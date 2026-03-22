@@ -1,0 +1,132 @@
+import { supabase } from '@/src/config/supabase';
+import type { ParsedOrderItem } from './pdfService';
+import type { UUID } from '@/src/types/common';
+import { inventoryService } from './inventoryService';
+
+export interface Order {
+  id: UUID;
+  order_number: string | null;
+  supplier_id: UUID | null;
+  party_name: string | null;
+  city: string | null;
+  order_date: string;
+  total_weight: number | null;
+  total_quantity: number | null;
+  status: 'ordered' | 'partially_received' | 'fully_received' | 'cancelled';
+  source_pdf_url: string | null;
+  raw_llm_response: any | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export const orderService = {
+  async fetchOrders(options?: { status?: string, limit?: number, offset?: number }) {
+    let query = supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (options?.status) {
+      query = query.eq('status', options.status);
+    }
+    if (options?.limit) {
+      query = query.limit(options.limit);
+      if (options?.offset) query = query.range(options.offset, options.offset + options.limit - 1);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return data as Order[];
+  },
+
+  async fetchOrderById(id: UUID) {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data as Order;
+  },
+
+  async fetchItemsByOrderId(orderId: UUID) {
+    const { data, error } = await supabase
+      .from('inventory_items')
+      .select('*')
+      .eq('order_id', orderId);
+      
+    if (error) throw error;
+    return data;
+  },
+
+  async importOrder(
+    partyName: string, 
+    items: ParsedOrderItem[], 
+    rawLlmResponse: any
+  ) {
+    const totalQty = items.reduce((sum, item) => sum + (item.box_count || 0), 0);
+    
+    // 1. Create order record
+    const { data: orderData, error: orderError } = await supabase
+      .from('orders')
+      .insert({
+        party_name: partyName,
+        total_quantity: totalQty,
+        status: 'fully_received',
+        raw_llm_response: rawLlmResponse,
+      })
+      .select()
+      .single();
+
+    if (orderError) throw orderError;
+    const orderId = orderData.id;
+
+    // 2. Process each item (Find/Create + Stock In)
+    for (const item of items) {
+      if (!item.design_name || !item.box_count) continue;
+
+      // Check if item exists
+      const { data: existingItems } = await supabase
+        .from('inventory_items')
+        .select('id')
+        .eq('design_name', item.design_name);
+
+      if (existingItems && existingItems.length > 0) {
+        // Item exists, just perform stock_in
+        const existingId = existingItems[0].id;
+        await inventoryService.performStockOperation(
+          existingId,
+          'stock_in',
+          item.box_count,
+          `Imported from Order ${orderId}`,
+          'purchase',
+          orderId
+        );
+      } else {
+        // Item does not exist, insert it directly with box_count
+        const { error: insertError } = await supabase
+          .from('inventory_items')
+          .insert({
+            design_name: item.design_name,
+            category: item.category || 'OTHER',
+            size_name: item.size || null,
+            brand_name: item.brand || null,
+            box_count: item.box_count,
+            selling_price: item.price_per_box || 0,
+            cost_price: item.price_per_box || 0,
+            order_id: orderId,
+            party_name: partyName
+          });
+
+        if (insertError) {
+          console.error(`Failed to insert new item ${item.design_name}:`, insertError);
+          // depending on exact needs, we might throw or continue. we continue for partial success.
+        }
+      }
+    }
+
+    return orderData;
+  }
+};

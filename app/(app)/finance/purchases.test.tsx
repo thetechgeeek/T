@@ -1,0 +1,61 @@
+import React from 'react';
+import { render, waitFor } from '@testing-library/react-native';
+import PurchasesScreen from './purchases';
+import { useFinanceStore } from '@/src/stores/financeStore';
+import { ThemeProvider } from '@/src/theme/ThemeProvider';
+
+// Mock store
+jest.mock('@/src/stores/financeStore', () => ({
+  useFinanceStore: jest.fn(),
+}));
+
+const renderWithTheme = (component: React.ReactElement) => {
+  return render(
+    <ThemeProvider>
+      {component}
+    </ThemeProvider>
+  );
+};
+
+const mockPurchases = [
+  { id: 'p-1', purchase_date: '2026-03-22', total_amount: 5000, supplier_name: 'Tile Corp', payment_status: 'paid' },
+];
+
+describe('PurchasesScreen', () => {
+  const mockFetchPurchases = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useFinanceStore as unknown as jest.Mock).mockReturnValue({
+      purchases: mockPurchases,
+      loading: false,
+      fetchPurchases: mockFetchPurchases,
+    });
+  });
+
+  it('renders purchases correctly', async () => {
+    const { getByText } = renderWithTheme(<PurchasesScreen />);
+    
+    await waitFor(() => {
+      expect(getByText('Tile Corp')).toBeTruthy();
+      expect(getByText('PAID')).toBeTruthy();
+      expect(getByText('₹5000', { exact: false })).toBeTruthy();
+    });
+    
+    expect(mockFetchPurchases).toHaveBeenCalled();
+  });
+
+  it('shows empty state when no purchases exist', async () => {
+    (useFinanceStore as unknown as jest.Mock).mockReturnValue({
+      purchases: [],
+      loading: false,
+      fetchPurchases: mockFetchPurchases,
+    });
+
+    const { getByText } = renderWithTheme(<PurchasesScreen />);
+    
+    await waitFor(() => {
+      expect(getByText('No purchases found')).toBeTruthy();
+    });
+  });
+});
