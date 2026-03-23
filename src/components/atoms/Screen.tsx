@@ -3,8 +3,8 @@ import {
   View, 
   StyleSheet, 
   ScrollView, 
-  KeyboardAvoidingView, 
   Platform, 
+  KeyboardAvoidingView,
   type ViewStyle,
   type ScrollViewProps
 } from 'react-native';

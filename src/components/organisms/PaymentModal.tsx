@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Modal, View, Text, StyleSheet, Platform, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';

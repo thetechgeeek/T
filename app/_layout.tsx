@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { useCallback as useStableCallback } from 'react';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View, StyleSheet } from 'react-native';
 import '../src/i18n';   // Initialize i18n
@@ -37,10 +37,10 @@ function AppShell() {
   return (
     <GestureHandlerRootView style={styles.root}>
       <SafeAreaProvider>
-        <StatusBar style={theme.isDark ? 'light' : 'dark'} />
-        <AuthGate>
-          <Slot />
-        </AuthGate>
+          <StatusBar style={theme.isDark ? 'light' : 'dark'} />
+          <AuthGate>
+            <Slot />
+          </AuthGate>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
