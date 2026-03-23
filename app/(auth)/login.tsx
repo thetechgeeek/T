@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
+  View, StyleSheet, Alert, ActivityIndicator, TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { TextInput } from '@/src/components/atoms/TextInput';
 
 export default function LoginScreen() {
   const { theme } = useTheme();
@@ -35,100 +37,82 @@ export default function LoginScreen() {
   const typo = theme.typography;
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.container, { backgroundColor: c.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        {/* Header */}
-        <View style={[styles.header, { backgroundColor: c.primary }]}>
-          <Text style={[styles.logo, { color: c.onPrimary, fontSize: typo.sizes['3xl'] }]}>🏺</Text>
-          <Text style={[styles.appName, { color: c.onPrimary, fontSize: typo.sizes['2xl'], fontWeight: typo.weights.bold }]}>
-            TileMaster
-          </Text>
-          <Text style={[styles.subtitle, { color: c.onPrimary, fontSize: typo.sizes.sm, opacity: 0.9 }]}>
-            {t('auth.subtitle')}
-          </Text>
-        </View>
+    <Screen scrollable safeAreaEdges={[]}>
+      {/* Header */}
+      <View style={[styles.header, { backgroundColor: c.primary }]}>
+        <ThemedText style={[styles.logo, { fontSize: typo.sizes['3xl'] }]}>🏺</ThemedText>
+        <ThemedText variant="h1" style={[styles.appName, { color: c.onPrimary }]}>
+          TileMaster
+        </ThemedText>
+        <ThemedText style={[styles.subtitle, { color: c.onPrimary, fontSize: typo.sizes.sm, opacity: 0.9 }]}>
+          {t('auth.subtitle')}
+        </ThemedText>
+      </View>
 
-        {/* Form */}
-        <View style={[styles.form, { padding: s.lg }]}>
-          <Text style={[styles.title, { color: c.onBackground, fontSize: typo.sizes.xl, fontWeight: typo.weights.bold, marginBottom: s.lg }]}>
-            {t('auth.signIn')}
-          </Text>
+      {/* Form */}
+      <View style={[styles.form, { padding: s.lg }]}>
+        <ThemedText variant="h2" style={{ marginBottom: s.lg }}>
+          {t('auth.signIn')}
+        </ThemedText>
 
-          {/* Email */}
-          <View style={[styles.inputWrap, { borderColor: c.border, borderRadius: r.md, backgroundColor: c.surface }]}>
-            <Text style={[styles.inputLabel, { color: c.onSurfaceVariant, fontSize: typo.sizes.xs }]}>
-              {t('auth.email')}
-            </Text>
-            <TextInput
-              style={[styles.input, { color: c.onSurface, fontSize: typo.sizes.md }]}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              placeholder="you@example.com"
-              placeholderTextColor={c.placeholder}
-            />
-          </View>
+        {/* Email */}
+        <TextInput
+          label={t('auth.email')}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          placeholder="you@example.com"
+        />
 
-          {/* Password */}
-          <View style={[styles.inputWrap, { borderColor: c.border, borderRadius: r.md, backgroundColor: c.surface, marginTop: s.md }]}>
-            <Text style={[styles.inputLabel, { color: c.onSurfaceVariant, fontSize: typo.sizes.xs }]}>
-              {t('auth.password')}
-            </Text>
-            <View style={styles.passwordRow}>
-              <TextInput
-                style={[styles.input, styles.flex, { color: c.onSurface, fontSize: typo.sizes.md }]}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-                autoComplete="password"
-                placeholder="••••••••"
-                placeholderTextColor={c.placeholder}
-              />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeBtn}>
-                <Text style={{ color: c.primary }}>{showPassword ? '🙈' : '👁️'}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+        {/* Password */}
+        <TextInput
+          label={t('auth.password')}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+          autoComplete="password"
+          placeholder="••••••••"
+          rightIcon={
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <ThemedText color={c.primary}>{showPassword ? '🙈' : '👁️'}</ThemedText>
+            </TouchableOpacity>
+          }
+          containerStyle={{ marginTop: s.md }}
+        />
 
-          {/* Sign In Button */}
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: c.primary, borderRadius: r.md, marginTop: s.lg }]}
-            onPress={handleLogin}
-            disabled={loading}
-            activeOpacity={0.85}
-          >
-            {loading ? (
-              <ActivityIndicator color={c.onPrimary} />
-            ) : (
-              <Text style={[styles.buttonText, { color: c.onPrimary, fontSize: typo.sizes.md, fontWeight: typo.weights.semibold }]}>
-                {t('auth.signIn')}
-              </Text>
-            )}
-          </TouchableOpacity>
+        {/* Sign In Button */}
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: c.primary, borderRadius: r.md, marginTop: s.lg }]}
+          onPress={handleLogin}
+          disabled={loading}
+          activeOpacity={0.85}
+        >
+          {loading ? (
+            <ActivityIndicator color={c.onPrimary} />
+          ) : (
+            <ThemedText weight="semibold" style={{ color: c.onPrimary }}>
+              {t('auth.signIn')}
+            </ThemedText>
+          )}
+        </TouchableOpacity>
 
-          {/* Setup link */}
-          <TouchableOpacity
-            style={[styles.linkBtn, { marginTop: s.md }]}
-            onPress={() => router.push('/(auth)/setup')}
-          >
-            <Text style={[{ color: c.primary, fontSize: typo.sizes.sm }]}>
-              {t('auth.setupBusiness')} →
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        {/* Setup link */}
+        <TouchableOpacity
+          style={[styles.linkBtn, { marginTop: s.md }]}
+          onPress={() => router.push('/(auth)/setup')}
+        >
+          <ThemedText color={c.primary}>
+            {t('auth.setupBusiness')} →
+          </ThemedText>
+        </TouchableOpacity>
+      </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  scroll: { flexGrow: 1 },
   header: {
     alignItems: 'center',
     paddingTop: 80,
@@ -139,22 +123,10 @@ const styles = StyleSheet.create({
   appName: { marginBottom: 4 },
   subtitle: { textAlign: 'center' },
   form: { flex: 1 },
-  title: {},
-  inputWrap: {
-    borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  inputLabel: { marginBottom: 2 },
-  input: { height: 40 },
-  passwordRow: { flexDirection: 'row', alignItems: 'center' },
-  flex: { flex: 1 },
-  eyeBtn: { padding: 4 },
   button: {
     height: 52,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {},
   linkBtn: { alignItems: 'center', height: 44, justifyContent: 'center' },
 });

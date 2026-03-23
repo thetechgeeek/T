@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { Search, Aperture } from 'lucide-react-native';
@@ -8,6 +8,8 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Button } from '@/src/components/atoms/Button';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function ScanTab() {
   const { theme } = useTheme();
@@ -92,22 +94,22 @@ export default function ScanTab() {
   };
 
   if (!permission) {
-    return <View style={{ flex: 1, backgroundColor: c.background }} />;
+    return <Screen><View /></Screen>;
   }
 
   if (!permission.granted) {
     return (
-      <View style={[styles.container, { backgroundColor: c.background, justifyContent: 'center', padding: s.xl }]}>
-        <Text style={{ color: c.onBackground, textAlign: 'center', marginBottom: s.lg, fontSize: 16 }}>
+      <Screen style={{ justifyContent: 'center', padding: s.xl }}>
+        <ThemedText align="center" style={{ marginBottom: s.lg, fontSize: 16 }}>
           We need your permission to show the camera for scanning tile box text.
-        </Text>
+        </ThemedText>
         <Button title="Grant Permission" onPress={requestPermission} />
-      </View>
+      </Screen>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: '#000' }]}>
+    <Screen backgroundColor="#000" safeAreaEdges={[]}>
       <CameraView 
         ref={cameraRef}
         style={StyleSheet.absoluteFillObject} 
@@ -128,9 +130,9 @@ export default function ScanTab() {
         
         {/* Bottom area */}
         <View style={[styles.darkness, { flex: 1, paddingTop: s.xl, alignItems: 'center' }]}>
-          <Text style={{ color: '#fff', fontSize: 14, opacity: 0.8, marginBottom: s.xl }}>
+          <ThemedText color="#fff" style={{ fontSize: 14, opacity: 0.8, marginBottom: s.xl }}>
             {capturing ? "Analyzing text..." : "Align item name / model number in frame"}
-          </Text>
+          </ThemedText>
 
           {/* Capture Button */}
           <TouchableOpacity 
@@ -144,8 +146,8 @@ export default function ScanTab() {
           <View style={{ flex: 1 }} />
 
           {/* Manual Entry */}
-          <View style={[styles.manualBox, { backgroundColor: c.surface, borderRadius: r.lg, padding: s.md }]}>
-            <Text style={{ color: c.onSurface, fontWeight: '600', marginBottom: s.sm }}>Manual Entry</Text>
+          <View style={[styles.manualBox, { backgroundColor: theme.colors.card, borderRadius: r.lg, padding: s.md }]}>
+            <ThemedText weight="semibold" style={{ marginBottom: s.sm }}>Manual Entry</ThemedText>
             <View style={{ flexDirection: 'row', gap: s.sm }}>
               <View style={{ flex: 1 }}>
                 <TextInput 
@@ -169,12 +171,11 @@ export default function ScanTab() {
           </View>
         </View>
       </View>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   overlay: { flex: 1 },
   darkness: { backgroundColor: 'rgba(0,0,0,0.6)' },
   scanFrame: { width: 300, height: 180, borderWidth: 2, borderRadius: 16, backgroundColor: 'transparent' },

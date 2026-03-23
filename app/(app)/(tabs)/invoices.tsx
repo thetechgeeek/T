@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
-import { FileText, Plus, Search } from 'lucide-react-native';
+import { FileText, Plus } from 'lucide-react-native';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function InvoicesListScreen() {
   const router = useRouter();
@@ -23,9 +25,9 @@ export default function InvoicesListScreen() {
   }, [fetchInvoices]);
 
   return (
-    <View style={[styles.container, { backgroundColor: c.background }]}>
+    <Screen safeAreaEdges={['top']}>
       <View style={[styles.header, { borderBottomColor: c.border }]}>
-        <Text style={{ color: c.onBackground, fontSize: 24, fontWeight: '700' }}>Invoices</Text>
+        <ThemedText variant="h1">Invoices</ThemedText>
         <Button 
           title="New Invoice" 
           leftIcon={<Plus color="#FFF" size={20} />}
@@ -42,7 +44,7 @@ export default function InvoicesListScreen() {
         ListEmptyComponent={() => (
           <View style={{ alignItems: 'center', marginTop: s['2xl'] }}>
             <FileText color={c.placeholder} size={64} />
-            <Text style={{ color: c.onSurfaceVariant, marginTop: s.md, fontSize: 16 }}>No invoices found.</Text>
+            <ThemedText color={c.onSurfaceVariant} style={{ marginTop: s.md }}>No invoices found.</ThemedText>
             <Button 
               title="Create your first invoice" 
               variant="outline"
@@ -53,33 +55,32 @@ export default function InvoicesListScreen() {
         )}
         renderItem={({ item }) => (
           <TouchableOpacity 
-            style={[styles.invoiceCard, { backgroundColor: c.surface, borderColor: c.border }]}
+            style={[styles.invoiceCard, { backgroundColor: theme.colors.card, borderColor: c.border, ...theme.shadows.sm as object }]}
             onPress={() => router.push(`/(app)/invoices/${item.id}`)}
           >
             <View style={styles.cardHeader}>
-              <Text style={{ color: c.onSurface, fontWeight: '700', fontSize: 16 }}>{item.invoice_number}</Text>
-              <Text style={{ color: c.onSurfaceVariant, fontSize: 14 }}>{new Date(item.invoice_date).toLocaleDateString()}</Text>
+              <ThemedText weight="bold" style={{ fontSize: 16 }}>{item.invoice_number}</ThemedText>
+              <ThemedText variant="caption" color={c.onSurfaceVariant}>{new Date(item.invoice_date).toLocaleDateString()}</ThemedText>
             </View>
-            <Text style={{ color: c.onSurfaceVariant, marginBottom: s.sm }}>{item.customer_name}</Text>
+            <ThemedText color={c.onSurfaceVariant} style={{ marginBottom: s.sm }}>{item.customer_name}</ThemedText>
             <View style={styles.cardFooter}>
               <View style={[styles.badge, { backgroundColor: item.payment_status === 'paid' ? c.success + '20' : c.warning + '20' }]}>
-                 <Text style={{ color: item.payment_status === 'paid' ? c.success : c.warning, fontSize: 12, fontWeight: '600', textTransform: 'capitalize' }}>
+                 <ThemedText color={item.payment_status === 'paid' ? c.success : c.warning} weight="semibold" style={{ fontSize: 12, textTransform: 'capitalize' }}>
                    {item.payment_status}
-                 </Text>
+                 </ThemedText>
               </View>
-              <Text style={{ color: c.primary, fontWeight: '700', fontSize: 18 }}>
+              <ThemedText variant="h3" color={c.primary}>
                 {formatCurrency(item.grand_total)}
-              </Text>
+              </ThemedText>
             </View>
           </TouchableOpacity>
         )}
       />
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   header: {
     padding: 16,
     flexDirection: 'row',

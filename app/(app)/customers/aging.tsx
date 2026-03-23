@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -7,6 +7,8 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function AgingReportScreen() {
   const { theme } = useTheme();
@@ -23,20 +25,18 @@ export default function AgingReportScreen() {
     .sort((a, b) => (b.current_balance || 0) - (a.current_balance || 0));
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <Screen scrollable contentContainerStyle={styles.scrollContent}>
       <Stack.Screen options={{ title: 'Aging Report' }} />
-      
-      <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.summaryCard}>
           <Card padding="lg" variant="elevated">
-            <Text style={[styles.summaryLabel, { color: theme.colors.onSurfaceVariant }]}>Total Outstanding</Text>
-            <Text style={[styles.summaryValue, { color: theme.colors.error, fontSize: 32, fontWeight: '800' }]}>
+            <ThemedText variant="caption" color={theme.colors.onSurfaceVariant} style={{ marginBottom: 4 }}>Total Outstanding</ThemedText>
+            <ThemedText variant="h1" color={theme.colors.error} style={{ fontSize: 32 }}>
               {formatCurrency(agingData.reduce((acc, curr) => acc + (curr.current_balance || 0), 0))}
-            </Text>
+            </ThemedText>
           </Card>
         </View>
 
-        <Text style={[styles.sectionTitle, { color: theme.colors.onSurface, fontWeight: '700' }]}>Customer Breakup</Text>
+        <ThemedText variant="h3" style={{ marginBottom: 16 }}>Customer Breakup</ThemedText>
 
         {agingData.length === 0 ? (
           <EmptyState title="No outstanding balances" />
@@ -45,13 +45,13 @@ export default function AgingReportScreen() {
             <Card key={c.id} style={styles.customerCard} padding="md">
               <View style={styles.row}>
                 <View style={{ flex: 1 }}>
-                  <Text style={[styles.name, { color: theme.colors.onSurface, fontWeight: '600' }]}>{c.name}</Text>
-                  <Text style={[styles.type, { color: theme.colors.onSurfaceVariant }]}>{c.type.toUpperCase()}</Text>
+                  <ThemedText weight="semibold" style={{ fontSize: 16 }}>{c.name}</ThemedText>
+                  <ThemedText variant="caption" color={theme.colors.onSurfaceVariant} style={{ marginTop: 2 }}>{c.type.toUpperCase()}</ThemedText>
                 </View>
                 <View style={{ alignItems: 'flex-end' }}>
-                  <Text style={[styles.balance, { color: theme.colors.error, fontWeight: '700' }]}>
+                  <ThemedText weight="bold" color={theme.colors.error} style={{ fontSize: 16 }}>
                     {formatCurrency(c.current_balance || 0)}
-                  </Text>
+                  </ThemedText>
                   <Badge 
                     label="Overdue" 
                     variant="error" 
@@ -62,21 +62,13 @@ export default function AgingReportScreen() {
             </Card>
           ))
         )}
-      </ScrollView>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   scrollContent: { padding: 16 },
   summaryCard: { marginBottom: 24 },
-  summaryLabel: { fontSize: 14, marginBottom: 4 },
-  summaryValue: { marginBottom: 8 },
-  sectionTitle: { fontSize: 18, marginBottom: 16 },
   customerCard: { marginBottom: 12 },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  name: { fontSize: 16 },
-  type: { fontSize: 12, marginTop: 2 },
-  balance: { fontSize: 16 },
 });

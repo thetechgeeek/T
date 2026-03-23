@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { View, ScrollView, StyleSheet, RefreshControl, Text } from 'react-native';
+import { View, StyleSheet, RefreshControl } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
-import { TrendingUp, TrendingDown, Wallet, Receipt, ShoppingCart, ChevronRight } from 'lucide-react-native';
+import { TrendingUp, TrendingDown, Wallet, Receipt, ShoppingCart } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -9,6 +8,9 @@ import { Card } from '@/src/components/atoms/Card';
 import { StatCard } from '@/src/components/molecules/StatCard';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { Divider } from '@/src/components/atoms/Divider';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import React, { useEffect } from 'react';
 
 export default function FinanceOverviewScreen() {
   const { theme } = useTheme();
@@ -42,18 +44,20 @@ export default function FinanceOverviewScreen() {
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <Screen 
+      scrollable
+      scrollViewProps={{
+        refreshControl: <RefreshControl refreshing={loading} onRefresh={fetchSummary} tintColor={theme.colors.primary} />
+      }}
+      contentContainerStyle={styles.scrollContent}
+    >
       <Stack.Screen options={{ title: 'Finance Overview' }} />
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchSummary} />}
-      >
         <View style={styles.metricsGrid}>
           {metrics.map((m, i) => (
             <Card key={i} style={styles.metricCard} padding="md" variant="elevated">
               <View style={styles.metricHeader}>
                 {m.icon}
-                <Text style={[styles.metricTitle, { color: theme.colors.onSurfaceVariant }]}>{m.title}</Text>
+                <ThemedText variant="body2" weight="semibold" style={{ marginLeft: 12 }}>{m.title}</ThemedText>
               </View>
               <StatCard
                 label=""
@@ -65,9 +69,9 @@ export default function FinanceOverviewScreen() {
 
         <Divider style={{ marginVertical: 24 }} />
 
-        <Text style={[styles.sectionTitle, { color: theme.colors.onSurface, fontFamily: theme.typography.fontFamilyBold }]}>
+        <ThemedText variant="h3" style={{ marginBottom: 16, paddingLeft: 4 }}>
           Reports & Management
-        </Text>
+        </ThemedText>
         
         <View style={styles.section}>
           <ListItem
@@ -95,15 +99,11 @@ export default function FinanceOverviewScreen() {
             leftIcon={<TrendingUp color={theme.colors.success} />}
           />
         </View>
-      </ScrollView>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   scrollContent: {
     padding: 16,
   },
@@ -117,16 +117,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
-  },
-  metricTitle: {
-    marginLeft: 12,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    marginBottom: 16,
-    paddingLeft: 4,
   },
   section: {
     gap: 8,

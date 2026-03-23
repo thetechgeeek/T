@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
+  View, StyleSheet, TouchableOpacity, Alert, ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
 import { supabase } from '@/src/config/supabase';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { TextInput } from '@/src/components/atoms/TextInput';
 
 export default function SetupScreen() {
   const { theme } = useTheme();
@@ -62,80 +64,95 @@ export default function SetupScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.container, { backgroundColor: c.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <ScrollView contentContainerStyle={[styles.scroll, { padding: s.lg }]} keyboardShouldPersistTaps="handled">
-        <Text style={[styles.title, { color: c.primary, fontSize: typo.sizes['2xl'], fontWeight: typo.weights.bold, marginBottom: s.sm }]}>
+    <Screen scrollable>
+      <View style={{ padding: s.lg }}>
+        <ThemedText variant="h1" color={c.primary} style={{ marginBottom: s.sm }}>
           🏺 TileMaster
-        </Text>
-        <Text style={[styles.subtitle, { color: c.onSurfaceVariant, fontSize: typo.sizes.md, marginBottom: s.xl }]}>
+        </ThemedText>
+        <ThemedText variant="body1" color={c.onSurfaceVariant} style={{ marginBottom: s.xl }}>
           {step === 'account' ? t('auth.welcome') : t('auth.setupBusiness')}
-        </Text>
+        </ThemedText>
 
         {step === 'account' ? (
           <>
-            <InputField label={t('auth.email')} placeholder="you@example.com" value={email} onChangeText={setEmail}
-              keyboardType="email-address" autoCapitalize="none" theme={theme} />
-            <View style={{ height: s.md }} />
-            <InputField label={t('auth.password')} placeholder="••••••••" value={password} onChangeText={setPassword}
-              secureTextEntry theme={theme} />
+            <TextInput 
+              label={t('auth.email')} 
+              placeholder="you@example.com" 
+              value={email} 
+              onChangeText={setEmail}
+              keyboardType="email-address" 
+              autoCapitalize="none" 
+              autoComplete="email"
+            />
+            <TextInput 
+              label={t('auth.password')} 
+              placeholder="••••••••" 
+              value={password} 
+              onChangeText={setPassword}
+              secureTextEntry 
+              autoComplete="password"
+              containerStyle={{ marginTop: s.md }}
+            />
             <TouchableOpacity
               style={[styles.button, { backgroundColor: c.primary, borderRadius: r.md, marginTop: s.xl }]}
-              onPress={handleCreateAccount} disabled={loading}
+              onPress={handleCreateAccount} 
+              disabled={loading}
             >
               {loading ? <ActivityIndicator color={c.onPrimary} /> :
-                <Text style={{ color: c.onPrimary, fontSize: typo.sizes.md, fontWeight: typo.weights.semibold }}>
+                <ThemedText weight="semibold" style={{ color: c.onPrimary }}>
                   {t('common.add')} Account →
-                </Text>}
+                </ThemedText>}
             </TouchableOpacity>
             <TouchableOpacity style={styles.linkBtn} onPress={() => router.push('/(auth)/login')}>
-              <Text style={{ color: c.primary, fontSize: typo.sizes.sm }}>Already have an account? {t('auth.signIn')}</Text>
+              <ThemedText color={c.primary} variant="body2">
+                Already have an account? {t('auth.signIn')}
+              </ThemedText>
             </TouchableOpacity>
           </>
         ) : (
           <>
-            <InputField label="Business Name *" placeholder="Enter business name" value={businessName} onChangeText={setBusinessName} theme={theme} />
-            <View style={{ height: s.md }} />
-            <InputField label="Phone" placeholder="Enter phone number" value={phone} onChangeText={setPhone} keyboardType="phone-pad" theme={theme} />
-            <View style={{ height: s.md }} />
-            <InputField label="GSTIN (optional)" placeholder="Enter GSTIN" value={gstin} onChangeText={setGstin} autoCapitalize="characters" theme={theme} />
+            <TextInput 
+              label="Business Name *" 
+              placeholder="Enter business name" 
+              value={businessName} 
+              onChangeText={setBusinessName} 
+            />
+            <TextInput 
+              label="Phone" 
+              placeholder="Enter phone number" 
+              value={phone} 
+              onChangeText={setPhone} 
+              keyboardType="phone-pad" 
+              containerStyle={{ marginTop: s.md }}
+            />
+            <TextInput 
+              label="GSTIN (optional)" 
+              placeholder="Enter GSTIN" 
+              value={gstin} 
+              onChangeText={setGstin} 
+              autoCapitalize="characters" 
+              containerStyle={{ marginTop: s.md }}
+            />
             <TouchableOpacity
               style={[styles.button, { backgroundColor: c.primary, borderRadius: r.md, marginTop: s.xl }]}
-              onPress={handleSaveBusiness} disabled={loading}
+              onPress={handleSaveBusiness} 
+              disabled={loading}
             >
               {loading ? <ActivityIndicator color={c.onPrimary} /> :
-                <Text style={{ color: c.onPrimary, fontSize: typo.sizes.md, fontWeight: typo.weights.semibold }}>
+                <ThemedText weight="semibold" style={{ color: c.onPrimary }}>
                   {t('common.save')} & Continue →
-                </Text>}
+                </ThemedText>}
             </TouchableOpacity>
           </>
         )}
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    </Screen>
   );
 }
 
-function InputField({ label, theme, ...props }: any) {
-  const c = theme.colors;
-  const typo = theme.typography;
-  const r = theme.borderRadius;
-  return (
-    <View style={[styles.inputWrap, { borderColor: c.border, borderRadius: r.md, backgroundColor: c.surface }]}>
-      <Text style={[styles.inputLabel, { color: c.onSurfaceVariant, fontSize: typo.sizes.xs }]}>{label}</Text>
-      <TextInput style={[{ color: c.onSurface, fontSize: typo.sizes.md, height: 40 }]} placeholderTextColor={c.placeholder} {...props} />
-    </View>
-  );
-}
+// Remove the obsolete InputField function
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  scroll: { flexGrow: 1, paddingTop: 80 },
-  title: {},
-  subtitle: {},
-  inputWrap: { borderWidth: 1, paddingHorizontal: 14, paddingVertical: 10 },
-  inputLabel: { marginBottom: 2 },
   button: { height: 52, alignItems: 'center', justifyContent: 'center' },
   linkBtn: { alignItems: 'center', height: 44, justifyContent: 'center', marginTop: 8 },
 });

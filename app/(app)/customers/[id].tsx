@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView, RefreshControl } from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
-import { Phone, MapPin, Receipt, Wallet, Plus } from 'lucide-react-native';
+import { Phone, MapPin, Wallet, Plus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -11,6 +11,8 @@ import { Divider } from '@/src/components/atoms/Divider';
 import { Button } from '@/src/components/atoms/Button';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { PaymentModal } from '@/src/components/organisms/PaymentModal';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { CustomerLedgerEntry } from '@/src/types/customer';
 
 export default function CustomerDetailScreen() {
@@ -34,31 +36,28 @@ export default function CustomerDetailScreen() {
   }, [id]);
 
   const renderLedgerItem = ({ item }: { item: CustomerLedgerEntry }) => (
-    <View style={[styles.ledgerItem, { borderLeftColor: item.type === 'invoice' ? theme.colors.error : theme.colors.success }]}>
+    <View style={[styles.ledgerItem, { borderLeftColor: item.type === 'invoice' ? theme.colors.error : theme.colors.success, backgroundColor: theme.colors.card }]}>
       <View style={styles.ledgerHeader}>
-        <Text style={[styles.ledgerRef, { color: theme.colors.onSurface, fontFamily: theme.typography.fontFamilyBold }]}>
+        <ThemedText weight="bold" style={styles.ledgerRef}>
           {item.reference}
-        </Text>
-        <Text style={[styles.ledgerDate, { color: theme.colors.onSurfaceVariant }]}>
+        </ThemedText>
+        <ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
           {formatDate(item.date)}
-        </Text>
+        </ThemedText>
       </View>
       
       <View style={styles.ledgerRow}>
         <View style={styles.ledgerCol}>
-          <Text style={[styles.ledgerLabel, { color: theme.colors.onSurfaceVariant }]}>Amount</Text>
-          <Text style={[
-            styles.ledgerValue, 
-            { color: item.type === 'invoice' ? theme.colors.error : theme.colors.success, fontFamily: theme.typography.fontFamilyBold }
-          ]}>
+          <ThemedText variant="caption" color={theme.colors.onSurfaceVariant} style={{ textTransform: 'uppercase' }}>Amount</ThemedText>
+          <ThemedText weight="bold" style={{ color: item.type === 'invoice' ? theme.colors.error : theme.colors.success }}>
             {item.debit > 0 ? `+${formatCurrency(item.debit)}` : `-${formatCurrency(item.credit)}`}
-          </Text>
+          </ThemedText>
         </View>
         <View style={styles.ledgerCol}>
-          <Text style={[styles.ledgerLabel, { color: theme.colors.onSurfaceVariant }]}>Balance</Text>
-          <Text style={[styles.ledgerValue, { color: theme.colors.onSurface, fontFamily: theme.typography.fontFamilyBold }]}>
+          <ThemedText variant="caption" color={theme.colors.onSurfaceVariant} style={{ textTransform: 'uppercase' }}>Balance</ThemedText>
+          <ThemedText weight="bold">
             {formatCurrency(item.balance)}
-          </Text>
+          </ThemedText>
         </View>
       </View>
     </View>
@@ -67,7 +66,7 @@ export default function CustomerDetailScreen() {
   if (!customer) return null;
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <Screen safeAreaEdges={['top', 'bottom']}>
       <Stack.Screen options={{ title: customer.name }} />
       
       <FlatList
@@ -77,21 +76,21 @@ export default function CustomerDetailScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             <Card style={styles.summaryCard}>
-              <Text style={[styles.summaryLabel, { color: theme.colors.onSurfaceVariant }]}>Outstanding Balance</Text>
-              <Text style={[styles.summaryAmount, { color: (summary?.outstanding_balance || 0) > 0 ? theme.colors.error : theme.colors.onSurface }]}>
+              <ThemedText variant="caption" color={theme.colors.onSurfaceVariant} style={{ textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Outstanding Balance</ThemedText>
+              <ThemedText variant="h1" style={{ color: (summary?.outstanding_balance || 0) > 0 ? theme.colors.error : theme.colors.onSurface, fontSize: 32 }}>
                 {formatCurrency(summary?.outstanding_balance || 0)}
-              </Text>
+              </ThemedText>
               
               <Divider style={{ marginVertical: 12 }} />
               
               <View style={styles.statsRow}>
                 <View style={styles.stat}>
-                  <Text style={[styles.statLabel, { color: theme.colors.onSurfaceVariant }]}>Total Invoiced</Text>
-                  <Text style={[styles.statValue, { color: theme.colors.onSurface }]}>{formatCurrency(summary?.total_invoiced || 0)}</Text>
+                  <ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>Total Invoiced</ThemedText>
+                  <ThemedText weight="bold">{formatCurrency(summary?.total_invoiced || 0)}</ThemedText>
                 </View>
                 <View style={styles.stat}>
-                  <Text style={[styles.statLabel, { color: theme.colors.onSurfaceVariant }]}>Total Paid</Text>
-                  <Text style={[styles.statValue, { color: theme.colors.success }]}>{formatCurrency(summary?.total_paid || 0)}</Text>
+                  <ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>Total Paid</ThemedText>
+                  <ThemedText weight="bold" color={theme.colors.success}>{formatCurrency(summary?.total_paid || 0)}</ThemedText>
                 </View>
               </View>
             </Card>
@@ -113,7 +112,7 @@ export default function CustomerDetailScreen() {
               />
             </View>
 
-            <Text style={[styles.sectionTitle, { color: theme.colors.onSurface, marginTop: 16 }]}>Customer Info</Text>
+            <ThemedText variant="h3" style={{ marginTop: 16, marginBottom: 8, paddingHorizontal: 4 }}>Customer Info</ThemedText>
             <Card style={styles.infoCard}>
               {customer.phone && (
                 <ListItem 
@@ -136,7 +135,7 @@ export default function CustomerDetailScreen() {
               />
             </Card>
 
-            <Text style={[styles.sectionTitle, { color: theme.colors.onSurface, marginTop: 16 }]}>Ledger History</Text>
+            <ThemedText variant="h3" style={{ marginTop: 16, marginBottom: 8, paddingHorizontal: 4 }}>Ledger History</ThemedText>
           </View>
         }
         contentContainerStyle={styles.list}
@@ -158,42 +157,27 @@ export default function CustomerDetailScreen() {
           onSuccess={() => fetchCustomerDetail(customer.id)}
         />
       )}
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   header: { padding: 16 },
   summaryCard: { padding: 20, alignItems: 'center' },
-  summaryLabel: { fontSize: 13, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
-  summaryAmount: { fontSize: 32, fontWeight: '800' },
   statsRow: { flexDirection: 'row', width: '100%' },
   stat: { flex: 1, alignItems: 'center' },
-  statLabel: { fontSize: 11, textTransform: 'uppercase', marginBottom: 2 },
-  statValue: { fontSize: 16, fontWeight: '700' },
   actions: { flexDirection: 'row', marginTop: 16 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', marginBottom: 8, paddingHorizontal: 4 },
   infoCard: { padding: 0 },
   list: { flexGrow: 1, paddingBottom: 40 },
   ledgerItem: { 
     marginHorizontal: 16, 
     marginBottom: 12, 
     padding: 12, 
-    backgroundColor: 'white', 
     borderRadius: 8,
     borderLeftWidth: 4,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
   },
   ledgerHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
   ledgerRef: { fontSize: 14 },
-  ledgerDate: { fontSize: 12 },
   ledgerRow: { flexDirection: 'row' },
   ledgerCol: { flex: 1 },
-  ledgerLabel: { fontSize: 10, textTransform: 'uppercase', marginBottom: 2 },
-  ledgerValue: { fontSize: 14 },
 });
