@@ -77,9 +77,8 @@ export default function InvoiceDetailScreen() {
           <ThemedText variant="caption" color={c.onSurfaceVariant}>Billed To</ThemedText>
           <ThemedText variant="h3">{currentInvoice.customer_name}</ThemedText>
           <ThemedText color={c.onSurface}>{currentInvoice.customer_phone}</ThemedText>
-          {currentInvoice.customer_gstin && <ThemedText color={c.onSurface}>GSTIN: {currentInvoice.customer_gstin}</ThemedText>}
+          {!!currentInvoice.customer_gstin && <ThemedText color={c.onSurface}>GSTIN: {currentInvoice.customer_gstin}</ThemedText>}
         </View>
-
         <ThemedText variant="h3" style={{ marginBottom: s.md }}>Items</ThemedText>
         <View style={{ backgroundColor: c.surface, borderRadius: theme.borderRadius.md, borderWidth: 1, borderColor: c.border, overflow: 'hidden' }}>
           {currentInvoice.line_items?.map((item, index) => (
@@ -92,7 +91,6 @@ export default function InvoiceDetailScreen() {
             </View>
           ))}
         </View>
-
         <View style={{ marginTop: s.xl, backgroundColor: c.surface, padding: s.md, borderRadius: theme.borderRadius.md, borderWidth: 1, borderColor: c.border }}>
           <View style={theme.layout.rowBetween}>
             <ThemedText color={c.onSurfaceVariant}>Subtotal</ThemedText>
@@ -115,17 +113,15 @@ export default function InvoiceDetailScreen() {
               </View>
             </>
           )}
-          
           <View style={[theme.layout.rowBetween, { borderTopWidth: 1, borderTopColor: c.border, paddingTop: s.sm, marginTop: s.sm }]}>
             <ThemedText weight="bold">Grand Total</ThemedText>
             <ThemedText variant="h2" color={c.primary}>{formatCurrency(currentInvoice.grand_total)}</ThemedText>
           </View>
-          
           <View style={theme.layout.rowBetween}>
             <ThemedText color={c.onSurfaceVariant}>Amount Paid</ThemedText>
             <ThemedText weight="semibold" color={c.success}>{formatCurrency(currentInvoice.amount_paid)}</ThemedText>
           </View>
-\n          {currentInvoice.grand_total - currentInvoice.amount_paid > 0 && (
+          {currentInvoice.grand_total - currentInvoice.amount_paid > 0 && (
             <View style={theme.layout.rowBetween}>
               <ThemedText color={c.error}>Balance Due</ThemedText>
               <ThemedText variant="h3" color={c.error}>{formatCurrency(currentInvoice.grand_total - currentInvoice.amount_paid)}</ThemedText>

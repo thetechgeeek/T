@@ -252,7 +252,7 @@ export default function AddItemScreen() {
                 control={control}
                 name="box_count"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <FormField label={isEditing ? "Stock (Boxes)" : "Initial Stock"} required placeholder="Enter initial stock" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.box_count?.message} editable={!isEditing} helperText={isEditing ? "Use Stock In/Out to update" : ""} />
+                  <FormField label={isEditing ? "Stock (Boxes)" : "Initial Stock"} required placeholder="Enter initial stock" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.box_count?.message} editable={!isEditing} helperText={isEditing ? "Use Stock In/Out to update" : undefined} />
                 )}
               />
             </View>

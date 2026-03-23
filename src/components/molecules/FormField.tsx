@@ -28,7 +28,7 @@ export const FormField: React.FC<FormFieldProps> = ({
         {required && <ThemedText color={c.error} style={{ marginLeft: 2 }}>*</ThemedText>}
       </View>
       <AtomTextInput {...props} editable={editable} error={undefined} label={undefined} />
-      {(error || helperText) && (
+      {!!(error || helperText) && (
         <ThemedText 
           variant="caption" 
           color={error ? c.error : c.onSurfaceVariant}

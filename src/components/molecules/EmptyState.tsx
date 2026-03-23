@@ -35,7 +35,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       ]}>
         {title}
       </Text>
-      {description && (
+      {!!description && (
         <Text style={[
           styles.description, 
           { 

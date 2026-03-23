@@ -47,7 +47,7 @@ export const ListItem: React.FC<ListItemProps> = ({
           ]}>
             {title}
           </Text>
-          {subtitle && (
+          {!!subtitle && (
             <Text style={[
               styles.subtitle, 
               { 
