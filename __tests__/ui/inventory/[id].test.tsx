@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
-import ItemDetailScreen from './[id]';
+import ItemDetailScreen from '@/app/(app)/inventory/[id]';
 import { inventoryService } from '@/src/services/inventoryService';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { useRouter, useLocalSearchParams } from 'expo-router';

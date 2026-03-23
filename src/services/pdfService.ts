@@ -220,9 +220,12 @@ export const pdfService = {
         dialogTitle: `Share Invoice ${invoice.invoice_number}`
       });
       
-    } catch (e) {
+    } catch (e: any) {
       console.error('Failed to generate/share PDF', e);
-      alert('Error generating PDF.');
+      // Using Alert.alert if I can, but since this is a service, maybe just throw.
+      // But the original had alert(). I will leave it for now but standardize it.
+      // Actually, I'll just leave it as alert() but with proper message.
+      alert('Error: ' + (e.message || 'Failed to generate PDF.'));
     }
   },
 
@@ -238,6 +241,8 @@ export const pdfService = {
       }
 
       const file = result.assets[0];
+      if (!file.uri) return null;
+
       const base64 = await FileSystem.readAsStringAsync(file.uri, {
         encoding: 'base64' as any,
       });

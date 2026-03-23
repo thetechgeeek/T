@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 
-import SetupScreen from './setup';
+import SetupScreen from '@/app/(auth)/setup';
 import { useAuthStore } from '@/src/stores/authStore';
 import { supabase } from '@/src/config/supabase';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';

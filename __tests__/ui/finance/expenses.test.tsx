@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
-import ExpensesScreen from './expenses';
+import ExpensesScreen from '@/app/(app)/finance/expenses';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
@@ -27,6 +27,7 @@ describe('ExpensesScreen', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockFetchExpenses.mockResolvedValue(undefined);
     (useFinanceStore as unknown as jest.Mock).mockReturnValue({
       expenses: mockExpenses,
       loading: false,
@@ -36,8 +37,7 @@ describe('ExpensesScreen', () => {
   });
 
   it('renders expenses correctly', async () => {
-    const { getByText, debug } = renderWithTheme(<ExpensesScreen />);
-    debug();
+    const { getByText } = renderWithTheme(<ExpensesScreen />);
     
     await waitFor(() => {
       expect(getByText('Rent')).toBeTruthy();
@@ -82,6 +82,32 @@ describe('ExpensesScreen', () => {
     
     await waitFor(() => {
       expect(getByText('No expenses found')).toBeTruthy();
+    });
+  });
+
+  it('shows an alert when expense addition fails', async () => {
+    const errorMessage = 'Could not find the table \'public.expenses\' in the schema cache';
+    mockAddExpense.mockRejectedValue(new Error(errorMessage));
+
+    const { getByText, getByPlaceholderText } = renderWithTheme(<ExpensesScreen />);
+    
+    fireEvent.press(getByText('Add Expense'));
+    
+    await waitFor(() => expect(getByText('New Expense')).toBeTruthy());
+    
+    fireEvent.changeText(getByPlaceholderText('0.00'), '150');
+    fireEvent.changeText(getByPlaceholderText(/electricity/i), 'Utility');
+    
+    fireEvent.press(getByText('Save Expense'));
+
+    const { Alert } = require('react-native');
+    await waitFor(() => {
+      expect(mockAddExpense).toHaveBeenCalled();
+      expect(Alert.alert).toHaveBeenCalledWith(
+        'Error Saving Expense',
+        expect.stringContaining(errorMessage),
+        expect.any(Array)
+      );
     });
   });
 });

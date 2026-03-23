@@ -1,20 +1,12 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
-import ImportOrderScreen from './import';
+import ImportOrderScreen from '@/app/(app)/orders/import';
 import { useOrderStore } from '@/src/stores/orderStore';
-import { pdfService } from '@/src/services/pdfService';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
-import { useRouter } from 'expo-router';
 
 // Mock stores and services
 jest.mock('@/src/stores/orderStore', () => ({
   useOrderStore: jest.fn(),
-}));
-
-jest.mock('@/src/services/pdfService', () => ({
-  pdfService: {
-    pickPdfDocument: jest.fn(),
-  },
 }));
 
 jest.mock('expo-router', () => ({

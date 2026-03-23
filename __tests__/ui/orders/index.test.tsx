@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
-import OrdersListScreen from './index';
+import OrdersListScreen from '@/app/(app)/orders/index';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { useRouter } from 'expo-router';

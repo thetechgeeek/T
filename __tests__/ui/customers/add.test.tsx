@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
-import AddCustomerScreen from './add';
+import AddCustomerScreen from '@/app/(app)/customers/add';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 

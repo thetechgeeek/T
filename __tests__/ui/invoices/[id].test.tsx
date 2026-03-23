@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
-import InvoiceDetailScreen from './[id]';
+import InvoiceDetailScreen from '@/app/(app)/invoices/[id]';
 import { invoiceService } from '@/src/services/invoiceService';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { useLocalSearchParams } from 'expo-router';

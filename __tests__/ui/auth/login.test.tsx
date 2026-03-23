@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 
-import LoginScreen from './login';
+import LoginScreen from '@/app/(auth)/login';
 import { useAuthStore } from '@/src/stores/authStore';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
@@ -60,9 +60,5 @@ describe('LoginScreen', () => {
     
     const setupLink = getByText('Set Up Your Business', { exact: false });
     fireEvent.press(setupLink);
-    
-    // Router mock from jest.setup.ts
-    // useRouter is mocked to return { push: jest.fn(), ... }
-    // We can verify push was called
   });
 });

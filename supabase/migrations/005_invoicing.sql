@@ -4,11 +4,12 @@
 CREATE OR REPLACE FUNCTION generate_invoice_number()
 RETURNS TEXT AS $$
 DECLARE
+  v_id UUID;
   v_prefix TEXT;
   v_seq BIGINT;
   v_fy TEXT;
 BEGIN
-  SELECT invoice_prefix, invoice_sequence INTO v_prefix, v_seq
+  SELECT id, invoice_prefix, invoice_sequence INTO v_id, v_prefix, v_seq
   FROM business_profile
   LIMIT 1
   FOR UPDATE;
@@ -22,7 +23,7 @@ BEGIN
 
   v_seq := v_seq + 1;
 
-  UPDATE business_profile SET invoice_sequence = v_seq;
+  UPDATE business_profile SET invoice_sequence = v_seq WHERE id = v_id;
 
   RETURN v_prefix || '/' || v_fy || '/' || LPAD(v_seq::TEXT, 4, '0');
 END;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import AddItemScreen from './add';
+import AddItemScreen from '@/app/(app)/inventory/add';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
@@ -76,5 +76,42 @@ describe('AddItemScreen', () => {
         gst_rate: 12,
       }));
     });
+  });
+
+  it('shows an alert when item creation fails', async () => {
+    const errorMessage = 'Could not find the table \'public.inventory_items\'';
+    mockCreateItem.mockRejectedValue(new Error(errorMessage));
+
+    const { getByText, getByPlaceholderText } = renderWithTheme(<AddItemScreen />);
+    
+    fireEvent.changeText(getByPlaceholderText('e.g. 10526-HL-1-A'), 'Error Item');
+    fireEvent.changeText(getByPlaceholderText('Enter selling price'), '500');
+    fireEvent.changeText(getByPlaceholderText('Enter initial stock'), '100');
+    fireEvent.changeText(getByPlaceholderText('Enter low stock alert'), '15');
+    fireEvent.changeText(getByPlaceholderText('Enter GST rate'), '12');
+
+    fireEvent.press(getByText('Save Item'));
+
+    const { Alert } = require('react-native');
+    await waitFor(() => {
+      expect(mockCreateItem).toHaveBeenCalled();
+      expect(Alert.alert).toHaveBeenCalledWith(
+        'Error',
+        expect.stringContaining(errorMessage),
+        expect.any(Array)
+      );
+    });
+  });
+
+  it('does not render raw empty strings in TextInput when helperText is empty', () => {
+    // This is to verify the fix for "Text strings must be rendered within a <Text> component"
+    // when isEditing is false and helperText is "" for the box_count field.
+    const { toJSON } = renderWithTheme(<AddItemScreen />);
+    const json = JSON.stringify(toJSON());
+    
+    // If an empty string was rendered as a child of a View, it might appear as "" in the JSON
+    // but React Native's toJSON normally filters out null/undefined.
+    // However, if it's a raw string child, it should be caught by RNTL if it's strict.
+    expect(json).not.toContain('""'); 
   });
 });

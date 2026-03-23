@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl, ActivityIndicator, Alert } from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
 import { Plus, Package, Search, SlidersHorizontal, Grid as GridIcon, List as ListIcon } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -28,7 +28,9 @@ export default function InventoryTab() {
   useEffect(() => {
     // Initial fetch if empty and not loading
     if (items.length === 0 && !loading && page === 1) {
-      fetchItems(true);
+      fetchItems(true).catch(e => {
+        Alert.alert('Error', 'Failed to load inventory. ' + e.message, [{ text: 'OK' }]);
+      });
     }
   }, []);
 

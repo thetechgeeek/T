@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, RefreshControl, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, RefreshControl, Text, Alert } from 'react-native';
 import { Stack } from 'expo-router';
 import { ShoppingCart, Calendar, User } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
@@ -15,7 +15,9 @@ export default function PurchasesScreen() {
   const { purchases, loading, fetchPurchases } = useFinanceStore();
 
   useEffect(() => {
-    fetchPurchases();
+    fetchPurchases().catch(e => {
+      Alert.alert('Error', 'Failed to load purchases. ' + e.message, [{ text: 'OK' }]);
+    });
   }, []);
 
   return (

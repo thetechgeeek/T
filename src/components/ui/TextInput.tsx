@@ -54,7 +54,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(({
         />
         {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
       </View>
-      {(error || helperText) && (
+      {!!(error || helperText) && (
         <Text style={[
           styles.helper,
           { color: error ? c.error : c.onSurfaceVariant, fontSize: theme.typography.sizes.xs }

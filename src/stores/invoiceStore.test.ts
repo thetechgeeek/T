@@ -33,7 +33,11 @@ describe('invoiceStore', () => {
     expect(state.error).toBeNull();
   });
 
-  it('createInvoice adds new invoice to the list', async () => {
+  it('createInvoice adds new invoice to the list and refreshes inventory', async () => {
+    const { useInventoryStore } = require('./inventoryStore');
+    const fetchItemsMock = jest.fn().mockResolvedValue(undefined);
+    useInventoryStore.getState = jest.fn().mockReturnValue({ fetchItems: fetchItemsMock });
+
     // start with 1 invoice
     useInvoiceStore.setState({ invoices: [{ id: '1', invoice_number: 'INV-01' } as any] });
 
@@ -44,6 +48,9 @@ describe('invoiceStore', () => {
 
     const state = useInvoiceStore.getState();
     expect(state.invoices).toHaveLength(2);
-    expect(state.invoices[0].id).toBe('2'); // Expected to be unshifted (added to beginning)
+    expect(state.invoices[0].id).toBe('2');
+    
+    // Verify inventory refresh was called
+    expect(fetchItemsMock).toHaveBeenCalledWith(true);
   });
 });

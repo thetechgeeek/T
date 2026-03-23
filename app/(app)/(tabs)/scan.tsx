@@ -50,9 +50,13 @@ export default function ScanTab() {
           ]
         );
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      Alert.alert("Error", "Failed to search inventory.");
+      Alert.alert(
+        "Error", 
+        err.message || "Failed to search inventory. Please check your database connection.",
+        [{ text: 'OK' }]
+      );
     } finally {
       setLoading(false);
     }
@@ -75,9 +79,13 @@ export default function ScanTab() {
         [{ text: "OK" }]
       );
       
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      Alert.alert("Error", "Failed to capture image for scanning.");
+      Alert.alert(
+        "Error",
+        err.message || "Failed to capture image for scanning.",
+        [{ text: 'OK' }]
+      );
     } finally {
       setCapturing(false);
     }
@@ -104,64 +112,63 @@ export default function ScanTab() {
         ref={cameraRef}
         style={StyleSheet.absoluteFillObject} 
         facing="back"
-      >
-        <View style={styles.overlay}>
-          {/* Top dark area */}
-          <View style={[styles.darkness, { flex: 1 }]} />
-          
-          {/* Middle scan area */}
-          <View style={{ flexDirection: 'row', height: 180 }}>
-            <View style={styles.darkness} />
-            <View style={[styles.scanFrame, { borderColor: capturing ? c.primary : '#ffffff80' }]}>
-              {capturing && <ActivityIndicator color={c.primary} style={{ marginTop: 70 }} size="large" />}
-            </View>
-            <View style={styles.darkness} />
+      />
+      <View style={styles.overlay}>
+        {/* Top dark area */}
+        <View style={[styles.darkness, { flex: 1 }]} />
+        
+        {/* Middle scan area */}
+        <View style={{ flexDirection: 'row', height: 180 }}>
+          <View style={styles.darkness} />
+          <View style={[styles.scanFrame, { borderColor: capturing ? c.primary : '#ffffff80' }]}>
+            {capturing && <ActivityIndicator color={c.primary} style={{ marginTop: 70 }} size="large" />}
           </View>
-          
-          {/* Bottom area */}
-          <View style={[styles.darkness, { flex: 1, paddingTop: s.xl, alignItems: 'center' }]}>
-            <Text style={{ color: '#fff', fontSize: 14, opacity: 0.8, marginBottom: s.xl }}>
-              {capturing ? "Analyzing text..." : "Align item name / model number in frame"}
-            </Text>
+          <View style={styles.darkness} />
+        </View>
+        
+        {/* Bottom area */}
+        <View style={[styles.darkness, { flex: 1, paddingTop: s.xl, alignItems: 'center' }]}>
+          <Text style={{ color: '#fff', fontSize: 14, opacity: 0.8, marginBottom: s.xl }}>
+            {capturing ? "Analyzing text..." : "Align item name / model number in frame"}
+          </Text>
 
-            {/* Capture Button */}
-            <TouchableOpacity 
-              disabled={capturing}
-              onPress={handleCaptureText}
-              style={[styles.captureBtn, { backgroundColor: c.primary, opacity: capturing ? 0.5 : 1 }]}
-            >
-              <Aperture size={32} color={c.onPrimary} />
-            </TouchableOpacity>
+          {/* Capture Button */}
+          <TouchableOpacity 
+            disabled={capturing}
+            onPress={handleCaptureText}
+            style={[styles.captureBtn, { backgroundColor: c.primary, opacity: capturing ? 0.5 : 1 }]}
+          >
+            <Aperture size={32} color={c.onPrimary} />
+          </TouchableOpacity>
 
-            <View style={{ flex: 1 }} />
+          <View style={{ flex: 1 }} />
 
-            {/* Manual Entry */}
-            <View style={[styles.manualBox, { backgroundColor: c.surface, borderRadius: r.lg, padding: s.md }]}>
-              <Text style={{ color: c.onSurface, fontWeight: '600', marginBottom: s.sm }}>Manual Entry</Text>
-              <View style={{ flexDirection: 'row', gap: s.sm }}>
-                <View style={{ flex: 1 }}>
-                  <TextInput 
-                    placeholder="Enter item or design #" 
-                    value={manualInput} 
-                    onChangeText={setManualInput} 
-                    containerStyle={{ marginBottom: 0 }}
-                    returnKeyType="search"
-                    onSubmitEditing={() => handleSearch(manualInput)}
-                    editable={!loading}
-                  />
-                </View>
-                <Button 
-                  title="" 
-                  leftIcon={<Search size={20} color={c.onPrimary} />} 
-                  onPress={() => handleSearch(manualInput)}
-                  style={{ width: 48, paddingHorizontal: 0 }}
-                  loading={loading}
+          {/* Manual Entry */}
+          <View style={[styles.manualBox, { backgroundColor: c.surface, borderRadius: r.lg, padding: s.md }]}>
+            <Text style={{ color: c.onSurface, fontWeight: '600', marginBottom: s.sm }}>Manual Entry</Text>
+            <View style={{ flexDirection: 'row', gap: s.sm }}>
+              <View style={{ flex: 1 }}>
+                <TextInput 
+                  placeholder="Enter item or design #" 
+                  value={manualInput} 
+                  onChangeText={setManualInput} 
+                  containerStyle={{ marginBottom: 0 }}
+                  returnKeyType="search"
+                  onSubmitEditing={() => handleSearch(manualInput)}
+                  editable={!loading}
                 />
               </View>
+              <Button 
+                title="" 
+                leftIcon={<Search size={20} color={c.onPrimary} />} 
+                onPress={() => handleSearch(manualInput)}
+                style={{ width: 48, paddingHorizontal: 0 }}
+                loading={loading}
+              />
             </View>
           </View>
         </View>
-      </CameraView>
+      </View>
     </View>
   );
 }

@@ -82,6 +82,11 @@ export const useInvoiceStore = create<InvoiceState>()(
           state.totalCount += 1;
           state.loading = false;
         });
+
+        // Refresh inventory store since stock changed
+        const { useInventoryStore } = require('./inventoryStore');
+        useInventoryStore.getState().fetchItems(true);
+
         return newInvoice;
       } catch (error: any) {
         set({ error: error.message, loading: false });

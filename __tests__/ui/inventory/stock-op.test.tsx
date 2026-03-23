@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
-import StockOpScreen from './stock-op';
+import StockOpScreen from '@/app/(app)/inventory/stock-op';
 import { inventoryService } from '@/src/services/inventoryService';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
@@ -109,7 +109,28 @@ describe('StockOpScreen', () => {
 
     const { Alert } = require('react-native');
     await waitFor(() => {
-      expect(Alert.alert).toHaveBeenCalledWith("Error", expect.stringContaining("valid"));
+      expect(Alert.alert).toHaveBeenCalledWith("Error", expect.stringContaining("valid"), expect.any(Array));
+    });
+  });
+
+  it('shows an alert when stock operation fails', async () => {
+    const errorMessage = 'Database error';
+    mockPerformStockOperation.mockRejectedValue(new Error(errorMessage));
+
+    const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
+    await waitFor(() => getByPlaceholderText('e.g. 50'));
+    
+    fireEvent.changeText(getByPlaceholderText('e.g. 50'), '10');
+    fireEvent.press(getByText('Confirm'));
+
+    const { Alert } = require('react-native');
+    await waitFor(() => {
+      expect(mockPerformStockOperation).toHaveBeenCalled();
+      expect(Alert.alert).toHaveBeenCalledWith(
+        'Error',
+        expect.stringContaining(errorMessage),
+        expect.any(Array)
+      );
     });
   });
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
-import CreateInvoiceScreen from './create';
+import CreateInvoiceScreen from '@/app/(app)/invoices/create';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
@@ -45,12 +45,14 @@ describe('CreateInvoiceScreen', () => {
       items: mockInventoryItems,
       fetchItems: mockFetchItems,
     });
-    (useInventoryStore.getState as jest.Mock) = jest.fn().mockReturnValue({
+    // @ts-ignore
+    useInventoryStore.getState = jest.fn().mockReturnValue({
       fetchItems: mockFetchItems,
     });
 
     // Mock Invoice Store
-    (useInvoiceStore.getState as jest.Mock) = jest.fn().mockReturnValue({
+    // @ts-ignore
+    useInvoiceStore.getState = jest.fn().mockReturnValue({
       createInvoice: mockCreateInvoice,
     });
     mockCreateInvoice.mockResolvedValue({ id: 'new-inv-123' });
@@ -110,7 +112,41 @@ describe('CreateInvoiceScreen', () => {
         amount_paid: 11682,
         payment_status: 'paid',
       }));
+    });
+    await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/(app)/invoices/new-inv-123');
+    });
+  });
+
+  it('shows an alert when invoice creation fails', async () => {
+    const errorMessage = 'Schema error';
+    mockCreateInvoice.mockRejectedValue(new Error(errorMessage));
+
+    const { getByText, getByPlaceholderText } = renderWithTheme(<CreateInvoiceScreen />);
+    
+    // Step 1
+    fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+    fireEvent.press(getByText('Next'));
+    
+    // Step 2
+    await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+    fireEvent.press(getByText('+ Add Item'));
+    fireEvent.press(getByText('Marble gold'));
+    fireEvent.press(getByText('Confirm'));
+    fireEvent.press(getByText('Next'));
+    
+    // Step 3
+    await waitFor(() => expect(getByText('3. Review')).toBeTruthy());
+    fireEvent.press(getByText('Generate Invoice'));
+
+    const { Alert } = require('react-native');
+    await waitFor(() => {
+      expect(mockCreateInvoice).toHaveBeenCalled();
+      expect(Alert.alert).toHaveBeenCalledWith(
+        'Error Creating Invoice',
+        expect.stringContaining(errorMessage),
+        expect.any(Array)
+      );
     });
   });
 });

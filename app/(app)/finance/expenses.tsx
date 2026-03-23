@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, RefreshControl, Modal, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, RefreshControl, Modal, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
@@ -24,7 +24,9 @@ export default function ExpensesScreen() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetchExpenses();
+    fetchExpenses().catch(e => {
+      Alert.alert('Error', 'Failed to load expenses. ' + e.message, [{ text: 'OK' }]);
+    });
   }, []);
 
   const handleSave = async () => {
@@ -41,8 +43,13 @@ export default function ExpensesScreen() {
       setAmount('');
       setCategory('');
       setNotes('');
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      Alert.alert(
+        'Error Saving Expense',
+        e.message || 'An unexpected error occurred. Please ensure your database is set up correctly.',
+        [{ text: 'OK' }]
+      );
     } finally {
       setSaving(false);
     }
@@ -99,45 +106,50 @@ export default function ExpensesScreen() {
 
       <Modal visible={modalVisible} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: theme.colors.background }]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: theme.colors.onSurface, fontFamily: theme.typography.fontFamilyBold, fontWeight: '700' }]}>
-                New Expense
-              </Text>
-              <Button variant="ghost" size="sm" onPress={() => setModalVisible(false)} leftIcon={<X size={24} color={theme.colors.onSurface} />} />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ width: '100%' }}
+          >
+            <View style={[styles.modalContent, { backgroundColor: theme.colors.background }]}>
+              <View style={styles.modalHeader}>
+                <Text style={[styles.modalTitle, { color: theme.colors.onSurface, fontFamily: theme.typography.fontFamilyBold, fontWeight: '700' }]}>
+                  New Expense
+                </Text>
+                <Button variant="ghost" size="sm" onPress={() => setModalVisible(false)} leftIcon={<X size={24} color={theme.colors.onSurface} />} />
+              </View>
+
+              <TextInput
+                label="Amount (₹) *"
+                value={amount}
+                onChangeText={setAmount}
+                keyboardType="numeric"
+                placeholder="0.00"
+              />
+
+              <TextInput
+                label="Category *"
+                value={category}
+                onChangeText={setCategory}
+                placeholder="e.g. Electricity, Rent, Salary"
+              />
+
+              <TextInput
+                label="Notes"
+                value={notes}
+                onChangeText={setNotes}
+                placeholder="Optional description"
+                multiline
+                numberOfLines={2}
+              />
+
+              <Button
+                title={saving ? 'Saving...' : 'Save Expense'}
+                onPress={handleSave}
+                loading={saving}
+                style={{ marginTop: 16 }}
+              />
             </View>
-
-            <TextInput
-              label="Amount (₹) *"
-              value={amount}
-              onChangeText={setAmount}
-              keyboardType="numeric"
-              placeholder="0.00"
-            />
-
-            <TextInput
-              label="Category *"
-              value={category}
-              onChangeText={setCategory}
-              placeholder="e.g. Electricity, Rent, Salary"
-            />
-
-            <TextInput
-              label="Notes"
-              value={notes}
-              onChangeText={setNotes}
-              placeholder="Optional description"
-              multiline
-              numberOfLines={2}
-            />
-
-            <Button
-              title={saving ? 'Saving...' : 'Save Expense'}
-              onPress={handleSave}
-              loading={saving}
-              style={{ marginTop: 16 }}
-            />
-          </View>
+          </KeyboardAvoidingView>
         </View>
       </Modal>
     </View>

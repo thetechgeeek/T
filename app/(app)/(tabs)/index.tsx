@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   ScrollView, View, Text, StyleSheet, TouchableOpacity,
-  RefreshControl, useWindowDimensions,
+  RefreshControl, useWindowDimensions, ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
   FileText, Package, QrCode, CreditCard,
   TrendingUp, AlertTriangle, Users,
+  ChevronRight,
 } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useAuthStore } from '@/src/stores/authStore';
+import { useInvoiceStore } from '@/src/stores/invoiceStore';
+import { useInventoryStore } from '@/src/stores/inventoryStore';
+import { useCustomerStore } from '@/src/stores/customerStore';
+import { todayISO, formatDate } from '@/src/utils/dateUtils';
 
 export default function DashboardScreen() {
   const { theme } = useTheme();
@@ -19,6 +24,10 @@ export default function DashboardScreen() {
   const router = useRouter();
   const [refreshing, setRefreshing] = React.useState(false);
   const { width } = useWindowDimensions();
+
+  const { invoices, fetchInvoices } = useInvoiceStore();
+  const { items, fetchItems } = useInventoryStore();
+  const { fetchCustomers } = useCustomerStore();
 
   const c = theme.colors;
   const s = theme.spacing;
@@ -32,16 +41,44 @@ export default function DashboardScreen() {
     { label: t('dashboard.recordPayment'), icon: CreditCard, route: '/(app)/finance/payments', color: c.warning },
   ];
 
+  const today = todayISO();
+  
+  const todaySales = useMemo(() => {
+    return invoices
+      .filter(inv => inv.invoice_date === today)
+      .reduce((sum, inv) => sum + inv.grand_total, 0);
+  }, [invoices, today]);
+
+  const outstandingCredit = useMemo(() => {
+    return invoices.reduce((sum, inv) => sum + (inv.grand_total - (inv.amount_paid || 0)), 0);
+  }, [invoices]);
+
+  const lowStockCount = useMemo(() => {
+    return items.filter(item => item.box_count <= (item.low_stock_threshold || 10)).length;
+  }, [items]);
+
+  const recentInvoices = useMemo(() => {
+    return invoices.slice(0, 5);
+  }, [invoices]);
+
   const stats = [
-    { label: t('dashboard.todaySales'), value: formatCurrency(0), icon: TrendingUp, color: c.success },
-    { label: t('dashboard.outstandingCredit'), value: formatCurrency(0), icon: Users, color: c.warning },
-    { label: t('dashboard.lowStock'), value: '0 items', icon: AlertTriangle, color: c.error },
+    { label: t('dashboard.todaySales'), value: formatCurrency(todaySales), icon: TrendingUp, color: c.success },
+    { label: t('dashboard.outstandingCredit'), value: formatCurrency(outstandingCredit), icon: Users, color: c.warning },
+    { label: t('dashboard.lowStock'), value: `${lowStockCount} items`, icon: AlertTriangle, color: c.error },
   ];
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 1000);
-  }, []);
+    try {
+      await Promise.all([
+        fetchInvoices(1),
+        fetchItems(true),
+        fetchCustomers(true),
+      ]);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [fetchInvoices, fetchItems, fetchCustomers]);
 
   return (
     <ScrollView
@@ -72,10 +109,14 @@ export default function DashboardScreen() {
             ...(theme.shadows.md as object),
           }]}>
             <stat.icon size={20} color={stat.color} strokeWidth={2} />
-            <Text style={[styles.statValue, { color: c.onSurface, fontSize: typo.sizes.lg, fontWeight: typo.weights.bold, marginTop: 6 }]}>
+            <Text 
+              numberOfLines={1} 
+              adjustsFontSizeToFit 
+              style={[styles.statValue, { color: c.onSurface, fontSize: typo.sizes.md, fontWeight: typo.weights.bold, marginTop: 6 }]}
+            >
               {stat.value}
             </Text>
-            <Text style={[styles.statLabel, { color: c.onSurfaceVariant, fontSize: typo.sizes.xs }]}>
+            <Text style={[styles.statLabel, { color: c.onSurfaceVariant, fontSize: 10 }]}>
               {stat.label}
             </Text>
           </View>
@@ -112,7 +153,7 @@ export default function DashboardScreen() {
         </View>
       </View>
 
-      {/* Recent Invoices Placeholder */}
+      {/* Recent Invoices */}
       <View style={[styles.section, { paddingHorizontal: s.lg, marginTop: s.lg }]}>
         <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { color: c.onBackground, fontSize: typo.sizes.md, fontWeight: typo.weights.semibold }]}>
@@ -122,12 +163,47 @@ export default function DashboardScreen() {
             <Text style={[{ color: c.primary, fontSize: typo.sizes.sm }]}>{t('common.seeAll')}</Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.emptyCard, { backgroundColor: c.surfaceVariant, borderRadius: r.md, padding: s.xl }]}>
-          <FileText size={32} color={c.placeholder} strokeWidth={1.5} />
-          <Text style={[{ color: c.placeholder, fontSize: typo.sizes.sm, marginTop: s.sm, textAlign: 'center' }]}>
-            {t('invoice.noInvoices')}{'\n'}{t('invoice.createFirst')}
-          </Text>
-        </View>
+
+        {recentInvoices.length === 0 ? (
+          <View style={[styles.emptyCard, { backgroundColor: c.surfaceVariant, borderRadius: r.md, padding: s.xl }]}>
+            <FileText size={32} color={c.placeholder} strokeWidth={1.5} />
+            <Text style={[{ color: c.placeholder, fontSize: typo.sizes.sm, marginTop: s.sm, textAlign: 'center' }]}>
+              {t('invoice.noInvoices')}{'\n'}{t('invoice.createFirst')}
+            </Text>
+          </View>
+        ) : (
+          <View style={{ gap: s.sm }}>
+            {recentInvoices.map((inv) => (
+              <TouchableOpacity
+                key={inv.id}
+                onPress={() => router.push(`/(app)/invoices/${inv.id}`)}
+                style={[styles.invoiceItem, { backgroundColor: c.card, borderRadius: r.md, padding: s.md, ...(theme.shadows.sm as object) }]}
+              >
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <View>
+                    <Text style={{ color: c.onSurface, fontWeight: '600' }}>{inv.customer_name}</Text>
+                    <Text style={{ color: c.onSurfaceVariant, fontSize: 12 }}>{inv.invoice_number} • {formatDate(inv.invoice_date)}</Text>
+                  </View>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <Text style={{ color: c.primary, fontWeight: '700' }}>{formatCurrency(inv.grand_total)}</Text>
+                    <View style={[styles.statusBadge, { 
+                      backgroundColor: inv.payment_status === 'paid' ? c.success + '20' : inv.payment_status === 'partial' ? c.warning + '20' : c.error + '20',
+                      paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 4
+                    }]}>
+                      <Text style={{ 
+                        fontSize: 10, color: inv.payment_status === 'paid' ? c.success : inv.payment_status === 'partial' ? c.warning : c.error,
+                        textTransform: 'capitalize' 
+                      }}>
+                        {inv.payment_status}
+                      </Text>
+                    </View>
+                  </View>
+                  <ChevronRight size={18} color={c.placeholder} style={{ marginLeft: s.xs }} />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -150,4 +226,6 @@ const styles = StyleSheet.create({
   actionIcon: {},
   actionLabel: {},
   emptyCard: { alignItems: 'center' },
+  invoiceItem: { marginBottom: 8 },
+  statusBadge: { alignSelf: 'flex-start' },
 });

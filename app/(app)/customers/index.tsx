@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { View, FlatList, StyleSheet, RefreshControl, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
@@ -27,7 +27,9 @@ export default function CustomersScreen() {
   const [search, setSearch] = useState(filters.search || '');
 
   useEffect(() => {
-    fetchCustomers();
+    fetchCustomers().catch(e => {
+      Alert.alert('Error', 'Failed to load customers. ' + e.message, [{ text: 'OK' }]);
+    });
   }, []);
 
   const handleSearch = (text: string) => {

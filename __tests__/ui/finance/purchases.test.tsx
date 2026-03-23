@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
-import PurchasesScreen from './purchases';
+import PurchasesScreen from '@/app/(app)/finance/purchases';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
@@ -26,6 +26,7 @@ describe('PurchasesScreen', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockFetchPurchases.mockResolvedValue(undefined);
     (useFinanceStore as unknown as jest.Mock).mockReturnValue({
       purchases: mockPurchases,
       loading: false,
@@ -56,6 +57,23 @@ describe('PurchasesScreen', () => {
     
     await waitFor(() => {
       expect(getByText('No purchases found')).toBeTruthy();
+    });
+  });
+
+  it('shows an alert when fetching purchases fails', async () => {
+    const errorMessage = 'Network error';
+    mockFetchPurchases.mockRejectedValue(new Error(errorMessage));
+
+    renderWithTheme(<PurchasesScreen />);
+    
+    const { Alert } = require('react-native');
+    await waitFor(() => {
+      expect(mockFetchPurchases).toHaveBeenCalled();
+      expect(Alert.alert).toHaveBeenCalledWith(
+        'Error',
+        expect.stringContaining(errorMessage),
+        expect.any(Array)
+      );
     });
   });
 });

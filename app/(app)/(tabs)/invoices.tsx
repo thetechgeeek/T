@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
@@ -17,7 +17,9 @@ export default function InvoicesListScreen() {
   const { invoices, fetchInvoices, loading, totalCount } = useInvoiceStore();
 
   useEffect(() => {
-    fetchInvoices();
+    fetchInvoices().catch(e => {
+      Alert.alert('Error', 'Failed to load invoices. ' + e.message, [{ text: 'OK' }]);
+    });
   }, [fetchInvoices]);
 
   return (
