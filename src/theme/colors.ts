@@ -120,6 +120,24 @@ const TYPOGRAPHY: Theme['typography'] = {
     normal: 1.5,
     relaxed: 1.75,
   },
+  variants: {
+    h1: { fontSize: 30, fontWeight: '700', lineHeight: 36 },
+    h2: { fontSize: 24, fontWeight: '700', lineHeight: 30 },
+    h3: { fontSize: 20, fontWeight: '700', lineHeight: 26 },
+    body1: { fontSize: 17, fontWeight: '400', lineHeight: 24 },
+    body2: { fontSize: 15, fontWeight: '400', lineHeight: 22 },
+    caption: { fontSize: 13, fontWeight: '400', lineHeight: 18 },
+    label: { fontSize: 13, fontWeight: '600', lineHeight: 18, textTransform: 'uppercase', letterSpacing: 0.5 },
+    button: { fontSize: 15, fontWeight: '600', lineHeight: 20 },
+  },
+};
+
+const LAYOUT: Theme['layout'] = {
+  row: { flexDirection: 'row', alignItems: 'center' },
+  rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  center: { alignItems: 'center', justifyContent: 'center' },
+  flex: { flex: 1 },
+  absoluteFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
 };
 
 const SPACING: Theme['spacing'] = {
@@ -165,6 +183,7 @@ export function buildTheme(isDark: boolean): Theme {
     spacing: SPACING,
     borderRadius: BORDER_RADIUS,
     shadows: makeShadows(isDark),
+    layout: LAYOUT,
     touchTarget: 48,
   };
 }

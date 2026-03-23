@@ -6,9 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { TextInput } from '@/src/components/ui/TextInput';
-import { Button } from '@/src/components/ui/Button';
-import { Card } from '@/src/components/ui/Card';
+import { Button } from '@/src/components/atoms/Button';
+import { Card } from '@/src/components/atoms/Card';
+import { Screen } from '@/src/components/atoms/Screen';
+import { FormField } from '@/src/components/molecules/FormField';
 
 interface CustomerFormData {
   name: string;
@@ -62,11 +63,7 @@ export default function AddCustomerScreen() {
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={{ flex: 1 }} 
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={100}
-    >
+    <Screen safeAreaEdges={['top', 'bottom']} withKeyboard>
       <Stack.Screen options={{ title: 'Add Customer' }} />
       <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
         <View style={styles.content}>
@@ -75,8 +72,9 @@ export default function AddCustomerScreen() {
               control={control}
               name="name"
               render={({ field: { onChange, value } }) => (
-                <TextInput
-                  label="Customer Name *"
+                <FormField
+                  label="Customer Name"
+                  required
                   placeholder="Enter full name"
                   value={value}
                   onChangeText={onChange}
@@ -89,7 +87,7 @@ export default function AddCustomerScreen() {
               control={control}
               name="phone"
               render={({ field: { onChange, value } }) => (
-                <TextInput
+                <FormField
                   label="Phone Number"
                   placeholder="Enter 10-digit number"
                   keyboardType="phone-pad"
@@ -104,7 +102,7 @@ export default function AddCustomerScreen() {
               control={control}
               name="gstin"
               render={({ field: { onChange, value } }) => (
-                <TextInput
+                <FormField
                   label="GSTIN"
                   placeholder="22AAAAA0000A1Z5"
                   autoCapitalize="characters"
@@ -115,13 +113,13 @@ export default function AddCustomerScreen() {
               )}
             />
 
-            <View style={styles.row}>
-              <View style={{ flex: 1, marginRight: 8 }}>
+            <View style={[theme.layout.row, { gap: 16 }]}>
+              <View style={{ flex: 1 }}>
                 <Controller
                   control={control}
                   name="city"
                   render={({ field: { onChange, value } }) => (
-                    <TextInput
+                    <FormField
                       label="City"
                       placeholder="e.g. Morbi"
                       value={value}
@@ -130,12 +128,12 @@ export default function AddCustomerScreen() {
                   )}
                 />
               </View>
-              <View style={{ flex: 1, marginLeft: 8 }}>
+              <View style={{ flex: 1 }}>
                 <Controller
                   control={control}
                   name="state"
                   render={({ field: { onChange, value } }) => (
-                    <TextInput
+                    <FormField
                       label="State"
                       placeholder="e.g. Gujarat"
                       value={value}
@@ -150,7 +148,7 @@ export default function AddCustomerScreen() {
               control={control}
               name="address"
               render={({ field: { onChange, value } }) => (
-                <TextInput
+                <FormField
                   label="Address"
                   placeholder="Detailed address"
                   multiline
@@ -165,7 +163,7 @@ export default function AddCustomerScreen() {
               control={control}
               name="credit_limit"
               render={({ field: { onChange, value } }) => (
-                <TextInput
+                <FormField
                   label="Credit Limit (₹)"
                   placeholder="0"
                   keyboardType="numeric"
@@ -184,7 +182,7 @@ export default function AddCustomerScreen() {
           </Card>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </Screen>
   );
 }
 
@@ -194,9 +192,6 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-  },
-  row: {
-    flexDirection: 'row',
   },
   saveButton: {
     marginTop: 16,

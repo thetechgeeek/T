@@ -1,31 +1,31 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function SupplierDetailScreen() {
   const { theme } = useTheme();
   const router = useRouter();
   const c = theme.colors;
   return (
-    <View style={[styles.container, { backgroundColor: c.background }]}>
-      <View style={[styles.header, { backgroundColor: c.surface, borderBottomColor: c.border, borderBottomWidth: 1, paddingTop: 56, paddingHorizontal: 20, paddingBottom: 16 }]}>
+    <Screen safeAreaEdges={['top', 'bottom']}>
+      <View style={[styles.header, { borderBottomColor: c.border, borderBottomWidth: 1, paddingHorizontal: 20, paddingBottom: 16 }]}>
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <ArrowLeft size={22} color={c.primary} strokeWidth={2} />
         </TouchableOpacity>
-        <Text style={[{ color: c.onBackground, fontSize: 22, fontWeight: '700' }]}>Supplier Detail</Text>
+        <ThemedText variant="h2">Supplier Detail</ThemedText>
       </View>
       <View style={styles.center}>
-        <Text style={[{ color: c.placeholder }]}>Supplier Detail — coming soon</Text>
+        <ThemedText color={c.placeholder}>Supplier Detail — coming soon</ThemedText>
       </View>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  header: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 },
   back: { marginRight: 4 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
-import { useTheme } from '../../theme/ThemeProvider';
-import { Button } from './Button';
+import { useTheme } from '@/src/theme/ThemeProvider';
+import { Button } from '@/src/components/atoms/Button';
 
 interface EmptyStateProps {
   title: string;

@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, RefreshControl, Text, Alert } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, ScrollView, StyleSheet, RefreshControl, Alert } from 'react-native';
 import { Stack } from 'expo-router';
-import { ShoppingCart, Calendar, User } from 'lucide-react-native';
+import { Calendar, User } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/components/ui/Card';
-import { Badge } from '@/src/components/ui/Badge';
-import { EmptyState } from '@/src/components/ui/EmptyState';
+import { Card } from '@/src/components/atoms/Card';
+import { Badge } from '@/src/components/atoms/Badge';
+import { EmptyState } from '@/src/components/molecules/EmptyState';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function PurchasesScreen() {
   const { theme } = useTheme();
@@ -21,7 +23,7 @@ export default function PurchasesScreen() {
   }, []);
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <Screen safeAreaEdges={['top', 'bottom']}>
       <Stack.Screen options={{ title: 'Purchases' }} />
       
       <ScrollView
@@ -39,9 +41,9 @@ export default function PurchasesScreen() {
               <View style={styles.header}>
                 <View style={styles.supplierInfo}>
                   <User size={16} color={theme.colors.primary} />
-                  <Text style={[styles.supplierName, { color: theme.colors.onSurface, fontWeight: '700' }]}>
+                  <ThemedText weight="bold" style={{ fontSize: 16 }}>
                     {p.supplier_name || 'Generic Supplier'}
-                  </Text>
+                  </ThemedText>
                 </View>
                 <Badge 
                   label={p.payment_status.toUpperCase()} 
@@ -52,23 +54,23 @@ export default function PurchasesScreen() {
               <View style={styles.details}>
                 <View style={styles.detailItem}>
                   <Calendar size={14} color={theme.colors.onSurfaceVariant} />
-                  <Text style={[styles.detailText, { color: theme.colors.onSurfaceVariant }]}>
+                  <ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
                     {formatDate(p.purchase_date)}
-                  </Text>
+                  </ThemedText>
                 </View>
               </View>
 
               <View style={styles.footer}>
-                <Text style={[styles.totalLabel, { color: theme.colors.onSurfaceVariant }]}>Total Amount</Text>
-                <Text style={[styles.totalValue, { color: theme.colors.onSurface, fontWeight: '800' }]}>
+                <ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>Total Amount</ThemedText>
+                <ThemedText weight="bold" style={{ fontSize: 18 }}>
                   {formatCurrency(p.total_amount)}
-                </Text>
+                </ThemedText>
               </View>
             </Card>
           ))
         )}
       </ScrollView>
-    </View>
+    </Screen>
   );
 }
 

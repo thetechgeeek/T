@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
-import { useTheme } from '../../theme/ThemeProvider';
+import { useTheme } from '@/src/theme/ThemeProvider';
 
 interface ListItemProps {
   title: string;

@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Package, Plus, ChevronRight, FileText } from 'lucide-react-native';
+import { Plus, ChevronRight, FileText } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useOrderStore } from '@/src/stores/orderStore';
-import { Button } from '@/src/components/ui/Button';
+import { Button } from '@/src/components/atoms/Button';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function OrdersListScreen() {
   const { theme } = useTheme();
@@ -18,14 +20,14 @@ export default function OrdersListScreen() {
 
   const { orders, loading, fetchOrders } = useOrderStore();
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchOrders();
   }, []);
 
   return (
-    <View style={[styles.container, { backgroundColor: c.background }]}>
-      <View style={[styles.header, { backgroundColor: c.surface, borderBottomColor: c.border }]}>
-        <Text style={{ color: c.onSurface, fontSize: 22, fontWeight: '700' }}>Purchase Orders</Text>
+    <Screen safeAreaEdges={['top', 'bottom']}>
+      <View style={[styles.header, { borderBottomColor: c.border }]}>
+        <ThemedText variant="h2">Purchase Orders</ThemedText>
         <Button 
           title="Import PDF" 
           size="sm" 
@@ -41,10 +43,10 @@ export default function OrdersListScreen() {
       ) : orders.length === 0 ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: s.xl }}>
           <FileText size={64} color={c.placeholder} style={{ marginBottom: s.lg }} />
-          <Text style={{ color: c.onBackground, fontSize: 18, fontWeight: '600', marginBottom: 8 }}>No Orders Yet</Text>
-          <Text style={{ color: c.placeholder, textAlign: 'center', marginBottom: s.xl }}>
+          <ThemedText variant="h3" style={{ marginBottom: 8 }}>No Orders Yet</ThemedText>
+          <ThemedText color={c.placeholder} align="center" style={{ marginBottom: s.xl }}>
             Import a supplier performa invoice (PDF or Image) to automatically extract items and restock inventory using AI.
-          </Text>
+          </ThemedText>
           <Button title="Import First Order" onPress={() => router.push('/(app)/orders/import')} />
         </View>
       ) : (
@@ -59,16 +61,16 @@ export default function OrdersListScreen() {
               activeOpacity={0.7}
             >
               <View style={{ flex: 1 }}>
-                <Text style={{ color: c.onSurface, fontSize: 16, fontWeight: '700' }}>
+                <ThemedText weight="bold" style={{ fontSize: 16 }}>
                   {item.party_name || 'Unknown Supplier'}
-                </Text>
-                <Text style={{ color: c.onSurfaceVariant, fontSize: 13, marginTop: 4 }}>
+                </ThemedText>
+                <ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginTop: 4 }}>
                   {formatDateShort(item.created_at)} • {item.total_quantity} items imported
-                </Text>
+                </ThemedText>
               </View>
               <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
                 <View style={[styles.badge, { backgroundColor: c.success + '15' }]}>
-                  <Text style={{ color: c.success, fontSize: 12, fontWeight: '600' }}>Imported</Text>
+                  <ThemedText color={c.success} weight="semibold" style={{ fontSize: 12 }}>Imported</ThemedText>
                 </View>
                 <ChevronRight size={20} color={c.placeholder} style={{ marginTop: 8 }} />
               </View>
@@ -76,15 +78,14 @@ export default function OrdersListScreen() {
           )}
         />
       )}
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   header: {
-    padding: 20,
-    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

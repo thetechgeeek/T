@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,8 +8,10 @@ import { X, Save, ArrowDownRight, ArrowUpRight } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { inventoryService } from '@/src/services/inventoryService';
-import { TextInput } from '@/src/components/ui/TextInput';
-import { Button } from '@/src/components/ui/Button';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { TextInput } from '@/src/components/atoms/TextInput';
+import { Button } from '@/src/components/atoms/Button';
+import { Screen } from '@/src/components/atoms/Screen';
 import type { UUID } from '@/src/types/common';
 import type { StockOpType, InventoryItem } from '@/src/types/inventory';
 
@@ -79,19 +81,15 @@ export default function StockOpScreen() {
   }
 
   return (
-    <KeyboardAvoidingView 
-      style={{ flex: 1 }} 
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <View style={[styles.container, { backgroundColor: c.background }]}>
-        <View style={[styles.header, { borderBottomColor: c.border, paddingTop: 56, paddingHorizontal: 20, paddingBottom: 16 }]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <Screen safeAreaEdges={['top', 'bottom']} withKeyboard>
+        <View style={[styles.header, theme.layout.rowBetween, { borderBottomColor: c.border, paddingHorizontal: 20, paddingBottom: 16 }]}>
+          <View style={theme.layout.row}>
             <View style={[styles.iconWrap, { backgroundColor: color + '20' }]}>
               <Icon size={22} color={color} strokeWidth={2.5} />
             </View>
-            <Text style={[{ color: c.onBackground, fontSize: 18, fontWeight: '700', marginLeft: 12 }]}>
+            <ThemedText variant="h3" style={{ marginLeft: 12 }}>
               {title}
-            </Text>
+            </ThemedText>
           </View>
           <TouchableOpacity onPress={() => router.back()} style={{ padding: 4 }}>
             <X size={24} color={c.placeholder} strokeWidth={2} />
@@ -100,9 +98,11 @@ export default function StockOpScreen() {
 
         <View style={{ padding: s.lg }}>
           <View style={[styles.infoBox, { backgroundColor: c.surfaceVariant, borderRadius: r.md, marginBottom: s.xl }]}>
-            <Text style={{ color: c.onSurfaceVariant, fontSize: 13 }}>Item</Text>
-            <Text style={{ color: c.onSurface, fontSize: 16, fontWeight: '600', marginTop: 4 }}>{item.design_name}</Text>
-            <Text style={{ color: c.onSurface, fontSize: 14, marginTop: 4 }}>Current Stock: <Text style={{ fontWeight: '700' }}>{item.box_count} Boxes</Text></Text>
+            <ThemedText variant="caption" color={c.onSurfaceVariant}>Item</ThemedText>
+            <ThemedText weight="bold" style={{ marginTop: 4 }}>{item.design_name}</ThemedText>
+            <ThemedText variant="body2" style={{ marginTop: 4 }}>
+              Current Stock: <ThemedText weight="bold">{item.box_count} Boxes</ThemedText>
+            </ThemedText>
           </View>
 
           <Controller
@@ -143,14 +143,13 @@ export default function StockOpScreen() {
             leftIcon={<Save size={20} color={c.onPrimary} />}
           />
         </View>
-      </View>
-    </KeyboardAvoidingView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1 },
+  header: { borderBottomWidth: 1 },
   iconWrap: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
   infoBox: { padding: 16 },
 });

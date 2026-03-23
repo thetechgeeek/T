@@ -4,11 +4,13 @@ import { useRouter, Stack } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { SearchBar } from '@/src/components/ui/SearchBar';
-import { ListItem } from '@/src/components/ui/ListItem';
-import { Button } from '@/src/components/ui/Button';
-import { EmptyState } from '@/src/components/ui/EmptyState';
-import { Badge } from '@/src/components/ui/Badge';
+import { SearchBar } from '@/src/components/molecules/SearchBar';
+import { ListItem } from '@/src/components/molecules/ListItem';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Screen } from '@/src/components/atoms/Screen';
+import { Button } from '@/src/components/atoms/Button';
+import { EmptyState } from '@/src/components/molecules/EmptyState';
+import { Badge } from '@/src/components/atoms/Badge';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { Customer } from '@/src/types/customer';
 
@@ -44,14 +46,9 @@ export default function CustomersScreen() {
       onPress={() => router.push(`/customers/${item.id}`)}
       leftIcon={
         <View style={[styles.avatar, { backgroundColor: theme.colors.surfaceVariant }]}>
-          <Text style={{ 
-            color: theme.colors.primary, 
-            fontWeight: '700', 
-            fontSize: 18,
-            fontFamily: theme.typography.fontFamilyBold 
-          }}>
+          <ThemedText weight="bold" color={theme.colors.primary} style={{ fontSize: 18 }}>
             {item.name.charAt(0).toUpperCase()}
-          </Text>
+          </ThemedText>
         </View>
       }
       rightElement={
@@ -65,7 +62,7 @@ export default function CustomersScreen() {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <Screen safeAreaEdges={['top']} withKeyboard={false}>
       <Stack.Screen 
         options={{ 
           title: 'Customers',
@@ -80,7 +77,7 @@ export default function CustomersScreen() {
         }} 
       />
 
-      <View style={[styles.header, { borderBottomColor: theme.colors.separator }]}>
+      <View style={[styles.header, { borderBottomColor: theme.colors.border, borderBottomWidth: 1 }]}>
         <SearchBar
           value={search}
           onChangeText={handleSearch}
@@ -113,19 +110,14 @@ export default function CustomersScreen() {
           ) : null
         }
       />
-    </View>
+    </Screen>
   );
 }
 
-import { Text } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   header: {
     padding: 16,
-    borderBottomWidth: 1,
   },
   searchBar: {
     marginBottom: 0,

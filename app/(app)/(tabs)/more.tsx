@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Users, Truck, BarChart2, Settings, ChevronRight, Package } from 'lucide-react-native';
+import { Users, Truck, BarChart2, Settings, ChevronRight, Package, Languages } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useAuthStore } from '@/src/stores/authStore';
-import { Languages } from 'lucide-react-native';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function MoreTab() {
   const { theme } = useTheme();
@@ -24,11 +24,11 @@ export default function MoreTab() {
   ];
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: c.background }]}>
-      <View style={[styles.header, { backgroundColor: c.surface, borderBottomColor: c.border, borderBottomWidth: StyleSheet.hairlineWidth, paddingTop: 56, paddingHorizontal: s.lg, paddingBottom: s.md }]}>
-        <Text style={[{ color: c.onBackground, fontSize: theme.typography.sizes['2xl'], fontWeight: theme.typography.weights.bold }]}>
+    <Screen safeAreaEdges={['top', 'bottom']} scrollable>
+      <View style={[styles.header, { borderBottomColor: c.border, borderBottomWidth: StyleSheet.hairlineWidth, paddingHorizontal: s.lg, paddingBottom: s.md }]}>
+        <ThemedText variant="h1">
           More
-        </Text>
+        </ThemedText>
       </View>
       <View style={{ padding: s.lg }}>
         {menuItems.map((item, i) => (
@@ -41,9 +41,9 @@ export default function MoreTab() {
             <View style={[styles.iconWrap, { backgroundColor: item.color + '20', borderRadius: 10 }]}>
               <item.icon size={22} color={item.color} strokeWidth={2} />
             </View>
-            <Text style={[styles.menuLabel, { color: c.onSurface, fontSize: theme.typography.sizes.md, fontWeight: theme.typography.weights.medium }]}>
+            <ThemedText weight="medium" style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}>
               {item.label}
-            </Text>
+            </ThemedText>
             <ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
           </TouchableOpacity>
         ))}
@@ -56,9 +56,9 @@ export default function MoreTab() {
           <View style={[styles.iconWrap, { backgroundColor: c.primary + '20', borderRadius: 10 }]}>
             <Languages size={22} color={c.primary} strokeWidth={2} />
           </View>
-          <Text style={[styles.menuLabel, { color: c.onSurface, fontSize: theme.typography.sizes.md, fontWeight: theme.typography.weights.medium }]}>
+          <ThemedText weight="medium" style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}>
             {currentLanguage === 'en' ? 'Switch to Hindi (हिंदी)' : 'Switch to English'}
-          </Text>
+          </ThemedText>
           <ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
         </TouchableOpacity>
 
@@ -66,18 +66,18 @@ export default function MoreTab() {
           style={[styles.menuItem, { backgroundColor: c.errorLight, borderRadius: theme.borderRadius.md, marginTop: s.lg }]}
           onPress={logout}
         >
-          <Text style={[{ color: c.error, fontSize: theme.typography.sizes.md, fontWeight: theme.typography.weights.medium, flex: 1, textAlign: 'center' }]}>
+          <ThemedText color={c.error} weight="medium" align="center" style={{ flex: 1, fontSize: theme.typography.sizes.md }}>
             {t('auth.signOut')}
-          </Text>
+          </ThemedText>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: {},
+  header: { paddingVertical: 12 },
   menuItem: { flexDirection: 'row', alignItems: 'center', padding: 14 },
   iconWrap: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
   menuLabel: { flex: 1 },

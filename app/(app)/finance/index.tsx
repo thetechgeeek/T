@@ -5,10 +5,10 @@ import { TrendingUp, TrendingDown, Wallet, Receipt, ShoppingCart, ChevronRight }
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/components/ui/Card';
-import { StatCard } from '@/src/components/ui/StatCard';
-import { ListItem } from '@/src/components/ui/ListItem';
-import { Divider } from '@/src/components/ui/Divider';
+import { Card } from '@/src/components/atoms/Card';
+import { StatCard } from '@/src/components/molecules/StatCard';
+import { ListItem } from '@/src/components/molecules/ListItem';
+import { Divider } from '@/src/components/atoms/Divider';
 
 export default function FinanceOverviewScreen() {
   const { theme } = useTheme();

@@ -6,8 +6,8 @@ import { Search, Aperture } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
-import { TextInput } from '@/src/components/ui/TextInput';
-import { Button } from '@/src/components/ui/Button';
+import { TextInput } from '@/src/components/atoms/TextInput';
+import { Button } from '@/src/components/atoms/Button';
 
 export default function ScanTab() {
   const { theme } = useTheme();

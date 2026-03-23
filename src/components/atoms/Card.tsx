@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
-import { useTheme } from '../../theme/ThemeProvider';
+import { useTheme } from '@/src/theme/ThemeProvider';
 
 interface CardProps {
   children: React.ReactNode;

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Animated, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Animated, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { FileUp, FileText, CheckCircle2, ChevronRight, Save, KeyRound } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { pdfService } from '@/src/services/pdfService';
-import { Button } from '@/src/components/ui/Button';
-import { TextInput } from '@/src/components/ui/TextInput';
+import { Button } from '@/src/components/atoms/Button';
+import { TextInput } from '@/src/components/atoms/TextInput';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function ImportOrderScreen() {
   const { theme } = useTheme();
@@ -18,12 +20,6 @@ export default function ImportOrderScreen() {
   const [aiKey, setAiKey] = useState('');
   const [partyName, setPartyName] = useState('');
   const [saving, setSaving] = useState(false);
-
-  // Simplified: 
-  // 1. Enter Gemini Key (if not in edge function env)
-  // 2. Upload Document
-  // 3. Review 
-  // 4. Save
 
   const handleUpload = async () => {
     try {
@@ -60,23 +56,23 @@ export default function ImportOrderScreen() {
 
   if (isParsing) {
     return (
-      <View style={[styles.container, { backgroundColor: c.background, alignItems: 'center', justifyContent: 'center' }]}>
+      <Screen safeAreaEdges={['top', 'bottom']} style={{ alignItems: 'center', justifyContent: 'center' }}>
         <FileText size={64} color={c.primary} style={{ opacity: 0.5, marginBottom: s.xl }} />
-        <Text style={{ color: c.onBackground, fontSize: 18, fontWeight: '600' }}>Analyzing Document...</Text>
-        <Text style={{ color: c.placeholder, marginTop: s.sm, textAlign: 'center', paddingHorizontal: s.xl }}>
+        <ThemedText variant="h3">Analyzing Document...</ThemedText>
+        <ThemedText color={c.placeholder} align="center" style={{ marginTop: s.sm, paddingHorizontal: s.xl }}>
           Our AI is reading your document to automatically extract exactly what was ordered.
-        </Text>
-      </View>
+        </ThemedText>
+      </Screen>
     );
   }
 
   if (parsedData) {
     return (
-      <View style={[styles.container, { backgroundColor: c.background }]}>
-        <View style={[styles.header, { backgroundColor: c.surface, borderBottomColor: c.border }]}>
-          <Text style={{ color: c.onSurface, fontSize: 20, fontWeight: '700' }}>Review Import</Text>
+      <Screen safeAreaEdges={['top', 'bottom']}>
+        <View style={[styles.header, { borderBottomColor: c.border }]}>
+          <ThemedText variant="h2">Review Import</ThemedText>
           <TouchableOpacity onPress={clearParsedData}>
-            <Text style={{ color: c.error }}>Discard</Text>
+            <ThemedText color={c.error}>Discard</ThemedText>
           </TouchableOpacity>
         </View>
 
@@ -90,73 +86,72 @@ export default function ImportOrderScreen() {
             />
           </View>
 
-          <Text style={{ color: c.onBackground, fontSize: 16, fontWeight: '600', marginBottom: s.md }}>
+          <ThemedText variant="h3" style={{ marginBottom: s.md }}>
             Extracted Items ({parsedData.length})
-          </Text>
+          </ThemedText>
 
           {parsedData.map((item, index) => (
             <View key={index} style={[styles.card, { backgroundColor: c.surface, borderLeftColor: c.primary }]}>
               <View style={{ flex: 1 }}>
-                <Text style={{ color: c.onSurface, fontWeight: '700', fontSize: 15 }}>{item.design_name || 'Unknown Design'}</Text>
-                <Text style={{ color: c.onSurfaceVariant, fontSize: 13, marginTop: 4 }}>
+                <ThemedText weight="bold" style={{ fontSize: 15 }}>{item.design_name || 'Unknown Design'}</ThemedText>
+                <ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginTop: 4 }}>
                   {item.category || 'N/A'} • {item.size || 'Size N/A'}
-                </Text>
+                </ThemedText>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
-                <Text style={{ color: c.primary, fontWeight: '700', fontSize: 16 }}>{item.box_count} Boxes</Text>
+                <ThemedText color={c.primary} weight="bold" style={{ fontSize: 16 }}>{item.box_count} Boxes</ThemedText>
                 {item.price_per_box ? (
-                  <Text style={{ color: c.onSurfaceVariant, fontSize: 12 }}>₹{item.price_per_box}/box</Text>
+                  <ThemedText variant="caption" color={c.onSurfaceVariant}>₹{item.price_per_box}/box</ThemedText>
                 ) : null}
               </View>
             </View>
           ))}
         </ScrollView>
 
-        <View style={[styles.footer, { backgroundColor: c.surface, borderTopColor: c.border }]}>
+        <View style={[styles.footer, { borderTopColor: c.border }]}>
           <Button 
             title="Confirm Import & Add Stock" 
             variant="primary"
             onPress={handleSave} 
             loading={saving}
-            style={{ marginBottom: 12 }}
           />
         </View>
-      </View>
+      </Screen>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: c.background }]}>
-      <View style={[styles.header, { backgroundColor: c.surface, borderBottomColor: c.border }]}>
-        <Text style={{ color: c.onSurface, fontSize: 20, fontWeight: '700' }}>Import Order (AI)</Text>
+    <Screen safeAreaEdges={['top', 'bottom']}>
+      <View style={[styles.header, { borderBottomColor: c.border }]}>
+        <ThemedText variant="h2">Import Order (AI)</ThemedText>
       </View>
 
       <ScrollView contentContainerStyle={{ padding: s.lg }}>
-        <Text style={{ color: c.onBackground, fontSize: 15, lineHeight: 22, marginBottom: s.xl }}>
+        <ThemedText style={{ lineHeight: 22, marginBottom: s.xl }}>
           Upload a PDF performa invoice, bill, or image of an order. The AI will extract all items and automatically restock your inventory.
-        </Text>
+        </ThemedText>
 
         <View style={[styles.uploadBox, { backgroundColor: c.surfaceVariant, borderColor: c.border }]}>
           <FileUp size={48} color={c.primary} style={{ marginBottom: s.md }} />
-          <Text style={{ color: c.onSurface, fontSize: 16, fontWeight: '600', marginBottom: 4 }}>
+          <ThemedText weight="bold" style={{ fontSize: 16, marginBottom: 4 }}>
             Select Document or Image
-          </Text>
-          <Text style={{ color: c.placeholder, fontSize: 13, marginBottom: s.lg, textAlign: 'center' }}>
+          </ThemedText>
+          <ThemedText variant="caption" color={c.placeholder} align="center" style={{ marginBottom: s.lg }}>
             Supported: .pdf, .jpg, .png
-          </Text>
+          </ThemedText>
           <Button title="Browse Files" onPress={handleUpload} variant="outline" />
         </View>
 
         <View style={{ marginTop: s.xl, padding: s.lg, backgroundColor: c.surfaceVariant + '40', borderRadius: theme.borderRadius.md }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: s.md }}>
             <KeyRound size={20} color={c.onSurfaceVariant} />
-            <Text style={{ color: c.onSurfaceVariant, fontSize: 15, fontWeight: '600', marginLeft: s.sm }}>
+            <ThemedText variant="label" weight="bold" style={{ marginLeft: s.sm }}>
               Developer Override (Optional)
-            </Text>
+            </ThemedText>
           </View>
-          <Text style={{ color: c.placeholder, fontSize: 12, marginBottom: s.md }}>
+          <ThemedText variant="caption" color={c.placeholder} style={{ marginBottom: s.md }}>
             If your Edge Function does not have the GEMINI_API_KEY secret set, paste your Gemini API key here to process the document.
-          </Text>
+          </ThemedText>
           <TextInput 
             label="Gemini API Key" 
             placeholder="AIzaSy..." 
@@ -167,13 +162,12 @@ export default function ImportOrderScreen() {
         </View>
 
       </ScrollView>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  header: { padding: 20, paddingTop: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1 },
+  header: { paddingHorizontal: 20, paddingVertical: 12, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1 },
   uploadBox: {
     borderWidth: 2,
     borderStyle: 'dashed',
@@ -190,5 +184,5 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderLeftWidth: 4,
   },
-  footer: { padding: 20, paddingBottom: 32, borderTopWidth: 1 }
+  footer: { padding: 20, paddingBottom: 12, borderTopWidth: 1 }
 });

@@ -5,12 +5,12 @@ import { Phone, MapPin, Receipt, Wallet, Plus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/components/ui/Card';
-import { Badge } from '@/src/components/ui/Badge';
-import { Divider } from '@/src/components/ui/Divider';
-import { Button } from '@/src/components/ui/Button';
-import { ListItem } from '@/src/components/ui/ListItem';
-import { PaymentModal } from '@/src/components/shared/PaymentModal';
+import { Card } from '@/src/components/atoms/Card';
+import { Badge } from '@/src/components/atoms/Badge';
+import { Divider } from '@/src/components/atoms/Divider';
+import { Button } from '@/src/components/atoms/Button';
+import { ListItem } from '@/src/components/molecules/ListItem';
+import { PaymentModal } from '@/src/components/organisms/PaymentModal';
 import type { CustomerLedgerEntry } from '@/src/types/customer';
 
 export default function CustomerDetailScreen() {

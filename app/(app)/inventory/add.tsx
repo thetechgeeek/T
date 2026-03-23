@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, Save, Image as ImageIcon } from 'lucide-react-native';
 import { useForm, Controller } from 'react-hook-form';
@@ -8,8 +8,10 @@ import { z } from 'zod';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { TextInput } from '@/src/components/ui/TextInput';
-import { Button } from '@/src/components/ui/Button';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Button } from '@/src/components/atoms/Button';
+import { Screen } from '@/src/components/atoms/Screen';
+import { FormField } from '@/src/components/molecules/FormField';
 import type { TileCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { inventoryService } from '@/src/services/inventoryService';
@@ -131,30 +133,27 @@ export default function AddItemScreen() {
   }
 
   return (
-    <KeyboardAvoidingView 
-      style={{ flex: 1 }} 
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <View style={[styles.container, { backgroundColor: c.background }]}>
-        <View style={[styles.header, { backgroundColor: c.surface, borderBottomColor: c.border, borderBottomWidth: 1, paddingHorizontal: s.lg }]}>
+    <Screen withKeyboard safeAreaEdges={['top', 'bottom']}>
+        <View style={[styles.header, theme.layout.rowBetween, { borderBottomColor: c.border, borderBottomWidth: 1, paddingHorizontal: s.lg }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
             <ArrowLeft size={24} color={c.onBackground} strokeWidth={2.5} />
           </TouchableOpacity>
-          <Text style={[{ color: c.onBackground, fontSize: 20, fontWeight: '700' }]}>
+          <ThemedText variant="h2">
             {isEditing ? 'Edit Item' : 'Add Item'}
-          </Text>
+          </ThemedText>
           <View style={{ width: 40 }} />
         </View>
 
         <ScrollView contentContainerStyle={{ padding: s.lg }} keyboardShouldPersistTaps="handled">
-          <Text style={[{ color: c.onBackground, fontSize: 18, fontWeight: '600', marginBottom: s.md }]}>Basic Details</Text>
+          <ThemedText variant="h3" style={{ marginBottom: s.md }}>Basic Details</ThemedText>
           
           <Controller
             control={control}
             name="design_name"
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Design Name / Item Number *"
+              <FormField
+                label="Design Name / Item Number"
+                required
                 placeholder="e.g. 10526-HL-1-A"
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -164,13 +163,13 @@ export default function AddItemScreen() {
             )}
           />
 
-          <View style={{ flexDirection: 'row', gap: s.md }}>
+          <View style={[theme.layout.row, { gap: s.md }]}>
             <View style={{ flex: 1 }}>
               <Controller
                 control={control}
                 name="size_name"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
+                  <FormField
                     label="Size"
                     placeholder="e.g. 600x600"
                     onBlur={onBlur}
@@ -185,7 +184,7 @@ export default function AddItemScreen() {
                 control={control}
                 name="brand_name"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
+                  <FormField
                     label="Brand"
                     placeholder="e.g. Somany"
                     onBlur={onBlur}
@@ -197,8 +196,8 @@ export default function AddItemScreen() {
             </View>
           </View>
 
-          <Text style={[{ color: c.onSurfaceVariant, fontSize: 14, fontWeight: '500', marginBottom: 6 }]}>Category *</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
+          <ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>Category *</ThemedText>
+          <View style={[theme.layout.row, { flexWrap: 'wrap', gap: 8, marginBottom: 16 }]}>
             <Controller
               control={control}
               name="category"
@@ -214,9 +213,9 @@ export default function AddItemScreen() {
                         borderRadius: r.md,
                       }}
                     >
-                      <Text style={{ color: value === cat ? c.onPrimary : c.onSurfaceVariant, fontSize: 13, fontWeight: '600' }}>
+                      <ThemedText variant="caption" weight="semibold" color={value === cat ? c.onPrimary : c.onSurfaceVariant}>
                         {cat}
-                      </Text>
+                      </ThemedText>
                     </TouchableOpacity>
                   ))}
                 </>
@@ -224,7 +223,7 @@ export default function AddItemScreen() {
             />
           </View>
 
-          <Text style={[{ color: c.onBackground, fontSize: 18, fontWeight: '600', marginTop: s.md, marginBottom: s.md }]}>Pricing & Stock</Text>
+          <ThemedText variant="h3" style={{ marginTop: s.md, marginBottom: s.md }}>Pricing & Stock</ThemedText>
 
           <View style={{ flexDirection: 'row', gap: s.md }}>
             <View style={{ flex: 1 }}>
@@ -232,7 +231,7 @@ export default function AddItemScreen() {
                 control={control}
                 name="selling_price"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput label="Selling Price *" placeholder="Enter selling price" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.selling_price?.message} />
+                  <FormField label="Selling Price" required placeholder="Enter selling price" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.selling_price?.message} />
                 )}
               />
             </View>
@@ -241,7 +240,7 @@ export default function AddItemScreen() {
                 control={control}
                 name="cost_price"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput label="Cost Price" placeholder="Enter cost price" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.cost_price?.message} />
+                  <FormField label="Cost Price" placeholder="Enter cost price" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.cost_price?.message} />
                 )}
               />
             </View>
@@ -253,7 +252,7 @@ export default function AddItemScreen() {
                 control={control}
                 name="box_count"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput label={isEditing ? "Stock (Boxes)" : "Initial Stock *"} placeholder="Enter initial stock" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.box_count?.message} editable={!isEditing} helperText={isEditing ? "Use Stock In/Out to update" : ""} />
+                  <FormField label={isEditing ? "Stock (Boxes)" : "Initial Stock"} required placeholder="Enter initial stock" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.box_count?.message} editable={!isEditing} helperText={isEditing ? "Use Stock In/Out to update" : ""} />
                 )}
               />
             </View>
@@ -262,7 +261,7 @@ export default function AddItemScreen() {
                 control={control}
                 name="low_stock_threshold"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput label="Low Alert At *" placeholder="Enter low stock alert" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.low_stock_threshold?.message} />
+                  <FormField label="Low Alert At" required placeholder="Enter low stock alert" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.low_stock_threshold?.message} />
                 )}
               />
             </View>
@@ -274,7 +273,7 @@ export default function AddItemScreen() {
                 control={control}
                 name="gst_rate"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput label="GST Rate *" placeholder="Enter GST rate" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.gst_rate?.message} />
+                  <FormField label="GST Rate" required placeholder="Enter GST rate" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.gst_rate?.message} />
                 )}
               />
             </View>
@@ -283,23 +282,23 @@ export default function AddItemScreen() {
                 control={control}
                 name="hsn_code"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput label="HSN Code" placeholder="Enter HSN code" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.hsn_code?.message} />
+                  <FormField label="HSN Code" placeholder="Enter HSN code" keyboardType="numeric" onBlur={onBlur} onChangeText={onChange} value={value} error={errors.hsn_code?.message} />
                 )}
               />
             </View>
           </View>
 
-          <Text style={[{ color: c.onBackground, fontSize: 18, fontWeight: '600', marginTop: s.sm, marginBottom: s.md }]}>Packaging Details</Text>
+          <ThemedText variant="h3" style={{ marginTop: s.sm, marginBottom: s.md }}>Packaging Details</ThemedText>
           
           <View style={{ flexDirection: 'row', gap: s.md }}>
             <View style={{ flex: 1 }}>
               <Controller control={control} name="pcs_per_box" render={({ field: { onChange, value } }) => (
-                <TextInput label="Pieces/Box" keyboardType="numeric" onChangeText={onChange} value={value} />
+                <FormField label="Pieces/Box" keyboardType="numeric" onChangeText={onChange} value={value} />
               )} />
             </View>
             <View style={{ flex: 1 }}>
               <Controller control={control} name="sqft_per_box" render={({ field: { onChange, value } }) => (
-                <TextInput label="SqFt/Box" keyboardType="numeric" onChangeText={onChange} value={value} />
+                <FormField label="SqFt/Box" keyboardType="numeric" onChangeText={onChange} value={value} />
               )} />
             </View>
           </View>
@@ -309,21 +308,19 @@ export default function AddItemScreen() {
         </ScrollView>
 
         <View style={[styles.footer, { backgroundColor: c.surface, borderTopColor: c.border, padding: s.md, paddingBottom: 32 }]}>
-            <Button 
-              title="Save Item" 
-              onPress={handleSubmit(onSubmit)} 
-              loading={submitting}
-              leftIcon={<Save size={20} color="white" />}
-            />
+          <Button 
+            title="Save Item" 
+            onPress={handleSubmit(onSubmit)} 
+            leftIcon={<Save size={20} color="white" />}
+          />
         </View>
-      </View>
-    </KeyboardAvoidingView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 56, paddingBottom: 16 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 16 },
   backBtn: { width: 40, alignItems: 'flex-start' },
   footer: { borderTopWidth: 1 },
 });

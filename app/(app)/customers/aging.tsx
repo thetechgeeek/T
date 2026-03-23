@@ -4,9 +4,9 @@ import { Stack } from 'expo-router';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/components/ui/Card';
-import { Badge } from '@/src/components/ui/Badge';
-import { EmptyState } from '@/src/components/ui/EmptyState';
+import { Card } from '@/src/components/atoms/Card';
+import { Badge } from '@/src/components/atoms/Badge';
+import { EmptyState } from '@/src/components/molecules/EmptyState';
 
 export default function AgingReportScreen() {
   const { theme } = useTheme();

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { Button } from '@/src/components/ui/Button';
+import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { FileText, Plus, Search } from 'lucide-react-native';
 

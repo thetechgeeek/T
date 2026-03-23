@@ -70,6 +70,16 @@ export interface ThemeTypography {
     normal: number;
     relaxed: number;
   };
+  variants: {
+    h1: TextStyle;
+    h2: TextStyle;
+    h3: TextStyle;
+    body1: TextStyle;
+    body2: TextStyle;
+    caption: TextStyle;
+    label: TextStyle;
+    button: TextStyle;
+  };
 }
 
 export interface Theme {
@@ -95,6 +105,13 @@ export interface Theme {
     sm: object;
     md: object;
     lg: object;
+  };
+  layout: {
+    row: { flexDirection: 'row'; alignItems: 'center' };
+    rowBetween: { flexDirection: 'row'; alignItems: 'center'; justifyContent: 'space-between' };
+    center: { alignItems: 'center'; justifyContent: 'center' };
+    flex: { flex: 1 };
+    absoluteFill: { position: 'absolute'; top: 0; left: 0; right: 0; bottom: 0 };
   };
   touchTarget: number; // minimum 48
 }

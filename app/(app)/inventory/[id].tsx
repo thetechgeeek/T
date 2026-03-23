@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, Package, Edit, Clock, HelpCircle, ArrowUpRight, ArrowDownRight } from 'lucide-react-native';
 import { Image } from 'expo-image';
@@ -7,6 +7,8 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Screen } from '@/src/components/atoms/Screen';
 import type { InventoryItem, StockOperation } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 
@@ -58,33 +60,33 @@ export default function ItemDetailScreen() {
 
   if (!item) {
     return (
-      <View style={[styles.container, { backgroundColor: c.background }]}>
-        <View style={[styles.header, { backgroundColor: c.surface, borderBottomColor: c.border, borderBottomWidth: 1, paddingTop: 56, paddingHorizontal: 20, paddingBottom: 16 }]}>
+      <Screen safeAreaEdges={['top']}>
+        <View style={[styles.header, theme.layout.rowBetween, { borderBottomColor: c.border, borderBottomWidth: 1, paddingHorizontal: 20, paddingBottom: 16 }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.back}>
             <ArrowLeft size={22} color={c.primary} strokeWidth={2} />
           </TouchableOpacity>
         </View>
         <View style={styles.center}>
           <HelpCircle size={48} color={c.placeholder} strokeWidth={1} />
-          <Text style={{ color: c.onSurface, marginTop: 16 }}>Item not found</Text>
+          <ThemedText style={{ marginTop: 16 }}>Item not found</ThemedText>
         </View>
-      </View>
+      </Screen>
     );
   }
 
   const isLowStock = item.box_count <= item.low_stock_threshold;
 
   return (
-    <View style={[styles.container, { backgroundColor: c.background }]}>
+    <Screen safeAreaEdges={['top']} withKeyboard={false}>
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: c.surface, borderBottomColor: c.border, borderBottomWidth: 1, paddingTop: 56, paddingHorizontal: s.lg, paddingBottom: s.md }]}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+      <View style={[styles.header, theme.layout.rowBetween, { borderBottomColor: c.border, borderBottomWidth: 1, paddingHorizontal: s.lg, paddingBottom: s.md }]}>
+        <View style={[theme.layout.row, { flex: 1 }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.back}>
             <ArrowLeft size={24} color={c.onBackground} strokeWidth={2.5} />
           </TouchableOpacity>
-          <Text style={[{ color: c.onBackground, fontSize: 20, fontWeight: '700', marginLeft: s.md, flex: 1 }]} numberOfLines={1}>
+          <ThemedText variant="h2" style={{ marginLeft: s.md, flex: 1 }} numberOfLines={1}>
             {item.design_name}
-          </Text>
+          </ThemedText>
         </View>
         <TouchableOpacity style={{ padding: 4 }} onPress={() => router.push(`/(app)/inventory/add?id=${item.id}`)}>
           <Edit size={22} color={c.primary} strokeWidth={2} />
@@ -104,7 +106,7 @@ export default function ItemDetailScreen() {
         </View>
 
         {/* Specs Grid */}
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: -6 }}>
+        <View style={[theme.layout.row, { flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: -6 }]}>
           <SpecBox label="Base Item" value={item.base_item_number} />
           <SpecBox label="Category" value={item.category} />
           <SpecBox label="Size" value={item.size_name || 'N/A'} />
@@ -112,71 +114,70 @@ export default function ItemDetailScreen() {
           <SpecBox label="Pcs / Box" value={item.pcs_per_box?.toString() || 'N/A'} />
           <SpecBox label="Sqft / Box" value={item.sqft_per_box?.toString() || 'N/A'} />
           <SpecBox label="Selling Price" value={formatCurrency(item.selling_price)} highlight />
-          {/* <SpecBox label="Cost Price" value={formatCurrency(item.cost_price)} /> */}
         </View>
 
         {/* Stock Status */}
         <View style={[styles.stockBox, { backgroundColor: isLowStock ? c.errorLight : c.success + '15', borderRadius: r.md, marginTop: s.xl, borderColor: isLowStock ? c.error : c.success, borderWidth: 1 }]}>
-          <Text style={{ color: isLowStock ? c.error : c.success, fontSize: theme.typography.sizes.lg, fontWeight: '700' }}>
+          <ThemedText variant="h3" color={isLowStock ? c.error : c.success}>
             {item.box_count} Boxes in Stock
-          </Text>
-          <Text style={{ color: c.onSurfaceVariant, fontSize: theme.typography.sizes.sm, marginTop: 2 }}>
+          </ThemedText>
+          <ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginTop: 2 }}>
             Threshold: {item.low_stock_threshold} boxes
-          </Text>
+          </ThemedText>
         </View>
 
         {/* Quick Actions */}
-        <View style={{ flexDirection: 'row', marginTop: s.md, gap: s.md }}>
+        <View style={[theme.layout.row, { marginTop: s.md, gap: s.md }]}>
           <TouchableOpacity 
-            style={[styles.actionBtn, { flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md }]}
+            style={[styles.actionBtn, theme.layout.row, { flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md }]}
             onPress={() => router.push(`/(app)/inventory/stock-op?id=${item.id}&type=stock_in`)}>
             <ArrowDownRight size={20} color={c.success} strokeWidth={2.5} />
-            <Text style={{ color: c.onSurface, fontWeight: '600', marginLeft: 8 }}>Stock In</Text>
+            <ThemedText weight="semibold" style={{ marginLeft: 8 }}>Stock In</ThemedText>
           </TouchableOpacity>
           <TouchableOpacity 
-            style={[styles.actionBtn, { flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md }]}
+            style={[styles.actionBtn, theme.layout.row, { flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md }]}
             onPress={() => router.push(`/(app)/inventory/stock-op?id=${item.id}&type=stock_out`)}>
             <ArrowUpRight size={20} color={c.error} strokeWidth={2.5} />
-            <Text style={{ color: c.onSurface, fontWeight: '600', marginLeft: 8 }}>Stock Out</Text>
+            <ThemedText weight="semibold" style={{ marginLeft: 8 }}>Stock Out</ThemedText>
           </TouchableOpacity>
         </View>
 
         {/* Stock History */}
         <View style={{ marginTop: s.xl }}>
-          <Text style={{ color: c.onBackground, fontSize: 18, fontWeight: '700', marginBottom: s.md }}>
+          <ThemedText variant="h3" style={{ marginBottom: s.md }}>
             Recent Operations
-          </Text>
+          </ThemedText>
           {history.length === 0 ? (
-            <Text style={{ color: c.placeholder }}>No stock operations recorded yet.</Text>
+            <ThemedText color={c.placeholder}>No stock operations recorded yet.</ThemedText>
           ) : (
             history.map((op, index) => (
-              <View key={op.id} style={[styles.historyRow, { borderBottomColor: c.border, borderBottomWidth: index === history.length - 1 ? 0 : StyleSheet.hairlineWidth }]}>
+              <View key={op.id} style={[styles.historyRow, theme.layout.row, { borderBottomColor: c.border, borderBottomWidth: index === history.length - 1 ? 0 : StyleSheet.hairlineWidth }]}>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: c.onSurface, fontWeight: '600', textTransform: 'capitalize' }}>
+                  <ThemedText weight="semibold" style={{ textTransform: 'capitalize' }}>
                     {op.operation_type.replace('_', ' ')}
-                  </Text>
-                  <Text style={{ color: c.onSurfaceVariant, fontSize: 12, marginTop: 2 }}>
+                  </ThemedText>
+                  <ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginTop: 2 }}>
                     {formatDateShort(op.created_at)}
                     {op.reason ? ` • ${op.reason}` : ''}
-                  </Text>
+                  </ThemedText>
                 </View>
-                <Text style={{ color: op.quantity_change > 0 ? c.success : c.error, fontWeight: '700' }}>
+                <ThemedText weight="bold" color={op.quantity_change > 0 ? c.success : c.error}>
                   {op.quantity_change > 0 ? '+' : ''}{op.quantity_change}
-                </Text>
+                </ThemedText>
               </View>
             ))
           )}
         </View>
       </ScrollView>
-    </View>
+    </Screen>
   );
 
   function SpecBox({ label, value, highlight = false }: { label: string, value: string, highlight?: boolean }) {
     return (
       <View style={{ width: '50%', padding: 6 }}>
         <View style={{ backgroundColor: highlight ? c.primary + '10' : c.surfaceVariant, padding: 12, borderRadius: r.md }}>
-          <Text style={{ color: c.onSurfaceVariant, fontSize: 12, marginBottom: 4 }}>{label}</Text>
-          <Text style={{ color: highlight ? c.primary : c.onSurface, fontWeight: '600', fontSize: 15 }} numberOfLines={1}>{value}</Text>
+          <ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginBottom: 4 }}>{label}</ThemedText>
+          <ThemedText variant="body1" weight="semibold" color={highlight ? c.primary : c.onSurface} numberOfLines={1}>{value}</ThemedText>
         </View>
       </View>
     );
@@ -185,11 +186,11 @@ export default function ItemDetailScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  header: { },
   back: { },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   imageCard: { padding: 4 },
   stockBox: { padding: 16, alignItems: 'center' },
-  actionBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 14 },
-  historyRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12 },
+  actionBtn: { paddingVertical: 14 },
+  historyRow: { paddingVertical: 12 },
 });

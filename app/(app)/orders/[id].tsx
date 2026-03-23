@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { orderService, Order } from '@/src/services/orderService';
 import type { InventoryItem } from '@/src/types/inventory';
-import { Package, FileText, CheckCircle2 } from 'lucide-react-native';
+import { Package, CheckCircle2 } from 'lucide-react-native';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function OrderDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -40,86 +42,84 @@ export default function OrderDetailScreen() {
 
   if (loading || !order) {
     return (
-      <View style={[styles.container, { backgroundColor: c.background, justifyContent: 'center', alignItems: 'center' }]}>
+      <Screen safeAreaEdges={['top', 'bottom']} style={{ justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color={c.primary} />
-      </View>
+      </Screen>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: c.background }]}>
+    <Screen safeAreaEdges={['top', 'bottom']}>
       <ScrollView>
         <View style={styles.headerArea}>
           <Package size={48} color={c.primary} style={{ marginBottom: s.md }} />
-          <Text style={{ color: c.onBackground, fontSize: 24, fontWeight: '700', textAlign: 'center' }}>
+          <ThemedText variant="h1" align="center">
             {order.party_name || 'Import Name Unknown'}
-          </Text>
-          <Text style={{ color: c.onSurfaceVariant, fontSize: 14, marginTop: s.xs, textAlign: 'center' }}>
+          </ThemedText>
+          <ThemedText color={c.onSurfaceVariant} align="center" style={{ marginTop: s.xs }}>
             Imported on {formatDateShort(order.created_at)}
-          </Text>
+          </ThemedText>
         </View>
 
         <View style={{ padding: s.lg }}>
           <View style={[styles.section, { backgroundColor: c.surface, borderRadius: r.md, borderColor: c.border }]}>
-            <Text style={{ color: c.onSurface, fontSize: 18, fontWeight: '700', marginBottom: s.md }}>
+            <ThemedText variant="h3" style={{ marginBottom: s.md }}>
               Summary
-            </Text>
+            </ThemedText>
             
             <View style={styles.row}>
-              <Text style={{ color: c.placeholder, flex: 1 }}>Total Box Quantity</Text>
-              <Text style={{ color: c.onSurface, fontWeight: '600' }}>{order.total_quantity} boxes</Text>
+              <ThemedText color={c.placeholder} style={{ flex: 1 }}>Total Box Quantity</ThemedText>
+              <ThemedText weight="semibold">{order.total_quantity} boxes</ThemedText>
             </View>
             <View style={styles.row}>
-              <Text style={{ color: c.placeholder, flex: 1 }}>Status</Text>
+              <ThemedText color={c.placeholder} style={{ flex: 1 }}>Status</ThemedText>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 <CheckCircle2 size={16} color={c.success} />
-                <Text style={{ color: c.success, fontWeight: '600' }}>Successfully Restocked</Text>
+                <ThemedText color={c.success} weight="semibold">Successfully Restocked</ThemedText>
               </View>
             </View>
           </View>
 
-          <Text style={{ color: c.onBackground, fontSize: 16, fontWeight: '600', marginTop: s.lg, marginBottom: s.md }}>
+          <ThemedText variant="h3" style={{ marginTop: s.lg, marginBottom: s.md }}>
             Items Processed ({items.length})
-          </Text>
-
-          {items.map((item, index) => (
+          </ThemedText>
+ 
+          {items.map((item: any, index: number) => (
             <View key={item.id || index} style={[styles.itemCard, { backgroundColor: c.surface, borderRadius: r.md, borderColor: c.border }]}>
               <View style={{ flex: 1 }}>
-                <Text style={{ color: c.onSurface, fontSize: 16, fontWeight: '700' }}>
+                <ThemedText weight="bold" style={{ fontSize: 16 }}>
                   {item.design_name}
-                </Text>
-                <Text style={{ color: c.onSurfaceVariant, fontSize: 13, marginTop: 4 }}>
+                </ThemedText>
+                <ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginTop: 4 }}>
                   {item.category} {item.size_name ? `• ${item.size_name}` : ''}
-                </Text>
+                </ThemedText>
               </View>
               <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-                <Text style={{ color: c.primary, fontSize: 18, fontWeight: '700' }}>
+                <ThemedText color={c.primary} variant="h3">
                   +{item.box_count}
-                </Text>
-                <Text style={{ color: c.onSurfaceVariant, fontSize: 12 }}>Stocked</Text>
+                </ThemedText>
+                <ThemedText variant="caption" color={c.onSurfaceVariant}>Stocked</ThemedText>
               </View>
             </View>
           ))}
           
           {items.length === 0 && (
              <View style={{ padding: s.lg, alignItems: 'center' }}>
-               <Text style={{ color: c.placeholder }}>No individual items were created.</Text>
+               <ThemedText color={c.placeholder}>No individual items were created.</ThemedText>
              </View>
           )}
 
         </View>
       </ScrollView>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   headerArea: {
     padding: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 60,
   },
   section: {
     padding: 16,
