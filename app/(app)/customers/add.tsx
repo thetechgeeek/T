@@ -12,6 +12,7 @@ import { Card } from '@/src/components/atoms/Card';
 import { Screen } from '@/src/components/atoms/Screen';
 import { FormField } from '@/src/components/molecules/FormField';
 import { layout } from '@/src/theme/layout';
+import { useLocale } from '@/src/hooks/useLocale';
 import logger from '@/src/utils/logger';
 
 interface CustomerFormData {
@@ -40,6 +41,7 @@ const customerSchema = z.object({
 
 export default function AddCustomerScreen() {
 	const { theme } = useThemeTokens();
+	const { t } = useLocale();
 	const router = useRouter();
 	const { createCustomer, loading } = useCustomerStore(
 		useShallow((s) => ({ createCustomer: s.createCustomer, loading: s.loading })),
@@ -61,13 +63,12 @@ export default function AddCustomerScreen() {
 		try {
 			await createCustomer(data);
 			router.back();
-		} catch (e: any) {
-			logger.error('error', e);
+		} catch (e: unknown) {
+			logger.error('Failed to save customer', e instanceof Error ? e : new Error(String(e)));
 			Alert.alert(
-				'Error Saving Customer',
-				e.message ||
-					'An unexpected error occurred. Please ensure your database is set up correctly.',
-				[{ text: 'OK' }],
+				t('common.errorTitle'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
+				[{ text: t('common.ok') }],
 			);
 		}
 	};

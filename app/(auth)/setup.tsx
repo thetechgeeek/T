@@ -26,22 +26,26 @@ export default function SetupScreen() {
 	const typo = theme.typography;
 
 	const handleCreateAccount = async () => {
-		if (!email || !password) return Alert.alert('Error', 'Email and password are required');
+		if (!email || !password)
+			return Alert.alert(t('common.errorTitle'), 'Email and password are required');
 		if (password.length < 6)
-			return Alert.alert('Error', 'Password must be at least 6 characters');
+			return Alert.alert(t('common.errorTitle'), 'Password must be at least 6 characters');
 		setLoading(true);
 		try {
 			await register(email, password);
 			setStep('business');
 		} catch (e: unknown) {
-			Alert.alert('Error', e instanceof Error ? e.message : 'Registration failed');
+			Alert.alert(
+				t('common.errorTitle'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
+			);
 		} finally {
 			setLoading(false);
 		}
 	};
 
 	const handleSaveBusiness = async () => {
-		if (!businessName) return Alert.alert('Error', 'Business name is required');
+		if (!businessName) return Alert.alert(t('common.errorTitle'), 'Business name is required');
 		setLoading(true);
 		try {
 			await businessProfileService.upsert({
@@ -54,8 +58,8 @@ export default function SetupScreen() {
 			router.replace('/(app)/(tabs)');
 		} catch (e: unknown) {
 			Alert.alert(
-				'Error',
-				e instanceof Error ? e.message : 'Failed to save business profile',
+				t('common.errorTitle'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
 			);
 		} finally {
 			setLoading(false);

@@ -7,12 +7,18 @@ export interface QueryOptions {
 	filters?: Record<string, unknown>;
 	sort?: { column: string; ascending: boolean };
 	pagination?: { page: number; pageSize: number };
+	/** Keyset cursor: ISO timestamp of the last item seen. Mutually exclusive with pagination. */
+	cursor?: string;
+	/** Page size when using cursor-based pagination. */
+	cursorPageSize?: number;
 	search?: { columns: string[]; term: string };
 }
 
 export interface PaginatedResult<T> {
 	data: T[];
 	total: number;
+	/** ISO timestamp of the last item in this page — use as cursor for the next page. */
+	nextCursor?: string;
 }
 
 /** Escape ILIKE special chars to prevent wildcard injection (§10.1) */
@@ -50,6 +56,12 @@ function applyFilters(query: any, options: QueryOptions): any {
 	if (pagination) {
 		const from = (pagination.page - 1) * pagination.pageSize;
 		query = query.range(from, from + pagination.pageSize - 1);
+	} else if (options.cursor) {
+		// Keyset pagination: more efficient than OFFSET for deep pages
+		query = query.lt('created_at', options.cursor).limit(options.cursorPageSize ?? 20);
+	} else if (options.cursorPageSize && !options.cursor) {
+		// First page of keyset pagination (no cursor yet)
+		query = query.limit(options.cursorPageSize);
 	}
 
 	return query;
@@ -59,7 +71,10 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 	return {
 		async findMany(options: QueryOptions = {}): Promise<PaginatedResult<T>> {
 			const start = performance.now();
-			let query = supabase.from(tableName).select('*', { count: 'exact' });
+			const useCursor = !!(options.cursor !== undefined || options.cursorPageSize);
+			let query = supabase
+				.from(tableName)
+				.select('*', { count: useCursor ? undefined : 'exact' });
 			query = applyFilters(query, options);
 			const { data, count, error } = await query;
 			logger.info('db_query', {
@@ -75,7 +90,13 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 					error,
 				);
 			}
-			return { data: (data ?? []) as T[], total: count ?? 0 };
+			const rows = (data ?? []) as T[];
+			const pageSize = options.cursorPageSize ?? 20;
+			const nextCursor =
+				useCursor && rows.length === pageSize
+					? (rows[rows.length - 1] as unknown as { created_at: string }).created_at
+					: undefined;
+			return { data: rows, total: count ?? rows.length, nextCursor };
 		},
 
 		async findById(id: UUID): Promise<T> {

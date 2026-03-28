@@ -20,7 +20,7 @@ import { layout } from '@/src/theme/layout';
 export default function ExpensesScreen() {
 	const { theme } = useThemeTokens();
 	const insets = useSafeAreaInsets();
-	const { formatCurrency, formatDate } = useLocale();
+	const { t, formatCurrency, formatDate } = useLocale();
 	const { expenses, loading, fetchExpenses, addExpense } = useFinanceStore(
 		useShallow((s) => ({
 			expenses: s.expenses,
@@ -38,8 +38,12 @@ export default function ExpensesScreen() {
 	const [saving, setSaving] = useState(false);
 
 	useEffect(() => {
-		fetchExpenses().catch((e) => {
-			Alert.alert('Error', 'Failed to load expenses. ' + e.message, [{ text: 'OK' }]);
+		fetchExpenses().catch((e: unknown) => {
+			Alert.alert(
+				t('common.errorTitle'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
+				[{ text: t('common.ok') }],
+			);
 		});
 	}, []);
 
@@ -59,11 +63,9 @@ export default function ExpensesScreen() {
 			setNotes('');
 		} catch (e: unknown) {
 			Alert.alert(
-				'Error Saving Expense',
-				e instanceof Error
-					? e.message
-					: 'An unexpected error occurred. Please ensure your database is set up correctly.',
-				[{ text: 'OK' }],
+				t('common.errorTitle'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
+				[{ text: t('common.ok') }],
 			);
 		} finally {
 			setSaving(false);

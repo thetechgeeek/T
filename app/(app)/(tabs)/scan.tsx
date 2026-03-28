@@ -56,12 +56,15 @@ export default function ScanTab() {
 					],
 				);
 			}
-		} catch (err: any) {
-			logger.error('error', err);
+		} catch (err: unknown) {
+			logger.error(
+				'Failed to search inventory',
+				err instanceof Error ? err : new Error(String(err)),
+			);
 			Alert.alert(
-				'Error',
-				err.message || 'Failed to search inventory. Please check your database connection.',
-				[{ text: 'OK' }],
+				t('common.errorTitle'),
+				err instanceof Error ? err.message : t('common.unexpectedError'),
+				[{ text: t('common.ok') }],
 			);
 		} finally {
 			setLoading(false);
@@ -84,11 +87,16 @@ export default function ScanTab() {
 				'Image captured! Cloud OCR integration will be wired up during Phase 7.\n\nFor now, please use the manual entry field to test search.',
 				[{ text: 'OK' }],
 			);
-		} catch (err: any) {
-			logger.error('error', err);
-			Alert.alert('Error', err.message || 'Failed to capture image for scanning.', [
-				{ text: 'OK' },
-			]);
+		} catch (err: unknown) {
+			logger.error(
+				'Failed to capture image',
+				err instanceof Error ? err : new Error(String(err)),
+			);
+			Alert.alert(
+				t('common.errorTitle'),
+				err instanceof Error ? err.message : t('common.unexpectedError'),
+				[{ text: t('common.ok') }],
+			);
 		} finally {
 			setCapturing(false);
 		}

@@ -20,6 +20,8 @@
 		"yes": "Yes",
 		"no": "No",
 		"ok": "OK",
+		"errorTitle": "Error",
+		"unexpectedError": "An unexpected error occurred. Please try again.",
 		"selectAll": "Select All",
 		"deselectAll": "Deselect All",
 		"seeAll": "See All",

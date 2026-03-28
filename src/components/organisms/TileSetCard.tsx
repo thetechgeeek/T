@@ -6,6 +6,7 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ViewStyle } from 'react-native';
 import type { TileSetGroup, InventoryItem } from '@/src/types/inventory';
+import { getThumbUrl } from '@/src/utils/imageTransform';
 
 interface TileSetCardProps {
 	group: TileSetGroup;
@@ -118,7 +119,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 							>
 								{item.tile_image_url ? (
 									<Image
-										source={{ uri: item.tile_image_url }}
+										source={{ uri: getThumbUrl(item.tile_image_url, 88) }}
 										style={styles.image}
 										contentFit="cover"
 									/>
