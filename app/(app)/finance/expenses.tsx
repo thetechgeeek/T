@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, RefreshControl, Modal, Alert, Platform, KeyboardAvoidingView } from 'react-native';
+import { View, ScrollView, StyleSheet, RefreshControl, Modal, Alert, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
@@ -111,11 +111,12 @@ export default function ExpensesScreen() {
 
       <Modal visible={modalVisible} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          <Screen
+            backgroundColor="transparent"
+            safeAreaEdges={['top']}
             style={{ width: '100%' }}
           >
-            <View style={[styles.modalContent, { backgroundColor: theme.colors.background, paddingBottom: 20 + insets.bottom }]}>
+            <View style={[styles.modalContent, { backgroundColor: theme.colors.background }]}>
               <View style={[theme.layout.rowBetween, { marginBottom: 20 }]}>
                 <ThemedText variant="h2">
                   New Expense
@@ -156,7 +157,7 @@ export default function ExpensesScreen() {
                 style={{ marginTop: 16 }}
               />
             </View>
-          </KeyboardAvoidingView>
+          </Screen>
         </View>
       </Modal>
     </Screen>

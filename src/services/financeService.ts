@@ -22,8 +22,8 @@ export interface Purchase {
 }
 
 export interface ProfitLossSummary {
-  total_sales: number;
-  total_purchases: number;
+  total_revenue: number;
+  total_cogs: number;
   total_expenses: number;
   gross_profit: number;
   net_profit: number;
@@ -86,7 +86,7 @@ export const financeService = {
     const { data, error } = await supabase.rpc('get_profit_loss', {
       p_start: startDate,
       p_end: endDate
-    });
+    }).single();
     
     if (error) throw error;
     return data as ProfitLossSummary;

@@ -4,10 +4,10 @@ import {
   StyleSheet, 
   ScrollView, 
   Platform, 
-  KeyboardAvoidingView,
   type ViewStyle,
   type ScrollViewProps
 } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
@@ -41,6 +41,7 @@ export const Screen: React.FC<ScreenProps> = ({
     styles.container,
     { 
       backgroundColor: bg,
+      // Default to 0 if edge is not in safeAreaEdges, but most screens should include 'top'
       paddingTop: safeAreaEdges.includes('top') ? insets.top : 0,
       paddingBottom: safeAreaEdges.includes('bottom') ? insets.bottom : 0,
     },
@@ -64,12 +65,12 @@ export const Screen: React.FC<ScreenProps> = ({
 
   if (withKeyboard) {
     return (
-      <KeyboardAvoidingView
-        style={containerStyle}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        {inner}
-      </KeyboardAvoidingView>
+    <KeyboardAvoidingView
+      style={containerStyle}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      {inner}
+    </KeyboardAvoidingView>
     );
   }
 

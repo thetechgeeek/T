@@ -16,7 +16,9 @@ const mockQuery: any = {
 jest.mock('../config/supabase', () => ({
   supabase: {
     from: jest.fn(() => mockQuery),
-    rpc: jest.fn(),
+    rpc: jest.fn().mockReturnValue({
+      single: jest.fn().mockResolvedValue({ data: null, error: null })
+    }),
   }
 }));
 
@@ -40,8 +42,10 @@ describe('financeService', () => {
 
   describe('getProfitLoss', () => {
     it('calls get_profit_loss RPC with correct params', async () => {
-      const mockSummary = { total_sales: 1000, net_profit: 200 };
-      (supabase.rpc as jest.Mock).mockResolvedValue({ data: mockSummary, error: null });
+      const mockSummary = { total_revenue: 1000, net_profit: 200, total_expenses: 50 };
+      (supabase.rpc as jest.Mock).mockReturnValue({
+        single: jest.fn().mockResolvedValue({ data: mockSummary, error: null })
+      });
 
       const result = await financeService.getProfitLoss('2026-01-01', '2026-01-31');
 

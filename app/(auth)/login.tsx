@@ -37,9 +37,9 @@ export default function LoginScreen() {
   const typo = theme.typography;
 
   return (
-    <Screen scrollable safeAreaEdges={[]}>
+    <Screen scrollable safeAreaEdges={['top']}>
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: c.primary }]}>
+      <View style={[styles.header, { backgroundColor: c.primary, paddingTop: s.xl }]}>
         <ThemedText style={[styles.logo, { fontSize: typo.sizes['3xl'] }]}>🏺</ThemedText>
         <ThemedText variant="h1" style={[styles.appName, { color: c.onPrimary }]}>
           TileMaster
@@ -115,7 +115,6 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
-    paddingTop: 80,
     paddingBottom: 40,
     paddingHorizontal: 24,
   },

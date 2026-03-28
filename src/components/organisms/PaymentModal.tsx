@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, StyleSheet, Platform, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Modal, View, StyleSheet, ScrollView } from 'react-native';
 import { X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Card } from '@/src/components/atoms/Card';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { PaymentMode } from '@/src/types/invoice';
 import type { UUID } from '@/src/types/common';
 import { paymentService } from '@/src/services/paymentService';
@@ -64,22 +66,21 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.overlay}>
-        <KeyboardAvoidingView 
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <Screen
+          backgroundColor="transparent"
+          safeAreaEdges={[]}
           style={styles.keyboardView}
         >
           <View style={[styles.content, { backgroundColor: theme.colors.background }]}>
             <View style={styles.header}>
-              <Text style={[styles.title, { color: theme.colors.onSurface, fontFamily: theme.typography.fontFamilyBold }]}>
-                Record Payment
-              </Text>
+              <ThemedText variant="h2">Record Payment</ThemedText>
               <Button variant="ghost" size="sm" onPress={onClose} leftIcon={<X size={24} color={theme.colors.onSurface} />} />
             </View>
 
             <ScrollView contentContainerStyle={styles.scroll}>
-              <Text style={[styles.subtitle, { color: theme.colors.onSurfaceVariant }]}>
+              <ThemedText variant="body2" color={theme.colors.onSurfaceVariant} style={{ marginBottom: 20 }}>
                 {invoiceNumber ? `Invoice: ${invoiceNumber}` : `Customer: ${customerName}`}
-              </Text>
+              </ThemedText>
 
               <TextInput
                 label="Amount (₹)"
@@ -90,7 +91,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 style={styles.input}
               />
 
-              <Text style={[styles.label, { color: theme.colors.onSurfaceVariant, marginTop: 16 }]}>Payment Mode</Text>
+              <ThemedText variant="label" color={theme.colors.onSurfaceVariant} style={{ marginTop: 16, marginBottom: 8, textTransform: 'uppercase' }}>
+                Payment Mode
+              </ThemedText>
               <View style={styles.modeGrid}>
                 {modes.map((mode) => (
                   <Button
@@ -122,7 +125,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               />
             </ScrollView>
           </View>
-        </KeyboardAvoidingView>
+        </Screen>
       </View>
     </Modal>
   );

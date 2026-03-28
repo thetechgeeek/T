@@ -8,6 +8,7 @@ import { View, StyleSheet } from 'react-native';
 import '../src/i18n';   // Initialize i18n
 import { ThemeProvider, useTheme } from '@/src/theme/ThemeProvider';
 import { useAuthStore } from '@/src/stores/authStore';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 function AuthGate({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, loading, initialize } = useAuthStore();
@@ -49,7 +50,9 @@ function AppShell() {
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <AppShell />
+      <KeyboardProvider>
+        <AppShell />
+      </KeyboardProvider>
     </ThemeProvider>
   );
 }
