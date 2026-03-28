@@ -34,8 +34,10 @@ Constraints:
 `;
 
 Deno.serve(async (req: Request) => {
+	const requestId = req.headers.get('x-request-id') ?? crypto.randomUUID();
+
 	if (req.method === 'OPTIONS') {
-		return new Response('ok', { headers: corsHeaders });
+		return new Response('ok', { headers: { ...corsHeaders, 'x-request-id': requestId } });
 	}
 
 	try {
@@ -130,7 +132,7 @@ Deno.serve(async (req: Request) => {
 		const parsedData = JSON.parse(cleanText);
 
 		return new Response(JSON.stringify({ success: true, data: parsedData }), {
-			headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+			headers: { ...corsHeaders, 'Content-Type': 'application/json', 'x-request-id': requestId },
 			status: 200,
 		});
 	} catch (error: unknown) {
@@ -148,6 +150,6 @@ Deno.serve(async (req: Request) => {
 function errorResponse(msg: string, status: number) {
 	return new Response(JSON.stringify({ error: msg }), {
 		status,
-		headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+		headers: { ...corsHeaders, 'Content-Type': 'application/json', 'x-request-id': requestId },
 	});
 }
