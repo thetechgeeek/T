@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { orderService } from '../services/orderService';
 import { pdfService } from '../services/pdfService';
+import { eventBus } from '../events/appEvents';
 import type { ParsedOrderItem } from '../services/pdfService';
 import type { UUID } from '@/src/types/common';
 
@@ -15,7 +16,7 @@ export interface Order {
 	total_quantity: number | null;
 	status: 'ordered' | 'partially_received' | 'fully_received' | 'cancelled';
 	source_pdf_url: string | null;
-	raw_llm_response: any | null;
+	raw_llm_response: unknown | null;
 	notes: string | null;
 	created_at: string;
 	updated_at: string;
@@ -28,7 +29,7 @@ interface OrderState {
 
 	// Import flow state
 	parsedData: ParsedOrderItem[] | null;
-	rawResponse: any | null;
+	rawResponse: unknown | null;
 	isParsing: boolean;
 
 	fetchOrders: () => Promise<void>;
@@ -51,8 +52,8 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 		try {
 			const data = await orderService.fetchOrders();
 			set({ orders: data, loading: false });
-		} catch (error: any) {
-			set({ error: error.message, loading: false });
+		} catch (error: unknown) {
+			set({ error: (error as Error).message, loading: false });
 		}
 	},
 
@@ -62,11 +63,11 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 			const parsedItems = await pdfService.parseDocumentWithLLM(base64, mimeType, aiKey);
 			set({
 				parsedData: parsedItems,
-				rawResponse: parsedItems, // keeping it simple for now as we just need the array
+				rawResponse: parsedItems,
 				isParsing: false,
 			});
-		} catch (error: any) {
-			set({ error: error.message, isParsing: false });
+		} catch (error: unknown) {
+			set({ error: (error as Error).message, isParsing: false });
 			throw error;
 		}
 	},
@@ -77,8 +78,10 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 			await orderService.importOrder(partyName, items, get().rawResponse);
 			const orders = await orderService.fetchOrders();
 			set({ orders, parsedData: null, rawResponse: null, loading: false });
-		} catch (error: any) {
-			set({ error: error.message, loading: false });
+			// Notify inventory store that stock levels may have changed
+			eventBus.emit({ type: 'STOCK_CHANGED', itemId: '' });
+		} catch (error: unknown) {
+			set({ error: (error as Error).message, loading: false });
 			throw error;
 		}
 	},

@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { inventoryService } from '../services/inventoryService';
+import { eventBus } from '../events/appEvents';
 import type {
 	InventoryItem,
 	InventoryItemInsert,
 	InventoryFilters,
 	StockOpType,
-	TileCategory,
 } from '../types/inventory';
 import type { UUID } from '../types/common';
 
@@ -57,7 +57,6 @@ export const useInventoryStore = create<InventoryState>()(
 			set((state) => {
 				state.filters = { ...state.filters, ...newFilters };
 			});
-			// Always reset back to page 1 when filters change
 			get().fetchItems(true);
 		},
 
@@ -85,7 +84,6 @@ export const useInventoryStore = create<InventoryState>()(
 					if (reset) {
 						s.items = data;
 					} else {
-						// Append ignoring duplicates (just in case)
 						const existingIds = new Set(s.items.map((i) => i.id));
 						const newItems = data.filter((i) => !existingIds.has(i.id));
 						s.items.push(...newItems);
@@ -95,9 +93,9 @@ export const useInventoryStore = create<InventoryState>()(
 					s.hasMore = s.items.length < count;
 					s.loading = false;
 				});
-			} catch (err: any) {
+			} catch (err: unknown) {
 				set((s) => {
-					s.error = err.message;
+					s.error = (err as Error).message;
 					s.loading = false;
 				});
 			}
@@ -115,10 +113,11 @@ export const useInventoryStore = create<InventoryState>()(
 					s.totalCount += 1;
 					s.loading = false;
 				});
+				eventBus.emit({ type: 'STOCK_CHANGED', itemId: newItem.id });
 				return newItem;
-			} catch (err: any) {
+			} catch (err: unknown) {
 				set((s) => {
-					s.error = err.message;
+					s.error = (err as Error).message;
 					s.loading = false;
 				});
 				throw err;
@@ -140,9 +139,9 @@ export const useInventoryStore = create<InventoryState>()(
 					s.loading = false;
 				});
 				return updated;
-			} catch (err: any) {
+			} catch (err: unknown) {
 				set((s) => {
-					s.error = err.message;
+					s.error = (err as Error).message;
 					s.loading = false;
 				});
 				throw err;
@@ -156,8 +155,7 @@ export const useInventoryStore = create<InventoryState>()(
 			});
 			try {
 				await inventoryService.performStockOperation(itemId, type, qty, reason);
-				// We successfully logged the operation, but we need to update the box_count in the UI
-				// The easiest way is to re-fetch that single item and update it in the store
+				// Re-fetch the single item to reflect the new stock level
 				const refreshedItem = await inventoryService.fetchItemById(itemId);
 				set((s) => {
 					const idx = s.items.findIndex((i) => i.id === itemId);
@@ -166,9 +164,10 @@ export const useInventoryStore = create<InventoryState>()(
 					}
 					s.loading = false;
 				});
-			} catch (err: any) {
+				eventBus.emit({ type: 'STOCK_CHANGED', itemId });
+			} catch (err: unknown) {
 				set((s) => {
-					s.error = err.message;
+					s.error = (err as Error).message;
 					s.loading = false;
 				});
 				throw err;
@@ -187,3 +186,10 @@ export const useInventoryStore = create<InventoryState>()(
 		},
 	})),
 );
+
+// Refresh inventory when stock changes externally (e.g., invoice line items sold)
+eventBus.subscribe((event) => {
+	if (event.type === 'STOCK_CHANGED') {
+		useInventoryStore.getState().fetchItems(true);
+	}
+});

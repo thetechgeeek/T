@@ -19,9 +19,11 @@ describe('customerStore', () => {
 		const error = new Error("Could not find the table 'public.customers' in the schema cache");
 		(customerService.createCustomer as jest.Mock).mockRejectedValue(error);
 
-		await expect(useCustomerStore.getState().createCustomer({ name: 'Test' })).rejects.toThrow(
-			error,
-		);
+		await expect(
+			useCustomerStore
+				.getState()
+				.createCustomer({ name: 'Test' } as import('../types/customer').CustomerInsert),
+		).rejects.toThrow(error);
 
 		const state = useCustomerStore.getState();
 		expect(state.error).toBe(error.message);
@@ -32,7 +34,9 @@ describe('customerStore', () => {
 		const mockCustomer = { id: '123', name: 'Test' };
 		(customerService.createCustomer as jest.Mock).mockResolvedValue(mockCustomer);
 
-		const result = await useCustomerStore.getState().createCustomer({ name: 'Test' });
+		const result = await useCustomerStore
+			.getState()
+			.createCustomer({ name: 'Test' } as import('../types/customer').CustomerInsert);
 
 		expect(result).toEqual(mockCustomer);
 		const state = useCustomerStore.getState();

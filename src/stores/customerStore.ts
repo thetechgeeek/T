@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { customerService } from '../services/customerService';
+import { eventBus } from '../events/appEvents';
 import type {
 	Customer,
+	CustomerInsert,
 	CustomerFilters,
 	CustomerLedgerEntry,
 	CustomerLedgerSummary,
@@ -25,8 +27,8 @@ interface CustomerState {
 	fetchCustomers: (reset?: boolean) => Promise<void>;
 	setFilters: (filters: Partial<CustomerFilters>) => void;
 	fetchCustomerDetail: (id: UUID) => Promise<void>;
-	createCustomer: (customer: any) => Promise<Customer>;
-	updateCustomer: (id: UUID, updates: any) => Promise<Customer>;
+	createCustomer: (customer: CustomerInsert) => Promise<Customer>;
+	updateCustomer: (id: UUID, updates: Partial<CustomerInsert>) => Promise<Customer>;
 }
 
 export const useCustomerStore = create<CustomerState>()(
@@ -65,9 +67,9 @@ export const useCustomerStore = create<CustomerState>()(
 					s.totalCount = count;
 					s.loading = false;
 				});
-			} catch (err: any) {
+			} catch (err: unknown) {
 				set((s) => {
-					s.error = err.message;
+					s.error = (err as Error).message;
 					s.loading = false;
 				});
 			}
@@ -93,9 +95,9 @@ export const useCustomerStore = create<CustomerState>()(
 					s.summary = summary;
 					s.loading = false;
 				});
-			} catch (err: any) {
+			} catch (err: unknown) {
 				set((s) => {
-					s.error = err.message;
+					s.error = (err as Error).message;
 					s.loading = false;
 				});
 			}
@@ -114,9 +116,9 @@ export const useCustomerStore = create<CustomerState>()(
 					s.loading = false;
 				});
 				return newCustomer;
-			} catch (err: any) {
+			} catch (err: unknown) {
 				set((s) => {
-					s.error = err.message;
+					s.error = (err as Error).message;
 					s.loading = false;
 				});
 				throw err;
@@ -136,10 +138,11 @@ export const useCustomerStore = create<CustomerState>()(
 					if (s.selectedCustomer?.id === id) s.selectedCustomer = updated;
 					s.loading = false;
 				});
+				eventBus.emit({ type: 'CUSTOMER_UPDATED', customerId: id });
 				return updated;
-			} catch (err: any) {
+			} catch (err: unknown) {
 				set((s) => {
-					s.error = err.message;
+					s.error = (err as Error).message;
 					s.loading = false;
 				});
 				throw err;
@@ -147,3 +150,10 @@ export const useCustomerStore = create<CustomerState>()(
 		},
 	})),
 );
+
+// Refresh customer list when an invoice or payment affects a customer's balance
+eventBus.subscribe((event) => {
+	if (event.type === 'INVOICE_CREATED' || event.type === 'PAYMENT_RECORDED') {
+		useCustomerStore.getState().fetchCustomers(true);
+	}
+});
