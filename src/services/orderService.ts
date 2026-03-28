@@ -2,6 +2,7 @@ import { supabase } from '@/src/config/supabase';
 import type { ParsedOrderItem } from './pdfService';
 import type { UUID } from '@/src/types/common';
 import { inventoryService } from './inventoryService';
+import logger from '../utils/logger';
 
 export interface Order {
 	id: UUID;
@@ -109,7 +110,7 @@ export const orderService = {
 				});
 
 				if (insertError) {
-					console.error(`Failed to insert new item ${item.design_name}:`, insertError);
+					logger.error(`Failed to insert new item ${item.design_name}:`, insertError);
 					// depending on exact needs, we might throw or continue. we continue for partial success.
 				}
 			}

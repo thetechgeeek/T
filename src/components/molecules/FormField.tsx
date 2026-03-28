@@ -3,6 +3,7 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput as AtomTextInput } from '@/src/components/atoms/TextInput';
 import type { TextInputProps } from 'react-native';
+import { layout } from '@/src/theme/layout';
 
 export interface FormFieldProps extends TextInputProps {
 	label: string;
@@ -27,7 +28,7 @@ export const FormField: React.FC<FormFieldProps> = ({
 
 	return (
 		<View style={[styles.container, containerStyle]}>
-			<View style={[theme.layout.row, { marginBottom: 4 }]}>
+			<View style={[layout.row, { marginBottom: 4 }]}>
 				<ThemedText variant="label" color={c.onSurfaceVariant}>
 					{label}
 				</ThemedText>

@@ -1,6 +1,8 @@
 import { supabase } from '../config/supabase';
 import { invoiceRepository } from '../repositories/invoiceRepository';
 import { calculateInvoiceTotals, calculateLineItemTax } from '../utils/gstCalculator';
+import { validateWith } from '../utils/validation';
+import { InvoiceInputSchema } from '../schemas/invoice';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
 import type { UUID } from '../types/common';
 
@@ -45,6 +47,7 @@ export function createInvoiceService(repo = invoiceRepository) {
 		 * DB transaction — no partial failures possible.
 		 */
 		async createInvoice(input: InvoiceInput): Promise<{ id: UUID; invoice_number: string }> {
+			validateWith(InvoiceInputSchema, input);
 			const totals = calculateInvoiceTotals(input.line_items, input.is_inter_state);
 
 			const invoiceData = {

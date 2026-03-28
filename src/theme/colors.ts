@@ -141,14 +141,6 @@ const TYPOGRAPHY: Theme['typography'] = {
 	},
 };
 
-const LAYOUT: Theme['layout'] = {
-	row: { flexDirection: 'row', alignItems: 'center' },
-	rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-	center: { alignItems: 'center', justifyContent: 'center' },
-	flex: { flex: 1 },
-	absoluteFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
-};
-
 const SPACING: Theme['spacing'] = {
 	xs: 4,
 	sm: 8,
@@ -210,7 +202,6 @@ export function buildTheme(isDark: boolean): Theme {
 		spacing: SPACING,
 		borderRadius: BORDER_RADIUS,
 		shadows: makeShadows(isDark),
-		layout: LAYOUT,
 		touchTarget: 48,
 	};
 }

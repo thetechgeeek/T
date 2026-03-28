@@ -14,6 +14,7 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { FormField } from '@/src/components/molecules/FormField';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { format } from 'date-fns';
+import { layout } from '@/src/theme/layout';
 
 export default function ExpensesScreen() {
 	const { theme } = useTheme();
@@ -48,12 +49,12 @@ export default function ExpensesScreen() {
 			setAmount('');
 			setCategory('');
 			setNotes('');
-		} catch (e: any) {
-			console.error(e);
+		} catch (e: unknown) {
 			Alert.alert(
 				'Error Saving Expense',
-				e.message ||
-					'An unexpected error occurred. Please ensure your database is set up correctly.',
+				e instanceof Error
+					? e.message
+					: 'An unexpected error occurred. Please ensure your database is set up correctly.',
 				[{ text: 'OK' }],
 			);
 		} finally {
@@ -80,7 +81,7 @@ export default function ExpensesScreen() {
 				) : (
 					expenses.map((exp) => (
 						<Card key={exp.id} style={styles.expenseCard} padding="md">
-							<View style={theme.layout.rowBetween}>
+							<View style={layout.rowBetween}>
 								<View style={{ flex: 1 }}>
 									<ThemedText weight="bold">{exp.category}</ThemedText>
 									<ThemedText
@@ -130,7 +131,7 @@ export default function ExpensesScreen() {
 								{ backgroundColor: theme.colors.background },
 							]}
 						>
-							<View style={[theme.layout.rowBetween, { marginBottom: 20 }]}>
+							<View style={[layout.rowBetween, { marginBottom: 20 }]}>
 								<ThemedText variant="h2">New Expense</ThemedText>
 								<Button
 									variant="ghost"

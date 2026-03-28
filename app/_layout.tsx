@@ -9,6 +9,7 @@ import { ThemeProvider, useTheme } from '@/src/theme/ThemeProvider';
 import { useAuthStore } from '@/src/stores/authStore';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { ErrorBoundary } from '@/src/components/atoms/ErrorBoundary';
+import { OfflineBanner } from '@/src/components/atoms/OfflineBanner';
 
 function AuthGate({ children }: { children: React.ReactNode }) {
 	const { isAuthenticated, loading, initialize } = useAuthStore();
@@ -39,6 +40,7 @@ function AppShell() {
 		<GestureHandlerRootView style={styles.root}>
 			<SafeAreaProvider>
 				<StatusBar style={theme.isDark ? 'light' : 'dark'} />
+				<OfflineBanner />
 				<AuthGate>
 					<Slot />
 				</AuthGate>

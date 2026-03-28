@@ -1,5 +1,7 @@
 import { supabase } from '../config/supabase';
 import { paymentRepository } from '../repositories/paymentRepository';
+import { validateWith } from '../utils/validation';
+import { PaymentSchema } from '../schemas/payment';
 import type { PaymentInput } from '../repositories/paymentRepository';
 import type { UUID } from '../types/common';
 
@@ -12,6 +14,7 @@ export function createPaymentService(repo = paymentRepository) {
 		 * via migration 012 RPC. Eliminates the read-modify-write race condition.
 		 */
 		async recordPayment(input: PaymentInput) {
+			validateWith(PaymentSchema, input);
 			return repo.recordWithInvoiceUpdate(input);
 		},
 

@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
-import { supabase } from '@/src/config/supabase';
+import { businessProfileService } from '@/src/services/businessProfileService';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput } from '@/src/components/atoms/TextInput';
@@ -36,8 +36,8 @@ export default function SetupScreen() {
 		try {
 			await register(email, password);
 			setStep('business');
-		} catch (e: any) {
-			Alert.alert('Error', e.message ?? 'Registration failed');
+		} catch (e: unknown) {
+			Alert.alert('Error', e instanceof Error ? e.message : 'Registration failed');
 		} finally {
 			setLoading(false);
 		}
@@ -47,7 +47,7 @@ export default function SetupScreen() {
 		if (!businessName) return Alert.alert('Error', 'Business name is required');
 		setLoading(true);
 		try {
-			await supabase.from('business_profile').upsert({
+			await businessProfileService.upsert({
 				business_name: businessName,
 				phone,
 				gstin,
@@ -55,8 +55,11 @@ export default function SetupScreen() {
 				invoice_sequence: 0,
 			});
 			router.replace('/(app)/(tabs)');
-		} catch (e: any) {
-			Alert.alert('Error', e.message ?? 'Failed to save business profile');
+		} catch (e: unknown) {
+			Alert.alert(
+				'Error',
+				e instanceof Error ? e.message : 'Failed to save business profile',
+			);
 		} finally {
 			setLoading(false);
 		}

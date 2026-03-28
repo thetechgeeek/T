@@ -21,6 +21,8 @@ import { Button } from '@/src/components/atoms/Button';
 import { Screen } from '@/src/components/atoms/Screen';
 import type { UUID } from '@/src/types/common';
 import type { StockOpType, InventoryItem } from '@/src/types/inventory';
+import { layout } from '@/src/theme/layout';
+import logger from '@/src/utils/logger';
 
 const schema = z.object({
 	quantity: z.string().min(1, 'Quantity is required'),
@@ -44,7 +46,10 @@ export default function StockOpScreen() {
 
 	useEffect(() => {
 		if (id) {
-			inventoryService.fetchItemById(id).then(setItem).catch(console.error);
+			inventoryService
+				.fetchItemById(id)
+				.then(setItem)
+				.catch((e) => logger.error('error', e instanceof Error ? e : new Error(String(e))));
 		}
 	}, [id]);
 
@@ -101,11 +106,11 @@ export default function StockOpScreen() {
 			<View
 				style={[
 					styles.header,
-					theme.layout.rowBetween,
+					layout.rowBetween,
 					{ borderBottomColor: c.border, paddingHorizontal: 20, paddingBottom: 16 },
 				]}
 			>
-				<View style={theme.layout.row}>
+				<View style={layout.row}>
 					<View style={[styles.iconWrap, { backgroundColor: color + '20' }]}>
 						<Icon size={22} color={color} strokeWidth={2.5} />
 					</View>

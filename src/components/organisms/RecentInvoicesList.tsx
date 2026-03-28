@@ -5,6 +5,7 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useLocale } from '@/src/hooks/useLocale';
 import { formatDate } from '@/src/utils/dateUtils';
+import { layout } from '@/src/theme/layout';
 
 export interface Invoice {
 	id: string;
@@ -31,7 +32,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 
 	return (
 		<View style={[styles.section, { paddingHorizontal: s.lg, marginTop: s.lg }]}>
-			<View style={[theme.layout.rowBetween, { marginBottom: s.sm }]}>
+			<View style={[layout.rowBetween, { marginBottom: s.sm }]}>
 				<ThemedText variant="h3">{t('dashboard.recentInvoices')}</ThemedText>
 				<TouchableOpacity onPress={() => router.push('/(app)/(tabs)/invoices')}>
 					<ThemedText variant="body2" color={c.primary}>
@@ -75,7 +76,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 								},
 							]}
 						>
-							<View style={theme.layout.rowBetween}>
+							<View style={layout.rowBetween}>
 								<View style={{ flex: 1 }}>
 									<ThemedText weight="semibold">{inv.customer_name}</ThemedText>
 									<ThemedText variant="caption" color={c.onSurfaceVariant}>

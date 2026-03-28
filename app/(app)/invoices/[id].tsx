@@ -9,6 +9,7 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Share2, ArrowLeft } from 'lucide-react-native';
+import { layout } from '@/src/theme/layout';
 
 export default function InvoiceDetailScreen() {
 	const { id } = useLocalSearchParams();
@@ -66,11 +67,11 @@ export default function InvoiceDetailScreen() {
 			<View
 				style={[
 					styles.header,
-					theme.layout.rowBetween,
+					layout.rowBetween,
 					{ borderBottomColor: c.border, borderBottomWidth: 1 },
 				]}
 			>
-				<View style={[theme.layout.row, { flex: 1 }]}>
+				<View style={[layout.row, { flex: 1 }]}>
 					<ArrowLeft
 						color={c.onBackground}
 						size={24}
@@ -126,7 +127,7 @@ export default function InvoiceDetailScreen() {
 							}}
 						>
 							<ThemedText weight="semibold">{item.design_name}</ThemedText>
-							<View style={[theme.layout.rowBetween, { marginTop: 4 }]}>
+							<View style={[layout.rowBetween, { marginTop: 4 }]}>
 								<ThemedText variant="caption" color={c.onSurfaceVariant}>
 									{item.quantity} units @ {formatCurrency(item.rate_per_unit)}
 								</ThemedText>
@@ -147,14 +148,14 @@ export default function InvoiceDetailScreen() {
 						borderColor: c.border,
 					}}
 				>
-					<View style={theme.layout.rowBetween}>
+					<View style={layout.rowBetween}>
 						<ThemedText color={c.onSurfaceVariant}>Subtotal</ThemedText>
 						<ThemedText color={c.onSurface}>
 							{formatCurrency(currentInvoice.subtotal)}
 						</ThemedText>
 					</View>
 					{currentInvoice.is_inter_state ? (
-						<View style={theme.layout.rowBetween}>
+						<View style={layout.rowBetween}>
 							<ThemedText color={c.onSurfaceVariant}>IGST</ThemedText>
 							<ThemedText color={c.onSurface}>
 								{formatCurrency(currentInvoice.igst_total)}
@@ -162,13 +163,13 @@ export default function InvoiceDetailScreen() {
 						</View>
 					) : (
 						<>
-							<View style={theme.layout.rowBetween}>
+							<View style={layout.rowBetween}>
 								<ThemedText color={c.onSurfaceVariant}>CGST</ThemedText>
 								<ThemedText color={c.onSurface}>
 									{formatCurrency(currentInvoice.cgst_total)}
 								</ThemedText>
 							</View>
-							<View style={theme.layout.rowBetween}>
+							<View style={layout.rowBetween}>
 								<ThemedText color={c.onSurfaceVariant}>SGST</ThemedText>
 								<ThemedText color={c.onSurface}>
 									{formatCurrency(currentInvoice.sgst_total)}
@@ -178,7 +179,7 @@ export default function InvoiceDetailScreen() {
 					)}
 					<View
 						style={[
-							theme.layout.rowBetween,
+							layout.rowBetween,
 							{
 								borderTopWidth: 1,
 								borderTopColor: c.border,
@@ -192,14 +193,14 @@ export default function InvoiceDetailScreen() {
 							{formatCurrency(currentInvoice.grand_total)}
 						</ThemedText>
 					</View>
-					<View style={theme.layout.rowBetween}>
+					<View style={layout.rowBetween}>
 						<ThemedText color={c.onSurfaceVariant}>Amount Paid</ThemedText>
 						<ThemedText weight="semibold" color={c.success}>
 							{formatCurrency(currentInvoice.amount_paid)}
 						</ThemedText>
 					</View>
 					{currentInvoice.grand_total - currentInvoice.amount_paid > 0 && (
-						<View style={theme.layout.rowBetween}>
+						<View style={layout.rowBetween}>
 							<ThemedText color={c.error}>Balance Due</ThemedText>
 							<ThemedText variant="h3" color={c.error}>
 								{formatCurrency(

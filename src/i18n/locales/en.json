@@ -96,7 +96,8 @@
 		"deleteConfirm": "Delete this item?",
 		"deleteWarning": "This action cannot be undone.",
 		"tileSet": "Tile Set",
-		"variants": "variants"
+		"variants": "variants",
+		"emptyFilterHint": "Try adjusting your search or filters."
 	},
 	"invoice": {
 		"title": "Invoices",
@@ -269,5 +270,8 @@
 		},
 		"noOrders": "No orders imported yet",
 		"importFirst": "Import your first order PDF"
+	},
+	"tabs": {
+		"more": "More"
 	}
 }

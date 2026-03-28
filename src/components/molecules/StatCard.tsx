@@ -29,6 +29,8 @@ export const StatCard: React.FC<StatCardProps> = ({
 
 	return (
 		<View
+			accessibilityRole="summary"
+			accessibilityLabel={`${label}: ${value}`}
 			style={[
 				styles.container,
 				{

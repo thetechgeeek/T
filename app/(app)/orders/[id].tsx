@@ -8,6 +8,7 @@ import type { InventoryItem } from '@/src/types/inventory';
 import { Package, CheckCircle2 } from 'lucide-react-native';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import logger from '@/src/utils/logger';
 
 export default function OrderDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
@@ -32,7 +33,7 @@ export default function OrderDetailScreen() {
 				setOrder(orderData);
 				setItems(itemsData as any);
 			} catch (err: any) {
-				console.error(err);
+				logger.error('error', err);
 			} finally {
 				setLoading(false);
 			}

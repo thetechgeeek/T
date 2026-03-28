@@ -26,6 +26,7 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Chip } from '@/src/components/atoms/Chip';
 import type { TileSetGroup, TileCategory } from '@/src/types/inventory';
+import { layout } from '@/src/theme/layout';
 
 const CATEGORIES: ('ALL' | TileCategory)[] = [
 	'ALL',
@@ -34,6 +35,7 @@ const CATEGORIES: ('ALL' | TileCategory)[] = [
 	'ELEVATION',
 	'FLOOR',
 	'WOODEN',
+	'SATIN',
 	'OTHER',
 ];
 
@@ -102,7 +104,7 @@ export default function InventoryTab() {
 					style={{ marginTop: s.sm, textAlign: 'center' }}
 				>
 					{filters.search || filters.category !== 'ALL'
-						? 'Try adjusting your search or filters.'
+						? t('inventory.emptyFilterHint')
 						: t('inventory.addFirstItem')}
 				</ThemedText>
 			</View>
@@ -114,7 +116,6 @@ export default function InventoryTab() {
 			{/* Header */}
 			<View
 				style={[
-					styles.header,
 					{
 						borderBottomColor: c.border,
 						borderBottomWidth: StyleSheet.hairlineWidth,
@@ -123,12 +124,12 @@ export default function InventoryTab() {
 					},
 				]}
 			>
-				<View style={[theme.layout.rowBetween, { marginBottom: 16 }]}>
+				<View style={[layout.rowBetween, { marginBottom: 16 }]}>
 					<ThemedText variant="h1">{t('inventory.title')}</ThemedText>
 				</View>
 
 				{/* Search Bar */}
-				<View style={[theme.layout.row, { gap: 12 }]}>
+				<View style={[layout.row, { gap: 12 }]}>
 					<View style={{ flex: 1 }}>
 						<TextInput
 							placeholder="Search design or item number..."
@@ -226,7 +227,6 @@ export default function InventoryTab() {
 const FiltersIcon = SlidersHorizontal;
 
 const styles = StyleSheet.create({
-	header: {},
 	filterBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
 	chipScrollWrap: { marginTop: 8, marginHorizontal: -20, paddingHorizontal: 20 },
 	centerFlex: {

@@ -10,6 +10,7 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { Button } from '@/src/components/atoms/Button';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import logger from '@/src/utils/logger';
 
 export default function ScanTab() {
 	const { theme } = useTheme();
@@ -60,7 +61,7 @@ export default function ScanTab() {
 				);
 			}
 		} catch (err: any) {
-			console.error(err);
+			logger.error('error', err);
 			Alert.alert(
 				'Error',
 				err.message || 'Failed to search inventory. Please check your database connection.',
@@ -88,7 +89,7 @@ export default function ScanTab() {
 				[{ text: 'OK' }],
 			);
 		} catch (err: any) {
-			console.error(err);
+			logger.error('error', err);
 			Alert.alert('Error', err.message || 'Failed to capture image for scanning.', [
 				{ text: 'OK' },
 			]);

@@ -22,10 +22,14 @@ export default function LoginScreen() {
 			Alert.alert('Error', 'Please enter email and password');
 			return;
 		}
+		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+			Alert.alert('Error', 'Please enter a valid email address');
+			return;
+		}
 		try {
 			await login(email, password);
-		} catch (e: any) {
-			Alert.alert('Login Failed', e.message ?? 'Invalid credentials');
+		} catch (e: unknown) {
+			Alert.alert('Login Failed', e instanceof Error ? e.message : 'Invalid credentials');
 		}
 	};
 

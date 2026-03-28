@@ -24,6 +24,8 @@ import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 
 import { calculateInvoiceTotals } from '@/src/utils/gstCalculator';
+import { layout } from '@/src/theme/layout';
+import logger from '@/src/utils/logger';
 
 export default function CreateInvoiceScreen() {
 	const router = useRouter();
@@ -97,7 +99,7 @@ export default function CreateInvoiceScreen() {
 			});
 			router.replace(`/(app)/invoices/${newInvoice.id}`);
 		} catch (e: any) {
-			console.error('Failed to create invoice', e);
+			logger.error('Failed to create invoice', e);
 			Alert.alert(
 				'Error Creating Invoice',
 				e.message || 'An unexpected error occurred. Please try again.',
@@ -204,7 +206,7 @@ export default function CreateInvoiceScreen() {
 
 				{step === 2 && (
 					<View>
-						<View style={[theme.layout.rowBetween, { marginBottom: s.md }]}>
+						<View style={[layout.rowBetween, { marginBottom: s.md }]}>
 							<ThemedText variant="h3">Line Items</ThemedText>
 							<Button
 								title="+ Add Item"
@@ -240,7 +242,7 @@ export default function CreateInvoiceScreen() {
 									}}
 								>
 									<ThemedText weight="semibold">{item.design_name}</ThemedText>
-									<View style={theme.layout.rowBetween}>
+									<View style={layout.rowBetween}>
 										<ThemedText variant="caption" color={c.onSurfaceVariant}>
 											{item.quantity} units @ ₹{item.rate_per_unit.toFixed(2)}
 										</ThemedText>
@@ -280,7 +282,7 @@ export default function CreateInvoiceScreen() {
 									borderColor: c.border,
 								}}
 							>
-								<View style={[theme.layout.rowBetween, { marginBottom: s.xs }]}>
+								<View style={[layout.rowBetween, { marginBottom: s.xs }]}>
 									<ThemedText weight="bold">Select from Inventory</ThemedText>
 									{inventoryLoading && (
 										<ActivityIndicator size="small" color={c.primary} />
@@ -431,10 +433,7 @@ export default function CreateInvoiceScreen() {
 
 							<View style={{ marginTop: s.md }}>
 								{lineItems.map((item, idx) => (
-									<View
-										key={idx}
-										style={[theme.layout.rowBetween, { marginTop: 4 }]}
-									>
+									<View key={idx} style={[layout.rowBetween, { marginTop: 4 }]}>
 										<ThemedText variant="body2">
 											{item.quantity}x {item.design_name}
 										</ThemedText>
@@ -453,7 +452,7 @@ export default function CreateInvoiceScreen() {
 								}}
 							/>
 
-							<View style={theme.layout.rowBetween}>
+							<View style={layout.rowBetween}>
 								<ThemedText weight="bold">Grand Total (inc. GST)</ThemedText>
 								<ThemedText variant="h3" color={c.primary}>
 									₹{grandTotal.toFixed(2)}
@@ -482,7 +481,7 @@ export default function CreateInvoiceScreen() {
 						</ThemedText>
 						<View
 							style={[
-								theme.layout.row,
+								layout.row,
 								{ gap: s.sm, marginBottom: s.xl, flexWrap: 'wrap' },
 							]}
 						>

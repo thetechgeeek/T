@@ -78,7 +78,7 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="more"
 				options={{
-					title: 'More',
+					title: t('tabs.more'),
 					tabBarIcon: ({ color }) => (
 						<MoreHorizontal size={22} color={color} strokeWidth={2} />
 					),

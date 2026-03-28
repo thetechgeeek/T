@@ -1,5 +1,12 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+	View,
+	StyleSheet,
+	FlatList,
+	TouchableOpacity,
+	ActivityIndicator,
+	RefreshControl,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { Plus, ChevronRight, FileText } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -19,10 +26,17 @@ export default function OrdersListScreen() {
 	const r = theme.borderRadius;
 
 	const { orders, loading, fetchOrders } = useOrderStore();
+	const [refreshing, setRefreshing] = useState(false);
 
 	React.useEffect(() => {
 		fetchOrders();
 	}, []);
+
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		await fetchOrders();
+		setRefreshing(false);
+	};
 
 	return (
 		<Screen safeAreaEdges={['top', 'bottom']}>
@@ -67,6 +81,13 @@ export default function OrdersListScreen() {
 					data={orders}
 					keyExtractor={(o) => o.id}
 					contentContainerStyle={{ padding: s.md }}
+					refreshControl={
+						<RefreshControl
+							refreshing={refreshing}
+							onRefresh={handleRefresh}
+							tintColor={c.primary}
+						/>
+					}
 					renderItem={({ item }) => (
 						<TouchableOpacity
 							style={[

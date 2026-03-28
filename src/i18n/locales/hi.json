@@ -96,7 +96,8 @@
 		"deleteConfirm": "इस आइटम को हटाएं?",
 		"deleteWarning": "यह क्रिया वापस नहीं की जा सकती।",
 		"tileSet": "टाइल सेट",
-		"variants": "वेरिएंट"
+		"variants": "वेरिएंट",
+		"emptyFilterHint": "अपनी खोज या फ़िल्टर बदलकर देखें।"
 	},
 	"invoice": {
 		"title": "बिल",
@@ -269,5 +270,8 @@
 		},
 		"noOrders": "अभी तक कोई ऑर्डर नहीं",
 		"importFirst": "पहला ऑर्डर PDF आयात करें"
+	},
+	"tabs": {
+		"more": "अधिक"
 	}
 }

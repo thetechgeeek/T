@@ -7,6 +7,7 @@ import { numberToIndianWords } from '../utils/currency';
 import { escapeHtml } from '../utils/html';
 import type { Invoice } from '../types/invoice';
 import type { BusinessProfile } from '../types/businessProfile';
+import logger from '../utils/logger';
 
 export interface ParsedOrderItem {
 	design_name?: string;
@@ -228,7 +229,7 @@ export const pdfService = {
 				dialogTitle: `Share Invoice ${invoice.invoice_number}`,
 			});
 		} catch (e: any) {
-			console.error('Failed to generate/share PDF', e);
+			logger.error('Failed to generate/share PDF', e);
 			// Using Alert.alert if I can, but since this is a service, maybe just throw.
 			// But the original had alert(). I will leave it for now but standardize it.
 			// Actually, I'll just leave it as alert() but with proper message.
@@ -262,7 +263,7 @@ export const pdfService = {
 				base64,
 			};
 		} catch (e) {
-			console.error('Error picking document', e);
+			logger.error('Error picking document', e);
 			throw e;
 		}
 	},

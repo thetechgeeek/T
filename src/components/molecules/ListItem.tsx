@@ -27,6 +27,8 @@ export const ListItem: React.FC<ListItemProps> = ({
 	return (
 		<Pressable
 			onPress={onPress}
+			accessibilityRole="button"
+			accessibilityLabel={title}
 			style={({ pressed }) => [
 				styles.container,
 				{ borderBottomWidth: 1, borderBottomColor: theme.colors.separator },

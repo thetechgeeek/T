@@ -89,7 +89,10 @@ export function Button({
 			{...props}
 		>
 			{loading ? (
-				<ActivityIndicator color={isOutline || variant === 'ghost' ? c.primary : v.text} />
+				<ActivityIndicator
+					testID="loading-indicator"
+					color={isOutline || variant === 'ghost' ? c.primary : v.text}
+				/>
 			) : (
 				<>
 					{leftIcon && <React.Fragment>{leftIcon}</React.Fragment>}

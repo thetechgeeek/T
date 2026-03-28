@@ -19,6 +19,8 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Screen } from '@/src/components/atoms/Screen';
 import type { InventoryItem, StockOperation } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
+import { layout } from '@/src/theme/layout';
+import logger from '@/src/utils/logger';
 
 export default function ItemDetailScreen() {
 	const { theme } = useTheme();
@@ -49,7 +51,7 @@ export default function ItemDetailScreen() {
 					setHistory(historyData);
 				}
 			} catch (err) {
-				console.error('Failed to load item detail', err);
+				logger.error('Failed to load item detail', err);
 			} finally {
 				if (isMounted) setLoading(false);
 			}
@@ -83,7 +85,7 @@ export default function ItemDetailScreen() {
 				<View
 					style={[
 						styles.header,
-						theme.layout.rowBetween,
+						layout.rowBetween,
 						{
 							borderBottomColor: c.border,
 							borderBottomWidth: 1,
@@ -112,7 +114,7 @@ export default function ItemDetailScreen() {
 			<View
 				style={[
 					styles.header,
-					theme.layout.rowBetween,
+					layout.rowBetween,
 					{
 						borderBottomColor: c.border,
 						borderBottomWidth: 1,
@@ -121,7 +123,7 @@ export default function ItemDetailScreen() {
 					},
 				]}
 			>
-				<View style={[theme.layout.row, { flex: 1 }]}>
+				<View style={[layout.row, { flex: 1 }]}>
 					<TouchableOpacity onPress={() => router.back()} style={styles.back}>
 						<ArrowLeft size={24} color={c.onBackground} strokeWidth={2.5} />
 					</TouchableOpacity>
@@ -178,7 +180,7 @@ export default function ItemDetailScreen() {
 				{/* Specs Grid */}
 				<View
 					style={[
-						theme.layout.row,
+						layout.row,
 						{ flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: -6 },
 					]}
 				>
@@ -221,11 +223,11 @@ export default function ItemDetailScreen() {
 				</View>
 
 				{/* Quick Actions */}
-				<View style={[theme.layout.row, { marginTop: s.md, gap: s.md }]}>
+				<View style={[layout.row, { marginTop: s.md, gap: s.md }]}>
 					<TouchableOpacity
 						style={[
 							styles.actionBtn,
-							theme.layout.row,
+							layout.row,
 							{ flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md },
 						]}
 						onPress={() =>
@@ -240,7 +242,7 @@ export default function ItemDetailScreen() {
 					<TouchableOpacity
 						style={[
 							styles.actionBtn,
-							theme.layout.row,
+							layout.row,
 							{ flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md },
 						]}
 						onPress={() =>
@@ -269,7 +271,7 @@ export default function ItemDetailScreen() {
 								key={op.id}
 								style={[
 									styles.historyRow,
-									theme.layout.row,
+									layout.row,
 									{
 										borderBottomColor: c.border,
 										borderBottomWidth:

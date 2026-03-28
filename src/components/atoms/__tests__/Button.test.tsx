@@ -27,7 +27,7 @@ describe('Button', () => {
 		);
 		// When loading, title is hidden and ActivityIndicator is shown
 		expect(queryByText('Save')).toBeFalsy();
-		fireEvent.press(getByTestId('ActivityIndicator')); // This depends on your mock
+		fireEvent.press(getByTestId('loading-indicator')); // This depends on your mock
 		expect(onPressMock).not.toHaveBeenCalled();
 	});
 });

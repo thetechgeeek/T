@@ -23,6 +23,7 @@ import { FormField } from '@/src/components/molecules/FormField';
 import type { TileCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { inventoryService } from '@/src/services/inventoryService';
+import { layout } from '@/src/theme/layout';
 
 const schema = z.object({
 	design_name: z.string().min(1, 'Design Name is required'),
@@ -164,7 +165,7 @@ export default function AddItemScreen() {
 			<View
 				style={[
 					styles.header,
-					theme.layout.rowBetween,
+					layout.rowBetween,
 					{ borderBottomColor: c.border, borderBottomWidth: 1, paddingHorizontal: s.lg },
 				]}
 			>
@@ -199,7 +200,7 @@ export default function AddItemScreen() {
 					)}
 				/>
 
-				<View style={[theme.layout.row, { gap: s.md }]}>
+				<View style={[layout.row, { gap: s.md }]}>
 					<View style={{ flex: 1 }}>
 						<Controller
 							control={control}
@@ -235,7 +236,7 @@ export default function AddItemScreen() {
 				<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
 					Category *
 				</ThemedText>
-				<View style={[theme.layout.row, { flexWrap: 'wrap', gap: 8, marginBottom: 16 }]}>
+				<View style={[layout.row, { flexWrap: 'wrap', gap: 8, marginBottom: 16 }]}>
 					<Controller
 						control={control}
 						name="category"

@@ -8,6 +8,7 @@ const STORAGE_KEY = '@tilemaster/theme';
 
 interface ThemeContextValue {
 	theme: Theme;
+	isDark: boolean;
 	mode: ThemeMode;
 	setThemeMode: (mode: ThemeMode) => void;
 	toggleTheme: () => void;
@@ -55,7 +56,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 	const theme = useMemo(() => buildTheme(isDark), [isDark]);
 
 	return (
-		<ThemeContext.Provider value={{ theme, mode, setThemeMode, toggleTheme }}>
+		<ThemeContext.Provider value={{ theme, isDark, mode, setThemeMode, toggleTheme }}>
 			{children}
 		</ThemeContext.Provider>
 	);

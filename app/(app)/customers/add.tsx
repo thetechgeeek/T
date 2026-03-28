@@ -10,6 +10,8 @@ import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { Screen } from '@/src/components/atoms/Screen';
 import { FormField } from '@/src/components/molecules/FormField';
+import { layout } from '@/src/theme/layout';
+import logger from '@/src/utils/logger';
 
 interface CustomerFormData {
 	name: string;
@@ -57,7 +59,7 @@ export default function AddCustomerScreen() {
 			await createCustomer(data);
 			router.back();
 		} catch (e: any) {
-			console.error(e);
+			logger.error('error', e);
 			Alert.alert(
 				'Error Saving Customer',
 				e.message ||
@@ -118,7 +120,7 @@ export default function AddCustomerScreen() {
 							)}
 						/>
 
-						<View style={[theme.layout.row, { gap: 16 }]}>
+						<View style={[layout.row, { gap: 16 }]}>
 							<View style={{ flex: 1 }}>
 								<Controller
 									control={control}

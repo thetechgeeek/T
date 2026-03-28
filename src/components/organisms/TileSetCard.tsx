@@ -103,6 +103,8 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 						<TouchableOpacity
 							key={item.id}
 							activeOpacity={0.7}
+							accessibilityRole="button"
+							accessibilityLabel={item.design_name}
 							style={[styles.variantRow, { marginTop: index > 0 ? s.md : 0 }]}
 							onPress={() => onPressItem(item)}
 						>

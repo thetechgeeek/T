@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useLocale } from '@/src/hooks/useLocale';
+import { layout } from '@/src/theme/layout';
 
 export interface DashboardHeaderProps {
 	businessName: string;
@@ -38,7 +39,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName }
 				{t('dashboard.greeting')} 🙏
 			</ThemedText>
 
-			<View style={[theme.layout.rowBetween, { marginTop: s.xs }]}>
+			<View style={[layout.rowBetween, { marginTop: s.xs }]}>
 				<ThemedText variant="h2" color={c.onPrimary} style={{ flex: 1 }}>
 					{businessName}
 				</ThemedText>
