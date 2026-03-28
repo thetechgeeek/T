@@ -1,5 +1,6 @@
 import { supabase } from '../config/supabase';
 import { AppError } from '../errors';
+import logger from '../utils/logger';
 import type { UUID } from '../types/common';
 
 export interface QueryOptions {
@@ -57,9 +58,15 @@ function applyFilters(query: any, options: QueryOptions): any {
 export function createRepository<T extends { id: UUID }>(tableName: string) {
 	return {
 		async findMany(options: QueryOptions = {}): Promise<PaginatedResult<T>> {
+			const start = performance.now();
 			let query = supabase.from(tableName).select('*', { count: 'exact' });
 			query = applyFilters(query, options);
 			const { data, count, error } = await query;
+			logger.info('db_query', {
+				table: tableName,
+				op: 'findMany',
+				duration_ms: Math.round(performance.now() - start),
+			});
 			if (error) {
 				throw new AppError(
 					error.message,
@@ -72,11 +79,17 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 		},
 
 		async findById(id: UUID): Promise<T> {
+			const start = performance.now();
 			const { data, error } = await supabase
 				.from(tableName)
 				.select('*')
 				.eq('id', id)
 				.single();
+			logger.info('db_query', {
+				table: tableName,
+				op: 'findById',
+				duration_ms: Math.round(performance.now() - start),
+			});
 			if (error) {
 				throw new AppError(
 					error.message,
