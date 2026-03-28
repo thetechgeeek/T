@@ -6,84 +6,86 @@ import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 // Mock store
 jest.mock('@/src/stores/inventoryStore', () => ({
-  useInventoryStore: jest.fn(),
+	useInventoryStore: jest.fn(),
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(
-    <ThemeProvider>
-      {component}
-    </ThemeProvider>
-  );
+	return render(<ThemeProvider>{component}</ThemeProvider>);
 };
 
 const mockInventoryItems = [
-  { id: 'i-1', design_name: 'Marble gold', box_count: 50, category: 'GLOSSY', base_item_number: 'B1' },
+	{
+		id: 'i-1',
+		design_name: 'Marble gold',
+		box_count: 50,
+		category: 'GLOSSY',
+		base_item_number: 'B1',
+	},
 ];
 
 describe('InventoryTab', () => {
-  const mockFetchItems = jest.fn();
-  const mockSetFilters = jest.fn();
+	const mockFetchItems = jest.fn();
+	const mockSetFilters = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockFetchItems.mockResolvedValue(undefined);
-    (useInventoryStore as unknown as jest.Mock).mockReturnValue({
-      items: [], // Start empty to trigger fetch
-      loading: false,
-      hasMore: false,
-      filters: { category: 'ALL' },
-      page: 1,
-      fetchItems: mockFetchItems,
-      setFilters: mockSetFilters,
-    });
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+		mockFetchItems.mockResolvedValue(undefined);
+		(useInventoryStore as unknown as jest.Mock).mockReturnValue({
+			items: [], // Start empty to trigger fetch
+			loading: false,
+			hasMore: false,
+			filters: { category: 'ALL' },
+			page: 1,
+			fetchItems: mockFetchItems,
+			setFilters: mockSetFilters,
+		});
+	});
 
-  it('renders inventory items correctly', async () => {
-    // Re-mock with data
-    (useInventoryStore as unknown as jest.Mock).mockReturnValue({
-      items: mockInventoryItems,
-      loading: false,
-      hasMore: false,
-      filters: { category: 'ALL' },
-      page: 1,
-      fetchItems: mockFetchItems,
-      setFilters: mockSetFilters,
-    });
+	it('renders inventory items correctly', async () => {
+		// Re-mock with data
+		(useInventoryStore as unknown as jest.Mock).mockReturnValue({
+			items: mockInventoryItems,
+			loading: false,
+			hasMore: false,
+			filters: { category: 'ALL' },
+			page: 1,
+			fetchItems: mockFetchItems,
+			setFilters: mockSetFilters,
+		});
 
-    const { getByText } = renderWithTheme(<InventoryTab />);
-    
-    await waitFor(() => {
-      expect(getByText('Marble gold')).toBeTruthy();
-      expect(getByText('50 Boxes', { exact: false })).toBeTruthy();
-    });
-  });
+		const { getByText } = renderWithTheme(<InventoryTab />);
 
-  it('shows an alert when fetching inventory fails', async () => {
-    const errorMessage = 'Schema error';
-    mockFetchItems.mockRejectedValue(new Error(errorMessage));
-    
-    // Ensure items is empty to trigger useEffect fetch
-    (useInventoryStore as unknown as jest.Mock).mockReturnValue({
-      items: [],
-      loading: false,
-      hasMore: false,
-      filters: { category: 'ALL' },
-      page: 1,
-      fetchItems: mockFetchItems,
-      setFilters: mockSetFilters,
-    });
+		await waitFor(() => {
+			expect(getByText('Marble gold')).toBeTruthy();
+			expect(getByText('50 Boxes', { exact: false })).toBeTruthy();
+		});
+	});
 
-    renderWithTheme(<InventoryTab />);
-    
-    const { Alert } = require('react-native');
-    await waitFor(() => {
-      expect(mockFetchItems).toHaveBeenCalled();
-      expect(Alert.alert).toHaveBeenCalledWith(
-        'Error',
-        expect.stringContaining(errorMessage),
-        expect.any(Array)
-      );
-    });
-  });
+	it('shows an alert when fetching inventory fails', async () => {
+		const errorMessage = 'Schema error';
+		mockFetchItems.mockRejectedValue(new Error(errorMessage));
+
+		// Ensure items is empty to trigger useEffect fetch
+		(useInventoryStore as unknown as jest.Mock).mockReturnValue({
+			items: [],
+			loading: false,
+			hasMore: false,
+			filters: { category: 'ALL' },
+			page: 1,
+			fetchItems: mockFetchItems,
+			setFilters: mockSetFilters,
+		});
+
+		renderWithTheme(<InventoryTab />);
+
+		const { Alert } = require('react-native');
+		await waitFor(() => {
+			expect(mockFetchItems).toHaveBeenCalled();
+			expect(Alert.alert).toHaveBeenCalledWith(
+				'Error',
+				expect.stringContaining(errorMessage),
+				expect.any(Array),
+			);
+		});
+	});
 });

@@ -1,7 +1,22 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, ActivityIndicator, Alert } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	FlatList,
+	TouchableOpacity,
+	RefreshControl,
+	ActivityIndicator,
+	Alert,
+} from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
-import { Plus, Package, Search, SlidersHorizontal, Grid as GridIcon, List as ListIcon } from 'lucide-react-native';
+import {
+	Plus,
+	Package,
+	Search,
+	SlidersHorizontal,
+	Grid as GridIcon,
+	List as ListIcon,
+} from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
@@ -12,208 +27,223 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { Chip } from '@/src/components/atoms/Chip';
 import type { TileSetGroup, TileCategory } from '@/src/types/inventory';
 
-const CATEGORIES: ('ALL' | TileCategory)[] = ['ALL', 'GLOSSY', 'MATT', 'ELEVATION', 'FLOOR', 'WOODEN', 'OTHER'];
+const CATEGORIES: ('ALL' | TileCategory)[] = [
+	'ALL',
+	'GLOSSY',
+	'MATT',
+	'ELEVATION',
+	'FLOOR',
+	'WOODEN',
+	'OTHER',
+];
 
 export default function InventoryTab() {
-    const { theme } = useTheme();
-    const { t } = useLocale();
-    const router = useExpoRouter();
-    const c = theme.colors;
-    const s = theme.spacing;
-    const r = theme.borderRadius;
+	const { theme } = useTheme();
+	const { t } = useLocale();
+	const router = useExpoRouter();
+	const c = theme.colors;
+	const s = theme.spacing;
+	const r = theme.borderRadius;
 
-    const { items, loading, hasMore, filters, page, fetchItems, setFilters } = useInventoryStore();
-    const [refreshing, setRefreshing] = useState(false);
-    const [searchInput, setSearchInput] = useState(filters.search || '');
+	const { items, loading, hasMore, filters, page, fetchItems, setFilters } = useInventoryStore();
+	const [refreshing, setRefreshing] = useState(false);
+	const [searchInput, setSearchInput] = useState(filters.search || '');
 
-    useEffect(() => {
-        // Initial fetch if empty and not loading
-        if (items.length === 0 && !loading && page === 1) {
-            fetchItems(true).catch((e) => {
-                Alert.alert('Error', 'Failed to load inventory. ' + e.message, [{ text: 'OK' }]);
-            });
-        }
-    }, []);
+	useEffect(() => {
+		// Initial fetch if empty and not loading
+		if (items.length === 0 && !loading && page === 1) {
+			fetchItems(true).catch((e) => {
+				Alert.alert('Error', 'Failed to load inventory. ' + e.message, [{ text: 'OK' }]);
+			});
+		}
+	}, []);
 
-    const handleRefresh = async () => {
-        setRefreshing(true);
-        await fetchItems(true);
-        setRefreshing(false);
-    };
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		await fetchItems(true);
+		setRefreshing(false);
+	};
 
-    const handleSearchSubmit = () => {
-        setFilters({ search: searchInput });
-    };
+	const handleSearchSubmit = () => {
+		setFilters({ search: searchInput });
+	};
 
-    const handleCategorySelect = (cat: 'ALL' | TileCategory) => {
-        setFilters({ category: cat });
-    };
+	const handleCategorySelect = (cat: 'ALL' | TileCategory) => {
+		setFilters({ category: cat });
+	};
 
-    const groupedSets = useMemo(() => {
-        const map: Record<string, TileSetGroup> = {};
-        items.forEach((item) => {
-            const g = item.base_item_number || 'UNKNOWN';
-            if (!map[g]) map[g] = { baseItemNumber: g, items: [] };
-            map[g].items.push(item);
-        });
-        return Object.values(map);
-    }, [items]);
+	const groupedSets = useMemo(() => {
+		const map: Record<string, TileSetGroup> = {};
+		items.forEach((item) => {
+			const g = item.base_item_number || 'UNKNOWN';
+			if (!map[g]) map[g] = { baseItemNumber: g, items: [] };
+			map[g].items.push(item);
+		});
+		return Object.values(map);
+	}, [items]);
 
-    const renderEmpty = () => {
-        if (loading && items.length === 0) {
-            return (
-                <View style={styles.centerFlex}>
-                    <ActivityIndicator
-                        size='large'
-                        color={c.primary}
-                    />
-                </View>
-            );
-        }
-        return (
-            <View style={styles.centerFlex}>
-                <Package
-                    size={64}
-                    color={c.placeholder}
-                    strokeWidth={1}
-                />
-                <ThemedText
-                    variant='h3'
-                    style={{ marginTop: s.md }}
-                >
-                    {t('inventory.noItems')}
-                </ThemedText>
-                <ThemedText
-                    variant='body2'
-                    color={c.onSurfaceVariant}
-                    style={{ marginTop: s.sm, textAlign: 'center' }}
-                >
-                    {filters.search || filters.category !== 'ALL' ? 'Try adjusting your search or filters.' : t('inventory.addFirstItem')}
-                </ThemedText>
-            </View>
-        );
-    };
+	const renderEmpty = () => {
+		if (loading && items.length === 0) {
+			return (
+				<View style={styles.centerFlex}>
+					<ActivityIndicator size="large" color={c.primary} />
+				</View>
+			);
+		}
+		return (
+			<View style={styles.centerFlex}>
+				<Package size={64} color={c.placeholder} strokeWidth={1} />
+				<ThemedText variant="h3" style={{ marginTop: s.md }}>
+					{t('inventory.noItems')}
+				</ThemedText>
+				<ThemedText
+					variant="body2"
+					color={c.onSurfaceVariant}
+					style={{ marginTop: s.sm, textAlign: 'center' }}
+				>
+					{filters.search || filters.category !== 'ALL'
+						? 'Try adjusting your search or filters.'
+						: t('inventory.addFirstItem')}
+				</ThemedText>
+			</View>
+		);
+	};
 
-    return (
-        <Screen
-            safeAreaEdges={['top']}
-            withKeyboard={false}
-        >
-            {/* Header */}
-            <View style={[styles.header, { borderBottomColor: c.border, borderBottomWidth: StyleSheet.hairlineWidth, paddingHorizontal: s.lg, paddingBottom: s.md }]}>
-                <View style={[theme.layout.rowBetween, { marginBottom: 16 }]}>
-                    <ThemedText variant='h1'>{t('inventory.title')}</ThemedText>
-                </View>
+	return (
+		<Screen safeAreaEdges={['top']} withKeyboard={false}>
+			{/* Header */}
+			<View
+				style={[
+					styles.header,
+					{
+						borderBottomColor: c.border,
+						borderBottomWidth: StyleSheet.hairlineWidth,
+						paddingHorizontal: s.lg,
+						paddingBottom: s.md,
+					},
+				]}
+			>
+				<View style={[theme.layout.rowBetween, { marginBottom: 16 }]}>
+					<ThemedText variant="h1">{t('inventory.title')}</ThemedText>
+				</View>
 
-                {/* Search Bar */}
-                <View style={[theme.layout.row, { gap: 12 }]}>
-                    <View style={{ flex: 1 }}>
-                        <TextInput
-                            placeholder='Search design or item number...'
-                            value={searchInput}
-                            onChangeText={setSearchInput}
-                            leftIcon={
-                                <Search
-                                    size={18}
-                                    color={c.placeholder}
-                                />
-                            }
-                            containerStyle={{ marginBottom: 0 }}
-                            returnKeyType='search'
-                            onSubmitEditing={handleSearchSubmit}
-                        />
-                    </View>
-                    <TouchableOpacity style={[styles.filterBtn, { backgroundColor: c.surfaceVariant, borderRadius: r.md }]}>
-                        <FiltersIcon
-                            size={20}
-                            color={c.onSurfaceVariant}
-                        />
-                    </TouchableOpacity>
-                </View>
+				{/* Search Bar */}
+				<View style={[theme.layout.row, { gap: 12 }]}>
+					<View style={{ flex: 1 }}>
+						<TextInput
+							placeholder="Search design or item number..."
+							value={searchInput}
+							onChangeText={setSearchInput}
+							leftIcon={<Search size={18} color={c.placeholder} />}
+							containerStyle={{ marginBottom: 0 }}
+							returnKeyType="search"
+							onSubmitEditing={handleSearchSubmit}
+						/>
+					</View>
+					<TouchableOpacity
+						style={[
+							styles.filterBtn,
+							{ backgroundColor: c.surfaceVariant, borderRadius: r.md },
+						]}
+					>
+						<FiltersIcon size={20} color={c.onSurfaceVariant} />
+					</TouchableOpacity>
+				</View>
 
-                {/* Categories (Horizontal Scroll) */}
-                <View style={styles.chipScrollWrap}>
-                    <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={CATEGORIES}
-                        keyExtractor={(item) => item}
-                        contentContainerStyle={{ paddingVertical: s.sm }}
-                        renderItem={({ item }) => {
-                            const isActive = filters.category === item;
-                            return (
-                                <Chip
-                                    label={item}
-                                    selected={isActive}
-                                    onPress={() => handleCategorySelect(item)}
-                                    style={{ marginRight: s.sm }}
-                                />
-                            );
-                        }}
-                    />
-                </View>
-            </View>
+				{/* Categories (Horizontal Scroll) */}
+				<View style={styles.chipScrollWrap}>
+					<FlatList
+						horizontal
+						showsHorizontalScrollIndicator={false}
+						data={CATEGORIES}
+						keyExtractor={(item) => item}
+						contentContainerStyle={{ paddingVertical: s.sm }}
+						renderItem={({ item }) => {
+							const isActive = filters.category === item;
+							return (
+								<Chip
+									label={item}
+									selected={isActive}
+									onPress={() => handleCategorySelect(item)}
+									style={{ marginRight: s.sm }}
+								/>
+							);
+						}}
+					/>
+				</View>
+			</View>
 
-            {/* List */}
-            <FlatList
-                data={groupedSets}
-                keyExtractor={(item) => item.baseItemNumber}
-                contentContainerStyle={{ padding: s.md, paddingBottom: 100 }}
-                renderItem={({ item }) => (
-                    <TileSetCard
-                        group={item}
-                        onPressItem={(invItem) => router.push(`/(app)/inventory/${invItem.id}`)}
-                        style={{ marginBottom: s.md }}
-                    />
-                )}
-                ListEmptyComponent={renderEmpty}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={handleRefresh}
-                        colors={[c.primary]}
-                        tintColor={c.primary}
-                    />
-                }
-                onEndReached={() => {
-                    if (hasMore && !loading) {
-                        fetchItems();
-                    }
-                }}
-                onEndReachedThreshold={0.5}
-                ListFooterComponent={
-                    loading && items.length > 0 ? (
-                        <ActivityIndicator
-                            style={{ padding: s.md }}
-                            color={c.primary}
-                        />
-                    ) : null
-                }
-            />
+			{/* List */}
+			<FlatList
+				data={groupedSets}
+				keyExtractor={(item) => item.baseItemNumber}
+				contentContainerStyle={{ padding: s.md, paddingBottom: 100 }}
+				renderItem={({ item }) => (
+					<TileSetCard
+						group={item}
+						onPressItem={(invItem) => router.push(`/(app)/inventory/${invItem.id}`)}
+						style={{ marginBottom: s.md }}
+					/>
+				)}
+				ListEmptyComponent={renderEmpty}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={handleRefresh}
+						colors={[c.primary]}
+						tintColor={c.primary}
+					/>
+				}
+				onEndReached={() => {
+					if (hasMore && !loading) {
+						fetchItems();
+					}
+				}}
+				onEndReachedThreshold={0.5}
+				ListFooterComponent={
+					loading && items.length > 0 ? (
+						<ActivityIndicator style={{ padding: s.md }} color={c.primary} />
+					) : null
+				}
+			/>
 
-            {/* FAB */}
-            <TouchableOpacity
-                style={[styles.fab, { backgroundColor: c.primary, ...(theme.shadows.lg as object) }]}
-                onPress={() => router.push('/(app)/inventory/add')}
-                activeOpacity={0.85}
-            >
-                <Plus
-                    size={28}
-                    color={c.onPrimary}
-                    strokeWidth={2.5}
-                />
-            </TouchableOpacity>
-        </Screen>
-    );
+			{/* FAB */}
+			<TouchableOpacity
+				style={[
+					styles.fab,
+					{ backgroundColor: c.primary, ...(theme.shadows.lg as object) },
+				]}
+				onPress={() => router.push('/(app)/inventory/add')}
+				activeOpacity={0.85}
+			>
+				<Plus size={28} color={c.onPrimary} strokeWidth={2.5} />
+			</TouchableOpacity>
+		</Screen>
+	);
 }
 
 // Map the icon since SlidersHorizontal isn't standard in older lucide but we imported it, if it fails we can fallback.
 const FiltersIcon = SlidersHorizontal;
 
 const styles = StyleSheet.create({
-    header: {},
-    filterBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-    chipScrollWrap: { marginTop: 8, marginHorizontal: -20, paddingHorizontal: 20 },
-    centerFlex: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, marginTop: 100 },
-    fab: { position: 'absolute', right: 20, bottom: 20, width: 60, height: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' },
+	header: {},
+	filterBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+	chipScrollWrap: { marginTop: 8, marginHorizontal: -20, paddingHorizontal: 20 },
+	centerFlex: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: 32,
+		marginTop: 100,
+	},
+	fab: {
+		position: 'absolute',
+		right: 20,
+		bottom: 20,
+		width: 60,
+		height: 60,
+		borderRadius: 30,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 });

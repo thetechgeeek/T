@@ -6,74 +6,76 @@ import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 // Mock store
 jest.mock('@/src/stores/financeStore', () => ({
-  useFinanceStore: jest.fn(),
+	useFinanceStore: jest.fn(),
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(
-    <ThemeProvider>
-      {component}
-    </ThemeProvider>
-  );
+	return render(<ThemeProvider>{component}</ThemeProvider>);
 };
 
 const mockPurchases = [
-  { id: 'p-1', purchase_date: '2026-03-22', total_amount: 5000, supplier_name: 'Tile Corp', payment_status: 'paid' },
+	{
+		id: 'p-1',
+		purchase_date: '2026-03-22',
+		total_amount: 5000,
+		supplier_name: 'Tile Corp',
+		payment_status: 'paid',
+	},
 ];
 
 describe('PurchasesScreen', () => {
-  const mockFetchPurchases = jest.fn();
+	const mockFetchPurchases = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockFetchPurchases.mockResolvedValue(undefined);
-    (useFinanceStore as unknown as jest.Mock).mockReturnValue({
-      purchases: mockPurchases,
-      loading: false,
-      fetchPurchases: mockFetchPurchases,
-    });
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+		mockFetchPurchases.mockResolvedValue(undefined);
+		(useFinanceStore as unknown as jest.Mock).mockReturnValue({
+			purchases: mockPurchases,
+			loading: false,
+			fetchPurchases: mockFetchPurchases,
+		});
+	});
 
-  it('renders purchases correctly', async () => {
-    const { getByText } = renderWithTheme(<PurchasesScreen />);
-    
-    await waitFor(() => {
-      expect(getByText('Tile Corp')).toBeTruthy();
-      expect(getByText('PAID')).toBeTruthy();
-      expect(getByText('₹5000', { exact: false })).toBeTruthy();
-    });
-    
-    expect(mockFetchPurchases).toHaveBeenCalled();
-  });
+	it('renders purchases correctly', async () => {
+		const { getByText } = renderWithTheme(<PurchasesScreen />);
 
-  it('shows empty state when no purchases exist', async () => {
-    (useFinanceStore as unknown as jest.Mock).mockReturnValue({
-      purchases: [],
-      loading: false,
-      fetchPurchases: mockFetchPurchases,
-    });
+		await waitFor(() => {
+			expect(getByText('Tile Corp')).toBeTruthy();
+			expect(getByText('PAID')).toBeTruthy();
+			expect(getByText('₹5000', { exact: false })).toBeTruthy();
+		});
 
-    const { getByText } = renderWithTheme(<PurchasesScreen />);
-    
-    await waitFor(() => {
-      expect(getByText('No purchases found')).toBeTruthy();
-    });
-  });
+		expect(mockFetchPurchases).toHaveBeenCalled();
+	});
 
-  it('shows an alert when fetching purchases fails', async () => {
-    const errorMessage = 'Network error';
-    mockFetchPurchases.mockRejectedValue(new Error(errorMessage));
+	it('shows empty state when no purchases exist', async () => {
+		(useFinanceStore as unknown as jest.Mock).mockReturnValue({
+			purchases: [],
+			loading: false,
+			fetchPurchases: mockFetchPurchases,
+		});
 
-    renderWithTheme(<PurchasesScreen />);
-    
-    const { Alert } = require('react-native');
-    await waitFor(() => {
-      expect(mockFetchPurchases).toHaveBeenCalled();
-      expect(Alert.alert).toHaveBeenCalledWith(
-        'Error',
-        expect.stringContaining(errorMessage),
-        expect.any(Array)
-      );
-    });
-  });
+		const { getByText } = renderWithTheme(<PurchasesScreen />);
+
+		await waitFor(() => {
+			expect(getByText('No purchases found')).toBeTruthy();
+		});
+	});
+
+	it('shows an alert when fetching purchases fails', async () => {
+		const errorMessage = 'Network error';
+		mockFetchPurchases.mockRejectedValue(new Error(errorMessage));
+
+		renderWithTheme(<PurchasesScreen />);
+
+		const { Alert } = require('react-native');
+		await waitFor(() => {
+			expect(mockFetchPurchases).toHaveBeenCalled();
+			expect(Alert.alert).toHaveBeenCalledWith(
+				'Error',
+				expect.stringContaining(errorMessage),
+				expect.any(Array),
+			);
+		});
+	});
 });

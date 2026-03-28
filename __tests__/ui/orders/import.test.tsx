@@ -6,78 +6,72 @@ import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 // Mock stores and services
 jest.mock('@/src/stores/orderStore', () => ({
-  useOrderStore: jest.fn(),
+	useOrderStore: jest.fn(),
 }));
 
 jest.mock('expo-router', () => ({
-  useRouter: () => ({ back: jest.fn() }),
+	useRouter: () => ({ back: jest.fn() }),
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(
-    <ThemeProvider>
-      {component}
-    </ThemeProvider>
-  );
+	return render(<ThemeProvider>{component}</ThemeProvider>);
 };
 
 describe('ImportOrderScreen', () => {
-  const mockParseDocument = jest.fn();
-  const mockImportParsedData = jest.fn();
-  const mockClearParsedData = jest.fn();
+	const mockParseDocument = jest.fn();
+	const mockImportParsedData = jest.fn();
+	const mockClearParsedData = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+	});
 
-  it('renders initial upload state', () => {
-    (useOrderStore as unknown as jest.Mock).mockReturnValue({
-      isParsing: false,
-      parsedData: null,
-      parseDocument: mockParseDocument,
-      importParsedData: mockImportParsedData,
-      clearParsedData: mockClearParsedData,
-    });
+	it('renders initial upload state', () => {
+		(useOrderStore as unknown as jest.Mock).mockReturnValue({
+			isParsing: false,
+			parsedData: null,
+			parseDocument: mockParseDocument,
+			importParsedData: mockImportParsedData,
+			clearParsedData: mockClearParsedData,
+		});
 
-    const { getByText } = renderWithTheme(<ImportOrderScreen />);
-    expect(getByText('Import Order (AI)')).toBeTruthy();
-    expect(getByText('Browse Files')).toBeTruthy();
-  });
+		const { getByText } = renderWithTheme(<ImportOrderScreen />);
+		expect(getByText('Import Order (AI)')).toBeTruthy();
+		expect(getByText('Browse Files')).toBeTruthy();
+	});
 
-  it('renders parsing state', () => {
-    (useOrderStore as unknown as jest.Mock).mockReturnValue({
-      isParsing: true,
-      parsedData: null,
-    });
+	it('renders parsing state', () => {
+		(useOrderStore as unknown as jest.Mock).mockReturnValue({
+			isParsing: true,
+			parsedData: null,
+		});
 
-    const { getByText } = renderWithTheme(<ImportOrderScreen />);
-    expect(getByText('Analyzing Document...')).toBeTruthy();
-  });
+		const { getByText } = renderWithTheme(<ImportOrderScreen />);
+		expect(getByText('Analyzing Document...')).toBeTruthy();
+	});
 
-  it('renders review state and handles save', async () => {
-    const mockData = [
-      { design_name: 'Marble gold', box_count: 50, price_per_box: 1000 }
-    ];
+	it('renders review state and handles save', async () => {
+		const mockData = [{ design_name: 'Marble gold', box_count: 50, price_per_box: 1000 }];
 
-    (useOrderStore as unknown as jest.Mock).mockReturnValue({
-      isParsing: false,
-      parsedData: mockData,
-      parseDocument: mockParseDocument,
-      importParsedData: mockImportParsedData,
-      clearParsedData: mockClearParsedData,
-    });
+		(useOrderStore as unknown as jest.Mock).mockReturnValue({
+			isParsing: false,
+			parsedData: mockData,
+			parseDocument: mockParseDocument,
+			importParsedData: mockImportParsedData,
+			clearParsedData: mockClearParsedData,
+		});
 
-    const { getByText, getByPlaceholderText } = renderWithTheme(<ImportOrderScreen />);
-    
-    expect(getByText('Review Import')).toBeTruthy();
-    expect(getByText('Marble gold')).toBeTruthy();
-    expect(getByText('50 Boxes')).toBeTruthy();
+		const { getByText, getByPlaceholderText } = renderWithTheme(<ImportOrderScreen />);
 
-    fireEvent.changeText(getByPlaceholderText(/kajaria/i), 'New Supplier');
-    fireEvent.press(getByText('Confirm Import & Add Stock'));
+		expect(getByText('Review Import')).toBeTruthy();
+		expect(getByText('Marble gold')).toBeTruthy();
+		expect(getByText('50 Boxes')).toBeTruthy();
 
-    await waitFor(() => {
-      expect(mockImportParsedData).toHaveBeenCalledWith('New Supplier', mockData);
-    });
-  });
+		fireEvent.changeText(getByPlaceholderText(/kajaria/i), 'New Supplier');
+		fireEvent.press(getByText('Confirm Import & Add Stock'));
+
+		await waitFor(() => {
+			expect(mockImportParsedData).toHaveBeenCalledWith('New Supplier', mockData);
+		});
+	});
 });

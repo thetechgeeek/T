@@ -10,50 +10,50 @@ const STORAGE_KEY = '@tilemaster/locale';
 export type SupportedLanguage = 'hi' | 'en';
 
 export function useLocale() {
-  const { t } = useTranslation();
-  const currentLanguage = i18n.language as SupportedLanguage;
+	const { t } = useTranslation();
+	const currentLanguage = i18n.language as SupportedLanguage;
 
-  const toggleLanguage = useCallback(async () => {
-    const next: SupportedLanguage = currentLanguage === 'hi' ? 'en' : 'hi';
-    await i18n.changeLanguage(next);
-    await AsyncStorage.setItem(STORAGE_KEY, next);
-  }, [currentLanguage]);
+	const toggleLanguage = useCallback(async () => {
+		const next: SupportedLanguage = currentLanguage === 'hi' ? 'en' : 'hi';
+		await i18n.changeLanguage(next);
+		await AsyncStorage.setItem(STORAGE_KEY, next);
+	}, [currentLanguage]);
 
-  const setLanguage = useCallback(async (lang: SupportedLanguage) => {
-    await i18n.changeLanguage(lang);
-    await AsyncStorage.setItem(STORAGE_KEY, lang);
-  }, []);
+	const setLanguage = useCallback(async (lang: SupportedLanguage) => {
+		await i18n.changeLanguage(lang);
+		await AsyncStorage.setItem(STORAGE_KEY, lang);
+	}, []);
 
-  const formatCurrency = useCallback((amount: number, showSymbol = true) => {
-    return formatINR(amount, showSymbol);
-  }, []);
+	const formatCurrency = useCallback((amount: number, showSymbol = true) => {
+		return formatINR(amount, showSymbol);
+	}, []);
 
-  const formatCurrencyShort = useCallback((amount: number) => {
-    return formatINRShort(amount);
-  }, []);
+	const formatCurrencyShort = useCallback((amount: number) => {
+		return formatINRShort(amount);
+	}, []);
 
-  const formatDateDisplay = useCallback((dateStr: string | Date) => {
-    return formatDate(dateStr);
-  }, []);
+	const formatDateDisplay = useCallback((dateStr: string | Date) => {
+		return formatDate(dateStr);
+	}, []);
 
-  const formatDateRelative = useCallback((dateStr: string | Date) => {
-    return formatRelativeDate(dateStr);
-  }, []);
+	const formatDateRelative = useCallback((dateStr: string | Date) => {
+		return formatRelativeDate(dateStr);
+	}, []);
 
-  const formatDateShort = useCallback((dateStr: string | Date) => {
-    return formatShortDate(dateStr);
-  }, []);
+	const formatDateShort = useCallback((dateStr: string | Date) => {
+		return formatShortDate(dateStr);
+	}, []);
 
-  return {
-    t,
-    currentLanguage,
-    isHindi: currentLanguage === 'hi',
-    toggleLanguage,
-    setLanguage,
-    formatCurrency,
-    formatCurrencyShort,
-    formatDate: formatDateDisplay,
-    formatDateRelative,
-    formatDateShort,
-  };
+	return {
+		t,
+		currentLanguage,
+		isHindi: currentLanguage === 'hi',
+		toggleLanguage,
+		setLanguage,
+		formatCurrency,
+		formatCurrencyShort,
+		formatDate: formatDateDisplay,
+		formatDateRelative,
+		formatDateShort,
+	};
 }

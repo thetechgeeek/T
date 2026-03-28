@@ -8,35 +8,35 @@ import { useFinanceStore } from '@/src/stores/financeStore';
 import { useOrderStore } from '@/src/stores/orderStore';
 
 export default function AppLayout() {
-  const { theme } = useTheme();
+	const { theme } = useTheme();
 
-  // Pre-fetch all major data stores on app load
-  React.useEffect(() => {
-    const prefetchData = async () => {
-      try {
-        await Promise.all([
-          useInventoryStore.getState().fetchItems(true),
-          useInvoiceStore.getState().fetchInvoices(1),
-          useCustomerStore.getState().fetchCustomers(true),
-          useFinanceStore.getState().fetchExpenses(),
-          useFinanceStore.getState().fetchPurchases(),
-          useFinanceStore.getState().fetchSummary(),
-          useOrderStore.getState().fetchOrders(),
-        ]);
-      } catch (err) {
-        console.error('Failed to pre-fetch app data:', err);
-      }
-    };
+	// Pre-fetch all major data stores on app load
+	React.useEffect(() => {
+		const prefetchData = async () => {
+			try {
+				await Promise.all([
+					useInventoryStore.getState().fetchItems(true),
+					useInvoiceStore.getState().fetchInvoices(1),
+					useCustomerStore.getState().fetchCustomers(true),
+					useFinanceStore.getState().fetchExpenses(),
+					useFinanceStore.getState().fetchPurchases(),
+					useFinanceStore.getState().fetchSummary(),
+					useOrderStore.getState().fetchOrders(),
+				]);
+			} catch (err) {
+				console.error('Failed to pre-fetch app data:', err);
+			}
+		};
 
-    prefetchData();
-  }, []);
+		prefetchData();
+	}, []);
 
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: theme.colors.background },
-      }}
-    />
-  );
+	return (
+		<Stack
+			screenOptions={{
+				headerShown: false,
+				contentStyle: { backgroundColor: theme.colors.background },
+			}}
+		/>
+	);
 }

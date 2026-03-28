@@ -6,26 +6,36 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function SupplierDetailScreen() {
-  const { theme } = useTheme();
-  const router = useRouter();
-  const c = theme.colors;
-  return (
-    <Screen safeAreaEdges={['top', 'bottom']}>
-      <View style={[styles.header, { borderBottomColor: c.border, borderBottomWidth: 1, paddingHorizontal: 20, paddingBottom: 16 }]}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-          <ArrowLeft size={22} color={c.primary} strokeWidth={2} />
-        </TouchableOpacity>
-        <ThemedText variant="h2">Supplier Detail</ThemedText>
-      </View>
-      <View style={styles.center}>
-        <ThemedText color={c.placeholder}>Supplier Detail — coming soon</ThemedText>
-      </View>
-    </Screen>
-  );
+	const { theme } = useTheme();
+	const router = useRouter();
+	const c = theme.colors;
+	return (
+		<Screen safeAreaEdges={['top', 'bottom']}>
+			<View
+				style={[
+					styles.header,
+					{
+						borderBottomColor: c.border,
+						borderBottomWidth: 1,
+						paddingHorizontal: 20,
+						paddingBottom: 16,
+					},
+				]}
+			>
+				<TouchableOpacity onPress={() => router.back()} style={styles.back}>
+					<ArrowLeft size={22} color={c.primary} strokeWidth={2} />
+				</TouchableOpacity>
+				<ThemedText variant="h2">Supplier Detail</ThemedText>
+			</View>
+			<View style={styles.center}>
+				<ThemedText color={c.placeholder}>Supplier Detail — coming soon</ThemedText>
+			</View>
+		</Screen>
+	);
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 },
-  back: { marginRight: 4 },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+	header: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 },
+	back: { marginRight: 4 },
+	center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 });

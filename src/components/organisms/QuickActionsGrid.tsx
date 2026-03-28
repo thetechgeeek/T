@@ -6,64 +6,76 @@ import { useLocale } from '@/src/hooks/useLocale';
 import type { LucideIcon } from 'lucide-react-native';
 
 export interface QuickAction {
-  label: string;
-  icon: LucideIcon;
-  route: string;
-  color: string;
+	label: string;
+	icon: LucideIcon;
+	route: string;
+	color: string;
 }
 
 export interface QuickActionsGridProps {
-  actions: QuickAction[];
+	actions: QuickAction[];
 }
 
 export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions }) => {
-  const { theme } = useTheme();
-  const { t } = useLocale();
-  const router = useRouter();
-  const { width } = useWindowDimensions();
+	const { theme } = useTheme();
+	const { t } = useLocale();
+	const router = useRouter();
+	const { width } = useWindowDimensions();
 
-  const c = theme.colors;
-  const s = theme.spacing;
-  const r = theme.borderRadius;
-  const typo = theme.typography;
+	const c = theme.colors;
+	const s = theme.spacing;
+	const r = theme.borderRadius;
+	const typo = theme.typography;
 
-  return (
-    <View style={[styles.section, { paddingHorizontal: s.lg, marginTop: s.lg }]}>
-      <ThemedText variant="h3" style={{ marginBottom: s.md }}>
-        {t('dashboard.quickActions')}
-      </ThemedText>
-      <View style={styles.actionsGrid}>
-        {actions.map((action, i) => (
-          <TouchableOpacity
-            key={i}
-            style={[styles.actionBtn, {
-              backgroundColor: c.card,
-              borderRadius: r.lg,
-              width: (width - s.lg * 2 - 8 * 3) / 2,
-              padding: s.md,
-              ...(theme.shadows.sm as object),
-            }]}
-            onPress={() => router.push(action.route as any)}
-            activeOpacity={0.8}
-          >
-            <View style={[styles.actionIcon, { backgroundColor: action.color + '20', borderRadius: r.md, padding: s.sm }]}>
-              <action.icon size={24} color={action.color} strokeWidth={2} />
-            </View>
-            <ThemedText variant="body2" weight="medium" style={{ marginTop: s.sm }}>
-              {action.label}
-            </ThemedText>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
-  );
+	return (
+		<View style={[styles.section, { paddingHorizontal: s.lg, marginTop: s.lg }]}>
+			<ThemedText variant="h3" style={{ marginBottom: s.md }}>
+				{t('dashboard.quickActions')}
+			</ThemedText>
+			<View style={styles.actionsGrid}>
+				{actions.map((action, i) => (
+					<TouchableOpacity
+						key={i}
+						style={[
+							styles.actionBtn,
+							{
+								backgroundColor: c.card,
+								borderRadius: r.lg,
+								width: (width - s.lg * 2 - 8 * 3) / 2,
+								padding: s.md,
+								...(theme.shadows.sm as object),
+							},
+						]}
+						onPress={() => router.push(action.route as any)}
+						activeOpacity={0.8}
+					>
+						<View
+							style={[
+								styles.actionIcon,
+								{
+									backgroundColor: action.color + '20',
+									borderRadius: r.md,
+									padding: s.sm,
+								},
+							]}
+						>
+							<action.icon size={24} color={action.color} strokeWidth={2} />
+						</View>
+						<ThemedText variant="body2" weight="medium" style={{ marginTop: s.sm }}>
+							{action.label}
+						</ThemedText>
+					</TouchableOpacity>
+				))}
+			</View>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
-  section: {},
-  sectionTitle: {},
-  actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  actionBtn: {},
-  actionIcon: {},
-  actionLabel: {},
+	section: {},
+	sectionTitle: {},
+	actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+	actionBtn: {},
+	actionIcon: {},
+	actionLabel: {},
 });

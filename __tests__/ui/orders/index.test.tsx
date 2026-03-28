@@ -7,71 +7,67 @@ import { useRouter } from 'expo-router';
 
 // Mock store
 jest.mock('@/src/stores/orderStore', () => ({
-  useOrderStore: jest.fn(),
+	useOrderStore: jest.fn(),
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(
-    <ThemeProvider>
-      {component}
-    </ThemeProvider>
-  );
+	return render(<ThemeProvider>{component}</ThemeProvider>);
 };
 
 const mockOrders = [
-  { id: 'o-1', party_name: 'Kajaria Ceramics', created_at: '2026-03-22', total_quantity: 150 },
+	{ id: 'o-1', party_name: 'Kajaria Ceramics', created_at: '2026-03-22', total_quantity: 150 },
 ];
 
 describe('OrdersListScreen', () => {
-  const mockFetchOrders = jest.fn();
-  const mockPush = jest.fn();
+	const mockFetchOrders = jest.fn();
+	const mockPush = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+		(useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+	});
 
-  it('renders orders correctly', async () => {
-    (useOrderStore as unknown as jest.Mock).mockReturnValue({
-      orders: mockOrders,
-      loading: false,
-      fetchOrders: mockFetchOrders,
-    });
+	it('renders orders correctly', async () => {
+		(useOrderStore as unknown as jest.Mock).mockReturnValue({
+			orders: mockOrders,
+			loading: false,
+			fetchOrders: mockFetchOrders,
+		});
 
-    const { getByText } = renderWithTheme(<OrdersListScreen />);
-    
-    await waitFor(() => {
-      expect(getByText('Kajaria Ceramics')).toBeTruthy();
-      expect(getByText('150 items imported', { exact: false })).toBeTruthy();
-    });
-    
-    expect(mockFetchOrders).toHaveBeenCalled();
-  });
+		const { getByText } = renderWithTheme(<OrdersListScreen />);
 
-  it('navigates to import screen when button is pressed', () => {
-    (useOrderStore as unknown as jest.Mock).mockReturnValue({
-      orders: [],
-      loading: false,
-      fetchOrders: mockFetchOrders,
-    });
+		await waitFor(() => {
+			expect(getByText('Kajaria Ceramics')).toBeTruthy();
+			expect(getByText('150 items imported', { exact: false })).toBeTruthy();
+		});
 
-    const { getByText } = renderWithTheme(<OrdersListScreen />);
-    
-    fireEvent.press(getByText('Import PDF'));
-    expect(mockPush).toHaveBeenCalledWith('/(app)/orders/import');
-  });
+		expect(mockFetchOrders).toHaveBeenCalled();
+	});
 
-  it('shows empty state when no orders exist', async () => {
-    (useOrderStore as unknown as jest.Mock).mockReturnValue({
-      orders: [],
-      loading: false,
-      fetchOrders: mockFetchOrders,
-    });
+	it('navigates to import screen when button is pressed', () => {
+		(useOrderStore as unknown as jest.Mock).mockReturnValue({
+			orders: [],
+			loading: false,
+			fetchOrders: mockFetchOrders,
+		});
 
-    const { getByText } = renderWithTheme(<OrdersListScreen />);
-    
-    await waitFor(() => {
-      expect(getByText('No Orders Yet')).toBeTruthy();
-    });
-  });
+		const { getByText } = renderWithTheme(<OrdersListScreen />);
+
+		fireEvent.press(getByText('Import PDF'));
+		expect(mockPush).toHaveBeenCalledWith('/(app)/orders/import');
+	});
+
+	it('shows empty state when no orders exist', async () => {
+		(useOrderStore as unknown as jest.Mock).mockReturnValue({
+			orders: [],
+			loading: false,
+			fetchOrders: mockFetchOrders,
+		});
+
+		const { getByText } = renderWithTheme(<OrdersListScreen />);
+
+		await waitFor(() => {
+			expect(getByText('No Orders Yet')).toBeTruthy();
+		});
+	});
 });

@@ -12,181 +12,223 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function ScanTab() {
-  const { theme } = useTheme();
-  const { t } = useLocale();
-  const router = useRouter();
-  
-  const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef<CameraView>(null);
-  
-  const [manualInput, setManualInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [capturing, setCapturing] = useState(false);
+	const { theme } = useTheme();
+	const { t } = useLocale();
+	const router = useRouter();
 
-  const c = theme.colors;
-  const s = theme.spacing;
-  const r = theme.borderRadius;
+	const [permission, requestPermission] = useCameraPermissions();
+	const cameraRef = useRef<CameraView>(null);
 
-  const handleSearch = async (query: string) => {
-    if (!query.trim()) return;
-    setLoading(true);
-    try {
-      const { data } = await inventoryService.fetchItems({ search: query });
-      
-      if (data && data.length > 0) {
-        if (data.length === 1) {
-          router.push(`/(app)/inventory/${data[0].id}`);
-        } else {
-          const exact = data.find(i => i.design_name.toLowerCase() === query.toLowerCase() || i.base_item_number.toLowerCase() === query.toLowerCase());
-          router.push(`/(app)/inventory/${exact ? exact.id : data[0].id}`);
-        }
-      } else {
-        Alert.alert(
-          "Not Found",
-          `No item found matching "${query}". Would you like to add it?`,
-          [
-            { text: "Cancel", style: "cancel" },
-            { text: "Add Item", onPress: () => {
-              router.push('/(app)/inventory/add');
-            }}
-          ]
-        );
-      }
-    } catch (err: any) {
-      console.error(err);
-      Alert.alert(
-        "Error", 
-        err.message || "Failed to search inventory. Please check your database connection.",
-        [{ text: 'OK' }]
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+	const [manualInput, setManualInput] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [capturing, setCapturing] = useState(false);
 
-  const handleCaptureText = async () => {
-    if (!cameraRef.current) return;
-    setCapturing(true);
-    try {
-      // 1. Take photo
-      const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
-      
-      // 2. OCR placeholder: We will send photo.base64 to an LLM / Cloud Vision API
-      // Since LLM connectivity is planned for Phase 7 (along with PDF Parsing), we mock it for now.
-      await new Promise(res => setTimeout(res, 1500)); 
-      
-      Alert.alert(
-        "Simulated OCR Success", 
-        "Image captured! Cloud OCR integration will be wired up during Phase 7.\n\nFor now, please use the manual entry field to test search.",
-        [{ text: "OK" }]
-      );
-      
-    } catch (err: any) {
-      console.error(err);
-      Alert.alert(
-        "Error",
-        err.message || "Failed to capture image for scanning.",
-        [{ text: 'OK' }]
-      );
-    } finally {
-      setCapturing(false);
-    }
-  };
+	const c = theme.colors;
+	const s = theme.spacing;
+	const r = theme.borderRadius;
 
-  if (!permission) {
-    return <Screen><View /></Screen>;
-  }
+	const handleSearch = async (query: string) => {
+		if (!query.trim()) return;
+		setLoading(true);
+		try {
+			const { data } = await inventoryService.fetchItems({ search: query });
 
-  if (!permission.granted) {
-    return (
-      <Screen style={{ justifyContent: 'center', padding: s.xl }}>
-        <ThemedText align="center" style={{ marginBottom: s.lg, fontSize: 16 }}>
-          We need your permission to show the camera for scanning tile box text.
-        </ThemedText>
-        <Button title="Grant Permission" onPress={requestPermission} />
-      </Screen>
-    );
-  }
+			if (data && data.length > 0) {
+				if (data.length === 1) {
+					router.push(`/(app)/inventory/${data[0].id}`);
+				} else {
+					const exact = data.find(
+						(i) =>
+							i.design_name.toLowerCase() === query.toLowerCase() ||
+							i.base_item_number.toLowerCase() === query.toLowerCase(),
+					);
+					router.push(`/(app)/inventory/${exact ? exact.id : data[0].id}`);
+				}
+			} else {
+				Alert.alert(
+					'Not Found',
+					`No item found matching "${query}". Would you like to add it?`,
+					[
+						{ text: 'Cancel', style: 'cancel' },
+						{
+							text: 'Add Item',
+							onPress: () => {
+								router.push('/(app)/inventory/add');
+							},
+						},
+					],
+				);
+			}
+		} catch (err: any) {
+			console.error(err);
+			Alert.alert(
+				'Error',
+				err.message || 'Failed to search inventory. Please check your database connection.',
+				[{ text: 'OK' }],
+			);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-  return (
-    <Screen backgroundColor="#000" safeAreaEdges={[]}>
-      <CameraView 
-        ref={cameraRef}
-        style={StyleSheet.absoluteFillObject} 
-        facing="back"
-      />
-      <View style={styles.overlay}>
-        {/* Top dark area */}
-        <View style={[styles.darkness, { flex: 1 }]} />
-        
-        {/* Middle scan area */}
-        <View style={{ flexDirection: 'row', height: 180 }}>
-          <View style={styles.darkness} />
-          <View style={[styles.scanFrame, { borderColor: capturing ? c.primary : '#ffffff80' }]}>
-            {capturing && <ActivityIndicator color={c.primary} style={{ marginTop: 70 }} size="large" />}
-          </View>
-          <View style={styles.darkness} />
-        </View>
-        
-        {/* Bottom area */}
-        <View style={[styles.darkness, { flex: 1, paddingTop: s.xl, alignItems: 'center' }]}>
-          <ThemedText color="#fff" style={{ fontSize: 14, opacity: 0.8, marginBottom: s.xl }}>
-            {capturing ? "Analyzing text..." : "Align item name / model number in frame"}
-          </ThemedText>
+	const handleCaptureText = async () => {
+		if (!cameraRef.current) return;
+		setCapturing(true);
+		try {
+			// 1. Take photo
+			const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
 
-          {/* Capture Button */}
-          <TouchableOpacity 
-            disabled={capturing}
-            onPress={handleCaptureText}
-            style={[styles.captureBtn, { backgroundColor: c.primary, opacity: capturing ? 0.5 : 1 }]}
-          >
-            <Aperture size={32} color={c.onPrimary} />
-          </TouchableOpacity>
+			// 2. OCR placeholder: We will send photo.base64 to an LLM / Cloud Vision API
+			// Since LLM connectivity is planned for Phase 7 (along with PDF Parsing), we mock it for now.
+			await new Promise((res) => setTimeout(res, 1500));
 
-          <View style={{ flex: 1 }} />
+			Alert.alert(
+				'Simulated OCR Success',
+				'Image captured! Cloud OCR integration will be wired up during Phase 7.\n\nFor now, please use the manual entry field to test search.',
+				[{ text: 'OK' }],
+			);
+		} catch (err: any) {
+			console.error(err);
+			Alert.alert('Error', err.message || 'Failed to capture image for scanning.', [
+				{ text: 'OK' },
+			]);
+		} finally {
+			setCapturing(false);
+		}
+	};
 
-          {/* Manual Entry */}
-          <View style={[styles.manualBox, { backgroundColor: theme.colors.card, borderRadius: r.lg, padding: s.md }]}>
-            <ThemedText weight="semibold" style={{ marginBottom: s.sm }}>Manual Entry</ThemedText>
-            <View style={{ flexDirection: 'row', gap: s.sm }}>
-              <View style={{ flex: 1 }}>
-                <TextInput 
-                  placeholder="Enter item or design #" 
-                  value={manualInput} 
-                  onChangeText={setManualInput} 
-                  containerStyle={{ marginBottom: 0 }}
-                  returnKeyType="search"
-                  onSubmitEditing={() => handleSearch(manualInput)}
-                  editable={!loading}
-                />
-              </View>
-              <Button 
-                title="" 
-                leftIcon={<Search size={20} color={c.onPrimary} />} 
-                onPress={() => handleSearch(manualInput)}
-                style={{ width: 48, paddingHorizontal: 0 }}
-                loading={loading}
-              />
-            </View>
-          </View>
-        </View>
-      </View>
-    </Screen>
-  );
+	if (!permission) {
+		return (
+			<Screen>
+				<View />
+			</Screen>
+		);
+	}
+
+	if (!permission.granted) {
+		return (
+			<Screen style={{ justifyContent: 'center', padding: s.xl }}>
+				<ThemedText align="center" style={{ marginBottom: s.lg, fontSize: 16 }}>
+					We need your permission to show the camera for scanning tile box text.
+				</ThemedText>
+				<Button title="Grant Permission" onPress={requestPermission} />
+			</Screen>
+		);
+	}
+
+	return (
+		<Screen backgroundColor="#000" safeAreaEdges={[]}>
+			<CameraView ref={cameraRef} style={StyleSheet.absoluteFillObject} facing="back" />
+			<View style={styles.overlay}>
+				{/* Top dark area */}
+				<View style={[styles.darkness, { flex: 1 }]} />
+
+				{/* Middle scan area */}
+				<View style={{ flexDirection: 'row', height: 180 }}>
+					<View style={styles.darkness} />
+					<View
+						style={[
+							styles.scanFrame,
+							{ borderColor: capturing ? c.primary : '#ffffff80' },
+						]}
+					>
+						{capturing && (
+							<ActivityIndicator
+								color={c.primary}
+								style={{ marginTop: 70 }}
+								size="large"
+							/>
+						)}
+					</View>
+					<View style={styles.darkness} />
+				</View>
+
+				{/* Bottom area */}
+				<View
+					style={[styles.darkness, { flex: 1, paddingTop: s.xl, alignItems: 'center' }]}
+				>
+					<ThemedText
+						color="#fff"
+						style={{ fontSize: 14, opacity: 0.8, marginBottom: s.xl }}
+					>
+						{capturing
+							? 'Analyzing text...'
+							: 'Align item name / model number in frame'}
+					</ThemedText>
+
+					{/* Capture Button */}
+					<TouchableOpacity
+						disabled={capturing}
+						onPress={handleCaptureText}
+						style={[
+							styles.captureBtn,
+							{ backgroundColor: c.primary, opacity: capturing ? 0.5 : 1 },
+						]}
+					>
+						<Aperture size={32} color={c.onPrimary} />
+					</TouchableOpacity>
+
+					<View style={{ flex: 1 }} />
+
+					{/* Manual Entry */}
+					<View
+						style={[
+							styles.manualBox,
+							{
+								backgroundColor: theme.colors.card,
+								borderRadius: r.lg,
+								padding: s.md,
+							},
+						]}
+					>
+						<ThemedText weight="semibold" style={{ marginBottom: s.sm }}>
+							Manual Entry
+						</ThemedText>
+						<View style={{ flexDirection: 'row', gap: s.sm }}>
+							<View style={{ flex: 1 }}>
+								<TextInput
+									placeholder="Enter item or design #"
+									value={manualInput}
+									onChangeText={setManualInput}
+									containerStyle={{ marginBottom: 0 }}
+									returnKeyType="search"
+									onSubmitEditing={() => handleSearch(manualInput)}
+									editable={!loading}
+								/>
+							</View>
+							<Button
+								title=""
+								leftIcon={<Search size={20} color={c.onPrimary} />}
+								onPress={() => handleSearch(manualInput)}
+								style={{ width: 48, paddingHorizontal: 0 }}
+								loading={loading}
+							/>
+						</View>
+					</View>
+				</View>
+			</View>
+		</Screen>
+	);
 }
 
 const styles = StyleSheet.create({
-  overlay: { flex: 1 },
-  darkness: { backgroundColor: 'rgba(0,0,0,0.6)' },
-  scanFrame: { width: 300, height: 180, borderWidth: 2, borderRadius: 16, backgroundColor: 'transparent' },
-  manualBox: { width: '85%', maxWidth: 400, marginBottom: 40 },
-  captureBtn: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 4,
-    borderColor: '#ffffff80',
-  }
+	overlay: { flex: 1 },
+	darkness: { backgroundColor: 'rgba(0,0,0,0.6)' },
+	scanFrame: {
+		width: 300,
+		height: 180,
+		borderWidth: 2,
+		borderRadius: 16,
+		backgroundColor: 'transparent',
+	},
+	manualBox: { width: '85%', maxWidth: 400, marginBottom: 40 },
+	captureBtn: {
+		width: 72,
+		height: 72,
+		borderRadius: 36,
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderWidth: 4,
+		borderColor: '#ffffff80',
+	},
 });

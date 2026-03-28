@@ -15,121 +15,113 @@ import { useLocale } from '@/src/hooks/useLocale';
 import type { Customer } from '@/src/types/customer';
 
 export default function CustomersScreen() {
-  const { theme } = useTheme();
-  const router = useRouter();
-  const { formatCurrency } = useLocale();
-  const { 
-    customers, 
-    loading, 
-    fetchCustomers, 
-    setFilters, 
-    filters 
-  } = useCustomerStore();
+	const { theme } = useTheme();
+	const router = useRouter();
+	const { formatCurrency } = useLocale();
+	const { customers, loading, fetchCustomers, setFilters, filters } = useCustomerStore();
 
-  const [search, setSearch] = useState(filters.search || '');
+	const [search, setSearch] = useState(filters.search || '');
 
-  useEffect(() => {
-    fetchCustomers().catch(e => {
-      Alert.alert('Error', 'Failed to load customers. ' + e.message, [{ text: 'OK' }]);
-    });
-  }, []);
+	useEffect(() => {
+		fetchCustomers().catch((e) => {
+			Alert.alert('Error', 'Failed to load customers. ' + e.message, [{ text: 'OK' }]);
+		});
+	}, []);
 
-  const handleSearch = (text: string) => {
-    setSearch(text);
-    setFilters({ search: text });
-  };
+	const handleSearch = (text: string) => {
+		setSearch(text);
+		setFilters({ search: text });
+	};
 
-  const renderCustomer = ({ item }: { item: Customer }) => (
-    <ListItem
-      title={item.name}
-      subtitle={item.phone || item.city || 'No contact info'}
-      onPress={() => router.push(`/customers/${item.id}`)}
-      leftIcon={
-        <View style={[styles.avatar, { backgroundColor: theme.colors.surfaceVariant }]}>
-          <ThemedText weight="bold" color={theme.colors.primary} style={{ fontSize: 18 }}>
-            {item.name.charAt(0).toUpperCase()}
-          </ThemedText>
-        </View>
-      }
-      rightElement={
-        <Badge 
-          label={item.type.toUpperCase()} 
-          variant="neutral" 
-          size="sm" 
-        />
-      }
-    />
-  );
+	const renderCustomer = ({ item }: { item: Customer }) => (
+		<ListItem
+			title={item.name}
+			subtitle={item.phone || item.city || 'No contact info'}
+			onPress={() => router.push(`/customers/${item.id}`)}
+			leftIcon={
+				<View style={[styles.avatar, { backgroundColor: theme.colors.surfaceVariant }]}>
+					<ThemedText weight="bold" color={theme.colors.primary} style={{ fontSize: 18 }}>
+						{item.name.charAt(0).toUpperCase()}
+					</ThemedText>
+				</View>
+			}
+			rightElement={<Badge label={item.type.toUpperCase()} variant="neutral" size="sm" />}
+		/>
+	);
 
-  return (
-    <Screen safeAreaEdges={['top']} withKeyboard={false}>
-      <Stack.Screen 
-        options={{ 
-          title: 'Customers',
-          headerRight: () => (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onPress={() => router.push('/customers/add')}
-              leftIcon={<UserPlus size={22} color={theme.colors.primary} />}
-            />
-          )
-        }} 
-      />
+	return (
+		<Screen safeAreaEdges={['top']} withKeyboard={false}>
+			<Stack.Screen
+				options={{
+					title: 'Customers',
+					headerRight: () => (
+						<Button
+							variant="ghost"
+							size="sm"
+							onPress={() => router.push('/customers/add')}
+							leftIcon={<UserPlus size={22} color={theme.colors.primary} />}
+						/>
+					),
+				}}
+			/>
 
-      <View style={[styles.header, { borderBottomColor: theme.colors.border, borderBottomWidth: 1 }]}>
-        <SearchBar
-          value={search}
-          onChangeText={handleSearch}
-          placeholder="Search customers..."
-          style={styles.searchBar}
-        />
-      </View>
+			<View
+				style={[
+					styles.header,
+					{ borderBottomColor: theme.colors.border, borderBottomWidth: 1 },
+				]}
+			>
+				<SearchBar
+					value={search}
+					onChangeText={handleSearch}
+					placeholder="Search customers..."
+					style={styles.searchBar}
+				/>
+			</View>
 
-      <FlatList
-        data={customers}
-        renderItem={renderCustomer}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        refreshControl={
-          <RefreshControl 
-            refreshing={loading && customers.length > 0} 
-            onRefresh={() => fetchCustomers(true)}
-            tintColor={theme.colors.primary}
-          />
-        }
-        ListEmptyComponent={
-          !loading ? (
-            <EmptyState
-              title="No customers found"
-              description="Start by adding your first customer to manage their credit and invoices."
-              icon={<UserPlus size={48} color={theme.colors.placeholder} />}
-              actionLabel="Add Customer"
-              onAction={() => router.push('/customers/add')}
-            />
-          ) : null
-        }
-      />
-    </Screen>
-  );
+			<FlatList
+				data={customers}
+				renderItem={renderCustomer}
+				keyExtractor={(item) => item.id}
+				contentContainerStyle={styles.list}
+				refreshControl={
+					<RefreshControl
+						refreshing={loading && customers.length > 0}
+						onRefresh={() => fetchCustomers(true)}
+						tintColor={theme.colors.primary}
+					/>
+				}
+				ListEmptyComponent={
+					!loading ? (
+						<EmptyState
+							title="No customers found"
+							description="Start by adding your first customer to manage their credit and invoices."
+							icon={<UserPlus size={48} color={theme.colors.placeholder} />}
+							actionLabel="Add Customer"
+							onAction={() => router.push('/customers/add')}
+						/>
+					) : null
+				}
+			/>
+		</Screen>
+	);
 }
 
-
 const styles = StyleSheet.create({
-  header: {
-    padding: 16,
-  },
-  searchBar: {
-    marginBottom: 0,
-  },
-  list: {
-    flexGrow: 1,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+	header: {
+		padding: 16,
+	},
+	searchBar: {
+		marginBottom: 0,
+	},
+	list: {
+		flexGrow: 1,
+	},
+	avatar: {
+		width: 40,
+		height: 40,
+		borderRadius: 20,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 });

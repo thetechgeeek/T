@@ -6,68 +6,71 @@ import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 // Mock store
 jest.mock('@/src/stores/invoiceStore', () => ({
-  useInvoiceStore: jest.fn(),
+	useInvoiceStore: jest.fn(),
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(
-    <ThemeProvider>
-      {component}
-    </ThemeProvider>
-  );
+	return render(<ThemeProvider>{component}</ThemeProvider>);
 };
 
 const mockInvoices = [
-  { id: 'inv-1', invoice_number: 'INV-001', customer_name: 'Test Customer', invoice_date: '2026-03-22', grand_total: 1000, payment_status: 'paid' },
+	{
+		id: 'inv-1',
+		invoice_number: 'INV-001',
+		customer_name: 'Test Customer',
+		invoice_date: '2026-03-22',
+		grand_total: 1000,
+		payment_status: 'paid',
+	},
 ];
 
 describe('InvoicesListScreen', () => {
-  const mockFetchInvoices = jest.fn();
+	const mockFetchInvoices = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockFetchInvoices.mockResolvedValue(undefined);
-    (useInvoiceStore as unknown as jest.Mock).mockReturnValue({
-      invoices: [], 
-      loading: false,
-      totalCount: 0,
-      fetchInvoices: mockFetchInvoices,
-    });
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+		mockFetchInvoices.mockResolvedValue(undefined);
+		(useInvoiceStore as unknown as jest.Mock).mockReturnValue({
+			invoices: [],
+			loading: false,
+			totalCount: 0,
+			fetchInvoices: mockFetchInvoices,
+		});
+	});
 
-  it('renders invoices correctly', async () => {
-    (useInvoiceStore as unknown as jest.Mock).mockReturnValue({
-      invoices: mockInvoices,
-      loading: false,
-      totalCount: 1,
-      fetchInvoices: mockFetchInvoices,
-    });
+	it('renders invoices correctly', async () => {
+		(useInvoiceStore as unknown as jest.Mock).mockReturnValue({
+			invoices: mockInvoices,
+			loading: false,
+			totalCount: 1,
+			fetchInvoices: mockFetchInvoices,
+		});
 
-    const { getByText } = renderWithTheme(<InvoicesListScreen />);
-    
-    await waitFor(() => {
-      expect(getByText('INV-001')).toBeTruthy();
-      expect(getByText('Test Customer')).toBeTruthy();
-      expect(getByText('₹1000')).toBeTruthy();
-    });
-    
-    expect(mockFetchInvoices).toHaveBeenCalled();
-  });
+		const { getByText } = renderWithTheme(<InvoicesListScreen />);
 
-  it('shows an alert when fetching invoices fails', async () => {
-    const errorMessage = 'Public table missing';
-    mockFetchInvoices.mockRejectedValue(new Error(errorMessage));
+		await waitFor(() => {
+			expect(getByText('INV-001')).toBeTruthy();
+			expect(getByText('Test Customer')).toBeTruthy();
+			expect(getByText('₹1000')).toBeTruthy();
+		});
 
-    renderWithTheme(<InvoicesListScreen />);
-    
-    const { Alert } = require('react-native');
-    await waitFor(() => {
-      expect(mockFetchInvoices).toHaveBeenCalled();
-      expect(Alert.alert).toHaveBeenCalledWith(
-        'Error',
-        expect.stringContaining(errorMessage),
-        expect.any(Array)
-      );
-    });
-  });
+		expect(mockFetchInvoices).toHaveBeenCalled();
+	});
+
+	it('shows an alert when fetching invoices fails', async () => {
+		const errorMessage = 'Public table missing';
+		mockFetchInvoices.mockRejectedValue(new Error(errorMessage));
+
+		renderWithTheme(<InvoicesListScreen />);
+
+		const { Alert } = require('react-native');
+		await waitFor(() => {
+			expect(mockFetchInvoices).toHaveBeenCalled();
+			expect(Alert.alert).toHaveBeenCalledWith(
+				'Error',
+				expect.stringContaining(errorMessage),
+				expect.any(Array),
+			);
+		});
+	});
 });

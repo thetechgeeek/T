@@ -7,48 +7,48 @@ import type { Invoice } from '../types/invoice';
 import { useLocale } from '../hooks/useLocale';
 
 export interface ParsedOrderItem {
-  design_name?: string;
-  base_item_number?: string;
-  category?: string;
-  size?: string;
-  brand?: string;
-  box_count?: number;
-  price_per_box?: number;
-  total_price?: number;
-  [key: string]: any;
+	design_name?: string;
+	base_item_number?: string;
+	category?: string;
+	size?: string;
+	brand?: string;
+	box_count?: number;
+	price_per_box?: number;
+	total_price?: number;
+	[key: string]: any;
 }
 
-
 export const pdfService = {
-  
-  async getBusinessProfile() {
-    const { data } = await supabase.from('business_profile').select('*').single();
-    return data;
-  },
+	async getBusinessProfile() {
+		const { data } = await supabase.from('business_profile').select('*').single();
+		return data;
+	},
 
-  generateInvoiceHTML(invoice: Invoice, businessProfile: any) {
-    const bp = businessProfile || {
-      business_name: 'TileMaster',
-      phone_number: '',
-      email: '',
-      address: '',
-      gstin: ''
-    };
+	generateInvoiceHTML(invoice: Invoice, businessProfile: any) {
+		const bp = businessProfile || {
+			business_name: 'TileMaster',
+			phone_number: '',
+			email: '',
+			address: '',
+			gstin: '',
+		};
 
-    const isInterState = invoice.is_inter_state;
+		const isInterState = invoice.is_inter_state;
 
-    let itemsTableRows = invoice.line_items?.map((item, index) => {
-      let taxCols = '';
-      if (isInterState) {
-        taxCols = `<td>₹${item.igst_amount.toFixed(2)} (${item.gst_rate}%)</td>`;
-      } else {
-        taxCols = `
+		let itemsTableRows =
+			invoice.line_items
+				?.map((item, index) => {
+					let taxCols = '';
+					if (isInterState) {
+						taxCols = `<td>₹${item.igst_amount.toFixed(2)} (${item.gst_rate}%)</td>`;
+					} else {
+						taxCols = `
           <td>₹${item.cgst_amount.toFixed(2)} (${item.gst_rate / 2}%)</td>
           <td>₹${item.sgst_amount.toFixed(2)} (${item.gst_rate / 2}%)</td>
         `;
-      }
+					}
 
-      return `
+					return `
         <tr>
           <td>${index + 1}</td>
           <td>${item.design_name} ${item.description ? `<br><small>${item.description}</small>` : ''}</td>
@@ -61,20 +61,19 @@ export const pdfService = {
           <td style="text-align:right">₹${item.line_total.toFixed(2)}</td>
         </tr>
       `;
-    }).join('') || '';
+				})
+				.join('') || '';
 
-    const taxHeaderCols = isInterState 
-      ? '<th>IGST</th>' 
-      : '<th>CGST</th><th>SGST</th>';
+		const taxHeaderCols = isInterState ? '<th>IGST</th>' : '<th>CGST</th><th>SGST</th>';
 
-    const taxFooterCols = isInterState
-      ? `
+		const taxFooterCols = isInterState
+			? `
           <tr>
             <td colspan="8" style="text-align:right; font-weight:bold">Total IGST:</td>
             <td colspan="2" style="text-align:right">₹${invoice.igst_total.toFixed(2)}</td>
           </tr>
         `
-      : `
+			: `
           <tr>
             <td colspan="9" style="text-align:right; font-weight:bold">Total CGST:</td>
             <td colspan="2" style="text-align:right">₹${invoice.cgst_total.toFixed(2)}</td>
@@ -85,7 +84,7 @@ export const pdfService = {
           </tr>
         `;
 
-    return `
+		return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -163,12 +162,16 @@ export const pdfService = {
               <td style="text-align:right; font-weight:bold">Subtotal:</td>
               <td style="text-align:right">₹${invoice.subtotal.toFixed(2)}</td>
             </tr>
-            ${invoice.discount_total > 0 ? `
+            ${
+				invoice.discount_total > 0
+					? `
             <tr>
               <td style="text-align:right; font-weight:bold; color:red">Discount:</td>
               <td style="text-align:right; color:red">-₹${invoice.discount_total.toFixed(2)}</td>
             </tr>
-            ` : ''}
+            `
+					: ''
+			}
             ${taxFooterCols}
             <tr class="grand-total">
               <td style="text-align:right; font-weight:bold">Grand Total:</td>
@@ -199,87 +202,92 @@ export const pdfService = {
         </body>
       </html>
     `;
-  },
+	},
 
-  async printAndShareInvoice(invoice: Invoice) {
-    try {
-      const bp = await this.getBusinessProfile();
-      const html = this.generateInvoiceHTML(invoice, bp);
-      
-      const { uri } = await Print.printToFileAsync({ html });
-      
-      if (!(await Sharing.isAvailableAsync())) {
-        alert("Sharing isn't available on your device");
-        return;
-      }
-      
-      // We share the PDF locally via intent
-      await Sharing.shareAsync(uri, {
-        UTI: '.pdf',
-        mimeType: 'application/pdf',
-        dialogTitle: `Share Invoice ${invoice.invoice_number}`
-      });
-      
-    } catch (e: any) {
-      console.error('Failed to generate/share PDF', e);
-      // Using Alert.alert if I can, but since this is a service, maybe just throw.
-      // But the original had alert(). I will leave it for now but standardize it.
-      // Actually, I'll just leave it as alert() but with proper message.
-      alert('Error: ' + (e.message || 'Failed to generate PDF.'));
-    }
-  },
+	async printAndShareInvoice(invoice: Invoice) {
+		try {
+			const bp = await this.getBusinessProfile();
+			const html = this.generateInvoiceHTML(invoice, bp);
 
-  async pickPdfDocument() {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: ['application/pdf', 'image/*'],
-        copyToCacheDirectory: true,
-      });
+			const { uri } = await Print.printToFileAsync({ html });
 
-      if (result.canceled || !result.assets || result.assets.length === 0) {
-        return null;
-      }
+			if (!(await Sharing.isAvailableAsync())) {
+				alert("Sharing isn't available on your device");
+				return;
+			}
 
-      const file = result.assets[0];
-      if (!file.uri) return null;
+			// We share the PDF locally via intent
+			await Sharing.shareAsync(uri, {
+				UTI: '.pdf',
+				mimeType: 'application/pdf',
+				dialogTitle: `Share Invoice ${invoice.invoice_number}`,
+			});
+		} catch (e: any) {
+			console.error('Failed to generate/share PDF', e);
+			// Using Alert.alert if I can, but since this is a service, maybe just throw.
+			// But the original had alert(). I will leave it for now but standardize it.
+			// Actually, I'll just leave it as alert() but with proper message.
+			alert('Error: ' + (e.message || 'Failed to generate PDF.'));
+		}
+	},
 
-      const base64 = await FileSystem.readAsStringAsync(file.uri, {
-        encoding: 'base64' as any,
-      });
+	async pickPdfDocument() {
+		try {
+			const result = await DocumentPicker.getDocumentAsync({
+				type: ['application/pdf', 'image/*'],
+				copyToCacheDirectory: true,
+			});
 
-      return {
-        uri: file.uri,
-        name: file.name,
-        size: file.size,
-        mimeType: file.mimeType || 'application/pdf',
-        base64,
-      };
-    } catch (e) {
-      console.error('Error picking document', e);
-      throw e;
-    }
-  },
+			if (result.canceled || !result.assets || result.assets.length === 0) {
+				return null;
+			}
 
-  async parseDocumentWithLLM(base64: string, mimeType: string, aiKey?: string): Promise<ParsedOrderItem[]> {
-    const { data, error } = await supabase.functions.invoke('parse-order-pdf', {
-      body: {
-        base64Data: base64,
-        mimeType: mimeType,
-        aiKey: aiKey
-      }
-    });
+			const file = result.assets[0];
+			if (!file.uri) return null;
 
-    if (error) {
-       // Supabase edge function errors sometimes return the raw response
-       throw new Error(error.message || 'Failed to call edge function');
-    }
+			const base64 = await FileSystem.readAsStringAsync(file.uri, {
+				encoding: 'base64' as any,
+			});
 
-    if (!data || !data.success || !data.data || !data.data.items) {
-      throw new Error(data?.error || 'Failed to parse document format explicitly from Vision API');
-    }
+			return {
+				uri: file.uri,
+				name: file.name,
+				size: file.size,
+				mimeType: file.mimeType || 'application/pdf',
+				base64,
+			};
+		} catch (e) {
+			console.error('Error picking document', e);
+			throw e;
+		}
+	},
 
-    return data.data.items as ParsedOrderItem[];
-  }
+	async parseDocumentWithLLM(
+		base64: string,
+		mimeType: string,
+		aiKey?: string,
+	): Promise<ParsedOrderItem[]> {
+		const { data, error } = await supabase.functions.invoke('parse-order-pdf', {
+			body: {
+				base64Data: base64,
+				mimeType: mimeType,
+				aiKey: aiKey,
+			},
+		});
+
+		if (error) {
+			// Supabase edge function errors sometimes return the raw response
+			throw new Error(error.message || 'Failed to call edge function');
+		}
+
+		if (!data || !data.success || !data.data || !data.data.items) {
+			throw new Error(
+				data?.error || 'Failed to parse document format explicitly from Vision API',
+			);
+		}
+
+		return data.data.items as ParsedOrderItem[];
+	},
 };
 
 /**
@@ -287,6 +295,6 @@ export const pdfService = {
  * To be replaced with full implementation if needed.
  */
 function convertNumberToWords(amount: number): string {
-  // Simplified for app context, can use `number-to-words` package if required
-  return Math.floor(amount).toString(); 
+	// Simplified for app context, can use `number-to-words` package if required
+	return Math.floor(amount).toString();
 }

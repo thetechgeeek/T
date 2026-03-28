@@ -8,129 +8,129 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 
 // Mock services and router
 jest.mock('@/src/services/inventoryService', () => ({
-  inventoryService: {
-    fetchItemById: jest.fn(),
-  },
+	inventoryService: {
+		fetchItemById: jest.fn(),
+	},
 }));
 
 jest.mock('@/src/stores/inventoryStore', () => ({
-  useInventoryStore: jest.fn(),
+	useInventoryStore: jest.fn(),
 }));
 
 jest.mock('expo-router', () => ({
-  useRouter: jest.fn(),
-  useLocalSearchParams: jest.fn(),
+	useRouter: jest.fn(),
+	useLocalSearchParams: jest.fn(),
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(
-    <ThemeProvider>
-      {component}
-    </ThemeProvider>
-  );
+	return render(<ThemeProvider>{component}</ThemeProvider>);
 };
 
 const mockItem = {
-  id: 'item-123',
-  design_name: 'Marble Premium Gold',
-  box_count: 50,
+	id: 'item-123',
+	design_name: 'Marble Premium Gold',
+	box_count: 50,
 };
 
 describe('StockOpScreen', () => {
-  const mockBack = jest.fn();
-  const mockPerformStockOperation = jest.fn();
+	const mockBack = jest.fn();
+	const mockPerformStockOperation = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (useRouter as jest.Mock).mockReturnValue({ back: mockBack });
-    (useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_in' });
-    (inventoryService.fetchItemById as jest.Mock).mockResolvedValue(mockItem);
-    (useInventoryStore as unknown as jest.Mock).mockReturnValue({
-      performStockOperation: mockPerformStockOperation,
-    });
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+		(useRouter as jest.Mock).mockReturnValue({ back: mockBack });
+		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_in' });
+		(inventoryService.fetchItemById as jest.Mock).mockResolvedValue(mockItem);
+		(useInventoryStore as unknown as jest.Mock).mockReturnValue({
+			performStockOperation: mockPerformStockOperation,
+		});
+	});
 
-  it('renders correctly for stock in', async () => {
-    const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
-    
-    await waitFor(() => {
-      expect(getByText('Stock In (Add)', { exact: false })).toBeTruthy();
-      expect(getByText('Marble Premium Gold', { exact: false })).toBeTruthy();
-      expect(getByPlaceholderText('e.g. 50')).toBeTruthy();
-    });
-  });
+	it('renders correctly for stock in', async () => {
+		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
 
-  it('successfully submits stock in operation', async () => {
-    const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
-    
-    await waitFor(() => getByPlaceholderText('e.g. 50'));
-    
-    fireEvent.changeText(getByPlaceholderText('e.g. 50'), '10');
-    fireEvent.changeText(getByPlaceholderText(/broken|reason/i), 'Restock');
-    
-    fireEvent.press(getByText('Confirm'));
+		await waitFor(() => {
+			expect(getByText('Stock In (Add)', { exact: false })).toBeTruthy();
+			expect(getByText('Marble Premium Gold', { exact: false })).toBeTruthy();
+			expect(getByPlaceholderText('e.g. 50')).toBeTruthy();
+		});
+	});
 
-    await waitFor(() => {
-      expect(mockPerformStockOperation).toHaveBeenCalledWith(
-        'item-123',
-        'stock_in',
-        10,
-        'Restock'
-      );
-      expect(mockBack).toHaveBeenCalled();
-    });
-  });
+	it('successfully submits stock in operation', async () => {
+		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
 
-  it('successfully submits stock out operation', async () => {
-    (useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_out' });
-    const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
-    
-    await waitFor(() => getByText('Stock Out (Remove)', { exact: false }));
-    
-    fireEvent.changeText(getByPlaceholderText('e.g. 50'), '5');
-    fireEvent.press(getByText('Confirm'));
+		await waitFor(() => getByPlaceholderText('e.g. 50'));
 
-    await waitFor(() => {
-      expect(mockPerformStockOperation).toHaveBeenCalledWith(
-        'item-123',
-        'stock_out',
-        -5,
-        undefined
-      );
-    });
-  });
+		fireEvent.changeText(getByPlaceholderText('e.g. 50'), '10');
+		fireEvent.changeText(getByPlaceholderText(/broken|reason/i), 'Restock');
 
-  it('shows error if quantity is invalid', async () => {
-    const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
-    await waitFor(() => getByText('Confirm'));
+		fireEvent.press(getByText('Confirm'));
 
-    fireEvent.changeText(getByPlaceholderText('e.g. 50'), '0');
-    fireEvent.press(getByText('Confirm'));
+		await waitFor(() => {
+			expect(mockPerformStockOperation).toHaveBeenCalledWith(
+				'item-123',
+				'stock_in',
+				10,
+				'Restock',
+			);
+			expect(mockBack).toHaveBeenCalled();
+		});
+	});
 
-    const { Alert } = require('react-native');
-    await waitFor(() => {
-      expect(Alert.alert).toHaveBeenCalledWith("Error", expect.stringContaining("valid"), expect.any(Array));
-    });
-  });
+	it('successfully submits stock out operation', async () => {
+		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_out' });
+		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
 
-  it('shows an alert when stock operation fails', async () => {
-    const errorMessage = 'Database error';
-    mockPerformStockOperation.mockRejectedValue(new Error(errorMessage));
+		await waitFor(() => getByText('Stock Out (Remove)', { exact: false }));
 
-    const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
-    await waitFor(() => getByPlaceholderText('e.g. 50'));
-    
-    fireEvent.changeText(getByPlaceholderText('e.g. 50'), '10');
-    fireEvent.press(getByText('Confirm'));
+		fireEvent.changeText(getByPlaceholderText('e.g. 50'), '5');
+		fireEvent.press(getByText('Confirm'));
 
-    const { Alert } = require('react-native');
-    await waitFor(() => {
-      expect(mockPerformStockOperation).toHaveBeenCalled();
-      expect(Alert.alert).toHaveBeenCalledWith(
-        'Error',
-        expect.stringContaining(errorMessage),
-        expect.any(Array)
-      );
-    });
-  });
+		await waitFor(() => {
+			expect(mockPerformStockOperation).toHaveBeenCalledWith(
+				'item-123',
+				'stock_out',
+				-5,
+				undefined,
+			);
+		});
+	});
+
+	it('shows error if quantity is invalid', async () => {
+		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
+		await waitFor(() => getByText('Confirm'));
+
+		fireEvent.changeText(getByPlaceholderText('e.g. 50'), '0');
+		fireEvent.press(getByText('Confirm'));
+
+		const { Alert } = require('react-native');
+		await waitFor(() => {
+			expect(Alert.alert).toHaveBeenCalledWith(
+				'Error',
+				expect.stringContaining('valid'),
+				expect.any(Array),
+			);
+		});
+	});
+
+	it('shows an alert when stock operation fails', async () => {
+		const errorMessage = 'Database error';
+		mockPerformStockOperation.mockRejectedValue(new Error(errorMessage));
+
+		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
+		await waitFor(() => getByPlaceholderText('e.g. 50'));
+
+		fireEvent.changeText(getByPlaceholderText('e.g. 50'), '10');
+		fireEvent.press(getByText('Confirm'));
+
+		const { Alert } = require('react-native');
+		await waitFor(() => {
+			expect(mockPerformStockOperation).toHaveBeenCalled();
+			expect(Alert.alert).toHaveBeenCalledWith(
+				'Error',
+				expect.stringContaining(errorMessage),
+				expect.any(Array),
+			);
+		});
+	});
 });

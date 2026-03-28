@@ -46,6 +46,7 @@
 ## 1. Executive Summary
 
 ### What's Good
+
 - **Atomic Design** component structure (atoms/molecules/organisms) is well-established
 - **Zustand + Immer** is a pragmatic, lightweight choice for state management
 - **Domain-driven file organization** (types, services, stores per domain) scales well
@@ -55,17 +56,17 @@
 
 ### What Must Change
 
-| Severity | Issue | Impact |
-|----------|-------|--------|
-| **P0 — Critical** | No transactional safety on invoice creation | Silent data corruption: invoices created without stock deduction, orphaned line items |
-| **P0 — Critical** | RLS policies are `USING (true)` — no tenant isolation | Any authenticated user sees all data; blocks multi-tenant future |
-| **P1 — High** | Types leak `any` in 14+ locations | Defeats TypeScript's purpose; bugs hide at compile-time |
-| **P1 — High** | No runtime validation (Zod is installed but unused) | Malformed data reaches DB; errors surface as Postgres errors |
-| **P1 — High** | Tests mock Supabase at wrong layer — zero business logic coverage | Tests verify "did we call supabase.from()?" not "did we calculate correctly?" |
-| **P2 — Medium** | Services are singletons with hardcoded `supabase` import | Cannot inject test doubles, cannot switch backends, cannot add middleware |
-| **P2 — Medium** | Stores mix concerns: UI state + async orchestration + cross-store coupling | Adding features requires editing store files; violates Open/Closed |
-| **P2 — Medium** | Screens contain business logic, raw state management, inline styles | Each new screen rewrites the same patterns |
-| **P3 — Low** | No CI/CD, no linting, no pre-commit hooks | Quality regresses with every PR |
+| Severity          | Issue                                                                      | Impact                                                                                |
+| ----------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **P0 — Critical** | No transactional safety on invoice creation                                | Silent data corruption: invoices created without stock deduction, orphaned line items |
+| **P0 — Critical** | RLS policies are `USING (true)` — no tenant isolation                      | Any authenticated user sees all data; blocks multi-tenant future                      |
+| **P1 — High**     | Types leak `any` in 14+ locations                                          | Defeats TypeScript's purpose; bugs hide at compile-time                               |
+| **P1 — High**     | No runtime validation (Zod is installed but unused)                        | Malformed data reaches DB; errors surface as Postgres errors                          |
+| **P1 — High**     | Tests mock Supabase at wrong layer — zero business logic coverage          | Tests verify "did we call supabase.from()?" not "did we calculate correctly?"         |
+| **P2 — Medium**   | Services are singletons with hardcoded `supabase` import                   | Cannot inject test doubles, cannot switch backends, cannot add middleware             |
+| **P2 — Medium**   | Stores mix concerns: UI state + async orchestration + cross-store coupling | Adding features requires editing store files; violates Open/Closed                    |
+| **P2 — Medium**   | Screens contain business logic, raw state management, inline styles        | Each new screen rewrites the same patterns                                            |
+| **P3 — Low**      | No CI/CD, no linting, no pre-commit hooks                                  | Quality regresses with every PR                                                       |
 
 ---
 
@@ -83,6 +84,7 @@
 ```
 
 The code itself acknowledges this:
+
 ```typescript
 // Ideally roll back, but REST is not transactional.
 // Alternatively, we could write a single RPC that does everything.
@@ -142,6 +144,7 @@ $$ LANGUAGE plpgsql;
 **Do the same for `record_payment_with_invoice_update()`.**
 
 ### Impact
+
 - Invoice creation becomes a single `supabase.rpc()` call
 - Zero chance of partial state
 - Service layer simplifies to ~10 lines
@@ -166,6 +169,7 @@ export const invoiceService = {
 ```
 
 **Issues:**
+
 1. Cannot inject a test double without `jest.mock()` gymnastics
 2. Cannot add cross-cutting concerns (logging, analytics, retry, offline queue) without editing every method
 3. Filter-building logic duplicated across services (customer, invoice, inventory all do the same `.ilike()` / `.gte()` / `.range()` pattern)
@@ -229,20 +233,21 @@ export const invoiceRepository = {
 ```typescript
 // src/services/invoiceService.ts
 export function createInvoiceService(repo = invoiceRepository) {
-  return {
-    async create(input: InvoiceInput): Promise<Invoice> {
-      // 1. Validate (Zod)
-      const validated = InvoiceInputSchema.parse(input);
-      // 2. Calculate totals
-      const totals = calculateInvoiceTotals(validated.line_items, validated.is_inter_state);
-      // 3. Delegate to repo (atomic)
-      return repo.createAtomic({ ...validated, ...totals });
-    }
-  };
+	return {
+		async create(input: InvoiceInput): Promise<Invoice> {
+			// 1. Validate (Zod)
+			const validated = InvoiceInputSchema.parse(input);
+			// 2. Calculate totals
+			const totals = calculateInvoiceTotals(validated.line_items, validated.is_inter_state);
+			// 3. Delegate to repo (atomic)
+			return repo.createAtomic({ ...validated, ...totals });
+		},
+	};
 }
 ```
 
 ### Benefits
+
 - **Adding a feature** (e.g., invoice approval workflow): add a new service method, don't edit existing ones
 - **Testing**: inject a mock repository — test business logic without Supabase
 - **Offline support**: swap repository implementation without touching services
@@ -284,6 +289,7 @@ Now `invoiceStore` emits `INVOICE_CREATED`, and `inventoryStore` subscribes to i
 **4.2: Every store reinvents the same pagination/loading/error pattern**
 
 Compare `inventoryStore` and `invoiceStore` — they have near-identical boilerplate for:
+
 - `loading`, `error`, `page`, `hasMore`, `totalCount`
 - `setFilters()` → reset page → fetch
 - `fetchItems(reset?)` → append or replace
@@ -294,29 +300,43 @@ Compare `inventoryStore` and `invoiceStore` — they have near-identical boilerp
 ```typescript
 // src/stores/createPaginatedStore.ts
 export function createPaginatedStore<T, F extends Record<string, unknown>>(config: {
-  fetchFn: (filters: F, page: number, pageSize: number) => Promise<PaginatedResult<T>>;
-  defaultFilters: F;
-  pageSize?: number;
+	fetchFn: (filters: F, page: number, pageSize: number) => Promise<PaginatedResult<T>>;
+	defaultFilters: F;
+	pageSize?: number;
 }) {
-  return create<PaginatedState<T, F>>()(immer((set, get) => ({
-    items: [],
-    totalCount: 0,
-    loading: false,
-    error: null,
-    filters: config.defaultFilters,
-    page: 1,
-    hasMore: true,
+	return create<PaginatedState<T, F>>()(
+		immer((set, get) => ({
+			items: [],
+			totalCount: 0,
+			loading: false,
+			error: null,
+			filters: config.defaultFilters,
+			page: 1,
+			hasMore: true,
 
-    setFilters: (newFilters: Partial<F>) => { /* shared logic */ },
-    fetch: async (reset = false) => { /* shared logic */ },
-    reset: () => { /* shared logic */ },
-  })));
+			setFilters: (newFilters: Partial<F>) => {
+				/* shared logic */
+			},
+			fetch: async (reset = false) => {
+				/* shared logic */
+			},
+			reset: () => {
+				/* shared logic */
+			},
+		})),
+	);
 }
 
 // Usage — entire store definition in 5 lines:
 export const useInventoryStore = createPaginatedStore<InventoryItem, InventoryFilters>({
-  fetchFn: inventoryRepository.findMany,
-  defaultFilters: { search: '', category: 'ALL', lowStockOnly: false, sortBy: 'created_at', sortDir: 'desc' },
+	fetchFn: inventoryRepository.findMany,
+	defaultFilters: {
+		search: '',
+		category: 'ALL',
+		lowStockOnly: false,
+		sortBy: 'created_at',
+		sortDir: 'desc',
+	},
 });
 ```
 
@@ -336,15 +356,15 @@ These should be `InventoryItemInsert` and `Partial<InventoryItemInsert>`.
 
 ### 5.1: `any` Audit
 
-| File | Line(s) | Issue |
-|------|---------|-------|
-| `invoiceService.ts` | 36 | `data as any[]` — return type should be typed |
-| `inventoryStore.ts` | 19-20 | `createItem: (item: any)` / `updateItem: (id, updates: any)` |
-| `financeService.ts` | 75 | `(p.suppliers as any)?.name` — needs typed join |
-| `orderService.ts` | 17 | `raw_llm_response: any` — define a LLM response type |
-| `invoiceStore.ts` | 87 | `require('./inventoryStore')` — untyped dynamic import |
-| `app/_layout.tsx` | 36 | `useTheme() as any` — theme type not inferred |
-| Screens (multiple) | various | `catch (e: any)` — should use typed `AppError` |
+| File                | Line(s) | Issue                                                        |
+| ------------------- | ------- | ------------------------------------------------------------ |
+| `invoiceService.ts` | 36      | `data as any[]` — return type should be typed                |
+| `inventoryStore.ts` | 19-20   | `createItem: (item: any)` / `updateItem: (id, updates: any)` |
+| `financeService.ts` | 75      | `(p.suppliers as any)?.name` — needs typed join              |
+| `orderService.ts`   | 17      | `raw_llm_response: any` — define a LLM response type         |
+| `invoiceStore.ts`   | 87      | `require('./inventoryStore')` — untyped dynamic import       |
+| `app/_layout.tsx`   | 36      | `useTheme() as any` — theme type not inferred                |
+| Screens (multiple)  | various | `catch (e: any)` — should use typed `AppError`               |
 
 ### 5.2: Duplicate Type Definitions
 
@@ -357,18 +377,18 @@ These should be `InventoryItemInsert` and `Partial<InventoryItemInsert>`.
 ```typescript
 // Current: boolean soup
 interface InventoryState {
-  loading: boolean;
-  error: string | null;
-  items: InventoryItem[];
+	loading: boolean;
+	error: string | null;
+	items: InventoryItem[];
 }
 // Problem: nothing stops `loading: true` AND `error: "something"` simultaneously
 
 // Better: discriminated union
 type InventoryState =
-  | { status: 'idle'; items: InventoryItem[] }
-  | { status: 'loading'; items: InventoryItem[] }
-  | { status: 'error'; error: AppError; items: InventoryItem[] }
-  | { status: 'success'; items: InventoryItem[]; totalCount: number };
+	| { status: 'idle'; items: InventoryItem[] }
+	| { status: 'loading'; items: InventoryItem[] }
+	| { status: 'error'; error: AppError; items: InventoryItem[] }
+	| { status: 'success'; items: InventoryItem[]; totalCount: number };
 ```
 
 ### 5.4: Brand Types for Critical IDs
@@ -395,11 +415,13 @@ CREATE POLICY "auth_full_access" ON %I FOR ALL TO authenticated USING (true) WIT
 ```
 
 Every authenticated user can read/write every row in every table. This is fine for single-user, but:
+
 - **Blocks multi-tenant** (multiple businesses on same Supabase project)
 - **Blocks role-based access** (owner vs. staff vs. read-only)
 - **Security risk**: if anon key leaks, all data is accessible
 
 **Fix (when ready for multi-tenant)**:
+
 ```sql
 -- Add user_id to all tables
 ALTER TABLE customers ADD COLUMN user_id UUID NOT NULL DEFAULT auth.uid();
@@ -479,9 +501,9 @@ But tiles can be sold in fractional box quantities (e.g., 2.5 boxes). This shoul
 ```typescript
 // financeService.test.ts — this test verifies:
 it('calls supabase with correct filters', async () => {
-  await financeService.fetchExpenses(filters);
-  expect(supabase.from).toHaveBeenCalledWith('expenses');
-  expect(mockQuery.ilike).toHaveBeenCalledWith('category', '%Office%');
+	await financeService.fetchExpenses(filters);
+	expect(supabase.from).toHaveBeenCalledWith('expenses');
+	expect(mockQuery.ilike).toHaveBeenCalledWith('category', '%Office%');
 });
 ```
 
@@ -527,56 +549,67 @@ If you refactor the query (e.g., switch to `or()` for multi-field search), the t
 ```typescript
 // invoiceService.test.ts — testing BEHAVIOR, not implementation
 describe('InvoiceService.create', () => {
-  const mockRepo = {
-    createAtomic: jest.fn().mockResolvedValue({ id: '123', invoice_number: 'TM/2026-27/0001' }),
-  };
-  const service = createInvoiceService(mockRepo);
+	const mockRepo = {
+		createAtomic: jest.fn().mockResolvedValue({ id: '123', invoice_number: 'TM/2026-27/0001' }),
+	};
+	const service = createInvoiceService(mockRepo);
 
-  it('calculates correct GST totals for intra-state invoice', async () => {
-    const input = {
-      customer_name: 'Test',
-      is_inter_state: false,
-      line_items: [{ gst_rate: 18, quantity: 10, rate_per_unit: 100, discount: 0, design_name: 'TEST-001' }],
-      // ...
-    };
-    await service.create(input);
-    expect(mockRepo.createAtomic).toHaveBeenCalledWith(
-      expect.objectContaining({
-        subtotal: 1000,
-        cgst_total: 90,
-        sgst_total: 90,
-        igst_total: 0,
-        grand_total: 1180,
-      })
-    );
-  });
+	it('calculates correct GST totals for intra-state invoice', async () => {
+		const input = {
+			customer_name: 'Test',
+			is_inter_state: false,
+			line_items: [
+				{
+					gst_rate: 18,
+					quantity: 10,
+					rate_per_unit: 100,
+					discount: 0,
+					design_name: 'TEST-001',
+				},
+			],
+			// ...
+		};
+		await service.create(input);
+		expect(mockRepo.createAtomic).toHaveBeenCalledWith(
+			expect.objectContaining({
+				subtotal: 1000,
+				cgst_total: 90,
+				sgst_total: 90,
+				igst_total: 0,
+				grand_total: 1180,
+			}),
+		);
+	});
 
-  it('rejects invoice with no line items', async () => {
-    await expect(service.create({ ...validInput, line_items: [] }))
-      .rejects.toThrow('Invoice must have at least one line item');
-  });
+	it('rejects invoice with no line items', async () => {
+		await expect(service.create({ ...validInput, line_items: [] })).rejects.toThrow(
+			'Invoice must have at least one line item',
+		);
+	});
 
-  it('rejects negative quantities', async () => {
-    await expect(service.create({
-      ...validInput,
-      line_items: [{ ...validItem, quantity: -5 }]
-    })).rejects.toThrow();
-  });
+	it('rejects negative quantities', async () => {
+		await expect(
+			service.create({
+				...validInput,
+				line_items: [{ ...validItem, quantity: -5 }],
+			}),
+		).rejects.toThrow();
+	});
 });
 ```
 
 ### 7.4: Missing Test Coverage
 
-| Area | Current | Target |
-|------|---------|--------|
-| `gstCalculator` | Has tests | Expand edge cases (0% rate, 100% discount, floating point) |
-| `currency.ts` | No tests | Needs tests (negative amounts, lakhs/crores, zero) |
-| `dateUtils.ts` | No tests | Needs tests (FY boundary, leap year, timezone) |
-| `itemNameParser.ts` | No tests | Needs tests (various suffix patterns) |
-| Services (business logic) | Mock-the-world tests | Rewrite with injected repos |
-| Stores | Mock-the-world tests | Rewrite with injected services |
-| Screens | `__tests__/ui/` exists | Verify coverage of happy + error paths |
-| DB functions | Zero | Add pgTAP tests for RPC functions |
+| Area                      | Current                | Target                                                     |
+| ------------------------- | ---------------------- | ---------------------------------------------------------- |
+| `gstCalculator`           | Has tests              | Expand edge cases (0% rate, 100% discount, floating point) |
+| `currency.ts`             | No tests               | Needs tests (negative amounts, lakhs/crores, zero)         |
+| `dateUtils.ts`            | No tests               | Needs tests (FY boundary, leap year, timezone)             |
+| `itemNameParser.ts`       | No tests               | Needs tests (various suffix patterns)                      |
+| Services (business logic) | Mock-the-world tests   | Rewrite with injected repos                                |
+| Stores                    | Mock-the-world tests   | Rewrite with injected services                             |
+| Screens                   | `__tests__/ui/` exists | Verify coverage of happy + error paths                     |
+| DB functions              | Zero                   | Add pgTAP tests for RPC functions                          |
 
 ---
 
@@ -585,6 +618,7 @@ describe('InvoiceService.create', () => {
 ### 8.1: Screens Mix Concerns
 
 `expenses.tsx` (165 lines) contains:
+
 - Data fetching (`useEffect → fetchExpenses`)
 - Form state management (4 `useState` calls)
 - Business logic (`parseFloat(amount)`, date formatting)
@@ -622,6 +656,7 @@ const handleSave = async () => {
 ```
 
 What's missing:
+
 - Amount must be > 0
 - Category must be from the predefined list (EXPENSE_CATEGORIES constant exists but isn't used here)
 - `parseFloat("12.34.56")` returns `12.34` — no error shown to user
@@ -636,10 +671,10 @@ import { z } from 'zod';
 import { EXPENSE_CATEGORIES } from '../constants/paymentModes';
 
 export const ExpenseSchema = z.object({
-  amount: z.number().positive('Amount must be greater than 0'),
-  category: z.enum(EXPENSE_CATEGORIES.map(c => c.value) as [string, ...string[]]),
-  notes: z.string().max(500).optional(),
-  expense_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+	amount: z.number().positive('Amount must be greater than 0'),
+	category: z.enum(EXPENSE_CATEGORIES.map((c) => c.value) as [string, ...string[]]),
+	notes: z.string().max(500).optional(),
+	expense_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
 ```
 
@@ -705,26 +740,31 @@ export { InventoryItemInsertSchema } from './inventory';
 import { z } from 'zod';
 
 export const InvoiceLineItemSchema = z.object({
-  item_id: z.string().uuid().optional(),
-  design_name: z.string().min(1, 'Design name is required'),
-  quantity: z.number().int().positive('Quantity must be at least 1'),
-  rate_per_unit: z.number().positive('Rate must be positive'),
-  discount: z.number().min(0).default(0),
-  gst_rate: z.number().refine(r => [0, 5, 12, 18, 28].includes(r), 'Invalid GST rate'),
+	item_id: z.string().uuid().optional(),
+	design_name: z.string().min(1, 'Design name is required'),
+	quantity: z.number().int().positive('Quantity must be at least 1'),
+	rate_per_unit: z.number().positive('Rate must be positive'),
+	discount: z.number().min(0).default(0),
+	gst_rate: z.number().refine((r) => [0, 5, 12, 18, 28].includes(r), 'Invalid GST rate'),
 });
 
 export const InvoiceInputSchema = z.object({
-  invoice_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  customer_name: z.string().min(1),
-  customer_gstin: z.string().regex(/^\d{2}[A-Z]{5}\d{4}[A-Z]\d[Z][A-Z\d]$/).optional().or(z.literal('')),
-  is_inter_state: z.boolean(),
-  line_items: z.array(InvoiceLineItemSchema).min(1, 'At least one line item required'),
-  payment_status: z.enum(['paid', 'partial', 'unpaid']),
-  amount_paid: z.number().min(0).default(0),
+	invoice_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+	customer_name: z.string().min(1),
+	customer_gstin: z
+		.string()
+		.regex(/^\d{2}[A-Z]{5}\d{4}[A-Z]\d[Z][A-Z\d]$/)
+		.optional()
+		.or(z.literal('')),
+	is_inter_state: z.boolean(),
+	line_items: z.array(InvoiceLineItemSchema).min(1, 'At least one line item required'),
+	payment_status: z.enum(['paid', 'partial', 'unpaid']),
+	amount_paid: z.number().min(0).default(0),
 });
 ```
 
 **Where to validate:**
+
 1. **Service layer** (primary): `InvoiceInputSchema.parse(input)` before any DB call
 2. **Form layer** (secondary): `zodResolver(InvoiceInputSchema)` with react-hook-form for instant UI feedback
 3. **DB layer** (tertiary): CHECK constraints already exist for some fields — keep as safety net
@@ -737,7 +777,9 @@ export const InvoiceInputSchema = z.object({
 
 ```typescript
 // invoiceService.ts:12
-query = query.or(`invoice_number.ilike.%${filters.search}%,customer_name.ilike.%${filters.search}%`);
+query = query.or(
+	`invoice_number.ilike.%${filters.search}%,customer_name.ilike.%${filters.search}%`,
+);
 ```
 
 If `filters.search` contains `,` or `.`, this can break the query syntax or produce unexpected results. Supabase's PostgREST generally sanitizes, but **constructing filter strings via interpolation is an anti-pattern**.
@@ -747,14 +789,15 @@ If `filters.search` contains `,` or `.`, this can break the query syntax or prod
 ```typescript
 // Safer approach
 if (filters.search) {
-  query = query.or(
-    `invoice_number.ilike.%${filters.search.replace(/[%_]/g, '\\$&')}%,` +
-    `customer_name.ilike.%${filters.search.replace(/[%_]/g, '\\$&')}%`
-  );
+	query = query.or(
+		`invoice_number.ilike.%${filters.search.replace(/[%_]/g, '\\$&')}%,` +
+			`customer_name.ilike.%${filters.search.replace(/[%_]/g, '\\$&')}%`,
+	);
 }
 ```
 
 Or better, use `textSearch` with `pg_trgm` index (already enabled):
+
 ```typescript
 query = query.textSearch('design_name', filters.search, { type: 'websearch' });
 ```
@@ -768,6 +811,7 @@ query = query.textSearch('design_name', filters.search, { type: 'websearch' });
 ### 10.3: No Rate Limiting or Abuse Protection
 
 The app calls Supabase directly. A malicious client could:
+
 - Generate thousands of invoice numbers (exhausting the sequence)
 - Create millions of stock operations
 - Enumerate all customers
@@ -780,32 +824,32 @@ The app calls Supabase directly. A malicious client could:
 
 ### 11.1: Missing Entirely
 
-| Tool | Status | Impact |
-|------|--------|--------|
-| ESLint | Not configured | Inconsistent code style, no unused import detection |
-| Prettier | Not configured | Formatting inconsistencies |
-| Husky + lint-staged | Not configured | Bad code merges to main |
-| CI/CD (GitHub Actions) | Not configured | No automated testing |
-| TypeScript strict checks | `strict: true` | Good — keep this |
+| Tool                     | Status         | Impact                                              |
+| ------------------------ | -------------- | --------------------------------------------------- |
+| ESLint                   | Not configured | Inconsistent code style, no unused import detection |
+| Prettier                 | Not configured | Formatting inconsistencies                          |
+| Husky + lint-staged      | Not configured | Bad code merges to main                             |
+| CI/CD (GitHub Actions)   | Not configured | No automated testing                                |
+| TypeScript strict checks | `strict: true` | Good — keep this                                    |
 
 ### 11.2: Recommended `package.json` Additions
 
 ```json
 {
-  "scripts": {
-    "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
-    "typecheck": "tsc --noEmit",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "validate": "npm run typecheck && npm run lint && npm run test"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
-    "*.{json,md}": ["prettier --write"]
-  }
+	"scripts": {
+		"lint": "eslint . --ext .ts,.tsx",
+		"lint:fix": "eslint . --ext .ts,.tsx --fix",
+		"format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+		"typecheck": "tsc --noEmit",
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"test:coverage": "jest --coverage",
+		"validate": "npm run typecheck && npm run lint && npm run test"
+	},
+	"lint-staged": {
+		"*.{ts,tsx}": ["eslint --fix", "prettier --write"],
+		"*.{json,md}": ["prettier --write"]
+	}
 }
 ```
 
@@ -816,16 +860,16 @@ The app calls Supabase directly. A malicious client could:
 name: CI
 on: [push, pull_request]
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run lint
-      - run: npm run test -- --coverage
-      - uses: codecov/codecov-action@v4
+    validate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+            - run: npm ci
+            - run: npm run typecheck
+            - run: npm run lint
+            - run: npm run test -- --coverage
+            - uses: codecov/codecov-action@v4
 ```
 
 ---
@@ -834,56 +878,64 @@ jobs:
 
 ### Current: Inconsistent
 
-| Layer | Pattern | Problem |
-|-------|---------|---------|
-| Services | `throw error` (raw Supabase error) | Leaks DB details to UI |
-| Stores | `catch (err: any) { set({ error: err.message }) }` | Loses error context, type unsafe |
-| Screens | `Alert.alert('Error', e.message)` | Not all screens do this; some silently fail |
+| Layer    | Pattern                                            | Problem                                     |
+| -------- | -------------------------------------------------- | ------------------------------------------- |
+| Services | `throw error` (raw Supabase error)                 | Leaks DB details to UI                      |
+| Stores   | `catch (err: any) { set({ error: err.message }) }` | Loses error context, type unsafe            |
+| Screens  | `Alert.alert('Error', e.message)`                  | Not all screens do this; some silently fail |
 
 ### Proposed: Typed Error Hierarchy
 
 ```typescript
 // src/errors/AppError.ts
 export class AppError extends Error {
-  constructor(
-    message: string,
-    public readonly code: string,
-    public readonly userMessage: string, // Safe to show in UI
-    public readonly cause?: unknown,
-  ) {
-    super(message);
-  }
+	constructor(
+		message: string,
+		public readonly code: string,
+		public readonly userMessage: string, // Safe to show in UI
+		public readonly cause?: unknown,
+	) {
+		super(message);
+	}
 }
 
 export class ValidationError extends AppError {
-  constructor(public readonly fieldErrors: Record<string, string[]>) {
-    super('Validation failed', 'VALIDATION_ERROR', 'Please check your input');
-  }
+	constructor(public readonly fieldErrors: Record<string, string[]>) {
+		super('Validation failed', 'VALIDATION_ERROR', 'Please check your input');
+	}
 }
 
 export class NetworkError extends AppError {
-  constructor(cause: unknown) {
-    super('Network request failed', 'NETWORK_ERROR', 'Please check your connection and try again', cause);
-  }
+	constructor(cause: unknown) {
+		super(
+			'Network request failed',
+			'NETWORK_ERROR',
+			'Please check your connection and try again',
+			cause,
+		);
+	}
 }
 
 export class InsufficientStockError extends AppError {
-  constructor(itemName: string, available: number, requested: number) {
-    super(
-      `Insufficient stock for ${itemName}`,
-      'INSUFFICIENT_STOCK',
-      `Only ${available} boxes of ${itemName} available (requested ${requested})`,
-    );
-  }
+	constructor(itemName: string, available: number, requested: number) {
+		super(
+			`Insufficient stock for ${itemName}`,
+			'INSUFFICIENT_STOCK',
+			`Only ${available} boxes of ${itemName} available (requested ${requested})`,
+		);
+	}
 }
 ```
 
 **Repository layer** catches Supabase errors and wraps them:
+
 ```typescript
-if (error) throw new AppError(error.message, error.code, 'Something went wrong. Please try again.', error);
+if (error)
+	throw new AppError(error.message, error.code, 'Something went wrong. Please try again.', error);
 ```
 
 **Store layer** preserves the typed error:
+
 ```typescript
 catch (err) {
   const appError = err instanceof AppError ? err : new AppError('Unknown error', 'UNKNOWN', 'An unexpected error occurred', err);
@@ -916,12 +968,13 @@ Audit all user-facing strings and ensure they go through `t()`.
 
 ```typescript
 export const EXPENSE_CATEGORIES = [
-  { value: 'Rent', label_en: 'Rent', label_hi: 'किराया' },
-  // ...
+	{ value: 'Rent', label_en: 'Rent', label_hi: 'किराया' },
+	// ...
 ];
 ```
 
 But `expenses.tsx` uses a freeform text input for category. This means:
+
 - Users can type anything → inconsistent data
 - No i18n in the DB-stored category value
 - Cannot aggregate by category reliably
@@ -941,12 +994,13 @@ But `expenses.tsx` uses a freeform text input for category. This means:
 ```typescript
 // TextInput.tsx:30
 const isFocused = false; // We can add onFocus/onBlur state if needed
-const borderColor = error ? c.error : (isFocused ? c.primary : c.border);
+const borderColor = error ? c.error : isFocused ? c.primary : c.border;
 ```
 
 The `isFocused` branch is **dead code** — the input border never turns primary-colored on focus. This is a UX regression: users get no visual feedback that a field is active.
 
 **Fix**:
+
 ```typescript
 const [isFocused, setIsFocused] = useState(false);
 // ...
@@ -1006,7 +1060,7 @@ Same issue exists in `Chip`, `ListItem`, and all `TouchableOpacity` usages in sc
 
 ```typescript
 // Badge.tsx — pattern used for light backgrounds:
-backgroundColor: c.primary + '20'   // Appends '20' hex opacity
+backgroundColor: c.primary + '20'; // Appends '20' hex opacity
 ```
 
 This works for 6-char hex (`#C1440E20`) but **breaks for named colors**, `rgb()`, or `rgba()` values. If the theme ever uses non-hex colors, every Badge crashes.
@@ -1016,7 +1070,7 @@ This works for 6-char hex (`#C1440E20`) but **breaks for named colors**, `rgb()`
 ```typescript
 // src/utils/color.ts
 export function withOpacity(color: string, opacity: number): string {
-  // Parse hex, rgb, or named color → return rgba
+	// Parse hex, rgb, or named color → return rgba
 }
 ```
 
@@ -1034,6 +1088,7 @@ This pattern appears in `QuickActionsGrid.tsx:49`, `DashboardHeader.tsx:41`, `in
 When a payment fails to record, the modal silently closes (or stays open with no feedback). The user believes the payment succeeded.
 
 **Fix**: Show an Alert or inline error:
+
 ```typescript
 } catch (e: unknown) {
   const message = e instanceof Error ? e.message : 'An unexpected error occurred';
@@ -1051,6 +1106,7 @@ const today = new Date().toLocaleDateString('hi-IN', { ... });
 The date is always formatted in Hindi (`hi-IN`) regardless of the user's language setting. When the app is in English mode, the dashboard header still shows Hindi date text.
 
 **Fix**: Use the `currentLanguage` from `useLocale()`:
+
 ```typescript
 const { currentLanguage } = useLocale();
 const locale = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
@@ -1059,18 +1115,18 @@ const today = new Date().toLocaleDateString(locale, { ... });
 
 ### 14.7: Molecules & Organisms Have Zero Tests
 
-| Component | Test File | Status |
-|-----------|-----------|--------|
-| `StatCard` | — | ❌ No tests |
-| `SearchBar` | — | ❌ No tests |
-| `FormField` | — | ❌ No tests |
-| `ListItem` | — | ❌ No tests |
-| `EmptyState` | — | ❌ No tests |
-| `DashboardHeader` | — | ❌ No tests |
-| `QuickActionsGrid` | — | ❌ No tests |
-| `RecentInvoicesList` | — | ❌ No tests |
-| `TileSetCard` | — | ❌ No tests |
-| `PaymentModal` | — | ❌ No tests |
+| Component            | Test File | Status      |
+| -------------------- | --------- | ----------- |
+| `StatCard`           | —         | ❌ No tests |
+| `SearchBar`          | —         | ❌ No tests |
+| `FormField`          | —         | ❌ No tests |
+| `ListItem`           | —         | ❌ No tests |
+| `EmptyState`         | —         | ❌ No tests |
+| `DashboardHeader`    | —         | ❌ No tests |
+| `QuickActionsGrid`   | —         | ❌ No tests |
+| `RecentInvoicesList` | —         | ❌ No tests |
+| `TileSetCard`        | —         | ❌ No tests |
+| `PaymentModal`       | —         | ❌ No tests |
 
 Only 4 atom tests exist (`Badge`, `Button`, `Card`, `TextInput`), and even those are smoke tests — they verify rendering, not behavior. The `Button.test.tsx` tests for `ActivityIndicator` by `testID` that the implementation doesn't set.
 
@@ -1159,13 +1215,13 @@ if (items.length === 0 && !loading && page === 1) {
 ```typescript
 // app/(app)/(tabs)/index.tsx:42-58
 const todaySales = useMemo(() => {
-  return invoices
-    .filter(inv => inv.invoice_date === today)
-    .reduce((sum, inv) => sum + inv.grand_total, 0);
+	return invoices
+		.filter((inv) => inv.invoice_date === today)
+		.reduce((sum, inv) => sum + inv.grand_total, 0);
 }, [invoices, today]);
 
 const outstandingCredit = useMemo(() => {
-  return invoices.reduce((sum, inv) => sum + (inv.grand_total - (inv.amount_paid || 0)), 0);
+	return invoices.reduce((sum, inv) => sum + (inv.grand_total - (inv.amount_paid || 0)), 0);
 }, [invoices]);
 ```
 
@@ -1178,9 +1234,9 @@ A Postgres RPC `get_dashboard_stats()` **already exists** (migration 007, lines 
 ```typescript
 // dashboardService.ts
 export async function fetchDashboardStats() {
-  const { data, error } = await supabase.rpc('get_dashboard_stats');
-  if (error) throw error;
-  return data as DashboardStats;
+	const { data, error } = await supabase.rpc('get_dashboard_stats');
+	if (error) throw error;
+	return data as DashboardStats;
 }
 ```
 
@@ -1201,6 +1257,7 @@ disabled={step === 1 && !customer || step === 2 && lineItems.length === 0}
 ```
 
 Due to JavaScript operator precedence (`&&` binds tighter than `||`), this evaluates as:
+
 ```
 (step === 1 && !customer) || (step === 2 && lineItems.length === 0)
 ```
@@ -1208,6 +1265,7 @@ Due to JavaScript operator precedence (`&&` binds tighter than `||`), this evalu
 This means the "Next" button is **enabled** at step 3 (where it should be hidden, though it is — via the `step < 3` ternary above). But if someone were to add a step 4, this logic would silently break.
 
 **Fix**: Always use explicit parentheses:
+
 ```typescript
 disabled={(step === 1 && !customer) || (step === 2 && lineItems.length === 0)}
 ```
@@ -1225,10 +1283,17 @@ const r = theme.borderRadius;
 4 lines of boilerplate × 20+ screens = 80+ lines of meaningless repetition.
 
 **Fix**: Create a `useThemeTokens()` hook:
+
 ```typescript
 export function useThemeTokens() {
-  const { theme } = useTheme();
-  return { theme, c: theme.colors, s: theme.spacing, r: theme.borderRadius, typo: theme.typography };
+	const { theme } = useTheme();
+	return {
+		theme,
+		c: theme.colors,
+		s: theme.spacing,
+		r: theme.borderRadius,
+		typo: theme.typography,
+	};
 }
 ```
 
@@ -1246,6 +1311,7 @@ const theme = buildTheme(isDark);
 `buildTheme()` is called **on every render** of `ThemeProvider`. Since `ThemeProvider` wraps the entire app, any state change anywhere causes a new `theme` object to be created. This means every `useTheme()` consumer re-renders, because the context value has a new object reference.
 
 **Fix**: Memoize the theme:
+
 ```typescript
 const theme = useMemo(() => buildTheme(isDark), [isDark]);
 ```
@@ -1257,23 +1323,24 @@ This is a single-line fix with cascading performance improvement across the enti
 ```typescript
 // theme/index.ts:104-108
 shadows: {
-  sm: object;
-  md: object;
-  lg: object;
-};
+	sm: object;
+	md: object;
+	lg: object;
+}
 ```
 
 Consumers must cast: `...(theme.shadows.md as object)` — which appears in `QuickActionsGrid.tsx:44`, `TileSetCard.tsx`, `inventory.tsx:196`, and others.
 
 **Fix**: Type the shadow properly:
+
 ```typescript
 import type { ViewStyle } from 'react-native';
 
 shadows: {
-  sm: ViewStyle;
-  md: ViewStyle;
-  lg: ViewStyle;
-};
+	sm: ViewStyle;
+	md: ViewStyle;
+	lg: ViewStyle;
+}
 ```
 
 ### 16.3: `layout` Utilities Are Static — Shouldn't Be in Theme Context
@@ -1281,23 +1348,24 @@ shadows: {
 ```typescript
 // colors.ts:135-141
 const LAYOUT: Theme['layout'] = {
-  row: { flexDirection: 'row', alignItems: 'center' },
-  rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  // ...
+	row: { flexDirection: 'row', alignItems: 'center' },
+	rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+	// ...
 };
 ```
 
 These never change between light/dark mode. They are **static layout constants** sitting inside a dynamic theme context. Every time `isDark` changes, these identical objects are recreated.
 
 **Fix**: Extract to a separate `StyleSheet.create()`:
+
 ```typescript
 // src/theme/layout.ts
 export const layout = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center' },
-  rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  center: { alignItems: 'center', justifyContent: 'center' },
-  flex: { flex: 1 },
-  absoluteFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
+	row: { flexDirection: 'row', alignItems: 'center' },
+	rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+	center: { alignItems: 'center', justifyContent: 'center' },
+	flex: { flex: 1 },
+	absoluteFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
 });
 ```
 
@@ -1337,12 +1405,14 @@ const rest = String(Math.abs(num)).slice(0, -3);
 Line 18: `const sign = num < 0 ? '-' : '';`
 
 But line 7: `const fixed = amount.toFixed(decimals);` — then `parseInt(intPart, 10)` — this loses the sign for `-0.50`:
+
 - `(-0.50).toFixed(2)` = `"-0.50"`
 - `parseInt("-0", 10)` = `-0` (negative zero)
 - `num < 0` is `false` for `-0` in JavaScript
 - **Result**: `-₹0.50` is displayed as `₹0.50`
 
 **Fix**: Check `amount < 0` instead of `num < 0`:
+
 ```typescript
 const sign = amount < 0 ? '-' : '';
 ```
@@ -1359,13 +1429,14 @@ if (n < 100000) return convert(Math.floor(n / 1000)) + 'Thousand ' + convert(n %
 ```typescript
 // pdfService.ts:289-291
 function convertNumberToWords(amount: number): string {
-  return Math.floor(amount).toString();  // Returns "1000" not "One Thousand"
+	return Math.floor(amount).toString(); // Returns "1000" not "One Thousand"
 }
 ```
 
 `pdfService.ts` has its own **non-functional stub** while `currency.ts` has the real implementation. The PDF invoice shows `"Amount in words: Rupees 154000 Only"` instead of `"Rupees One Lakh Fifty Four Thousand Only"`.
 
 **Fix**: Import `numberToIndianWords` from `currency.ts` in `pdfService.ts`:
+
 ```typescript
 import { numberToIndianWords } from '../utils/currency';
 // In generateInvoiceHTML:
@@ -1382,6 +1453,7 @@ const suffixPattern = /(-(?:HL(?:-\d+(?:-[A-Z])?)?|ELE(?:VATION)?|[DLFABCM]\d*))
 The `i` flag makes the regex case-insensitive, but the character class `[DLFABCM]` only lists uppercase. Since `i` flag is on, this correctly matches lowercase — fine.
 
 But the **PostgreSQL function** (migration 003) has a different regex:
+
 ```sql
 regexp_replace(design_name, '-(?:HL(?:-\d+(?:-[A-Z])?)?|ELEVATION|ELE|[DLFABCM]\d*).*$', '', 'i')
 ```
@@ -1401,6 +1473,7 @@ if (isYesterday(date)) return 'Yesterday';
 When the app is in Hindi mode, the dashboard still shows "Today" and "Yesterday" in English.
 
 **Fix**: Use i18n keys:
+
 ```typescript
 if (isToday(date)) return i18n.t('common.today');
 if (isYesterday(date)) return i18n.t('common.yesterday');
@@ -1424,8 +1497,8 @@ query = query.or('box_count.lte.low_stock_threshold');
 
 // Option 2 (correct): Use the existing `low_stock_items` VIEW (migration 007)
 if (filters.lowStockOnly) {
-  query = supabase.from('low_stock_items').select('*', { count: 'exact' });
-  // Apply remaining filters to the view
+	query = supabase.from('low_stock_items').select('*', { count: 'exact' });
+	// Apply remaining filters to the view
 }
 
 // Option 3: Add an RPC
@@ -1447,21 +1520,23 @@ ${invoice.customer_address ? `<p>${invoice.customer_address}</p>` : ''}
 ```
 
 If `customer_name` contains `<script>alert('xss')</script>` or `<img src=x onerror=...>`, the generated HTML will execute it in the print WebView context. While the risk is lower than browser XSS (the PDF is generated locally), it can:
+
 - Break the PDF layout with injected HTML tags
 - Potentially access the WebView context on Android
 
 **Fix**: Escape all interpolated values:
+
 ```typescript
 function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+	return str
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;');
 }
 
 // Usage:
-`<p><strong>${escapeHtml(invoice.customer_name)}</strong></p>`
+`<p><strong>${escapeHtml(invoice.customer_name)}</strong></p>`;
 ```
 
 ### 18.2: `pdfService.ts` Has a Dead `useLocale` Import
@@ -1485,6 +1560,7 @@ The `any` type means typos in property access (`bp.phone_number` vs `bp.phone`) 
 ### 18.4: `convertNumberToWords` Stub — Invoice Compliance Risk
 
 As noted in 17.2, the PDF invoice renders:
+
 ```
 Amount in words: Rupees 154000 Only.
 ```
@@ -1500,28 +1576,30 @@ Under GST rules, Indian tax invoices **must** display the amount in words. Showi
 ```typescript
 // app/(app)/_layout.tsx:14-31
 React.useEffect(() => {
-  const prefetchData = async () => {
-    await Promise.all([
-      useInventoryStore.getState().fetchItems(true),
-      useInvoiceStore.getState().fetchInvoices(1),
-      useCustomerStore.getState().fetchCustomers(true),
-      useFinanceStore.getState().fetchExpenses(),
-      useFinanceStore.getState().fetchPurchases(),
-      useFinanceStore.getState().fetchSummary(),
-      useOrderStore.getState().fetchOrders(),
-    ]);
-  };
-  prefetchData();
+	const prefetchData = async () => {
+		await Promise.all([
+			useInventoryStore.getState().fetchItems(true),
+			useInvoiceStore.getState().fetchInvoices(1),
+			useCustomerStore.getState().fetchCustomers(true),
+			useFinanceStore.getState().fetchExpenses(),
+			useFinanceStore.getState().fetchPurchases(),
+			useFinanceStore.getState().fetchSummary(),
+			useOrderStore.getState().fetchOrders(),
+		]);
+	};
+	prefetchData();
 }, []);
 ```
 
 **Issues**:
+
 1. **7 parallel API calls on app launch** — on slow 3G, this saturates the connection and delays first meaningful paint by seconds
 2. **No error handling per-call** — if customers fail, the entire `Promise.all` rejects, and `catch` logs one generic error. The user sees stale data with no indication
 3. **No staleness management** — if the user backgrounds the app for 2 hours and returns, all data is from the initial load. No refresh-on-foreground logic exists
 4. **Finance fetches 3 separate calls** (`fetchExpenses`, `fetchPurchases`, `fetchSummary`) — these should be batched into a single store action
 
 **Fix**:
+
 ```typescript
 // 1. Use Promise.allSettled for independent error handling
 const results = await Promise.allSettled([...]);
@@ -1554,10 +1632,11 @@ useEffect(() => {
 The `_layout.tsx` already fetched inventory. This `useEffect` checks `items.length === 0` but it may fire before the layout's `Promise.all` resolves. This causes a **duplicate fetch** on first mount.
 
 **Fix**: Track "has initial fetch completed" in the store:
+
 ```typescript
 interface InventoryState {
-  initialized: boolean;
-  // ...
+	initialized: boolean;
+	// ...
 }
 ```
 
@@ -1568,16 +1647,22 @@ When creating an invoice, stock operation, or payment, the user must wait for th
 ```typescript
 // Optimistic pattern:
 createItem: async (itemPayload) => {
-  const tempId = `temp-${Date.now()}`;
-  const optimistic = { ...itemPayload, id: tempId };
-  set((s) => { s.items.unshift(optimistic); }); // Show immediately
-  try {
-    const real = await inventoryService.createItem(itemPayload);
-    set((s) => { s.items = s.items.map(i => i.id === tempId ? real : i); }); // Replace with real
-  } catch (err) {
-    set((s) => { s.items = s.items.filter(i => i.id !== tempId); }); // Rollback
-    throw err;
-  }
+	const tempId = `temp-${Date.now()}`;
+	const optimistic = { ...itemPayload, id: tempId };
+	set((s) => {
+		s.items.unshift(optimistic);
+	}); // Show immediately
+	try {
+		const real = await inventoryService.createItem(itemPayload);
+		set((s) => {
+			s.items = s.items.map((i) => (i.id === tempId ? real : i));
+		}); // Replace with real
+	} catch (err) {
+		set((s) => {
+			s.items = s.items.filter((i) => i.id !== tempId);
+		}); // Rollback
+		throw err;
+	}
 };
 ```
 
@@ -1589,15 +1674,15 @@ createItem: async (itemPayload) => {
 
 Zero components in the codebase set `accessibilityRole`. This means screen readers treat everything as generic "element":
 
-| Component | Should Have |
-|-----------|-------------|
-| `Button` | `accessibilityRole="button"` |
-| `TextInput` | `accessibilityRole="none"` (RN auto-handles) |
-| `Chip` | `accessibilityRole="togglebutton"` + `accessibilityState={{ selected }}` |
-| `ListItem` | `accessibilityRole="button"` |
-| `Badge` | `accessibilityRole="text"` |
-| `StatCard` | `accessibilityRole="summary"` |
-| Tab icons | Already handled by Expo Router |
+| Component   | Should Have                                                              |
+| ----------- | ------------------------------------------------------------------------ |
+| `Button`    | `accessibilityRole="button"`                                             |
+| `TextInput` | `accessibilityRole="none"` (RN auto-handles)                             |
+| `Chip`      | `accessibilityRole="togglebutton"` + `accessibilityState={{ selected }}` |
+| `ListItem`  | `accessibilityRole="button"`                                             |
+| `Badge`     | `accessibilityRole="text"`                                               |
+| `StatCard`  | `accessibilityRole="summary"`                                            |
+| Tab icons   | Already handled by Expo Router                                           |
 
 ### 20.2: No Haptic Feedback on Critical Actions
 
@@ -1621,37 +1706,39 @@ In `invoices/create.tsx`, scrolling the line items list or review step doesn't d
 
 ### 21.1: Three Definitions of Tile Categories
 
-| Location | Definition |
-|----------|------------|
-| `001_extensions_enums.sql` | `CREATE TYPE tile_category AS ENUM ('GLOSSY', 'FLOOR', 'MATT', 'SATIN', 'WOODEN', 'ELEVATION', 'OTHER')` |
-| `src/types/inventory.ts` | `type TileCategory = 'GLOSSY' \| 'FLOOR' \| 'MATT' \| 'SATIN' \| 'WOODEN' \| 'ELEVATION' \| 'OTHER'` |
-| `src/constants/categories.ts` | `TILE_CATEGORIES` array with `value`, `labelEn`, `labelHi`, `icon` |
-| `inventory.tsx:15` | `const CATEGORIES = ['ALL', 'GLOSSY', 'MATT', 'ELEVATION', 'FLOOR', 'WOODEN', 'OTHER']` — **missing 'SATIN'** |
+| Location                      | Definition                                                                                                    |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `001_extensions_enums.sql`    | `CREATE TYPE tile_category AS ENUM ('GLOSSY', 'FLOOR', 'MATT', 'SATIN', 'WOODEN', 'ELEVATION', 'OTHER')`      |
+| `src/types/inventory.ts`      | `type TileCategory = 'GLOSSY' \| 'FLOOR' \| 'MATT' \| 'SATIN' \| 'WOODEN' \| 'ELEVATION' \| 'OTHER'`          |
+| `src/constants/categories.ts` | `TILE_CATEGORIES` array with `value`, `labelEn`, `labelHi`, `icon`                                            |
+| `inventory.tsx:15`            | `const CATEGORIES = ['ALL', 'GLOSSY', 'MATT', 'ELEVATION', 'FLOOR', 'WOODEN', 'OTHER']` — **missing 'SATIN'** |
 
 The inventory screen's `CATEGORIES` constant is **missing 'SATIN'**. Any items categorized as SATIN are unfilterable in the UI.
 
 **Fix**: Derive all frontend category lists from the single `constants/categories.ts` source:
+
 ```typescript
 import { TILE_CATEGORIES } from '@/src/constants/categories';
-const CATEGORIES = ['ALL', ...TILE_CATEGORIES.map(c => c.value)];
+const CATEGORIES = ['ALL', ...TILE_CATEGORIES.map((c) => c.value)];
 ```
 
 ### 21.2: Three Definitions of Payment Modes
 
-| Location | Values |
-|----------|--------|
-| `001_extensions_enums.sql` | `'cash', 'upi', 'bank_transfer', 'credit', 'cheque'` |
-| `src/types/invoice.ts` | `PaymentMode = 'cash' \| 'upi' \| 'bank_transfer' \| 'credit' \| 'cheque'` |
-| `PaymentModal.tsx:64` | `['cash', 'upi', 'bank_transfer', 'cheque']` — **missing 'credit'** |
-| `invoices/create.tsx:295` | `['cash', 'upi', 'bank_transfer', 'cheque']` — **missing 'credit'** |
-| `constants/paymentModes.ts` | Full list with labels |
+| Location                    | Values                                                                     |
+| --------------------------- | -------------------------------------------------------------------------- |
+| `001_extensions_enums.sql`  | `'cash', 'upi', 'bank_transfer', 'credit', 'cheque'`                       |
+| `src/types/invoice.ts`      | `PaymentMode = 'cash' \| 'upi' \| 'bank_transfer' \| 'credit' \| 'cheque'` |
+| `PaymentModal.tsx:64`       | `['cash', 'upi', 'bank_transfer', 'cheque']` — **missing 'credit'**        |
+| `invoices/create.tsx:295`   | `['cash', 'upi', 'bank_transfer', 'cheque']` — **missing 'credit'**        |
+| `constants/paymentModes.ts` | Full list with labels                                                      |
 
 The `credit` payment mode is defined in the DB enum and TypeScript type but **excluded from both UIs** that render payment mode selectors. If a customer wants to pay on credit, there is no way to select it.
 
 **Fix**: Derive from the constant:
+
 ```typescript
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
-const modes = PAYMENT_MODES.map(m => m.value);
+const modes = PAYMENT_MODES.map((m) => m.value);
 ```
 
 ### 21.3: GST Rate Hardcoded as `18` in Invoice Creation
@@ -1662,6 +1749,7 @@ gst_rate: 18, // Default
 ```
 
 The app has a `GST_RATES` constant (`[5, 12, 18, 28]`) and `DEFAULT_GST_RATE = 18` in `constants/gst.ts`, but the invoice creation screen:
+
 1. Hardcodes `18` instead of using the constant
 2. Never lets the user pick a different GST rate per line item
 3. Items in the database have their own `gst_rate` field, but it's ignored during invoice creation
@@ -1669,6 +1757,7 @@ The app has a `GST_RATES` constant (`[5, 12, 18, 28]`) and `DEFAULT_GST_RATE = 1
 This means invoices for 5% GST items (e.g., ceramic articles under HSN 6914) are always calculated at 18%.
 
 **Fix**: Read `selectedItem.gst_rate` from inventory:
+
 ```typescript
 gst_rate: selectedItem.gst_rate || DEFAULT_GST_RATE,
 ```
@@ -1683,25 +1772,25 @@ And provide a rate picker in the line item form for override.
 
 The entire `src/hooks/` directory contains one file: `useLocale.ts`. The app needs at minimum:
 
-| Hook | Purpose | Removes Duplication From |
-|------|---------|--------------------------|
-| `useThemeTokens()` | Destructure theme colors/spacing/radius | Every screen (20+ files) |
-| `useDebounce(value, delay)` | Debounce search inputs | `inventory.tsx`, `create.tsx` (manual `setTimeout`) |
-| `usePagination(fetchFn)` | Handle infinite scroll state | `inventory.tsx`, `invoices.tsx`, `customers/index.tsx` |
-| `useForm(schema)` | Wrap `react-hook-form` + `zod` | Every form screen (8+ files) |
-| `useRefreshOnFocus()` | Refresh stale data when screen focused | Every list screen |
-| `useConfirmBack()` | Prevent accidental back during unsaved forms | `invoices/create.tsx`, `inventory/add.tsx` |
+| Hook                        | Purpose                                      | Removes Duplication From                               |
+| --------------------------- | -------------------------------------------- | ------------------------------------------------------ |
+| `useThemeTokens()`          | Destructure theme colors/spacing/radius      | Every screen (20+ files)                               |
+| `useDebounce(value, delay)` | Debounce search inputs                       | `inventory.tsx`, `create.tsx` (manual `setTimeout`)    |
+| `usePagination(fetchFn)`    | Handle infinite scroll state                 | `inventory.tsx`, `invoices.tsx`, `customers/index.tsx` |
+| `useForm(schema)`           | Wrap `react-hook-form` + `zod`               | Every form screen (8+ files)                           |
+| `useRefreshOnFocus()`       | Refresh stale data when screen focused       | Every list screen                                      |
+| `useConfirmBack()`          | Prevent accidental back during unsaved forms | `invoices/create.tsx`, `inventory/add.tsx`             |
 
 ### 22.2: Search Debounce is Hand-Rolled Everywhere
 
 ```typescript
 // invoices/create.tsx:52-58
 React.useEffect(() => {
-  if (!isAddingItem) return;
-  const timer = setTimeout(() => {
-    setFilters({ search: searchQuery });
-  }, 400);
-  return () => clearTimeout(timer);
+	if (!isAddingItem) return;
+	const timer = setTimeout(() => {
+		setFilters({ search: searchQuery });
+	}, 400);
+	return () => clearTimeout(timer);
 }, [searchQuery, isAddingItem]);
 ```
 
@@ -1709,17 +1798,19 @@ This exact pattern with minor variations exists in inventory search and customer
 
 ```typescript
 export function useDebounce<T>(value: T, delay = 300): T {
-  const [debounced, setDebounced] = useState(value);
-  useEffect(() => {
-    const timer = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-  return debounced;
+	const [debounced, setDebounced] = useState(value);
+	useEffect(() => {
+		const timer = setTimeout(() => setDebounced(value), delay);
+		return () => clearTimeout(timer);
+	}, [value, delay]);
+	return debounced;
 }
 
 // Usage:
 const debouncedSearch = useDebounce(searchQuery, 400);
-useEffect(() => { setFilters({ search: debouncedSearch }); }, [debouncedSearch]);
+useEffect(() => {
+	setFilters({ search: debouncedSearch });
+}, [debouncedSearch]);
 ```
 
 ---
@@ -1744,17 +1835,18 @@ const { data } = await supabase.from('invoices')
 
 ```typescript
 // Keyset cursor — O(1) seek regardless of page depth
-const { data } = await supabase.from('invoices')
-  .select('*')
-  .order('invoice_date', { ascending: false })
-  .order('id', { ascending: false })
-  .lt('invoice_date', cursor.lastDate)
-  .limit(PAGE_SIZE);
+const { data } = await supabase
+	.from('invoices')
+	.select('*')
+	.order('invoice_date', { ascending: false })
+	.order('id', { ascending: false })
+	.lt('invoice_date', cursor.lastDate)
+	.limit(PAGE_SIZE);
 ```
 
 ### 23.2 Unbounded `SELECT *` in Views
 
-The `customer_ledger_summary` and `supplier_ledger_summary` views (migration 007) aggregate across the *entire* invoice/purchase history with no date bounds:
+The `customer_ledger_summary` and `supplier_ledger_summary` views (migration 007) aggregate across the _entire_ invoice/purchase history with no date bounds:
 
 ```sql
 -- Scans ALL invoices for ALL customers, every time
@@ -1765,6 +1857,7 @@ GROUP BY c.id, c.name;
 ```
 
 At 50K invoices × 500 customers, this is a full table scan on every dashboard load. Options:
+
 1. **Materialized view** refreshed on a schedule (`REFRESH MATERIALIZED VIEW CONCURRENTLY`).
 2. **Denormalized balance column** on the `customers` table, updated atomically inside the invoice/payment transaction RPCs.
 3. **Date-bounded variant** — only aggregate the current financial year, with carried-forward opening balances.
@@ -1774,6 +1867,7 @@ At 50K invoices × 500 customers, this is a full table scan on every dashboard l
 `tile_image_url` in `inventory_items` points to Supabase Storage. The app loads full-resolution images in list views (`TileSetCard`, invoice line items). With 2000+ SKUs, list scrolling will stall.
 
 **Fix**: Use Supabase Storage's image transformation API or a CDN resize proxy:
+
 ```
 // Instead of full-res:
 `${SUPABASE_URL}/storage/v1/object/public/tile-images/${path}`
@@ -1792,6 +1886,7 @@ Pair with `expo-image` (already in the ecosystem) for disk caching and progressi
 ### 23.5 Store-Level Scaling
 
 All stores are global singletons holding entire datasets in memory. As data grows:
+
 - `inventoryStore` holds all 2000+ items in `items[]`.
 - `invoiceStore` holds paginated but never evicts old pages.
 - No LRU or windowed caching.
@@ -1820,41 +1915,44 @@ try {
 ```typescript
 // src/utils/retry.ts
 export async function withRetry<T>(
-  fn: () => Promise<T>,
-  { maxAttempts = 3, baseDelay = 1000 } = {}
+	fn: () => Promise<T>,
+	{ maxAttempts = 3, baseDelay = 1000 } = {},
 ): Promise<T> {
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    try { return await fn(); }
-    catch (e) {
-      if (attempt === maxAttempts) throw e;
-      await new Promise(r => setTimeout(r, baseDelay * 2 ** (attempt - 1)));
-    }
-  }
-  throw new Error('Unreachable');
+	for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+		try {
+			return await fn();
+		} catch (e) {
+			if (attempt === maxAttempts) throw e;
+			await new Promise((r) => setTimeout(r, baseDelay * 2 ** (attempt - 1)));
+		}
+	}
+	throw new Error('Unreachable');
 }
 ```
 
 ### 24.2 No Offline Capability
 
 The app has zero offline support. If the network drops mid-use:
+
 - Unsaved form data is lost.
 - List screens show stale data with no indicator.
 - The `fetchExpenses` call in `useEffect` silently fails, leaving an empty screen.
 
 **Fix (incremental)**:
+
 1. **Optimistic local state** — write to the store first, sync to Supabase in background, reconcile on response.
 2. **Network status hook** — show a banner when offline (using `@react-native-community/netinfo`).
 3. **Pending operation queue** — persist failed writes to AsyncStorage, retry on reconnect.
 
 ### 24.3 `Promise.all` Launch Waterfall
 
-`app/(app)/_layout.tsx` fires 7 API calls in `Promise.all`. If *any one* fails, the entire `catch` block triggers, but the error is only logged — the user sees a partially loaded app with no indication of what failed:
+`app/(app)/_layout.tsx` fires 7 API calls in `Promise.all`. If _any one_ fails, the entire `catch` block triggers, but the error is only logged — the user sees a partially loaded app with no indication of what failed:
 
 ```typescript
 await Promise.all([
-  useInventoryStore.getState().fetchItems(true),
-  useInvoiceStore.getState().fetchInvoices(1),
-  // ... 5 more
+	useInventoryStore.getState().fetchItems(true),
+	useInvoiceStore.getState().fetchInvoices(1),
+	// ... 5 more
 ]);
 ```
 
@@ -1885,7 +1983,7 @@ clearTimeout(timeout);
 
 ### 24.5 Invoice Number Sequence Gap Risk
 
-`generate_invoice_number()` increments `invoice_sequence` with `FOR UPDATE` lock but commits independently from invoice insertion. If the invoice insert fails *after* sequence increment, the sequence has a gap — which may violate GST audit trail requirements (see §28).
+`generate_invoice_number()` increments `invoice_sequence` with `FOR UPDATE` lock but commits independently from invoice insertion. If the invoice insert fails _after_ sequence increment, the sequence has a gap — which may violate GST audit trail requirements (see §28).
 
 **Fix**: Move `generate_invoice_number()` inside the transactional invoice creation RPC so both increment and insert share the same transaction boundary.
 
@@ -1904,10 +2002,18 @@ The entire codebase relies on `console.log`, `console.error`, and `console.warn`
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 const logger = {
-  debug: (msg: string, meta?: Record<string, unknown>) => { /* ... */ },
-  info:  (msg: string, meta?: Record<string, unknown>) => { /* ... */ },
-  warn:  (msg: string, meta?: Record<string, unknown>) => { /* ... */ },
-  error: (msg: string, error?: Error, meta?: Record<string, unknown>) => { /* ... */ },
+	debug: (msg: string, meta?: Record<string, unknown>) => {
+		/* ... */
+	},
+	info: (msg: string, meta?: Record<string, unknown>) => {
+		/* ... */
+	},
+	warn: (msg: string, meta?: Record<string, unknown>) => {
+		/* ... */
+	},
+	error: (msg: string, error?: Error, meta?: Record<string, unknown>) => {
+		/* ... */
+	},
 };
 
 export default logger;
@@ -1925,13 +2031,13 @@ There is no `ErrorBoundary` component wrapping the app or individual screens. An
 import { ErrorBoundary } from 'react-error-boundary';
 
 function FallbackScreen({ error, resetErrorBoundary }) {
-  return (
-    <Screen>
-      <ThemedText variant="h2">Something went wrong</ThemedText>
-      <ThemedText>{error.message}</ThemedText>
-      <Button title="Try Again" onPress={resetErrorBoundary} />
-    </Screen>
-  );
+	return (
+		<Screen>
+			<ThemedText variant="h2">Something went wrong</ThemedText>
+			<ThemedText>{error.message}</ThemedText>
+			<Button title="Try Again" onPress={resetErrorBoundary} />
+		</Screen>
+	);
 }
 ```
 
@@ -1940,6 +2046,7 @@ function FallbackScreen({ error, resetErrorBoundary }) {
 There are no performance traces, no screen render timing, and no API latency tracking. With Supabase as the sole backend, API latency from Indian mobile networks to a potentially US/Singapore Supabase region can be 200-500ms — and there's no visibility into it.
 
 **Fix**: Instrument with `expo-updates` analytics or a lightweight custom solution:
+
 ```typescript
 // Wrap all service calls
 const start = performance.now();
@@ -1957,8 +2064,8 @@ logger.info('api_call', { table: 'invoices', duration_ms: performance.now() - st
 // Client
 const requestId = crypto.randomUUID();
 const { data } = await supabase.functions.invoke('parse-order-pdf', {
-  body: { base64Data, mimeType },
-  headers: { 'x-request-id': requestId },
+	body: { base64Data, mimeType },
+	headers: { 'x-request-id': requestId },
 });
 // Edge Function
 const requestId = req.headers.get('x-request-id') ?? 'unknown';
@@ -2008,7 +2115,7 @@ Previously noted in §16 — `buildTheme(isDark)` runs every render. The fix (`u
 
 ### 26.3 Unnecessary Re-renders from Store Subscriptions
 
-Zustand stores expose entire state objects. Components subscribing with `useFinanceStore()` re-render on *any* state change, even for unrelated fields:
+Zustand stores expose entire state objects. Components subscribing with `useFinanceStore()` re-render on _any_ state change, even for unrelated fields:
 
 ```typescript
 // This re-renders when expenses, purchases, summary, OR loading changes
@@ -2018,18 +2125,20 @@ const { expenses, loading } = useFinanceStore();
 **Fix**: Use Zustand selectors to subscribe to minimal slices:
 
 ```typescript
-const expenses = useFinanceStore(s => s.expenses);
-const loading = useFinanceStore(s => s.loading);
+const expenses = useFinanceStore((s) => s.expenses);
+const loading = useFinanceStore((s) => s.loading);
 ```
 
 For computed values, use `useShallow` from `zustand/shallow`:
 
 ```typescript
 import { useShallow } from 'zustand/react/shallow';
-const { expenses, loading } = useFinanceStore(useShallow(s => ({
-  expenses: s.expenses,
-  loading: s.loading,
-})));
+const { expenses, loading } = useFinanceStore(
+	useShallow((s) => ({
+		expenses: s.expenses,
+		loading: s.loading,
+	})),
+);
 ```
 
 ### 26.4 Bundle Size — Unused Dependencies
@@ -2048,12 +2157,12 @@ const { expenses, loading } = useFinanceStore(useShallow(s => ({
 
 Several frequently-queried columns lack indexes:
 
-| Table | Column | Query Pattern | Impact |
-|-------|--------|---------------|--------|
-| `payments` | `direction` | `WHERE direction = 'received'` in ledger view | Full scan on payments |
-| `expenses` | `category` | Group-by in finance reports | Full scan on expenses |
-| `purchases` | `supplier_id` | Supplier ledger lookups | Full scan on purchases |
-| `invoice_line_items` | `item_id` | Stock history/COGS calculation | Full scan on line items |
+| Table                | Column        | Query Pattern                                 | Impact                  |
+| -------------------- | ------------- | --------------------------------------------- | ----------------------- |
+| `payments`           | `direction`   | `WHERE direction = 'received'` in ledger view | Full scan on payments   |
+| `expenses`           | `category`    | Group-by in finance reports                   | Full scan on expenses   |
+| `purchases`          | `supplier_id` | Supplier ledger lookups                       | Full scan on purchases  |
+| `invoice_line_items` | `item_id`     | Stock history/COGS calculation                | Full scan on line items |
 
 **Fix**: Add a new migration:
 
@@ -2076,7 +2185,8 @@ The `parse-order-pdf` Edge Function accepts a client-provided `aiKey` parameter:
 const geminiKey = aiKey || Deno.env.get('GEMINI_API_KEY');
 ```
 
-This means *any* authenticated user can inject an arbitrary API key, which:
+This means _any_ authenticated user can inject an arbitrary API key, which:
+
 - Could be a stolen key used to launder API calls through the app's infrastructure.
 - Bypasses server-side key rotation — if the server key is rotated, clients with hardcoded keys continue working.
 - Leaks the key to the Edge Function's logs if error responses include the request payload.
@@ -2087,7 +2197,7 @@ This means *any* authenticated user can inject an arbitrary API key, which:
 
 ```typescript
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+	'Access-Control-Allow-Origin': '*',
 };
 ```
 
@@ -2100,19 +2210,22 @@ This allows any website to call the Edge Function if it obtains a valid auth tok
 ### 27.3 No Rate Limiting
 
 There is no rate limiting at any layer:
+
 - **Auth**: No brute-force protection on `login()`. Supabase has built-in rate limits, but they're generous (30 requests/minute on free tier).
 - **Edge Functions**: No per-user call limit on `parse-order-pdf`. A malicious user could burn through the Gemini API quota.
 - **Service layer**: No throttling on write operations.
 
 **Fix**:
+
 1. Enable Supabase's built-in auth rate limiting (configure in dashboard).
 2. Add a `rate_limits` table or use Supabase Edge Function middleware:
+
 ```typescript
 const { count } = await supabaseClient
-  .from('api_usage')
-  .select('*', { count: 'exact' })
-  .eq('user_id', user.id)
-  .gte('created_at', new Date(Date.now() - 3600000).toISOString());
+	.from('api_usage')
+	.select('*', { count: 'exact' })
+	.eq('user_id', user.id)
+	.gte('created_at', new Date(Date.now() - 3600000).toISOString());
 
 if (count > 10) return errorResponse('Rate limit exceeded', 429);
 ```
@@ -2120,6 +2233,7 @@ if (count > 10) return errorResponse('Rate limit exceeded', 429);
 ### 27.4 No Input Sanitization on Edge Function
 
 The `parse-order-pdf` function passes `base64Data` directly to the Gemini API without validating:
+
 - Maximum size (memory exhaustion).
 - Actual MIME type vs declared `mimeType` (type confusion).
 - Whether the base64 is valid (malformed payload → cryptic Gemini error).
@@ -2129,13 +2243,14 @@ The `parse-order-pdf` function passes `base64Data` directly to the Gemini API wi
 ```typescript
 if (base64Data.length > 10_000_000) return errorResponse('File too large (max 7.5MB)', 413);
 if (!['application/pdf', 'image/png', 'image/jpeg'].includes(mimeType)) {
-  return errorResponse('Unsupported file type', 415);
+	return errorResponse('Unsupported file type', 415);
 }
 ```
 
 ### 27.5 Session Management Gaps
 
 The Supabase client is configured with `autoRefreshToken: true` and `persistSession: true`, which is correct. However:
+
 - No session expiry UI — if the token expires and refresh fails, API calls silently fail.
 - No biometric re-authentication before sensitive operations (despite `expo-local-authentication` being listed in `app.json` plugins).
 - No forced logout on auth state change (e.g., password reset from another device).
@@ -2144,19 +2259,19 @@ The Supabase client is configured with `autoRefreshToken: true` and `persistSess
 
 ```typescript
 supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'TOKEN_REFRESHED' && !session) {
-    // Force logout
-    useAuthStore.getState().logout();
-  }
-  if (event === 'SIGNED_OUT') {
-    router.replace('/(auth)/login');
-  }
+	if (event === 'TOKEN_REFRESHED' && !session) {
+		// Force logout
+		useAuthStore.getState().logout();
+	}
+	if (event === 'SIGNED_OUT') {
+		router.replace('/(auth)/login');
+	}
 });
 ```
 
 ### 27.6 Supabase Anon Key in Client Bundle
 
-`EXPO_PUBLIC_SUPABASE_ANON_KEY` is embedded in the JavaScript bundle. This is by design (anon key + RLS), but the current RLS policies are `USING (true)` — meaning the anon key provides *full read/write access to all tables* for any authenticated user, regardless of data ownership.
+`EXPO_PUBLIC_SUPABASE_ANON_KEY` is embedded in the JavaScript bundle. This is by design (anon key + RLS), but the current RLS policies are `USING (true)` — meaning the anon key provides _full read/write access to all tables_ for any authenticated user, regardless of data ownership.
 
 This is acceptable only for a single-user/single-tenant deployment. If multi-tenancy is ever planned, this is a P0 data isolation breach. See §10 for RLS fixes.
 
@@ -2168,20 +2283,20 @@ This is acceptable only for a single-user/single-tenant deployment. If multi-ten
 
 Indian GST law mandates specific fields on tax invoices. Current coverage:
 
-| Required Field | Present | Notes |
-|---------------|---------|-------|
-| Supplier name, address, GSTIN | ✅ | From `business_profile` |
-| Recipient name, address, GSTIN | ⚠️ | GSTIN optional in schema; address not always populated |
-| Invoice number (sequential, unique) | ✅ | `generate_invoice_number()` |
-| Date of issue | ✅ | `invoice_date` |
-| HSN code | ✅ | `hsn_code` per line item |
-| Description of goods | ✅ | `design_name` |
-| Quantity and unit | ⚠️ | `quantity` is INTEGER — fractional boxes not supported |
-| Taxable value | ✅ | `taxable_amount` |
-| CGST/SGST or IGST rate + amount | ✅ | Properly split |
-| Place of supply | ❌ | **Missing** — required for inter-state determination |
-| Reverse charge applicability | ❌ | **Missing** — required field (even if "No") |
-| Signature / digital signature | ❌ | Not present on generated PDFs |
+| Required Field                      | Present | Notes                                                  |
+| ----------------------------------- | ------- | ------------------------------------------------------ |
+| Supplier name, address, GSTIN       | ✅      | From `business_profile`                                |
+| Recipient name, address, GSTIN      | ⚠️      | GSTIN optional in schema; address not always populated |
+| Invoice number (sequential, unique) | ✅      | `generate_invoice_number()`                            |
+| Date of issue                       | ✅      | `invoice_date`                                         |
+| HSN code                            | ✅      | `hsn_code` per line item                               |
+| Description of goods                | ✅      | `design_name`                                          |
+| Quantity and unit                   | ⚠️      | `quantity` is INTEGER — fractional boxes not supported |
+| Taxable value                       | ✅      | `taxable_amount`                                       |
+| CGST/SGST or IGST rate + amount     | ✅      | Properly split                                         |
+| Place of supply                     | ❌      | **Missing** — required for inter-state determination   |
+| Reverse charge applicability        | ❌      | **Missing** — required field (even if "No")            |
+| Signature / digital signature       | ❌      | Not present on generated PDFs                          |
 
 **Fix**: Add `place_of_supply` (state code) to the `invoices` table. Add a "Reverse Charge: No" line to the PDF template. Consider digital signature integration for e-invoice compliance.
 
@@ -2207,6 +2322,7 @@ END IF;
 ### 28.4 Audit Trail Gaps
 
 There is no audit trail for:
+
 - Invoice edits or deletions (no soft delete).
 - Payment modifications.
 - Price changes on inventory items.
@@ -2232,6 +2348,7 @@ CREATE TABLE audit_log (
 ### 28.5 Data Retention & Export
 
 No mechanism exists for:
+
 - Exporting data in GSTR-1/GSTR-3B format for GST filing.
 - Bulk CSV/Excel export for accountants.
 - Data backup/export for business continuity.
@@ -2245,6 +2362,7 @@ These are not just compliance nice-to-haves — they're operational necessities 
 ### 29.1 Supabase Vendor Lock-in
 
 The codebase is tightly coupled to Supabase at every layer:
+
 - Services import `supabase` directly and call `.from()`, `.rpc()`, `.functions.invoke()`.
 - Auth uses `supabase.auth.signInWithPassword()`.
 - Storage uses `supabase.storage.from()`.
@@ -2268,13 +2386,13 @@ export class SupabaseAdapter implements DatabaseAdapter { ... }
 
 The app targets iOS and Android via Expo. Web is listed in `app.json` (`"bundler": "metro"`) but is not actively tested. Platform-specific considerations:
 
-| Feature | iOS | Android | Web |
-|---------|-----|---------|-----|
-| `expo-print` (PDF gen) | ✅ | ✅ | ❌ (no native print) |
-| `expo-sharing` | ✅ | ✅ | ❌ (Web Share API needed) |
-| `expo-camera` | ✅ | ✅ | ⚠️ (works but UX differs) |
-| `expo-local-authentication` | ✅ (Face ID) | ✅ (Fingerprint) | ❌ |
-| `AsyncStorage` | ✅ | ✅ | ✅ (localStorage) |
+| Feature                     | iOS          | Android          | Web                       |
+| --------------------------- | ------------ | ---------------- | ------------------------- |
+| `expo-print` (PDF gen)      | ✅           | ✅               | ❌ (no native print)      |
+| `expo-sharing`              | ✅           | ✅               | ❌ (Web Share API needed) |
+| `expo-camera`               | ✅           | ✅               | ⚠️ (works but UX differs) |
+| `expo-local-authentication` | ✅ (Face ID) | ✅ (Fingerprint) | ❌                        |
+| `AsyncStorage`              | ✅           | ✅               | ✅ (localStorage)         |
 
 **Fix**: Add `Platform.OS` guards for features that don't work on all platforms, or exclude web from the build config.
 
@@ -2346,6 +2464,7 @@ export const usePurchaseReturnStore = createPaginatedStore('purchase_returns', p
 ### 30.2 Adding a New Report
 
 Adding a new financial report currently requires:
+
 1. A new PostgreSQL function (migration).
 2. A new service method to call `.rpc()`.
 3. A new store action + state.
@@ -2356,10 +2475,12 @@ The report query logic is split between PostgreSQL (good for aggregation) and Ty
 ```typescript
 // src/services/reportService.ts
 export const reportService = {
-  getDashboardStats: () => supabase.rpc('get_dashboard_stats'),
-  getProfitLoss: (start: string, end: string) => supabase.rpc('get_profit_loss', { p_start: start, p_end: end }),
-  getAgingReport: (customerId?: string) => supabase.rpc('get_aging_report', { p_customer_id: customerId }),
-  // New reports are one-liners here
+	getDashboardStats: () => supabase.rpc('get_dashboard_stats'),
+	getProfitLoss: (start: string, end: string) =>
+		supabase.rpc('get_profit_loss', { p_start: start, p_end: end }),
+	getAgingReport: (customerId?: string) =>
+		supabase.rpc('get_aging_report', { p_customer_id: customerId }),
+	// New reports are one-liners here
 };
 ```
 
@@ -2377,9 +2498,11 @@ ALTER TABLE inventory_items ADD COLUMN metadata JSONB DEFAULT '{}';
 On the frontend, render metadata fields dynamically:
 
 ```tsx
-{Object.entries(item.metadata ?? {}).map(([key, value]) => (
-  <FormField key={key} label={key} value={String(value)} />
-))}
+{
+	Object.entries(item.metadata ?? {}).map(([key, value]) => (
+		<FormField key={key} label={key} value={String(value)} />
+	));
+}
 ```
 
 ### 30.4 Feature Flags
@@ -2389,15 +2512,15 @@ There is no feature flag system. Every feature is always on. For a business app 
 ```typescript
 // src/config/featureFlags.ts
 export const Features = {
-  PURCHASE_RETURNS: false,
-  AI_ORDER_PARSING: true,
-  MULTI_WAREHOUSE: false,
-  GST_E_INVOICE: false,
+	PURCHASE_RETURNS: false,
+	AI_ORDER_PARSING: true,
+	MULTI_WAREHOUSE: false,
+	GST_E_INVOICE: false,
 } as const;
 
 // Usage
 if (Features.PURCHASE_RETURNS) {
-  // Show purchase returns tab
+	// Show purchase returns tab
 }
 ```
 
@@ -2406,6 +2529,7 @@ Start with compile-time flags; migrate to remote config (Supabase `app_config` t
 ### 30.5 Notification & Webhook System
 
 No mechanism exists for:
+
 - Low stock alerts (despite tracking `low_stock_threshold`).
 - Payment due reminders.
 - Order status change notifications.
@@ -2444,90 +2568,90 @@ $$ LANGUAGE plpgsql;
 
 ### Phase 1: Stop the Bleeding (Week 1-2)
 
-| # | Task | Files | Effort |
-|---|------|-------|--------|
-| 1.1 | **Transactional invoice creation RPC** (include `generate_invoice_number` in same txn — §24.5) | New migration, `invoiceService.ts` | 1 day |
-| 1.2 | **Transactional payment recording RPC** | New migration, `paymentService.ts` | 0.5 day |
-| 1.3 | **Remove all `any` types** | 14+ locations across services/stores | 1 day |
-| 1.4 | **Move duplicate types from `financeService.ts` to `src/types/`** | 2 files | 0.5 day |
-| 1.5 | **Add `.env` to `.gitignore`**, create `.env.example` | 2 files | 10 min |
-| 1.6 | **Fix `get_profit_loss()` redundant subqueries** | 1 migration | 0.5 day |
-| 1.7 | **Fix `lowStockOnly` filter** — use `low_stock_items` view | `inventoryService.ts` | 0.5 day |
-| 1.8 | **Fix `convertNumberToWords`** — import from `currency.ts` | `pdfService.ts` | 10 min |
-| 1.9 | **Fix dashboard stats** — use existing `get_dashboard_stats()` RPC | `(tabs)/index.tsx` | 0.5 day |
-| 1.10 | **Memoize theme** — `useMemo(() => buildTheme(isDark), [isDark])` | `ThemeProvider.tsx` | 5 min |
-| 1.11 | **Fix GST rate hardcoded to 18** — read from `selectedItem.gst_rate` | `invoices/create.tsx` | 15 min |
-| 1.12 | **Fix missing 'SATIN' category** — derive from `constants/categories.ts` | `inventory.tsx` | 10 min |
-| 1.13 | **Fix missing 'credit' payment mode** — derive from `constants/paymentModes.ts` | `PaymentModal.tsx`, `invoices/create.tsx` | 15 min |
-| 1.14 | **Remove client-supplied `aiKey`** from Edge Function (§27.1) | `parse-order-pdf/index.ts` | 15 min |
-| 1.15 | **Add `ErrorBoundary`** at app root and per-tab (§25.2) | `_layout.tsx`, new component | 0.5 day |
-| 1.16 | **Replace `Promise.all` with `Promise.allSettled`** in app prefetch (§24.3) | `(app)/_layout.tsx` | 30 min |
-| 1.17 | **Add input validation on Edge Function** — size, MIME type (§27.4) | `parse-order-pdf/index.ts` | 30 min |
+| #    | Task                                                                                           | Files                                     | Effort  |
+| ---- | ---------------------------------------------------------------------------------------------- | ----------------------------------------- | ------- |
+| 1.1  | **Transactional invoice creation RPC** (include `generate_invoice_number` in same txn — §24.5) | New migration, `invoiceService.ts`        | 1 day   |
+| 1.2  | **Transactional payment recording RPC**                                                        | New migration, `paymentService.ts`        | 0.5 day |
+| 1.3  | **Remove all `any` types**                                                                     | 14+ locations across services/stores      | 1 day   |
+| 1.4  | **Move duplicate types from `financeService.ts` to `src/types/`**                              | 2 files                                   | 0.5 day |
+| 1.5  | **Add `.env` to `.gitignore`**, create `.env.example`                                          | 2 files                                   | 10 min  |
+| 1.6  | **Fix `get_profit_loss()` redundant subqueries**                                               | 1 migration                               | 0.5 day |
+| 1.7  | **Fix `lowStockOnly` filter** — use `low_stock_items` view                                     | `inventoryService.ts`                     | 0.5 day |
+| 1.8  | **Fix `convertNumberToWords`** — import from `currency.ts`                                     | `pdfService.ts`                           | 10 min  |
+| 1.9  | **Fix dashboard stats** — use existing `get_dashboard_stats()` RPC                             | `(tabs)/index.tsx`                        | 0.5 day |
+| 1.10 | **Memoize theme** — `useMemo(() => buildTheme(isDark), [isDark])`                              | `ThemeProvider.tsx`                       | 5 min   |
+| 1.11 | **Fix GST rate hardcoded to 18** — read from `selectedItem.gst_rate`                           | `invoices/create.tsx`                     | 15 min  |
+| 1.12 | **Fix missing 'SATIN' category** — derive from `constants/categories.ts`                       | `inventory.tsx`                           | 10 min  |
+| 1.13 | **Fix missing 'credit' payment mode** — derive from `constants/paymentModes.ts`                | `PaymentModal.tsx`, `invoices/create.tsx` | 15 min  |
+| 1.14 | **Remove client-supplied `aiKey`** from Edge Function (§27.1)                                  | `parse-order-pdf/index.ts`                | 15 min  |
+| 1.15 | **Add `ErrorBoundary`** at app root and per-tab (§25.2)                                        | `_layout.tsx`, new component              | 0.5 day |
+| 1.16 | **Replace `Promise.all` with `Promise.allSettled`** in app prefetch (§24.3)                    | `(app)/_layout.tsx`                       | 30 min  |
+| 1.17 | **Add input validation on Edge Function** — size, MIME type (§27.4)                            | `parse-order-pdf/index.ts`                | 30 min  |
 
 ### Phase 2: Foundation for Scale (Week 3-4)
 
-| # | Task | Files | Effort |
-|---|------|-------|--------|
-| 2.1 | **Extract Repository pattern** — `baseRepository.ts` + domain repos | ~8 new files | 2 days |
-| 2.2 | **Refactor services to use repos** — inject dependencies | ~7 service files | 2 days |
-| 2.3 | **Create Zod schemas** for all forms/inputs | ~6 new schema files | 1 day |
-| 2.4 | **Wire react-hook-form + zod** in all form screens | ~8 screen files | 2 days |
-| 2.5 | **Extract `createPaginatedStore` factory** | 1 new file, refactor 4 stores | 1 day |
-| 2.6 | **Add event bus** for cross-store communication | 1 new file, update 3 stores | 1 day |
-| 2.7 | **Extract common hooks** — `useDebounce`, `useThemeTokens`, `usePagination` | 3 new files | 0.5 day |
-| 2.8 | **Decompose `invoices/create.tsx`** into feature module | 8+ new files, delete 1 | 2 days |
-| 2.9 | **Add `escapeHtml` utility** + apply to PDF generation | 1 new file, update `pdfService.ts` | 0.5 day |
-| 2.10 | **Add `withOpacity` color utility** — replace string concatenation | 1 new file, update 8+ files | 0.5 day |
-| 2.11 | **Replace `ScrollView` + `.map()` with `FlashList`** on all list screens (§26.1) | ~6 screen files | 1 day |
-| 2.12 | **Add Zustand selectors** — replace bare `useXStore()` with slice selectors (§26.3) | ~10 screen files | 1 day |
-| 2.13 | **Add `withRetry` wrapper** for idempotent service calls (§24.1) | 1 new file, update services | 0.5 day |
-| 2.14 | **Add structured logger** (`src/utils/logger.ts`) — replace all `console.*` (§25.1) | 1 new file, update ~20 files | 1 day |
+| #    | Task                                                                                | Files                              | Effort  |
+| ---- | ----------------------------------------------------------------------------------- | ---------------------------------- | ------- |
+| 2.1  | **Extract Repository pattern** — `baseRepository.ts` + domain repos                 | ~8 new files                       | 2 days  |
+| 2.2  | **Refactor services to use repos** — inject dependencies                            | ~7 service files                   | 2 days  |
+| 2.3  | **Create Zod schemas** for all forms/inputs                                         | ~6 new schema files                | 1 day   |
+| 2.4  | **Wire react-hook-form + zod** in all form screens                                  | ~8 screen files                    | 2 days  |
+| 2.5  | **Extract `createPaginatedStore` factory**                                          | 1 new file, refactor 4 stores      | 1 day   |
+| 2.6  | **Add event bus** for cross-store communication                                     | 1 new file, update 3 stores        | 1 day   |
+| 2.7  | **Extract common hooks** — `useDebounce`, `useThemeTokens`, `usePagination`         | 3 new files                        | 0.5 day |
+| 2.8  | **Decompose `invoices/create.tsx`** into feature module                             | 8+ new files, delete 1             | 2 days  |
+| 2.9  | **Add `escapeHtml` utility** + apply to PDF generation                              | 1 new file, update `pdfService.ts` | 0.5 day |
+| 2.10 | **Add `withOpacity` color utility** — replace string concatenation                  | 1 new file, update 8+ files        | 0.5 day |
+| 2.11 | **Replace `ScrollView` + `.map()` with `FlashList`** on all list screens (§26.1)    | ~6 screen files                    | 1 day   |
+| 2.12 | **Add Zustand selectors** — replace bare `useXStore()` with slice selectors (§26.3) | ~10 screen files                   | 1 day   |
+| 2.13 | **Add `withRetry` wrapper** for idempotent service calls (§24.1)                    | 1 new file, update services        | 0.5 day |
+| 2.14 | **Add structured logger** (`src/utils/logger.ts`) — replace all `console.*` (§25.1) | 1 new file, update ~20 files       | 1 day   |
 
 ### Phase 3: Testing & DX (Week 5-6)
 
-| # | Task | Files | Effort |
-|---|------|-------|--------|
-| 3.1 | **Rewrite service tests** with injected mock repos | ~7 test files | 2 days |
-| 3.2 | **Add unit tests** for `currency.ts`, `dateUtils.ts`, `itemNameParser.ts` | 3 new test files | 1 day |
-| 3.3 | **Add store tests** with mock services | ~6 test files | 2 days |
-| 3.4 | **Add molecule/organism component tests** | 10 new test files | 2 days |
-| 3.5 | **Configure ESLint + Prettier** (catches dead imports, unused styles) | 3 config files | 0.5 day |
-| 3.6 | **Configure Husky + lint-staged** | 2 config files | 0.5 day |
-| 3.7 | **Add GitHub Actions CI** | 1 workflow file | 0.5 day |
-| 3.8 | **Add pgTAP tests** for DB functions (`get_profit_loss`, `perform_stock_operation`, `generate_invoice_number`) | 3 test files | 1 day |
+| #   | Task                                                                                                           | Files             | Effort  |
+| --- | -------------------------------------------------------------------------------------------------------------- | ----------------- | ------- |
+| 3.1 | **Rewrite service tests** with injected mock repos                                                             | ~7 test files     | 2 days  |
+| 3.2 | **Add unit tests** for `currency.ts`, `dateUtils.ts`, `itemNameParser.ts`                                      | 3 new test files  | 1 day   |
+| 3.3 | **Add store tests** with mock services                                                                         | ~6 test files     | 2 days  |
+| 3.4 | **Add molecule/organism component tests**                                                                      | 10 new test files | 2 days  |
+| 3.5 | **Configure ESLint + Prettier** (catches dead imports, unused styles)                                          | 3 config files    | 0.5 day |
+| 3.6 | **Configure Husky + lint-staged**                                                                              | 2 config files    | 0.5 day |
+| 3.7 | **Add GitHub Actions CI**                                                                                      | 1 workflow file   | 0.5 day |
+| 3.8 | **Add pgTAP tests** for DB functions (`get_profit_loss`, `perform_stock_operation`, `generate_invoice_number`) | 3 test files      | 1 day   |
 
 ### Phase 4: Polish & Patterns (Week 7-8)
 
-| # | Task | Files | Effort |
-|---|------|-------|--------|
-| 4.1 | **Create `AppError` hierarchy** | 1 new file, update all catch blocks | 1 day |
-| 4.2 | **Create `<QueryBoundary>` component** | 1 new file, update screens | 1 day |
-| 4.3 | **Add accessibility** — roles, labels, states to all interactive components | ~12 files | 1 day |
-| 4.4 | **Add missing DB indexes** — payments, expenses, purchases, line items (§26.6) | 1 migration | 0.5 day |
-| 4.5 | **Audit and fix i18n hardcoded strings** | ~10 files | 0.5 day |
-| 4.6 | **Add `RefreshControl` to all list screens** | 4 screens | 0.5 day |
-| 4.7 | **Add `AppState` foreground refresh logic** | `_layout.tsx` | 0.5 day |
-| 4.8 | **Extract layout utilities from theme context** to static `StyleSheet` | `theme/layout.ts`, update ~20 screens | 1 day |
-| 4.9 | **Clean up dead StyleSheet keys** and unused imports | ~10 files | 0.5 day |
-| 4.10 | **RLS policies with `user_id`** (if multi-tenant planned) | 1 migration | 1 day |
-| 4.11 | **Add `TextInput` focus state** tracking | `TextInput.tsx` | 15 min |
+| #    | Task                                                                           | Files                                 | Effort  |
+| ---- | ------------------------------------------------------------------------------ | ------------------------------------- | ------- |
+| 4.1  | **Create `AppError` hierarchy**                                                | 1 new file, update all catch blocks   | 1 day   |
+| 4.2  | **Create `<QueryBoundary>` component**                                         | 1 new file, update screens            | 1 day   |
+| 4.3  | **Add accessibility** — roles, labels, states to all interactive components    | ~12 files                             | 1 day   |
+| 4.4  | **Add missing DB indexes** — payments, expenses, purchases, line items (§26.6) | 1 migration                           | 0.5 day |
+| 4.5  | **Audit and fix i18n hardcoded strings**                                       | ~10 files                             | 0.5 day |
+| 4.6  | **Add `RefreshControl` to all list screens**                                   | 4 screens                             | 0.5 day |
+| 4.7  | **Add `AppState` foreground refresh logic**                                    | `_layout.tsx`                         | 0.5 day |
+| 4.8  | **Extract layout utilities from theme context** to static `StyleSheet`         | `theme/layout.ts`, update ~20 screens | 1 day   |
+| 4.9  | **Clean up dead StyleSheet keys** and unused imports                           | ~10 files                             | 0.5 day |
+| 4.10 | **RLS policies with `user_id`** (if multi-tenant planned)                      | 1 migration                           | 1 day   |
+| 4.11 | **Add `TextInput` focus state** tracking                                       | `TextInput.tsx`                       | 15 min  |
 
 ### Phase 5: Production Readiness (Week 9-10)
 
-| # | Task | Files | Effort |
-|---|------|-------|--------|
-| 5.1 | **Add `audit_log` table + triggers** for GST compliance (§28.4) | New migration | 1 day |
-| 5.2 | **Add `place_of_supply` and reverse charge fields** to invoices (§28.1) | Migration, `invoiceService.ts`, PDF template | 1 day |
-| 5.3 | **Fix FY sequence reset** in `generate_invoice_number` (§28.3) | Migration | 0.5 day |
-| 5.4 | **Switch to keyset pagination** on all paginated queries (§23.1) | Services, stores | 1.5 days |
-| 5.5 | **Materialize ledger summary views** or add denormalized balances (§23.2) | Migration | 1 day |
-| 5.6 | **Add network status banner** + pending operation queue (§24.2) | 2 new files, `_layout.tsx` | 1.5 days |
-| 5.7 | **Add image transforms** for list view thumbnails (§23.3) | `TileSetCard`, image utility | 0.5 day |
-| 5.8 | **Upgrade Edge Function** to modern `Deno.serve` (§29.3) | `parse-order-pdf/index.ts` | 0.5 day |
-| 5.9 | **Add feature flags system** (§30.4) | 1 new file | 0.5 day |
-| 5.10 | **Add low stock notification triggers** (§30.5) | Migration, new component | 1 day |
-| 5.11 | **Enable `pg_stat_statements`** + slow query baseline (§25.5) | Supabase dashboard, docs | 0.5 day |
-| 5.12 | **Add performance instrumentation** on critical API paths (§25.3) | `src/utils/logger.ts`, services | 0.5 day |
+| #    | Task                                                                      | Files                                        | Effort   |
+| ---- | ------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| 5.1  | **Add `audit_log` table + triggers** for GST compliance (§28.4)           | New migration                                | 1 day    |
+| 5.2  | **Add `place_of_supply` and reverse charge fields** to invoices (§28.1)   | Migration, `invoiceService.ts`, PDF template | 1 day    |
+| 5.3  | **Fix FY sequence reset** in `generate_invoice_number` (§28.3)            | Migration                                    | 0.5 day  |
+| 5.4  | **Switch to keyset pagination** on all paginated queries (§23.1)          | Services, stores                             | 1.5 days |
+| 5.5  | **Materialize ledger summary views** or add denormalized balances (§23.2) | Migration                                    | 1 day    |
+| 5.6  | **Add network status banner** + pending operation queue (§24.2)           | 2 new files, `_layout.tsx`                   | 1.5 days |
+| 5.7  | **Add image transforms** for list view thumbnails (§23.3)                 | `TileSetCard`, image utility                 | 0.5 day  |
+| 5.8  | **Upgrade Edge Function** to modern `Deno.serve` (§29.3)                  | `parse-order-pdf/index.ts`                   | 0.5 day  |
+| 5.9  | **Add feature flags system** (§30.4)                                      | 1 new file                                   | 0.5 day  |
+| 5.10 | **Add low stock notification triggers** (§30.5)                           | Migration, new component                     | 1 day    |
+| 5.11 | **Enable `pg_stat_statements`** + slow query baseline (§25.5)             | Supabase dashboard, docs                     | 0.5 day  |
+| 5.12 | **Add performance instrumentation** on critical API paths (§25.3)         | `src/utils/logger.ts`, services              | 0.5 day  |
 
 ---
 
@@ -2644,58 +2768,58 @@ Database                    → missing indexes on payments.direction, expenses.
 
 ## Appendix B: Dependency Audit
 
-| Package | Version | Status |
-|---------|---------|--------|
-| expo | 54.0.0 | Current |
-| react | 19.1.0 | Current |
-| react-native | 0.81.5 | Current |
-| zustand | ^5.0.12 | Current |
-| zod | ^4.3.6 | **Installed, unused** — zero imports in codebase |
-| react-hook-form | ^7.72.0 | **Installed, underused** — only in `setup.tsx` |
-| @supabase/supabase-js | ^2.99.3 | Current |
-| date-fns | ^4.1.0 | Current |
-| immer | ^11.1.4 | Current |
-| expo-print / expo-sharing | Current | Used for PDF generation |
-| expo-camera | Current | Used for QR scanner |
-| expo-document-picker | Current | Used for PDF import |
-| lucide-react-native | Current | Icon system |
-| i18next / react-i18next | Current | i18n framework |
-| react-native-keyboard-controller | Current | Keyboard avoidance |
+| Package                          | Version | Status                                           |
+| -------------------------------- | ------- | ------------------------------------------------ |
+| expo                             | 54.0.0  | Current                                          |
+| react                            | 19.1.0  | Current                                          |
+| react-native                     | 0.81.5  | Current                                          |
+| zustand                          | ^5.0.12 | Current                                          |
+| zod                              | ^4.3.6  | **Installed, unused** — zero imports in codebase |
+| react-hook-form                  | ^7.72.0 | **Installed, underused** — only in `setup.tsx`   |
+| @supabase/supabase-js            | ^2.99.3 | Current                                          |
+| date-fns                         | ^4.1.0  | Current                                          |
+| immer                            | ^11.1.4 | Current                                          |
+| expo-print / expo-sharing        | Current | Used for PDF generation                          |
+| expo-camera                      | Current | Used for QR scanner                              |
+| expo-document-picker             | Current | Used for PDF import                              |
+| lucide-react-native              | Current | Icon system                                      |
+| i18next / react-i18next          | Current | i18n framework                                   |
+| react-native-keyboard-controller | Current | Keyboard avoidance                               |
 
 No outdated or vulnerable dependencies detected. `zod` and `react-hook-form` are dead weight until wired in.
 
 ## Appendix C: Component Test Coverage Matrix
 
-| Layer | Component | Has Tests | Test Quality |
-|-------|-----------|-----------|--------------|
-| **Atoms** | `Button` | ✅ | Smoke only — loading state test broken (missing testID) |
-| | `Badge` | ✅ | Smoke only — single variant tested |
-| | `Card` | ✅ | Smoke only — children render |
-| | `TextInput` | ✅ | Decent — label, placeholder, error, onChangeText |
-| | `Chip` | ❌ | — |
-| | `Divider` | ❌ | — |
-| | `ThemedText` | ❌ | — |
-| | `Screen` | ❌ | — |
-| **Molecules** | `StatCard` | ❌ | — |
-| | `SearchBar` | ❌ | — |
-| | `FormField` | ❌ | — |
-| | `ListItem` | ❌ | — |
-| | `EmptyState` | ❌ | — |
-| **Organisms** | `DashboardHeader` | ❌ | — |
-| | `QuickActionsGrid` | ❌ | — |
-| | `RecentInvoicesList` | ❌ | — |
-| | `TileSetCard` | ❌ | — |
-| | `PaymentModal` | ❌ | — |
-| **Services** | `financeService` | ✅ | Structural — tests implementation, not behavior |
-| **Stores** | `customerStore` | ✅ | Structural — tests mock interactions |
-| **Utils** | `gstCalculator` | ✅ | Good — tests actual calculations |
-| | `currency` | ❌ | — |
-| | `dateUtils` | ❌ | — |
-| | `itemNameParser` | ❌ | — |
+| Layer         | Component            | Has Tests | Test Quality                                            |
+| ------------- | -------------------- | --------- | ------------------------------------------------------- |
+| **Atoms**     | `Button`             | ✅        | Smoke only — loading state test broken (missing testID) |
+|               | `Badge`              | ✅        | Smoke only — single variant tested                      |
+|               | `Card`               | ✅        | Smoke only — children render                            |
+|               | `TextInput`          | ✅        | Decent — label, placeholder, error, onChangeText        |
+|               | `Chip`               | ❌        | —                                                       |
+|               | `Divider`            | ❌        | —                                                       |
+|               | `ThemedText`         | ❌        | —                                                       |
+|               | `Screen`             | ❌        | —                                                       |
+| **Molecules** | `StatCard`           | ❌        | —                                                       |
+|               | `SearchBar`          | ❌        | —                                                       |
+|               | `FormField`          | ❌        | —                                                       |
+|               | `ListItem`           | ❌        | —                                                       |
+|               | `EmptyState`         | ❌        | —                                                       |
+| **Organisms** | `DashboardHeader`    | ❌        | —                                                       |
+|               | `QuickActionsGrid`   | ❌        | —                                                       |
+|               | `RecentInvoicesList` | ❌        | —                                                       |
+|               | `TileSetCard`        | ❌        | —                                                       |
+|               | `PaymentModal`       | ❌        | —                                                       |
+| **Services**  | `financeService`     | ✅        | Structural — tests implementation, not behavior         |
+| **Stores**    | `customerStore`      | ✅        | Structural — tests mock interactions                    |
+| **Utils**     | `gstCalculator`      | ✅        | Good — tests actual calculations                        |
+|               | `currency`           | ❌        | —                                                       |
+|               | `dateUtils`          | ❌        | —                                                       |
+|               | `itemNameParser`     | ❌        | —                                                       |
 
 **Estimated current coverage**: ~8% of meaningful code paths.
 **Target**: 60% by end of Phase 3, 80% by end of Phase 5.
 
 ---
 
-*End of review. Happy to discuss any section in detail or pair on implementation of any phase.*
+_End of review. Happy to discuss any section in detail or pair on implementation of any phase._

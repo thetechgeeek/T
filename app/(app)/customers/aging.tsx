@@ -11,64 +11,82 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function AgingReportScreen() {
-  const { theme } = useTheme();
-  const { formatCurrency } = useLocale();
-  const { customers, fetchCustomers, loading } = useCustomerStore();
+	const { theme } = useTheme();
+	const { formatCurrency } = useLocale();
+	const { customers, fetchCustomers, loading } = useCustomerStore();
 
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
+	useEffect(() => {
+		fetchCustomers();
+	}, []);
 
-  // Simple aging logic: just group by balance for now as a placeholder for real date-based aging
-  const agingData = customers
-    .filter(c => (c.current_balance || 0) > 0)
-    .sort((a, b) => (b.current_balance || 0) - (a.current_balance || 0));
+	// Simple aging logic: just group by balance for now as a placeholder for real date-based aging
+	const agingData = customers
+		.filter((c) => (c.current_balance || 0) > 0)
+		.sort((a, b) => (b.current_balance || 0) - (a.current_balance || 0));
 
-  return (
-    <Screen scrollable contentContainerStyle={styles.scrollContent}>
-      <Stack.Screen options={{ title: 'Aging Report' }} />
-        <View style={styles.summaryCard}>
-          <Card padding="lg" variant="elevated">
-            <ThemedText variant="caption" color={theme.colors.onSurfaceVariant} style={{ marginBottom: 4 }}>Total Outstanding</ThemedText>
-            <ThemedText variant="h1" color={theme.colors.error} style={{ fontSize: 32 }}>
-              {formatCurrency(agingData.reduce((acc, curr) => acc + (curr.current_balance || 0), 0))}
-            </ThemedText>
-          </Card>
-        </View>
+	return (
+		<Screen scrollable contentContainerStyle={styles.scrollContent}>
+			<Stack.Screen options={{ title: 'Aging Report' }} />
+			<View style={styles.summaryCard}>
+				<Card padding="lg" variant="elevated">
+					<ThemedText
+						variant="caption"
+						color={theme.colors.onSurfaceVariant}
+						style={{ marginBottom: 4 }}
+					>
+						Total Outstanding
+					</ThemedText>
+					<ThemedText variant="h1" color={theme.colors.error} style={{ fontSize: 32 }}>
+						{formatCurrency(
+							agingData.reduce((acc, curr) => acc + (curr.current_balance || 0), 0),
+						)}
+					</ThemedText>
+				</Card>
+			</View>
 
-        <ThemedText variant="h3" style={{ marginBottom: 16 }}>Customer Breakup</ThemedText>
+			<ThemedText variant="h3" style={{ marginBottom: 16 }}>
+				Customer Breakup
+			</ThemedText>
 
-        {agingData.length === 0 ? (
-          <EmptyState title="No outstanding balances" />
-        ) : (
-          agingData.map((c) => (
-            <Card key={c.id} style={styles.customerCard} padding="md">
-              <View style={styles.row}>
-                <View style={{ flex: 1 }}>
-                  <ThemedText weight="semibold" style={{ fontSize: 16 }}>{c.name}</ThemedText>
-                  <ThemedText variant="caption" color={theme.colors.onSurfaceVariant} style={{ marginTop: 2 }}>{c.type.toUpperCase()}</ThemedText>
-                </View>
-                <View style={{ alignItems: 'flex-end' }}>
-                  <ThemedText weight="bold" color={theme.colors.error} style={{ fontSize: 16 }}>
-                    {formatCurrency(c.current_balance || 0)}
-                  </ThemedText>
-                  <Badge 
-                    label="Overdue" 
-                    variant="error" 
-                    style={{ marginTop: 4 }}
-                  />
-                </View>
-              </View>
-            </Card>
-          ))
-        )}
-    </Screen>
-  );
+			{agingData.length === 0 ? (
+				<EmptyState title="No outstanding balances" />
+			) : (
+				agingData.map((c) => (
+					<Card key={c.id} style={styles.customerCard} padding="md">
+						<View style={styles.row}>
+							<View style={{ flex: 1 }}>
+								<ThemedText weight="semibold" style={{ fontSize: 16 }}>
+									{c.name}
+								</ThemedText>
+								<ThemedText
+									variant="caption"
+									color={theme.colors.onSurfaceVariant}
+									style={{ marginTop: 2 }}
+								>
+									{c.type.toUpperCase()}
+								</ThemedText>
+							</View>
+							<View style={{ alignItems: 'flex-end' }}>
+								<ThemedText
+									weight="bold"
+									color={theme.colors.error}
+									style={{ fontSize: 16 }}
+								>
+									{formatCurrency(c.current_balance || 0)}
+								</ThemedText>
+								<Badge label="Overdue" variant="error" style={{ marginTop: 4 }} />
+							</View>
+						</View>
+					</Card>
+				))
+			)}
+		</Screen>
+	);
 }
 
 const styles = StyleSheet.create({
-  scrollContent: { padding: 16 },
-  summaryCard: { marginBottom: 24 },
-  customerCard: { marginBottom: 12 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+	scrollContent: { padding: 16 },
+	summaryCard: { marginBottom: 24 },
+	customerCard: { marginBottom: 12 },
+	row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
 });

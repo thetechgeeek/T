@@ -3,27 +3,27 @@
 export type UUID = string;
 
 export interface Timestamps {
-  created_at: string;
-  updated_at: string;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface PaginationState {
-  page: number;
-  pageSize: number;
-  hasMore: boolean;
-  total?: number;
+	page: number;
+	pageSize: number;
+	hasMore: boolean;
+	total?: number;
 }
 
 export interface ApiError {
-  message: string;
-  code?: string;
-  details?: string;
+	message: string;
+	code?: string;
+	details?: string;
 }
 
 export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
 
 export interface QueryFilters {
-  search?: string;
-  limit?: number;
-  offset?: number;
+	search?: string;
+	limit?: number;
+	offset?: number;
 }
