@@ -1,8 +1,9 @@
 import React from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, RefreshControl } from 'react-native';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
@@ -24,15 +25,16 @@ import {
 } from 'lucide-react-native';
 
 export default function DashboardScreen() {
-	const { theme } = useTheme();
+	const { c, s } = useThemeTokens();
 	const { t, formatCurrency } = useLocale();
 	const [refreshing, setRefreshing] = React.useState(false);
 
-	const { invoices, fetchInvoices } = useInvoiceStore();
-	const { stats, fetchStats } = useDashboardStore();
-
-	const c = theme.colors;
-	const s = theme.spacing;
+	const { invoices, fetchInvoices } = useInvoiceStore(
+		useShallow((s) => ({ invoices: s.invoices, fetchInvoices: s.fetchInvoices })),
+	);
+	const { stats, fetchStats } = useDashboardStore(
+		useShallow((s) => ({ stats: s.stats, fetchStats: s.fetchStats })),
+	);
 
 	const quickActions = [
 		{

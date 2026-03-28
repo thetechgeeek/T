@@ -65,7 +65,7 @@ describe('numberToIndianWords', () => {
 	});
 
 	it('converts one lakh', () => {
-		expect(numberToIndianWords(100000)).toBe('One Lakh  Rupees Only');
+		expect(numberToIndianWords(100000)).toBe('One Lakh Rupees Only');
 	});
 
 	it('includes paise', () => {

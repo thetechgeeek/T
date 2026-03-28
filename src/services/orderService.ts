@@ -41,7 +41,7 @@ export const orderService = {
 		return data;
 	},
 
-	async importOrder(partyName: string, items: ParsedOrderItem[], rawLlmResponse: any) {
+	async importOrder(partyName: string, items: ParsedOrderItem[], rawLlmResponse: unknown) {
 		const totalQty = items.reduce((sum, item) => sum + (item.box_count || 0), 0);
 
 		// 1. Create order record

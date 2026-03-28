@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import {
 	View,
 	StyleSheet,
@@ -9,7 +10,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Plus, ChevronRight, FileText } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { Button } from '@/src/components/atoms/Button';
@@ -17,15 +18,13 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function OrdersListScreen() {
-	const { theme } = useTheme();
+	const { c, s, r } = useThemeTokens();
 	const { formatDateShort } = useLocale();
 	const router = useRouter();
 
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
-
-	const { orders, loading, fetchOrders } = useOrderStore();
+	const { orders, loading, fetchOrders } = useOrderStore(
+		useShallow((s) => ({ orders: s.orders, loading: s.loading, fetchOrders: s.fetchOrders })),
+	);
 	const [refreshing, setRefreshing] = useState(false);
 
 	React.useEffect(() => {

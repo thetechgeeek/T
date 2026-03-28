@@ -38,7 +38,7 @@ jest.mock('react-native', () => {
 	};
 	const TextInput = (props: any) => React.createElement('TextInput', props);
 	const ActivityIndicator = (props: any) =>
-		React.createElement('ActivityIndicator', { ...props, testID: 'ActivityIndicator' });
+		React.createElement('ActivityIndicator', { testID: 'ActivityIndicator', ...props });
 	const Platform = { OS: 'ios', select: jest.fn((o) => o.ios || o.default), Version: 1 };
 	const StyleSheet = { create: (s: any) => s, flatten: (s: any) => s, hairlineWidth: 1 };
 	const Appearance = {

@@ -4,12 +4,13 @@ import { Image } from 'expo-image';
 import { Package, AlertCircle, TrendingUp } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
+import type { ViewStyle } from 'react-native';
 import type { TileSetGroup, InventoryItem } from '@/src/types/inventory';
 
 interface TileSetCardProps {
 	group: TileSetGroup;
 	onPressItem: (item: InventoryItem) => void;
-	style?: any;
+	style?: ViewStyle;
 }
 
 export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {

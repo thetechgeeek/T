@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
 import { useCustomerStore } from '@/src/stores/customerStore';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
@@ -11,9 +12,15 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function AgingReportScreen() {
-	const { theme } = useTheme();
+	const { theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
-	const { customers, fetchCustomers, loading } = useCustomerStore();
+	const { customers, fetchCustomers, loading } = useCustomerStore(
+		useShallow((s) => ({
+			customers: s.customers,
+			fetchCustomers: s.fetchCustomers,
+			loading: s.loading,
+		})),
+	);
 
 	useEffect(() => {
 		fetchCustomers();

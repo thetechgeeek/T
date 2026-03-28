@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { FormField } from '@/src/components/molecules/FormField';
 import { layout } from '@/src/theme/layout';
@@ -30,10 +30,7 @@ export function PaymentStep({
 	paymentMode,
 	setPaymentMode,
 }: Props) {
-	const { theme } = useTheme();
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
+	const { c, s, r } = useThemeTokens();
 
 	const balanceDue = Math.max(0, grandTotal - amountPaidNum);
 	const isPaid = amountPaidNum >= grandTotal;

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -11,12 +12,17 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function InvoicesListScreen() {
 	const router = useRouter();
-	const { theme } = useTheme();
+	const { theme, c, s } = useThemeTokens();
 	const { formatCurrency } = useLocale();
-	const c = theme.colors;
-	const s = theme.spacing;
 
-	const { invoices, fetchInvoices, loading, totalCount } = useInvoiceStore();
+	const { invoices, fetchInvoices, loading, totalCount } = useInvoiceStore(
+		useShallow((s) => ({
+			invoices: s.invoices,
+			fetchInvoices: s.fetchInvoices,
+			loading: s.loading,
+			totalCount: s.totalCount,
+		})),
+	);
 
 	useEffect(() => {
 		fetchInvoices().catch((e) => {

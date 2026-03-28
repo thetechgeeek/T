@@ -12,7 +12,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { X, Save, ArrowDownRight, ArrowUpRight } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { inventoryService } from '@/src/services/inventoryService';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -32,13 +32,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function StockOpScreen() {
-	const { theme } = useTheme();
+	const { c, s, r } = useThemeTokens();
 	const router = useRouter();
 	const { id, type } = useLocalSearchParams<{ id: UUID; type: StockOpType }>();
-
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
 
 	const { performStockOperation } = useInventoryStore();
 	const [submitting, setSubmitting] = useState(false);

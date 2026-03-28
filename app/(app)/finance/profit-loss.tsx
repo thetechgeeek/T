@@ -1,14 +1,13 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function ProfitLossScreen() {
-	const { theme } = useTheme();
+	const { c } = useThemeTokens();
 	const router = useRouter();
-	const c = theme.colors;
 	return (
 		<Screen safeAreaEdges={['top', 'bottom']}>
 			<View

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, ScrollView, StyleSheet, RefreshControl, Alert } from 'react-native';
 import { Stack } from 'expo-router';
 import { Calendar, User } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
@@ -12,9 +13,15 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function PurchasesScreen() {
-	const { theme } = useTheme();
+	const { theme } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
-	const { purchases, loading, fetchPurchases } = useFinanceStore();
+	const { purchases, loading, fetchPurchases } = useFinanceStore(
+		useShallow((s) => ({
+			purchases: s.purchases,
+			loading: s.loading,
+			fetchPurchases: s.fetchPurchases,
+		})),
+	);
 
 	useEffect(() => {
 		fetchPurchases().catch((e) => {

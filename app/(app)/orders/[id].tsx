@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { orderService, Order } from '@/src/services/orderService';
 import type { InventoryItem } from '@/src/types/inventory';
@@ -12,17 +12,13 @@ import logger from '@/src/utils/logger';
 
 export default function OrderDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { theme } = useTheme();
+	const { c, s, r } = useThemeTokens();
 	const { formatDateShort } = useLocale();
 	const router = useRouter();
 
 	const [order, setOrder] = useState<Order | null>(null);
 	const [items, setItems] = useState<InventoryItem[]>([]);
 	const [loading, setLoading] = useState(true);
-
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
 
 	useEffect(() => {
 		async function loadData() {

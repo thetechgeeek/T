@@ -11,7 +11,7 @@ import {
 	ArrowDownRight,
 } from 'lucide-react-native';
 import { Image } from 'expo-image';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
@@ -23,14 +23,10 @@ import { layout } from '@/src/theme/layout';
 import logger from '@/src/utils/logger';
 
 export default function ItemDetailScreen() {
-	const { theme } = useTheme();
+	const { theme, c, s, r } = useThemeTokens();
 	const { t, formatCurrency, formatDateShort } = useLocale();
 	const router = useRouter();
 	const { id } = useLocalSearchParams<{ id: UUID }>();
-
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
 
 	const [item, setItem] = useState<InventoryItem | null>(null);
 	const [history, setHistory] = useState<StockOperation[]>([]);

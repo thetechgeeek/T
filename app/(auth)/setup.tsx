@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
 import { businessProfileService } from '@/src/services/businessProfileService';
@@ -10,7 +10,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput } from '@/src/components/atoms/TextInput';
 
 export default function SetupScreen() {
-	const { theme } = useTheme();
+	const { theme, c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const { register } = useAuthStore();
 	const router = useRouter();
@@ -23,9 +23,6 @@ export default function SetupScreen() {
 	const [gstin, setGstin] = useState('');
 	const [loading, setLoading] = useState(false);
 
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
 	const typo = theme.typography;
 
 	const handleCreateAccount = async () => {

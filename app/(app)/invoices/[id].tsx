@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { pdfService } from '@/src/services/pdfService';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -14,10 +14,8 @@ import { layout } from '@/src/theme/layout';
 export default function InvoiceDetailScreen() {
 	const { id } = useLocalSearchParams();
 	const router = useRouter();
-	const { theme } = useTheme();
+	const { c, s } = useThemeTokens();
 	const { formatCurrency } = useLocale();
-	const c = theme.colors;
-	const s = theme.spacing;
 
 	const { currentInvoice, fetchInvoiceById, loading, error, clearCurrentInvoice } =
 		useInvoiceStore();

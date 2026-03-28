@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, ScrollView, StyleSheet, RefreshControl, Modal, Alert, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
@@ -17,10 +18,17 @@ import { format } from 'date-fns';
 import { layout } from '@/src/theme/layout';
 
 export default function ExpensesScreen() {
-	const { theme } = useTheme();
+	const { theme } = useThemeTokens();
 	const insets = useSafeAreaInsets();
 	const { formatCurrency, formatDate } = useLocale();
-	const { expenses, loading, fetchExpenses, addExpense } = useFinanceStore();
+	const { expenses, loading, fetchExpenses, addExpense } = useFinanceStore(
+		useShallow((s) => ({
+			expenses: s.expenses,
+			loading: s.loading,
+			fetchExpenses: s.fetchExpenses,
+			addExpense: s.addExpense,
+		})),
+	);
 	const [modalVisible, setModalVisible] = useState(false);
 
 	// Form state

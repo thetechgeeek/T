@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -9,9 +10,11 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput } from '@/src/components/atoms/TextInput';
 
 export default function LoginScreen() {
-	const { theme } = useTheme();
+	const { theme, c, s, r } = useThemeTokens();
 	const { t } = useLocale();
-	const { login, loading } = useAuthStore();
+	const { login, loading } = useAuthStore(
+		useShallow((s) => ({ login: s.login, loading: s.loading })),
+	);
 	const router = useRouter();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -33,9 +36,6 @@ export default function LoginScreen() {
 		}
 	};
 
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
 	const typo = theme.typography;
 
 	return (

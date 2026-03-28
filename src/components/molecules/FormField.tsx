@@ -1,8 +1,8 @@
 import { View, StyleSheet } from 'react-native';
+import type { StyleProp, ViewStyle, TextInputProps } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput as AtomTextInput } from '@/src/components/atoms/TextInput';
-import type { TextInputProps } from 'react-native';
 import { layout } from '@/src/theme/layout';
 
 export interface FormFieldProps extends TextInputProps {
@@ -11,7 +11,7 @@ export interface FormFieldProps extends TextInputProps {
 	required?: boolean;
 	helperText?: string;
 	editable?: boolean;
-	containerStyle?: any;
+	containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const FormField: React.FC<FormFieldProps> = ({

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 import { Stack } from 'expo-router';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useCustomerStore } from '@/src/stores/customerStore';
@@ -10,7 +10,7 @@ import { useOrderStore } from '@/src/stores/orderStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
 
 export default function AppLayout() {
-	const { theme } = useTheme();
+	const { theme } = useThemeTokens();
 	const appState = useRef(AppState.currentState);
 
 	const prefetchData = React.useCallback(async () => {

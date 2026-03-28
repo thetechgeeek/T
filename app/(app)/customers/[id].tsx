@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { Phone, MapPin, Wallet, Plus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
@@ -17,7 +17,7 @@ import type { CustomerLedgerEntry } from '@/src/types/customer';
 
 export default function CustomerDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { theme } = useTheme();
+	const { theme } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -10,9 +10,7 @@ import { LineItemsStep } from './LineItemsStep';
 import { PaymentStep } from './PaymentStep';
 
 export default function InvoiceCreateScreen() {
-	const { theme } = useTheme();
-	const c = theme.colors;
-	const s = theme.spacing;
+	const { c, s } = useThemeTokens();
 
 	const flow = useInvoiceCreateFlow();
 

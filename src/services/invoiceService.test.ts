@@ -1,21 +1,9 @@
 import { invoiceService } from '@/src/services/invoiceService';
 import { supabase } from '../config/supabase';
 
-// Mock query object
-const mockQuery: any = {
-	select: jest.fn().mockReturnThis(),
-	insert: jest.fn().mockReturnThis(),
-	update: jest.fn().mockReturnThis(),
-	eq: jest.fn().mockReturnThis(),
-	single: jest.fn().mockReturnThis(),
-	order: jest.fn().mockReturnThis(),
-	range: jest.fn().mockReturnThis(),
-	then: jest.fn((resolve) => resolve({ data: [], error: null })),
-};
-
 jest.mock('../config/supabase', () => ({
 	supabase: {
-		from: jest.fn(() => mockQuery),
+		from: jest.fn(),
 		rpc: jest.fn(),
 	},
 }));
@@ -23,40 +11,27 @@ jest.mock('../config/supabase', () => ({
 describe('invoiceService', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
-		mockQuery.then.mockImplementation((resolve: any) => resolve({ data: [], error: null }));
 	});
 
 	describe('createInvoice', () => {
-		it('successfully saves invoice, links items, and deducts stock', async () => {
-			const mockInvoiceId = 'inv-123';
+		it('successfully creates invoice via create_invoice_with_items RPC', async () => {
+			const mockInvoiceId = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 			const mockInvoiceNum = 'TM/2026-27/0001';
+			const itemId = '123e4567-e89b-12d3-a456-426614174000';
 
-			// Mock generate_invoice_number RPC
-			(supabase.rpc as jest.Mock).mockImplementation((name) => {
-				if (name === 'generate_invoice_number')
-					return Promise.resolve({ data: mockInvoiceNum, error: null });
-				if (name === 'perform_stock_operation')
-					return Promise.resolve({ data: 10, error: null });
-				return Promise.resolve({ data: null, error: null });
+			(supabase.rpc as jest.Mock).mockResolvedValue({
+				data: { id: mockInvoiceId, invoice_number: mockInvoiceNum },
+				error: null,
 			});
 
-			// Mock invoice insert
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
-				resolve({
-					data: { id: mockInvoiceId, invoice_number: mockInvoiceNum },
-					error: null,
-				}),
-			);
-
 			const mockInput = {
-				customer_id: 'cust-1',
 				customer_name: 'John Doe',
 				is_inter_state: false,
 				invoice_date: '2026-03-28',
 				payment_status: 'paid' as const,
 				line_items: [
 					{
-						item_id: 'item-1',
+						item_id: itemId,
 						design_name: 'Glossy White',
 						quantity: 10,
 						rate_per_unit: 100,
@@ -69,20 +44,38 @@ describe('invoiceService', () => {
 			const result = await invoiceService.createInvoice(mockInput as any);
 
 			expect(result.invoice_number).toBe(mockInvoiceNum);
-			expect(supabase.from).toHaveBeenCalledWith('invoices');
-			expect(supabase.from).toHaveBeenCalledWith('invoice_line_items');
-
-			// Verify stock deduction RPC
+			expect(result.id).toBe(mockInvoiceId);
 			expect(supabase.rpc).toHaveBeenCalledWith(
-				'perform_stock_operation',
+				'create_invoice_with_items',
 				expect.objectContaining({
-					p_item_id: 'item-1',
-					p_operation_type: 'stock_out',
-					p_quantity_change: -10,
-					p_reference_type: 'invoice',
-					p_reference_id: mockInvoiceId,
+					p_invoice: expect.objectContaining({
+						customer_name: 'John Doe',
+						is_inter_state: false,
+						payment_status: 'paid',
+					}),
+					p_line_items: expect.arrayContaining([
+						expect.objectContaining({
+							item_id: itemId,
+							design_name: 'Glossy White',
+							quantity: 10,
+						}),
+					]),
 				}),
 			);
+		});
+
+		it('throws ValidationError for invalid input', async () => {
+			const { ValidationError } = require('../errors/AppError');
+			await expect(
+				invoiceService.createInvoice({
+					customer_name: '',
+					is_inter_state: false,
+					invoice_date: 'bad-date',
+					payment_status: 'paid',
+					line_items: [],
+					amount_paid: 0,
+				} as any),
+			).rejects.toBeInstanceOf(ValidationError);
 		});
 	});
 });

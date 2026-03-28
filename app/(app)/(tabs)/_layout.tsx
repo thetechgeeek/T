@@ -1,11 +1,24 @@
 import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { Home, Package, QrCode, FileText, MoreHorizontal } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import type { ErrorBoundaryProps } from 'expo-router';
+
+export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+	return (
+		<View style={styles.errorContainer}>
+			<Text style={styles.errorTitle}>Something went wrong</Text>
+			<Text style={styles.errorMessage}>{error.message}</Text>
+			<TouchableOpacity onPress={retry} style={styles.retryButton}>
+				<Text style={styles.retryText}>Try Again</Text>
+			</TouchableOpacity>
+		</View>
+	);
+}
 
 function ScanTabIcon({ focused }: { focused: boolean }) {
-	const { theme } = useTheme();
+	const { theme, c } = useThemeTokens();
 	return (
 		<View
 			style={[
@@ -22,9 +35,8 @@ function ScanTabIcon({ focused }: { focused: boolean }) {
 }
 
 export default function TabLayout() {
-	const { theme } = useTheme();
+	const { theme, c } = useThemeTokens();
 	const { t } = useLocale();
-	const c = theme.colors;
 	const typo = theme.typography;
 
 	return (
@@ -97,4 +109,14 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		marginBottom: 20,
 	},
+	errorContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
+	errorTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
+	errorMessage: { fontSize: 14, color: '#666', textAlign: 'center', marginBottom: 24 },
+	retryButton: {
+		backgroundColor: '#2563EB',
+		paddingHorizontal: 24,
+		paddingVertical: 12,
+		borderRadius: 8,
+	},
+	retryText: { color: '#fff', fontWeight: '600' },
 });

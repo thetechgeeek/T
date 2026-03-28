@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { TextInput as AppTextInput } from '@/src/components/atoms/TextInput';
@@ -46,10 +46,7 @@ export function LineItemsStep({
 	setInputDiscount,
 	addLineItem,
 }: Props) {
-	const { theme } = useTheme();
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
+	const { c, s, r } = useThemeTokens();
 
 	return (
 		<View>

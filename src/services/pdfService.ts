@@ -228,12 +228,12 @@ export const pdfService = {
 				mimeType: 'application/pdf',
 				dialogTitle: `Share Invoice ${invoice.invoice_number}`,
 			});
-		} catch (e: any) {
-			logger.error('Failed to generate/share PDF', e);
-			// Using Alert.alert if I can, but since this is a service, maybe just throw.
-			// But the original had alert(). I will leave it for now but standardize it.
-			// Actually, I'll just leave it as alert() but with proper message.
-			alert('Error: ' + (e.message || 'Failed to generate PDF.'));
+		} catch (e: unknown) {
+			logger.error(
+				'Failed to generate/share PDF',
+				e instanceof Error ? e : new Error(String(e)),
+			);
+			alert('Error: ' + (e instanceof Error ? e.message : 'Failed to generate PDF.'));
 		}
 	},
 

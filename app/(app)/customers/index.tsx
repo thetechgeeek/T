@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, FlatList, StyleSheet, RefreshControl, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { SearchBar } from '@/src/components/molecules/SearchBar';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -15,10 +16,18 @@ import { useLocale } from '@/src/hooks/useLocale';
 import type { Customer } from '@/src/types/customer';
 
 export default function CustomersScreen() {
-	const { theme } = useTheme();
+	const { theme } = useThemeTokens();
 	const router = useRouter();
 	const { formatCurrency } = useLocale();
-	const { customers, loading, fetchCustomers, setFilters, filters } = useCustomerStore();
+	const { customers, loading, fetchCustomers, setFilters, filters } = useCustomerStore(
+		useShallow((s) => ({
+			customers: s.customers,
+			loading: s.loading,
+			fetchCustomers: s.fetchCustomers,
+			setFilters: s.setFilters,
+			filters: s.filters,
+		})),
+	);
 
 	const [search, setSearch] = useState(filters.search || '');
 

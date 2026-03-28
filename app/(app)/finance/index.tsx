@@ -1,8 +1,9 @@
 import { View, StyleSheet, RefreshControl } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 import { Stack, useRouter } from 'expo-router';
 import { TrendingUp, TrendingDown, Wallet, Receipt, ShoppingCart } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@/src/components/atoms/Card';
 import { StatCard } from '@/src/components/molecules/StatCard';
@@ -13,10 +14,16 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import React, { useEffect } from 'react';
 
 export default function FinanceOverviewScreen() {
-	const { theme } = useTheme();
+	const { theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 	const router = useRouter();
-	const { summary, loading, fetchSummary } = useFinanceStore();
+	const { summary, loading, fetchSummary } = useFinanceStore(
+		useShallow((s) => ({
+			summary: s.summary,
+			loading: s.loading,
+			fetchSummary: s.fetchSummary,
+		})),
+	);
 
 	useEffect(() => {
 		fetchSummary();

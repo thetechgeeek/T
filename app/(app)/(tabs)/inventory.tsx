@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import {
 	View,
 	StyleSheet,
@@ -17,7 +18,7 @@ import {
 	Grid as GridIcon,
 	List as ListIcon,
 } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { TileSetCard } from '@/src/components/organisms/TileSetCard';
@@ -40,14 +41,21 @@ const CATEGORIES: ('ALL' | TileCategory)[] = [
 ];
 
 export default function InventoryTab() {
-	const { theme } = useTheme();
+	const { theme, c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useExpoRouter();
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
 
-	const { items, loading, hasMore, filters, page, fetchItems, setFilters } = useInventoryStore();
+	const { items, loading, hasMore, filters, page, fetchItems, setFilters } = useInventoryStore(
+		useShallow((s) => ({
+			items: s.items,
+			loading: s.loading,
+			hasMore: s.hasMore,
+			filters: s.filters,
+			page: s.page,
+			fetchItems: s.fetchItems,
+			setFilters: s.setFilters,
+		})),
+	);
 	const [refreshing, setRefreshing] = useState(false);
 	const [searchInput, setSearchInput] = useState(filters.search || '');
 

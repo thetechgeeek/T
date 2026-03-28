@@ -9,19 +9,17 @@ import {
 	Package,
 	Languages,
 } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useAuthStore } from '@/src/stores/authStore';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function MoreTab() {
-	const { theme } = useTheme();
+	const { theme, c, s } = useThemeTokens();
 	const { t, currentLanguage, toggleLanguage } = useLocale();
 	const { logout } = useAuthStore();
 	const router = useRouter();
-	const c = theme.colors;
-	const s = theme.spacing;
 
 	const menuItems = [
 		{ label: t('customer.title'), icon: Users, route: '/(app)/customers/', color: c.info },

@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 're
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { Search, Aperture } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
 import { TextInput } from '@/src/components/atoms/TextInput';
@@ -13,7 +13,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import logger from '@/src/utils/logger';
 
 export default function ScanTab() {
-	const { theme } = useTheme();
+	const { c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 
@@ -23,10 +23,6 @@ export default function ScanTab() {
 	const [manualInput, setManualInput] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [capturing, setCapturing] = useState(false);
-
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
 
 	const handleSearch = async (query: string) => {
 		if (!query.trim()) return;

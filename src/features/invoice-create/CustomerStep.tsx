@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { FormField } from '@/src/components/molecules/FormField';
 import { withOpacity } from '@/src/utils/color';
@@ -14,10 +14,7 @@ interface Props {
 }
 
 export function CustomerStep({ customer, setCustomer, isInterState, setIsInterState }: Props) {
-	const { theme } = useTheme();
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
+	const { c, s, r } = useThemeTokens();
 
 	const update = (field: keyof CustomerDraft) => (text: string) => {
 		setCustomer((prev) => ({ name: '', ...prev, [field]: text }));

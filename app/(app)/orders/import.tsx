@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Animated, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { FileUp, FileText, CheckCircle2, ChevronRight, Save, KeyRound } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { pdfService } from '@/src/services/pdfService';
 import { Button } from '@/src/components/atoms/Button';
@@ -11,9 +11,7 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function ImportOrderScreen() {
-	const { theme } = useTheme();
-	const c = theme.colors;
-	const s = theme.spacing;
+	const { c, s } = useThemeTokens();
 	const router = useRouter();
 
 	const { parseDocument, isParsing, parsedData, importParsedData, clearParsedData } =

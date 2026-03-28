@@ -1,11 +1,12 @@
 import React from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, ScrollView, StyleSheet, Platform, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCustomerStore } from '@/src/stores/customerStore';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -38,9 +39,11 @@ const customerSchema = z.object({
 });
 
 export default function AddCustomerScreen() {
-	const { theme } = useTheme();
+	const { theme } = useThemeTokens();
 	const router = useRouter();
-	const { createCustomer, loading } = useCustomerStore();
+	const { createCustomer, loading } = useCustomerStore(
+		useShallow((s) => ({ createCustomer: s.createCustomer, loading: s.loading })),
+	);
 
 	const {
 		control,

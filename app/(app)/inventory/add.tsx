@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import {
 	View,
 	StyleSheet,
@@ -13,7 +14,7 @@ import { ArrowLeft, Save, Image as ImageIcon } from 'lucide-react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -53,17 +54,15 @@ const CATEGORIES: TileCategory[] = [
 ];
 
 export default function AddItemScreen() {
-	const { theme } = useTheme();
+	const { c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 	const { id } = useLocalSearchParams<{ id?: UUID }>();
 	const isEditing = !!id;
 
-	const c = theme.colors;
-	const s = theme.spacing;
-	const r = theme.borderRadius;
-
-	const { createItem, updateItem } = useInventoryStore();
+	const { createItem, updateItem } = useInventoryStore(
+		useShallow((s) => ({ createItem: s.createItem, updateItem: s.updateItem })),
+	);
 	const [submitting, setSubmitting] = useState(false);
 	const [loading, setLoading] = useState(isEditing);
 
