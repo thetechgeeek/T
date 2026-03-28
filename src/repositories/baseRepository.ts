@@ -102,11 +102,17 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 		},
 
 		async create(payload: Partial<T>): Promise<T> {
+			const start = performance.now();
 			const { data, error } = await supabase
 				.from(tableName)
 				.insert(payload)
 				.select()
 				.single();
+			logger.info('db_query', {
+				table: tableName,
+				op: 'create',
+				duration_ms: Math.round(performance.now() - start),
+			});
 			if (error) {
 				throw new AppError(
 					error.message,
@@ -119,12 +125,18 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 		},
 
 		async update(id: UUID, payload: Partial<T>): Promise<T> {
+			const start = performance.now();
 			const { data, error } = await supabase
 				.from(tableName)
 				.update(payload)
 				.eq('id', id)
 				.select()
 				.single();
+			logger.info('db_query', {
+				table: tableName,
+				op: 'update',
+				duration_ms: Math.round(performance.now() - start),
+			});
 			if (error) {
 				throw new AppError(
 					error.message,
@@ -137,7 +149,13 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 		},
 
 		async remove(id: UUID): Promise<void> {
+			const start = performance.now();
 			const { error } = await supabase.from(tableName).delete().eq('id', id);
+			logger.info('db_query', {
+				table: tableName,
+				op: 'remove',
+				duration_ms: Math.round(performance.now() - start),
+			});
 			if (error) {
 				throw new AppError(
 					error.message,
@@ -149,7 +167,14 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 		},
 
 		async rpc<R>(fnName: string, params: Record<string, unknown>): Promise<R> {
+			const start = performance.now();
 			const { data, error } = await supabase.rpc(fnName, params);
+			logger.info('db_query', {
+				table: tableName,
+				op: 'rpc',
+				fn: fnName,
+				duration_ms: Math.round(performance.now() - start),
+			});
 			if (error) {
 				throw new AppError(
 					error.message,

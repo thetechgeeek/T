@@ -72,7 +72,10 @@ export default function AddCustomerScreen() {
 	return (
 		<Screen safeAreaEdges={['top', 'bottom']} withKeyboard>
 			<Stack.Screen options={{ title: 'Add Customer' }} />
-			<ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+			<ScrollView
+				keyboardDismissMode="on-drag"
+				style={[styles.container, { backgroundColor: theme.colors.background }]}
+			>
 				<View style={styles.content}>
 					<Card padding="md">
 						<Controller

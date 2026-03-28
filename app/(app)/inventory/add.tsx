@@ -177,6 +177,7 @@ export default function AddItemScreen() {
 			</View>
 
 			<ScrollView
+				keyboardDismissMode="on-drag"
 				contentContainerStyle={{ padding: s.lg }}
 				keyboardShouldPersistTaps="handled"
 			>

@@ -67,6 +67,7 @@ export default function ExpensesScreen() {
 			<Stack.Screen options={{ title: 'Expenses' }} />
 
 			<ScrollView
+				keyboardDismissMode="on-drag"
 				contentContainerStyle={styles.scrollContent}
 				refreshControl={
 					<RefreshControl refreshing={loading} onRefresh={() => fetchExpenses()} />
