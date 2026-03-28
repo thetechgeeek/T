@@ -1,0 +1,3 @@
+# Ignore bulk-formatting commits in git blame
+# Phase 0.7: Run Prettier one-time format across entire codebase
+a564bc2
