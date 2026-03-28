@@ -1,4 +1,4 @@
-import type { TextStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 
 export interface ThemeColors {
 	// Backgrounds
@@ -102,9 +102,9 @@ export interface Theme {
 		full: number; // 9999
 	};
 	shadows: {
-		sm: object;
-		md: object;
-		lg: object;
+		sm: ViewStyle;
+		md: ViewStyle;
+		lg: ViewStyle;
 	};
 	layout: {
 		row: { flexDirection: 'row'; alignItems: 'center' };

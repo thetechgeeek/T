@@ -25,7 +25,9 @@
 		"seeAll": "सभी देखें",
 		"noResults": "कोई परिणाम नहीं",
 		"required": "आवश्यक",
-		"optional": "वैकल्पिक"
+		"optional": "वैकल्पिक",
+		"today": "आज",
+		"yesterday": "कल"
 	},
 	"auth": {
 		"signIn": "लॉग इन करें",

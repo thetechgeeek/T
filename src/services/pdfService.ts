@@ -3,6 +3,8 @@ import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { supabase } from '../config/supabase';
+import { numberToIndianWords } from '../utils/currency';
+import { escapeHtml } from '../utils/html';
 import type { Invoice } from '../types/invoice';
 import type { BusinessProfile } from '../types/businessProfile';
 
@@ -191,7 +193,7 @@ export const pdfService = {
           </table>
 
           <div class="amount-words">
-             Amount in words: Rupees ${convertNumberToWords(invoice.grand_total)} Only.
+             Amount in words: ${escapeHtml(numberToIndianWords(invoice.grand_total))}.
           </div>
 
           <div class="footer">
@@ -292,12 +294,3 @@ export const pdfService = {
 		return data.data.items as ParsedOrderItem[];
 	},
 };
-
-/**
- * Very basic number to words converter for INR
- * To be replaced with full implementation if needed.
- */
-function convertNumberToWords(amount: number): string {
-	// Simplified for app context, can use `number-to-words` package if required
-	return Math.floor(amount).toString();
-}

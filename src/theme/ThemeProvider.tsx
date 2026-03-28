@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Appearance } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Theme, ThemeMode } from './index';
@@ -52,7 +52,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 		setThemeMode(isDark ? 'light' : 'dark');
 	}, [isDark, setThemeMode]);
 
-	const theme = buildTheme(isDark);
+	const theme = useMemo(() => buildTheme(isDark), [isDark]);
 
 	return (
 		<ThemeContext.Provider value={{ theme, mode, setThemeMode, toggleTheme }}>

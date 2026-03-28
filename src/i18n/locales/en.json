@@ -25,7 +25,9 @@
 		"seeAll": "See All",
 		"noResults": "No results found",
 		"required": "Required",
-		"optional": "Optional"
+		"optional": "Optional",
+		"today": "Today",
+		"yesterday": "Yesterday"
 	},
 	"auth": {
 		"signIn": "Sign In",
