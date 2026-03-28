@@ -1,6 +1,8 @@
 // React Native uses __DEV__ inside node_modules
 (global as any).__DEV__ = true;
 
+import React from 'react';
+
 import '@testing-library/jest-native/extend-expect';
 import 'react-native-gesture-handler/jestSetup';
 

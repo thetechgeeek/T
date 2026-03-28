@@ -1,33 +1,8 @@
 import { supabase } from '../config/supabase';
 import type { UUID } from '../types/common';
+import type { Expense, Purchase, ProfitLossReport as ProfitLossSummary } from '../types/finance';
 
-export interface Expense {
-	id: UUID;
-	expense_date: string;
-	amount: number;
-	category: string;
-	notes?: string;
-	created_at: string;
-}
-
-export interface Purchase {
-	id: UUID;
-	purchase_date: string;
-	supplier_id: UUID;
-	total_amount: number;
-	payment_status: 'paid' | 'partial' | 'unpaid';
-	notes?: string;
-	created_at: string;
-	supplier_name?: string;
-}
-
-export interface ProfitLossSummary {
-	total_revenue: number;
-	total_cogs: number;
-	total_expenses: number;
-	gross_profit: number;
-	net_profit: number;
-}
+type PurchaseWithSupplier = Purchase & { suppliers: { name: string } | null };
 
 export const financeService = {
 	async fetchExpenses(filters: { search?: string; startDate?: string; endDate?: string }) {
@@ -48,7 +23,7 @@ export const financeService = {
 		return { data: data as Expense[], count: count || 0 };
 	},
 
-	async createExpense(expense: Omit<Expense, 'id' | 'created_at'>) {
+	async createExpense(expense: Omit<Expense, 'id' | 'created_at' | 'updated_at'>) {
 		const { data, error } = await supabase.from('expenses').insert(expense).select().single();
 		if (error) throw error;
 		return data as Expense;
@@ -70,13 +45,15 @@ export const financeService = {
 		const { data, error } = await query.order('purchase_date', { ascending: false });
 		if (error) throw error;
 
-		return data.map((p) => ({
+		return (data as PurchaseWithSupplier[]).map((p) => ({
 			...p,
-			supplier_name: (p.suppliers as any)?.name,
+			supplier_name: p.suppliers?.name,
 		})) as Purchase[];
 	},
 
-	async createPurchase(purchase: Omit<Purchase, 'id' | 'created_at' | 'supplier_name'>) {
+	async createPurchase(
+		purchase: Omit<Purchase, 'id' | 'created_at' | 'updated_at' | 'supplier_name'>,
+	) {
 		const { data, error } = await supabase.from('purchases').insert(purchase).select().single();
 		if (error) throw error;
 		return data as Purchase;

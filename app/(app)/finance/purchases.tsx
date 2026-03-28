@@ -68,7 +68,7 @@ export default function PurchasesScreen() {
 									Total Amount
 								</ThemedText>
 								<ThemedText weight="bold" style={{ fontSize: 18 }}>
-									{formatCurrency(p.total_amount)}
+									{formatCurrency(p.grand_total)}
 								</ThemedText>
 							</View>
 						</Card>

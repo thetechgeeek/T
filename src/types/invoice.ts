@@ -10,6 +10,7 @@ export interface InvoiceLineItem {
 	design_name: string;
 	description?: string;
 	hsn_code?: string;
+	/** Can be fractional — e.g. 2.5 boxes */
 	quantity: number;
 	rate_per_unit: number;
 	discount: number;
@@ -39,6 +40,8 @@ export interface Invoice extends Timestamps {
 	discount_total: number;
 	grand_total: number;
 	is_inter_state: boolean;
+	place_of_supply?: string;
+	reverse_charge: boolean;
 	payment_status: PaymentStatus;
 	payment_mode?: PaymentMode;
 	amount_paid: number;

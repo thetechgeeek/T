@@ -35,7 +35,7 @@ export const invoiceService = {
 		const { data, count, error } = await query;
 
 		if (error) throw error;
-		return { data: data as any[], count: count || 0 };
+		return { data: (data ?? []) as Invoice[], count: count || 0 };
 	},
 
 	async fetchInvoiceById(id: string): Promise<Invoice> {

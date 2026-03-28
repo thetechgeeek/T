@@ -4,7 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { supabase } from '../config/supabase';
 import type { Invoice } from '../types/invoice';
-import { useLocale } from '../hooks/useLocale';
+import type { BusinessProfile } from '../types/businessProfile';
 
 export interface ParsedOrderItem {
 	design_name?: string;
@@ -15,7 +15,7 @@ export interface ParsedOrderItem {
 	box_count?: number;
 	price_per_box?: number;
 	total_price?: number;
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 export const pdfService = {
@@ -24,14 +24,17 @@ export const pdfService = {
 		return data;
 	},
 
-	generateInvoiceHTML(invoice: Invoice, businessProfile: any) {
-		const bp = businessProfile || {
-			business_name: 'TileMaster',
-			phone_number: '',
-			email: '',
-			address: '',
-			gstin: '',
-		};
+	generateInvoiceHTML(invoice: Invoice, businessProfile: BusinessProfile | null) {
+		const bp =
+			businessProfile ||
+			({
+				business_name: 'TileMaster',
+				phone: '',
+				email: '',
+				address: '',
+				gstin: '',
+				terms_and_conditions: '',
+			} as Partial<BusinessProfile> & { business_name: string });
 
 		const isInterState = invoice.is_inter_state;
 
@@ -120,7 +123,7 @@ export const pdfService = {
             <div class="business-info">
               <h1>${bp.business_name}</h1>
               <p>${bp.address || ''}</p>
-              <p>Phone: ${bp.phone_number || ''} ${bp.email ? ` | Email: ${bp.email}` : ''}</p>
+              <p>Phone: ${bp.phone || ''} ${bp.email ? ` | Email: ${bp.email}` : ''}</p>
               ${bp.gstin ? `<p><strong>GSTIN:</strong> ${bp.gstin}</p>` : ''}
             </div>
             <div class="doc-details">
@@ -193,7 +196,7 @@ export const pdfService = {
 
           <div class="footer">
             <p>Notes: ${invoice.notes || '-'}</p>
-            <p>Terms & Conditions: ${invoice.terms || bp.invoice_terms || 'Errors and Omissions Excepted. Subject to local jurisdiction.'}</p>
+            <p>Terms & Conditions: ${invoice.terms || bp.terms_and_conditions || 'Errors and Omissions Excepted. Subject to local jurisdiction.'}</p>
             <div style="text-align:right; margin-top:40px;">
                ___________________________<br>
                Authorized Signatory

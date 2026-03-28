@@ -1,11 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import {
-	financeService,
-	type Expense,
-	type Purchase,
-	type ProfitLossSummary,
-} from '../services/financeService';
+import { financeService } from '../services/financeService';
+import type { Expense, Purchase, ProfitLossReport as ProfitLossSummary } from '../types/finance';
 import { subMonths, format } from 'date-fns';
 
 interface FinanceState {
@@ -26,7 +22,7 @@ interface FinanceState {
 	fetchPurchases: () => Promise<void>;
 	fetchSummary: () => Promise<void>;
 	setDateRange: (start: string, end: string) => void;
-	addExpense: (expense: Omit<Expense, 'id' | 'created_at'>) => Promise<void>;
+	addExpense: (expense: Omit<Expense, 'id' | 'created_at' | 'updated_at'>) => Promise<void>;
 }
 
 export const useFinanceStore = create<FinanceState>()(

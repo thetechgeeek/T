@@ -23,6 +23,8 @@ export interface Purchase extends Timestamps {
 	payment_status: PaymentStatus;
 	amount_paid: number;
 	notes?: string;
+	/** Populated from suppliers join in financeService.fetchPurchases */
+	supplier_name?: string;
 }
 
 export interface PurchaseLineItem {
@@ -35,7 +37,7 @@ export interface PurchaseLineItem {
 	amount: number;
 }
 
-export interface Payment extends Pick<Timestamps, 'created_at'> {
+export interface Payment extends Timestamps {
 	id: UUID;
 	payment_date: string;
 	amount: number;
@@ -90,6 +92,7 @@ export interface BusinessProfile {
 	invoice_prefix: string;
 	invoice_sequence: number;
 	financial_year_start?: string;
+	last_invoice_fy?: string;
 	terms_and_conditions?: string;
 	created_at: string;
 	updated_at: string;

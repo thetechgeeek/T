@@ -3,6 +3,7 @@ import { immer } from 'zustand/middleware/immer';
 import { inventoryService } from '../services/inventoryService';
 import type {
 	InventoryItem,
+	InventoryItemInsert,
 	InventoryFilters,
 	StockOpType,
 	TileCategory,
@@ -21,8 +22,8 @@ interface InventoryState {
 	// Actions
 	setFilters: (filters: Partial<InventoryFilters>) => void;
 	fetchItems: (reset?: boolean) => Promise<void>;
-	createItem: (item: any) => Promise<InventoryItem>;
-	updateItem: (id: UUID, updates: any) => Promise<InventoryItem>;
+	createItem: (item: InventoryItemInsert) => Promise<InventoryItem>;
+	updateItem: (id: UUID, updates: Partial<InventoryItemInsert>) => Promise<InventoryItem>;
 	performStockOperation: (
 		itemId: UUID,
 		type: StockOpType,
