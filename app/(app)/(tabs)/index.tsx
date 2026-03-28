@@ -1,13 +1,12 @@
-import React, { useMemo } from 'react';
-import { View, StyleSheet, RefreshControl } from 'react-native';
+import React from 'react';
+import { View, RefreshControl } from 'react-native';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { useCustomerStore } from '@/src/stores/customerStore';
-import { todayISO } from '@/src/utils/dateUtils';
+import { useDashboardStore } from '@/src/stores/dashboardStore';
+import { layout } from '@/src/theme/layout';
 
 // Atomic Design Components
 import { StatCard } from '@/src/components/molecules/StatCard';
@@ -30,8 +29,7 @@ export default function DashboardScreen() {
 	const [refreshing, setRefreshing] = React.useState(false);
 
 	const { invoices, fetchInvoices } = useInvoiceStore();
-	const { items, fetchItems } = useInventoryStore();
-	const { fetchCustomers } = useCustomerStore();
+	const { stats, fetchStats } = useDashboardStore();
 
 	const c = theme.colors;
 	const s = theme.spacing;
@@ -63,61 +61,44 @@ export default function DashboardScreen() {
 		},
 	];
 
-	const today = todayISO();
-
-	const todaySales = useMemo(() => {
-		return invoices
-			.filter((inv) => inv.invoice_date === today)
-			.reduce((sum, inv) => sum + inv.grand_total, 0);
-	}, [invoices, today]);
-
-	const outstandingCredit = useMemo(() => {
-		return invoices.reduce((sum, inv) => sum + (inv.grand_total - (inv.amount_paid || 0)), 0);
-	}, [invoices]);
-
-	const lowStockCount = useMemo(() => {
-		return items.filter((item) => item.box_count <= (item.low_stock_threshold || 10)).length;
-	}, [items]);
-
-	const recentInvoices = useMemo(() => {
-		return invoices.slice(0, 5);
-	}, [invoices]);
-
-	const stats = [
+	const dashboardStats = [
 		{
 			label: t('dashboard.todaySales'),
-			value: formatCurrency(todaySales),
+			value: formatCurrency(stats?.today_sales ?? 0),
 			icon: TrendingUp,
 			color: c.success,
 		},
 		{
 			label: t('dashboard.outstandingCredit'),
-			value: formatCurrency(outstandingCredit),
+			value: formatCurrency(stats?.total_outstanding_credit ?? 0),
 			icon: Users,
 			color: c.warning,
 		},
 		{
 			label: t('dashboard.lowStock'),
-			value: `${lowStockCount} items`,
+			value: `${stats?.low_stock_count ?? 0} items`,
 			icon: AlertTriangle,
 			color: c.error,
 		},
 	];
 
+	const recentInvoices = invoices.slice(0, 5);
+
 	const onRefresh = React.useCallback(async () => {
 		setRefreshing(true);
 		try {
-			await Promise.all([fetchInvoices(1), fetchItems(true), fetchCustomers(true)]);
+			await Promise.allSettled([fetchStats(), fetchInvoices(1)]);
 		} finally {
 			setRefreshing(false);
 		}
-	}, [fetchInvoices, fetchItems, fetchCustomers]);
+	}, [fetchStats, fetchInvoices]);
 
 	return (
 		<Screen
 			scrollable
 			safeAreaEdges={[]}
 			scrollViewProps={{
+				keyboardDismissMode: 'on-drag',
 				refreshControl: (
 					<RefreshControl
 						refreshing={refreshing}
@@ -131,8 +112,8 @@ export default function DashboardScreen() {
 			<DashboardHeader businessName="TileMaster" />
 
 			{/* Stats Cards */}
-			<View style={[theme.layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
-				{stats.map((stat, i) => (
+			<View style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
+				{dashboardStats.map((stat, i) => (
 					<StatCard
 						key={i}
 						label={stat.label}
@@ -144,13 +125,13 @@ export default function DashboardScreen() {
 				))}
 			</View>
 
-			<QuickActionsGrid actions={quickActions as any} />
+			<QuickActionsGrid
+				actions={quickActions as Parameters<typeof QuickActionsGrid>[0]['actions']}
+			/>
 
-			<RecentInvoicesList invoices={recentInvoices as any} />
+			<RecentInvoicesList
+				invoices={recentInvoices as Parameters<typeof RecentInvoicesList>[0]['invoices']}
+			/>
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: { flex: 1 },
-});

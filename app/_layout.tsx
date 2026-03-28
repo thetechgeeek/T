@@ -1,14 +1,14 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { useCallback as useStableCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import '../src/i18n'; // Initialize i18n
 import { ThemeProvider, useTheme } from '@/src/theme/ThemeProvider';
 import { useAuthStore } from '@/src/stores/authStore';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { ErrorBoundary } from '@/src/components/atoms/ErrorBoundary';
 
 function AuthGate({ children }: { children: React.ReactNode }) {
 	const { isAuthenticated, loading, initialize } = useAuthStore();
@@ -33,7 +33,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 }
 
 function AppShell() {
-	const { theme, isDark } = useTheme() as any;
+	const { theme } = useTheme();
 
 	return (
 		<GestureHandlerRootView style={styles.root}>
@@ -49,11 +49,13 @@ function AppShell() {
 
 export default function RootLayout() {
 	return (
-		<ThemeProvider>
-			<KeyboardProvider>
-				<AppShell />
-			</KeyboardProvider>
-		</ThemeProvider>
+		<ErrorBoundary>
+			<ThemeProvider>
+				<KeyboardProvider>
+					<AppShell />
+				</KeyboardProvider>
+			</ThemeProvider>
+		</ErrorBoundary>
 	);
 }
 
