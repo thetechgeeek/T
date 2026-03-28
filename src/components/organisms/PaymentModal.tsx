@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, View, StyleSheet, ScrollView } from 'react-native';
+import { Alert, Modal, View, StyleSheet, ScrollView } from 'react-native';
+import { PAYMENT_MODES } from '@/src/constants/paymentModes';
 import { X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
@@ -7,7 +8,6 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { Card } from '@/src/components/atoms/Card';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import type { PaymentMode } from '@/src/types/invoice';
 import type { UUID } from '@/src/types/common';
 import { paymentService } from '@/src/services/paymentService';
 
@@ -34,7 +34,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 }) => {
 	const { theme } = useTheme();
 	const [amount, setAmount] = useState(totalAmount > 0 ? totalAmount.toString() : '');
-	const [paymentMode, setPaymentMode] = useState<PaymentMode>('cash');
+	const [paymentMode, setPaymentMode] = useState(PAYMENT_MODES[0].value);
 	const [notes, setNotes] = useState('');
 	const [loading, setLoading] = useState(false);
 
@@ -55,13 +55,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 			onSuccess();
 			onClose();
 		} catch (e) {
-			console.error(e);
+			Alert.alert(
+				'Payment Failed',
+				e instanceof Error ? e.message : 'An unexpected error occurred',
+			);
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	const modes: PaymentMode[] = ['cash', 'upi', 'bank_transfer', 'cheque'];
+	const modes = PAYMENT_MODES.map((m) => m.value);
 
 	return (
 		<Modal visible={visible} transparent animationType="slide">
@@ -171,21 +174,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginBottom: 16,
 	},
-	title: {
-		fontSize: 20,
-	},
-	subtitle: {
-		fontSize: 14,
-		marginBottom: 20,
-	},
 	scroll: {
 		paddingBottom: 20,
-	},
-	label: {
-		fontSize: 12,
-		fontWeight: '700',
-		marginBottom: 8,
-		textTransform: 'uppercase',
 	},
 	modeGrid: {
 		flexDirection: 'row',

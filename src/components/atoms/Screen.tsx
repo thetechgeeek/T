@@ -48,18 +48,17 @@ export const Screen: React.FC<ScreenProps> = ({
 		style,
 	];
 
-	const Content = scrollable ? ScrollView : View;
-	const contentProps = scrollable
-		? {
-				showsVerticalScrollIndicator: false,
-				...scrollViewProps,
-				contentContainerStyle: [styles.scrollContent, contentContainerStyle],
-			}
-		: {
-				style: [styles.flex, contentContainerStyle],
-			};
-
-	const inner = <Content {...(contentProps as any)}>{children}</Content>;
+	const inner = scrollable ? (
+		<ScrollView
+			showsVerticalScrollIndicator={false}
+			{...scrollViewProps}
+			contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
+		>
+			{children}
+		</ScrollView>
+	) : (
+		<View style={[styles.flex, contentContainerStyle]}>{children}</View>
+	);
 
 	if (withKeyboard) {
 		return (

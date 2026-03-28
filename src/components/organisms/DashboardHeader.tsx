@@ -10,13 +10,12 @@ export interface DashboardHeaderProps {
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName }) => {
 	const { theme } = useTheme();
-	const { t } = useLocale();
+	const { t, currentLanguage } = useLocale();
 	const insets = useSafeAreaInsets();
 
 	const c = theme.colors;
 	const s = theme.spacing;
-
-	const today = new Date().toLocaleDateString('hi-IN', {
+	const today = new Date().toLocaleDateString(`${currentLanguage}-IN`, {
 		weekday: 'long',
 		year: 'numeric',
 		month: 'long',

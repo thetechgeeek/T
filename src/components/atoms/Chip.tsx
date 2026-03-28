@@ -23,6 +23,8 @@ export function Chip({ label, selected = false, onPress, style }: ChipProps) {
 			activeOpacity={0.7}
 			onPress={onPress}
 			hitSlop={hitSlop}
+			accessibilityRole="togglebutton"
+			accessibilityState={{ selected }}
 			style={[styles.chip, { backgroundColor: bgColor, borderRadius: r.full }, style]}
 		>
 			<Text

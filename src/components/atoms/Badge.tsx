@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { withOpacity } from '@/src/utils/color';
 
 export type BadgeVariant = 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral';
 
@@ -34,7 +35,7 @@ export const Badge: React.FC<BadgeProps> = ({
 			case 'neutral':
 				return { bg: theme.colors.surfaceVariant, text: theme.colors.onSurfaceVariant };
 			default:
-				return { bg: theme.colors.primary + '20', text: theme.colors.primary };
+				return { bg: withOpacity(theme.colors.primary, 0.12), text: theme.colors.primary };
 		}
 	};
 
@@ -60,7 +61,7 @@ export const Badge: React.FC<BadgeProps> = ({
 						color: text,
 						fontSize:
 							size === 'sm' ? theme.typography.sizes.xs : theme.typography.sizes.sm,
-						fontWeight: theme.typography.weights.semibold as any,
+						fontWeight: theme.typography.weights.semibold,
 						fontFamily: theme.typography.fontFamilyBold,
 					},
 					textStyle,

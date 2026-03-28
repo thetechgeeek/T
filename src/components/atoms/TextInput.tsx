@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import {
 	View,
 	TextInput as RNTextInput,
@@ -23,7 +23,18 @@ export interface TextInputProps extends RNTextInputProps {
 
 export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 	(
-		{ label, error, leftIcon, rightIcon, containerStyle, inputStyle, helperText, ...props },
+		{
+			label,
+			error,
+			leftIcon,
+			rightIcon,
+			containerStyle,
+			inputStyle,
+			helperText,
+			onFocus,
+			onBlur,
+			...props
+		},
 		ref,
 	) => {
 		const { theme } = useTheme();
@@ -31,7 +42,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 		const s = theme.spacing;
 		const r = theme.borderRadius;
 
-		const isFocused = false; // We can add onFocus/onBlur state if needed
+		const [isFocused, setIsFocused] = useState(false);
 		const borderColor = error ? c.error : isFocused ? c.primary : c.border;
 
 		return (
@@ -70,6 +81,14 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 							{ color: c.onSurface, fontSize: theme.typography.sizes.md },
 							inputStyle,
 						]}
+						onFocus={(e) => {
+							setIsFocused(true);
+							onFocus?.(e);
+						}}
+						onBlur={(e) => {
+							setIsFocused(false);
+							onBlur?.(e);
+						}}
 						{...props}
 					/>
 					{rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
