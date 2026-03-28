@@ -46,7 +46,7 @@ describe('invoiceService', () => {
 			expect(result.invoice_number).toBe(mockInvoiceNum);
 			expect(result.id).toBe(mockInvoiceId);
 			expect(supabase.rpc).toHaveBeenCalledWith(
-				'create_invoice_with_items',
+				'create_invoice_with_items_v1',
 				expect.objectContaining({
 					p_invoice: expect.objectContaining({
 						customer_name: 'John Doe',

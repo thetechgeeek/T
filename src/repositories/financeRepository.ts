@@ -12,7 +12,7 @@ export const financeRepository = {
 
 	async fetchProfitLoss(startDate: string, endDate: string): Promise<ProfitLossReport> {
 		const { data, error } = await supabase
-			.rpc('get_profit_loss', { p_start: startDate, p_end: endDate })
+			.rpc('get_profit_loss_v1', { p_start: startDate, p_end: endDate })
 			.single();
 		if (error) {
 			throw new AppError(
@@ -26,7 +26,7 @@ export const financeRepository = {
 	},
 
 	async fetchDashboardStats(): Promise<DashboardStats> {
-		const { data, error } = await supabase.rpc('get_dashboard_stats').single();
+		const { data, error } = await supabase.rpc('get_dashboard_stats_v1').single();
 		if (error) {
 			throw new AppError(
 				error.message,

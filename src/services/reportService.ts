@@ -13,7 +13,7 @@ export const reportService = {
 	},
 
 	async getAgingReport(customerId?: string): Promise<AgingBucket[]> {
-		return customerRepository.rpc<AgingBucket[]>('get_aging_report', {
+		return customerRepository.rpc<AgingBucket[]>('get_aging_report_v1', {
 			p_customer_id: customerId ?? null,
 		});
 	},

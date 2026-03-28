@@ -145,7 +145,7 @@ export const customerService = {
 	},
 
 	async getAgingReport(customerId?: UUID): Promise<AgingBucket[]> {
-		const { data, error } = await supabase.rpc('get_aging_report', {
+		const { data, error } = await supabase.rpc('get_aging_report_v1', {
 			p_customer_id: customerId || null,
 		});
 

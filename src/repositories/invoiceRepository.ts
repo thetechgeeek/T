@@ -26,7 +26,7 @@ export const invoiceRepository = {
 		invoice: Omit<Invoice, 'id' | 'created_at' | 'updated_at' | 'line_items'>,
 		lineItems: InvoiceLineItemInput[],
 	): Promise<{ id: UUID; invoice_number: string }> {
-		const { data, error } = await supabase.rpc('create_invoice_with_items', {
+		const { data, error } = await supabase.rpc('create_invoice_with_items_v1', {
 			p_invoice: invoice,
 			p_line_items: lineItems,
 		});

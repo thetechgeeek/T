@@ -34,7 +34,7 @@ export const inventoryRepository = {
 		referenceType?: string,
 		referenceId?: UUID,
 	): Promise<void> {
-		const { error } = await supabase.rpc('perform_stock_operation', {
+		const { error } = await supabase.rpc('perform_stock_operation_v1', {
 			p_item_id: itemId,
 			p_operation_type: operationType,
 			p_quantity_change: quantityChange,

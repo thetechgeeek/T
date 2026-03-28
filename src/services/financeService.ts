@@ -61,7 +61,7 @@ export const financeService = {
 
 	async getProfitLoss(startDate: string, endDate: string): Promise<ProfitLossSummary> {
 		const { data, error } = await supabase
-			.rpc('get_profit_loss', {
+			.rpc('get_profit_loss_v1', {
 				p_start: startDate,
 				p_end: endDate,
 			})

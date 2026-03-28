@@ -3,6 +3,7 @@ import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { supabase } from '../config/supabase';
+import { businessProfileService } from './businessProfileService';
 import { numberToIndianWords } from '../utils/currency';
 import { escapeHtml } from '../utils/html';
 import type { Invoice } from '../types/invoice';
@@ -23,8 +24,7 @@ export interface ParsedOrderItem {
 
 export const pdfService = {
 	async getBusinessProfile() {
-		const { data } = await supabase.from('business_profile').select('*').single();
-		return data;
+		return businessProfileService.fetch();
 	},
 
 	generateInvoiceHTML(invoice: Invoice, businessProfile: BusinessProfile | null) {
@@ -252,7 +252,7 @@ export const pdfService = {
 			if (!file.uri) return null;
 
 			const base64 = await FileSystem.readAsStringAsync(file.uri, {
-				encoding: 'base64' as any,
+				encoding: FileSystem.EncodingType.Base64,
 			});
 
 			return {

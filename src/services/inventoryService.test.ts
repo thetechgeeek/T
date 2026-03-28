@@ -105,7 +105,7 @@ describe('inventoryService', () => {
 				'Restock',
 			);
 
-			expect(supabase.rpc).toHaveBeenCalledWith('perform_stock_operation', {
+			expect(supabase.rpc).toHaveBeenCalledWith('perform_stock_operation_v1', {
 				p_item_id: 'item1',
 				p_operation_type: 'stock_in',
 				p_quantity_change: 10,

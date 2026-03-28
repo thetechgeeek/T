@@ -16,7 +16,7 @@ export const paymentRepository = {
 	async recordWithInvoiceUpdate(
 		payment: PaymentInput,
 	): Promise<{ id: UUID; new_status: PaymentStatus }> {
-		const { data, error } = await supabase.rpc('record_payment_with_invoice_update', {
+		const { data, error } = await supabase.rpc('record_payment_with_invoice_update_v1', {
 			p_payment: payment,
 		});
 		if (error) {

@@ -116,7 +116,7 @@ export const inventoryService = {
 		referenceType?: string,
 		referenceId?: UUID,
 	) {
-		const { data, error } = await supabase.rpc('perform_stock_operation', {
+		const { data, error } = await supabase.rpc('perform_stock_operation_v1', {
 			p_item_id: itemId,
 			p_operation_type: operationType,
 			p_quantity_change: quantityChange,

@@ -51,7 +51,7 @@ describe('financeService', () => {
 
 			const result = await financeService.getProfitLoss('2026-01-01', '2026-01-31');
 
-			expect(supabase.rpc).toHaveBeenCalledWith('get_profit_loss', {
+			expect(supabase.rpc).toHaveBeenCalledWith('get_profit_loss_v1', {
 				p_start: '2026-01-01',
 				p_end: '2026-01-31',
 			});
