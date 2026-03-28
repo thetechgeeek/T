@@ -3,23 +3,8 @@ import type { ParsedOrderItem } from './pdfService';
 import type { UUID } from '@/src/types/common';
 import { inventoryService } from './inventoryService';
 import logger from '../utils/logger';
-
-export interface Order {
-	id: UUID;
-	order_number: string | null;
-	supplier_id: UUID | null;
-	party_name: string | null;
-	city: string | null;
-	order_date: string;
-	total_weight: number | null;
-	total_quantity: number | null;
-	status: 'ordered' | 'partially_received' | 'fully_received' | 'cancelled';
-	source_pdf_url: string | null;
-	raw_llm_response: any | null;
-	notes: string | null;
-	created_at: string;
-	updated_at: string;
-}
+import type { Order } from '../types/order';
+export type { Order };
 
 export const orderService = {
 	async fetchOrders(options?: { status?: string; limit?: number; offset?: number }) {

@@ -52,6 +52,8 @@ describe('invoiceService', () => {
 				customer_id: 'cust-1',
 				customer_name: 'John Doe',
 				is_inter_state: false,
+				invoice_date: '2026-03-28',
+				payment_status: 'paid' as const,
 				line_items: [
 					{
 						item_id: 'item-1',
