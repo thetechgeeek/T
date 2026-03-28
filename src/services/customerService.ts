@@ -14,7 +14,9 @@ export const customerService = {
 		let query = supabase.from('customers').select('*', { count: 'exact' });
 
 		if (filters.search) {
-			query = query.ilike('name', `%${filters.search}%`);
+			// Search both name AND phone (fixes §customerService.ts:19)
+			const escaped = filters.search.replace(/[%_\\]/g, (c) => `\\${c}`);
+			query = query.or(`name.ilike.%${escaped}%,phone.ilike.%${escaped}%`);
 		}
 
 		if (filters.type && filters.type !== 'ALL') {

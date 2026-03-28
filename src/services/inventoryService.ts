@@ -16,9 +16,9 @@ export const inventoryService = {
 		let query = supabase.from('inventory_items').select('*', { count: 'exact' });
 
 		if (filters.search) {
-			query = query.or(
-				`design_name.ilike.%${filters.search}%,base_item_number.ilike.%${filters.search}%`,
-			);
+			// Escape ILIKE special chars before interpolating into filter string (§10.1)
+			const escaped = filters.search.replace(/[%_\\]/g, (c) => `\\${c}`);
+			query = query.or(`design_name.ilike.%${escaped}%,base_item_number.ilike.%${escaped}%`);
 		}
 
 		if (filters.category && filters.category !== 'ALL') {
@@ -26,8 +26,17 @@ export const inventoryService = {
 		}
 
 		if (filters.lowStockOnly) {
-			// Box count less than or equal to low stock threshold
-			query = query.lte('box_count', 'low_stock_threshold');
+			// Use the low_stock_items view which does the column comparison correctly (§17.5)
+			// Direct .lte() can't compare two columns — delegate to the view via a separate query
+			const { data: lowStockData, error: lowStockError } = await supabase
+				.from('low_stock_items')
+				.select('id');
+			if (lowStockError) throw lowStockError;
+			const lowStockIds = (lowStockData ?? []).map((r: { id: string }) => r.id);
+			if (lowStockIds.length === 0) {
+				return { data: [], count: 0 };
+			}
+			query = query.in('id', lowStockIds);
 		}
 
 		if (filters.supplier_id) {

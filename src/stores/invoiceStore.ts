@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { invoiceService } from '../services/invoiceService';
+import { eventBus } from '../events/appEvents';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
+import type { UUID } from '../types/common';
 
 interface InvoiceState {
 	invoices: Invoice[];
@@ -15,8 +17,8 @@ interface InvoiceState {
 	// Actions
 	setFilters: (filters: Partial<InvoiceFilters>) => void;
 	fetchInvoices: (page?: number) => Promise<void>;
-	fetchInvoiceById: (id: string) => Promise<void>;
-	createInvoice: (input: InvoiceInput) => Promise<Invoice>;
+	fetchInvoiceById: (id: UUID) => Promise<void>;
+	createInvoice: (input: InvoiceInput) => Promise<{ id: UUID; invoice_number: string }>;
 	clearCurrentInvoice: () => void;
 }
 
@@ -47,7 +49,6 @@ export const useInvoiceStore = create<InvoiceState>()(
 					if (page === 1) {
 						state.invoices = data;
 					} else {
-						// Append
 						const newIds = new Set(data.map((i) => i.id));
 						state.invoices = [
 							...state.invoices.filter((i) => !newIds.has(i.id)),
@@ -58,41 +59,39 @@ export const useInvoiceStore = create<InvoiceState>()(
 					state.currentPage = page;
 					state.loading = false;
 				});
-			} catch (error: any) {
-				set({ error: error.message, loading: false });
+			} catch (error: unknown) {
+				set({ error: (error as Error).message, loading: false });
 			}
 		},
 
 		fetchInvoiceById: async (id) => {
 			set({ loading: true, error: null });
 			try {
-				const invoice = await invoiceService.fetchInvoiceById(id);
+				const invoice = await invoiceService.fetchInvoiceDetail(id);
 				set((state) => {
 					state.currentInvoice = invoice;
 					state.loading = false;
 				});
-			} catch (error: any) {
-				set({ error: error.message, loading: false });
+			} catch (error: unknown) {
+				set({ error: (error as Error).message, loading: false });
 			}
 		},
 
 		createInvoice: async (input) => {
 			set({ loading: true, error: null });
 			try {
-				const newInvoice = await invoiceService.createInvoice(input);
+				const result = await invoiceService.createInvoice(input);
 				set((state) => {
-					state.invoices.unshift(newInvoice);
 					state.totalCount += 1;
 					state.loading = false;
 				});
 
-				// Refresh inventory store since stock changed
-				const { useInventoryStore } = require('./inventoryStore');
-				useInventoryStore.getState().fetchItems(true);
+				// Notify other stores via event bus (replaces brittle require())
+				eventBus.emit({ type: 'INVOICE_CREATED', invoiceId: result.id });
 
-				return newInvoice;
-			} catch (error: any) {
-				set({ error: error.message, loading: false });
+				return result;
+			} catch (error: unknown) {
+				set({ error: (error as Error).message, loading: false });
 				throw error;
 			}
 		},
@@ -102,3 +101,10 @@ export const useInvoiceStore = create<InvoiceState>()(
 		},
 	})),
 );
+
+// Refresh invoice list when a payment is recorded against an invoice
+eventBus.subscribe((event) => {
+	if (event.type === 'PAYMENT_RECORDED' && event.invoiceId) {
+		useInvoiceStore.getState().fetchInvoices(1);
+	}
+});

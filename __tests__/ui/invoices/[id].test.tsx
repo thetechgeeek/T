@@ -8,7 +8,7 @@ import { useLocalSearchParams } from 'expo-router';
 // Mock services and router
 jest.mock('@/src/services/invoiceService', () => ({
 	invoiceService: {
-		fetchInvoiceById: jest.fn(),
+		fetchInvoiceDetail: jest.fn(),
 	},
 }));
 
@@ -48,7 +48,7 @@ describe('InvoiceDetailScreen', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'inv-123' });
-		(invoiceService.fetchInvoiceById as jest.Mock).mockResolvedValue(mockInvoice);
+		(invoiceService.fetchInvoiceDetail as jest.Mock).mockResolvedValue(mockInvoice);
 	});
 
 	it('renders invoice details correctly', async () => {

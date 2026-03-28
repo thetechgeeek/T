@@ -71,6 +71,8 @@ export interface InvoiceInput {
 	customer_phone?: string;
 	customer_address?: string;
 	is_inter_state: boolean;
+	place_of_supply?: string;
+	reverse_charge?: boolean;
 	line_items: InvoiceLineItemInput[];
 	payment_status: PaymentStatus;
 	payment_mode?: PaymentMode;
