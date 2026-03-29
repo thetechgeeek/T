@@ -15,6 +15,7 @@ import { X, Save, ArrowDownRight, ArrowUpRight } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { inventoryService } from '@/src/services/inventoryService';
+import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Button } from '@/src/components/atoms/Button';
@@ -33,6 +34,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function StockOpScreen() {
 	const { c, s, r } = useThemeTokens();
+	const { t } = useLocale();
 	const router = useRouter();
 	const { id, type } = useLocalSearchParams<{ id: UUID; type: StockOpType }>();
 
@@ -67,7 +69,9 @@ export default function StockOpScreen() {
 		if (!id || !type) return;
 		const qty = parseInt(data.quantity);
 		if (isNaN(qty) || qty <= 0) {
-			Alert.alert('Error', 'Please enter a valid positive number.', [{ text: 'OK' }]);
+			Alert.alert(t('common.errorTitle'), t('inventory.stockOpValidationError'), [
+				{ text: t('common.ok') },
+			]);
 			return;
 		}
 
@@ -75,10 +79,14 @@ export default function StockOpScreen() {
 		try {
 			const change = isStockIn ? qty : -qty;
 			await performStockOperation(id, type, change, data.reason || undefined);
-			Alert.alert('Success', 'Stock updated successfully!');
+			Alert.alert(t('common.successTitle'), t('inventory.stockOpSuccess'));
 			router.back();
-		} catch (err: any) {
-			Alert.alert('Error', err.message || 'Failed to update stock', [{ text: 'OK' }]);
+		} catch (err: unknown) {
+			Alert.alert(
+				t('common.errorTitle'),
+				err instanceof Error ? err.message : t('inventory.stockOpFailed'),
+				[{ text: t('common.ok') }],
+			);
 		} finally {
 			setSubmitting(false);
 		}

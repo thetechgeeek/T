@@ -105,10 +105,12 @@ export default function AddItemScreen() {
 					});
 					setLoading(false);
 				})
-				.catch((err) => {
-					Alert.alert('Error', 'Could not load item details.', [{ text: 'OK' }]);
-					router.back();
-				});
+			.catch((err) => {
+				Alert.alert(t('common.errorTitle'), t('inventory.loadError'), [
+					{ text: t('common.ok') },
+				]);
+				router.back();
+			});
 		}
 	}, [id, isEditing]);
 
@@ -132,15 +134,19 @@ export default function AddItemScreen() {
 
 			if (isEditing && id) {
 				await updateItem(id, payload);
-				Alert.alert('Success', 'Item updated successfully!');
+				Alert.alert(t('common.successTitle'), t('inventory.updateSuccess'));
 				router.back();
 			} else {
 				await createItem(payload);
-				Alert.alert('Success', 'Item added successfully!');
+				Alert.alert(t('common.successTitle'), t('inventory.addSuccess'));
 				router.back();
 			}
-		} catch (err: any) {
-			Alert.alert('Error', err.message || 'Failed to save item', [{ text: 'OK' }]);
+		} catch (err: unknown) {
+			Alert.alert(
+				t('common.errorTitle'),
+				err instanceof Error ? err.message : t('inventory.saveError'),
+				[{ text: t('common.ok') }],
+			);
 		} finally {
 			setSubmitting(false);
 		}

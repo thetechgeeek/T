@@ -22,17 +22,20 @@ export default function LoginScreen() {
 
 	const handleLogin = async () => {
 		if (!email || !password) {
-			Alert.alert('Error', 'Please enter email and password');
+			Alert.alert(t('common.errorTitle'), t('auth.errorMissingFields'));
 			return;
 		}
 		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-			Alert.alert('Error', 'Please enter a valid email address');
+			Alert.alert(t('common.errorTitle'), t('auth.errorInvalidEmail'));
 			return;
 		}
 		try {
 			await login(email, password);
 		} catch (e: unknown) {
-			Alert.alert('Login Failed', e instanceof Error ? e.message : 'Invalid credentials');
+			Alert.alert(
+				t('auth.loginFailed'),
+				e instanceof Error ? e.message : t('auth.invalidCredentials'),
+			);
 		}
 	};
 

@@ -26,8 +26,19 @@ function escapeLike(term: string): string {
 	return term.replace(/[%_\\]/g, (c) => `\\${c}`);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function applyFilters(query: any, options: QueryOptions): any {
+/** Minimal structural type covering all PostgREST query builder methods we call. */
+interface QueryBuilder {
+	or(conditions: string): this;
+	eq(column: string, value: unknown): this;
+	gte(column: string, value: unknown): this;
+	lte(column: string, value: unknown): this;
+	lt(column: string, value: unknown): this;
+	order(column: string, options: { ascending: boolean }): this;
+	range(from: number, to: number): this;
+	limit(count: number): this;
+}
+
+function applyFilters<Q extends QueryBuilder>(query: Q, options: QueryOptions): Q {
 	const { filters, sort, pagination, search } = options;
 
 	if (search?.term && search.columns.length > 0) {

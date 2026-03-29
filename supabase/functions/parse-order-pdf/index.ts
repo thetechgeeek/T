@@ -52,7 +52,7 @@ Deno.serve(async (req: Request) => {
 			error: userError,
 		} = await supabaseClient.auth.getUser();
 		if (userError || !user) {
-			return errorResponse('Unauthorized', 401);
+			return errorResponse('Unauthorized', 401, requestId);
 		}
 
 		const body = await req.json();
@@ -60,11 +60,11 @@ Deno.serve(async (req: Request) => {
 		let base64Data: string | undefined = body.base64Data;
 
 		if (!mimeType) {
-			return errorResponse('Missing mimeType', 400);
+			return errorResponse('Missing mimeType', 400, requestId);
 		}
 
 		if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
-			return errorResponse('Unsupported file type', 415);
+			return errorResponse('Unsupported file type', 415, requestId);
 		}
 
 		// Storage path preferred over inline base64 (avoids large request payloads)
@@ -78,7 +78,7 @@ Deno.serve(async (req: Request) => {
 				.download(body.storagePath);
 
 			if (downloadError || !fileData) {
-				return errorResponse('Failed to download file from storage', 500);
+				return errorResponse('Failed to download file from storage', 500, requestId);
 			}
 
 			const arrayBuffer = await fileData.arrayBuffer();
@@ -90,16 +90,16 @@ Deno.serve(async (req: Request) => {
 		}
 
 		if (!base64Data) {
-			return errorResponse('Missing base64Data or storagePath', 400);
+			return errorResponse('Missing base64Data or storagePath', 400, requestId);
 		}
 
 		if (base64Data.length > MAX_BASE64_LENGTH) {
-			return errorResponse('File too large (max 7.5MB)', 413);
+			return errorResponse('File too large (max 7.5MB)', 413, requestId);
 		}
 
 		const geminiKey = Deno.env.get('GEMINI_API_KEY');
 		if (!geminiKey) {
-			return errorResponse('AI service not configured', 503);
+			return errorResponse('AI service not configured', 503, requestId);
 		}
 
 		const apiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
@@ -142,7 +142,7 @@ Deno.serve(async (req: Request) => {
 		if (!response.ok) {
 			const errText = await response.text();
 			console.error('Gemini Error:', errText);
-			return errorResponse(`Vision API Error: ${errText}`, 502);
+			return errorResponse(`Vision API Error: ${errText}`, 502, requestId);
 		}
 
 		const resultData = await response.json();
@@ -166,16 +166,17 @@ Deno.serve(async (req: Request) => {
 	} catch (error: unknown) {
 		console.error('Function error:', error);
 		if (error instanceof Error && error.name === 'AbortError') {
-			return errorResponse('Request timed out', 504);
+			return errorResponse('Request timed out', 504, requestId);
 		}
 		return errorResponse(
 			error instanceof Error ? error.message : 'Internal Server Error',
 			500,
+			requestId,
 		);
 	}
 });
 
-function errorResponse(msg: string, status: number) {
+function errorResponse(msg: string, status: number, requestId: string) {
 	return new Response(JSON.stringify({ error: msg }), {
 		status,
 		headers: { ...corsHeaders, 'Content-Type': 'application/json', 'x-request-id': requestId },

@@ -5,13 +5,15 @@ import { FileUp, FileText, CheckCircle2, ChevronRight, Save, KeyRound } from 'lu
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { pdfService } from '@/src/services/pdfService';
+import { useLocale } from '@/src/hooks/useLocale';
 import { Button } from '@/src/components/atoms/Button';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function ImportOrderScreen() {
-	const { c, s } = useThemeTokens();
+	const { c, s, theme } = useThemeTokens();
+	const { t } = useLocale();
 	const router = useRouter();
 
 	const { parseDocument, isParsing, parsedData, importParsedData, clearParsedData } =
@@ -25,7 +27,6 @@ export default function ImportOrderScreen() {
 			const doc = await pdfService.pickPdfDocument();
 			if (!doc) return;
 
-			// Try to upload to storage first (avoids large base64 in request body)
 			const storagePath = await pdfService.uploadDocumentToStorage(
 				doc.uri,
 				doc.name,
@@ -39,27 +40,33 @@ export default function ImportOrderScreen() {
 				storagePath ?? undefined,
 			);
 		} catch (err: unknown) {
-			Alert.alert('Processing Failed', err instanceof Error ? err.message : 'Unknown error');
+			Alert.alert(
+				t('order.processFailed'),
+				err instanceof Error ? err.message : t('common.unexpectedError'),
+			);
 		}
 	};
 
 	const handleSave = async () => {
 		if (!partyName) {
-			Alert.alert('Details Missing', 'Please enter a Party/Supplier Name for this order.');
+			Alert.alert(t('order.detailsMissing'), t('order.partyNameRequired'));
 			return;
 		}
 		if (!parsedData || parsedData.length === 0) {
-			Alert.alert('No Items', 'No items were parsed from this document.');
+			Alert.alert(t('order.noItemsTitle'), t('order.noItemsMessage'));
 			return;
 		}
 
 		setSaving(true);
 		try {
 			await importParsedData(partyName, parsedData);
-			Alert.alert('Success', 'Order has been imported and stock updated successfully!');
+			Alert.alert(t('common.successTitle'), t('order.importSuccessMessage'));
 			router.back();
-		} catch (err: any) {
-			Alert.alert('Import Failed', err.message);
+		} catch (err: unknown) {
+			Alert.alert(
+				t('order.importFailed'),
+				err instanceof Error ? err.message : t('common.unexpectedError'),
+			);
 		} finally {
 			setSaving(false);
 		}

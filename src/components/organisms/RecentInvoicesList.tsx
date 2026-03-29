@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { FileText, ChevronRight } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -65,7 +65,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 					{invoices.map((inv) => (
 						<TouchableOpacity
 							key={inv.id}
-							onPress={() => router.push(`/(app)/invoices/${inv.id}` as any)}
+							onPress={() => router.push(`/(app)/invoices/${inv.id}` as Href)}
 							style={[
 								styles.invoiceItem,
 								{

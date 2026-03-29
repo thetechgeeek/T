@@ -13,7 +13,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 export default function InvoicesListScreen() {
 	const router = useRouter();
 	const { theme, c, s } = useThemeTokens();
-	const { formatCurrency } = useLocale();
+	const { t, formatCurrency } = useLocale();
 
 	const { invoices, fetchInvoices, loading, totalCount } = useInvoiceStore(
 		useShallow((s) => ({
@@ -26,7 +26,9 @@ export default function InvoicesListScreen() {
 
 	useEffect(() => {
 		fetchInvoices().catch((e) => {
-			Alert.alert('Error', 'Failed to load invoices. ' + e.message, [{ text: 'OK' }]);
+			Alert.alert(t('common.errorTitle'), t('invoice.loadError'), [
+				{ text: t('common.ok') },
+			]);
 		});
 	}, [fetchInvoices]);
 

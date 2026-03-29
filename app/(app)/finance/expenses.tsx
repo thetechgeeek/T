@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, ScrollView, StyleSheet, RefreshControl, Modal, Alert, Platform } from 'react-native';
+import { View, StyleSheet, RefreshControl, Modal, Alert, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -14,6 +15,7 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { FormField } from '@/src/components/molecules/FormField';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
+import type { Expense } from '@/src/types/finance';
 import { format } from 'date-fns';
 import { layout } from '@/src/theme/layout';
 
@@ -76,49 +78,51 @@ export default function ExpensesScreen() {
 		<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
 			<Stack.Screen options={{ title: 'Expenses' }} />
 
-			<ScrollView
-				keyboardDismissMode="on-drag"
+			<FlashList
+				data={expenses}
+				estimatedItemSize={80}
+				keyExtractor={(item) => item.id}
 				contentContainerStyle={styles.scrollContent}
 				refreshControl={
 					<RefreshControl refreshing={loading} onRefresh={() => fetchExpenses()} />
 				}
-			>
-				{expenses.length === 0 && !loading ? (
-					<EmptyState
-						title="No expenses found"
-						actionLabel="Add Expense"
-						onAction={() => setModalVisible(true)}
-					/>
-				) : (
-					expenses.map((exp) => (
-						<Card key={exp.id} style={styles.expenseCard} padding="md">
-							<View style={layout.rowBetween}>
-								<View style={{ flex: 1 }}>
-									<ThemedText weight="bold">{exp.category}</ThemedText>
+				ListEmptyComponent={
+					!loading ? (
+						<EmptyState
+							title="No expenses found"
+							actionLabel="Add Expense"
+							onAction={() => setModalVisible(true)}
+						/>
+					) : null
+				}
+				renderItem={({ item: exp }: { item: Expense }) => (
+					<Card style={styles.expenseCard} padding="md">
+						<View style={layout.rowBetween}>
+							<View style={{ flex: 1 }}>
+								<ThemedText weight="bold">{exp.category}</ThemedText>
+								<ThemedText
+									variant="caption"
+									color={theme.colors.onSurfaceVariant}
+								>
+									{formatDate(exp.expense_date)}
+								</ThemedText>
+								{exp.notes && (
 									<ThemedText
 										variant="caption"
 										color={theme.colors.onSurfaceVariant}
+										style={{ fontStyle: 'italic', marginTop: 2 }}
 									>
-										{formatDate(exp.expense_date)}
+										{exp.notes}
 									</ThemedText>
-									{exp.notes && (
-										<ThemedText
-											variant="caption"
-											color={theme.colors.onSurfaceVariant}
-											style={{ fontStyle: 'italic', marginTop: 2 }}
-										>
-											{exp.notes}
-										</ThemedText>
-									)}
-								</View>
-								<ThemedText weight="bold" color={theme.colors.error}>
-									- {formatCurrency(exp.amount)}
-								</ThemedText>
+								)}
 							</View>
-						</Card>
-					))
+							<ThemedText weight="bold" color={theme.colors.error}>
+								- {formatCurrency(exp.amount)}
+							</ThemedText>
+						</View>
+					</Card>
 				)}
-			</ScrollView>
+			/>
 
 			<View style={[styles.fabContainer, { bottom: 32 + insets.bottom }]}>
 				<Button

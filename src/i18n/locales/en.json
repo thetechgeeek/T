@@ -21,6 +21,7 @@
 		"no": "No",
 		"ok": "OK",
 		"errorTitle": "Error",
+		"successTitle": "Success",
 		"unexpectedError": "An unexpected error occurred. Please try again.",
 		"selectAll": "Select All",
 		"deselectAll": "Deselect All",
@@ -40,7 +41,11 @@
 		"forgotPassword": "Forgot Password?",
 		"welcome": "Welcome to TileMaster",
 		"subtitle": "Manage your tiles & ceramics business",
-		"setupBusiness": "Set Up Your Business"
+		"setupBusiness": "Set Up Your Business",
+		"loginFailed": "Login Failed",
+		"errorMissingFields": "Please enter email and password",
+		"errorInvalidEmail": "Please enter a valid email address",
+		"invalidCredentials": "Invalid credentials"
 	},
 	"dashboard": {
 		"greeting": "Namaste",
@@ -95,6 +100,12 @@
 		"noItems": "No items in inventory",
 		"addFirstItem": "Add your first item",
 		"stockOpSuccess": "Stock updated successfully",
+		"stockOpValidationError": "Please enter a valid positive number.",
+		"stockOpFailed": "Failed to update stock",
+		"loadError": "Could not load item details.",
+		"updateSuccess": "Item updated successfully!",
+		"addSuccess": "Item added successfully!",
+		"saveError": "Failed to save item",
 		"deleteConfirm": "Delete this item?",
 		"deleteWarning": "This action cannot be undone.",
 		"tileSet": "Tile Set",
@@ -134,6 +145,7 @@
 		"recordPayment": "Record Payment",
 		"noInvoices": "No invoices yet",
 		"createFirst": "Create your first invoice",
+		"loadError": "Failed to load invoices.",
 		"stepCustomer": "Customer",
 		"stepItems": "Items",
 		"stepReview": "Review"
@@ -156,6 +168,7 @@
 		"sendReminder": "Send Reminder",
 		"callCustomer": "Call",
 		"noCustomers": "No customers yet",
+		"loadError": "Failed to load customers.",
 		"types": {
 			"retail": "Retail",
 			"contractor": "Contractor",
@@ -202,7 +215,8 @@
 		"thisMonth": "This Month",
 		"thisYear": "This Year",
 		"exportCSV": "Export CSV",
-		"noExpenses": "No expenses recorded"
+		"noExpenses": "No expenses recorded",
+		"loadPurchasesError": "Failed to load purchases."
 	},
 	"settings": {
 		"title": "Settings",
@@ -271,7 +285,14 @@
 			"cancelled": "Cancelled"
 		},
 		"noOrders": "No orders imported yet",
-		"importFirst": "Import your first order PDF"
+		"importFirst": "Import your first order PDF",
+		"processFailed": "Processing Failed",
+		"detailsMissing": "Details Missing",
+		"partyNameRequired": "Please enter a Party/Supplier Name for this order.",
+		"noItemsTitle": "No Items",
+		"noItemsMessage": "No items were parsed from this document.",
+		"importFailed": "Import Failed",
+		"importSuccessMessage": "Order has been imported and stock updated successfully!"
 	},
 	"tabs": {
 		"more": "More"

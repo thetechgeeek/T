@@ -21,6 +21,7 @@
 		"no": "नहीं",
 		"ok": "ठीक है",
 		"errorTitle": "त्रुटि",
+		"successTitle": "सफलता",
 		"unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें।",
 		"selectAll": "सभी चुनें",
 		"deselectAll": "सभी हटाएं",
@@ -40,7 +41,11 @@
 		"forgotPassword": "पासवर्ड भूल गए?",
 		"welcome": "TileMaster में आपका स्वागत है",
 		"subtitle": "अपना टाइल्स और सेरामिक्स व्यवसाय प्रबंधित करें",
-		"setupBusiness": "अपना व्यवसाय सेट करें"
+		"setupBusiness": "अपना व्यवसाय सेट करें",
+		"loginFailed": "लॉगिन विफल",
+		"errorMissingFields": "कृपया ईमेल और पासवर्ड दर्ज करें",
+		"errorInvalidEmail": "कृपया एक वैध ईमेल पता दर्ज करें",
+		"invalidCredentials": "ईमेल या पासवर्ड गलत है"
 	},
 	"dashboard": {
 		"greeting": "नमस्ते",
@@ -95,6 +100,12 @@
 		"noItems": "स्टॉक में कोई आइटम नहीं",
 		"addFirstItem": "पहला आइटम जोड़ें",
 		"stockOpSuccess": "स्टॉक सफलतापूर्वक अपडेट हुआ",
+		"stockOpValidationError": "कृपया एक वैध धनात्मक संख्या दर्ज करें।",
+		"stockOpFailed": "स्टॉक अपडेट करने में विफल",
+		"loadError": "आइटम विवरण लोड नहीं हो सका।",
+		"updateSuccess": "आइटम सफलतापूर्वक अपडेट हुआ!",
+		"addSuccess": "आइटम सफलतापूर्वक जोड़ा गया!",
+		"saveError": "आइटम सेव करने में विफल",
 		"deleteConfirm": "इस आइटम को हटाएं?",
 		"deleteWarning": "यह क्रिया वापस नहीं की जा सकती।",
 		"tileSet": "टाइल सेट",
@@ -134,6 +145,7 @@
 		"recordPayment": "भुगतान दर्ज करें",
 		"noInvoices": "अभी तक कोई बिल नहीं",
 		"createFirst": "पहला बिल बनाएं",
+		"loadError": "बिल लोड करने में विफल।",
 		"stepCustomer": "ग्राहक",
 		"stepItems": "सामान",
 		"stepReview": "समीक्षा"
@@ -156,6 +168,7 @@
 		"sendReminder": "याद दिलाएं",
 		"callCustomer": "कॉल करें",
 		"noCustomers": "अभी तक कोई ग्राहक नहीं",
+		"loadError": "ग्राहक लोड करने में विफल।",
 		"types": {
 			"retail": "रिटेल",
 			"contractor": "ठेकेदार",
@@ -202,7 +215,8 @@
 		"thisMonth": "इस महीने",
 		"thisYear": "इस साल",
 		"exportCSV": "CSV निर्यात करें",
-		"noExpenses": "कोई खर्च दर्ज नहीं"
+		"noExpenses": "कोई खर्च दर्ज नहीं",
+		"loadPurchasesError": "खरीद लोड करने में विफल।"
 	},
 	"settings": {
 		"title": "सेटिंग",
@@ -271,7 +285,14 @@
 			"cancelled": "रद्द"
 		},
 		"noOrders": "अभी तक कोई ऑर्डर नहीं",
-		"importFirst": "पहला ऑर्डर PDF आयात करें"
+		"importFirst": "पहला ऑर्डर PDF आयात करें",
+		"processFailed": "प्रसंस्करण विफल",
+		"detailsMissing": "विवरण अनुपलब्ध",
+		"partyNameRequired": "कृपया इस ऑर्डर के लिए पार्टी/सप्लायर नाम दर्ज करें।",
+		"noItemsTitle": "कोई आइटम नहीं",
+		"noItemsMessage": "इस दस्तावेज़ से कोई आइटम नहीं निकाला गया।",
+		"importFailed": "आयात विफल",
+		"importSuccessMessage": "ऑर्डर आयात हो गया और स्टॉक सफलतापूर्वक अपडेट हुआ!"
 	},
 	"tabs": {
 		"more": "अधिक"

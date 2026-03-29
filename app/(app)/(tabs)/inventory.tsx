@@ -63,7 +63,9 @@ export default function InventoryTab() {
 		// Initial fetch if empty and not loading
 		if (items.length === 0 && !loading && page === 1) {
 			fetchItems(true).catch((e) => {
-				Alert.alert('Error', 'Failed to load inventory. ' + e.message, [{ text: 'OK' }]);
+				Alert.alert(t('common.errorTitle'), t('inventory.loadError'), [
+					{ text: t('common.ok') },
+				]);
 			});
 		}
 	}, []);

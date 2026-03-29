@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
+import { View, StyleSheet, ViewStyle, StyleProp, Platform } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
 interface CardProps {
@@ -35,7 +35,7 @@ export const Card: React.FC<CardProps> = ({
 		style,
 	];
 
-	return <View style={cardStyles as any}>{children}</View>;
+	return <View style={cardStyles as StyleProp<ViewStyle>}>{children}</View>;
 };
 
 const styles = StyleSheet.create({

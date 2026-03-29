@@ -18,7 +18,7 @@ import type { Customer } from '@/src/types/customer';
 export default function CustomersScreen() {
 	const { theme } = useThemeTokens();
 	const router = useRouter();
-	const { formatCurrency } = useLocale();
+	const { t, formatCurrency } = useLocale();
 	const { customers, loading, fetchCustomers, setFilters, filters } = useCustomerStore(
 		useShallow((s) => ({
 			customers: s.customers,
@@ -33,7 +33,9 @@ export default function CustomersScreen() {
 
 	useEffect(() => {
 		fetchCustomers().catch((e) => {
-			Alert.alert('Error', 'Failed to load customers. ' + e.message, [{ text: 'OK' }]);
+			Alert.alert(t('common.errorTitle'), t('customer.loadError') + ' ' + e.message, [
+				{ text: t('common.ok') },
+			]);
 		});
 	}, []);
 
