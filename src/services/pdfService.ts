@@ -251,16 +251,11 @@ export const pdfService = {
 			const file = result.assets[0];
 			if (!file.uri) return null;
 
-			const base64 = await FileSystem.readAsStringAsync(file.uri, {
-				encoding: FileSystem.EncodingType.Base64,
-			});
-
 			return {
 				uri: file.uri,
-				name: file.name,
+				name: file.name ?? `upload-${Date.now()}.pdf`,
 				size: file.size,
 				mimeType: file.mimeType || 'application/pdf',
-				base64,
 			};
 		} catch (e) {
 			logger.error('Error picking document', e);
@@ -268,21 +263,68 @@ export const pdfService = {
 		}
 	},
 
+	/**
+	 * Upload a picked document to Supabase Storage and return the storage path.
+	 * Falls back gracefully: if upload fails, returns null so the caller can
+	 * use the base64 fallback path.
+	 */
+	async uploadDocumentToStorage(
+		uri: string,
+		fileName: string,
+		mimeType: string,
+	): Promise<string | null> {
+		try {
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
+			if (!user) return null;
+
+			const storagePath = `${user.id}/${Date.now()}-${fileName}`;
+			const base64 = await FileSystem.readAsStringAsync(uri, {
+				encoding: FileSystem.EncodingType.Base64,
+			});
+
+			// Convert base64 → Uint8Array for the storage upload
+			const binary = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+
+			const { error } = await supabase.storage
+				.from('order-pdfs')
+				.upload(storagePath, binary, { contentType: mimeType, upsert: false });
+
+			if (error) {
+				logger.error('Storage upload failed', new Error(error.message));
+				return null;
+			}
+
+			return storagePath;
+		} catch (e) {
+			logger.error('Storage upload exception', e instanceof Error ? e : new Error(String(e)));
+			return null;
+		}
+	},
+
 	async parseDocumentWithLLM(
-		base64: string,
+		uriOrBase64: string,
 		mimeType: string,
 		aiKey?: string,
+		/** Pre-uploaded storage path — preferred over base64 to avoid large payloads */
+		storagePath?: string,
 	): Promise<ParsedOrderItem[]> {
-		const { data, error } = await supabase.functions.invoke('parse-order-pdf', {
-			body: {
-				base64Data: base64,
-				mimeType: mimeType,
-				aiKey: aiKey,
-			},
-		});
+		let body: Record<string, unknown>;
+
+		if (storagePath) {
+			body = { storagePath, mimeType, aiKey };
+		} else {
+			// Legacy path: read file as base64 and send inline
+			const base64 = await FileSystem.readAsStringAsync(uriOrBase64, {
+				encoding: FileSystem.EncodingType.Base64,
+			});
+			body = { base64Data: base64, mimeType, aiKey };
+		}
+
+		const { data, error } = await supabase.functions.invoke('parse-order-pdf', { body });
 
 		if (error) {
-			// Supabase edge function errors sometimes return the raw response
 			throw new Error(error.message || 'Failed to call edge function');
 		}
 

@@ -25,9 +25,21 @@ export default function ImportOrderScreen() {
 			const doc = await pdfService.pickPdfDocument();
 			if (!doc) return;
 
-			await parseDocument(doc.base64, doc.mimeType, aiKey || undefined);
-		} catch (err: any) {
-			Alert.alert('Processing Failed', err.message);
+			// Try to upload to storage first (avoids large base64 in request body)
+			const storagePath = await pdfService.uploadDocumentToStorage(
+				doc.uri,
+				doc.name,
+				doc.mimeType,
+			);
+
+			await parseDocument(
+				doc.uri,
+				doc.mimeType,
+				aiKey || undefined,
+				storagePath ?? undefined,
+			);
+		} catch (err: unknown) {
+			Alert.alert('Processing Failed', err instanceof Error ? err.message : 'Unknown error');
 		}
 	};
 

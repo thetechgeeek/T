@@ -1,4 +1,5 @@
 import { authService } from './authService';
+import { AppError } from '@/src/errors';
 import { supabase } from '@/src/config/supabase';
 
 jest.mock('@/src/config/supabase', () => ({
@@ -56,13 +57,19 @@ describe('authService', () => {
 		expect(result).toEqual(mockSession);
 	});
 
-	it('handles auth errors', async () => {
+	it('handles auth errors — wraps into AppError', async () => {
 		const mockError = { message: 'Invalid credentials' };
 		(supabase.auth.signInWithPassword as jest.Mock).mockResolvedValue({
 			data: null,
 			error: mockError,
 		});
 
-		await expect(authService.signIn('test@example.com', 'wrong')).rejects.toEqual(mockError);
+		await expect(authService.signIn('test@example.com', 'wrong')).rejects.toBeInstanceOf(
+			AppError,
+		);
+		await expect(authService.signIn('test@example.com', 'wrong')).rejects.toMatchObject({
+			message: 'Invalid credentials',
+			code: 'AUTH_ERROR',
+		});
 	});
 });

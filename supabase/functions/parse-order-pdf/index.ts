@@ -55,18 +55,46 @@ Deno.serve(async (req: Request) => {
 			return errorResponse('Unauthorized', 401);
 		}
 
-		const { base64Data, mimeType } = await req.json();
+		const body = await req.json();
+		const { mimeType, aiKey } = body;
+		let base64Data: string | undefined = body.base64Data;
 
-		if (!base64Data || !mimeType) {
-			return errorResponse('Missing base64Data or mimeType', 400);
-		}
-
-		if (base64Data.length > MAX_BASE64_LENGTH) {
-			return errorResponse('File too large (max 7.5MB)', 413);
+		if (!mimeType) {
+			return errorResponse('Missing mimeType', 400);
 		}
 
 		if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
 			return errorResponse('Unsupported file type', 415);
+		}
+
+		// Storage path preferred over inline base64 (avoids large request payloads)
+		if (body.storagePath && !base64Data) {
+			const serviceClient = createClient(
+				Deno.env.get('SUPABASE_URL') ?? '',
+				Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+			);
+			const { data: fileData, error: downloadError } = await serviceClient.storage
+				.from('order-pdfs')
+				.download(body.storagePath);
+
+			if (downloadError || !fileData) {
+				return errorResponse('Failed to download file from storage', 500);
+			}
+
+			const arrayBuffer = await fileData.arrayBuffer();
+			const uint8Array = new Uint8Array(arrayBuffer);
+			base64Data = btoa(String.fromCharCode(...uint8Array));
+
+			// Clean up the temporary upload after we've read it
+			serviceClient.storage.from('order-pdfs').remove([body.storagePath]).catch(() => {});
+		}
+
+		if (!base64Data) {
+			return errorResponse('Missing base64Data or storagePath', 400);
+		}
+
+		if (base64Data.length > MAX_BASE64_LENGTH) {
+			return errorResponse('File too large (max 7.5MB)', 413);
 		}
 
 		const geminiKey = Deno.env.get('GEMINI_API_KEY');
