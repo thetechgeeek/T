@@ -2,6 +2,7 @@ import {
 	getCurrentFinancialYear,
 	getFinancialYearStart,
 	formatDate,
+	formatRelativeDate,
 	formatShortDate,
 } from '../dateUtils';
 
@@ -71,7 +72,8 @@ describe('formatDate', () => {
 	});
 
 	it('accepts Date objects', () => {
-		const result = formatDate(new Date('2025-01-01'));
+		// Use Date.UTC to avoid UTC-vs-local timezone drift (QA issue 2.14)
+		const result = formatDate(new Date(Date.UTC(2025, 0, 1)));
 		expect(result).toBe('1 Jan 2025');
 	});
 });
@@ -80,5 +82,46 @@ describe('formatShortDate', () => {
 	it('formats date to day and month only', () => {
 		const result = formatShortDate('2025-03-22');
 		expect(result).toBe('22 Mar');
+	});
+});
+
+describe('formatRelativeDate', () => {
+	afterEach(() => {
+		jest.useRealTimers();
+	});
+
+	it('returns Today when called with today\'s date', () => {
+		jest.useFakeTimers();
+		jest.setSystemTime(new Date('2026-03-29T12:00:00.000Z'));
+		expect(formatRelativeDate('2026-03-29')).toBe('Today');
+	});
+
+	it('returns Yesterday when called with yesterday\'s date', () => {
+		jest.useFakeTimers();
+		jest.setSystemTime(new Date('2026-03-29T12:00:00.000Z'));
+		expect(formatRelativeDate('2026-03-28')).toBe('Yesterday');
+	});
+
+	it('returns a formatted relative string for older dates (not Today or Yesterday)', () => {
+		jest.useFakeTimers();
+		jest.setSystemTime(new Date('2026-03-29T12:00:00.000Z'));
+		const result = formatRelativeDate('2024-01-15');
+		expect(result).not.toBe('Today');
+		expect(result).not.toBe('Yesterday');
+		expect(result.length).toBeGreaterThan(0);
+	});
+});
+
+describe('getFinancialYearStart — boundary', () => {
+	afterEach(() => {
+		jest.useRealTimers();
+	});
+
+	it('April 1 is included in the new FY (same-day inclusion)', () => {
+		jest.useFakeTimers();
+		jest.setSystemTime(new Date(Date.UTC(2026, 3, 1))); // April 1 2026 UTC
+		// getFinancialYearStart uses new Date() internally — with fake timers this is April 1 2026
+		const result = getFinancialYearStart();
+		expect(result).toBe('2026-04-01');
 	});
 });

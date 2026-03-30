@@ -73,4 +73,20 @@ describe('groupByBaseItemNumber', () => {
 		const groups = groupByBaseItemNumber([]);
 		expect(groups.size).toBe(0);
 	});
+
+	it('item with no numeric block is grouped under its design_name as key', () => {
+		const items = [{ design_name: 'BRAND', id: '1' }];
+		const groups = groupByBaseItemNumber(items);
+		// Should not produce an undefined key — item is grouped under 'BRAND'
+		expect(groups.has(undefined as any)).toBe(false);
+		expect(groups.size).toBe(1);
+	});
+});
+
+describe('extractBaseItemNumber — whitespace handling', () => {
+	it('trims whitespace before extracting base number', () => {
+		const result = extractBaseItemNumber('  10526-D  ');
+		// Should extract the numeric base without the suffix
+		expect(result).toBe('10526');
+	});
 });

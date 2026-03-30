@@ -43,4 +43,44 @@ describe('withRetry', () => {
 		);
 		expect(fn).toHaveBeenCalledTimes(1);
 	});
+
+	it('maxAttempts = 1: calls fn exactly once and rejects with original error', async () => {
+		const error = new Error('fail');
+		const fn = jest.fn().mockRejectedValue(error);
+		await expect(withRetry(fn, { maxAttempts: 1 })).rejects.toThrow('fail');
+		expect(fn).toHaveBeenCalledTimes(1);
+	});
+
+	it('success on third attempt: fn called 3 times, resolves correctly', async () => {
+		const fn = jest
+			.fn()
+			.mockRejectedValueOnce(new Error('first'))
+			.mockRejectedValueOnce(new Error('second'))
+			.mockResolvedValueOnce('success');
+
+		const promise = withRetry(fn, { maxAttempts: 3, baseDelay: 10 });
+		jest.runAllTimersAsync();
+		await expect(promise).resolves.toBe('success');
+		expect(fn).toHaveBeenCalledTimes(3);
+	});
+
+	it('baseDelay is respected: second attempt fires after baseDelay ms', async () => {
+		const fn = jest.fn().mockRejectedValue(new Error('fail'));
+		const promise = withRetry(fn, { maxAttempts: 2, baseDelay: 100 });
+
+		// After first attempt fails, second attempt should not start before 100ms
+		await Promise.resolve(); // flush microtasks
+		expect(fn).toHaveBeenCalledTimes(1);
+
+		jest.advanceTimersByTime(99);
+		await Promise.resolve();
+		expect(fn).toHaveBeenCalledTimes(1);
+
+		jest.advanceTimersByTime(1); // total 100ms
+		await Promise.resolve();
+		expect(fn).toHaveBeenCalledTimes(2);
+
+		// Drain the rejection
+		await expect(promise).rejects.toThrow('fail');
+	});
 });

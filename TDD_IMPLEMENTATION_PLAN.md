@@ -199,75 +199,75 @@
 
 ### gstCalculator.test.ts
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `gst_rate = 0` (zero-rated): assert `taxable_amount === gross`, `cgst_amount === 0`, `sgst_amount === 0`, `igst_amount === 0`, `line_total === taxable_amount`.
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `gst_rate = 0` (zero-rated): assert `taxable_amount === gross`, `cgst_amount === 0`, `sgst_amount === 0`, `igst_amount === 0`, `line_total === taxable_amount`.
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `gst_rate = 5`, `is_inter_state = false`: assert `cgst_amount === taxable_amount * 0.025`, `sgst_amount === taxable_amount * 0.025`, `igst_amount === 0`. Use exact numeric values to avoid floating-point ambiguity (e.g., `rate_per_unit = 1000`, `quantity = 1` → `taxable_amount = 1000`, `cgst_amount = 25`).
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `gst_rate = 5`, `is_inter_state = false`: assert `cgst_amount === taxable_amount * 0.025`, `sgst_amount === taxable_amount * 0.025`, `igst_amount === 0`. Use exact numeric values to avoid floating-point ambiguity (e.g., `rate_per_unit = 1000`, `quantity = 1` → `taxable_amount = 1000`, `cgst_amount = 25`).
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `gst_rate = 28`, `is_inter_state = true`: assert `igst_amount === taxable_amount * 0.28`, `cgst_amount === 0`, `sgst_amount === 0`.
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `gst_rate = 28`, `is_inter_state = true`: assert `igst_amount === taxable_amount * 0.28`, `cgst_amount === 0`, `sgst_amount === 0`.
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `discount` exactly equal to `gross_amount` (`rate_per_unit * quantity`): assert `taxable_amount === 0`, all tax fields `=== 0`, `line_total === 0`.
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `discount` exactly equal to `gross_amount` (`rate_per_unit * quantity`): assert `taxable_amount === 0`, all tax fields `=== 0`, `line_total === 0`.
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `discount` greater than `gross_amount`: assert `taxable_amount` is clamped to `0` (not negative), all tax values `=== 0`, `line_total === 0`. Verifies the guard against negative taxable amounts.
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `discount` greater than `gross_amount`: assert `taxable_amount` is clamped to `0` (not negative), all tax values `=== 0`, `line_total === 0`. Verifies the guard against negative taxable amounts.
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `quantity = 0`: assert all monetary output fields (`taxable_amount`, `cgst_amount`, `sgst_amount`, `igst_amount`, `line_total`) equal `0`.
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateLineItem` with `quantity = 0`: assert all monetary output fields (`taxable_amount`, `cgst_amount`, `sgst_amount`, `igst_amount`, `line_total`) equal `0`.
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test floating-point precision: call `calculateLineItem({ rate_per_unit: 333.33, quantity: 3, gst_rate: 18, discount: 0, is_inter_state: false })`. Assert `line_total` is a finite number, `Number.isFinite(result.line_total) === true`, and `result.line_total === parseFloat(result.line_total.toFixed(2))` (no drift beyond 2 decimal places).
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test floating-point precision: call `calculateLineItem({ rate_per_unit: 333.33, quantity: 3, gst_rate: 18, discount: 0, is_inter_state: false })`. Assert `line_total` is a finite number, `Number.isFinite(result.line_total) === true`, and `result.line_total === parseFloat(result.line_total.toFixed(2))` (no drift beyond 2 decimal places).
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateInvoiceTotals` with `isInterState = false` and two line items with different GST rates (e.g., one at 12%, one at 18%): assert `cgst_total > 0`, `sgst_total > 0`, `igst_total === 0`. Verify that `cgst_total + sgst_total === total_tax`.
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateInvoiceTotals` with `isInterState = false` and two line items with different GST rates (e.g., one at 12%, one at 18%): assert `cgst_total > 0`, `sgst_total > 0`, `igst_total === 0`. Verify that `cgst_total + sgst_total === total_tax`.
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateInvoiceTotals` sort order of `slabBreakdown`: pass three line items with `gst_rate` values `[28, 5, 18]` in that order. Assert `slabBreakdown[0].rate === 5`, `slabBreakdown[1].rate === 18`, `slabBreakdown[2].rate === 28` (ascending sort).
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateInvoiceTotals` sort order of `slabBreakdown`: pass three line items with `gst_rate` values `[28, 5, 18]` in that order. Assert `slabBreakdown[0].rate === 5`, `slabBreakdown[1].rate === 18`, `slabBreakdown[2].rate === 28` (ascending sort).
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateInvoiceTotals` with a single line item of `gst_rate = 0`: assert `slabBreakdown.length === 1`, `slabBreakdown[0].rate === 0`, `slabBreakdown[0].total_tax === 0`.
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateInvoiceTotals` with a single line item of `gst_rate = 0`: assert `slabBreakdown.length === 1`, `slabBreakdown[0].rate === 0`, `slabBreakdown[0].total_tax === 0`.
 
-- [ ] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateInvoiceTotals` with an empty `line_items` array `[]`: assert `subtotal === 0`, `total_tax === 0`, `grand_total === 0`, `cgst_total === 0`, `sgst_total === 0`, `igst_total === 0`, `slabBreakdown` is an empty array `[]`.
+- [x] Add to `src/utils/__tests__/gstCalculator.test.ts`: Test `calculateInvoiceTotals` with an empty `line_items` array `[]`: assert `subtotal === 0`, `total_tax === 0`, `grand_total === 0`, `cgst_total === 0`, `sgst_total === 0`, `igst_total === 0`, `slabBreakdown` is an empty array `[]`.
 
 ### dateUtils.test.ts
 
-- [ ] Fix in `src/utils/__tests__/dateUtils.test.ts`: Replace `new Date('2025-01-01')` with `new Date(Date.UTC(2025, 0, 1))` in the existing `formatDate` test to avoid UTC-vs-local timezone drift. Update the expected output string to match. This resolves QA issue 2.14.
+- [x] Fix in `src/utils/__tests__/dateUtils.test.ts`: Replace `new Date('2025-01-01')` with `new Date(Date.UTC(2025, 0, 1))` in the existing `formatDate` test to avoid UTC-vs-local timezone drift. Update the expected output string to match. This resolves QA issue 2.14.
 
-- [ ] Add to `src/utils/__tests__/dateUtils.test.ts`: Test `formatRelativeDate` returns `'Today'` when called with today's ISO date string. Use `jest.useFakeTimers()` and `jest.setSystemTime(new Date('2026-03-29T12:00:00.000Z'))` before the assertion, then call `formatRelativeDate('2026-03-29')` and assert the result equals `'Today'`. Restore real timers in `afterEach`.
+- [x] Add to `src/utils/__tests__/dateUtils.test.ts`: Test `formatRelativeDate` returns `'Today'` when called with today's ISO date string. Use `jest.useFakeTimers()` and `jest.setSystemTime(new Date('2026-03-29T12:00:00.000Z'))` before the assertion, then call `formatRelativeDate('2026-03-29')` and assert the result equals `'Today'`. Restore real timers in `afterEach`.
 
-- [ ] Add to `src/utils/__tests__/dateUtils.test.ts`: Test `formatRelativeDate` returns `'Yesterday'` when called with yesterday's ISO date string. With system time set to `2026-03-29`, call `formatRelativeDate('2026-03-28')` and assert `=== 'Yesterday'`.
+- [x] Add to `src/utils/__tests__/dateUtils.test.ts`: Test `formatRelativeDate` returns `'Yesterday'` when called with yesterday's ISO date string. With system time set to `2026-03-29`, call `formatRelativeDate('2026-03-28')` and assert `=== 'Yesterday'`.
 
-- [ ] Add to `src/utils/__tests__/dateUtils.test.ts`: Test `formatRelativeDate` with a date more than 1 day in the past. With system time set to `2026-03-29`, call `formatRelativeDate('2024-01-15')` and assert the result is a formatted date string (not `'Today'` or `'Yesterday'`). Assert `result !== 'Today'` and `result !== 'Yesterday'` and `result.length > 0`.
+- [x] Add to `src/utils/__tests__/dateUtils.test.ts`: Test `formatRelativeDate` with a date more than 1 day in the past. With system time set to `2026-03-29`, call `formatRelativeDate('2024-01-15')` and assert the result is a formatted date string (not `'Today'` or `'Yesterday'`). Assert `result !== 'Today'` and `result !== 'Yesterday'` and `result.length > 0`.
 
-- [ ] Add to `src/utils/__tests__/dateUtils.test.ts`: Test `getFinancialYearStart` on the exact April 1 boundary. Call `getFinancialYearStart(new Date(Date.UTC(2026, 3, 1)))` (April 1 2026 UTC) and assert it returns a date whose month is April (month index 3) and year is 2026, not 2025. This verifies same-day inclusion logic.
+- [x] Add to `src/utils/__tests__/dateUtils.test.ts`: Test `getFinancialYearStart` on the exact April 1 boundary. Call `getFinancialYearStart(new Date(Date.UTC(2026, 3, 1)))` (April 1 2026 UTC) and assert it returns a date whose month is April (month index 3) and year is 2026, not 2025. This verifies same-day inclusion logic.
 
 ### currency.test.ts
 
-- [ ] Add to `src/utils/__tests__/currency.test.ts`: Test `formatINR(NaN)`: assert the result is either `'₹0.00'` or that the function throws a `TypeError`. Document which behavior is expected in the test description. Whichever behavior is currently implemented, assert it explicitly — do not leave this as implicit.
+- [x] Add to `src/utils/__tests__/currency.test.ts`: Test `formatINR(NaN)`: assert the result is either `'₹0.00'` or that the function throws a `TypeError`. Document which behavior is expected in the test description. Whichever behavior is currently implemented, assert it explicitly — do not leave this as implicit.
 
-- [ ] Add to `src/utils/__tests__/currency.test.ts`: Test `formatINR(Infinity)`: assert the result is `'₹0.00'` or that the function throws. Same pattern as the `NaN` test — pick one documented behavior.
+- [x] Add to `src/utils/__tests__/currency.test.ts`: Test `formatINR(Infinity)`: assert the result is `'₹0.00'` or that the function throws. Same pattern as the `NaN` test — pick one documented behavior.
 
-- [ ] Add to `src/utils/__tests__/currency.test.ts`: Test `parseINR('not-a-number')`: assert the return value is `0`. This guards against `NaN` propagation into financial calculations.
+- [x] Add to `src/utils/__tests__/currency.test.ts`: Test `parseINR('not-a-number')`: assert the return value is `0`. This guards against `NaN` propagation into financial calculations.
 
-- [ ] Add to `src/utils/__tests__/currency.test.ts`: Test `parseINR('₹-500.00')`: assert the return value is `-500`. Verifies that negative formatted strings are parsed correctly.
+- [x] Add to `src/utils/__tests__/currency.test.ts`: Test `parseINR('₹-500.00')`: assert the return value is `-500`. Verifies that negative formatted strings are parsed correctly.
 
-- [ ] Add to `src/utils/__tests__/currency.test.ts`: Test `numberToIndianWords(10000000)`: assert the result contains `'Crore'` (or `'crore'` — match the actual casing). This verifies crore-scale formatting works.
+- [x] Add to `src/utils/__tests__/currency.test.ts`: Test `numberToIndianWords(10000000)`: assert the result contains `'Crore'` (or `'crore'` — match the actual casing). This verifies crore-scale formatting works.
 
-- [ ] Add to `src/utils/__tests__/currency.test.ts`: Test `numberToIndianWords(10000000000)`: assert the result contains `'Arab'` or `'Hundred Crore'` — document what the function currently returns for 10 billion and assert that exact output.
+- [x] Add to `src/utils/__tests__/currency.test.ts`: Test `numberToIndianWords(10000000000)`: assert the result contains `'Arab'` or `'Hundred Crore'` — document what the function currently returns for 10 billion and assert that exact output.
 
-- [ ] Add to `src/utils/__tests__/currency.test.ts`: Fix the existing `formatINR(-500)` test: replace the current assertion (if it asserts `'₹-500.00'`) with `expect(result.startsWith('-₹')).toBe(true)`. This verifies the minus sign precedes the rupee symbol per standard Indian accounting notation. This resolves QA issue 2.15.
+- [x] Add to `src/utils/__tests__/currency.test.ts`: Fix the existing `formatINR(-500)` test: replace the current assertion (if it asserts `'₹-500.00'`) with `expect(result.startsWith('-₹')).toBe(true)`. This verifies the minus sign precedes the rupee symbol per standard Indian accounting notation. This resolves QA issue 2.15.
 
 ### retry.test.ts
 
-- [ ] Add to `src/utils/__tests__/retry.test.ts` (create if missing): Test `withRetry` with `maxAttempts = 1`: call `withRetry(jest.fn().mockRejectedValue(new Error('fail')), { maxAttempts: 1 })`. Assert the function was called exactly once and the returned promise rejects with the original error.
+- [x] Add to `src/utils/__tests__/retry.test.ts` (create if missing): Test `withRetry` with `maxAttempts = 1`: call `withRetry(jest.fn().mockRejectedValue(new Error('fail')), { maxAttempts: 1 })`. Assert the function was called exactly once and the returned promise rejects with the original error.
 
-- [ ] Add to `src/utils/__tests__/retry.test.ts`: Test exponential backoff timing: use `jest.useFakeTimers()`. Set up `withRetry(fn, { maxAttempts: 3, baseDelay: 100 })` where `fn` always rejects. After the first failure, advance timers by 99ms and assert the second attempt has NOT been made yet. Advance by 1ms more (total 100ms) and assert the second attempt IS made. This verifies `baseDelay` is respected.
+- [x] Add to `src/utils/__tests__/retry.test.ts`: Test exponential backoff timing: use `jest.useFakeTimers()`. Set up `withRetry(fn, { maxAttempts: 3, baseDelay: 100 })` where `fn` always rejects. After the first failure, advance timers by 99ms and assert the second attempt has NOT been made yet. Advance by 1ms more (total 100ms) and assert the second attempt IS made. This verifies `baseDelay` is respected.
 
-- [ ] Add to `src/utils/__tests__/retry.test.ts`: Test `withRetry` success on third attempt: create `fn` that rejects twice then resolves with `'success'`. Call `withRetry(fn, { maxAttempts: 3 })`. Assert `fn` was called exactly 3 times and the promise resolves with `'success'`.
+- [x] Add to `src/utils/__tests__/retry.test.ts`: Test `withRetry` success on third attempt: create `fn` that rejects twice then resolves with `'success'`. Call `withRetry(fn, { maxAttempts: 3 })`. Assert `fn` was called exactly 3 times and the promise resolves with `'success'`.
 
 ### itemNameParser.test.ts
 
-- [ ] Add to `src/utils/__tests__/itemNameParser.test.ts` (create if missing): Test `extractBaseItemNumber` with whitespace-padded input `'  10526-D  '`: assert the result is `'10526'` (or whatever the function currently extracts — document and assert the trimming behavior).
+- [x] Add to `src/utils/__tests__/itemNameParser.test.ts` (create if missing): Test `extractBaseItemNumber` with whitespace-padded input `'  10526-D  '`: assert the result is `'10526'` (or whatever the function currently extracts — document and assert the trimming behavior).
 
-- [ ] Add to `src/utils/__tests__/itemNameParser.test.ts`: Test `groupByBaseItemNumber` where one item has a `design_name` with no numeric block (e.g., `'BRAND'`): assert the item is grouped under key `'BRAND'` (or the fallback key the function uses). This prevents silent `undefined` key grouping.
+- [x] Add to `src/utils/__tests__/itemNameParser.test.ts`: Test `groupByBaseItemNumber` where one item has a `design_name` with no numeric block (e.g., `'BRAND'`): assert the item is grouped under key `'BRAND'` (or the fallback key the function uses). This prevents silent `undefined` key grouping.
 
 ### html.test.ts and color.test.ts
 
-- [ ] Check `src/utils/__tests__/html.test.ts` (create if missing): Enumerate all exported functions from `src/utils/html.ts` (likely `stripHtml`, `sanitizeHtml`, or similar). Add a test for each exported function that does not already have one. Minimum: one happy-path and one empty-string test per function.
+- [x] Check `src/utils/__tests__/html.test.ts` (create if missing): Enumerate all exported functions from `src/utils/html.ts` (likely `stripHtml`, `sanitizeHtml`, or similar). Add a test for each exported function that does not already have one. Minimum: one happy-path and one empty-string test per function.
 
-- [ ] Check `src/utils/__tests__/color.test.ts` (create if missing): Enumerate all exported functions from `src/utils/color.ts`. Add tests for any function not already covered. Minimum: verify that color utility functions handle both valid hex and invalid inputs gracefully.
+- [x] Check `src/utils/__tests__/color.test.ts` (create if missing): Enumerate all exported functions from `src/utils/color.ts`. Add tests for any function not already covered. Minimum: verify that color utility functions handle both valid hex and invalid inputs gracefully.
 
 ---
 
