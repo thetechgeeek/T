@@ -69,7 +69,7 @@
 
 ### FlatList Mock
 
-- [ ] Fix in `jest.setup.ts`: Replace the minimal `FlatList` mock with one that handles all props used in the codebase. The new mock must: render each item in `data` via `renderItem`, render `ListHeaderComponent` if provided, render `ListFooterComponent` if provided, render `ListEmptyComponent` if `data` is empty or `data.length === 0`, call `onEndReached` when a `data-testid="flatlist-end-trigger"` element is pressed (or expose it via a ref-style helper), and pass `refreshing` to a `ScrollView`-like wrapper. Example structure:
+- [x] Fix in `jest.setup.ts`: Replace the minimal `FlatList` mock with one that handles all props used in the codebase. The new mock must: render each item in `data` via `renderItem`, render `ListHeaderComponent` if provided, render `ListFooterComponent` if provided, render `ListEmptyComponent` if `data` is empty or `data.length === 0`, call `onEndReached` when a `data-testid="flatlist-end-trigger"` element is pressed (or expose it via a ref-style helper), and pass `refreshing` to a `ScrollView`-like wrapper. Example structure:
   ```tsx
   const FlatList = ({ data, renderItem, keyExtractor, ListHeaderComponent, ListFooterComponent, ListEmptyComponent, onEndReached, onRefresh, refreshing }: any) => (
     <View>
@@ -87,7 +87,7 @@
 
 ### Modal Mock
 
-- [ ] Fix in `jest.setup.ts`: Replace the `Modal` mock so it conditionally renders children only when `visible === true`:
+- [x] Fix in `jest.setup.ts`: Replace the `Modal` mock so it conditionally renders children only when `visible === true`:
   ```tsx
   const Modal = ({ children, visible, ...props }: any) =>
     visible ? React.createElement('Modal', props, children) : null;
@@ -96,11 +96,11 @@
 
 ### useLocalSearchParams Mock
 
-- [ ] Fix in `jest.setup.ts`: Remove the hardcoded `useLocalSearchParams: () => ({ id: '123' })` global override from `jest.setup.ts`. Instead, add a per-file configurable approach: export a `mockSearchParams` object from a test utility file (`__tests__/utils/mockSearchParams.ts`) that individual test files can populate via `jest.mock` before each test. Document this pattern at the top of `jest.setup.ts` in a comment. This resolves QA issue 3.3.
+- [x] Fix in `jest.setup.ts`: Remove the hardcoded `useLocalSearchParams: () => ({ id: '123' })` global override from `jest.setup.ts`. Instead, add a per-file configurable approach: export a `mockSearchParams` object from a test utility file (`__tests__/utils/mockSearchParams.ts`) that individual test files can populate via `jest.mock` before each test. Document this pattern at the top of `jest.setup.ts` in a comment. This resolves QA issue 3.3.
 
 ### react-i18next Mock
 
-- [ ] Fix in `jest.setup.ts`: Replace the static key-to-string map in the `useTranslation` mock with a fallback function that returns the last segment of the key if it is not in the static map:
+- [x] Fix in `jest.setup.ts`: Replace the static key-to-string map in the `useTranslation` mock with a fallback function that returns the last segment of the key if it is not in the static map:
   ```ts
   const t = (key: string, opts?: any) => {
     const staticMap: Record<string, string> = { /* keep existing keys */ };
@@ -114,7 +114,7 @@
 
 ### Platform Mock
 
-- [ ] Fix in `jest.setup.ts`: Replace the static `Platform = { OS: 'ios', ... }` with a mock that allows per-test override:
+- [x] Fix in `jest.setup.ts`: Replace the static `Platform = { OS: 'ios', ... }` with a mock that allows per-test override:
   ```ts
   jest.mock('react-native/Libraries/Utilities/Platform', () => {
     const platform = { OS: 'ios', Version: 1, select: (obj: any) => obj[platform.OS] ?? obj.default };
@@ -125,7 +125,7 @@
 
 ### Global Supabase Mock
 
-- [ ] Fix in `jest.setup.ts`: Remove the global `jest.mock('./src/config/supabase', ...)` from `jest.setup.ts` entirely. Each test file that needs a Supabase mock must declare its own local `jest.mock('../config/supabase', ...)`. Add a shared typed chainable mock builder to `__tests__/utils/supabaseMock.ts` (see Phase 2) so there is no duplication. Document at the top of `jest.setup.ts` that Supabase is NOT globally mocked and each test file is responsible for its own mock. This resolves QA issue 3.1.
+- [x] Fix in `jest.setup.ts`: Remove the global `jest.mock('./src/config/supabase', ...)` from `jest.setup.ts` entirely. Each test file that needs a Supabase mock must declare its own local `jest.mock('../config/supabase', ...)`. Add a shared typed chainable mock builder to `__tests__/utils/supabaseMock.ts` (see Phase 2) so there is no duplication. Document at the top of `jest.setup.ts` that Supabase is NOT globally mocked and each test file is responsible for its own mock. This resolves QA issue 3.1.
 
 ---
 
