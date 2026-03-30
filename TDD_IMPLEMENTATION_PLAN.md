@@ -135,61 +135,61 @@
 
 ### Invoice Fixtures
 
-- [ ] Create `__tests__/fixtures/invoiceFixtures.ts`: Export `makeInvoiceLineItemInput(overrides?: Partial<InvoiceLineItemInput>): InvoiceLineItemInput` with defaults `{ item_id: 'item-uuid-001', design_name: 'GLOSSY WHITE 60x60', category: 'GLOSSY', quantity: 10, rate_per_unit: 500, gst_rate: 18, discount: 0 }`. Import the `InvoiceLineItemInput` type from `src/schemas/invoiceSchema.ts` (or wherever it lives).
+- [x] Create `__tests__/fixtures/invoiceFixtures.ts`: Export `makeInvoiceLineItemInput(overrides?: Partial<InvoiceLineItemInput>): InvoiceLineItemInput` with defaults `{ item_id: 'item-uuid-001', design_name: 'GLOSSY WHITE 60x60', category: 'GLOSSY', quantity: 10, rate_per_unit: 500, gst_rate: 18, discount: 0 }`. Import the `InvoiceLineItemInput` type from `src/schemas/invoiceSchema.ts` (or wherever it lives).
 
-- [ ] Add to `__tests__/fixtures/invoiceFixtures.ts`: Export `makeInvoiceInput(overrides?: Partial<InvoiceInput>): InvoiceInput` with defaults `{ customer_name: 'Test Customer', customer_gstin: '', invoice_date: '2026-01-15', place_of_supply: '27', is_inter_state: false, payment_status: 'unpaid', amount_paid: 0, payment_mode: 'cash', notes: '', reverse_charge: false, line_items: [makeInvoiceLineItemInput()] }`.
+- [x] Add to `__tests__/fixtures/invoiceFixtures.ts`: Export `makeInvoiceInput(overrides?: Partial<InvoiceInput>): InvoiceInput` with defaults `{ customer_name: 'Test Customer', customer_gstin: '', invoice_date: '2026-01-15', place_of_supply: '27', is_inter_state: false, payment_status: 'unpaid', amount_paid: 0, payment_mode: 'cash', notes: '', reverse_charge: false, line_items: [makeInvoiceLineItemInput()] }`.
 
-- [ ] Add to `__tests__/fixtures/invoiceFixtures.ts`: Export `makeInvoice(overrides?: Partial<Invoice>): Invoice` with defaults including `id: 'inv-uuid-001'`, `invoice_number: 'TM/2025-26/0001'`, `grand_total: 5900`, `created_at: '2026-01-15T10:00:00.000Z'`, and a spread of `makeInvoiceInput()` fields.
+- [x] Add to `__tests__/fixtures/invoiceFixtures.ts`: Export `makeInvoice(overrides?: Partial<Invoice>): Invoice` with defaults including `id: 'inv-uuid-001'`, `invoice_number: 'TM/2025-26/0001'`, `grand_total: 5900`, `created_at: '2026-01-15T10:00:00.000Z'`, and a spread of `makeInvoiceInput()` fields.
 
-- [ ] Add to `__tests__/fixtures/invoiceFixtures.ts`: Export `makeInvoiceListItem(overrides?: Partial<InvoiceListItem>): InvoiceListItem` — the slim type used in `fetchInvoices` list view, with `customer: { name: 'Test Customer', phone: '9876543210' }`.
+- [x] Add to `__tests__/fixtures/invoiceFixtures.ts`: Export `makeInvoiceListItem(overrides?: Partial<InvoiceListItem>): InvoiceListItem` — the slim type used in `fetchInvoices` list view, with `customer: { name: 'Test Customer', phone: '9876543210' }`.
 
 ### Customer Fixtures
 
-- [ ] Create `__tests__/fixtures/customerFixtures.ts`: Export `makeCustomer(overrides?: Partial<Customer>): Customer` with defaults `{ id: 'cust-uuid-001', name: 'Test Customer', phone: '9876543210', email: 'test@example.com', gstin: '', address: '123 Test St', city: 'Mumbai', state: 'Maharashtra', created_at: '2026-01-01T00:00:00.000Z' }`.
+- [x] Create `__tests__/fixtures/customerFixtures.ts`: Export `makeCustomer(overrides?: Partial<Customer>): Customer` with defaults `{ id: 'cust-uuid-001', name: 'Test Customer', phone: '9876543210', email: 'test@example.com', gstin: '', address: '123 Test St', city: 'Mumbai', state: 'Maharashtra', created_at: '2026-01-01T00:00:00.000Z' }`.
 
-- [ ] Add to `__tests__/fixtures/customerFixtures.ts`: Export `makeCustomerInput(overrides?: Partial<CustomerInput>): CustomerInput` — same shape minus `id` and `created_at`.
+- [x] Add to `__tests__/fixtures/customerFixtures.ts`: Export `makeCustomerInput(overrides?: Partial<CustomerInput>): CustomerInput` — same shape minus `id` and `created_at`.
 
 ### Inventory Fixtures
 
-- [ ] Create `__tests__/fixtures/inventoryFixtures.ts`: Export `makeInventoryItem(overrides?: Partial<InventoryItem>): InventoryItem` with defaults `{ id: 'item-uuid-001', design_name: 'GLOSSY WHITE 60x60', base_item_number: '10526', category: 'GLOSSY', box_count: 50, selling_price: 500, created_at: '2026-01-01T00:00:00.000Z' }`.
+- [x] Create `__tests__/fixtures/inventoryFixtures.ts`: Export `makeInventoryItem(overrides?: Partial<InventoryItem>): InventoryItem` with defaults `{ id: 'item-uuid-001', design_name: 'GLOSSY WHITE 60x60', base_item_number: '10526', category: 'GLOSSY', box_count: 50, selling_price: 500, created_at: '2026-01-01T00:00:00.000Z' }`.
 
-- [ ] Add to `__tests__/fixtures/inventoryFixtures.ts`: Export `makeInventoryItemInput(overrides?: Partial<InventoryItemInput>): InventoryItemInput`.
+- [x] Add to `__tests__/fixtures/inventoryFixtures.ts`: Export `makeInventoryItemInput(overrides?: Partial<InventoryItemInput>): InventoryItemInput`.
 
 ### Payment Fixtures
 
-- [ ] Create `__tests__/fixtures/paymentFixtures.ts`: Export `makePaymentInput(overrides?: Partial<PaymentInput>): PaymentInput` with defaults `{ invoice_id: 'inv-uuid-001', customer_id: 'cust-uuid-001', amount: 1000, payment_mode: 'cash', payment_date: '2026-01-15', notes: '' }`.
+- [x] Create `__tests__/fixtures/paymentFixtures.ts`: Export `makePaymentInput(overrides?: Partial<PaymentInput>): PaymentInput` with defaults `{ invoice_id: 'inv-uuid-001', customer_id: 'cust-uuid-001', amount: 1000, payment_mode: 'cash', payment_date: '2026-01-15', notes: '' }`.
 
-- [ ] Add to `__tests__/fixtures/paymentFixtures.ts`: Export `makePayment(overrides?: Partial<Payment>): Payment` with `id: 'pay-uuid-001'` and spread of `makePaymentInput()`.
+- [x] Add to `__tests__/fixtures/paymentFixtures.ts`: Export `makePayment(overrides?: Partial<Payment>): Payment` with `id: 'pay-uuid-001'` and spread of `makePaymentInput()`.
 
 ### Order Fixtures
 
-- [ ] Create `__tests__/fixtures/orderFixtures.ts`: Export `makeOrderItem(overrides?: Partial<OrderItem>): OrderItem` with defaults `{ design_name: 'GLOSSY WHITE 60x60', quantity: 5, base_item_number: '10526' }`.
+- [x] Create `__tests__/fixtures/orderFixtures.ts`: Export `makeOrderItem(overrides?: Partial<OrderItem>): OrderItem` with defaults `{ design_name: 'GLOSSY WHITE 60x60', quantity: 5, base_item_number: '10526' }`.
 
-- [ ] Add to `__tests__/fixtures/orderFixtures.ts`: Export `makeOrder(overrides?: Partial<Order>): Order` with defaults `{ id: 'order-uuid-001', party_name: 'Test Party', status: 'pending', items: [makeOrderItem()], created_at: '2026-01-01T00:00:00.000Z' }`.
+- [x] Add to `__tests__/fixtures/orderFixtures.ts`: Export `makeOrder(overrides?: Partial<Order>): Order` with defaults `{ id: 'order-uuid-001', party_name: 'Test Party', status: 'pending', items: [makeOrderItem()], created_at: '2026-01-01T00:00:00.000Z' }`.
 
 ### Finance Fixtures
 
-- [ ] Create `__tests__/fixtures/financeFixtures.ts`: Export `makeExpense(overrides?: Partial<Expense>): Expense` with defaults `{ id: 'exp-uuid-001', category: 'Transport', amount: 500, expense_date: '2026-01-15', notes: '', created_at: '2026-01-15T00:00:00.000Z' }`.
+- [x] Create `__tests__/fixtures/financeFixtures.ts`: Export `makeExpense(overrides?: Partial<Expense>): Expense` with defaults `{ id: 'exp-uuid-001', category: 'Transport', amount: 500, expense_date: '2026-01-15', notes: '', created_at: '2026-01-15T00:00:00.000Z' }`.
 
-- [ ] Add to `__tests__/fixtures/financeFixtures.ts`: Export `makeDashboardStats(overrides?: Partial<DashboardStats>): DashboardStats` with defaults `{ today_sales: 10000, total_outstanding_credit: 25000, low_stock_count: 3, monthly_revenue: 150000 }`.
+- [x] Add to `__tests__/fixtures/financeFixtures.ts`: Export `makeDashboardStats(overrides?: Partial<DashboardStats>): DashboardStats` with defaults `{ today_sales: 10000, total_outstanding_credit: 25000, low_stock_count: 3, monthly_revenue: 150000 }`.
 
 ### Auth Fixtures
 
-- [ ] Create `__tests__/fixtures/authFixtures.ts`: Export `makeUser(overrides?: Partial<User>): User` with defaults `{ id: 'user-uuid-001', email: 'admin@tilemaster.in', created_at: '2026-01-01T00:00:00.000Z' }`.
+- [x] Create `__tests__/fixtures/authFixtures.ts`: Export `makeUser(overrides?: Partial<User>): User` with defaults `{ id: 'user-uuid-001', email: 'admin@tilemaster.in', created_at: '2026-01-01T00:00:00.000Z' }`.
 
-- [ ] Add to `__tests__/fixtures/authFixtures.ts`: Export `makeSession(overrides?: Partial<Session>): Session` with defaults `{ access_token: 'mock-access-token', refresh_token: 'mock-refresh-token', user: makeUser() }`.
+- [x] Add to `__tests__/fixtures/authFixtures.ts`: Export `makeSession(overrides?: Partial<Session>): Session` with defaults `{ access_token: 'mock-access-token', refresh_token: 'mock-refresh-token', user: makeUser() }`.
 
 ### Shared Render Utility
 
-- [ ] Create `__tests__/utils/renderWithTheme.tsx`: Export a single `renderWithTheme(ui: React.ReactElement, options?: RenderOptions)` function that wraps the component in any required providers (ThemeProvider, SafeAreaProvider, NavigationContainer if needed). This replaces the duplicated `renderWithTheme` defined locally inside each UI test file. Export the result of `render(...)` so callers get the full `@testing-library/react-native` query API.
+- [x] Create `__tests__/utils/renderWithTheme.tsx`: Export a single `renderWithTheme(ui: React.ReactElement, options?: RenderOptions)` function that wraps the component in any required providers (ThemeProvider, SafeAreaProvider, NavigationContainer if needed). This replaces the duplicated `renderWithTheme` defined locally inside each UI test file. Export the result of `render(...)` so callers get the full `@testing-library/react-native` query API.
 
 ### Supabase Mock Builder
 
-- [ ] Create `__tests__/utils/supabaseMock.ts`: Export `createSupabaseMock()` that returns a fully typed chainable mock object. The mock must support the full Supabase query builder chain: `.from(table)` → returns a builder with `.select()`, `.insert()`, `.update()`, `.delete()`, `.upsert()`, each returning a builder with `.eq()`, `.neq()`, `.gte()`, `.lte()`, `.ilike()`, `.or()`, `.in()`, `.is()`, `.order()`, `.range()`, `.single()`, `.maybeSingle()`, `.limit()` — all returning the builder itself for chaining. The terminal call (`.single()`, `.maybeSingle()`, or any awaited call) resolves via `mockResolvedValue({ data: null, error: null })` by default. Also export `mockRpc` for `.rpc()` calls. Use `jest.fn()` for every method so calls can be asserted.
+- [x] Create `__tests__/utils/supabaseMock.ts`: Export `createSupabaseMock()` that returns a fully typed chainable mock object. The mock must support the full Supabase query builder chain: `.from(table)` → returns a builder with `.select()`, `.insert()`, `.update()`, `.delete()`, `.upsert()`, each returning a builder with `.eq()`, `.neq()`, `.gte()`, `.lte()`, `.ilike()`, `.or()`, `.in()`, `.is()`, `.order()`, `.range()`, `.single()`, `.maybeSingle()`, `.limit()` — all returning the builder itself for chaining. The terminal call (`.single()`, `.maybeSingle()`, or any awaited call) resolves via `mockResolvedValue({ data: null, error: null })` by default. Also export `mockRpc` for `.rpc()` calls. Use `jest.fn()` for every method so calls can be asserted.
 
 ### Zustand Store Reset Helper
 
-- [ ] Create `__tests__/utils/mockStore.ts`: Export `resetAllStores()` that calls the `.getState().reset()` (or Zustand's `useStore.setState(initialState)`) for each store used in tests. Export individual `resetInvoiceStore()`, `resetInventoryStore()`, `resetCustomerStore()`, `resetAuthStore()`, `resetFinanceStore()`, `resetDashboardStore()` helpers. Call these in `afterEach` blocks in relevant test files.
+- [x] Create `__tests__/utils/mockStore.ts`: Export `resetAllStores()` that calls the `.getState().reset()` (or Zustand's `useStore.setState(initialState)`) for each store used in tests. Export individual `resetInvoiceStore()`, `resetInventoryStore()`, `resetCustomerStore()`, `resetAuthStore()`, `resetFinanceStore()`, `resetDashboardStore()` helpers. Call these in `afterEach` blocks in relevant test files.
 
 ---
 
