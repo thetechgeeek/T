@@ -277,79 +277,79 @@
 
 ### Invoice Schema Tests
 
-- [ ] Create `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.parse(validInput)` with a fully valid input object — assert it parses without throwing and returns the parsed object.
+- [x] Create `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.parse(validInput)` with a fully valid input object — assert it parses without throwing and returns the parsed object.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, item_id: 'not-a-uuid' })`: assert `success === false` and `error.issues[0].path` contains `'item_id'`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, item_id: 'not-a-uuid' })`: assert `success === false` and `error.issues[0].path` contains `'item_id'`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, quantity: 0 })`: assert `success === false` and `error.issues[0].message` contains `'at least 1'` (or the exact Zod message defined in the schema).
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, quantity: 0 })`: assert `success === false` and `error.issues[0].message` contains `'at least 1'` (or the exact Zod message defined in the schema).
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, quantity: -1 })`: assert `success === false`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, quantity: -1 })`: assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, rate_per_unit: 0 })`: assert `success === false` and message contains `'positive'` (or equivalent).
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, rate_per_unit: 0 })`: assert `success === false` and message contains `'positive'` (or equivalent).
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, gst_rate: 7 })` (not in allowed enum `[0, 5, 12, 18, 28]`): assert `success === false` and message contains `'Invalid GST rate'` or `'Invalid enum value'`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, gst_rate: 7 })` (not in allowed enum `[0, 5, 12, 18, 28]`): assert `success === false` and message contains `'Invalid GST rate'` or `'Invalid enum value'`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, gst_rate: 0 })`: assert `success === true`. Zero is a valid GST rate for zero-rated supplies.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, gst_rate: 0 })`: assert `success === true`. Zero is a valid GST rate for zero-rated supplies.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, discount: undefined })`: assert `success === true` and `result.data.discount === 0` (default applied).
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceLineItemSchema.safeParse({ ...valid, discount: undefined })`: assert `success === true` and `result.data.discount === 0` (default applied).
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse(validFullInput)` with all required fields: assert `success === true`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse(validFullInput)` with all required fields: assert `success === true`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, invoice_date: '28-03-2026' })` (wrong date format DD-MM-YYYY): assert `success === false` and message references `'YYYY-MM-DD'`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, invoice_date: '28-03-2026' })` (wrong date format DD-MM-YYYY): assert `success === false` and message references `'YYYY-MM-DD'`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, customer_name: '' })`: assert `success === false` and message contains `'required'` or `'empty'`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, customer_name: '' })`: assert `success === false` and message contains `'required'` or `'empty'`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, customer_gstin: 'INVALIDGSTIN' })` (not matching the GSTIN regex): assert `success === false` and message references `'GSTIN'` or `'Invalid format'`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, customer_gstin: 'INVALIDGSTIN' })` (not matching the GSTIN regex): assert `success === false` and message references `'GSTIN'` or `'Invalid format'`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, customer_gstin: '' })`: assert `success === true`. Empty GSTIN is allowed (not all customers are GST registered).
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, customer_gstin: '' })`: assert `success === true`. Empty GSTIN is allowed (not all customers are GST registered).
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, customer_gstin: '27AAAAA0000A1Z5' })` (valid 15-char GSTIN): assert `success === true`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, customer_gstin: '27AAAAA0000A1Z5' })` (valid 15-char GSTIN): assert `success === true`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, line_items: [] })`: assert `success === false` and message contains `'at least one'` or `'min'`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, line_items: [] })`: assert `success === false` and message contains `'at least one'` or `'min'`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, payment_status: 'bounced' })` (invalid enum value): assert `success === false`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, payment_status: 'bounced' })` (invalid enum value): assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, notes: 'x'.repeat(1001) })` (exceeds 1000-char limit): assert `success === false`.
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, notes: 'x'.repeat(1001) })` (exceeds 1000-char limit): assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, amount_paid: undefined })`: assert `success === true` and `result.data.amount_paid === 0` (default applied).
+- [x] Add to `src/schemas/__tests__/invoice.schema.test.ts`: Test `InvoiceInputSchema.safeParse({ ...valid, amount_paid: undefined })`: assert `success === true` and `result.data.amount_paid === 0` (default applied).
 
 ### Payment Schema Tests
 
-- [ ] Create `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse(validPaymentInput)` with all required fields: assert `success === true`.
+- [x] Create `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse(validPaymentInput)` with all required fields: assert `success === true`.
 
-- [ ] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, amount: 0 })`: document the intended behavior (is 0 valid?) and assert it. If 0 is invalid, assert `success === false`. If 0 is valid, assert `success === true`. The test description must state the business rule.
+- [x] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, amount: 0 })`: document the intended behavior (is 0 valid?) and assert it. If 0 is invalid, assert `success === false`. If 0 is valid, assert `success === true`. The test description must state the business rule.
 
-- [ ] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, amount: -1 })`: assert `success === false`.
+- [x] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, amount: -1 })`: assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, payment_mode: 'bitcoin' })` (invalid mode): assert `success === false`.
+- [x] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, payment_mode: 'bitcoin' })` (invalid mode): assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, payment_date: '29-03-2026' })` (wrong date format): assert `success === false`.
+- [x] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, payment_date: '29-03-2026' })` (wrong date format): assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, customer_id: undefined, supplier_id: undefined })` (neither provided): assert `success === false` if the schema enforces mutual exclusion at the schema level. If the schema does not enforce this, document that the check is at the service layer and skip this test.
+- [x] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, customer_id: undefined, supplier_id: undefined })` (neither provided): assert `success === false` if the schema enforces mutual exclusion at the schema level. If the schema does not enforce this, document that the check is at the service layer and skip this test.
 
-- [ ] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, customer_id: 'cust-001', supplier_id: 'supp-001' })` (both provided): assert `success === false` if the schema enforces mutual exclusion.
+- [x] Add to `src/schemas/__tests__/payment.schema.test.ts`: Test `PaymentSchema.safeParse({ ...valid, customer_id: 'cust-001', supplier_id: 'supp-001' })` (both provided): assert `success === false` if the schema enforces mutual exclusion.
 
 ### Inventory Schema Tests
 
-- [ ] Create `src/schemas/__tests__/inventory.schema.test.ts`: Test `InventoryItemSchema.safeParse(validItem)`: assert `success === true`.
+- [x] Create `src/schemas/__tests__/inventory.schema.test.ts`: Test `InventoryItemSchema.safeParse(validItem)`: assert `success === true`.
 
-- [ ] Add to `src/schemas/__tests__/inventory.schema.test.ts`: Test `InventoryItemSchema.safeParse({ ...valid, design_name: '' })`: assert `success === false`.
+- [x] Add to `src/schemas/__tests__/inventory.schema.test.ts`: Test `InventoryItemSchema.safeParse({ ...valid, design_name: '' })`: assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/inventory.schema.test.ts`: Test `InventoryItemSchema.safeParse({ ...valid, box_count: -1 })`: assert `success === false`.
+- [x] Add to `src/schemas/__tests__/inventory.schema.test.ts`: Test `InventoryItemSchema.safeParse({ ...valid, box_count: -1 })`: assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/inventory.schema.test.ts`: Test `InventoryItemSchema.safeParse({ ...valid, selling_price: -100 })`: assert `success === false`.
+- [x] Add to `src/schemas/__tests__/inventory.schema.test.ts`: Test `InventoryItemSchema.safeParse({ ...valid, selling_price: -100 })`: assert `success === false`.
 
 ### Customer Schema Tests
 
-- [ ] Create `src/schemas/__tests__/customer.schema.test.ts`: Test `CustomerSchema.safeParse(validCustomer)`: assert `success === true`.
+- [x] Create `src/schemas/__tests__/customer.schema.test.ts`: Test `CustomerSchema.safeParse(validCustomer)`: assert `success === true`.
 
-- [ ] Add to `src/schemas/__tests__/customer.schema.test.ts`: Test `CustomerSchema.safeParse({ ...valid, name: '' })`: assert `success === false`.
+- [x] Add to `src/schemas/__tests__/customer.schema.test.ts`: Test `CustomerSchema.safeParse({ ...valid, name: '' })`: assert `success === false`.
 
-- [ ] Add to `src/schemas/__tests__/customer.schema.test.ts`: Test phone format validation if applicable: `CustomerSchema.safeParse({ ...valid, phone: 'not-a-phone' })` — assert `success === false` if phone format is validated in the schema.
+- [x] Add to `src/schemas/__tests__/customer.schema.test.ts`: Test phone format validation if applicable: `CustomerSchema.safeParse({ ...valid, phone: 'not-a-phone' })` — assert `success === false` if phone format is validated in the schema.
 
-- [ ] Add to `src/schemas/__tests__/customer.schema.test.ts`: Test `CustomerSchema.safeParse({ ...valid, gstin: '27AAAAA0000A1Z5' })` (valid 15-char GSTIN): assert `success === true`.
+- [x] Add to `src/schemas/__tests__/customer.schema.test.ts`: Test `CustomerSchema.safeParse({ ...valid, gstin: '27AAAAA0000A1Z5' })` (valid 15-char GSTIN): assert `success === true`.
 
-- [ ] Add to `src/schemas/__tests__/customer.schema.test.ts`: Test `CustomerSchema.safeParse({ ...valid, gstin: '27AAAAA0000A1Z' })` (14-char GSTIN): assert `success === false`.
+- [x] Add to `src/schemas/__tests__/customer.schema.test.ts`: Test `CustomerSchema.safeParse({ ...valid, gstin: '27AAAAA0000A1Z' })` (14-char GSTIN): assert `success === false`.
 
 ---
 
