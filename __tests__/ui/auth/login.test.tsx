@@ -3,15 +3,11 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 
 import LoginScreen from '@/app/(auth)/login';
 import { useAuthStore } from '@/src/stores/authStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 
 jest.mock('@/src/stores/authStore', () => ({
 	useAuthStore: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 describe('LoginScreen', () => {
 	const mockLogin = jest.fn();
@@ -42,8 +38,8 @@ describe('LoginScreen', () => {
 		fireEvent.changeText(getByPlaceholderText('you@example.com'), 'test@example.com');
 		fireEvent.changeText(getByPlaceholderText('••••••••'), 'password123');
 
-		// The button text is 'Sign In'. Since there might be multiple, we find one that is Touchable
-		const signInButton = getAllByText('Sign In')[1]; // Second one is the button
+		// Use role-based selector to find the submit button (resolves QA issue 2.4)
+		const signInButton = getByRole('button', { name: 'Sign In' });
 		fireEvent.press(signInButton);
 
 		await waitFor(() => {

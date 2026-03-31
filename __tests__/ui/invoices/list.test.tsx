@@ -2,16 +2,12 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import InvoicesListScreen from '@/app/(app)/(tabs)/invoices';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 
 // Mock store
 jest.mock('@/src/stores/invoiceStore', () => ({
 	useInvoiceStore: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockInvoices = [
 	{

@@ -3,24 +3,19 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 
 import SetupScreen from '@/app/(auth)/setup';
 import { useAuthStore } from '@/src/stores/authStore';
-import { supabase } from '@/src/config/supabase';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { businessProfileService } from '@/src/services/businessProfileService';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 
 jest.mock('@/src/stores/authStore', () => ({
 	useAuthStore: jest.fn(),
 }));
 
-jest.mock('@/src/config/supabase', () => ({
-	supabase: {
-		from: jest.fn().mockReturnValue({
-			upsert: jest.fn().mockResolvedValue({ error: null }),
-		}),
+// Resolves QA issue 2.16 — mock businessProfileService.upsert instead of supabase directly
+jest.mock('@/src/services/businessProfileService', () => ({
+	businessProfileService: {
+		upsert: jest.fn().mockResolvedValue({}),
 	},
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 describe('SetupScreen', () => {
 	const mockRegister = jest.fn();
@@ -53,7 +48,7 @@ describe('SetupScreen', () => {
 		expect(mockRegister).toHaveBeenCalled();
 	});
 
-	it('calls supabase.from("business_profile").upsert on final step', async () => {
+	it('calls businessProfileService.upsert on final step', async () => {
 		mockRegister.mockResolvedValueOnce({});
 		const { getByText, findByText, getByPlaceholderText } = renderWithTheme(<SetupScreen />);
 
@@ -71,7 +66,24 @@ describe('SetupScreen', () => {
 		fireEvent.press(getByText('Save', { exact: false }));
 
 		await waitFor(() => {
-			expect(supabase.from).toHaveBeenCalledWith('business_profile');
+			expect(businessProfileService.upsert).toHaveBeenCalled();
+		});
+	});
+
+	it('shows error and stays on step 1 when register fails', async () => {
+		mockRegister.mockRejectedValueOnce(new Error('Registration failed'));
+		const { getByText, getByPlaceholderText, queryByText } = renderWithTheme(<SetupScreen />);
+
+		fireEvent.changeText(getByPlaceholderText('you@example.com'), 'fail@example.com');
+		fireEvent.changeText(getByPlaceholderText('••••••••'), 'wrongpass');
+
+		fireEvent.press(getByText('Add Account', { exact: false }));
+
+		await waitFor(() => {
+			// Step 1 should still be visible (not advanced to step 2)
+			expect(queryByText('Business Name', { exact: false })).toBeNull();
+			// The submit button should still be on screen
+			expect(getByText('Add Account', { exact: false })).toBeTruthy();
 		});
 	});
 });

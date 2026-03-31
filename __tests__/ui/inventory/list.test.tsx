@@ -2,16 +2,12 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import InventoryTab from '@/app/(app)/(tabs)/inventory';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 
 // Mock store
 jest.mock('@/src/stores/inventoryStore', () => ({
 	useInventoryStore: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockInventoryItems = [
 	{

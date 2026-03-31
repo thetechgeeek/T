@@ -2,17 +2,13 @@ import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import OrdersListScreen from '@/app/(app)/orders/index';
 import { useOrderStore } from '@/src/stores/orderStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
 
 // Mock store
 jest.mock('@/src/stores/orderStore', () => ({
 	useOrderStore: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockOrders = [
 	{ id: 'o-1', party_name: 'Kajaria Ceramics', created_at: '2026-03-22', total_quantity: 150 },

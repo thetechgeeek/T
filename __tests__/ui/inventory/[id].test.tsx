@@ -2,7 +2,7 @@ import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import ItemDetailScreen from '@/app/(app)/inventory/[id]';
 import { inventoryService } from '@/src/services/inventoryService';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 // Mock services and router
@@ -17,10 +17,6 @@ jest.mock('expo-router', () => ({
 	useRouter: jest.fn(),
 	useLocalSearchParams: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockItem = {
 	id: 'item-123',
@@ -82,6 +78,15 @@ describe('ItemDetailScreen', () => {
 		fireEvent.press(getByText('Stock In'));
 
 		expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('stock_in'));
+	});
+
+	it('navigates to stock-op with type=stock_out for Stock Out', async () => {
+		const { getByText } = renderWithTheme(<ItemDetailScreen />);
+
+		await waitFor(() => getByText('Stock Out'));
+		fireEvent.press(getByText('Stock Out'));
+
+		expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('stock_out'));
 	});
 
 	it('notifies user when item is not found', async () => {

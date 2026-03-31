@@ -2,7 +2,7 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import InvoiceDetailScreen from '@/app/(app)/invoices/[id]';
 import { invoiceService } from '@/src/services/invoiceService';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useLocalSearchParams } from 'expo-router';
 
 // Mock services and router
@@ -16,10 +16,6 @@ jest.mock('expo-router', () => ({
 	useLocalSearchParams: jest.fn(),
 	useRouter: () => ({ back: jest.fn() }),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockInvoice = {
 	id: 'inv-123',

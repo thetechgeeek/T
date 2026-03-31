@@ -2,7 +2,7 @@ import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import ImportOrderScreen from '@/app/(app)/orders/import';
 import { useOrderStore } from '@/src/stores/orderStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 
 // Mock stores and services
 jest.mock('@/src/stores/orderStore', () => ({
@@ -12,10 +12,6 @@ jest.mock('@/src/stores/orderStore', () => ({
 jest.mock('expo-router', () => ({
 	useRouter: () => ({ back: jest.fn() }),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 describe('ImportOrderScreen', () => {
 	const mockParseDocument = jest.fn();

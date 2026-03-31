@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import AddItemScreen from '@/app/(app)/inventory/add';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 
 // Mock values
 const mockCreateItem = jest.fn();
@@ -16,10 +16,6 @@ jest.mock('expo-router', () => ({
 	useRouter: () => ({ back: jest.fn(), push: jest.fn() }),
 	useLocalSearchParams: () => ({}),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 describe('AddItemScreen', () => {
 	beforeEach(() => {

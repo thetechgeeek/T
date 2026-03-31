@@ -3,7 +3,7 @@ import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import CreateInvoiceScreen from '@/app/(app)/invoices/create';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
 
 // Mock stores and router
@@ -18,10 +18,6 @@ jest.mock('@/src/stores/invoiceStore', () => ({
 jest.mock('expo-router', () => ({
 	useRouter: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockInventoryItems = [
 	{ id: 'item-1', design_name: 'Marble gold', box_count: 50, selling_price: 1000 },
@@ -41,14 +37,12 @@ describe('CreateInvoiceScreen', () => {
 			items: mockInventoryItems,
 			fetchItems: mockFetchItems,
 		});
-		// @ts-ignore
-		useInventoryStore.getState = jest.fn().mockReturnValue({
+		jest.mocked(useInventoryStore).getState = jest.fn().mockReturnValue({
 			fetchItems: mockFetchItems,
 		});
 
 		// Mock Invoice Store
-		// @ts-ignore
-		useInvoiceStore.getState = jest.fn().mockReturnValue({
+		jest.mocked(useInvoiceStore).getState = jest.fn().mockReturnValue({
 			createInvoice: mockCreateInvoice,
 		});
 		mockCreateInvoice.mockResolvedValue({ id: 'new-inv-123' });
@@ -115,6 +109,64 @@ describe('CreateInvoiceScreen', () => {
 		});
 		await waitFor(() => {
 			expect(mockReplace).toHaveBeenCalledWith('/(app)/invoices/new-inv-123');
+		});
+	});
+
+	it('Step 1 with empty customer name does NOT advance to Step 2', async () => {
+		const { getByText, queryByText } = renderWithTheme(<CreateInvoiceScreen />);
+
+		// Do NOT fill customer name
+		fireEvent.press(getByText('Next'));
+
+		// Should still be on Step 1 — "2. Items" header not visible
+		expect(queryByText('2. Items')).toBeNull();
+		// Step 1 indicator still visible
+		expect(getByText('1. Details')).toBeTruthy();
+	});
+
+	it('Step 2 with no line items does NOT advance to Step 3', async () => {
+		const { getByText, queryByText, getByPlaceholderText } = renderWithTheme(<CreateInvoiceScreen />);
+
+		// Fill valid customer data on Step 1
+		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.press(getByText('Next'));
+
+		await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+
+		// Press Next without adding any line items
+		fireEvent.press(getByText('Next'));
+
+		// Should still be on Step 2
+		expect(queryByText('3. Review')).toBeNull();
+		expect(getByText('2. Items')).toBeTruthy();
+	});
+
+	it('payment_status is unpaid when amount_paid is 0', async () => {
+		const { getByText, getByPlaceholderText } = renderWithTheme(<CreateInvoiceScreen />);
+
+		// Step 1
+		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.press(getByText('Next'));
+
+		// Step 2
+		await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+		fireEvent.press(getByText('+ Add Item'));
+		fireEvent.changeText(getByPlaceholderText(/search/i), 'Marble');
+		fireEvent.press(getByText('Marble gold'));
+		fireEvent.changeText(getByPlaceholderText('Enter quantity'), '5');
+		fireEvent.press(getByText('Confirm'));
+		fireEvent.press(getByText('Next'));
+
+		// Step 3
+		await waitFor(() => expect(getByText('3. Review')).toBeTruthy());
+
+		// Leave amount_paid at 0 (default)
+		fireEvent.press(getByText('Generate Invoice'));
+
+		await waitFor(() => {
+			expect(mockCreateInvoice).toHaveBeenCalledWith(
+				expect.objectContaining({ payment_status: 'unpaid', amount_paid: 0 }),
+			);
 		});
 	});
 

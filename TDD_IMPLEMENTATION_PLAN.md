@@ -811,103 +811,103 @@
 
 ### Replace Local renderWithTheme in All Existing UI Tests
 
-- [ ] Fix in `__tests__/ui/auth/login.test.tsx`: Remove the local `renderWithTheme` definition at the top of the file. Replace with `import { renderWithTheme } from '../../utils/renderWithTheme'`. Verify all tests pass.
+- [x] Fix in `__tests__/ui/auth/login.test.tsx`: Remove the local `renderWithTheme` definition at the top of the file. Replace with `import { renderWithTheme } from '../../utils/renderWithTheme'`. Verify all tests pass.
 
-- [ ] Fix in `__tests__/ui/auth/setup.test.tsx`: Same — remove local `renderWithTheme`, import from shared utility.
+- [x] Fix in `__tests__/ui/auth/setup.test.tsx`: Same — remove local `renderWithTheme`, import from shared utility.
 
-- [ ] Fix in `__tests__/ui/customers/add.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/customers/add.test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/customers/index.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/customers/index.test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/finance/expenses.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/finance/expenses.test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/inventory/list.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/inventory/list.test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/inventory/stock-op.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/inventory/stock-op.test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/invoices/create.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/invoices/create.test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/invoices/list.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/invoices/list.test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/invoices/[id].test.tsx`: Same.
+- [x] Fix in `__tests__/ui/invoices/[id].test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/orders/import.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/orders/import.test.tsx`: Same.
 
-- [ ] Fix in `__tests__/ui/orders/index.test.tsx`: Same.
+- [x] Fix in `__tests__/ui/orders/index.test.tsx`: Same.
 
 ### Fix login.test.tsx
 
-- [ ] Fix in `__tests__/ui/auth/login.test.tsx`: Replace `getAllByText('Sign In')[1]` with `getByRole('button', { name: 'Sign In' })`. If the component does not have an accessible role on the button, add `accessibilityRole="button"` to the submit button in the component and add `testID="login-submit-button"` as a fallback. Update the test to use `getByTestId('login-submit-button')` if `getByRole` is not feasible. This resolves QA issue 2.4.
+- [x] Fix in `__tests__/ui/auth/login.test.tsx`: Replace `getAllByText('Sign In')[1]` with `getByRole('button', { name: 'Sign In' })`. If the component does not have an accessible role on the button, add `accessibilityRole="button"` to the submit button in the component and add `testID="login-submit-button"` as a fallback. Update the test to use `getByTestId('login-submit-button')` if `getByRole` is not feasible. This resolves QA issue 2.4.
 
 ### Fix setup.test.tsx
 
-- [ ] Fix in `__tests__/ui/auth/setup.test.tsx`: Replace any direct `supabase` mock calls with a mock of `businessProfileService.upsert` (i.e., `jest.mock('../../services/businessProfileService', () => ({ upsert: jest.fn() }))`). Adjust test assertions to verify `businessProfileService.upsert` is called rather than a specific Supabase table insert. This resolves QA issue 2.16.
+- [x] Fix in `__tests__/ui/auth/setup.test.tsx`: Replace any direct `supabase` mock calls with a mock of `businessProfileService.upsert` (i.e., `jest.mock('../../services/businessProfileService', () => ({ upsert: jest.fn() }))`). Adjust test assertions to verify `businessProfileService.upsert` is called rather than a specific Supabase table insert. This resolves QA issue 2.16.
 
-- [ ] Add to `__tests__/ui/auth/setup.test.tsx`: Test `register` failure — mock `register` (from `authStore`) to reject. Submit the setup form. Assert an error message is displayed to the user and the screen remains on step 1 (does not advance).
+- [x] Add to `__tests__/ui/auth/setup.test.tsx`: Test `register` failure — mock `register` (from `authStore`) to reject. Submit the setup form. Assert an error message is displayed to the user and the screen remains on step 1 (does not advance).
 
 ### Fix invoices/create.test.tsx
 
-- [ ] Fix in `__tests__/ui/invoices/create.test.tsx`: Remove both `// @ts-ignore` comments. Type the store mock correctly using `jest.mocked(useInventoryStore)` and `jest.mocked(useInvoiceStore)`. This resolves QA issue 7.2.
+- [x] Fix in `__tests__/ui/invoices/create.test.tsx`: Remove both `// @ts-ignore` comments. Type the store mock correctly using `jest.mocked(useInventoryStore)` and `jest.mocked(useInvoiceStore)`. This resolves QA issue 7.2.
 
-- [ ] Fix in `__tests__/ui/invoices/create.test.tsx`: Replace all `as any` usages in `mockCreateInvoice` calls with properly typed `makeInvoiceInput()` from Phase 2 fixtures. This resolves QA issue 7.1.
+- [x] Fix in `__tests__/ui/invoices/create.test.tsx`: Replace all `as any` usages in `mockCreateInvoice` calls with properly typed `makeInvoiceInput()` from Phase 2 fixtures. This resolves QA issue 7.1.
 
-- [ ] Add to `__tests__/ui/invoices/create.test.tsx`: Test pressing "Next" on Step 1 with empty customer name does NOT advance to Step 2: render the create screen, clear the customer name field, press the "Next" button. Assert the Step 1 form is still visible (not Step 2).
+- [x] Add to `__tests__/ui/invoices/create.test.tsx`: Test pressing "Next" on Step 1 with empty customer name does NOT advance to Step 2: render the create screen, clear the customer name field, press the "Next" button. Assert the Step 1 form is still visible (not Step 2).
 
-- [ ] Add to `__tests__/ui/invoices/create.test.tsx`: Test pressing "Next" on Step 2 with no line items does NOT advance to Step 3: navigate to Step 2 (fill in valid customer data), do not add any line items, press "Next". Assert Step 2 is still visible.
+- [x] Add to `__tests__/ui/invoices/create.test.tsx`: Test pressing "Next" on Step 2 with no line items does NOT advance to Step 3: navigate to Step 2 (fill in valid customer data), do not add any line items, press "Next". Assert Step 2 is still visible.
 
-- [ ] Add to `__tests__/ui/invoices/create.test.tsx`: Test `payment_status` is `'unpaid'` when `amount_paid = 0`: complete the full 3-step flow with `amount_paid = 0`. Assert `invoiceStore.createInvoice` was called with a payload where `payment_status === 'unpaid'`.
+- [x] Add to `__tests__/ui/invoices/create.test.tsx`: Test `payment_status` is `'unpaid'` when `amount_paid = 0`: complete the full 3-step flow with `amount_paid = 0`. Assert `invoiceStore.createInvoice` was called with a payload where `payment_status === 'unpaid'`.
 
 ### Fix / Create inventory/[id].test.tsx
 
-- [ ] Fix or create `__tests__/ui/inventory/[id].test.tsx`: Test renders item `design_name`, `box_count`, and `category`: mock `inventoryStore.selectedItem` with `makeInventoryItem()`. Render the screen. Assert `getByText('GLOSSY WHITE 60x60')`, `getByText('50')` (or formatted box count), and `getByText('GLOSSY')` are present.
+- [x] Fix or create `__tests__/ui/inventory/[id].test.tsx`: Test renders item `design_name`, `box_count`, and `category`: mock `inventoryStore.selectedItem` with `makeInventoryItem()`. Render the screen. Assert `getByText('GLOSSY WHITE 60x60')`, `getByText('50')` (or formatted box count), and `getByText('GLOSSY')` are present.
 
-- [ ] Add to `__tests__/ui/inventory/[id].test.tsx`: Test renders stock history entries: mock stock history with 2 entries. Assert both entries appear in the list.
+- [x] Add to `__tests__/ui/inventory/[id].test.tsx`: Test renders stock history entries: mock stock history with 2 entries. Assert both entries appear in the list.
 
-- [ ] Add to `__tests__/ui/inventory/[id].test.tsx`: Test "Stock In" button navigates to stock-op screen: press the "Stock In" button. Assert `router.push` was called with a path containing `'stock-op'`, the item `id`, and `type=stock_in`.
+- [x] Add to `__tests__/ui/inventory/[id].test.tsx`: Test "Stock In" button navigates to stock-op screen: press the "Stock In" button. Assert `router.push` was called with a path containing `'stock-op'`, the item `id`, and `type=stock_in`.
 
-- [ ] Add to `__tests__/ui/inventory/[id].test.tsx`: Test "Stock Out" button navigates with `type=stock_out`.
+- [x] Add to `__tests__/ui/inventory/[id].test.tsx`: Test "Stock Out" button navigates with `type=stock_out`.
 
 ### Create inventory/add.test.tsx
 
-- [ ] Create `__tests__/ui/inventory/add.test.tsx`: Test form renders with all required fields: assert `getByPlaceholderText` (or `getByLabelText`) for design_name, category selector, and selling_price fields are all present.
+- [x] Create `__tests__/ui/inventory/add.test.tsx`: Test form renders with all required fields: assert `getByPlaceholderText` (or `getByLabelText`) for design_name, category selector, and selling_price fields are all present.
 
-- [ ] Add to `__tests__/ui/inventory/add.test.tsx`: Test submitting with empty design_name shows validation error and does NOT call `createItem`: clear the design_name field, press Submit. Assert an error message is shown. Assert `inventoryStore.createItem` was NOT called.
+- [x] Add to `__tests__/ui/inventory/add.test.tsx`: Test submitting with empty design_name shows validation error and does NOT call `createItem`: clear the design_name field, press Submit. Assert an error message is shown. Assert `inventoryStore.createItem` was NOT called.
 
-- [ ] Add to `__tests__/ui/inventory/add.test.tsx`: Test submitting valid form calls `inventoryStore.createItem` with correct data: fill in `design_name = 'NEW TILE'`, `selling_price = '800'`, select a `category`. Press Submit. Assert `inventoryStore.createItem` was called with an object containing `{ design_name: 'NEW TILE', selling_price: 800 }`.
+- [x] Add to `__tests__/ui/inventory/add.test.tsx`: Test submitting valid form calls `inventoryStore.createItem` with correct data: fill in `design_name = 'NEW TILE'`, `selling_price = '800'`, select a `category`. Press Submit. Assert `inventoryStore.createItem` was called with an object containing `{ design_name: 'NEW TILE', selling_price: 800 }`.
 
-- [ ] Add to `__tests__/ui/inventory/add.test.tsx`: Test on success navigates back: mock `createItem` to resolve. Submit form. Assert `router.back()` was called.
+- [x] Add to `__tests__/ui/inventory/add.test.tsx`: Test on success navigates back: mock `createItem` to resolve. Submit form. Assert `router.back()` was called.
 
-- [ ] Add to `__tests__/ui/inventory/add.test.tsx`: Test on failure shows alert: mock `createItem` to reject with `new Error('DB error')`. Submit form. Assert `Alert.alert` was called with a message containing `'DB error'` or an error indicator.
+- [x] Add to `__tests__/ui/inventory/add.test.tsx`: Test on failure shows alert: mock `createItem` to reject with `new Error('DB error')`. Submit form. Assert `Alert.alert` was called with a message containing `'DB error'` or an error indicator.
 
 ### Create finance/purchases.test.tsx
 
-- [ ] Create `__tests__/ui/finance/purchases.test.tsx` (or verify and expand if existing): Test renders list of purchase entries: mock `financeStore.purchases` with `[makeOrder()]`. Render the screen. Assert `getByText('Test Party')` (or whatever the order party name is).
+- [x] Create `__tests__/ui/finance/purchases.test.tsx` (or verify and expand if existing): Test renders list of purchase entries: mock `financeStore.purchases` with `[makeOrder()]`. Render the screen. Assert `getByText('Test Party')` (or whatever the order party name is).
 
-- [ ] Add to `__tests__/ui/finance/purchases.test.tsx`: Test shows empty state when no purchases: mock `financeStore.purchases` as `[]`. Assert the `EmptyState` component or "no purchases" text is present.
+- [x] Add to `__tests__/ui/finance/purchases.test.tsx`: Test shows empty state when no purchases: mock `financeStore.purchases` as `[]`. Assert the `EmptyState` component or "no purchases" text is present.
 
-- [ ] Add to `__tests__/ui/finance/purchases.test.tsx`: Test calls `fetchPurchases` on mount: render the screen. Assert `financeStore.fetchPurchases` was called.
+- [x] Add to `__tests__/ui/finance/purchases.test.tsx`: Test calls `fetchPurchases` on mount: render the screen. Assert `financeStore.fetchPurchases` was called.
 
 ### Create dashboard/index.test.tsx
 
-- [ ] Create `__tests__/ui/dashboard/index.test.tsx`: Test renders `today_sales` stat: mock `dashboardStore.stats` with `makeDashboardStats({ today_sales: 12345 })`. Render. Assert `getByText('₹12,345.00')` or the formatted value is present.
+- [x] Create `__tests__/ui/dashboard/index.test.tsx`: Test renders `today_sales` stat: mock `dashboardStore.stats` with `makeDashboardStats({ today_sales: 12345 })`. Render. Assert `getByText('₹12,345.00')` or the formatted value is present.
 
-- [ ] Add to `__tests__/ui/dashboard/index.test.tsx`: Test renders `total_outstanding_credit` stat: assert the credit stat value from `makeDashboardStats()` is visible.
+- [x] Add to `__tests__/ui/dashboard/index.test.tsx`: Test renders `total_outstanding_credit` stat: assert the credit stat value from `makeDashboardStats()` is visible.
 
-- [ ] Add to `__tests__/ui/dashboard/index.test.tsx`: Test renders `low_stock_count` stat: assert `getByText('3')` (or the formatted low stock count) is visible.
+- [x] Add to `__tests__/ui/dashboard/index.test.tsx`: Test renders `low_stock_count` stat: assert `getByText('3')` (or the formatted low stock count) is visible.
 
-- [ ] Add to `__tests__/ui/dashboard/index.test.tsx`: Test renders loading state while fetching: mock `dashboardStore.loading = true`. Assert a loading indicator (`ActivityIndicator` or skeleton) is present.
+- [x] Add to `__tests__/ui/dashboard/index.test.tsx`: Test renders loading state while fetching: mock `dashboardStore.loading = true`. Assert a loading indicator (`ActivityIndicator` or skeleton) is present.
 
-- [ ] Add to `__tests__/ui/dashboard/index.test.tsx`: Test renders error state if fetch fails: mock `dashboardStore.error = 'Failed to load'`. Assert the error message is displayed.
+- [x] Add to `__tests__/ui/dashboard/index.test.tsx`: Test renders error state if fetch fails: mock `dashboardStore.error = 'Failed to load'`. Assert the error message is displayed.
 
-- [ ] Add to `__tests__/ui/dashboard/index.test.tsx`: Test calls `fetchStats` on mount: render the screen. Assert `dashboardStore.fetchStats` (or equivalent action) was called.
+- [x] Add to `__tests__/ui/dashboard/index.test.tsx`: Test calls `fetchStats` on mount: render the screen. Assert `dashboardStore.fetchStats` (or equivalent action) was called.
 
 ### Clean Up Stale Tests
 
-- [ ] Fix `src/__tests__/ui/InvoiceCreateFlow.test.tsx`: Either delete the file entirely (preferred — all its cases are now covered by `__tests__/ui/invoices/create.test.tsx`) OR remove the `describe.skip(...)` wrapper, remove every `expect(true).toBe(true)` placeholder, and write real assertions for each test case. Do NOT leave `describe.skip` with placeholder bodies in the codebase. This resolves QA issues 2.1 and 2.2.
+- [x] Fix `src/__tests__/ui/InvoiceCreateFlow.test.tsx`: Either delete the file entirely (preferred — all its cases are now covered by `__tests__/ui/invoices/create.test.tsx`) OR remove the `describe.skip(...)` wrapper, remove every `expect(true).toBe(true)` placeholder, and write real assertions for each test case. Do NOT leave `describe.skip` with placeholder bodies in the codebase. This resolves QA issues 2.1 and 2.2.
 
-- [ ] Clean up `src/__tests__/ui/` directory: open `src/__tests__/ui/InventoryScreen.test.tsx` and `src/__tests__/ui/InvoicesScreen.test.tsx`. If they contain only `describe.skip` blocks or placeholder tests, delete both files. If they contain real tests not duplicated elsewhere, migrate them to `__tests__/ui/` following the established directory convention, then delete the originals from `src/__tests__/ui/`.
+- [x] Clean up `src/__tests__/ui/` directory: open `src/__tests__/ui/InventoryScreen.test.tsx` and `src/__tests__/ui/InvoicesScreen.test.tsx`. If they contain only `describe.skip` blocks or placeholder tests, delete both files. If they contain real tests not duplicated elsewhere, migrate them to `__tests__/ui/` following the established directory convention, then delete the originals from `src/__tests__/ui/`.
 
-- [ ] After cleanup: remove `testPathIgnorePatterns: ['<rootDir>/src/__tests__/ui/']` from `jest.config.js` (added in Phase 0) once the directory is empty or fully migrated.
+- [x] After cleanup: remove `testPathIgnorePatterns: ['<rootDir>/src/__tests__/ui/']` from `jest.config.js` (added in Phase 0) once the directory is empty or fully migrated.
 
 ---
 

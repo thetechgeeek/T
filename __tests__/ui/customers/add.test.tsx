@@ -3,17 +3,12 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import AddCustomerScreen from '@/app/(app)/customers/add';
 import { useCustomerStore } from '@/src/stores/customerStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 
 // Mock the customer store
 jest.mock('@/src/stores/customerStore', () => ({
 	useCustomerStore: jest.fn(),
 }));
-
-// Mock ThemeProvider to avoid context issues if needed, but we use the real one with a wrapper
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 describe('AddCustomerScreen', () => {
 	const mockCreateCustomer = jest.fn();

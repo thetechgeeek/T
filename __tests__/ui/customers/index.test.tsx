@@ -2,17 +2,13 @@ import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import CustomersScreen from '@/app/(app)/customers/index';
 import { useCustomerStore } from '@/src/stores/customerStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
 
 // Mock store
 jest.mock('@/src/stores/customerStore', () => ({
 	useCustomerStore: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockCustomers = [
 	{ id: 'c-1', name: 'John Doe', phone: '1234567890', city: 'Morbi', type: 'retail' },

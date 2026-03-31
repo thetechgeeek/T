@@ -45,9 +45,6 @@ module.exports = {
 		'<rootDir>/src/**/*.test.{ts,tsx}',
 	],
 
-	// Exclude the stale skipped-test directory until Phase 10 cleanup
-	testPathIgnorePatterns: ['<rootDir>/src/__tests__/ui/'],
-
 	moduleNameMapper: {
 		// Canonical alias: @/src/hooks/useLocale → src/hooks/useLocale
 		//                  @/app/(app)/...       → app/(app)/...

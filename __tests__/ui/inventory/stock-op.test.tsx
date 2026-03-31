@@ -3,7 +3,7 @@ import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import StockOpScreen from '@/app/(app)/inventory/stock-op';
 import { inventoryService } from '@/src/services/inventoryService';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 // Mock services and router
@@ -21,10 +21,6 @@ jest.mock('expo-router', () => ({
 	useRouter: jest.fn(),
 	useLocalSearchParams: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockItem = {
 	id: 'item-123',

@@ -2,16 +2,12 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import PurchasesScreen from '@/app/(app)/finance/purchases';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { renderWithTheme } from '../../utils/renderWithTheme';
 
 // Mock store
 jest.mock('@/src/stores/financeStore', () => ({
 	useFinanceStore: jest.fn(),
 }));
-
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
 
 const mockPurchases = [
 	{
