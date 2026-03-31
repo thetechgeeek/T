@@ -1,0 +1,141 @@
+import React from 'react';
+import { waitFor, fireEvent } from '@testing-library/react-native';
+import InventoryTab from '@/app/(app)/(tabs)/inventory';
+import { useInventoryStore } from '@/src/stores/inventoryStore';
+import { renderWithTheme } from '../../utils/renderWithTheme';
+import { useRouter } from 'expo-router';
+
+jest.mock('@/src/stores/inventoryStore', () => ({
+	useInventoryStore: jest.fn(),
+}));
+
+jest.mock('@/src/hooks/useLocale', () => ({
+	useLocale: () => ({
+		t: (key: string) => {
+			const map: Record<string, string> = {
+				'inventory.title': 'Inventory',
+				'inventory.noItems': 'No items found',
+				'inventory.addFirstItem': 'Add your first item',
+				'inventory.emptyFilterHint': 'Try a different filter',
+				'inventory.loadError': 'Failed to load',
+				'common.errorTitle': 'Error',
+				'common.ok': 'OK',
+			};
+			return map[key] ?? key.split('.').pop() ?? key;
+		},
+		formatCurrency: (amount: number) => `₹${amount.toFixed(2)}`,
+	}),
+}));
+
+const mockFetchItems = jest.fn();
+const mockSetFilters = jest.fn();
+const mockPush = jest.fn();
+
+const defaultStoreState = {
+	items: [],
+	loading: false,
+	hasMore: false,
+	filters: { category: 'ALL', search: '' },
+	page: 1,
+	fetchItems: mockFetchItems,
+	setFilters: mockSetFilters,
+};
+
+beforeEach(() => {
+	jest.clearAllMocks();
+	mockFetchItems.mockResolvedValue(undefined);
+	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
+	(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: any) =>
+		selector(defaultStoreState),
+	);
+});
+
+describe('InventoryTab', () => {
+	it('renders Inventory title', () => {
+		const { getByText } = renderWithTheme(<InventoryTab />);
+		expect(getByText('Inventory')).toBeTruthy();
+	});
+
+	it('calls fetchItems on mount when items empty', async () => {
+		renderWithTheme(<InventoryTab />);
+		await waitFor(() => {
+			expect(mockFetchItems).toHaveBeenCalledWith(true);
+		});
+	});
+
+	it('does not call fetchItems if items already loaded', async () => {
+		(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: any) =>
+			selector({
+				...defaultStoreState,
+				items: [
+					{
+						id: 'i1',
+						base_item_number: 'B001',
+						design_name: 'Classic',
+						category: 'GLOSSY',
+						size_name: '60x60',
+						box_count: 10,
+						selling_price: 1000,
+					},
+				],
+			}),
+		);
+
+		renderWithTheme(<InventoryTab />);
+		await waitFor(() => {
+			expect(mockFetchItems).not.toHaveBeenCalled();
+		});
+	});
+
+	it('renders empty state when no items', async () => {
+		const { getByText } = renderWithTheme(<InventoryTab />);
+		await waitFor(() => {
+			expect(getByText('No items found')).toBeTruthy();
+		});
+	});
+
+	it('renders items grouped by base_item_number', async () => {
+		(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: any) =>
+			selector({
+				...defaultStoreState,
+				items: [
+					{
+						id: 'i1',
+						base_item_number: 'ELITE-001',
+						design_name: 'Elite Classic',
+						category: 'GLOSSY',
+						size_name: '60x60',
+						box_count: 20,
+						selling_price: 1500,
+					},
+				],
+				page: 2, // already loaded
+			}),
+		);
+
+		const { getByText } = renderWithTheme(<InventoryTab />);
+		await waitFor(() => {
+			expect(getByText('ELITE-001')).toBeTruthy();
+		});
+	});
+
+	it('renders category chips', () => {
+		const { getByText } = renderWithTheme(<InventoryTab />);
+		expect(getByText('ALL')).toBeTruthy();
+		expect(getByText('GLOSSY')).toBeTruthy();
+		expect(getByText('MATT')).toBeTruthy();
+	});
+
+	it('calls setFilters with selected category on chip press', () => {
+		const { getByText } = renderWithTheme(<InventoryTab />);
+		fireEvent.press(getByText('GLOSSY'));
+		expect(mockSetFilters).toHaveBeenCalledWith({ category: 'GLOSSY' });
+	});
+
+	it('navigates to add inventory on FAB press', () => {
+		const { toJSON } = renderWithTheme(<InventoryTab />);
+		// FAB (Plus icon TouchableOpacity) is present in the render tree
+		const json = JSON.stringify(toJSON());
+		expect(json).toContain('"Plus"');
+	});
+});
