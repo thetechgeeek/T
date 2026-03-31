@@ -663,53 +663,53 @@
 
 ### useDebounce
 
-- [ ] Create `src/hooks/__tests__/useDebounce.test.ts`: Test initial value: render `useDebounce('initial', 300)` with `renderHook`. Assert the returned value equals `'initial'` immediately without advancing timers.
+- [x] Create `src/hooks/__tests__/useDebounce.test.ts`: Test initial value: render `useDebounce('initial', 300)` with `renderHook`. Assert the returned value equals `'initial'` immediately without advancing timers.
 
-- [ ] Add to `src/hooks/__tests__/useDebounce.test.ts`: Test value does NOT update before delay: call `renderHook` with initial `value = 'first'`, then `rerender` with `value = 'second'`. Use `jest.useFakeTimers()` and `jest.advanceTimersByTime(299)`. Assert the returned value is still `'first'`.
+- [x] Add to `src/hooks/__tests__/useDebounce.test.ts`: Test value does NOT update before delay: call `renderHook` with initial `value = 'first'`, then `rerender` with `value = 'second'`. Use `jest.useFakeTimers()` and `jest.advanceTimersByTime(299)`. Assert the returned value is still `'first'`.
 
-- [ ] Add to `src/hooks/__tests__/useDebounce.test.ts`: Test value updates after delay: advance timers by 1ms more (total 300ms). Assert the returned value is now `'second'`.
+- [x] Add to `src/hooks/__tests__/useDebounce.test.ts`: Test value updates after delay: advance timers by 1ms more (total 300ms). Assert the returned value is now `'second'`.
 
-- [ ] Add to `src/hooks/__tests__/useDebounce.test.ts`: Test rapid updates — only the final value is applied: change value to `'a'`, `'b'`, `'c'` in quick succession without advancing timers. Advance by 300ms. Assert the returned value is `'c'` (intermediate values `'a'` and `'b'` were debounced away).
+- [x] Add to `src/hooks/__tests__/useDebounce.test.ts`: Test rapid updates — only the final value is applied: change value to `'a'`, `'b'`, `'c'` in quick succession without advancing timers. Advance by 300ms. Assert the returned value is `'c'` (intermediate values `'a'` and `'b'` were debounced away).
 
-- [ ] Add to `src/hooks/__tests__/useDebounce.test.ts`: Test changing delay resets the timer: start with `delay = 300`. Change `value` to `'new'`. Advance by 200ms. Change `delay` to `500`. Assert value is still `'initial'`. Advance by 499ms. Assert still `'initial'`. Advance by 1ms (total 500ms from delay change). Assert value is `'new'`.
+- [x] Add to `src/hooks/__tests__/useDebounce.test.ts`: Test changing delay resets the timer: start with `delay = 300`. Change `value` to `'new'`. Advance by 200ms. Change `delay` to `500`. Assert value is still `'initial'`. Advance by 499ms. Assert still `'initial'`. Advance by 1ms (total 500ms from delay change). Assert value is `'new'`.
 
 ### useNetworkStatus
 
-- [ ] Create `src/hooks/__tests__/useNetworkStatus.test.ts`: Test initial connected state: mock `@react-native-community/netinfo` to emit an initial event with `isConnected: true`. Render `useNetworkStatus`. Assert the returned `isConnected` is `true`.
+- [x] Create `src/hooks/__tests__/useNetworkStatus.test.ts`: Test initial connected state: mock `@react-native-community/netinfo` to emit an initial event with `isConnected: true`. Render `useNetworkStatus`. Assert the returned `isConnected` is `true`.
 
-- [ ] Add to `src/hooks/__tests__/useNetworkStatus.test.ts`: Test disconnection: capture the NetInfo event listener registered by the hook. Emit `{ isConnected: false }` via the mock listener. Assert `isConnected` becomes `false` using `act()`.
+- [x] Add to `src/hooks/__tests__/useNetworkStatus.test.ts`: Test disconnection: capture the NetInfo event listener registered by the hook. Emit `{ isConnected: false }` via the mock listener. Assert `isConnected` becomes `false` using `act()`.
 
-- [ ] Add to `src/hooks/__tests__/useNetworkStatus.test.ts`: Test reconnection: after emitting disconnected, emit `{ isConnected: true }`. Assert `isConnected` returns to `true`.
+- [x] Add to `src/hooks/__tests__/useNetworkStatus.test.ts`: Test reconnection: after emitting disconnected, emit `{ isConnected: true }`. Assert `isConnected` returns to `true`.
 
-- [ ] Add to `src/hooks/__tests__/useNetworkStatus.test.ts`: Test listener cleanup on unmount: capture the `removeEventListener` (or `unsubscribe`) call on the NetInfo mock. `unmount()` the hook. Assert `unsubscribe` or `removeEventListener` was called. This verifies no memory leak.
+- [x] Add to `src/hooks/__tests__/useNetworkStatus.test.ts`: Test listener cleanup on unmount: capture the `removeEventListener` (or `unsubscribe`) call on the NetInfo mock. `unmount()` the hook. Assert `unsubscribe` or `removeEventListener` was called. This verifies no memory leak.
 
 ### useRefreshOnFocus
 
-- [ ] Create `src/hooks/__tests__/useRefreshOnFocus.test.ts`: Test refetch is NOT called on initial render: pass a `refetch = jest.fn()` to `useRefreshOnFocus`. Assert `refetch` was not called immediately after render.
+- [x] Create `src/hooks/__tests__/useRefreshOnFocus.test.ts`: Test refetch is NOT called on initial render: pass a `refetch = jest.fn()` to `useRefreshOnFocus`. Assert `refetch` was not called immediately after render.
 
-- [ ] Add to `src/hooks/__tests__/useRefreshOnFocus.test.ts`: Test refetch IS called when screen comes into focus: mock `@react-navigation/native`'s `useFocusEffect` so the registered callback is captured. Simulate a focus event by calling the captured callback. Assert `refetch` was called once.
+- [x] Add to `src/hooks/__tests__/useRefreshOnFocus.test.ts`: Test refetch IS called when screen comes into focus: mock `@react-navigation/native`'s `useFocusEffect` so the registered callback is captured. Simulate a focus event by calling the captured callback. Assert `refetch` was called once.
 
-- [ ] Add to `src/hooks/__tests__/useRefreshOnFocus.test.ts`: Test refetch is NOT called when screen loses focus: simulate a blur/unfocus event via the mock. Assert `refetch` remains uncalled (or not called an additional time if it was called on prior focus).
+- [x] Add to `src/hooks/__tests__/useRefreshOnFocus.test.ts`: Test refetch is NOT called when screen loses focus: simulate a blur/unfocus event via the mock. Assert `refetch` remains uncalled (or not called an additional time if it was called on prior focus).
 
 ### useConfirmBack
 
-- [ ] Create `src/hooks/__tests__/useConfirmBack.test.ts`: Test clean form (no changes) — pressing back navigates immediately: render `useConfirmBack({ isDirty: false })`. Trigger the hardware back press event (simulate via the `BackHandler` mock). Assert `router.back()` or `navigation.goBack()` was called without showing an `Alert`.
+- [x] Create `src/hooks/__tests__/useConfirmBack.test.ts`: Test clean form (no changes) — pressing back navigates immediately: render `useConfirmBack({ isDirty: false })`. Trigger the hardware back press event (simulate via the `BackHandler` mock). Assert `router.back()` or `navigation.goBack()` was called without showing an `Alert`.
 
-- [ ] Add to `src/hooks/__tests__/useConfirmBack.test.ts`: Test dirty form — pressing back shows confirmation Alert: render `useConfirmBack({ isDirty: true })`. Trigger back press. Assert `Alert.alert` was called. Assert navigation was NOT called yet.
+- [x] Add to `src/hooks/__tests__/useConfirmBack.test.ts`: Test dirty form — pressing back shows confirmation Alert: render `useConfirmBack({ isDirty: true })`. Trigger back press. Assert `Alert.alert` was called. Assert navigation was NOT called yet.
 
-- [ ] Add to `src/hooks/__tests__/useConfirmBack.test.ts`: Test confirming alert triggers navigation: capture the `Alert.alert` call. Find the confirm button's `onPress` handler in the `Alert.alert` call arguments. Call it. Assert `router.back()` or equivalent was then called.
+- [x] Add to `src/hooks/__tests__/useConfirmBack.test.ts`: Test confirming alert triggers navigation: capture the `Alert.alert` call. Find the confirm button's `onPress` handler in the `Alert.alert` call arguments. Call it. Assert `router.back()` or equivalent was then called.
 
-- [ ] Add to `src/hooks/__tests__/useConfirmBack.test.ts`: Test cancelling alert does NOT navigate: find the cancel button's `onPress` handler. Call it. Assert `router.back()` was NOT called.
+- [x] Add to `src/hooks/__tests__/useConfirmBack.test.ts`: Test cancelling alert does NOT navigate: find the cancel button's `onPress` handler. Call it. Assert `router.back()` was NOT called.
 
 ### useLocale
 
-- [ ] Create `src/hooks/__tests__/useLocale.test.ts`: Test `formatCurrency(1000)`: render `useLocale` with `renderHook`. Call `result.current.formatCurrency(1000)`. Assert the result equals `'₹1,000.00'` (or `'₹1,000'` — match the actual output and document the expected format).
+- [x] Create `src/hooks/__tests__/useLocale.test.ts`: Test `formatCurrency(1000)`: render `useLocale` with `renderHook`. Call `result.current.formatCurrency(1000)`. Assert the result equals `'₹1,000.00'` (or `'₹1,000'` — match the actual output and document the expected format).
 
-- [ ] Add to `src/hooks/__tests__/useLocale.test.ts`: Test `formatDate('2026-03-29')`: call `result.current.formatDate('2026-03-29')`. Assert the result is a non-empty human-readable string (e.g., `'29 Mar 2026'` or `'March 29, 2026'` — assert the actual format).
+- [x] Add to `src/hooks/__tests__/useLocale.test.ts`: Test `formatDate('2026-03-29')`: call `result.current.formatDate('2026-03-29')`. Assert the result is a non-empty human-readable string (e.g., `'29 Mar 2026'` or `'March 29, 2026'` — assert the actual format).
 
-- [ ] Add to `src/hooks/__tests__/useLocale.test.ts`: Test `toggleLanguage()`: assert initial `currentLanguage === 'en'`. Call `result.current.toggleLanguage()`. Assert `currentLanguage === 'hi'`. Call again. Assert `currentLanguage === 'en'`.
+- [x] Add to `src/hooks/__tests__/useLocale.test.ts`: Test `toggleLanguage()`: assert initial `currentLanguage === 'en'`. Call `result.current.toggleLanguage()`. Assert `currentLanguage === 'hi'`. Call again. Assert `currentLanguage === 'en'`.
 
-- [ ] Add to `src/hooks/__tests__/useLocale.test.ts`: Test `t('common.save')` returns a translated string: assert `result.current.t('common.save')` is not the raw key string `'common.save'` but a human-readable value like `'Save'`.
+- [x] Add to `src/hooks/__tests__/useLocale.test.ts`: Test `t('common.save')` returns a translated string: assert `result.current.t('common.save')` is not the raw key string `'common.save'` but a human-readable value like `'Save'`.
 
 ---
 
