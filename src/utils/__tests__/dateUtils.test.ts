@@ -6,19 +6,7 @@ import {
 	formatShortDate,
 } from '../dateUtils';
 
-// Mock i18n so formatRelativeDate works without full setup
-jest.mock('../../i18n', () => ({
-	default: {
-		t: (key: string) => {
-			const map: Record<string, string> = {
-				'common.today': 'Today',
-				'common.yesterday': 'Yesterday',
-			};
-			return map[key] ?? key;
-		},
-	},
-}));
-
+// No local i18n mock needed — using global mock from jest.setup.ts
 describe('getCurrentFinancialYear', () => {
 	it('returns correct FY when month is April or later', () => {
 		jest.useFakeTimers();

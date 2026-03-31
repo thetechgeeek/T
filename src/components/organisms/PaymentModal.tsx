@@ -81,6 +81,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 								variant="ghost"
 								size="sm"
 								onPress={onClose}
+								testID="close-modal-button"
 								leftIcon={<X size={24} color={theme.colors.onSurface} />}
 							/>
 						</View>
@@ -143,6 +144,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 								title={loading ? 'Processing...' : 'Record Payment'}
 								onPress={handleSave}
 								loading={loading}
+								testID="submit-payment-button"
 								style={styles.saveButton}
 							/>
 						</ScrollView>

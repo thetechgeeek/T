@@ -10,17 +10,6 @@ import { useNetworkStatus } from '../useNetworkStatus';
 const mockAddEventListener = jest.fn();
 const mockRemove = jest.fn();
 
-jest.mock('react-native', () => {
-	const rn = jest.requireActual('react-native');
-	return {
-		...rn,
-		AppState: {
-			...rn.AppState,
-			addEventListener: jest.fn(() => ({ remove: jest.fn() })),
-		},
-	};
-});
-
 describe('useNetworkStatus', () => {
 	let originalFetch: typeof global.fetch;
 

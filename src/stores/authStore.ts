@@ -65,7 +65,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 	register: async (email, password) => {
 		set({ loading: true });
 		try {
-			await authService.signUp(email, password);
+			const data = await authService.signUp(email, password);
+			set({ session: data.session, user: data.user, isAuthenticated: !!data.session });
 		} finally {
 			set({ loading: false });
 		}

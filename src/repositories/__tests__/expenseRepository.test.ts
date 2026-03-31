@@ -1,6 +1,6 @@
 import { makeBuilder } from './helpers';
 import { supabase } from '../../config/supabase';
-import { makeExpense } from '../../../../__tests__/fixtures/financeFixtures';
+import { makeExpense } from '../../../__tests__/fixtures/financeFixtures';
 
 jest.mock('../../config/supabase', () => ({
 	supabase: {
@@ -20,7 +20,7 @@ beforeEach(() => {
 describe('expenseRepository.create', () => {
 	it('calls from(expenses).insert(payload).select().single() and returns saved expense', async () => {
 		const expense = makeExpense();
-		const builder = makeBuilder({}, { data: expense, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: expense, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const input = { category: 'Transport', amount: 500, expense_date: '2026-01-15', notes: '' };

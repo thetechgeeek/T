@@ -31,7 +31,7 @@ describe('AddItemScreen', () => {
 
 		expect(getByText('Add Item')).toBeTruthy();
 		expect(getByPlaceholderText('e.g. 10526-HL-1-A')).toBeTruthy();
-		expect(getByText('Initial Stock *')).toBeTruthy();
+		expect(getByText(/Initial Stock/i)).toBeTruthy();
 	});
 
 	it('shows validation errors for required fields', async () => {

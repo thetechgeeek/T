@@ -13,10 +13,14 @@ import { useRefreshOnFocus } from '../useRefreshOnFocus';
 let capturedFocusCallback: (() => void) | null = null;
 
 jest.mock('expo-router', () => ({
-	...jest.requireMock('expo-router'),
 	useFocusEffect: jest.fn((cb: () => void) => {
-		// Store callback for manual simulation; do NOT call immediately
+		// Store callback for manual simulation
 		capturedFocusCallback = cb;
+	}),
+	useRouter: () => ({
+		replace: jest.fn(),
+		push: jest.fn(),
+		back: jest.fn(),
 	}),
 }));
 

@@ -1,6 +1,6 @@
 import { makeBuilder } from './helpers';
 import { supabase } from '../../config/supabase';
-import { makeOrder } from '../../../../__tests__/fixtures/orderFixtures';
+import { makeOrder } from '../../../__tests__/fixtures/orderFixtures';
 
 jest.mock('../../config/supabase', () => ({
 	supabase: {
@@ -20,7 +20,7 @@ beforeEach(() => {
 describe('orderRepository.create (base)', () => {
 	it('calls from(orders).insert(payload).select().single() and returns new order', async () => {
 		const order = makeOrder();
-		const builder = makeBuilder({}, { data: order, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: order, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await orderRepository.create({ party_name: 'Test Party' } as any);

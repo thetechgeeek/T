@@ -15,8 +15,8 @@ export function formatINR(amount: number, showSymbol = true, decimals = 2): stri
 		rest.length > 0 ? rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastThree : lastThree;
 
 	const sign = amount < 0 ? '-' : '';
-	const formatted = decimals > 0 ? `${sign}${grouped}.${decPart}` : `${sign}${grouped}`;
-	return showSymbol ? `₹${formatted}` : formatted;
+	const formatted = decimals > 0 ? `${grouped}.${decPart}` : `${grouped}`;
+	return showSymbol ? `${sign}₹${formatted}` : `${sign}${formatted}`;
 }
 
 /**

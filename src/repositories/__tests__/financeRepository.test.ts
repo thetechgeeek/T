@@ -1,5 +1,5 @@
 import { supabase } from '../../config/supabase';
-import { makeDashboardStats } from '../../../../__tests__/fixtures/financeFixtures';
+import { makeDashboardStats } from '../../../__tests__/fixtures/financeFixtures';
 
 jest.mock('../../config/supabase', () => ({
 	supabase: {

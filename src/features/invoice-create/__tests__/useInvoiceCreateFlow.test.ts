@@ -98,6 +98,8 @@ describe('useInvoiceCreateFlow', () => {
 		// Advance to step 2
 		act(() => {
 			result.current.setCustomer({ name: 'John' });
+		});
+		act(() => {
 			result.current.handleNext();
 		});
 		expect(result.current.step).toBe(2);

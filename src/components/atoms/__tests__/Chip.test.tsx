@@ -23,14 +23,14 @@ describe('Chip', () => {
 	});
 
 	it('selected=true applies selected accessibilityState', () => {
-		const { getByRole } = renderWithTheme(<Chip label="selected" selected={true} />);
-		const chip = getByRole('togglebutton');
+		const { getByTestId } = renderWithTheme(<Chip label="selected" selected={true} testID="chip-unit" />);
+		const chip = getByTestId('chip-unit');
 		expect(chip.props.accessibilityState?.selected).toBe(true);
 	});
 
 	it('selected=false applies unselected accessibilityState', () => {
-		const { getByRole } = renderWithTheme(<Chip label="unselected" selected={false} />);
-		const chip = getByRole('togglebutton');
+		const { getByTestId } = renderWithTheme(<Chip label="unselected" selected={false} testID="chip-unit" />);
+		const chip = getByTestId('chip-unit');
 		expect(chip.props.accessibilityState?.selected).toBe(false);
 	});
 });

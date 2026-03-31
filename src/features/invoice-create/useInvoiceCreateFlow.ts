@@ -67,7 +67,12 @@ export function useInvoiceCreateFlow() {
 	const amountPaidNum = parseFloat(amountPaid) || 0;
 
 	// Navigation
-	const handleNext = useCallback(() => setStep((s) => Math.min(s + 1, 3)), []);
+	const handleNext = useCallback(() => {
+		const canNext = (step === 1 && !!customer?.name) || (step === 2 && lineItems.length > 0);
+		if (canNext) {
+			setStep((s) => Math.min(s + 1, 3));
+		}
+	}, [step, customer, lineItems]);
 	const handleBack = useCallback(() => setStep((s) => Math.max(s - 1, 1)), []);
 
 	// Line item management

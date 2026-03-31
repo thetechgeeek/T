@@ -113,15 +113,15 @@ describe('CreateInvoiceScreen', () => {
 	});
 
 	it('Step 1 with empty customer name does NOT advance to Step 2', async () => {
-		const { getByText, queryByText } = renderWithTheme(<CreateInvoiceScreen />);
+		const { getByText, queryByText, getByPlaceholderText } = renderWithTheme(<CreateInvoiceScreen />);
 
 		// Do NOT fill customer name
 		fireEvent.press(getByText('Next'));
 
-		// Should still be on Step 1 — "2. Items" header not visible
-		expect(queryByText('2. Items')).toBeNull();
-		// Step 1 indicator still visible
-		expect(getByText('1. Details')).toBeTruthy();
+		// Should still be on Step 1 — next step content not visible
+		expect(queryByText('+ Add Item')).toBeNull();
+		// Step 1 title or field still visible
+		expect(getByPlaceholderText('e.g. Rahul Sharma')).toBeTruthy();
 	});
 
 	it('Step 2 with no line items does NOT advance to Step 3', async () => {
@@ -136,9 +136,9 @@ describe('CreateInvoiceScreen', () => {
 		// Press Next without adding any line items
 		fireEvent.press(getByText('Next'));
 
-		// Should still be on Step 2
-		expect(queryByText('3. Review')).toBeNull();
-		expect(getByText('2. Items')).toBeTruthy();
+		// Should still be on Step 2 — Step 3 title not visible
+		expect(queryByText('Grand Total')).toBeNull();
+		expect(getByText('+ Add Item')).toBeTruthy();
 	});
 
 	it('payment_status is unpaid when amount_paid is 0', async () => {

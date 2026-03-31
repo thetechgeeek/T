@@ -1,6 +1,6 @@
 import { makeBuilder } from './helpers';
 import { supabase } from '../../config/supabase';
-import { makePaymentInput } from '../../../../__tests__/fixtures/paymentFixtures';
+import { makePaymentInput } from '../../../__tests__/fixtures/paymentFixtures';
 
 jest.mock('../../config/supabase', () => ({
 	supabase: {

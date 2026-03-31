@@ -1,6 +1,6 @@
 import { makeBuilder } from './helpers';
 import { supabase } from '../../config/supabase';
-import { makeInvoice, makeInvoiceLineItemInput } from '../../../../__tests__/fixtures/invoiceFixtures';
+import { makeInvoice, makeInvoiceLineItemInput } from '../../../__tests__/fixtures/invoiceFixtures';
 
 jest.mock('../../config/supabase', () => ({
 	supabase: {
@@ -23,7 +23,7 @@ describe('invoiceRepository.findWithLineItems', () => {
 
 	it('success: calls from(invoices).select(*,line_items).eq(id).single() and returns data', async () => {
 		const invoice = makeInvoice();
-		const builder = makeBuilder({}, { data: invoice, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: invoice, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await invoiceRepository.findWithLineItems(id);
@@ -36,7 +36,7 @@ describe('invoiceRepository.findWithLineItems', () => {
 	});
 
 	it('error: throws AppError when supabase returns an error', async () => {
-		const builder = makeBuilder({}, { data: null, error: { message: 'Not found', code: 'PGRST116' } });
+		const builder = makeBuilder({ data: [], error: null }, { data: null, error: { message: 'Not found', code: 'PGRST116' } });
 		mockFrom.mockReturnValue(builder);
 
 		await expect(invoiceRepository.findWithLineItems(id)).rejects.toMatchObject({
@@ -48,7 +48,7 @@ describe('invoiceRepository.findWithLineItems', () => {
 		// Repository always returns data as-is (cast); null + no error means record did not exist.
 		// findWithLineItems returns null-cast to Invoice type — service layer guards this.
 		// Test that the repository does NOT throw on null+no-error — service must guard.
-		const builder = makeBuilder({}, { data: null, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: null, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		// Should resolve (possibly null) rather than throw — repository trusts Supabase

@@ -13,7 +13,7 @@ const mockPurchases = [
 	{
 		id: 'p-1',
 		purchase_date: '2026-03-22',
-		total_amount: 5000,
+		grand_total: 5000,
 		supplier_name: 'Tile Corp',
 		payment_status: 'paid',
 	},

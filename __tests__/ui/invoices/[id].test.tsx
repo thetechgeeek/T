@@ -1,15 +1,13 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import InvoiceDetailScreen from '@/app/(app)/invoices/[id]';
-import { invoiceService } from '@/src/services/invoiceService';
+import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useLocalSearchParams } from 'expo-router';
 
-// Mock services and router
-jest.mock('@/src/services/invoiceService', () => ({
-	invoiceService: {
-		fetchInvoiceDetail: jest.fn(),
-	},
+// Mock store and router
+jest.mock('@/src/stores/invoiceStore', () => ({
+	useInvoiceStore: jest.fn(),
 }));
 
 jest.mock('expo-router', () => ({
@@ -40,11 +38,20 @@ const mockInvoice = {
 	],
 };
 
+const mockFetchInvoiceById = jest.fn();
+const mockClearCurrentInvoice = jest.fn();
+
 describe('InvoiceDetailScreen', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'inv-123' });
-		(invoiceService.fetchInvoiceDetail as jest.Mock).mockResolvedValue(mockInvoice);
+		(useInvoiceStore as unknown as jest.Mock).mockReturnValue({
+			currentInvoice: mockInvoice,
+			fetchInvoiceById: mockFetchInvoiceById,
+			loading: false,
+			error: null,
+			clearCurrentInvoice: mockClearCurrentInvoice,
+		});
 	});
 
 	it('renders invoice details correctly', async () => {

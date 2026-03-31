@@ -35,8 +35,13 @@ export default function DashboardScreen() {
 	const { stats, fetchStats } = useDashboardStore(
 		useShallow((s) => ({ stats: s.stats, fetchStats: s.fetchStats })),
 	);
-
-	const quickActions = [
+ 
+ 	React.useEffect(() => {
+ 		fetchStats();
+ 		fetchInvoices(1);
+ 	}, []);
+ 
+ 	const quickActions = [
 		{
 			label: t('dashboard.newInvoice'),
 			icon: FileText,

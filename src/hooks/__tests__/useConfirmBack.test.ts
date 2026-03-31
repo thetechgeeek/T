@@ -12,11 +12,15 @@ const mockAddListener = jest.fn();
 const mockUnsubscribe = jest.fn();
 
 jest.mock('expo-router', () => ({
-	...jest.requireMock('expo-router'),
 	useNavigation: jest.fn(() => ({
 		addListener: mockAddListener,
 		dispatch: mockDispatch,
 	})),
+	useRouter: () => ({
+		replace: jest.fn(),
+		push: jest.fn(),
+		back: jest.fn(),
+	}),
 }));
 
 describe('useConfirmBack', () => {

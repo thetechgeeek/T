@@ -96,9 +96,9 @@ describe('DashboardScreen', () => {
 	});
 
 	it('renders ₹0.00 for today_sales when stats is null', () => {
-		const { getByText } = renderWithTheme(<DashboardScreen />);
-		// When stats is null, today_sales defaults to 0
-		expect(getByText('₹0.00')).toBeTruthy();
+		const { getAllByText } = renderWithTheme(<DashboardScreen />);
+		// When stats is null, both today_sales and total_outstanding_credit default to 0 (shows two ₹0.00)
+		expect(getAllByText('₹0.00').length).toBeGreaterThan(0);
 	});
 
 	it('calls fetchStats on mount', async () => {

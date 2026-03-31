@@ -11,6 +11,7 @@ const mockQuery: any = {
 	lte: jest.fn().mockReturnThis(),
 	order: jest.fn().mockReturnThis(),
 	single: jest.fn().mockReturnThis(),
+	eq: jest.fn().mockReturnThis(),
 	then: jest.fn((resolve) => resolve({ data: [], error: null, count: 0 })),
 };
 

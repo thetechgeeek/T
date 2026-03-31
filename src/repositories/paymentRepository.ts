@@ -29,4 +29,24 @@ export const paymentRepository = {
 		}
 		return data as { id: UUID; new_status: PaymentStatus };
 	},
+
+	async fetchPayments(filters: {
+		customer_id?: UUID;
+		supplier_id?: UUID;
+		dateFrom?: string;
+		dateTo?: string;
+	}) {
+		let query = supabase
+			.from('payments')
+			.select('*, customer:customers(name), supplier:suppliers(name)');
+
+		if (filters.customer_id) query = query.eq('customer_id', filters.customer_id);
+		if (filters.supplier_id) query = query.eq('supplier_id', filters.supplier_id);
+		if (filters.dateFrom) query = query.gte('payment_date', filters.dateFrom);
+		if (filters.dateTo) query = query.lte('payment_date', filters.dateTo);
+
+		const { data, error } = await query.order('payment_date', { ascending: false });
+		if (error) throw error;
+		return data;
+	},
 };

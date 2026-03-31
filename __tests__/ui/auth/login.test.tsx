@@ -33,13 +33,13 @@ describe('LoginScreen', () => {
 	});
 
 	it('calls login on submit', async () => {
-		const { getByPlaceholderText, getByText, getAllByText } = renderWithTheme(<LoginScreen />);
+		const { getByPlaceholderText, getByTestId } = renderWithTheme(<LoginScreen />);
 
 		fireEvent.changeText(getByPlaceholderText('you@example.com'), 'test@example.com');
 		fireEvent.changeText(getByPlaceholderText('••••••••'), 'password123');
 
-		// Use role-based selector to find the submit button (resolves QA issue 2.4)
-		const signInButton = getByRole('button', { name: 'Sign In' });
+		// Use testID for reliable interaction in the presence of duplicate text
+		const signInButton = getByTestId('sign-in-button');
 		fireEvent.press(signInButton);
 
 		await waitFor(() => {

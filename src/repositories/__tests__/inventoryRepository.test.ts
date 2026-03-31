@@ -1,6 +1,6 @@
 import { makeBuilder } from './helpers';
 import { supabase } from '../../config/supabase';
-import { makeInventoryItem } from '../../../../__tests__/fixtures/inventoryFixtures';
+import { makeInventoryItem } from '../../../__tests__/fixtures/inventoryFixtures';
 
 jest.mock('../../config/supabase', () => ({
 	supabase: {
@@ -21,7 +21,7 @@ beforeEach(() => {
 describe('inventoryRepository.findById (base)', () => {
 	it('calls from(inventory_items).select(*).eq(id).single()', async () => {
 		const item = makeInventoryItem();
-		const builder = makeBuilder({}, { data: item, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: item, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await inventoryRepository.findById('item-uuid-001');
@@ -91,7 +91,7 @@ describe('inventoryRepository.findLowStock', () => {
 describe('inventoryRepository.create (base)', () => {
 	it('calls insert(payload).select().single() and returns created item', async () => {
 		const item = makeInventoryItem();
-		const builder = makeBuilder({}, { data: item, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: item, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await inventoryRepository.create({ design_name: 'GLOSSY WHITE 60x60' } as any);
@@ -105,7 +105,7 @@ describe('inventoryRepository.create (base)', () => {
 describe('inventoryRepository.update (base)', () => {
 	it('calls update(payload).eq(id).select().single()', async () => {
 		const updated = makeInventoryItem({ box_count: 99 });
-		const builder = makeBuilder({}, { data: updated, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: updated, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await inventoryRepository.update('item-uuid-001', { box_count: 99 });

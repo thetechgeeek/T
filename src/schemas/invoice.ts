@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const InvoiceLineItemSchema = z.object({
 	item_id: z.string().uuid().optional(),
 	design_name: z.string().min(1, 'Design name is required'),
-	quantity: z.number().positive('Quantity must be at least 1'),
+	quantity: z.number().positive('Quantity must be a positive number'),
 	rate_per_unit: z.number().positive('Rate must be positive'),
 	discount: z.number().min(0).default(0),
 	gst_rate: z.number().refine((r) => [0, 5, 12, 18, 28].includes(r), 'Invalid GST rate'),

@@ -34,10 +34,9 @@ describe('PaymentModal', () => {
 		// Modal mock returns null when visible=false
 		expect(queryByText('Record Payment')).toBeNull();
 	});
-
 	it('DOES render content when visible=true', () => {
-		const { getByText } = renderWithTheme(<PaymentModal {...baseProps} />);
-		expect(getByText('Record Payment')).toBeTruthy();
+		const { getByTestId } = renderWithTheme(<PaymentModal {...baseProps} />);
+		expect(getByTestId('submit-payment-button')).toBeTruthy();
 	});
 
 	it('renders the invoice number in the modal header area', () => {
@@ -46,20 +45,16 @@ describe('PaymentModal', () => {
 	});
 
 	it('calls paymentService.recordPayment with amount and mode when submitted', async () => {
-		const { getByPlaceholderText, getAllByRole } = renderWithTheme(
+		const { getByPlaceholderText, getByTestId } = renderWithTheme(
 			<PaymentModal {...baseProps} totalAmount={0} />,
 		);
 
 		// Enter amount
 		fireEvent.changeText(getByPlaceholderText('0.00'), '2000');
 
-		// Press "Record Payment" submit button (last button by role)
-		const buttons = getAllByRole('button');
-		const submitButton = buttons.find(
-			(b) => b.props.accessibilityLabel === 'Record Payment',
-		);
-		expect(submitButton).toBeDefined();
-		fireEvent.press(submitButton!);
+		// Press "Record Payment" submit button
+		const submitButton = getByTestId('submit-payment-button');
+		fireEvent.press(submitButton);
 
 		// paymentService.recordPayment should be called
 		await new Promise(process.nextTick);
@@ -69,37 +64,26 @@ describe('PaymentModal', () => {
 	});
 
 	it('does NOT call paymentService.recordPayment when amount is empty on submit', () => {
-		const { getAllByRole } = renderWithTheme(
+		const { getByTestId } = renderWithTheme(
 			<PaymentModal {...baseProps} totalAmount={0} />,
 		);
 
-		// Do not fill the amount (leave empty)
-		const buttons = getAllByRole('button');
-		const submitButton = buttons.find(
-			(b) => b.props.accessibilityLabel === 'Record Payment',
-		);
-		fireEvent.press(submitButton!);
+		// Press "Record Payment" submit button
+		const submitButton = getByTestId('submit-payment-button');
+		fireEvent.press(submitButton);
 
 		expect(paymentService.recordPayment).not.toHaveBeenCalled();
 	});
 
 	it('calls onClose when close (ghost) button is pressed', () => {
 		const onClose = jest.fn();
-		const { getAllByRole } = renderWithTheme(
+		const { getByTestId } = renderWithTheme(
 			<PaymentModal {...baseProps} onClose={onClose} />,
 		);
 
-		// The ghost close button is the first button in the header (no title text)
-		const buttons = getAllByRole('button');
-		// Find the button without an accessibilityLabel (the ghost X button)
-		const closeButton = buttons.find((b) => !b.props.accessibilityLabel);
-		if (closeButton) {
-			fireEvent.press(closeButton);
-			expect(onClose).toHaveBeenCalled();
-		} else {
-			// Fallback: press first button (ghost button is first rendered)
-			fireEvent.press(buttons[0]);
-			expect(onClose).toHaveBeenCalled();
-		}
+		// Find and press the close button
+		const closeButton = getByTestId('close-modal-button');
+		fireEvent.press(closeButton);
+		expect(onClose).toHaveBeenCalled();
 	});
 });

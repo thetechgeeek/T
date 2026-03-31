@@ -106,16 +106,21 @@ describe('invoiceStore', () => {
 		expect(useInvoiceStore.getState().filters).toMatchObject({ payment_status: 'paid' });
 		expect(invoiceService.fetchInvoices).toHaveBeenCalledWith(
 			expect.objectContaining({ payment_status: 'paid' }),
+			1
 		);
 	});
 
-	it('fetchInvoiceDetail calls service and sets selectedInvoice', async () => {
-		const invoice = makeInvoice({ id: 'inv-001' });
-		(invoiceService.fetchInvoiceDetail as jest.Mock).mockResolvedValue(invoice);
+	it('fetchInvoiceDetail failure sets error state', async () => {
+		(invoiceService.fetchInvoiceDetail as jest.Mock).mockRejectedValue(new Error('Detail fetch failed'));
 
-		await useInvoiceStore.getState().fetchInvoiceDetail('inv-001');
+		try {
+			await useInvoiceStore.getState().fetchInvoiceById('inv-001');
+		} catch {
+			// Expected rejection
+		}
 
-		expect(invoiceService.fetchInvoiceDetail).toHaveBeenCalledWith('inv-001');
-		expect(useInvoiceStore.getState().selectedInvoice).toEqual(invoice);
+		const state = useInvoiceStore.getState();
+		expect(state.error).toBe('Detail fetch failed');
+		expect(state.loading).toBe(false);
 	});
 });

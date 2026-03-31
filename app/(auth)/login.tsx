@@ -101,6 +101,7 @@ export default function LoginScreen() {
 					onPress={handleLogin}
 					disabled={loading}
 					activeOpacity={0.85}
+					testID="sign-in-button"
 				>
 					{loading ? (
 						<ActivityIndicator color={c.onPrimary} />

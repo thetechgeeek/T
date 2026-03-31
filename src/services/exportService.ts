@@ -38,6 +38,12 @@ interface GSTR1B2CRow {
 	'Taxable Value': number;
 	'Cess Amount': number;
 	'E-Commerce GSTIN': string;
+	'Invoice Value'?: number;
+	CGST?: number;
+	SGST?: number;
+	IGST?: number;
+	'Invoice Number'?: string;
+	'Receiver Name'?: string;
 }
 
 function escapeCSV(value: string | number): string {
@@ -107,6 +113,10 @@ export const exportService = {
 					});
 				} else {
 					// B2C — unregistered / consumer
+					const cgst = inv.is_inter_state ? 0 : (group.taxable * rate) / 200;
+					const sgst = inv.is_inter_state ? 0 : (group.taxable * rate) / 200;
+					const igst = inv.is_inter_state ? (group.taxable * rate) / 100 : 0;
+
 					b2cRows.push({
 						Type: 'OE',
 						'Place Of Supply': inv.place_of_supply ?? '',
@@ -115,6 +125,12 @@ export const exportService = {
 						'Taxable Value': group.taxable,
 						'Cess Amount': 0,
 						'E-Commerce GSTIN': '',
+						'Invoice Value': inv.grand_total,
+						CGST: cgst,
+						SGST: sgst,
+						IGST: igst,
+						'Invoice Number': inv.invoice_number,
+						'Receiver Name': inv.customer_name,
 					});
 				}
 			}
@@ -144,6 +160,12 @@ export const exportService = {
 			'Taxable Value',
 			'Cess Amount',
 			'E-Commerce GSTIN',
+			'Invoice Number',
+			'Receiver Name',
+			'Invoice Value',
+			'CGST',
+			'SGST',
+			'IGST',
 		];
 
 		const b2bCSV = toCSV(b2bHeaders, b2bRows as unknown as Record<string, string | number>[]);

@@ -14,7 +14,7 @@ import { layout } from '@/src/theme/layout';
 export default function InvoiceDetailScreen() {
 	const { id } = useLocalSearchParams();
 	const router = useRouter();
-	const { c, s } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const { currentInvoice, fetchInvoiceById, loading, error, clearCurrentInvoice } =
@@ -108,7 +108,7 @@ export default function InvoiceDetailScreen() {
 				<View
 					style={{
 						backgroundColor: c.surface,
-						borderRadius: theme.borderRadius.md,
+						borderRadius: r.md,
 						borderWidth: 1,
 						borderColor: c.border,
 						overflow: 'hidden',
@@ -141,7 +141,7 @@ export default function InvoiceDetailScreen() {
 						marginTop: s.xl,
 						backgroundColor: c.surface,
 						padding: s.md,
-						borderRadius: theme.borderRadius.md,
+						borderRadius: r.md,
 						borderWidth: 1,
 						borderColor: c.border,
 					}}

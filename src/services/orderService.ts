@@ -81,23 +81,31 @@ export const orderService = {
 					orderId,
 				);
 			} else {
-				// Item does not exist, insert it directly with box_count
-				const { error: insertError } = await supabase.from('inventory_items').insert({
+				// Item does not exist, use inventoryService to create it
+				const newItem = await inventoryService.createItem({
 					design_name: item.design_name,
-					category: item.category || 'OTHER',
-					size_name: item.size || null,
-					brand_name: item.brand || null,
-					box_count: item.box_count,
+					category: (item.category as any) || 'OTHER',
+					size_name: item.size || undefined,
+					brand_name: item.brand || undefined,
+					box_count: 0, // Set to 0, let performStockOperation handle it
 					selling_price: item.price_per_box || 0,
 					cost_price: item.price_per_box || 0,
+					gst_rate: 18,
+					hsn_code: '6908',
+					low_stock_threshold: 10,
 					order_id: orderId,
 					party_name: partyName,
 				});
 
-				if (insertError) {
-					logger.error(`Failed to insert new item ${item.design_name}:`, insertError);
-					// depending on exact needs, we might throw or continue. we continue for partial success.
-				}
+				// Also perform stock_in for the new item to ensure consistent logging
+				await inventoryService.performStockOperation(
+					newItem.id,
+					'stock_in',
+					item.box_count,
+					`Imported from Order ${orderId}`,
+					'purchase',
+					orderId,
+				);
 			}
 		}
 

@@ -1,6 +1,6 @@
 import { makeBuilder } from './helpers';
 import { supabase } from '../../config/supabase';
-import { makeCustomer } from '../../../../__tests__/fixtures/customerFixtures';
+import { makeCustomer } from '../../../__tests__/fixtures/customerFixtures';
 
 jest.mock('../../config/supabase', () => ({
 	supabase: {
@@ -20,7 +20,7 @@ beforeEach(() => {
 describe('customerRepository.findById (base)', () => {
 	it('success: returns customer matching the id', async () => {
 		const customer = makeCustomer();
-		const builder = makeBuilder({}, { data: customer, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: customer, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await customerRepository.findById('cust-uuid-001');
@@ -33,7 +33,7 @@ describe('customerRepository.findById (base)', () => {
 	});
 
 	it('error: throws when supabase returns an error', async () => {
-		const builder = makeBuilder({}, { data: null, error: { message: 'DB error', code: 'XX000' } });
+		const builder = makeBuilder({ data: [], error: null }, { data: null, error: { message: 'DB error', code: 'XX000' } });
 		mockFrom.mockReturnValue(builder);
 
 		await expect(customerRepository.findById('bad-id')).rejects.toMatchObject({ message: 'DB error' });
@@ -97,7 +97,7 @@ describe('customerRepository.findMany (base) — filter variations', () => {
 describe('customerRepository.create (base)', () => {
 	it('calls insert(payload).select().single() and returns created customer', async () => {
 		const customer = makeCustomer();
-		const builder = makeBuilder({}, { data: customer, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: customer, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await customerRepository.create({ name: 'Test Customer' } as any);
@@ -112,7 +112,7 @@ describe('customerRepository.create (base)', () => {
 describe('customerRepository.update (base)', () => {
 	it('calls update(payload).eq(id).select().single() and returns updated customer', async () => {
 		const customer = makeCustomer({ name: 'Updated Name' });
-		const builder = makeBuilder({}, { data: customer, error: null });
+		const builder = makeBuilder({ data: [], error: null }, { data: customer, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await customerRepository.update('cust-uuid-001', { name: 'Updated Name' });

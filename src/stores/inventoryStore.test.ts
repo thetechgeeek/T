@@ -144,7 +144,11 @@ describe('inventoryStore', () => {
 			new Error('Stock op failed'),
 		);
 
-		await useInventoryStore.getState().performStockOperation('item-1', 'stock_out', 10, 'Sale');
+		try {
+			await useInventoryStore.getState().performStockOperation('item-1', 'stock_out', 10, 'Sale');
+		} catch {
+			// Expected error
+		}
 
 		const state = useInventoryStore.getState();
 		expect(state.error).toBeTruthy();

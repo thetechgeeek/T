@@ -65,9 +65,9 @@ describe('financeStore', () => {
 	});
 
 	it('fetchPurchases success updates purchases', async () => {
-		(financeService.fetchPurchases as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+		(financeService.fetchPurchases as jest.Mock).mockResolvedValue([]);
 
-		await useFinanceStore.getState().fetchPurchases({});
+		await useFinanceStore.getState().fetchPurchases();
 
 		const state = useFinanceStore.getState();
 		expect(state.purchases).toEqual([]);

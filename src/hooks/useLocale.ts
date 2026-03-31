@@ -10,14 +10,14 @@ const STORAGE_KEY = '@tilemaster/locale';
 export type SupportedLanguage = 'hi' | 'en';
 
 export function useLocale() {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 	const currentLanguage = i18n.language as SupportedLanguage;
 
 	const toggleLanguage = useCallback(async () => {
 		const next: SupportedLanguage = currentLanguage === 'hi' ? 'en' : 'hi';
 		await i18n.changeLanguage(next);
 		await AsyncStorage.setItem(STORAGE_KEY, next);
-	}, [currentLanguage]);
+	}, [currentLanguage, i18n]);
 
 	const setLanguage = useCallback(async (lang: SupportedLanguage) => {
 		await i18n.changeLanguage(lang);

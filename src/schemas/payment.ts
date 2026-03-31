@@ -15,6 +15,10 @@ export const PaymentSchema = z
 	.refine((data) => !(data.customer_id && data.supplier_id), {
 		message: 'Payment cannot be linked to both a customer and a supplier',
 		path: ['supplier_id'],
+	})
+	.refine((data) => data.customer_id || data.supplier_id, {
+		message: 'Payment must be linked to either a customer or a supplier',
+		path: ['customer_id'],
 	});
 
 export type PaymentFormInput = z.infer<typeof PaymentSchema>;

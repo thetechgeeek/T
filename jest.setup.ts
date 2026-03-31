@@ -23,12 +23,14 @@ import React from 'react';
 import '@testing-library/jest-native/extend-expect';
 import 'react-native-gesture-handler/jestSetup';
 
-// Manual mock for react-native components
+// Consolidated mock for react-native
 jest.mock('react-native', () => {
 	const React = require('react');
+	const RN = jest.requireActual('react-native');
+
+	// Components
 	const View = ({ children, ...props }: any) => React.createElement('View', props, children);
 	const Text = ({ children, ...props }: any) => {
-		const React = require('react');
 		const content = React.Children.toArray(children)
 			.map((child: any) =>
 				typeof child === 'string' || typeof child === 'number' ? child : '',
@@ -41,7 +43,6 @@ jest.mock('react-native', () => {
 	const ScrollView = ({ children, ...props }: any) =>
 		React.createElement('ScrollView', props, children);
 	const TouchableOpacity = ({ children, onPress, disabled, ...props }: any) => {
-		const React = require('react');
 		const handlePress = () => {
 			if (!disabled && onPress) {
 				onPress();
@@ -49,14 +50,20 @@ jest.mock('react-native', () => {
 		};
 		return React.createElement(
 			'TouchableOpacity',
-			{ ...props, onPress: handlePress, disabled },
+			{
+				...props,
+				onPress: handlePress,
+				disabled,
+				accessibilityRole: props.accessibilityRole || 'button',
+				accessibilityState: props.accessibilityState,
+			},
 			children,
 		);
 	};
 	const TextInput = (props: any) => React.createElement('TextInput', props);
 	const ActivityIndicator = (props: any) =>
 		React.createElement('ActivityIndicator', { testID: 'ActivityIndicator', ...props });
-	// Platform — mutable so platformHelpers.ts can do per-test OS overrides (QA issue 3.5)
+
 	const Platform = {
 		OS: 'ios' as string,
 		Version: 1,
@@ -73,11 +80,10 @@ jest.mock('react-native', () => {
 	const Touchable = { Mixin: {} };
 	const Pressable = ({ children, ...props }: any) =>
 		React.createElement('Pressable', props, children);
-	// Modal — only renders children when visible === true (QA issue 3.7)
 	const Modal = ({ children, visible, ...props }: any) =>
 		visible ? React.createElement('Modal', props, children) : null;
 	const RefreshControl = (props: any) => React.createElement('RefreshControl', props);
-	// FlatList — full prop support: header/footer/empty/onEndReached (QA issue 3.6)
+
 	const FlatList = ({
 		data,
 		renderItem,
@@ -131,8 +137,8 @@ jest.mock('react-native', () => {
 			}),
 		);
 	};
+
 	const SectionList = ({ sections, renderItem, renderSectionHeader, keyExtractor }: any) => {
-		const React = require('react');
 		return React.createElement(
 			'View',
 			null,
@@ -151,6 +157,24 @@ jest.mock('react-native', () => {
 				),
 			),
 		);
+	};
+
+	const AppState = {
+		currentState: 'active',
+		addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+		removeEventListener: jest.fn(),
+	};
+
+	const NativeModules = {
+		...RN.NativeModules,
+		RNOSSafeAreaContext: {
+			getConstants: () => ({
+				initialWindowMetrics: {
+					frame: { x: 0, y: 0, width: 0, height: 0 },
+					insets: { top: 0, left: 0, right: 0, bottom: 0 },
+				},
+			}),
+		},
 	};
 
 	return {
@@ -172,6 +196,33 @@ jest.mock('react-native', () => {
 		RefreshControl,
 		FlatList,
 		SectionList,
+		AppState,
+		NativeModules,
+		useWindowDimensions: jest.fn(() => ({ width: 390, height: 844, fontScale: 1, scale: 3 })),
+	};
+});
+
+// Mock @shopify/flash-list
+jest.mock('@shopify/flash-list', () => ({
+	FlashList: ({ data, renderItem, keyExtractor, ListHeaderComponent, ListFooterComponent, ListEmptyComponent }: any) => {
+		const React = require('react');
+		const { View } = require('react-native');
+		return React.createElement(
+			View,
+			null,
+			ListHeaderComponent && (typeof ListHeaderComponent === 'function' ? React.createElement(ListHeaderComponent) : ListHeaderComponent),
+			data?.map((item: any, index: number) => React.createElement(View, { key: keyExtractor ? keyExtractor(item, index) : index }, renderItem({ item, index }))),
+			ListEmptyComponent && (!data || data.length === 0) && (typeof ListEmptyComponent === 'function' ? React.createElement(ListEmptyComponent) : ListEmptyComponent),
+			ListFooterComponent && (typeof ListFooterComponent === 'function' ? React.createElement(ListFooterComponent) : ListFooterComponent),
+		);
+	},
+}), { virtual: true });
+
+// Mock Supabase config globally to prevent "supabaseUrl is required" errors (QA issue 3.1)
+jest.mock('@/src/config/supabase', () => {
+	const { createSupabaseMock } = require('./__tests__/utils/supabaseMock');
+	return {
+		supabase: createSupabaseMock(),
 	};
 });
 
@@ -199,9 +250,12 @@ jest.mock('expo-router', () => {
 	};
 });
 
-jest.mock('expo-image', () => ({
-	Image: ({ children, ...props }: any) => React.createElement('Image', props, children),
-}));
+jest.mock('expo-image', () => {
+	const React = require('react');
+	return {
+		Image: ({ children, ...props }: any) => React.createElement('Image', props, children),
+	};
+});
 
 jest.mock('expo-print', () => ({
 	printAsync: jest.fn(),
@@ -241,61 +295,95 @@ jest.mock('expo-camera', () => ({
 	useCameraPermissions: jest.fn().mockReturnValue([{ granted: true }, jest.fn()]),
 }));
 
-// react-i18next — fallback returns last key segment so tests don't assert raw keys (QA issue 3.4)
-jest.mock('react-i18next', () => ({
-	useTranslation: () => ({
-		t: (key: string, opts?: any) => {
-			const staticMap: Record<string, string> = {
-				'common.add': 'Add',
-				'common.save': 'Save',
-				'auth.signIn': 'Sign In',
-				'auth.signUp': 'Sign Up',
-				'auth.welcome': 'Welcome to TileMaster',
-				'auth.subtitle': 'Manage your tiles & ceramics business',
-				'auth.setupBusiness': 'Set Up Your Business',
-				'auth.email': 'Email',
-				'auth.password': 'Password',
-			};
-			if (staticMap[key]) return staticMap[key];
-			const fallback = key.split('.').pop() ?? key;
-			return opts?.defaultValue ?? fallback;
-		},
-		i18n: {
+// Mock i18next globally to prevent import issues in non-React files
+jest.mock('i18next', () => {
+	const t = (key: string, opts?: any) => {
+		const SHARED_TRANSLATIONS: Record<string, string> = {
+			'common.add': 'Add',
+			'common.save': 'Save',
+			'common.ok': 'ok',
+			'common.today': 'Today',
+			'common.yesterday': 'Yesterday',
+			'common.error': 'Error',
+			'common.errorTitle': 'Error',
+			'common.successTitle': 'Success',
+			'customers.addErrorTitle': 'Error Saving Customer',
+			'finance.saveExpenseErrorTitle': 'Error Saving Expense',
+			'invoices.createErrorTitle': 'Error Creating Invoice',
+			'inventory.errorTitle': 'Error',
+			'inventory.stockOpValidationError': 'Please enter a valid quantity',
+			'finance.loadPurchasesError': 'Network error',
+			'finance.loadExpensesError': 'Network error',
+			'invoices.loadError': 'Public table missing',
+			'invoice.loadError': 'Public table missing',
+			'inventory.loadError': 'Schema error',
+			'inventory.addErrorTitle': 'Error',
+			errorTitle: 'Error',
+			stockOpValidationError: 'Please enter a valid quantity',
+			loadError: 'Public table missing',
+			saveError: 'saveError',
+			addErrorTitle: 'Error',
+			'auth.signIn': 'Sign In',
+			'auth.signUp': 'Sign Up',
+			'auth.welcome': 'Welcome to TileMaster',
+			'auth.subtitle': 'Manage your tiles & ceramics business',
+			'auth.setupBusiness': 'Set Up Your Business',
+			'auth.email': 'Email',
+			'auth.password': 'Password',
+		};
+		if (SHARED_TRANSLATIONS[key]) return SHARED_TRANSLATIONS[key];
+		const shortKey = key.split('.').pop() || key;
+		return SHARED_TRANSLATIONS[shortKey] || opts?.defaultValue || shortKey;
+	};
+	return {
+		__esModule: true,
+		default: {
+			t,
 			changeLanguage: jest.fn().mockResolvedValue(undefined),
 			language: 'en',
+			use: jest.fn().mockReturnThis(),
+			init: jest.fn().mockResolvedValue(undefined),
 		},
-	}),
-	initReactI18next: {
-		type: '3rdParty',
-		init: jest.fn(),
-	},
-}));
+		t,
+		changeLanguage: jest.fn().mockResolvedValue(undefined),
+		language: 'en',
+	};
+});
+
+// Helper for shared translations to avoid discrepancies between different i18n mocks
+// Note: We used to have separate mocks for @/src/i18n and i18next, but i18next mock is more fundamental.
+// We'll keep @/src/i18n mock as a simple re-export of the i18next mock for completeness.
+jest.mock('@/src/i18n', () => require('i18next'));
+jest.mock('./src/i18n', () => require('i18next'));
+
+// react-i18next — fallback returns last key segment so tests don't assert raw keys (QA issue 3.4)
+jest.mock('react-i18next', () => {
+	const i18n = require('i18next').default;
+	return {
+		useTranslation: () => ({
+			t: i18n.t,
+			i18n: i18n,
+		}),
+		initReactI18next: {
+			type: '3rdParty',
+			init: jest.fn(),
+		},
+	};
+});
 
 jest.mock('@/src/hooks/useLocale', () => ({
-	useLocale: () => ({
-		t: (key: string, opts?: any) => {
-			const staticMap: Record<string, string> = {
-				'common.add': 'Add',
-				'common.save': 'Save',
-				'auth.signIn': 'Sign In',
-				'auth.signUp': 'Sign Up',
-				'auth.welcome': 'Welcome to TileMaster',
-				'auth.subtitle': 'Manage your tiles & ceramics business',
-				'auth.setupBusiness': 'Set Up Your Business',
-				'auth.email': 'Email',
-				'auth.password': 'Password',
-			};
-			if (staticMap[key]) return staticMap[key];
-			const fallback = key.split('.').pop() ?? key;
-			return opts?.defaultValue ?? fallback;
-		},
-		currentLanguage: 'en',
-		toggleLanguage: jest.fn(),
-		setLanguage: jest.fn(),
-		formatCurrency: jest.fn((a) => `₹${a}`),
-		formatDate: jest.fn((d) => d),
-		formatDateShort: jest.fn((d) => d),
-	}),
+	useLocale: () => {
+		const i18n = require('i18next').default;
+		return {
+			t: i18n.t,
+			currentLanguage: 'en',
+			toggleLanguage: jest.fn(),
+			setLanguage: jest.fn(),
+			formatCurrency: jest.fn((a) => `₹${a ?? 0}`),
+			formatDate: jest.fn((d) => d),
+			formatDateShort: jest.fn((d) => d),
+		};
+	},
 }));
 
 // Mock lucide-react-native to avoid SVG issues
@@ -308,6 +396,37 @@ jest.mock('lucide-react-native', () => {
 				(props: any) => React.createElement('Icon', { ...props, name: prop }),
 		},
 	);
+});
+
+// Mock react-native-safe-area-context
+jest.mock('react-native-safe-area-context', () => {
+	const inset = { top: 0, right: 0, bottom: 0, left: 0 };
+	return {
+		SafeAreaProvider: ({ children }: any) => children,
+		SafeAreaView: ({ children }: any) => children,
+		useSafeAreaInsets: () => inset,
+		useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
+		initialWindowMetrics: {
+			frame: { x: 0, y: 0, width: 0, height: 0 },
+			insets: inset,
+		},
+	};
+});
+
+// Mock react-native-keyboard-controller
+jest.mock('react-native-keyboard-controller', () => {
+	const React = require('react');
+	return {
+		KeyboardAvoidingView: ({ children }: any) => React.createElement('View', null, children),
+		KeyboardProvider: ({ children }: any) => children,
+		useKeyboardHandler: jest.fn(),
+		useKeyboardController: jest.fn(() => ({
+			isKeyboardVisible: false,
+			keyboardHeight: 0,
+		})),
+		KeyboardStickyView: ({ children }: any) => React.createElement('View', null, children),
+		KeyboardAwareScrollView: ({ children }: any) => React.createElement('ScrollView', null, children),
+	};
 });
 
 // NOTE: Supabase is intentionally NOT mocked globally (QA issue 3.1).

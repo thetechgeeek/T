@@ -143,4 +143,16 @@ export const inventoryService = {
 		if (error) throw error;
 		return data as StockOperation[];
 	},
+	/**
+	 * Delete an inventory item
+	 */
+	async deleteItem(id: UUID) {
+		const { error } = await supabase
+			.from('inventory_items')
+			.delete()
+			.eq('id', id);
+
+		if (error) throw error;
+		return true;
+	},
 };

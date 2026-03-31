@@ -1,10 +1,7 @@
 import { renderHook, act } from '@testing-library/react-native';
 import { useLocale } from '../useLocale';
 
-jest.mock('@/src/i18n', () => ({
-	language: 'en',
-	changeLanguage: jest.fn().mockResolvedValue(undefined),
-}));
+jest.unmock('@/src/hooks/useLocale');
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
 	setItem: jest.fn().mockResolvedValue(undefined),
@@ -34,7 +31,7 @@ describe('useLocale', () => {
 	});
 
 	it('toggleLanguage switches from en to hi then back to en', async () => {
-		const i18n = require('@/src/i18n');
+		const i18n = require('i18next').default;
 		// Start in English
 		i18n.language = 'en';
 

@@ -65,7 +65,7 @@ export default function ExpensesScreen() {
 			setNotes('');
 		} catch (e: unknown) {
 			Alert.alert(
-				t('common.errorTitle'),
+				t('finance.saveExpenseErrorTitle'),
 				e instanceof Error ? e.message : t('common.unexpectedError'),
 				[{ text: t('common.ok') }],
 			);

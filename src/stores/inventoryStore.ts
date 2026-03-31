@@ -30,6 +30,7 @@ interface InventoryState {
 		qty: number,
 		reason?: string,
 	) => Promise<void>;
+	deleteItem: (id: UUID) => Promise<void>;
 	reset: () => void;
 }
 
@@ -173,6 +174,32 @@ export const useInventoryStore = create<InventoryState>()(
 				throw err;
 			}
 		},
+
+		deleteItem: async (id: string) => {
+			set((s) => {
+				s.loading = true;
+				s.error = null;
+			});
+			try {
+				await inventoryService.deleteItem(id);
+				set((s) => {
+					const idx = s.items.findIndex((i) => i.id === id);
+					if (idx !== -1) {
+						s.items.splice(idx, 1);
+					}
+					s.totalCount -= 1;
+					s.loading = false;
+				});
+				eventBus.emit({ type: 'STOCK_CHANGED', itemId: id });
+			} catch (err: unknown) {
+				set((s) => {
+					s.error = (err as Error).message;
+					s.loading = false;
+				});
+				throw err;
+			}
+		},
+
 
 		reset: () => {
 			set((s) => {

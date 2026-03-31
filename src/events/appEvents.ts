@@ -18,4 +18,8 @@ export const eventBus = {
 		listeners.add(handler);
 		return () => listeners.delete(handler);
 	},
+	/** Alias for subscribe (matches some legacy store tests) */
+	on(handler: EventHandler) {
+		return this.subscribe(handler);
+	},
 };

@@ -66,7 +66,7 @@ export default function AddCustomerScreen() {
 		} catch (e: unknown) {
 			logger.error('Failed to save customer', e instanceof Error ? e : new Error(String(e)));
 			Alert.alert(
-				t('common.errorTitle'),
+				t('customers.addErrorTitle'),
 				e instanceof Error ? e.message : t('common.unexpectedError'),
 				[{ text: t('common.ok') }],
 			);
