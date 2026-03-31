@@ -190,6 +190,11 @@ export function LineItemsStep({
 								placeholder="Enter quantity"
 								keyboardType="numeric"
 								onChangeText={setInputQuantity}
+								error={
+									parseInt(inputQuantity) > selectedItem.box_count
+										? `Exceeds available stock (${selectedItem.box_count})`
+										: undefined
+								}
 							/>
 							<FormField
 								label="Discount (₹ total)"

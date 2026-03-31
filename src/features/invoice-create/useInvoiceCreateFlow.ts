@@ -78,12 +78,25 @@ export function useInvoiceCreateFlow() {
 	// Line item management
 	const addLineItem = useCallback(() => {
 		if (!selectedItem) return;
+
+		const quantity = parseInt(inputQuantity) || 1;
+
+		// UI-level stock validation
+		if (quantity > selectedItem.box_count) {
+			Alert.alert(
+				'Insufficient Stock',
+				`You only have ${selectedItem.box_count} boxes of ${selectedItem.design_name} available.`,
+				[{ text: 'OK' }],
+			);
+			return;
+		}
+
 		setLineItems((prev) => [
 			...prev,
 			{
 				item_id: selectedItem.id,
 				design_name: selectedItem.design_name,
-				quantity: parseInt(inputQuantity) || 1,
+				quantity,
 				rate_per_unit: selectedItem.selling_price || 0,
 				discount: parseFloat(inputDiscount) || 0,
 				gst_rate: 18,

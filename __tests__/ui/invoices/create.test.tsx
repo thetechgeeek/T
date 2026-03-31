@@ -113,7 +113,9 @@ describe('CreateInvoiceScreen', () => {
 	});
 
 	it('Step 1 with empty customer name does NOT advance to Step 2', async () => {
-		const { getByText, queryByText, getByPlaceholderText } = renderWithTheme(<CreateInvoiceScreen />);
+		const { getByText, queryByText, getByPlaceholderText } = renderWithTheme(
+			<CreateInvoiceScreen />,
+		);
 
 		// Do NOT fill customer name
 		fireEvent.press(getByText('Next'));
@@ -125,7 +127,9 @@ describe('CreateInvoiceScreen', () => {
 	});
 
 	it('Step 2 with no line items does NOT advance to Step 3', async () => {
-		const { getByText, queryByText, getByPlaceholderText } = renderWithTheme(<CreateInvoiceScreen />);
+		const { getByText, queryByText, getByPlaceholderText } = renderWithTheme(
+			<CreateInvoiceScreen />,
+		);
 
 		// Fill valid customer data on Step 1
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
@@ -168,6 +172,36 @@ describe('CreateInvoiceScreen', () => {
 				expect.objectContaining({ payment_status: 'unpaid', amount_paid: 0 }),
 			);
 		});
+	});
+
+	it('shows an alert and prevents adding item if quantity exceeds stock', async () => {
+		const { getByText, getByPlaceholderText, queryByText } = renderWithTheme(
+			<CreateInvoiceScreen />,
+		);
+
+		// Go to Step 2
+		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.press(getByText('Next'));
+		await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+
+		fireEvent.press(getByText('+ Add Item'));
+		fireEvent.press(getByText('Marble gold'));
+
+		// Enter quantity > stock (mock stock is 50)
+		fireEvent.changeText(getByPlaceholderText('Enter quantity'), '60');
+		fireEvent.press(getByText('Confirm'));
+
+		const { Alert } = require('react-native');
+		await waitFor(() => {
+			expect(Alert.alert).toHaveBeenCalledWith(
+				'Insufficient Stock',
+				expect.stringContaining('50 boxes'),
+				expect.any(Array),
+			);
+		});
+
+		// Verify item was NOT added to the list
+		expect(queryByText('60 units @ ₹1000.00')).toBeNull();
 	});
 
 	it('shows an alert when invoice creation fails', async () => {
