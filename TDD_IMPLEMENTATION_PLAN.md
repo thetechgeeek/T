@@ -359,101 +359,101 @@
 
 ### Invoice Repository Tests
 
-- [ ] Create `src/repositories/__tests__/invoiceRepository.test.ts`: Import `createSupabaseMock` from `__tests__/utils/supabaseMock.ts`. At the top of each test, call `jest.mock('../../config/supabase', () => ({ supabase: createSupabaseMock() }))`.
+- [x] Create `src/repositories/__tests__/invoiceRepository.test.ts`: Import `createSupabaseMock` from `__tests__/utils/supabaseMock.ts`. At the top of each test, call `jest.mock('../../config/supabase', () => ({ supabase: createSupabaseMock() }))`.
 
-- [ ] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.findWithLineItems(id)` success path: configure the mock's `.from('invoices').select('*, line_items(*)').eq('id', id).single()` to resolve with `{ data: makeInvoice(), error: null }`. Assert that `supabase.from` was called with `'invoices'`, `.select` was called with a string containing `'line_items'`, `.eq` was called with `('id', id)`, and `.single()` was called.
+- [x] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.findWithLineItems(id)` success path: configure the mock's `.from('invoices').select('*, line_items(*)').eq('id', id).single()` to resolve with `{ data: makeInvoice(), error: null }`. Assert that `supabase.from` was called with `'invoices'`, `.select` was called with a string containing `'line_items'`, `.eq` was called with `('id', id)`, and `.single()` was called.
 
-- [ ] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.findWithLineItems(id)` error path: configure `.single()` to resolve with `{ data: null, error: { message: 'Not found', code: 'PGRST116' } }`. Assert the method throws (or rejects with) that error.
+- [x] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.findWithLineItems(id)` error path: configure `.single()` to resolve with `{ data: null, error: { message: 'Not found', code: 'PGRST116' } }`. Assert the method throws (or rejects with) that error.
 
-- [ ] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.findWithLineItems(id)` null-data path: configure `.single()` to resolve with `{ data: null, error: null }`. Assert the method returns `null` or throws — document and assert whichever behavior is implemented.
+- [x] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.findWithLineItems(id)` null-data path: configure `.single()` to resolve with `{ data: null, error: null }`. Assert the method returns `null` or throws — document and assert whichever behavior is implemented.
 
-- [ ] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.createAtomic(invoiceData, lineItems)`: configure `supabase.rpc('create_invoice_with_items_v1', ...)` to resolve with `{ data: { id: 'inv-001', invoice_number: 'TM/2025-26/0001' }, error: null }`. Assert `supabase.rpc` was called with `'create_invoice_with_items_v1'` and an object containing keys `p_invoice` and `p_line_items`.
+- [x] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.createAtomic(invoiceData, lineItems)`: configure `supabase.rpc('create_invoice_with_items_v1', ...)` to resolve with `{ data: { id: 'inv-001', invoice_number: 'TM/2025-26/0001' }, error: null }`. Assert `supabase.rpc` was called with `'create_invoice_with_items_v1'` and an object containing keys `p_invoice` and `p_line_items`.
 
-- [ ] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.createAtomic` error path: configure `rpc` to resolve with `{ data: null, error: { message: 'RPC failed' } }`. Assert the method throws that error.
+- [x] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.createAtomic` error path: configure `rpc` to resolve with `{ data: null, error: { message: 'RPC failed' } }`. Assert the method throws that error.
 
-- [ ] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.createAtomic` return value: configure `rpc` to resolve with `{ data: { id: 'new-id', invoice_number: 'TM/2025-26/0002' }, error: null }`. Assert the returned object has `id === 'new-id'` and `invoice_number === 'TM/2025-26/0002'`.
+- [x] Add to `src/repositories/__tests__/invoiceRepository.test.ts`: Test `InvoiceRepository.createAtomic` return value: configure `rpc` to resolve with `{ data: { id: 'new-id', invoice_number: 'TM/2025-26/0002' }, error: null }`. Assert the returned object has `id === 'new-id'` and `invoice_number === 'TM/2025-26/0002'`.
 
 ### Customer Repository Tests
 
-- [ ] Create `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findById(id)` success: configure `.from('customers').select('*').eq('id', id).single()` to resolve with `{ data: makeCustomer(), error: null }`. Assert each chained call was made with the correct argument.
+- [x] Create `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findById(id)` success: configure `.from('customers').select('*').eq('id', id).single()` to resolve with `{ data: makeCustomer(), error: null }`. Assert each chained call was made with the correct argument.
 
-- [ ] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findById(id)` returns customer data on success: assert the returned value deep-equals `makeCustomer()`.
+- [x] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findById(id)` returns customer data on success: assert the returned value deep-equals `makeCustomer()`.
 
-- [ ] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findById(id)` error path: configure `.single()` to resolve with `{ data: null, error: { message: 'DB error' } }`. Assert the method throws.
+- [x] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findById(id)` error path: configure `.single()` to resolve with `{ data: null, error: { message: 'DB error' } }`. Assert the method throws.
 
-- [ ] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findAll({ search: 'Raj' })`: configure the mock chain and assert `.ilike` was called with a pattern containing `'%Raj%'`.
+- [x] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findAll({ search: 'Raj' })`: configure the mock chain and assert `.ilike` was called with a pattern containing `'%Raj%'`.
 
-- [ ] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findAll({ type: 'retail' })`: assert `.eq` was called with `('type', 'retail')`.
+- [x] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findAll({ type: 'retail' })`: assert `.eq` was called with `('type', 'retail')`.
 
-- [ ] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findAll({})` return shape: configure the mock to return `{ data: [makeCustomer()], error: null, count: 1 }`. Assert the returned value is `{ data: [makeCustomer()], count: 1 }`.
+- [x] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.findAll({})` return shape: configure the mock to return `{ data: [makeCustomer()], error: null, count: 1 }`. Assert the returned value is `{ data: [makeCustomer()], count: 1 }`.
 
-- [ ] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.create(input)`: assert `.from('customers').insert(input).select().single()` chain was called. Assert the returned value is the created customer.
+- [x] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.create(input)`: assert `.from('customers').insert(input).select().single()` chain was called. Assert the returned value is the created customer.
 
-- [ ] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.update(id, data)`: assert `.from('customers').update(data).eq('id', id).select().single()` chain was called.
+- [x] Add to `src/repositories/__tests__/customerRepository.test.ts`: Test `CustomerRepository.update(id, data)`: assert `.from('customers').update(data).eq('id', id).select().single()` chain was called.
 
 ### Inventory Repository Tests
 
-- [ ] Create `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findById(id)`: assert chain `.from('inventory_items').select('*').eq('id', id).single()` was called and returns the item.
+- [x] Create `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findById(id)`: assert chain `.from('inventory_items').select('*').eq('id', id).single()` was called and returns the item.
 
-- [ ] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findAll({ category: 'GLOSSY' })`: assert `.eq('category', 'GLOSSY')` was called.
+- [x] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findAll({ category: 'GLOSSY' })`: assert `.eq('category', 'GLOSSY')` was called.
 
-- [ ] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findAll({ category: 'ALL' })`: assert `.eq` was NOT called with `'category'` argument (ALL means no filter).
+- [x] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findAll({ category: 'ALL' })`: assert `.eq` was NOT called with `'category'` argument (ALL means no filter).
 
-- [ ] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findAll({ search: 'white' })`: assert `.or` was called with a string containing `'%white%'` and referencing both `design_name` and `base_item_number` columns.
+- [x] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findAll({ search: 'white' })`: assert `.or` was called with a string containing `'%white%'` and referencing both `design_name` and `base_item_number` columns.
 
-- [ ] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findAll({ lowStock: true })`: assert `.lte('box_count', threshold)` was called with some numeric threshold.
+- [x] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.findAll({ lowStock: true })`: assert `.lte('box_count', threshold)` was called with some numeric threshold.
 
-- [ ] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.create(input)`: assert `.from('inventory_items').insert(input).select().single()` was called.
+- [x] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.create(input)`: assert `.from('inventory_items').insert(input).select().single()` was called.
 
-- [ ] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.update(id, data)`: assert `.from('inventory_items').update(data).eq('id', id).select().single()` was called.
+- [x] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.update(id, data)`: assert `.from('inventory_items').update(data).eq('id', id).select().single()` was called.
 
-- [ ] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.delete(id)`: assert `.from('inventory_items').delete().eq('id', id)` was called.
+- [x] Add to `src/repositories/__tests__/inventoryRepository.test.ts`: Test `InventoryRepository.delete(id)`: assert `.from('inventory_items').delete().eq('id', id)` was called.
 
 ### Payment Repository Tests
 
-- [ ] Create `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.recordWithInvoiceUpdate(input)`: configure `supabase.rpc('record_payment_v1', ...)` to return `{ data: { id: 'pay-001', new_status: 'paid' }, error: null }`. Assert `rpc` was called with `'record_payment_v1'` and an object whose keys include the expected param names.
+- [x] Create `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.recordWithInvoiceUpdate(input)`: configure `supabase.rpc('record_payment_v1', ...)` to return `{ data: { id: 'pay-001', new_status: 'paid' }, error: null }`. Assert `rpc` was called with `'record_payment_v1'` and an object whose keys include the expected param names.
 
-- [ ] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.recordWithInvoiceUpdate` returns `{ id, new_status }`: assert the returned object has `id === 'pay-001'` and `new_status === 'paid'`.
+- [x] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.recordWithInvoiceUpdate` returns `{ id, new_status }`: assert the returned object has `id === 'pay-001'` and `new_status === 'paid'`.
 
-- [ ] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.recordWithInvoiceUpdate` error path: configure `rpc` to return `{ data: null, error: { message: 'RPC failed' } }`. Assert the method throws.
+- [x] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.recordWithInvoiceUpdate` error path: configure `rpc` to return `{ data: null, error: { message: 'RPC failed' } }`. Assert the method throws.
 
-- [ ] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.fetchPayments({})`: assert `.from('payments')` was called and the query terminates with the correct select.
+- [x] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.fetchPayments({})`: assert `.from('payments')` was called and the query terminates with the correct select.
 
-- [ ] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.fetchPayments({ customer_id: 'cust-001' })`: assert `.eq('customer_id', 'cust-001')` was called.
+- [x] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.fetchPayments({ customer_id: 'cust-001' })`: assert `.eq('customer_id', 'cust-001')` was called.
 
-- [ ] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.fetchPayments({ dateFrom: '2026-01-01', dateTo: '2026-03-31' })`: assert `.gte('payment_date', '2026-01-01')` and `.lte('payment_date', '2026-03-31')` were called.
+- [x] Add to `src/repositories/__tests__/paymentRepository.test.ts`: Test `PaymentRepository.fetchPayments({ dateFrom: '2026-01-01', dateTo: '2026-03-31' })`: assert `.gte('payment_date', '2026-01-01')` and `.lte('payment_date', '2026-03-31')` were called.
 
 ### Finance Repository Tests
 
-- [ ] Create `src/repositories/__tests__/financeRepository.test.ts`: Test `FinanceRepository.fetchDashboardStats()`: assert `supabase.rpc` was called with the correct RPC function name (look up the actual name in `financeRepository.ts`). Configure it to return `{ data: makeDashboardStats(), error: null }`.
+- [x] Create `src/repositories/__tests__/financeRepository.test.ts`: Test `FinanceRepository.fetchDashboardStats()`: assert `supabase.rpc` was called with the correct RPC function name (look up the actual name in `financeRepository.ts`). Configure it to return `{ data: makeDashboardStats(), error: null }`.
 
-- [ ] Add to `src/repositories/__tests__/financeRepository.test.ts`: Test `FinanceRepository.fetchDashboardStats` returns stats object: assert the returned value matches `makeDashboardStats()`.
+- [x] Add to `src/repositories/__tests__/financeRepository.test.ts`: Test `FinanceRepository.fetchDashboardStats` returns stats object: assert the returned value matches `makeDashboardStats()`.
 
-- [ ] Add to `src/repositories/__tests__/financeRepository.test.ts`: Test `FinanceRepository.fetchDashboardStats` error path: configure `rpc` to return `{ data: null, error: { message: 'RPC error' } }`. Assert the method throws.
+- [x] Add to `src/repositories/__tests__/financeRepository.test.ts`: Test `FinanceRepository.fetchDashboardStats` error path: configure `rpc` to return `{ data: null, error: { message: 'RPC error' } }`. Assert the method throws.
 
 ### Expense Repository Tests
 
-- [ ] Create `src/repositories/__tests__/expenseRepository.test.ts`: Test `ExpenseRepository.create(input)`: assert `.from('expenses').insert(input).select().single()` was called. Assert the returned value contains an `id`.
+- [x] Create `src/repositories/__tests__/expenseRepository.test.ts`: Test `ExpenseRepository.create(input)`: assert `.from('expenses').insert(input).select().single()` was called. Assert the returned value contains an `id`.
 
-- [ ] Add to `src/repositories/__tests__/expenseRepository.test.ts`: Test `ExpenseRepository.findAll({ search: 'Transport' })`: assert `.ilike` was called with a pattern containing `'%Transport%'` on the `category` column.
+- [x] Add to `src/repositories/__tests__/expenseRepository.test.ts`: Test `ExpenseRepository.findAll({ search: 'Transport' })`: assert `.ilike` was called with a pattern containing `'%Transport%'` on the `category` column.
 
-- [ ] Add to `src/repositories/__tests__/expenseRepository.test.ts`: Test `ExpenseRepository.findAll({ dateFrom: '2026-01-01', dateTo: '2026-01-31' })`: assert `.gte('expense_date', '2026-01-01')` and `.lte('expense_date', '2026-01-31')` were called.
+- [x] Add to `src/repositories/__tests__/expenseRepository.test.ts`: Test `ExpenseRepository.findAll({ dateFrom: '2026-01-01', dateTo: '2026-01-31' })`: assert `.gte('expense_date', '2026-01-01')` and `.lte('expense_date', '2026-01-31')` were called.
 
-- [ ] Add to `src/repositories/__tests__/expenseRepository.test.ts`: Test `ExpenseRepository.findAll({})` return shape: configure mock to return `{ data: [makeExpense()], error: null, count: 1 }`. Assert the returned value is `{ data: [makeExpense()], count: 1 }`.
+- [x] Add to `src/repositories/__tests__/expenseRepository.test.ts`: Test `ExpenseRepository.findAll({})` return shape: configure mock to return `{ data: [makeExpense()], error: null, count: 1 }`. Assert the returned value is `{ data: [makeExpense()], count: 1 }`.
 
 ### Order Repository Tests
 
-- [ ] Create `src/repositories/__tests__/orderRepository.test.ts`: Test `OrderRepository.create(input)`: assert `.from('orders').insert(input).select().single()` was called and returns the new order.
+- [x] Create `src/repositories/__tests__/orderRepository.test.ts`: Test `OrderRepository.create(input)`: assert `.from('orders').insert(input).select().single()` was called and returns the new order.
 
-- [ ] Add to `src/repositories/__tests__/orderRepository.test.ts`: Test `OrderRepository.findAll({ status: 'received' })`: assert `.eq('status', 'received')` was called.
+- [x] Add to `src/repositories/__tests__/orderRepository.test.ts`: Test `OrderRepository.findAll({ status: 'received' })`: assert `.eq('status', 'received')` was called.
 
-- [ ] Add to `src/repositories/__tests__/orderRepository.test.ts`: Test `OrderRepository.findAll({})` returns an array: configure mock to return `{ data: [makeOrder()], error: null }`. Assert the returned value is `[makeOrder()]`.
+- [x] Add to `src/repositories/__tests__/orderRepository.test.ts`: Test `OrderRepository.findAll({})` returns an array: configure mock to return `{ data: [makeOrder()], error: null }`. Assert the returned value is `[makeOrder()]`.
 
 ### Base Repository Tests
 
-- [ ] Create `src/repositories/__tests__/baseRepository.test.ts`: Instantiate `BaseRepository` (or a minimal concrete subclass) and assert that `this.supabase` is the imported Supabase client instance. This verifies dependency injection is wired correctly.
+- [x] Create `src/repositories/__tests__/baseRepository.test.ts`: Instantiate `BaseRepository` (or a minimal concrete subclass) and assert that `this.supabase` is the imported Supabase client instance. This verifies dependency injection is wired correctly.
 
-- [ ] Add to `src/repositories/__tests__/baseRepository.test.ts`: If `BaseRepository` exposes shared methods such as `paginate(query, page, limit)` or `withCount(query)`, add one test per shared method verifying correct `.range()` or `.select('*', { count: 'exact' })` calls.
+- [x] Add to `src/repositories/__tests__/baseRepository.test.ts`: If `BaseRepository` exposes shared methods such as `paginate(query, page, limit)` or `withCount(query)`, add one test per shared method verifying correct `.range()` or `.select('*', { count: 'exact' })` calls.
 
 ---
 
