@@ -2,7 +2,11 @@ import { orderService } from './orderService';
 import { supabase } from '@/src/config/supabase';
 import { inventoryService } from './inventoryService';
 
-// Mock query object
+/**
+ * Chainable + thenable query builder mock.
+ * Replaced broken `then: jest.fn(resolve => resolve({...}))` singleton pattern (QA issue 3.2).
+ * .single() is now a proper jest.fn().mockResolvedValue() so per-test overrides work correctly.
+ */
 const mockQuery: any = {
 	select: jest.fn().mockReturnThis(),
 	insert: jest.fn().mockReturnThis(),
@@ -10,8 +14,9 @@ const mockQuery: any = {
 	order: jest.fn().mockReturnThis(),
 	limit: jest.fn().mockReturnThis(),
 	range: jest.fn().mockReturnThis(),
-	single: jest.fn().mockReturnThis(),
-	then: jest.fn((resolve) => resolve({ data: [], error: null })),
+	single: jest.fn().mockResolvedValue({ data: null, error: null }),
+	// Thenable for `await query` pattern (fetchOrders, importOrder item search)
+	then: jest.fn((resolve) => Promise.resolve({ data: [], error: null }).then(resolve)),
 };
 
 jest.mock('@/src/config/supabase', () => ({
@@ -22,7 +27,8 @@ jest.mock('@/src/config/supabase', () => ({
 
 jest.mock('./inventoryService', () => ({
 	inventoryService: {
-		performStockOperation: jest.fn(),
+		performStockOperation: jest.fn().mockResolvedValue(undefined),
+		createItem: jest.fn().mockResolvedValue({ id: 'new-item-id', design_name: 'New Item' }),
 	},
 }));
 
@@ -32,9 +38,9 @@ describe('orderService', () => {
 	});
 
 	describe('fetchOrders', () => {
-		it('calls supabase with correct query', async () => {
-			mockQuery.then.mockImplementation((resolve: any) =>
-				resolve({ data: [{ id: '1' }], error: null }),
+		it('applies eq(status) when status filter is set', async () => {
+			mockQuery.then.mockImplementationOnce((resolve: any) =>
+				Promise.resolve({ data: [{ id: '1' }], error: null }).then(resolve),
 			);
 			const result = await orderService.fetchOrders({ status: 'ordered' });
 
@@ -42,19 +48,30 @@ describe('orderService', () => {
 			expect(mockQuery.eq).toHaveBeenCalledWith('status', 'ordered');
 			expect(result).toHaveLength(1);
 		});
+
+		it('does NOT call eq(status) when no status filter provided', async () => {
+			mockQuery.then.mockImplementationOnce((resolve: any) =>
+				Promise.resolve({ data: [], error: null }).then(resolve),
+			);
+
+			await orderService.fetchOrders({});
+
+			const eqCalls = (mockQuery.eq as jest.Mock).mock.calls;
+			expect(eqCalls.find((c: any[]) => c[0] === 'status')).toBeUndefined();
+		});
 	});
 
 	describe('importOrder', () => {
-		it('creates order and processes items', async () => {
+		it('creates order and calls performStockOperation when item already exists', async () => {
 			const partyName = 'Test Party';
-			const items = [{ design_name: 'Marble', box_count: 10, price_per_box: 100 }];
+			const items = [{ design_name: 'Marble', box_count: 10 }];
 
-			// Mock order creation
+			// Mock order creation (insert.select.single)
 			mockQuery.single.mockResolvedValueOnce({ data: { id: 'order-123' }, error: null });
 
-			// Mock item search (item exists)
-			mockQuery.then.mockImplementation((resolve: any) =>
-				resolve({ data: [{ id: 'item-1' }], error: null }),
+			// Mock item search: item exists
+			mockQuery.then.mockImplementationOnce((resolve: any) =>
+				Promise.resolve({ data: [{ id: 'item-1' }], error: null }).then(resolve),
 			);
 
 			await orderService.importOrder(partyName, items as any, {});
@@ -68,6 +85,37 @@ describe('orderService', () => {
 				'purchase',
 				'order-123',
 			);
+		});
+
+		it('calls createItem when inventory item does NOT exist, then performStockOperation', async () => {
+			const partyName = 'New Party';
+			const items = [{ design_name: 'New Tile', box_count: 5 }];
+
+			// Mock order creation
+			mockQuery.single.mockResolvedValueOnce({ data: { id: 'order-456' }, error: null });
+
+			// Mock item search: no existing item
+			mockQuery.then.mockImplementationOnce((resolve: any) =>
+				Promise.resolve({ data: [], error: null }).then(resolve),
+			);
+
+			await orderService.importOrder(partyName, items as any, {});
+
+			// createItem should be called to create the new inventory item
+			expect(inventoryService.createItem).toHaveBeenCalled();
+			// performStockOperation should still be called for stock_in
+			expect(inventoryService.performStockOperation).toHaveBeenCalled();
+		});
+
+		it('propagates error when order creation fails (performStockOperation NOT called)', async () => {
+			const partyName = 'Fail Party';
+			const items = [{ design_name: 'Any Tile', box_count: 3 }];
+
+			// Mock order creation failure
+			mockQuery.single.mockResolvedValueOnce({ data: null, error: { message: 'insert failed' } });
+
+			await expect(orderService.importOrder(partyName, items as any, {})).rejects.toBeDefined();
+			expect(inventoryService.performStockOperation).not.toHaveBeenCalled();
 		});
 	});
 });

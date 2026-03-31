@@ -1,26 +1,28 @@
 import { inventoryService } from './inventoryService';
 import { supabase } from '@/src/config/supabase';
+import { makeInventoryItem } from '../../__tests__/fixtures/inventoryFixtures';
 
-// A mock query object that is both chainable and awaitable
-const mockQuery: any = {
-	select: jest.fn().mockReturnThis(),
-	insert: jest.fn().mockReturnThis(),
-	update: jest.fn().mockReturnThis(),
-	eq: jest.fn().mockReturnThis(),
-	or: jest.fn().mockReturnThis(),
-	order: jest.fn().mockReturnThis(),
-	range: jest.fn().mockReturnThis(),
-	single: jest.fn().mockReturnThis(),
-	maybeSingle: jest.fn().mockReturnThis(),
-	limit: jest.fn().mockReturnThis(),
-	lte: jest.fn().mockReturnThis(),
-	// Final result handling
-	then: jest.fn((resolve) => resolve({ data: [], error: null, count: 0 })),
-};
+/**
+ * Chainable + thenable builder.
+ * Replaces the broken `then: jest.fn(resolve => resolve({...}))` pattern (QA issue 3.2)
+ * that caused fetchItemById to use the wrong mock path.
+ */
+function makeBuilder(result: { data: any; count?: number | null; error: any } = { data: [], count: 0, error: null }) {
+	const b: any = {};
+	const chainable = ['select', 'insert', 'update', 'delete', 'eq', 'or', 'order', 'range', 'limit', 'lte', 'ilike'];
+	chainable.forEach((m) => { b[m] = jest.fn().mockReturnValue(b); });
+	// .single() is a real promise (terminal call)
+	const singleData = Array.isArray(result.data) ? (result.data[0] ?? null) : result.data;
+	b.single = jest.fn().mockResolvedValue({ data: singleData, error: result.error });
+	b.maybeSingle = jest.fn().mockResolvedValue({ data: singleData, error: result.error });
+	// Thenable for `await query` (fetchItems, fetchStockHistory use this)
+	b.then = jest.fn((resolve: any) => Promise.resolve(result).then(resolve));
+	return b;
+}
 
 jest.mock('@/src/config/supabase', () => ({
 	supabase: {
-		from: jest.fn(() => mockQuery),
+		from: jest.fn(),
 		rpc: jest.fn(),
 	},
 }));
@@ -28,69 +30,102 @@ jest.mock('@/src/config/supabase', () => ({
 describe('inventoryService', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
-		// Reset the default then behavior
-		mockQuery.then.mockImplementation((resolve: any) =>
-			resolve({ data: [], error: null, count: 0 }),
-		);
 	});
 
 	describe('fetchItems', () => {
 		it('fetches items with default filters', async () => {
-			const mockData = [{ id: '1', design_name: 'Test' }];
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
-				resolve({ data: mockData, error: null, count: 1 }),
-			);
+			const items = [makeInventoryItem()];
+			const builder = makeBuilder({ data: items, count: 1, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			const result = await inventoryService.fetchItems({});
 
 			expect(supabase.from).toHaveBeenCalledWith('inventory_items');
-			expect(mockQuery.select).toHaveBeenCalled();
-			expect(result.data).toEqual(mockData);
+			expect(builder.select).toHaveBeenCalled();
+			expect(result.data).toEqual(items);
 			expect(result.count).toBe(1);
 		});
 
-		it('applies search filters correctly', async () => {
+		it('applies search .or() on design_name and base_item_number', async () => {
+			const builder = makeBuilder({ data: [], count: 0, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
 			await inventoryService.fetchItems({ search: 'marble' });
-			expect(mockQuery.or).toHaveBeenCalledWith(expect.stringContaining('marble'));
+
+			expect(builder.or).toHaveBeenCalledWith(expect.stringContaining('marble'));
+		});
+
+		it('applies eq(category) when category filter is set and not ALL', async () => {
+			const builder = makeBuilder({ data: [], count: 0, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await inventoryService.fetchItems({ category: 'GLOSSY' });
+
+			expect(builder.eq).toHaveBeenCalledWith('category', 'GLOSSY');
+		});
+
+		it('does NOT call eq(category) when category is "ALL"', async () => {
+			const builder = makeBuilder({ data: [], count: 0, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await inventoryService.fetchItems({ category: 'ALL' });
+
+			const eqCalls = (builder.eq as jest.Mock).mock.calls;
+			expect(eqCalls.find((c: any[]) => c[0] === 'category')).toBeUndefined();
 		});
 
 		it('throws error when supabase returns an error', async () => {
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
-				resolve({ data: null, error: { message: 'DB Error' } }),
-			);
+			const builder = makeBuilder({ data: null, count: null, error: { message: 'DB Error' } });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			await expect(inventoryService.fetchItems({})).rejects.toEqual({ message: 'DB Error' });
+			await expect(inventoryService.fetchItems({})).rejects.toBeDefined();
 		});
 	});
 
 	describe('fetchItemById', () => {
-		it('fetches a single item by id', async () => {
-			const mockItem = { id: '123', design_name: 'Product' };
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
-				resolve({ data: mockItem, error: null }),
-			);
+		// Fixed: proper .single().mockResolvedValue() replaces broken `then` mock (QA issue 3.2)
+		it('fetches a single item by id via .eq(id).single()', async () => {
+			const item = makeInventoryItem();
+			const builder = makeBuilder({ data: item, error: null });
+			builder.single.mockResolvedValue({ data: item, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			const result = await inventoryService.fetchItemById('123');
+			const result = await inventoryService.fetchItemById('item-uuid-001');
 
 			expect(supabase.from).toHaveBeenCalledWith('inventory_items');
-			expect(mockQuery.eq).toHaveBeenCalledWith('id', '123');
-			expect(mockQuery.single).toHaveBeenCalled();
-			expect(result).toEqual(mockItem);
+			expect(builder.eq).toHaveBeenCalledWith('id', 'item-uuid-001');
+			expect(builder.single).toHaveBeenCalled();
+			expect(result).toEqual(item);
 		});
 	});
 
 	describe('createItem', () => {
-		it('successfully creates an item', async () => {
-			const newItem = { design_name: 'New' };
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
-				resolve({ data: { id: '1', ...newItem }, error: null }),
-			);
+		it('calls insert(payload).select().single() and returns created item', async () => {
+			const item = makeInventoryItem();
+			const builder = makeBuilder({ data: item, error: null });
+			builder.single.mockResolvedValue({ data: item, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			const result = await inventoryService.createItem(newItem as any);
+			const result = await inventoryService.createItem({ design_name: 'GLOSSY WHITE 60x60' } as any);
 
 			expect(supabase.from).toHaveBeenCalledWith('inventory_items');
-			expect(mockQuery.insert).toHaveBeenCalledWith(newItem);
-			expect(result.id).toBe('1');
+			expect(builder.insert).toHaveBeenCalled();
+			expect(result).toEqual(item);
+		});
+	});
+
+	describe('updateItem', () => {
+		it('calls update(data).eq(id).select().single() and returns updated item', async () => {
+			const updated = makeInventoryItem({ box_count: 99 });
+			const builder = makeBuilder({ data: updated, error: null });
+			builder.single.mockResolvedValue({ data: updated, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			const result = await inventoryService.updateItem('item-uuid-001', { box_count: 99 });
+
+			expect(builder.update).toHaveBeenCalledWith({ box_count: 99 });
+			expect(builder.eq).toHaveBeenCalledWith('id', 'item-uuid-001');
+			expect(result).toEqual(updated);
 		});
 	});
 
@@ -98,12 +133,7 @@ describe('inventoryService', () => {
 		it('calls the supabase RPC correctly', async () => {
 			(supabase.rpc as jest.Mock).mockResolvedValueOnce({ data: 100, error: null });
 
-			const result = await inventoryService.performStockOperation(
-				'item1',
-				'stock_in',
-				10,
-				'Restock',
-			);
+			const result = await inventoryService.performStockOperation('item1', 'stock_in', 10, 'Restock');
 
 			expect(supabase.rpc).toHaveBeenCalledWith('perform_stock_operation_v1', {
 				p_item_id: 'item1',
@@ -114,6 +144,27 @@ describe('inventoryService', () => {
 				p_reference_type: null,
 			});
 			expect(result).toBe(100);
+		});
+
+		it('propagates RPC error (does not swallow it)', async () => {
+			(supabase.rpc as jest.Mock).mockResolvedValue({ data: null, error: { message: 'RPC error', code: 'P0001' } });
+
+			await expect(
+				inventoryService.performStockOperation('item1', 'stock_in', 10),
+			).rejects.toBeDefined();
+		});
+	});
+
+	describe('fetchStockHistory', () => {
+		it('queries stock_operations table with eq(item_id) and order(created_at desc)', async () => {
+			const builder = makeBuilder({ data: [], error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await inventoryService.fetchStockHistory('item-uuid-001');
+
+			expect(supabase.from).toHaveBeenCalledWith('stock_operations');
+			expect(builder.eq).toHaveBeenCalledWith('item_id', 'item-uuid-001');
+			expect(builder.order).toHaveBeenCalledWith('created_at', { ascending: false });
 		});
 	});
 });

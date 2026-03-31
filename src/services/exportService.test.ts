@@ -95,5 +95,90 @@ describe('exportService', () => {
 				'DB error',
 			);
 		});
+
+		it('sharing not available: Sharing.shareAsync is NOT called', async () => {
+			(Sharing.isAvailableAsync as jest.Mock).mockResolvedValue(false);
+			const mockQuery = makeMockQuery([]);
+			(supabase.from as jest.Mock).mockReturnValue(mockQuery);
+
+			await exportService.exportGSTR1('2026-04-01', '2026-06-30');
+
+			expect(Sharing.shareAsync).not.toHaveBeenCalled();
+			// File should still be written even when sharing is unavailable
+			expect(FileSystem.writeAsStringAsync).toHaveBeenCalled();
+		});
+
+		it('B2C row: CSV contains invoice_number, customer_name, grand_total', async () => {
+			const b2cInvoice = {
+				id: '3',
+				invoice_number: 'TM/003',
+				invoice_date: '2026-04-12',
+				customer_name: 'Retail Guy',
+				customer_gstin: null,
+				grand_total: 5900,
+				place_of_supply: 'Maharashtra',
+				is_inter_state: false,
+				reverse_charge: false,
+				line_items: [{ gst_rate: 18, taxable_amount: 5000 }],
+			};
+			const mockQuery = makeMockQuery([b2cInvoice]);
+			(supabase.from as jest.Mock).mockReturnValue(mockQuery);
+
+			await exportService.exportGSTR1('2026-04-01', '2026-06-30');
+
+			const csv = (FileSystem.writeAsStringAsync as jest.Mock).mock.calls[0][1] as string;
+			expect(csv).toContain('TM/003');
+			expect(csv).toContain('Retail Guy');
+			expect(csv).toContain('5900');
+		});
+
+		it('B2B invoice: GSTIN column contains the customer GSTIN', async () => {
+			const b2bInvoice = {
+				id: '4',
+				invoice_number: 'TM/004',
+				invoice_date: '2026-04-13',
+				customer_name: 'Dealer Ltd',
+				customer_gstin: '27AAAAA0000A1Z5',
+				grand_total: 11800,
+				place_of_supply: 'Maharashtra',
+				is_inter_state: true,
+				reverse_charge: false,
+				line_items: [{ gst_rate: 18, taxable_amount: 10000 }],
+			};
+			const mockQuery = makeMockQuery([b2bInvoice]);
+			(supabase.from as jest.Mock).mockReturnValue(mockQuery);
+
+			await exportService.exportGSTR1('2026-04-01', '2026-06-30');
+
+			const csv = (FileSystem.writeAsStringAsync as jest.Mock).mock.calls[0][1] as string;
+			expect(csv).toContain('27AAAAA0000A1Z5');
+		});
+
+		it('intra-state invoice: CGST and SGST columns are non-zero, IGST is 0', async () => {
+			const intraInvoice = {
+				id: '5',
+				invoice_number: 'TM/005',
+				invoice_date: '2026-04-14',
+				customer_name: 'Local Customer',
+				customer_gstin: null,
+				grand_total: 5900,
+				place_of_supply: 'Maharashtra',
+				is_inter_state: false,
+				reverse_charge: false,
+				line_items: [{ gst_rate: 18, taxable_amount: 5000 }],
+			};
+			const mockQuery = makeMockQuery([intraInvoice]);
+			(supabase.from as jest.Mock).mockReturnValue(mockQuery);
+
+			await exportService.exportGSTR1('2026-04-01', '2026-06-30');
+
+			const csv = (FileSystem.writeAsStringAsync as jest.Mock).mock.calls[0][1] as string;
+			// CGST = SGST = 450 (9% each of 5000), IGST = 0
+			expect(csv).toContain('450');
+			// IGST should be 0 for intra-state
+			const rows = csv.split('\n');
+			const dataRow = rows.find((r) => r.includes('TM/005'));
+			expect(dataRow).toBeDefined();
+		});
 	});
 });

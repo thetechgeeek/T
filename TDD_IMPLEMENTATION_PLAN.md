@@ -463,125 +463,125 @@
 
 ### invoiceService.test.ts
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({})` default call: verify `supabase.from('invoices')` called, `.select` called with a string containing both `'*'` and `'customer:customers(name, phone)'`, `.order` called with `('created_at', { ascending: false })`, `.range` called with `(0, 19)`.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({})` default call: verify `supabase.from('invoices')` called, `.select` called with a string containing both `'*'` and `'customer:customers(name, phone)'`, `.order` called with `('created_at', { ascending: false })`, `.range` called with `(0, 19)`.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ search: 'marble' })`: verify `.or` was called with a string containing `'%marble%'` referencing `invoice_number` and `customer_name`.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ search: 'marble' })`: verify `.or` was called with a string containing `'%marble%'` referencing `invoice_number` and `customer_name`.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test SQL injection protection — `fetchInvoices({ search: 'mar%ble' })`: verify the `%` character in the search term is escaped to `\%` in the `.or` call so it is treated as a literal percent sign, not a SQL wildcard.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test SQL injection protection — `fetchInvoices({ search: 'mar%ble' })`: verify the `%` character in the search term is escaped to `\%` in the `.or` call so it is treated as a literal percent sign, not a SQL wildcard.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test SQL injection protection — `fetchInvoices({ search: 'mar_ble' })`: verify `_` is escaped to `\_` in the `.or` call.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test SQL injection protection — `fetchInvoices({ search: 'mar_ble' })`: verify `_` is escaped to `\_` in the `.or` call.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ payment_status: 'paid' })`: verify `.eq('payment_status', 'paid')` was called.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ payment_status: 'paid' })`: verify `.eq('payment_status', 'paid')` was called.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ payment_status: 'ALL' })`: verify `.eq` was NOT called with `'payment_status'` as the first argument. `'ALL'` is the sentinel value for "no filter".
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ payment_status: 'ALL' })`: verify `.eq` was NOT called with `'payment_status'` as the first argument. `'ALL'` is the sentinel value for "no filter".
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ dateFrom: '2026-01-01', dateTo: '2026-03-31' })`: verify `.gte('invoice_date', '2026-01-01')` and `.lte('invoice_date', '2026-03-31')` were both called.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ dateFrom: '2026-01-01', dateTo: '2026-03-31' })`: verify `.gte('invoice_date', '2026-01-01')` and `.lte('invoice_date', '2026-03-31')` were both called.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test pagination — `fetchInvoices({}, 3, 10)` (page=3, limit=10): verify `.range(20, 29)` was called. Offset = `(3-1) * 10 = 20`, end = `20 + 10 - 1 = 29`.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test pagination — `fetchInvoices({}, 3, 10)` (page=3, limit=10): verify `.range(20, 29)` was called. Offset = `(3-1) * 10 = 20`, end = `20 + 10 - 1 = 29`.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ sortBy: 'invoice_date', sortDir: 'asc' })`: verify `.order('invoice_date', { ascending: true })` was called.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices({ sortBy: 'invoice_date', sortDir: 'asc' })`: verify `.order('invoice_date', { ascending: true })` was called.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices` error path: configure supabase mock to return `{ data: null, error: { message: 'DB error' }, count: null }`. Assert the returned promise rejects.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoices` error path: configure supabase mock to return `{ data: null, error: { message: 'DB error' }, count: null }`. Assert the returned promise rejects.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoiceDetail('some-uuid')`: mock `invoiceRepository.findWithLineItems` and assert it was called with `'some-uuid'`. Assert the service returns the repository result.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `fetchInvoiceDetail('some-uuid')`: mock `invoiceRepository.findWithLineItems` and assert it was called with `'some-uuid'`. Assert the service returns the repository result.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `createInvoice` full payload — verify the `p_invoice` object passed to `rpc` includes: `place_of_supply`, `reverse_charge`, `payment_mode`, `notes`, `subtotal`, `total_tax`, `grand_total`, `cgst_total`, `sgst_total`, `igst_total`. Use `expect.objectContaining({...})`.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `createInvoice` full payload — verify the `p_invoice` object passed to `rpc` includes: `place_of_supply`, `reverse_charge`, `payment_mode`, `notes`, `subtotal`, `total_tax`, `grand_total`, `cgst_total`, `sgst_total`, `igst_total`. Use `expect.objectContaining({...})`.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `createInvoice` line item payload — verify `p_line_items[0]` includes `cgst_amount`, `sgst_amount`, `igst_amount`, `taxable_amount`, `line_total`, and `sort_order: 0`.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `createInvoice` line item payload — verify `p_line_items[0]` includes `cgst_amount`, `sgst_amount`, `igst_amount`, `taxable_amount`, `line_total`, and `sort_order: 0`.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `createInvoice` RPC error — configure `rpc` to return `{ data: null, error: { message: 'RPC failed' } }`. Assert the returned promise rejects with that error.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `createInvoice` RPC error — configure `rpc` to return `{ data: null, error: { message: 'RPC failed' } }`. Assert the returned promise rejects with that error.
 
-- [ ] Add to `src/services/__tests__/invoiceService.test.ts`: Test `createInvoice` with no discount provided: verify the `p_line_items[0]` object in the RPC call contains `discount: 0`.
+- [x] Add to `src/services/__tests__/invoiceService.test.ts`: Test `createInvoice` with no discount provided: verify the `p_line_items[0]` object in the RPC call contains `discount: 0`.
 
 ### customerService.test.ts
 
-- [ ] Add to `src/services/__tests__/customerService.test.ts`: Test `fetchCustomers({})`: verify `supabase.from('customers')` called, `.select` called, result contains `{ data: [...], count: N }`.
+- [x] Add to `src/services/__tests__/customerService.test.ts`: Test `fetchCustomers({})`: verify `supabase.from('customers')` called, `.select` called, result contains `{ data: [...], count: N }`.
 
-- [ ] Add to `src/services/__tests__/customerService.test.ts`: Test `fetchCustomers({ search: 'John' })`: verify the search filter is applied (e.g., `.ilike` or `.or` called with `'%John%'`).
+- [x] Add to `src/services/__tests__/customerService.test.ts`: Test `fetchCustomers({ search: 'John' })`: verify the search filter is applied (e.g., `.ilike` or `.or` called with `'%John%'`).
 
-- [ ] Add to `src/services/__tests__/customerService.test.ts`: Test `fetchCustomers` error path: configure mock to return an error. Assert the returned promise rejects.
+- [x] Add to `src/services/__tests__/customerService.test.ts`: Test `fetchCustomers` error path: configure mock to return an error. Assert the returned promise rejects.
 
-- [ ] Fix in `src/services/__tests__/customerService.test.ts`: Replace `rejects.toEqual(mockError)` in the existing `createCustomer` error test with `rejects.toMatchObject({ code: 'PGRST205' })` (or `rejects.toBeInstanceOf(AppError)` if the service wraps errors). This makes the assertion less brittle to error object structure changes.
+- [x] Fix in `src/services/__tests__/customerService.test.ts`: Replace `rejects.toEqual(mockError)` in the existing `createCustomer` error test with `rejects.toMatchObject({ code: 'PGRST205' })` (or `rejects.toBeInstanceOf(AppError)` if the service wraps errors). This makes the assertion less brittle to error object structure changes.
 
-- [ ] Add to `src/services/__tests__/customerService.test.ts`: Test `updateCustomer(id, data)`: verify `.from('customers').update(data).eq('id', id)` was called and the service returns the updated customer.
+- [x] Add to `src/services/__tests__/customerService.test.ts`: Test `updateCustomer(id, data)`: verify `.from('customers').update(data).eq('id', id)` was called and the service returns the updated customer.
 
-- [ ] Fix in `src/services/__tests__/customerService.test.ts`: Remove the unused `select_single` property from the `mockTable` object. This cleans up QA issue 7.5.
+- [x] Fix in `src/services/__tests__/customerService.test.ts`: Remove the unused `select_single` property from the `mockTable` object. This cleans up QA issue 7.5.
 
 ### inventoryService.test.ts
 
-- [ ] Add to `src/services/__tests__/inventoryService.test.ts`: Test `fetchItems({ category: 'GLOSSY' })`: verify `.eq('category', 'GLOSSY')` was called on the query builder.
+- [x] Add to `src/services/__tests__/inventoryService.test.ts`: Test `fetchItems({ category: 'GLOSSY' })`: verify `.eq('category', 'GLOSSY')` was called on the query builder.
 
-- [ ] Add to `src/services/__tests__/inventoryService.test.ts`: Test `fetchItems({ lowStock: true })`: verify `.lte('box_count', <threshold>)` was called with a numeric threshold.
+- [x] Add to `src/services/__tests__/inventoryService.test.ts`: Test `fetchItems({ lowStock: true })`: verify `.lte('box_count', <threshold>)` was called with a numeric threshold.
 
-- [ ] Add to `src/services/__tests__/inventoryService.test.ts`: Test `updateItem(id, data)`: verify `.from('inventory_items').update(data).eq('id', id)` was called and the service returns the updated item.
+- [x] Add to `src/services/__tests__/inventoryService.test.ts`: Test `updateItem(id, data)`: verify `.from('inventory_items').update(data).eq('id', id)` was called and the service returns the updated item.
 
-- [ ] Add to `src/services/__tests__/inventoryService.test.ts`: Test `deleteItem(id)`: verify `.from('inventory_items').delete().eq('id', id)` was called.
+- [x] Add to `src/services/__tests__/inventoryService.test.ts`: Test `deleteItem(id)`: verify `.from('inventory_items').delete().eq('id', id)` was called.
 
-- [ ] Add to `src/services/__tests__/inventoryService.test.ts`: Test `fetchStockHistory(itemId)`: verify the correct stock history table is queried with `.eq('item_id', itemId)` and `.order('created_at', { ascending: false })`.
+- [x] Add to `src/services/__tests__/inventoryService.test.ts`: Test `fetchStockHistory(itemId)`: verify the correct stock history table is queried with `.eq('item_id', itemId)` and `.order('created_at', { ascending: false })`.
 
-- [ ] Add to `src/services/__tests__/inventoryService.test.ts`: Test `getLowStockItems()`: verify `.lte('box_count', threshold)` is called and the result is returned.
+- [x] Add to `src/services/__tests__/inventoryService.test.ts`: Test `getLowStockItems()`: verify `.lte('box_count', threshold)` is called and the result is returned.
 
-- [ ] Add to `src/services/__tests__/inventoryService.test.ts`: Test `performStockOperation` error path: configure `supabase.rpc` to reject. Assert the service propagates the rejection.
+- [x] Add to `src/services/__tests__/inventoryService.test.ts`: Test `performStockOperation` error path: configure `supabase.rpc` to reject. Assert the service propagates the rejection.
 
-- [ ] Fix in `src/services/__tests__/inventoryService.test.ts`: Replace any test that uses the `mockQuery.then` pattern (QA issue 3.2) for `fetchItemById` with a proper `.single().mockResolvedValue({ data: makeInventoryItem(), error: null })` chain. This resolves the broken thenable mock.
+- [x] Fix in `src/services/__tests__/inventoryService.test.ts`: Replace any test that uses the `mockQuery.then` pattern (QA issue 3.2) for `fetchItemById` with a proper `.single().mockResolvedValue({ data: makeInventoryItem(), error: null })` chain. This resolves the broken thenable mock.
 
 ### financeService.test.ts
 
-- [ ] Add to `src/services/__tests__/financeService.test.ts`: Test `fetchExpenses({})` return value: configure mock to return `{ data: [makeExpense()], error: null, count: 1 }`. Assert the service returns an object containing `data` matching the mock data. The current test only checks filter calls — add the return value assertion.
+- [x] Add to `src/services/__tests__/financeService.test.ts`: Test `fetchExpenses({})` return value: configure mock to return `{ data: [makeExpense()], error: null, count: 1 }`. Assert the service returns an object containing `data` matching the mock data. The current test only checks filter calls — add the return value assertion.
 
-- [ ] Add to `src/services/__tests__/financeService.test.ts`: Test `fetchExpenses` error path: configure mock to return an error. Assert the returned promise rejects.
+- [x] Add to `src/services/__tests__/financeService.test.ts`: Test `fetchExpenses` error path: configure mock to return an error. Assert the returned promise rejects.
 
-- [ ] Add to `src/services/__tests__/financeService.test.ts`: Test `fetchPurchases({})`: verify the correct purchases/orders table is queried, returns `{ data: [...], count: N }`.
+- [x] Add to `src/services/__tests__/financeService.test.ts`: Test `fetchPurchases({})`: verify the correct purchases/orders table is queried, returns `{ data: [...], count: N }`.
 
-- [ ] Add to `src/services/__tests__/financeService.test.ts`: Test `fetchPurchases({ search: 'Kajaria' })`: verify the search filter is applied on the correct column (design_name or party_name — check the actual implementation).
+- [x] Add to `src/services/__tests__/financeService.test.ts`: Test `fetchPurchases({ search: 'Kajaria' })`: verify the search filter is applied on the correct column (design_name or party_name — check the actual implementation).
 
-- [ ] Add to `src/services/__tests__/financeService.test.ts`: Test `createExpense(data)`: verify `.from('expenses').insert(data).select().single()` was called.
+- [x] Add to `src/services/__tests__/financeService.test.ts`: Test `createExpense(data)`: verify `.from('expenses').insert(data).select().single()` was called.
 
-- [ ] Add to `src/services/__tests__/financeService.test.ts`: Test `createExpense` returns saved expense: configure mock to return `{ data: makeExpense(), error: null }`. Assert the return value has an `id` field.
+- [x] Add to `src/services/__tests__/financeService.test.ts`: Test `createExpense` returns saved expense: configure mock to return `{ data: makeExpense(), error: null }`. Assert the return value has an `id` field.
 
-- [ ] Add to `src/services/__tests__/financeService.test.ts`: Test `createExpense` error path: configure mock to return an error. Assert the returned promise rejects.
+- [x] Add to `src/services/__tests__/financeService.test.ts`: Test `createExpense` error path: configure mock to return an error. Assert the returned promise rejects.
 
 ### paymentService.test.ts
 
-- [ ] Fix in `src/services/__tests__/paymentService.test.ts`: Replace the hardcoded `payment_date: '2026-03-29'` in the test fixture with a dynamically computed date using `new Date().toISOString().split('T')[0]` or with a date known to always be in the past. This resolves QA issue 2.18.
+- [x] Fix in `src/services/__tests__/paymentService.test.ts`: Replace the hardcoded `payment_date: '2026-03-29'` in the test fixture with a dynamically computed date using `new Date().toISOString().split('T')[0]` or with a date known to always be in the past. This resolves QA issue 2.18.
 
-- [ ] Add to `src/services/__tests__/paymentService.test.ts`: Test `recordPayment` DB error propagation: configure `repo.recordWithInvoiceUpdate` to reject with `new Error('DB error')`. Assert the service propagates the error (does not swallow it).
+- [x] Add to `src/services/__tests__/paymentService.test.ts`: Test `recordPayment` DB error propagation: configure `repo.recordWithInvoiceUpdate` to reject with `new Error('DB error')`. Assert the service propagates the error (does not swallow it).
 
-- [ ] Add to `src/services/__tests__/paymentService.test.ts`: Test `recordPayment` with `amount = 0`: check whether `PaymentSchema` allows zero. Assert either `ValidationError` is thrown (if 0 is invalid) or the RPC is called (if 0 is valid). The test description must state the business rule.
+- [x] Add to `src/services/__tests__/paymentService.test.ts`: Test `recordPayment` with `amount = 0`: check whether `PaymentSchema` allows zero. Assert either `ValidationError` is thrown (if 0 is invalid) or the RPC is called (if 0 is valid). The test description must state the business rule.
 
-- [ ] Add to `src/services/__tests__/paymentService.test.ts`: Test `recordPayment` with both `customer_id` and `supplier_id` absent: assert `ValidationError` is thrown (or `ZodError`) before the repository is called.
+- [x] Add to `src/services/__tests__/paymentService.test.ts`: Test `recordPayment` with both `customer_id` and `supplier_id` absent: assert `ValidationError` is thrown (or `ZodError`) before the repository is called.
 
-- [ ] Add to `src/services/__tests__/paymentService.test.ts`: Test `fetchPayments({})`: mock `repo.fetchPayments` and assert it was called with the correct arguments. Assert the service returns the repo result.
+- [x] Add to `src/services/__tests__/paymentService.test.ts`: Test `fetchPayments({})`: mock `repo.fetchPayments` and assert it was called with the correct arguments. Assert the service returns the repo result.
 
 ### authService.test.ts
 
-- [ ] Add to `src/services/__tests__/authService.test.ts`: Test `signOut()`: mock `supabase.auth.signOut` to resolve with `{ error: null }`. Assert `supabase.auth.signOut` was called. Assert the method returns `undefined` (void).
+- [x] Add to `src/services/__tests__/authService.test.ts`: Test `signOut()`: mock `supabase.auth.signOut` to resolve with `{ error: null }`. Assert `supabase.auth.signOut` was called. Assert the method returns `undefined` (void).
 
-- [ ] Add to `src/services/__tests__/authService.test.ts`: Test `onAuthStateChange(callback)`: mock `supabase.auth.onAuthStateChange` to return a mock subscription object `{ data: { subscription: { unsubscribe: jest.fn() } } }`. Call `authService.onAuthStateChange(jest.fn())`. Assert `supabase.auth.onAuthStateChange` was called with the callback. Assert the subscription is returned to the caller.
+- [x] Add to `src/services/__tests__/authService.test.ts`: Test `onAuthStateChange(callback)`: mock `supabase.auth.onAuthStateChange` to return a mock subscription object `{ data: { subscription: { unsubscribe: jest.fn() } } }`. Call `authService.onAuthStateChange(jest.fn())`. Assert `supabase.auth.onAuthStateChange` was called with the callback. Assert the subscription is returned to the caller.
 
-- [ ] Add to `src/services/__tests__/authService.test.ts`: Test `signIn` network error (rejected promise, not an auth error object): configure `supabase.auth.signInWithPassword` to reject with `new Error('Network request failed')`. Assert the service wraps this in `AppError` (or at minimum that the rejection propagates). This verifies network-level errors are handled, not just Supabase-level auth errors.
+- [x] Add to `src/services/__tests__/authService.test.ts`: Test `signIn` network error (rejected promise, not an auth error object): configure `supabase.auth.signInWithPassword` to reject with `new Error('Network request failed')`. Assert the service wraps this in `AppError` (or at minimum that the rejection propagates). This verifies network-level errors are handled, not just Supabase-level auth errors.
 
 ### exportService.test.ts
 
-- [ ] Add to `src/services/__tests__/exportService.test.ts`: Test `exportGSTR1` when `Sharing.isAvailableAsync()` returns `false`: assert `Sharing.shareAsync` is NOT called. Assert the method either shows an alert, resolves gracefully, or throws — document and assert whichever behavior is correct.
+- [x] Add to `src/services/__tests__/exportService.test.ts`: Test `exportGSTR1` when `Sharing.isAvailableAsync()` returns `false`: assert `Sharing.shareAsync` is NOT called. Assert the method either shows an alert, resolves gracefully, or throws — document and assert whichever behavior is correct.
 
-- [ ] Add to `src/services/__tests__/exportService.test.ts`: Test `exportGSTR1` B2C row column structure: provide a single B2C invoice in the test data. Capture the CSV string passed to the file writer. Split by newline, find the row for this invoice, and assert it contains the expected values in the expected columns (invoice number, date, customer name, total value, GST rate, taxable value, IGST, CGST, SGST).
+- [x] Add to `src/services/__tests__/exportService.test.ts`: Test `exportGSTR1` B2C row column structure: provide a single B2C invoice in the test data. Capture the CSV string passed to the file writer. Split by newline, find the row for this invoice, and assert it contains the expected values in the expected columns (invoice number, date, customer name, total value, GST rate, taxable value, IGST, CGST, SGST).
 
-- [ ] Add to `src/services/__tests__/exportService.test.ts`: Test `exportGSTR1` B2B row has GSTIN: provide a B2B invoice with `customer_gstin = '27AAAAA0000A1Z5'`. Assert the GSTIN column in the CSV row is `'27AAAAA0000A1Z5'`, not empty.
+- [x] Add to `src/services/__tests__/exportService.test.ts`: Test `exportGSTR1` B2B row has GSTIN: provide a B2B invoice with `customer_gstin = '27AAAAA0000A1Z5'`. Assert the GSTIN column in the CSV row is `'27AAAAA0000A1Z5'`, not empty.
 
-- [ ] Add to `src/services/__tests__/exportService.test.ts`: Test `exportGSTR1` intra-state invoice: provide an invoice with `is_inter_state = false`. Assert the CGST and SGST columns are non-zero and the IGST column is `0` in the CSV row.
+- [x] Add to `src/services/__tests__/exportService.test.ts`: Test `exportGSTR1` intra-state invoice: provide an invoice with `is_inter_state = false`. Assert the CGST and SGST columns are non-zero and the IGST column is `0` in the CSV row.
 
 ### orderService.test.ts
 
-- [ ] Add to `src/services/__tests__/orderService.test.ts`: Test `importOrder` when inventory item does NOT exist: mock `inventoryService.fetchItems` to return `{ data: [], count: 0 }`. Assert that `inventoryService.createItem` is called (a new item is created), and then `inventoryService.performStockOperation` is called.
+- [x] Add to `src/services/__tests__/orderService.test.ts`: Test `importOrder` when inventory item does NOT exist: mock `inventoryService.fetchItems` to return `{ data: [], count: 0 }`. Assert that `inventoryService.createItem` is called (a new item is created), and then `inventoryService.performStockOperation` is called.
 
-- [ ] Add to `src/services/__tests__/orderService.test.ts`: Test `importOrder` when order creation fails: mock `orderRepository.create` to reject. Assert the rejection propagates and `inventoryService.performStockOperation` is NOT called.
+- [x] Add to `src/services/__tests__/orderService.test.ts`: Test `importOrder` when order creation fails: mock `orderRepository.create` to reject. Assert the rejection propagates and `inventoryService.performStockOperation` is NOT called.
 
-- [ ] Add to `src/services/__tests__/orderService.test.ts`: Test `fetchOrders({ status: 'received' })`: verify `.eq('status', 'received')` is called on the query.
+- [x] Add to `src/services/__tests__/orderService.test.ts`: Test `fetchOrders({ status: 'received' })`: verify `.eq('status', 'received')` is called on the query.
 
-- [ ] Add to `src/services/__tests__/orderService.test.ts`: Test `fetchOrders({})`: verify `.eq` is NOT called with a `'status'` argument when status is not provided.
+- [x] Add to `src/services/__tests__/orderService.test.ts`: Test `fetchOrders({})`: verify `.eq` is NOT called with a `'status'` argument when status is not provided.
 
-- [ ] Fix in `src/services/__tests__/orderService.test.ts`: Replace any test that uses the `mockQuery.then` pattern (QA issue 3.2) with a proper `mockResolvedValue(...)` on the terminal query method. This eliminates the broken thenable mock.
+- [x] Fix in `src/services/__tests__/orderService.test.ts`: Replace any test that uses the `mockQuery.then` pattern (QA issue 3.2) with a proper `mockResolvedValue(...)` on the terminal query method. This eliminates the broken thenable mock.
 
 ---
 

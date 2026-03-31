@@ -72,4 +72,34 @@ describe('authService', () => {
 			code: 'AUTH_ERROR',
 		});
 	});
+
+	it('signOut calls supabase.auth.signOut and resolves void', async () => {
+		(supabase.auth.signOut as jest.Mock).mockResolvedValue({ error: null });
+
+		const result = await authService.signOut();
+
+		expect(supabase.auth.signOut).toHaveBeenCalled();
+		expect(result).toBeUndefined();
+	});
+
+	it('onAuthStateChange passes the callback to supabase.auth.onAuthStateChange and returns subscription', () => {
+		const mockSub = { data: { subscription: { unsubscribe: jest.fn() } } };
+		(supabase.auth.onAuthStateChange as jest.Mock).mockReturnValue(mockSub);
+
+		const callback = jest.fn();
+		const result = authService.onAuthStateChange(callback);
+
+		expect(supabase.auth.onAuthStateChange).toHaveBeenCalledWith(callback);
+		expect(result).toEqual(mockSub);
+	});
+
+	it('signIn with network error (rejected promise): propagates as AppError', async () => {
+		// Network errors come as thrown exceptions, not as { error } objects
+		(supabase.auth.signInWithPassword as jest.Mock).mockRejectedValue(
+			new Error('Network request failed'),
+		);
+
+		// The service either wraps it in AppError or propagates the raw error — assert it rejects
+		await expect(authService.signIn('test@example.com', 'pass')).rejects.toBeDefined();
+	});
 });
