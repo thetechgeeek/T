@@ -1,5 +1,6 @@
 import { useAuthStore } from './authStore';
 import { authService } from '@/src/services/authService';
+import { makeUser, makeSession } from '../../__tests__/fixtures/authFixtures';
 
 jest.mock('@/src/services/authService', () => ({
 	authService: {
@@ -62,5 +63,57 @@ describe('authStore', () => {
 		const state = useAuthStore.getState();
 		expect(state.user).toBeNull();
 		expect(state.isAuthenticated).toBe(false);
+	});
+
+	it('login failure keeps user null and isAuthenticated false', async () => {
+		(authService.signIn as jest.Mock).mockRejectedValue(new Error('Invalid credentials'));
+
+		try {
+			await useAuthStore.getState().login('a@b.com', 'wrong');
+		} catch {
+			// may rethrow
+		}
+
+		const state = useAuthStore.getState();
+		expect(state.isAuthenticated).toBe(false);
+		expect(state.user).toBeNull();
+		expect(state.loading).toBe(false);
+	});
+
+	it('login loading state — true during login, false after', async () => {
+		let resolveP!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolveP = r;
+		});
+		(authService.signIn as jest.Mock).mockReturnValue(p);
+
+		const loginPromise = useAuthStore.getState().login('a@b.com', 'password');
+		expect(useAuthStore.getState().loading).toBe(true);
+
+		resolveP({ user: makeUser(), session: makeSession() });
+		await loginPromise;
+
+		expect(useAuthStore.getState().loading).toBe(false);
+	});
+
+	it('register calls authService.signUp and sets user', async () => {
+		const user = makeUser();
+		const session = makeSession();
+		(authService.signUp as jest.Mock).mockResolvedValue({ user, session });
+
+		await useAuthStore.getState().register('a@b.com', 'password');
+
+		expect(authService.signUp).toHaveBeenCalledWith('a@b.com', 'password');
+		expect(useAuthStore.getState().user).not.toBeNull();
+	});
+
+	it('logout calls authService.signOut and sets isAuthenticated false', async () => {
+		useAuthStore.setState({ user: makeUser() as any, isAuthenticated: true });
+		(authService.signOut as jest.Mock).mockResolvedValue(undefined);
+
+		await useAuthStore.getState().logout();
+
+		expect(authService.signOut).toHaveBeenCalled();
+		expect(useAuthStore.getState().isAuthenticated).toBe(false);
 	});
 });

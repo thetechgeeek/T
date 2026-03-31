@@ -49,4 +49,44 @@ describe('financeStore', () => {
 		expect(state.expenses[0]).toEqual(savedExpense);
 		expect(financeService.getProfitLoss).toHaveBeenCalled();
 	});
+
+	it('fetchExpenses failure sets error and loading=false', async () => {
+		(financeService.fetchExpenses as jest.Mock).mockRejectedValue(new Error('Fetch failed'));
+
+		try {
+			await useFinanceStore.getState().fetchExpenses();
+		} catch {
+			// may rethrow
+		}
+
+		const state = useFinanceStore.getState();
+		expect(state.error).toBeTruthy();
+		expect(state.loading).toBe(false);
+	});
+
+	it('fetchPurchases success updates purchases', async () => {
+		(financeService.fetchPurchases as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+
+		await useFinanceStore.getState().fetchPurchases({});
+
+		const state = useFinanceStore.getState();
+		expect(state.purchases).toEqual([]);
+		expect(state.loading).toBe(false);
+	});
+
+	it('addExpense failure sets error and leaves expenses unchanged', async () => {
+		(financeService.createExpense as jest.Mock).mockRejectedValue(new Error('Create failed'));
+
+		try {
+			await useFinanceStore
+				.getState()
+				.addExpense({ amount: 50, category: 'Tools', expense_date: '2026-03-22' });
+		} catch {
+			// may rethrow
+		}
+
+		const state = useFinanceStore.getState();
+		expect(state.error).toBeTruthy();
+		expect(state.expenses).toEqual([]);
+	});
 });

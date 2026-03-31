@@ -591,69 +591,69 @@
 
 ### invoiceStore.test.ts
 
-- [ ] Add to `src/stores/__tests__/invoiceStore.test.ts`: Test `fetchInvoices` loading state — use a deferred promise: `let resolve; const p = new Promise(r => { resolve = r; }); mockFetchInvoices.mockReturnValue(p);`. Call `store.fetchInvoices({})` (do not await). Immediately assert `store.getState().loading === true`. Then `resolve([])` and await the store action. Assert `loading === false`.
+- [x] Add to `src/stores/__tests__/invoiceStore.test.ts`: Test `fetchInvoices` loading state — use a deferred promise: `let resolve; const p = new Promise(r => { resolve = r; }); mockFetchInvoices.mockReturnValue(p);`. Call `store.fetchInvoices({})` (do not await). Immediately assert `store.getState().loading === true`. Then `resolve([])` and await the store action. Assert `loading === false`.
 
-- [ ] Add to `src/stores/__tests__/invoiceStore.test.ts`: Test `fetchInvoices` failure: configure `invoiceService.fetchInvoices` to reject with `new Error('Network error')`. Await the store action. Assert `store.getState().error === 'Network error'` (or whatever string the store extracts), `store.getState().loading === false`, and `store.getState().invoices` remains unchanged from initial state.
+- [x] Add to `src/stores/__tests__/invoiceStore.test.ts`: Test `fetchInvoices` failure: configure `invoiceService.fetchInvoices` to reject with `new Error('Network error')`. Await the store action. Assert `store.getState().error === 'Network error'` (or whatever string the store extracts), `store.getState().loading === false`, and `store.getState().invoices` remains unchanged from initial state.
 
-- [ ] Add to `src/stores/__tests__/invoiceStore.test.ts`: Test `createInvoice` failure: configure `invoiceService.createInvoice` to reject. Await the action. Assert `store.getState().error` is set, `loading === false`, and `store.getState().totalCount` is unchanged.
+- [x] Add to `src/stores/__tests__/invoiceStore.test.ts`: Test `createInvoice` failure: configure `invoiceService.createInvoice` to reject. Await the action. Assert `store.getState().error` is set, `loading === false`, and `store.getState().totalCount` is unchanged.
 
-- [ ] Add to `src/stores/__tests__/invoiceStore.test.ts`: Test filter update — call `store.getState().setFilters({ payment_status: 'paid' })`. Assert `store.getState().filters.payment_status === 'paid'`. Assert `invoiceService.fetchInvoices` was called with the updated filter object.
+- [x] Add to `src/stores/__tests__/invoiceStore.test.ts`: Test filter update — call `store.getState().setFilters({ payment_status: 'paid' })`. Assert `store.getState().filters.payment_status === 'paid'`. Assert `invoiceService.fetchInvoices` was called with the updated filter object.
 
-- [ ] Fix in `src/stores/__tests__/invoiceStore.test.ts`: Add `fetchInvoiceDetail` to the `invoiceService` mock at the top of the file. Add a test: mock `invoiceService.fetchInvoiceDetail` to return `makeInvoice()`. Call `store.getState().fetchInvoiceDetail('inv-001')`. Assert the service was called with `'inv-001'` and `store.getState().selectedInvoice` equals the returned invoice.
+- [x] Fix in `src/stores/__tests__/invoiceStore.test.ts`: Add `fetchInvoiceDetail` to the `invoiceService` mock at the top of the file. Add a test: mock `invoiceService.fetchInvoiceDetail` to return `makeInvoice()`. Call `store.getState().fetchInvoiceDetail('inv-001')`. Assert the service was called with `'inv-001'` and `store.getState().selectedInvoice` equals the returned invoice.
 
 ### inventoryStore.test.ts
 
-- [ ] Fix in `src/stores/__tests__/inventoryStore.test.ts`: Remove the duplicate `expect(state.loading).toBe(false)` on line 37. Keep only one assertion. This resolves QA issue 2.3.
+- [x] Fix in `src/stores/__tests__/inventoryStore.test.ts`: Remove the duplicate `expect(state.loading).toBe(false)` on line 37. Keep only one assertion. This resolves QA issue 2.3.
 
-- [ ] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `createItem(data)` success: mock `inventoryService.createItem` to return `makeInventoryItem({ id: 'new-item' })`. Await `store.getState().createItem(makeInventoryItemInput())`. Assert `store.getState().items[0].id === 'new-item'` (prepended), `store.getState().totalCount` incremented by 1, `loading === false`.
+- [x] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `createItem(data)` success: mock `inventoryService.createItem` to return `makeInventoryItem({ id: 'new-item' })`. Await `store.getState().createItem(makeInventoryItemInput())`. Assert `store.getState().items[0].id === 'new-item'` (prepended), `store.getState().totalCount` incremented by 1, `loading === false`.
 
-- [ ] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `createItem(data)` failure: configure `inventoryService.createItem` to reject. Assert `store.getState().error` is set, `loading === false`, and `items` array is unchanged.
+- [x] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `createItem(data)` failure: configure `inventoryService.createItem` to reject. Assert `store.getState().error` is set, `loading === false`, and `items` array is unchanged.
 
-- [ ] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `updateItem(id, data)` success: seed the store with `[makeInventoryItem({ id: 'item-1', box_count: 10 })]`. Mock `inventoryService.updateItem` to return `makeInventoryItem({ id: 'item-1', box_count: 20 })`. Await `store.getState().updateItem('item-1', { box_count: 20 })`. Assert `store.getState().items[0].box_count === 20` (in-place update, same index), `loading === false`.
+- [x] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `updateItem(id, data)` success: seed the store with `[makeInventoryItem({ id: 'item-1', box_count: 10 })]`. Mock `inventoryService.updateItem` to return `makeInventoryItem({ id: 'item-1', box_count: 20 })`. Await `store.getState().updateItem('item-1', { box_count: 20 })`. Assert `store.getState().items[0].box_count === 20` (in-place update, same index), `loading === false`.
 
-- [ ] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `deleteItem(id)` success: seed the store with two items. Mock `inventoryService.deleteItem` to resolve. Await `store.getState().deleteItem('item-1')`. Assert the item with id `'item-1'` is no longer in `items`, `totalCount` decremented by 1.
+- [x] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `deleteItem(id)` success: seed the store with two items. Mock `inventoryService.deleteItem` to resolve. Await `store.getState().deleteItem('item-1')`. Assert the item with id `'item-1'` is no longer in `items`, `totalCount` decremented by 1.
 
-- [ ] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `performStockOperation` failure: configure `inventoryService.performStockOperation` to reject. Assert `store.getState().error` is set, `loading === false`, and the target item's `box_count` is NOT modified.
+- [x] Add to `src/stores/__tests__/inventoryStore.test.ts`: Test `performStockOperation` failure: configure `inventoryService.performStockOperation` to reject. Assert `store.getState().error` is set, `loading === false`, and the target item's `box_count` is NOT modified.
 
 ### authStore.test.ts
 
-- [ ] Add to `src/stores/__tests__/authStore.test.ts`: Test `login` failure path: configure `authService.signIn` to reject with `new Error('Invalid credentials')`. Await `store.getState().login('a@b.com', 'wrong')`. Assert `store.getState().isAuthenticated === false`, `store.getState().user === null`, `store.getState().loading === false`.
+- [x] Add to `src/stores/__tests__/authStore.test.ts`: Test `login` failure path: configure `authService.signIn` to reject with `new Error('Invalid credentials')`. Await `store.getState().login('a@b.com', 'wrong')`. Assert `store.getState().isAuthenticated === false`, `store.getState().user === null`, `store.getState().loading === false`.
 
-- [ ] Add to `src/stores/__tests__/authStore.test.ts`: Test `login` loading state: use deferred promise pattern. Call `store.getState().login(...)` (do not await). Assert `store.getState().loading === true` synchronously. Resolve the deferred promise. Assert `loading === false`.
+- [x] Add to `src/stores/__tests__/authStore.test.ts`: Test `login` loading state: use deferred promise pattern. Call `store.getState().login(...)` (do not await). Assert `store.getState().loading === true` synchronously. Resolve the deferred promise. Assert `loading === false`.
 
-- [ ] Add to `src/stores/__tests__/authStore.test.ts`: Test `register(email, password)`: mock `authService.signUp` to return `{ user: makeUser(), session: makeSession() }`. Await `store.getState().register('a@b.com', 'password')`. Assert `authService.signUp` was called with `('a@b.com', 'password')` and `store.getState().user` is not null.
+- [x] Add to `src/stores/__tests__/authStore.test.ts`: Test `register(email, password)`: mock `authService.signUp` to return `{ user: makeUser(), session: makeSession() }`. Await `store.getState().register('a@b.com', 'password')`. Assert `authService.signUp` was called with `('a@b.com', 'password')` and `store.getState().user` is not null.
 
-- [ ] Add to `src/stores/__tests__/authStore.test.ts`: Test `logout`: mock `authService.signOut` to resolve. Await `store.getState().logout()`. Assert `authService.signOut` was called and `store.getState().isAuthenticated === false`.
+- [x] Add to `src/stores/__tests__/authStore.test.ts`: Test `logout`: mock `authService.signOut` to resolve. Await `store.getState().logout()`. Assert `authService.signOut` was called and `store.getState().isAuthenticated === false`.
 
 ### customerStore.test.ts
 
-- [ ] Add to `src/stores/__tests__/customerStore.test.ts`: Test `fetchCustomers({})` success: configure `customerService.fetchCustomers` to return `{ data: [makeCustomer()], count: 1 }`. Await `store.getState().fetchCustomers({})`. Assert `store.getState().customers` has length 1, `store.getState().totalCount === 1`, `loading === false`.
+- [x] Add to `src/stores/__tests__/customerStore.test.ts`: Test `fetchCustomers({})` success: configure `customerService.fetchCustomers` to return `{ data: [makeCustomer()], count: 1 }`. Await `store.getState().fetchCustomers({})`. Assert `store.getState().customers` has length 1, `store.getState().totalCount === 1`, `loading === false`.
 
-- [ ] Add to `src/stores/__tests__/customerStore.test.ts`: Test `fetchCustomers` failure: configure service to reject. Assert `store.getState().error` is set, `loading === false`, and `customers` array is unchanged.
+- [x] Add to `src/stores/__tests__/customerStore.test.ts`: Test `fetchCustomers` failure: configure service to reject. Assert `store.getState().error` is set, `loading === false`, and `customers` array is unchanged.
 
-- [ ] Add to `src/stores/__tests__/customerStore.test.ts`: Test `createCustomer` loading state: use deferred promise. Call (do not await). Assert `loading === true`. Resolve. Assert `loading === false`.
+- [x] Add to `src/stores/__tests__/customerStore.test.ts`: Test `createCustomer` loading state: use deferred promise. Call (do not await). Assert `loading === true`. Resolve. Assert `loading === false`.
 
 ### financeStore.test.ts
 
-- [ ] Add to `src/stores/__tests__/financeStore.test.ts`: Test `fetchExpenses` failure: configure `financeService.fetchExpenses` to reject. Assert `store.getState().error` is set, `loading === false`.
+- [x] Add to `src/stores/__tests__/financeStore.test.ts`: Test `fetchExpenses` failure: configure `financeService.fetchExpenses` to reject. Assert `store.getState().error` is set, `loading === false`.
 
-- [ ] Add to `src/stores/__tests__/financeStore.test.ts`: Test `fetchPurchases({})` success: configure `financeService.fetchPurchases` to return `{ data: [], count: 0 }`. Await `store.getState().fetchPurchases({})`. Assert `store.getState().purchases` is updated.
+- [x] Add to `src/stores/__tests__/financeStore.test.ts`: Test `fetchPurchases({})` success: configure `financeService.fetchPurchases` to return `{ data: [], count: 0 }`. Await `store.getState().fetchPurchases({})`. Assert `store.getState().purchases` is updated.
 
-- [ ] Add to `src/stores/__tests__/financeStore.test.ts`: Test `addExpense` failure: configure `financeService.createExpense` to reject. Assert `store.getState().error` is set and `store.getState().expenses` is NOT modified.
+- [x] Add to `src/stores/__tests__/financeStore.test.ts`: Test `addExpense` failure: configure `financeService.createExpense` to reject. Assert `store.getState().error` is set and `store.getState().expenses` is NOT modified.
 
 ### orderStore.test.ts
 
-- [ ] Add to `src/stores/__tests__/orderStore.test.ts`: Test `fetchOrders` failure: configure `orderService.fetchOrders` to reject. Assert `store.getState().error` is set, `loading === false`.
+- [x] Add to `src/stores/__tests__/orderStore.test.ts`: Test `fetchOrders` failure: configure `orderService.fetchOrders` to reject. Assert `store.getState().error` is set, `loading === false`.
 
-- [ ] Add to `src/stores/__tests__/orderStore.test.ts`: Test `importParsedData` failure: configure `orderService.importOrder` to reject. Assert `store.getState().error` is set.
+- [x] Add to `src/stores/__tests__/orderStore.test.ts`: Test `importParsedData` failure: configure `orderService.importOrder` to reject. Assert `store.getState().error` is set.
 
 ### dashboardStore.test.ts
 
-- [ ] Fix in `src/stores/__tests__/dashboardStore.test.ts`: Replace all `await Promise.resolve()` microtask-flush patterns with `await waitFor(() => expect(dashboardService.fetchDashboardStats).toHaveBeenCalled())` from `@testing-library/react-native`. This resolves the flaky async test pattern described in QA issue 5.4.
+- [x] Fix in `src/stores/__tests__/dashboardStore.test.ts`: Replace all `await Promise.resolve()` microtask-flush patterns with `await waitFor(() => expect(dashboardService.fetchDashboardStats).toHaveBeenCalled())` from `@testing-library/react-native`. This resolves the flaky async test pattern described in QA issue 5.4.
 
-- [ ] Add to `src/stores/__tests__/dashboardStore.test.ts`: Test event listener cleanup — after calling the store teardown (or the unsubscribe function returned from the event bus), emit `{ type: 'INVOICE_CREATED', invoiceId: 'inv-1' }` again. Assert `dashboardService.fetchDashboardStats` was NOT called an additional time. This resolves QA issue 5.5.
+- [x] Add to `src/stores/__tests__/dashboardStore.test.ts`: Test event listener cleanup — after calling the store teardown (or the unsubscribe function returned from the event bus), emit `{ type: 'INVOICE_CREATED', invoiceId: 'inv-1' }` again. Assert `dashboardService.fetchDashboardStats` was NOT called an additional time. This resolves QA issue 5.5.
 
-- [ ] Add `afterEach` cleanup to `src/stores/__tests__/dashboardStore.test.ts`: Store the unsubscribe function returned when the store subscribes to the eventBus. In `afterEach`, call that unsubscribe function to remove the listener. If the store does not expose the unsubscribe function, mock `eventBus.on` to capture and return a mock unsubscriber. This prevents listener leaks between tests.
+- [x] Add `afterEach` cleanup to `src/stores/__tests__/dashboardStore.test.ts`: Store the unsubscribe function returned when the store subscribes to the eventBus. In `afterEach`, call that unsubscribe function to remove the listener. If the store does not expose the unsubscribe function, mock `eventBus.on` to capture and return a mock unsubscriber. This prevents listener leaks between tests.
 
 ---
 

@@ -44,4 +44,30 @@ describe('orderStore', () => {
 		expect(orderService.importOrder).toHaveBeenCalledWith('Party', [], null);
 		expect(orderService.fetchOrders).toHaveBeenCalled();
 	});
+
+	it('fetchOrders failure sets error and loading=false', async () => {
+		(orderService.fetchOrders as jest.Mock).mockRejectedValue(new Error('Fetch failed'));
+
+		try {
+			await useOrderStore.getState().fetchOrders();
+		} catch {
+			// may rethrow
+		}
+
+		const state = useOrderStore.getState();
+		expect(state.error).toBeTruthy();
+		expect(state.loading).toBe(false);
+	});
+
+	it('importParsedData failure sets error', async () => {
+		(orderService.importOrder as jest.Mock).mockRejectedValue(new Error('Import failed'));
+
+		try {
+			await useOrderStore.getState().importParsedData('Party', []);
+		} catch {
+			// may rethrow
+		}
+
+		expect(useOrderStore.getState().error).toBeTruthy();
+	});
 });
