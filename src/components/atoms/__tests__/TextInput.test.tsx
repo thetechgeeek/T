@@ -31,4 +31,19 @@ describe('TextInput', () => {
 		);
 		expect(getByText('Invalid email address')).toBeTruthy();
 	});
+
+	it('does NOT show error text when error is undefined', () => {
+		const { queryByText } = renderWithTheme(
+			<TextInput label="Email" placeholder="email@example.com" />,
+		);
+		expect(queryByText(/required/i)).toBeNull();
+	});
+
+	it('passes secureTextEntry prop to the native input', () => {
+		const { getByPlaceholderText } = renderWithTheme(
+			<TextInput placeholder="Password" secureTextEntry />,
+		);
+		const input = getByPlaceholderText('Password');
+		expect(input.props.secureTextEntry).toBe(true);
+	});
 });

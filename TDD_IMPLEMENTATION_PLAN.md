@@ -719,89 +719,89 @@
 
 ### Atom Components
 
-- [ ] Create `src/components/atoms/__tests__/Badge.test.tsx`: Import `makeTestId` if the component uses testIDs. Test renders label text: `render(<Badge label="Paid" variant="success" />)`. Assert `getByText('Paid')` is present.
+- [x] Create `src/components/atoms/__tests__/Badge.test.tsx`: Import `makeTestId` if the component uses testIDs. Test renders label text: `render(<Badge label="Paid" variant="success" />)`. Assert `getByText('Paid')` is present.
 
-- [ ] Add to `src/components/atoms/__tests__/Badge.test.tsx`: Test `variant="success"` applies green color: use `renderWithTheme` and `getByTestId` (add `testID="badge"` to the component if missing). Assert the component's style contains a green background or text color token.
+- [x] Add to `src/components/atoms/__tests__/Badge.test.tsx`: Test `variant="success"` applies green color: use `renderWithTheme` and `getByTestId` (add `testID="badge"` to the component if missing). Assert the component's style contains a green background or text color token.
 
-- [ ] Add to `src/components/atoms/__tests__/Badge.test.tsx`: Test `variant="error"` applies red color: same pattern, assert red color token.
+- [x] Add to `src/components/atoms/__tests__/Badge.test.tsx`: Test `variant="error"` applies red color: same pattern, assert red color token.
 
-- [ ] Add to `src/components/atoms/__tests__/Badge.test.tsx`: Test `variant="warning"` applies amber/yellow color.
+- [x] Add to `src/components/atoms/__tests__/Badge.test.tsx`: Test `variant="warning"` applies amber/yellow color.
 
-- [ ] Create `src/components/atoms/__tests__/Chip.test.tsx`: Test renders label text: `render(<Chip label="GST 18%" />)`. Assert `getByText('GST 18%')`.
+- [x] Create `src/components/atoms/__tests__/Chip.test.tsx`: Test renders label text: `render(<Chip label="GST 18%" />)`. Assert `getByText('GST 18%')`.
 
-- [ ] Add to `src/components/atoms/__tests__/Chip.test.tsx`: Test `onPress` called when pressed: `const onPress = jest.fn(); render(<Chip label="test" onPress={onPress} />); fireEvent.press(getByText('test')); expect(onPress).toHaveBeenCalledTimes(1)`.
+- [x] Add to `src/components/atoms/__tests__/Chip.test.tsx`: Test `onPress` called when pressed: `const onPress = jest.fn(); render(<Chip label="test" onPress={onPress} />); fireEvent.press(getByText('test')); expect(onPress).toHaveBeenCalledTimes(1)`.
 
-- [ ] Add to `src/components/atoms/__tests__/Chip.test.tsx`: Test `disabled=true` — `onPress` NOT called: render with `disabled={true}`. Fire press event. Assert `onPress` was not called.
+- [x] Add to `src/components/atoms/__tests__/Chip.test.tsx`: Test `disabled=true` — `onPress` NOT called: render with `disabled={true}`. Fire press event. Assert `onPress` was not called.
 
-- [ ] Add to `src/components/atoms/__tests__/Chip.test.tsx`: Test `selected=true` applies selected styling: assert the wrapper element has a different background color or border token compared to the unselected state.
+- [x] Add to `src/components/atoms/__tests__/Chip.test.tsx`: Test `selected=true` applies selected styling: assert the wrapper element has a different background color or border token compared to the unselected state.
 
-- [ ] Create `src/components/atoms/__tests__/OfflineBanner.test.tsx`: Test does NOT render when `isConnected=true`: `render(<OfflineBanner isConnected={true} />)`. Assert `queryByText(/offline/i)` returns `null`.
+- [x] Create `src/components/atoms/__tests__/OfflineBanner.test.tsx`: Test does NOT render when `isConnected=true`: `render(<OfflineBanner isConnected={true} />)`. Assert `queryByText(/offline/i)` returns `null`.
 
-- [ ] Add to `src/components/atoms/__tests__/OfflineBanner.test.tsx`: Test DOES render when `isConnected=false`: render with `isConnected={false}`. Assert `getByText(/offline/i)` (or the actual offline message text) is present.
+- [x] Add to `src/components/atoms/__tests__/OfflineBanner.test.tsx`: Test DOES render when `isConnected=false`: render with `isConnected={false}`. Assert `getByText(/offline/i)` (or the actual offline message text) is present.
 
-- [ ] Add to existing `src/components/atoms/__tests__/TextInput.test.tsx` (or create): Test `onChangeText` called when user types: `fireEvent.changeText(getByTestId('input'), 'hello')`. Assert `onChangeText` was called with `'hello'`.
+- [x] Add to existing `src/components/atoms/__tests__/TextInput.test.tsx` (or create): Test `onChangeText` called when user types: `fireEvent.changeText(getByTestId('input'), 'hello')`. Assert `onChangeText` was called with `'hello'`.
 
-- [ ] Add to `src/components/atoms/__tests__/TextInput.test.tsx`: Test error message shown when `error` prop provided: render with `error="This field is required"`. Assert `getByText('This field is required')` is present.
+- [x] Add to `src/components/atoms/__tests__/TextInput.test.tsx`: Test error message shown when `error` prop provided: render with `error="This field is required"`. Assert `getByText('This field is required')` is present.
 
-- [ ] Add to `src/components/atoms/__tests__/TextInput.test.tsx`: Test error text NOT shown when `error` is undefined: render without `error` prop. Assert `queryByText(/required/i)` returns `null`.
+- [x] Add to `src/components/atoms/__tests__/TextInput.test.tsx`: Test error text NOT shown when `error` is undefined: render without `error` prop. Assert `queryByText(/required/i)` returns `null`.
 
-- [ ] Add to `src/components/atoms/__tests__/TextInput.test.tsx`: Test `secureTextEntry=true`: assert the input element has the `secureTextEntry` prop set to `true` (inspect via `toHaveAccessibilityValue` or `getByDisplayValue` with masked output).
+- [x] Add to `src/components/atoms/__tests__/TextInput.test.tsx`: Test `secureTextEntry=true`: assert the input element has the `secureTextEntry` prop set to `true` (inspect via `toHaveAccessibilityValue` or `getByDisplayValue` with masked output).
 
 ### Molecule Components
 
-- [ ] Create `src/components/molecules/__tests__/SearchBar.test.tsx`: Test renders with placeholder text: `render(<SearchBar placeholder="Search invoices..." value="" onChangeText={jest.fn()} />)`. Assert `getByPlaceholderText('Search invoices...')` is present.
+- [x] Create `src/components/molecules/__tests__/SearchBar.test.tsx`: Test renders with placeholder text: `render(<SearchBar placeholder="Search invoices..." value="" onChangeText={jest.fn()} />)`. Assert `getByPlaceholderText('Search invoices...')` is present.
 
-- [ ] Add to `src/components/molecules/__tests__/SearchBar.test.tsx`: Test calls `onChangeText` with typed value: `fireEvent.changeText(getByPlaceholderText('Search invoices...'), 'marble')`. Assert `onChangeText` called with `'marble'`.
+- [x] Add to `src/components/molecules/__tests__/SearchBar.test.tsx`: Test calls `onChangeText` with typed value: `fireEvent.changeText(getByPlaceholderText('Search invoices...'), 'marble')`. Assert `onChangeText` called with `'marble'`.
 
-- [ ] Add to `src/components/molecules/__tests__/SearchBar.test.tsx`: Test clear button NOT visible when value is empty: render with `value=""`. Assert `queryByTestId('search-clear-button')` (or equivalent) returns `null`.
+- [x] Add to `src/components/molecules/__tests__/SearchBar.test.tsx`: Test clear button NOT visible when value is empty: render with `value=""`. Assert `queryByTestId('search-clear-button')` (or equivalent) returns `null`.
 
-- [ ] Add to `src/components/molecules/__tests__/SearchBar.test.tsx`: Test clear button IS visible when value is non-empty: render with `value="marble"`. Assert the clear button is present.
+- [x] Add to `src/components/molecules/__tests__/SearchBar.test.tsx`: Test clear button IS visible when value is non-empty: render with `value="marble"`. Assert the clear button is present.
 
-- [ ] Add to `src/components/molecules/__tests__/SearchBar.test.tsx`: Test pressing clear button calls `onClear` (or sets value to `''`): render with `value="marble"` and `onClear={jest.fn()}`. Press the clear button. Assert `onClear` was called.
+- [x] Add to `src/components/molecules/__tests__/SearchBar.test.tsx`: Test pressing clear button calls `onClear` (or sets value to `''`): render with `value="marble"` and `onClear={jest.fn()}`. Press the clear button. Assert `onClear` was called.
 
-- [ ] Create `src/components/molecules/__tests__/FormField.test.tsx`: Test renders label text: `render(<FormField label="Invoice Date"><TextInput /></FormField>)`. Assert `getByText('Invoice Date')` is present.
+- [x] Create `src/components/molecules/__tests__/FormField.test.tsx`: Test renders label text: `render(<FormField label="Invoice Date"><TextInput /></FormField>)`. Assert `getByText('Invoice Date')` is present.
 
-- [ ] Add to `src/components/molecules/__tests__/FormField.test.tsx`: Test renders children: assert the child `TextInput` (or `getByTestId`) is present inside the rendered output.
+- [x] Add to `src/components/molecules/__tests__/FormField.test.tsx`: Test renders children: assert the child `TextInput` (or `getByTestId`) is present inside the rendered output.
 
-- [ ] Add to `src/components/molecules/__tests__/FormField.test.tsx`: Test renders error message below when `error` prop provided: render with `error="Date is required"`. Assert `getByText('Date is required')` is present.
+- [x] Add to `src/components/molecules/__tests__/FormField.test.tsx`: Test renders error message below when `error` prop provided: render with `error="Date is required"`. Assert `getByText('Date is required')` is present.
 
-- [ ] Add to `src/components/molecules/__tests__/FormField.test.tsx`: Test does NOT render error slot when no error: render without `error`. Assert no error text appears in the output.
+- [x] Add to `src/components/molecules/__tests__/FormField.test.tsx`: Test does NOT render error slot when no error: render without `error`. Assert no error text appears in the output.
 
-- [ ] Create `src/components/molecules/__tests__/EmptyState.test.tsx`: Test renders title text: `render(<EmptyState title="No invoices yet" />)`. Assert `getByText('No invoices yet')`.
+- [x] Create `src/components/molecules/__tests__/EmptyState.test.tsx`: Test renders title text: `render(<EmptyState title="No invoices yet" />)`. Assert `getByText('No invoices yet')`.
 
-- [ ] Add to `src/components/molecules/__tests__/EmptyState.test.tsx`: Test renders subtitle when provided: render with `subtitle="Create your first invoice"`. Assert `getByText('Create your first invoice')`.
+- [x] Add to `src/components/molecules/__tests__/EmptyState.test.tsx`: Test renders subtitle when provided: render with `subtitle="Create your first invoice"`. Assert `getByText('Create your first invoice')`.
 
-- [ ] Add to `src/components/molecules/__tests__/EmptyState.test.tsx`: Test renders action button when `actionLabel` and `onAction` provided: render with `actionLabel="Create Invoice"` and `onAction={jest.fn()}`. Assert `getByText('Create Invoice')` is present.
+- [x] Add to `src/components/molecules/__tests__/EmptyState.test.tsx`: Test renders action button when `actionLabel` and `onAction` provided: render with `actionLabel="Create Invoice"` and `onAction={jest.fn()}`. Assert `getByText('Create Invoice')` is present.
 
-- [ ] Add to `src/components/molecules/__tests__/EmptyState.test.tsx`: Test action button calls `onAction` when pressed: press the button. Assert `onAction` was called once.
+- [x] Add to `src/components/molecules/__tests__/EmptyState.test.tsx`: Test action button calls `onAction` when pressed: press the button. Assert `onAction` was called once.
 
-- [ ] Add to `src/components/molecules/__tests__/EmptyState.test.tsx`: Test no action button when `actionLabel` not provided: render without `actionLabel`. Assert `queryByRole('button')` returns `null`.
+- [x] Add to `src/components/molecules/__tests__/EmptyState.test.tsx`: Test no action button when `actionLabel` not provided: render without `actionLabel`. Assert `queryByRole('button')` returns `null`.
 
 ### Organism Components
 
-- [ ] Create `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test does NOT render content when `visible=false`: render with `visible={false}`. Assert the modal content (e.g., `queryByText('Record Payment')`) returns `null`. This depends on the Modal mock fix from Phase 1.
+- [x] Create `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test does NOT render content when `visible=false`: render with `visible={false}`. Assert the modal content (e.g., `queryByText('Record Payment')`) returns `null`. This depends on the Modal mock fix from Phase 1.
 
-- [ ] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test DOES render content when `visible=true`: render with `visible={true}` and a test invoice. Assert `getByText('Record Payment')` (or the modal title) is present.
+- [x] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test DOES render content when `visible=true`: render with `visible={true}` and a test invoice. Assert `getByText('Record Payment')` (or the modal title) is present.
 
-- [ ] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test renders the invoice total amount: render with `invoice={{ grand_total: 5900, ... }}`. Assert `getByText('₹5,900.00')` or equivalent is present.
+- [x] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test renders the invoice total amount: render with `invoice={{ grand_total: 5900, ... }}`. Assert `getByText('₹5,900.00')` or equivalent is present.
 
-- [ ] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test calls `onRecordPayment` with correct amount and mode when submitted: fill in the amount field with `'2000'`, select payment mode `'UPI'`, press Submit. Assert `onRecordPayment` was called with `{ amount: 2000, payment_mode: 'upi' }`.
+- [x] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test calls `onRecordPayment` with correct amount and mode when submitted: fill in the amount field with `'2000'`, select payment mode `'UPI'`, press Submit. Assert `onRecordPayment` was called with `{ amount: 2000, payment_mode: 'upi' }`.
 
-- [ ] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test shows validation error when amount is empty and submit pressed: clear the amount field, press Submit. Assert an error message (e.g., `'Amount is required'`) is visible and `onRecordPayment` was NOT called.
+- [x] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test shows validation error when amount is empty and submit pressed: clear the amount field, press Submit. Assert an error message (e.g., `'Amount is required'`) is visible and `onRecordPayment` was NOT called.
 
-- [ ] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test calls `onClose` when cancel button pressed: press the Cancel button. Assert `onClose` was called.
+- [x] Add to `src/components/organisms/__tests__/PaymentModal.test.tsx`: Test calls `onClose` when cancel button pressed: press the Cancel button. Assert `onClose` was called.
 
-- [ ] Create `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test renders invoice items with invoice number, customer name, and amount: render with `invoices={[makeInvoiceListItem()]}`. Assert `getByText('TM/2025-26/0001')`, `getByText('Test Customer')`, and the formatted amount are present.
+- [x] Create `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test renders invoice items with invoice number, customer name, and amount: render with `invoices={[makeInvoiceListItem()]}`. Assert `getByText('TM/2025-26/0001')`, `getByText('Test Customer')`, and the formatted amount are present.
 
-- [ ] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test calls `onPressInvoice(id)` when row is tapped: render with one invoice. `fireEvent.press(getByText('TM/2025-26/0001'))`. Assert `onPressInvoice` was called with `'inv-uuid-001'`.
+- [x] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test calls `onPressInvoice(id)` when row is tapped: render with one invoice. `fireEvent.press(getByText('TM/2025-26/0001'))`. Assert `onPressInvoice` was called with `'inv-uuid-001'`.
 
-- [ ] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test renders `EmptyState` when invoices array is empty: render with `invoices={[]}`. Assert the `EmptyState` component or an "no invoices" text message is present.
+- [x] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test renders `EmptyState` when invoices array is empty: render with `invoices={[]}`. Assert the `EmptyState` component or an "no invoices" text message is present.
 
-- [ ] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test correct Badge variant for `payment_status='paid'`: render with an invoice where `payment_status = 'paid'`. Assert the Badge component has `variant='success'` (or inspect via the text content of the badge).
+- [x] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test correct Badge variant for `payment_status='paid'`: render with an invoice where `payment_status = 'paid'`. Assert the Badge component has `variant='success'` (or inspect via the text content of the badge).
 
-- [ ] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test Badge variant for `payment_status='unpaid'`: assert `variant='error'` or equivalent.
+- [x] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test Badge variant for `payment_status='unpaid'`: assert `variant='error'` or equivalent.
 
-- [ ] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test Badge variant for `payment_status='partial'`: assert `variant='warning'` or equivalent.
+- [x] Add to `src/components/organisms/__tests__/RecentInvoicesList.test.tsx`: Test Badge variant for `payment_status='partial'`: assert `variant='warning'` or equivalent.
 
 ---
 
