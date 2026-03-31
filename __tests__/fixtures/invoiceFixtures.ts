@@ -36,6 +36,19 @@ export function makeInvoiceInput(overrides?: Partial<InvoiceInput>): InvoiceInpu
 }
 
 export function makeInvoice(overrides?: Partial<Invoice>): Invoice {
+	const input = makeInvoiceInput();
+	const lineItems: InvoiceLineItem[] = input.line_items.map((li, idx) => ({
+		id: `li-uuid-00${idx + 1}`,
+		invoice_id: 'inv-uuid-001',
+		...li,
+		discount: li.discount ?? 0,
+		taxable_amount: li.rate_per_unit * li.quantity,
+		cgst_amount: (li.rate_per_unit * li.quantity * li.gst_rate) / 200,
+		sgst_amount: (li.rate_per_unit * li.quantity * li.gst_rate) / 200,
+		igst_amount: 0,
+		line_total: li.rate_per_unit * li.quantity * (1 + li.gst_rate / 100),
+	}));
+
 	return {
 		id: 'inv-uuid-001',
 		invoice_number: 'TM/2025-26/0001',
@@ -47,9 +60,10 @@ export function makeInvoice(overrides?: Partial<Invoice>): Invoice {
 		sgst_total: 450,
 		igst_total: 0,
 		discount_total: 0,
-		is_inter_state: false,
 		reverse_charge: false,
-		...makeInvoiceInput(),
+		...input,
+		amount_paid: input.amount_paid ?? 0,
+		line_items: lineItems,
 		...overrides,
 	};
 }

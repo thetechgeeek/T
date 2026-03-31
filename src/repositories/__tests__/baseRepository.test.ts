@@ -22,7 +22,7 @@ describe('createRepository — findById', () => {
 
 	it('calls .from(table).select(*).eq(id, value).single()', async () => {
 		const item = { id: 'test-id', name: 'Item' };
-		const builder = makeBuilder({}, { data: item, error: null });
+		const builder = makeBuilder(undefined, { data: item, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await repo.findById('test-id');
@@ -35,7 +35,7 @@ describe('createRepository — findById', () => {
 	});
 
 	it('throws AppError when supabase returns an error', async () => {
-		const builder = makeBuilder({}, { data: null, error: { message: 'Not found', code: 'PGRST116' } });
+		const builder = makeBuilder(undefined, { data: null, error: { message: 'Not found', code: 'PGRST116' } });
 		mockFrom.mockReturnValue(builder);
 
 		await expect(repo.findById('bad-id')).rejects.toMatchObject({ message: 'Not found' });
@@ -48,7 +48,7 @@ describe('createRepository — create', () => {
 	it('calls .from(table).insert(payload).select().single()', async () => {
 		const payload = { name: 'New Item' };
 		const created = { id: 'new-id', ...payload };
-		const builder = makeBuilder({}, { data: created, error: null });
+		const builder = makeBuilder(undefined, { data: created, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await repo.create(payload);
@@ -65,7 +65,7 @@ describe('createRepository — update', () => {
 
 	it('calls .from(table).update(payload).eq(id, value).select().single()', async () => {
 		const updated = { id: 'upd-id', name: 'Updated' };
-		const builder = makeBuilder({}, { data: updated, error: null });
+		const builder = makeBuilder(undefined, { data: updated, error: null });
 		mockFrom.mockReturnValue(builder);
 
 		const result = await repo.update('upd-id', { name: 'Updated' });

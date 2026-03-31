@@ -19,7 +19,7 @@ describe('invoiceStore', () => {
 			error: null,
 			totalCount: 0,
 			filters: {},
-			selectedInvoice: null,
+			currentInvoice: null,
 		});
 	});
 

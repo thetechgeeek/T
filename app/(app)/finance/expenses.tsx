@@ -81,7 +81,7 @@ export default function ExpensesScreen() {
 			<FlashList
 				data={expenses}
 				estimatedItemSize={80}
-				keyExtractor={(item) => item.id}
+				keyExtractor={(item: Expense) => item.id}
 				contentContainerStyle={styles.scrollContent}
 				refreshControl={
 					<RefreshControl refreshing={loading} onRefresh={() => fetchExpenses()} />

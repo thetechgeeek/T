@@ -1,7 +1,7 @@
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { supabase } from '../config/supabase';
 import { businessProfileService } from './businessProfileService';
 import { numberToIndianWords } from '../utils/currency';

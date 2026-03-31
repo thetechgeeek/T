@@ -11,7 +11,7 @@ jest.mock('../config/supabase', () => ({
 }));
 
 /** Chainable + thenable builder for query-awaiting service methods. */
-function makeListBuilder(result = { data: [] as any[], count: 0, error: null }) {
+function makeListBuilder(result: { data: any[]; count: number | null; error: any | null } = { data: [] as any[], count: 0, error: null }) {
 	const b: any = {};
 	['select', 'insert', 'update', 'or', 'eq', 'gte', 'lte', 'ilike', 'order', 'range'].forEach((m) => {
 		b[m] = jest.fn().mockReturnValue(b);

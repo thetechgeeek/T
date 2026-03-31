@@ -53,7 +53,7 @@ describe('customerStore', () => {
 			count: 1,
 		});
 
-		await useCustomerStore.getState().fetchCustomers({});
+		await useCustomerStore.getState().fetchCustomers(true);
 
 		const state = useCustomerStore.getState();
 		expect(state.customers).toHaveLength(1);
@@ -65,7 +65,7 @@ describe('customerStore', () => {
 		(customerService.fetchCustomers as jest.Mock).mockRejectedValue(new Error('Fetch failed'));
 
 		try {
-			await useCustomerStore.getState().fetchCustomers({});
+			await useCustomerStore.getState().fetchCustomers(true);
 		} catch {
 			// may rethrow
 		}

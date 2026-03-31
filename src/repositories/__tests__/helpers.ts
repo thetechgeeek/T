@@ -6,8 +6,8 @@
  *  - The terminal pattern: `await query.single()` (used by findById / create / update)
  */
 export function makeBuilder(
-	thenResult: { data: any; count?: number | null; error: any } = { data: [], count: 0, error: null },
-	singleResult: { data: any; error: any } = { data: null, error: null },
+	thenResult: { data: any; count?: number | null; error: any | null } = { data: [], count: 0, error: null },
+	singleResult: { data: any; error: any | null } = { data: null, error: null },
 ) {
 	const builder: any = {};
 	const chainable = [

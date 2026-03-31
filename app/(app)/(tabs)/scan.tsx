@@ -13,7 +13,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import logger from '@/src/utils/logger';
 
 export default function ScanTab() {
-	const { c, s, r } = useThemeTokens();
+	const { theme, c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 

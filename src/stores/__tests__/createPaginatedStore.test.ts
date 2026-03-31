@@ -1,4 +1,4 @@
-import { createPaginatedStore } from '../createPaginatedStore';
+import { createPaginatedStore, PaginatedStoreConfig } from '../createPaginatedStore';
 
 interface TestItem {
 	id: string;
@@ -9,8 +9,9 @@ interface TestFilters extends Record<string, unknown> {
 	search: string;
 }
 
-function makeStore(overrides?: Partial<Parameters<typeof createPaginatedStore>[0]>) {
-	const fetchFn = jest.fn().mockResolvedValue({ data: [], count: 0 });
+function makeStore(overrides?: Partial<PaginatedStoreConfig<TestItem, TestFilters>>) {
+	const fetchFn = jest.fn() as jest.Mock<Promise<{ data: TestItem[]; count: number }>>;
+	fetchFn.mockResolvedValue({ data: [], count: 0 });
 	const store = createPaginatedStore<TestItem, TestFilters>({
 		fetchFn,
 		defaultFilters: { search: '' },

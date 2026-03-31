@@ -9,7 +9,7 @@ jest.mock('../config/supabase', () => ({
 }));
 
 /** Chainable + thenable builder for fetchInvoices tests (`await query` pattern). */
-function makeListBuilder(result = { data: [] as any[], count: 0, error: null }) {
+function makeListBuilder(result: { data: any[]; count: number | null; error: any | null } = { data: [] as any[], count: 0, error: null }) {
 	const b: any = {};
 	['select', 'or', 'eq', 'gte', 'lte', 'order', 'range'].forEach((m) => {
 		b[m] = jest.fn().mockReturnValue(b);

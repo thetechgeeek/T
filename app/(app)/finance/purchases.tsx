@@ -40,7 +40,7 @@ export default function PurchasesScreen() {
 			<FlashList
 				data={purchases}
 				estimatedItemSize={130}
-				keyExtractor={(item) => item.id}
+				keyExtractor={(item: Purchase) => item.id}
 				contentContainerStyle={styles.scrollContent}
 				refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchPurchases} />}
 				ListEmptyComponent={
