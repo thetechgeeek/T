@@ -1,0 +1,35 @@
+appId: com.tilemaster.app
+---
+# E2E-008: Finance overview — stats, navigation to sub-sections
+- launchApp
+- tapOn: "More"
+- tapOn: "Finance"
+- assertVisible: "Finance Overview"
+- takeScreenshot: finance_overview
+
+# Verify metric cards visible
+- assertVisible: "Gross Profit"
+- assertVisible: "Net Profit"
+- assertVisible: "Total Expenses"
+- takeScreenshot: finance_metrics
+
+# Navigate to Expenses
+- assertVisible: "Expenses"
+- tapOn: "Expenses"
+- assertVisible:
+    text: "Expense"
+    optional: true
+- takeScreenshot: finance_expenses
+
+# Go back
+- tapOn: "Back"
+- assertVisible: "Finance Overview"
+
+# Navigate to Aging Report
+- tapOn: "Aging Report"
+- assertVisible: "Aging Report"
+- assertVisible: "Total Outstanding"
+- takeScreenshot: aging_report
+
+- tapOn: "Back"
+- assertVisible: "Finance Overview"

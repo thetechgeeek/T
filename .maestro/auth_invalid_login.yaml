@@ -1,0 +1,15 @@
+appId: com.tilemaster.app
+---
+# E2E-001b: Invalid login shows error
+- launchApp:
+    clearState: true
+- assertVisible: "Sign In"
+- tapOn:
+    id: "email-input"
+- inputText: "wrong@tilemaster.dev"
+- tapOn:
+    id: "password-input"
+- inputText: "WrongPassword!"
+- tapOn: "Sign In"
+- assertNotVisible: "Dashboard"
+- takeScreenshot: auth_login_failure

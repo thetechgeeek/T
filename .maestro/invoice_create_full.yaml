@@ -1,0 +1,43 @@
+appId: com.tilemaster.app
+---
+# E2E-003: Full invoice creation wizard
+- launchApp
+- tapOn: "Invoices"
+- tapOn: "New Invoice"
+- assertVisible: "1. Customer"
+- takeScreenshot: invoice_step1_customer
+
+# Step 1: Enter customer name
+- tapOn:
+    id: "customer-name-input"
+- inputText: "E2E Test Customer"
+- hideKeyboard
+- tapOn: "Next"
+
+# Step 2: Add items
+- assertVisible: "2. Items"
+- takeScreenshot: invoice_step2_items
+- tapOn: "+ Add Item"
+- assertVisible: "GLOSSY WHITE 60x60"
+- tapOn: "GLOSSY WHITE 60x60"
+- tapOn:
+    id: "item-quantity-input"
+- clearText
+- inputText: "5"
+- hideKeyboard
+- tapOn: "Confirm"
+
+# Verify item added
+- assertVisible: "GLOSSY WHITE 60x60"
+- tapOn: "Next"
+
+# Step 3: Review
+- assertVisible: "3. Review"
+- assertVisible: "E2E Test Customer"
+- assertVisible: "GLOSSY WHITE 60x60"
+- takeScreenshot: invoice_step3_review
+
+# Generate
+- tapOn: "Generate Invoice"
+- assertVisible: "Invoice Created"
+- takeScreenshot: invoice_created_success

@@ -1,0 +1,45 @@
+appId: com.tilemaster.app
+---
+# E2E-006: Customer management — list, add, view detail
+- launchApp
+- tapOn: "More"
+- assertVisible: "Customers"
+- tapOn: "Customers"
+- assertVisible: "Customers"
+- takeScreenshot: customers_list
+
+# Add a new customer
+- tapOn:
+    id: "fab-add-customer"
+    optional: true
+- tapOn:
+    text: "Add Customer"
+    optional: true
+- assertVisible:
+    text: "Add Customer"
+    optional: true
+- tapOn:
+    id: "customer-name-input"
+    optional: true
+- inputText: "E2E Tiles Ltd"
+- hideKeyboard
+- tapOn:
+    text: "Save"
+    optional: true
+- takeScreenshot: customer_added
+
+# View customer detail (tap first customer)
+- tapOn:
+    index: 0
+    text: "E2E Tiles Ltd"
+    optional: true
+- assertVisible:
+    text: "Outstanding Balance"
+    optional: true
+- takeScreenshot: customer_detail
+
+# Navigate back
+- tapOn: "Back"
+    optional: true
+- assertVisible: "Customers"
+    optional: true

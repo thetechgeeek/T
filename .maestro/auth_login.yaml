@@ -1,0 +1,15 @@
+appId: com.tilemaster.app
+---
+# E2E-001a: Successful login flow
+- launchApp:
+    clearState: true
+- assertVisible: "Sign In"
+- tapOn:
+    id: "email-input"
+- inputText: "${INTEGRATION_TEST_EMAIL}"
+- tapOn:
+    id: "password-input"
+- inputText: "${INTEGRATION_TEST_PASSWORD}"
+- tapOn: "Sign In"
+- assertVisible: "Dashboard"
+- takeScreenshot: auth_login_success
