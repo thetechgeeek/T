@@ -8,6 +8,8 @@
 		"ios": "expo run:ios",
 		"web": "expo start --web",
 		"test": "jest",
+		"test:coverage": "jest --coverage",
+		"test:integration": "jest --config jest.integration.config.js --runInBand",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
