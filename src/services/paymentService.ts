@@ -1,9 +1,7 @@
-import { supabase } from '../config/supabase';
-import { paymentRepository } from '../repositories/paymentRepository';
+import { paymentRepository, type PaymentInput } from '../repositories/paymentRepository';
 import { validateWith } from '../utils/validation';
 import { PaymentSchema } from '../schemas/payment';
-import type { PaymentInput } from '../repositories/paymentRepository';
-import type { UUID } from '../types/common';
+import { eventBus } from '../events/appEvents';
 
 export type { PaymentInput };
 
@@ -15,12 +13,21 @@ export function createPaymentService(repo = paymentRepository) {
 		 */
 		async recordPayment(input: PaymentInput) {
 			validateWith(PaymentSchema, input);
-			return repo.recordWithInvoiceUpdate(input);
+			const result = await repo.recordWithInvoiceUpdate(input);
+
+			// Notify other stores via event bus (standard project pattern)
+			eventBus.emit({
+				type: 'PAYMENT_RECORDED',
+				paymentId: result.id,
+				invoiceId: input.invoice_id,
+			});
+
+			return result;
 		},
 
 		async fetchPayments(filters: {
-			customer_id?: UUID;
-			supplier_id?: UUID;
+			customer_id?: import('../types/common').UUID;
+			supplier_id?: import('../types/common').UUID;
 			dateFrom?: string;
 			dateTo?: string;
 		}) {

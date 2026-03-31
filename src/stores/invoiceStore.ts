@@ -20,6 +20,7 @@ interface InvoiceState {
 	fetchInvoiceById: (id: UUID) => Promise<void>;
 	createInvoice: (input: InvoiceInput) => Promise<{ id: UUID; invoice_number: string }>;
 	clearCurrentInvoice: () => void;
+	reset: () => void;
 }
 
 export const useInvoiceStore = create<InvoiceState>()(
@@ -98,6 +99,16 @@ export const useInvoiceStore = create<InvoiceState>()(
 
 		clearCurrentInvoice: () => {
 			set({ currentInvoice: null });
+		},
+		reset: () => {
+			set((s) => {
+				s.invoices = [];
+				s.currentInvoice = null;
+				s.totalCount = 0;
+				s.currentPage = 1;
+				s.filters = {};
+				s.error = null;
+			});
 		},
 	})),
 );

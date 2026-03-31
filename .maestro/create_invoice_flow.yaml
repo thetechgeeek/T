@@ -1,0 +1,20 @@
+appId: com.tilemaster.app
+---
+- launchApp
+- tapOn: "Invoices"
+- tapOn: "Create Invoice"
+- assertVisible: "1. Customer"
+- inputText: "Test Customer"
+- hideKeyboard
+- tapOn: "Next"
+- assertVisible: "2. Items"
+- tapOn: "+ Add Item"
+- tapOn: "GLOSSY WHITE 60x60"
+- inputText: "10"
+- hideKeyboard
+- tapOn: "Confirm"
+- tapOn: "Next"
+- assertVisible: "3. Review"
+- tapOn: "Generate Invoice"
+- assertVisible: "Invoice Created"
+- takeScreenshot: invoice_created

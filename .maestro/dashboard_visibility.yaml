@@ -1,0 +1,6 @@
+appId: com.tilemaster.app
+---
+- launchApp
+- assertVisible: "Dashboard"
+- assertVisible: "Today's Sales"
+- takeScreenshot: dashboard_initial

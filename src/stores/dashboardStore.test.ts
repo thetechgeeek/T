@@ -22,7 +22,7 @@ const mockStats: DashboardStats = {
 describe('dashboardStore', () => {
 	// Capture unsubscribe functions to prevent listener leaks between tests
 	const unsubscribers: Array<() => void> = [];
-	const originalOn = eventBus.on.bind(eventBus);
+	const originalSubscribe = eventBus.subscribe.bind(eventBus);
 
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -94,7 +94,7 @@ describe('dashboardStore', () => {
 		it('re-fetches on PAYMENT_RECORDED', async () => {
 			(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
 
-			eventBus.emit({ type: 'PAYMENT_RECORDED', paymentId: 'pay-1' });
+			eventBus.emit({ type: 'PAYMENT_RECORDED', paymentId: 'pay-1', invoiceId: 'inv-1' });
 
 			await waitFor(() =>
 				expect(dashboardService.fetchDashboardStats).toHaveBeenCalledTimes(1),
@@ -114,8 +114,8 @@ describe('dashboardStore', () => {
 		it('does NOT re-fetch on unrelated events', async () => {
 			(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
 
-			eventBus.emit({ type: 'CUSTOMER_UPDATED', customerId: 'cust-1' });
-			eventBus.emit({ type: 'EXPENSE_CREATED', expenseId: 'exp-1' });
+			eventBus.emit({ type: 'CUSTOMER_UPDATED' as any, customerId: 'cust-1' });
+			eventBus.emit({ type: 'EXPENSE_CREATED' as any, expenseId: 'exp-1' });
 			await Promise.resolve();
 
 			expect(dashboardService.fetchDashboardStats).not.toHaveBeenCalled();
@@ -126,13 +126,13 @@ describe('dashboardStore', () => {
 
 			// Capture a temporary subscription so we can verify unsubscribe works
 			const mockUnsub = jest.fn();
-			const onSpy = jest.spyOn(eventBus, 'on').mockImplementation((_handler) => {
+			const onSpy = jest.spyOn(eventBus, 'subscribe').mockImplementation((_handler) => {
 				// Return a mock unsubscribe; the real store listeners are already set up
 				return mockUnsub;
 			});
 
 			// Register via the spy to capture the unsubscribe mechanism
-			const unsub = eventBus.on(() => {});
+			const unsub = eventBus.subscribe(() => {});
 			unsubscribers.push(unsub);
 
 			// Unsubscribe

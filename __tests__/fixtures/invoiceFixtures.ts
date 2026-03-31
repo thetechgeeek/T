@@ -1,6 +1,14 @@
-import type { Invoice, InvoiceLineItem, InvoiceLineItemInput, InvoiceInput } from '../../src/types/invoice';
+import type {
+	Invoice,
+	InvoiceLineItem,
+	InvoiceLineItemInput,
+	InvoiceInput,
+} from '../../src/types/invoice';
 
-export type InvoiceListItem = Pick<Invoice, 'id' | 'invoice_number' | 'invoice_date' | 'grand_total' | 'payment_status' | 'amount_paid'> & {
+export type InvoiceListItem = Pick<
+	Invoice,
+	'id' | 'invoice_number' | 'invoice_date' | 'grand_total' | 'payment_status' | 'amount_paid'
+> & {
 	customer: { name: string; phone?: string };
 };
 
@@ -8,7 +16,7 @@ export function makeInvoiceLineItemInput(
 	overrides?: Partial<InvoiceLineItemInput>,
 ): InvoiceLineItemInput {
 	return {
-		item_id: 'item-uuid-001',
+		item_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b5',
 		design_name: 'GLOSSY WHITE 60x60',
 		quantity: 10,
 		rate_per_unit: 500,
@@ -37,9 +45,9 @@ export function makeInvoiceInput(overrides?: Partial<InvoiceInput>): InvoiceInpu
 
 export function makeInvoice(overrides?: Partial<Invoice>): Invoice {
 	const input = makeInvoiceInput();
-	const lineItems: InvoiceLineItem[] = input.line_items.map((li, idx) => ({
-		id: `li-uuid-00${idx + 1}`,
-		invoice_id: 'inv-uuid-001',
+	const lineItems: InvoiceLineItem[] = (input.line_items || []).map((li, idx) => ({
+		id: `b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b${idx > 15 ? 'f' : idx.toString(16)}`,
+		invoice_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4',
 		...li,
 		discount: li.discount ?? 0,
 		taxable_amount: li.rate_per_unit * li.quantity,
@@ -50,7 +58,7 @@ export function makeInvoice(overrides?: Partial<Invoice>): Invoice {
 	}));
 
 	return {
-		id: 'inv-uuid-001',
+		id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4',
 		invoice_number: 'TM/2025-26/0001',
 		grand_total: 5900,
 		created_at: '2026-01-15T10:00:00.000Z',
@@ -70,7 +78,7 @@ export function makeInvoice(overrides?: Partial<Invoice>): Invoice {
 
 export function makeInvoiceListItem(overrides?: Partial<InvoiceListItem>): InvoiceListItem {
 	return {
-		id: 'inv-uuid-001',
+		id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4',
 		invoice_number: 'TM/2025-26/0001',
 		invoice_date: '2026-01-15',
 		grand_total: 5900,
