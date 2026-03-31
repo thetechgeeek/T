@@ -917,25 +917,25 @@
 
 ### useInvoiceCreateFlow
 
-- [ ] Create `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test initial state — render `renderHook(() => useInvoiceCreateFlow())`. Assert `result.current.step === 1`, `result.current.customerData === null`, `result.current.lineItems` is an empty array `[]`, `result.current.paymentData === null`.
+- [x] Create `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test initial state — render `renderHook(() => useInvoiceCreateFlow())`. Assert `result.current.step === 1`, `result.current.customerData === null`, `result.current.lineItems` is an empty array `[]`, `result.current.paymentData === null`.
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `goToStep(2)` without customerData — call `act(() => result.current.goToStep(2))`. Assert `result.current.step === 1` (guard prevents advancement).
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `goToStep(2)` without customerData — call `act(() => result.current.goToStep(2))`. Assert `result.current.step === 1` (guard prevents advancement).
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `setCustomerData` then `goToStep(2)` — call `act(() => result.current.setCustomerData({ name: 'John', phone: '9876543210' }))`. Then `act(() => result.current.goToStep(2))`. Assert `result.current.step === 2`.
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `setCustomerData` then `goToStep(2)` — call `act(() => result.current.setCustomerData({ name: 'John', phone: '9876543210' }))`. Then `act(() => result.current.goToStep(2))`. Assert `result.current.step === 2`.
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `goToStep(3)` without lineItems — from step 2, call `act(() => result.current.goToStep(3))`. Assert `result.current.step === 2` (no line items means cannot advance).
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `goToStep(3)` without lineItems — from step 2, call `act(() => result.current.goToStep(3))`. Assert `result.current.step === 2` (no line items means cannot advance).
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `addLineItem(item)` — call `act(() => result.current.addLineItem(makeInvoiceLineItemInput()))`. Assert `result.current.lineItems.length === 1`. Call again. Assert `result.current.lineItems.length === 2`.
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `addLineItem(item)` — call `act(() => result.current.addLineItem(makeInvoiceLineItemInput()))`. Assert `result.current.lineItems.length === 1`. Call again. Assert `result.current.lineItems.length === 2`.
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `removeLineItem(index)` — add two items, then `act(() => result.current.removeLineItem(0))`. Assert `result.current.lineItems.length === 1` and the remaining item is the one that was originally at index 1.
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `removeLineItem(index)` — add two items, then `act(() => result.current.removeLineItem(0))`. Assert `result.current.lineItems.length === 1` and the remaining item is the one that was originally at index 1.
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `updateLineItem(index, data)` — add two items. Update index 0 with `{ quantity: 99 }`. Assert `result.current.lineItems[0].quantity === 99` and `result.current.lineItems[1]` is unchanged.
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `updateLineItem(index, data)` — add two items. Update index 0 with `{ quantity: 99 }`. Assert `result.current.lineItems[0].quantity === 99` and `result.current.lineItems[1]` is unchanged.
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `submitInvoice` calls `invoiceStore.createInvoice` with merged data: mock `invoiceStore.createInvoice`. Set customer data, add a line item, set payment data. Call `act(async () => result.current.submitInvoice())`. Assert `invoiceStore.createInvoice` was called with an object containing the customer data, line items, and payment data merged together.
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `submitInvoice` calls `invoiceStore.createInvoice` with merged data: mock `invoiceStore.createInvoice`. Set customer data, add a line item, set payment data. Call `act(async () => result.current.submitInvoice())`. Assert `invoiceStore.createInvoice` was called with an object containing the customer data, line items, and payment data merged together.
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `submitInvoice` sets `submitting=true` during submission: use deferred promise for `invoiceStore.createInvoice`. Call `submitInvoice()` (do not await). Assert `result.current.submitting === true`. Resolve the deferred. Assert `result.current.submitting === false`.
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `submitInvoice` sets `submitting=true` during submission: use deferred promise for `invoiceStore.createInvoice`. Call `submitInvoice()` (do not await). Assert `result.current.submitting === true`. Resolve the deferred. Assert `result.current.submitting === false`.
 
-- [ ] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `submitInvoice` on failure — mock `invoiceStore.createInvoice` to reject with `new Error('Submit failed')`. Await the submit call. Assert `result.current.submitting === false` and `result.current.error === 'Submit failed'` (or the error message).
+- [x] Add to `src/features/invoice-create/__tests__/useInvoiceCreateFlow.test.ts`: Test `submitInvoice` on failure — mock `invoiceStore.createInvoice` to reject with `new Error('Submit failed')`. Await the submit call. Assert `result.current.submitting === false` and `result.current.error === 'Submit failed'` (or the error message).
 
 ---
 
