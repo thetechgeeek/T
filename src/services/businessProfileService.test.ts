@@ -1,36 +1,36 @@
 import { businessProfileService } from './businessProfileService';
 import { supabase } from '../config/supabase';
 
-jest.mock('../config/supabase', () => ({
-	supabase: {
-		from: jest.fn(),
-	},
-}));
+jest.mock('../config/supabase', () => {
+	const { createSupabaseMock } = require('../../__tests__/utils/supabaseMock');
+	return {
+		supabase: createSupabaseMock(),
+	};
+});
 
-const mockTable = {
-	upsert: jest.fn(),
-	select: jest.fn().mockReturnThis(),
-	single: jest.fn(),
-};
+const mockSupabase = supabase as any;
 
 beforeEach(() => {
 	jest.clearAllMocks();
-	(supabase.from as jest.Mock).mockReturnValue(mockTable);
 });
 
 describe('businessProfileService', () => {
 	describe('upsert', () => {
 		it('calls supabase with the correct table and data', async () => {
-			mockTable.upsert.mockResolvedValue({ error: null });
+			mockSupabase.from('business_profile').upsert.mockResolvedValue({ error: null });
 
 			await businessProfileService.upsert({ business_name: 'Acme Tiles' });
 
 			expect(supabase.from).toHaveBeenCalledWith('business_profile');
-			expect(mockTable.upsert).toHaveBeenCalledWith({ business_name: 'Acme Tiles' });
+			expect(mockSupabase.from('business_profile').upsert).toHaveBeenCalledWith({
+				business_name: 'Acme Tiles',
+			});
 		});
 
 		it('throws when supabase returns an error', async () => {
-			mockTable.upsert.mockResolvedValue({ error: { message: 'DB error' } });
+			mockSupabase
+				.from('business_profile')
+				.upsert.mockResolvedValue({ error: { message: 'DB error' } });
 
 			await expect(
 				businessProfileService.upsert({ business_name: 'Acme Tiles' }),
@@ -41,7 +41,10 @@ describe('businessProfileService', () => {
 	describe('fetch', () => {
 		it('returns business profile data on success', async () => {
 			const mockData = { business_name: 'Acme Tiles', gstin: '27AAAAA0000A1Z5' };
-			mockTable.single.mockResolvedValue({ data: mockData, error: null });
+			mockSupabase.from('business_profile').maybeSingle.mockResolvedValue({
+				data: mockData,
+				error: null,
+			});
 
 			const result = await businessProfileService.fetch();
 
@@ -50,7 +53,7 @@ describe('businessProfileService', () => {
 		});
 
 		it('returns null without throwing when no row exists (PGRST116)', async () => {
-			mockTable.single.mockResolvedValue({
+			mockSupabase.from('business_profile').maybeSingle.mockResolvedValue({
 				data: null,
 				error: { code: 'PGRST116', message: 'No rows' },
 			});
@@ -61,7 +64,7 @@ describe('businessProfileService', () => {
 		});
 
 		it('throws for non-PGRST116 errors', async () => {
-			mockTable.single.mockResolvedValue({
+			mockSupabase.from('business_profile').maybeSingle.mockResolvedValue({
 				data: null,
 				error: { code: 'PGRST205', message: 'Table not found' },
 			});
