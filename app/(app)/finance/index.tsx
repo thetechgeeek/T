@@ -35,18 +35,21 @@ export default function FinanceOverviewScreen() {
 			value: formatCurrency(summary?.gross_profit || 0),
 			icon: <TrendingUp size={24} color={theme.colors.success} />,
 			color: theme.colors.success,
+			accessibilityLabel: 'stat-gross-profit',
 		},
 		{
 			title: 'Net Profit',
 			value: formatCurrency(summary?.net_profit || 0),
 			icon: <Wallet size={24} color={theme.colors.primary} />,
 			color: theme.colors.primary,
+			accessibilityLabel: 'stat-net-profit',
 		},
 		{
 			title: 'Total Expenses',
 			value: formatCurrency(summary?.total_expenses || 0),
 			icon: <TrendingDown size={24} color={theme.colors.error} />,
 			color: theme.colors.error,
+			accessibilityLabel: 'stat-total-expenses',
 		},
 	];
 
@@ -68,7 +71,7 @@ export default function FinanceOverviewScreen() {
 			<View style={styles.metricsGrid}>
 				{metrics.map((m, i) => (
 					<Card key={i} style={styles.metricCard} padding="md" variant="elevated">
-						<View style={styles.metricHeader}>
+						<View style={styles.metricHeader} importantForAccessibility="no">
 							{m.icon}
 							<ThemedText
 								variant="body2"
@@ -78,7 +81,11 @@ export default function FinanceOverviewScreen() {
 								{m.title}
 							</ThemedText>
 						</View>
-						<StatCard label="" value={m.value} />
+						<StatCard
+							label={m.title}
+							value={m.value}
+							accessibilityLabel={m.accessibilityLabel}
+						/>
 					</Card>
 				))}
 			</View>
@@ -93,26 +100,46 @@ export default function FinanceOverviewScreen() {
 				<ListItem
 					title="Expenses"
 					subtitle="View and add business expenses"
+					accessibilityLabel="menu-expenses"
+					accessibilityHint="Double tap to view expenses"
 					onPress={() => router.push('/(app)/finance/expenses')}
-					leftIcon={<Receipt color={theme.colors.primary} />}
+					leftIcon={
+						<Receipt color={theme.colors.primary} importantForAccessibility="no" />
+					}
 				/>
 				<ListItem
 					title="Purchases"
 					subtitle="Supplier bills and inventory procurement"
+					accessibilityLabel="menu-purchases"
+					accessibilityHint="Double tap to view purchases"
 					onPress={() => router.push('/finance/purchases')}
-					leftIcon={<ShoppingCart color={theme.colors.primary} size={24} />}
+					leftIcon={
+						<ShoppingCart
+							color={theme.colors.primary}
+							size={24}
+							importantForAccessibility="no"
+						/>
+					}
 				/>
 				<ListItem
 					title="Aging Report"
 					subtitle="Outstanding balances from customers"
+					accessibilityLabel="menu-aging-report"
+					accessibilityHint="Double tap to view aging report"
 					onPress={() => router.push('/customers/aging')}
-					leftIcon={<TrendingDown color={theme.colors.error} />}
+					leftIcon={
+						<TrendingDown color={theme.colors.error} importantForAccessibility="no" />
+					}
 				/>
 				<ListItem
 					title="Profit & Loss"
 					subtitle="Detailed financial performance"
+					accessibilityLabel="menu-profit-loss"
+					accessibilityHint="Double tap to view profit and loss"
 					onPress={() => {}} // TODO
-					leftIcon={<TrendingUp color={theme.colors.success} />}
+					leftIcon={
+						<TrendingUp color={theme.colors.success} importantForAccessibility="no" />
+					}
 				/>
 			</View>
 		</Screen>

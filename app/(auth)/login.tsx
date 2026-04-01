@@ -61,13 +61,19 @@ export default function LoginScreen() {
 
 			{/* Form */}
 			<View style={[styles.form, { padding: s.lg }]}>
-				<ThemedText variant="h2" style={{ marginBottom: s.lg }}>
+				<ThemedText
+					variant="h2"
+					accessibilityLabel="sign-in-heading"
+					style={{ marginBottom: s.lg }}
+				>
 					{t('auth.signIn')}
 				</ThemedText>
 
 				{/* Email */}
 				<TextInput
 					label={t('auth.email')}
+					accessibilityLabel="email-input"
+					accessibilityHint="Enter your registered email address"
 					value={email}
 					onChangeText={setEmail}
 					keyboardType="email-address"
@@ -79,14 +85,25 @@ export default function LoginScreen() {
 				{/* Password */}
 				<TextInput
 					label={t('auth.password')}
+					accessibilityLabel="password-input"
+					accessibilityHint="Enter your account password"
 					value={password}
 					onChangeText={setPassword}
 					secureTextEntry={!showPassword}
 					autoComplete="password"
 					placeholder="••••••••"
 					rightIcon={
-						<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-							<ThemedText color={c.primary}>{showPassword ? '🙈' : '👁️'}</ThemedText>
+						<TouchableOpacity
+							onPress={() => setShowPassword(!showPassword)}
+							accessibilityRole="button"
+							accessibilityLabel={
+								showPassword ? 'hide-password-toggle' : 'show-password-toggle'
+							}
+							accessibilityHint={showPassword ? 'Hide password' : 'Show password'}
+						>
+							<ThemedText color={c.primary} importantForAccessibility="no">
+								{showPassword ? '🙈' : '👁️'}
+							</ThemedText>
 						</TouchableOpacity>
 					}
 					containerStyle={{ marginTop: s.md }}
@@ -101,7 +118,9 @@ export default function LoginScreen() {
 					onPress={handleLogin}
 					disabled={loading}
 					activeOpacity={0.85}
-					testID="sign-in-button"
+					accessibilityRole="button"
+					accessibilityLabel="sign-in-button"
+					accessibilityState={{ busy: loading }}
 				>
 					{loading ? (
 						<ActivityIndicator color={c.onPrimary} />

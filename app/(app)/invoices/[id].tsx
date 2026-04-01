@@ -75,15 +75,23 @@ export default function InvoiceDetailScreen() {
 						size={24}
 						onPress={() => router.back()}
 						style={{ marginRight: s.md }}
+						accessibilityRole="button"
+						accessibilityLabel="back-button"
+						accessibilityHint="Go back to invoice list"
 					/>
-					<ThemedText variant="h2" style={{ flex: 1 }}>
+					<ThemedText
+						variant="h2"
+						accessibilityLabel="invoice-detail-screen"
+						style={{ flex: 1 }}
+					>
 						{currentInvoice.invoice_number}
 					</ThemedText>
 				</View>
 				<Button
 					title="Share PDF"
+					accessibilityLabel="share-pdf-button"
 					variant="outline"
-					leftIcon={<Share2 size={20} color={c.primary} />}
+					leftIcon={<Share2 size={20} color={c.primary} importantForAccessibility="no" />}
 					onPress={handleShare}
 					loading={sharing}
 				/>

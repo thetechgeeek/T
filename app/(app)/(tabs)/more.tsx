@@ -22,12 +22,37 @@ export default function MoreTab() {
 	const router = useRouter();
 
 	const menuItems = [
-		{ label: t('customer.title'), icon: Users, route: '/(app)/customers/', color: c.info },
-		{ label: t('supplier.title'), icon: Truck, route: '/(app)/suppliers/', color: c.success },
-		{ label: t('order.title'), icon: Package, route: '/(app)/orders/', color: c.warning },
-		{ label: t('finance.title'), icon: BarChart2, route: '/(app)/finance/', color: c.primary },
+		{
+			label: t('customer.title'),
+			accessibilityLabel: 'menu-customers',
+			icon: Users,
+			route: '/(app)/customers/',
+			color: c.info,
+		},
+		{
+			label: t('supplier.title'),
+			accessibilityLabel: 'menu-suppliers',
+			icon: Truck,
+			route: '/(app)/suppliers/',
+			color: c.success,
+		},
+		{
+			label: t('order.title'),
+			accessibilityLabel: 'menu-orders',
+			icon: Package,
+			route: '/(app)/orders/',
+			color: c.warning,
+		},
+		{
+			label: t('finance.title'),
+			accessibilityLabel: 'menu-finance',
+			icon: BarChart2,
+			route: '/(app)/finance/',
+			color: c.primary,
+		},
 		{
 			label: t('settings.title'),
+			accessibilityLabel: 'menu-settings',
 			icon: Settings,
 			route: '/(app)/settings/',
 			color: c.onSurfaceVariant,
@@ -47,7 +72,9 @@ export default function MoreTab() {
 					},
 				]}
 			>
-				<ThemedText variant="h1">More</ThemedText>
+				<ThemedText variant="h1" accessibilityLabel="more-screen">
+					More
+				</ThemedText>
 			</View>
 			<View style={{ padding: s.lg }}>
 				{menuItems.map((item, i) => (
@@ -64,6 +91,9 @@ export default function MoreTab() {
 						]}
 						onPress={() => router.push(item.route as any)}
 						activeOpacity={0.8}
+						accessibilityRole="button"
+						accessibilityLabel={item.accessibilityLabel}
+						accessibilityHint={`Open ${item.label}`}
 					>
 						<View
 							style={[
@@ -96,6 +126,13 @@ export default function MoreTab() {
 					]}
 					onPress={toggleLanguage}
 					activeOpacity={0.8}
+					accessibilityRole="button"
+					accessibilityLabel="language-toggle"
+					accessibilityHint={
+						currentLanguage === 'en'
+							? 'Switch app language to Hindi'
+							: 'Switch app language to English'
+					}
 				>
 					<View
 						style={[
@@ -124,6 +161,9 @@ export default function MoreTab() {
 						},
 					]}
 					onPress={logout}
+					accessibilityRole="button"
+					accessibilityLabel="sign-out-button"
+					accessibilityHint="Logs you out of TileMaster"
 				>
 					<ThemedText
 						color={c.error}

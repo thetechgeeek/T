@@ -116,7 +116,12 @@ export default function ScanTab() {
 				<ThemedText align="center" style={{ marginBottom: s.lg, fontSize: 16 }}>
 					We need your permission to show the camera for scanning tile box text.
 				</ThemedText>
-				<Button title="Grant Permission" onPress={requestPermission} />
+				<Button
+					title="Grant Permission"
+					accessibilityLabel="grant-camera-permission"
+					accessibilityHint="Allow TileMaster to use your camera for scanning"
+					onPress={requestPermission}
+				/>
 			</Screen>
 		);
 	}
@@ -165,12 +170,16 @@ export default function ScanTab() {
 					<TouchableOpacity
 						disabled={capturing}
 						onPress={handleCaptureText}
+						accessibilityRole="button"
+						accessibilityLabel="capture-button"
+						accessibilityHint="Take a photo to scan item text"
+						accessibilityState={{ busy: capturing }}
 						style={[
 							styles.captureBtn,
 							{ backgroundColor: c.primary, opacity: capturing ? 0.5 : 1 },
 						]}
 					>
-						<Aperture size={32} color={c.onPrimary} />
+						<Aperture size={32} color={c.onPrimary} importantForAccessibility="no" />
 					</TouchableOpacity>
 
 					<View style={{ flex: 1 }} />
@@ -186,12 +195,18 @@ export default function ScanTab() {
 							},
 						]}
 					>
-						<ThemedText weight="semibold" style={{ marginBottom: s.sm }}>
+						<ThemedText
+							weight="semibold"
+							accessibilityRole="header"
+							style={{ marginBottom: s.sm }}
+						>
 							Manual Entry
 						</ThemedText>
 						<View style={{ flexDirection: 'row', gap: s.sm }}>
 							<View style={{ flex: 1 }}>
 								<TextInput
+									accessibilityLabel="manual-entry-input"
+									accessibilityHint="Type an item name or design number to search"
 									placeholder="Enter item or design #"
 									value={manualInput}
 									onChangeText={setManualInput}
@@ -203,7 +218,15 @@ export default function ScanTab() {
 							</View>
 							<Button
 								title=""
-								leftIcon={<Search size={20} color={c.onPrimary} />}
+								accessibilityLabel="scan-search-button"
+								accessibilityHint="Search inventory for entered text"
+								leftIcon={
+									<Search
+										size={20}
+										color={c.onPrimary}
+										importantForAccessibility="no"
+									/>
+								}
 								onPress={() => handleSearch(manualInput)}
 								style={{ width: 48, paddingHorizontal: 0 }}
 								loading={loading}

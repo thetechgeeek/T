@@ -26,18 +26,19 @@ export default function InvoicesListScreen() {
 
 	useEffect(() => {
 		fetchInvoices().catch((e) => {
-			Alert.alert(t('common.errorTitle'), t('invoice.loadError'), [
-				{ text: t('common.ok') },
-			]);
+			Alert.alert(t('common.errorTitle'), t('invoice.loadError'), [{ text: t('common.ok') }]);
 		});
 	}, [fetchInvoices]);
 
 	return (
 		<Screen safeAreaEdges={['top']}>
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
-				<ThemedText variant="h1">Invoices</ThemedText>
+				<ThemedText variant="h1" accessibilityLabel="invoices-screen">
+					Invoices
+				</ThemedText>
 				<Button
 					title="New Invoice"
+					accessibilityLabel="new-invoice-button"
 					leftIcon={<Plus color="#FFF" size={20} />}
 					onPress={() => router.push('/(app)/invoices/create')}
 				/>
@@ -73,6 +74,9 @@ export default function InvoicesListScreen() {
 								...(theme.shadows.sm as object),
 							},
 						]}
+						accessibilityRole="button"
+						accessibilityLabel={`invoice-${item.invoice_number}`}
+						accessibilityHint={`${item.payment_status}, ${formatCurrency(item.grand_total)}. Double tap to open`}
 						onPress={() => router.push(`/(app)/invoices/${item.id}`)}
 					>
 						<View style={styles.cardHeader}>

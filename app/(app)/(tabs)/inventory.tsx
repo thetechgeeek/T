@@ -135,13 +135,17 @@ export default function InventoryTab() {
 				]}
 			>
 				<View style={[layout.rowBetween, { marginBottom: 16 }]}>
-					<ThemedText variant="h1">{t('inventory.title')}</ThemedText>
+					<ThemedText variant="h1" accessibilityLabel="inventory-screen">
+						{t('inventory.title')}
+					</ThemedText>
 				</View>
 
 				{/* Search Bar */}
 				<View style={[layout.row, { gap: 12 }]}>
 					<View style={{ flex: 1 }}>
 						<TextInput
+							accessibilityLabel="inventory-search-input"
+							accessibilityHint="Search by design name or item number"
 							placeholder="Search design or item number..."
 							value={searchInput}
 							onChangeText={setSearchInput}
@@ -156,8 +160,15 @@ export default function InventoryTab() {
 							styles.filterBtn,
 							{ backgroundColor: c.surfaceVariant, borderRadius: r.md },
 						]}
+						accessibilityRole="button"
+						accessibilityLabel="inventory-filter-button"
+						accessibilityHint="Open category and filter options"
 					>
-						<FiltersIcon size={20} color={c.onSurfaceVariant} />
+						<FiltersIcon
+							size={20}
+							color={c.onSurfaceVariant}
+							importantForAccessibility="no"
+						/>
 					</TouchableOpacity>
 				</View>
 
@@ -174,6 +185,7 @@ export default function InventoryTab() {
 							return (
 								<Chip
 									label={item}
+									accessibilityLabel={`category-chip-${item}`}
 									selected={isActive}
 									onPress={() => handleCategorySelect(item)}
 									style={{ marginRight: s.sm }}
@@ -226,8 +238,16 @@ export default function InventoryTab() {
 				]}
 				onPress={() => router.push('/(app)/inventory/add')}
 				activeOpacity={0.85}
+				accessibilityRole="button"
+				accessibilityLabel="add-inventory-button"
+				accessibilityHint="Add a new inventory item"
 			>
-				<Plus size={28} color={c.onPrimary} strokeWidth={2.5} />
+				<Plus
+					size={28}
+					color={c.onPrimary}
+					strokeWidth={2.5}
+					importantForAccessibility="no"
+				/>
 			</TouchableOpacity>
 		</Screen>
 	);

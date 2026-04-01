@@ -35,33 +35,37 @@ export default function DashboardScreen() {
 	const { stats, fetchStats } = useDashboardStore(
 		useShallow((s) => ({ stats: s.stats, fetchStats: s.fetchStats })),
 	);
- 
- 	React.useEffect(() => {
- 		fetchStats();
- 		fetchInvoices(1);
- 	}, []);
- 
- 	const quickActions = [
+
+	React.useEffect(() => {
+		fetchStats();
+		fetchInvoices(1);
+	}, []);
+
+	const quickActions = [
 		{
 			label: t('dashboard.newInvoice'),
+			accessibilityLabel: 'quick-action-new-invoice',
 			icon: FileText,
 			route: '/(app)/invoices/create',
 			color: c.primary,
 		},
 		{
 			label: t('dashboard.scanItem'),
+			accessibilityLabel: 'quick-action-scan-item',
 			icon: QrCode,
 			route: '/(app)/(tabs)/scan',
 			color: c.info,
 		},
 		{
 			label: t('dashboard.addStock'),
+			accessibilityLabel: 'quick-action-add-stock',
 			icon: Package,
 			route: '/(app)/inventory/stock-op',
 			color: c.success,
 		},
 		{
 			label: t('dashboard.recordPayment'),
+			accessibilityLabel: 'quick-action-record-payment',
 			icon: CreditCard,
 			route: '/(app)/finance/payments',
 			color: c.warning,
@@ -71,18 +75,21 @@ export default function DashboardScreen() {
 	const dashboardStats = [
 		{
 			label: t('dashboard.todaySales'),
+			accessibilityLabel: 'stat-today-sales',
 			value: formatCurrency(stats?.today_sales ?? 0),
 			icon: TrendingUp,
 			color: c.success,
 		},
 		{
 			label: t('dashboard.outstandingCredit'),
+			accessibilityLabel: 'stat-outstanding',
 			value: formatCurrency(stats?.total_outstanding_credit ?? 0),
 			icon: Users,
 			color: c.warning,
 		},
 		{
 			label: t('dashboard.lowStock'),
+			accessibilityLabel: 'stat-low-stock',
 			value: `${stats?.low_stock_count ?? 0} items`,
 			icon: AlertTriangle,
 			color: c.error,
@@ -124,6 +131,7 @@ export default function DashboardScreen() {
 					<StatCard
 						key={i}
 						label={stat.label}
+						accessibilityLabel={stat.accessibilityLabel}
 						value={stat.value}
 						icon={stat.icon}
 						color={stat.color}

@@ -88,6 +88,7 @@ export default function AddCustomerScreen() {
 							render={({ field: { onChange, value } }) => (
 								<FormField
 									label="Customer Name"
+									accessibilityLabel="customer-name-input"
 									required
 									placeholder="Enter full name"
 									value={value}
@@ -103,6 +104,7 @@ export default function AddCustomerScreen() {
 							render={({ field: { onChange, value } }) => (
 								<FormField
 									label="Phone Number"
+									accessibilityLabel="customer-phone-input"
 									placeholder="Enter 10-digit number"
 									keyboardType="phone-pad"
 									value={value}
@@ -118,6 +120,7 @@ export default function AddCustomerScreen() {
 							render={({ field: { onChange, value } }) => (
 								<FormField
 									label="GSTIN"
+									accessibilityLabel="customer-gstin-input"
 									placeholder="22AAAAA0000A1Z5"
 									autoCapitalize="characters"
 									value={value}
@@ -135,6 +138,7 @@ export default function AddCustomerScreen() {
 									render={({ field: { onChange, value } }) => (
 										<FormField
 											label="City"
+											accessibilityLabel="customer-city-input"
 											placeholder="e.g. Morbi"
 											value={value}
 											onChangeText={onChange}
@@ -149,6 +153,7 @@ export default function AddCustomerScreen() {
 									render={({ field: { onChange, value } }) => (
 										<FormField
 											label="State"
+											accessibilityLabel="customer-state-input"
 											placeholder="e.g. Gujarat"
 											value={value}
 											onChangeText={onChange}
@@ -164,6 +169,7 @@ export default function AddCustomerScreen() {
 							render={({ field: { onChange, value } }) => (
 								<FormField
 									label="Address"
+									accessibilityLabel="customer-address-input"
 									placeholder="Detailed address"
 									multiline
 									numberOfLines={2}
@@ -179,6 +185,7 @@ export default function AddCustomerScreen() {
 							render={({ field: { onChange, value } }) => (
 								<FormField
 									label="Credit Limit (₹)"
+									accessibilityLabel="customer-credit-limit-input"
 									placeholder="0"
 									keyboardType="numeric"
 									value={value.toString()}
@@ -189,6 +196,8 @@ export default function AddCustomerScreen() {
 
 						<Button
 							title={loading ? 'Saving...' : 'Save Customer'}
+							accessibilityLabel="save-customer-button"
+							accessibilityState={{ busy: loading }}
 							onPress={handleSubmit(onSubmit)}
 							loading={loading}
 							style={styles.saveButton}

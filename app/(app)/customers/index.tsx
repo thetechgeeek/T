@@ -69,8 +69,16 @@ export default function CustomersScreen() {
 						<Button
 							variant="ghost"
 							size="sm"
+							accessibilityLabel="add-customer-button"
+							accessibilityHint="Add a new customer"
 							onPress={() => router.push('/customers/add')}
-							leftIcon={<UserPlus size={22} color={theme.colors.primary} />}
+							leftIcon={
+								<UserPlus
+									size={22}
+									color={theme.colors.primary}
+									importantForAccessibility="no"
+								/>
+							}
 						/>
 					),
 				}}

@@ -40,11 +40,15 @@ export default function OrdersListScreen() {
 	return (
 		<Screen safeAreaEdges={['top', 'bottom']}>
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
-				<ThemedText variant="h2">Purchase Orders</ThemedText>
+				<ThemedText variant="h2" accessibilityLabel="orders-screen">
+					Purchase Orders
+				</ThemedText>
 				<Button
 					title="Import PDF"
+					accessibilityLabel="import-pdf-button"
+					accessibilityHint="Import a supplier PDF to create a purchase order"
 					size="sm"
-					leftIcon={<Plus size={16} color={c.onPrimary} />}
+					leftIcon={<Plus size={16} color={c.onPrimary} importantForAccessibility="no" />}
 					onPress={() => router.push('/(app)/orders/import')}
 				/>
 			</View>
@@ -72,6 +76,7 @@ export default function OrdersListScreen() {
 					</ThemedText>
 					<Button
 						title="Import First Order"
+						accessibilityLabel="import-first-order-button"
 						onPress={() => router.push('/(app)/orders/import')}
 					/>
 				</View>
@@ -99,6 +104,9 @@ export default function OrdersListScreen() {
 							]}
 							onPress={() => router.push(`/(app)/orders/${item.id}`)}
 							activeOpacity={0.7}
+							accessibilityRole="button"
+							accessibilityLabel={`order-${item.id}`}
+							accessibilityHint={`${item.party_name || 'Unknown Supplier'}, double tap to open`}
 						>
 							<View style={{ flex: 1 }}>
 								<ThemedText weight="bold" style={{ fontSize: 16 }}>
@@ -127,6 +135,7 @@ export default function OrdersListScreen() {
 									size={20}
 									color={c.placeholder}
 									style={{ marginTop: 8 }}
+									importantForAccessibility="no"
 								/>
 							</View>
 						</TouchableOpacity>

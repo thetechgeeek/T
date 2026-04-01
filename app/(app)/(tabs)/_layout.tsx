@@ -60,6 +60,7 @@ export default function TabLayout() {
 				name="index"
 				options={{
 					title: t('dashboard.greeting'),
+					tabBarAccessibilityLabel: 'tab-dashboard',
 					tabBarIcon: ({ color, size }) => (
 						<Home size={22} color={color} strokeWidth={2} />
 					),
@@ -69,6 +70,7 @@ export default function TabLayout() {
 				name="inventory"
 				options={{
 					title: t('inventory.title'),
+					tabBarAccessibilityLabel: 'tab-inventory',
 					tabBarIcon: ({ color }) => <Package size={22} color={color} strokeWidth={2} />,
 				}}
 			/>
@@ -76,6 +78,7 @@ export default function TabLayout() {
 				name="scan"
 				options={{
 					title: t('scanner.title'),
+					tabBarAccessibilityLabel: 'tab-scan',
 					tabBarIcon: ({ focused }) => <ScanTabIcon focused={focused} />,
 					tabBarLabel: () => null,
 				}}
@@ -84,6 +87,7 @@ export default function TabLayout() {
 				name="invoices"
 				options={{
 					title: t('invoice.title'),
+					tabBarAccessibilityLabel: 'tab-invoices',
 					tabBarIcon: ({ color }) => <FileText size={22} color={color} strokeWidth={2} />,
 				}}
 			/>
@@ -91,6 +95,7 @@ export default function TabLayout() {
 				name="more"
 				options={{
 					title: t('tabs.more'),
+					tabBarAccessibilityLabel: 'tab-more',
 					tabBarIcon: ({ color }) => (
 						<MoreHorizontal size={22} color={color} strokeWidth={2} />
 					),

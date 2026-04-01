@@ -21,13 +21,28 @@ export default function SettingsScreen() {
 					},
 				]}
 			>
-				<TouchableOpacity onPress={() => router.back()} style={styles.back}>
-					<ArrowLeft size={22} color={c.primary} strokeWidth={2} />
+				<TouchableOpacity
+					onPress={() => router.back()}
+					style={styles.back}
+					accessibilityRole="button"
+					accessibilityLabel="settings-back-button"
+					accessibilityHint="Go back"
+				>
+					<ArrowLeft
+						size={22}
+						color={c.primary}
+						strokeWidth={2}
+						importantForAccessibility="no"
+					/>
 				</TouchableOpacity>
-				<ThemedText variant="h2">Settings</ThemedText>
+				<ThemedText variant="h2" accessibilityLabel="settings-screen">
+					Settings
+				</ThemedText>
 			</View>
 			<View style={styles.center}>
-				<ThemedText color={c.placeholder}>Settings — coming soon</ThemedText>
+				<ThemedText color={c.placeholder} accessibilityLabel="settings-coming-soon">
+					Settings — coming soon
+				</ThemedText>
 			</View>
 		</Screen>
 	);
