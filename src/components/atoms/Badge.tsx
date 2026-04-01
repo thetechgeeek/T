@@ -11,6 +11,8 @@ interface BadgeProps {
 	style?: ViewStyle;
 	textStyle?: TextStyle;
 	size?: 'sm' | 'md';
+	/** Stable English identifier for screen readers. Defaults to label. */
+	accessibilityLabel?: string;
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -19,6 +21,7 @@ export const Badge: React.FC<BadgeProps> = ({
 	style,
 	textStyle,
 	size = 'md',
+	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
 
@@ -43,6 +46,9 @@ export const Badge: React.FC<BadgeProps> = ({
 
 	return (
 		<View
+			accessible={true}
+			accessibilityRole="text"
+			accessibilityLabel={accessibilityLabel ?? label}
 			style={[
 				styles.container,
 				{
@@ -55,6 +61,7 @@ export const Badge: React.FC<BadgeProps> = ({
 			]}
 		>
 			<Text
+				importantForAccessibility="no"
 				style={[
 					styles.text,
 					{

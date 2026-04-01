@@ -13,6 +13,8 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 
 export interface TextInputProps extends RNTextInputProps {
 	label?: string;
+	/** Stable English identifier for screen readers and Maestro. Takes precedence over label. */
+	accessibilityLabel?: string;
 	error?: string;
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
@@ -25,6 +27,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 	(
 		{
 			label,
+			accessibilityLabel,
 			error,
 			leftIcon,
 			rightIcon,
@@ -45,10 +48,15 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 		const [isFocused, setIsFocused] = useState(false);
 		const borderColor = error ? c.error : isFocused ? c.primary : c.border;
 
+		// Build a composed hint so error/helper is announced alongside the field
+		const computedLabel = accessibilityLabel ?? label ?? undefined;
+		const computedHint = error ? `Error: ${error}` : (helperText ?? undefined);
+
 		return (
 			<View style={[styles.container, containerStyle]}>
 				{label && (
 					<Text
+						importantForAccessibility="no"
 						style={[
 							styles.label,
 							{
@@ -72,9 +80,16 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 						},
 					]}
 				>
-					{leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
+					{leftIcon && (
+						<View style={styles.leftIcon} importantForAccessibility="no">
+							{leftIcon}
+						</View>
+					)}
 					<RNTextInput
 						ref={ref}
+						accessible={true}
+						accessibilityLabel={computedLabel}
+						accessibilityHint={computedHint}
 						placeholderTextColor={c.placeholder}
 						style={[
 							styles.input,
@@ -91,10 +106,16 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 						}}
 						{...props}
 					/>
-					{rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
+					{rightIcon && (
+						<View style={styles.rightIcon} importantForAccessibility="no">
+							{rightIcon}
+						</View>
+					)}
 				</View>
+				{/* Error/helper text is announced via the input's accessibilityHint; kept visual-only here */}
 				{!!(error || helperText) && (
 					<Text
+						importantForAccessibility="no"
 						style={[
 							styles.helper,
 							{

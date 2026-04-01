@@ -12,6 +12,8 @@ export const Divider: React.FC<DividerProps> = ({ style, inset }) => {
 
 	return (
 		<View
+			accessible={false}
+			importantForAccessibility="no"
 			style={[
 				styles.divider,
 				{

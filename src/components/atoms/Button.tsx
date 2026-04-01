@@ -10,6 +10,8 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 
 export interface ButtonProps extends TouchableOpacityProps {
 	title?: string;
+	/** Stable English identifier used by screen readers and Maestro. Overrides the default title-derived label. */
+	accessibilityLabel?: string;
 	variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 	size?: 'sm' | 'md' | 'lg';
 	loading?: boolean;
@@ -19,6 +21,7 @@ export interface ButtonProps extends TouchableOpacityProps {
 
 export function Button({
 	title,
+	accessibilityLabel,
 	variant = 'primary',
 	size = 'md',
 	loading = false,
@@ -51,7 +54,8 @@ export function Button({
 	const getSizeStyles = () => {
 		switch (size) {
 			case 'sm':
-				return { height: 36, px: 16, fontSize: theme.typography.sizes.sm };
+				// 44pt minimum touch target (Apple HIG / Material)
+				return { height: 44, px: 16, fontSize: theme.typography.sizes.sm };
 			case 'lg':
 				return { height: 56, px: 32, fontSize: theme.typography.sizes.lg };
 			case 'md':
@@ -71,8 +75,9 @@ export function Button({
 			activeOpacity={0.7}
 			disabled={isDisabled}
 			accessibilityRole="button"
-			accessibilityLabel={title}
+			accessibilityLabel={accessibilityLabel ?? title}
 			accessibilityState={{ disabled: isDisabled, busy: loading }}
+			accessibilityHint={loading ? 'Loading, please wait' : undefined}
 			style={[
 				styles.button,
 				{

@@ -7,10 +7,11 @@ export interface ChipProps {
 	selected?: boolean;
 	onPress?: () => void;
 	style?: StyleProp<ViewStyle>;
-	testID?: string;
+	/** Stable English identifier for screen readers and Maestro. Defaults to label. */
+	accessibilityLabel?: string;
 }
 
-export function Chip({ label, selected = false, onPress, style, testID }: ChipProps) {
+export function Chip({ label, selected = false, onPress, style, accessibilityLabel }: ChipProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
 	const r = theme.borderRadius;
@@ -24,9 +25,10 @@ export function Chip({ label, selected = false, onPress, style, testID }: ChipPr
 			activeOpacity={0.7}
 			onPress={onPress}
 			hitSlop={hitSlop}
-			testID={testID}
 			accessibilityRole="togglebutton"
+			accessibilityLabel={accessibilityLabel ?? label}
 			accessibilityState={{ selected }}
+			accessibilityHint={selected ? 'Double tap to deselect' : 'Double tap to select'}
 			style={[styles.chip, { backgroundColor: bgColor, borderRadius: r.full }, style]}
 		>
 			<Text
