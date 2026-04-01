@@ -17,6 +17,14 @@
 
 require('dotenv').config({ path: '.env.test' });
 
+// Map test variables to EXPO ones so the production client uses the test project
+if (process.env.SUPABASE_TEST_URL) {
+	process.env.EXPO_PUBLIC_SUPABASE_URL = process.env.SUPABASE_TEST_URL;
+}
+if (process.env.SUPABASE_TEST_ANON_KEY) {
+	process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = process.env.SUPABASE_TEST_ANON_KEY;
+}
+
 module.exports = {
 	preset: 'jest-expo',
 	testMatch: ['<rootDir>/__tests__/integration/**/*.test.{ts,tsx}'],
