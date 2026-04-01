@@ -35,7 +35,7 @@ describe('INT-004: Inventory Flow', () => {
 			size_name: '60x60',
 			box_count: initialBoxCount,
 			selling_price: 1500,
-			purchase_price: 1000,
+			cost_price: 1000,
 		};
 
 		const item = await inventoryRepository.create(input);
@@ -102,7 +102,7 @@ describe('INT-004: Inventory Flow', () => {
 			size_name: '60x60',
 			box_count: 30,
 			selling_price: 1400,
-			purchase_price: 950,
+			cost_price: 950,
 		});
 
 		expect(variant.base_item_number).toBe(`${prefix}ME-001`);

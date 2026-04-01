@@ -4,7 +4,7 @@
 
 BEGIN;
 
-SELECT plan(8);
+SELECT plan(14);
 
 -- ─── Setup ────────────────────────────────────────────────────────────────────
 
@@ -107,6 +107,63 @@ SELECT throws_ok(
   NULL,
   NULL,
   'nonexistent item raises exception'
+);
+
+-- ─── Extended Tests (DB-001 additions) ───────────────────────────────────────
+
+-- 9. stock_out exactly to 0 is allowed
+SELECT perform_stock_operation_v1(
+  'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'::uuid,
+  'stock_out'::stock_op_type, 9, 'Sell remainder', null, null
+);
+
+SELECT is(
+  (SELECT current_stock FROM inventory_item WHERE id = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'),
+  0,
+  'stock_out to exactly 0 is allowed'
+);
+
+-- 10. stock_out below 0 is rejected (already 0, try -1)
+SELECT throws_ok(
+  $$SELECT perform_stock_operation_v1(
+      'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'::uuid,
+      'stock_out'::stock_op_type, 1, 'over-sell after zero', null, null
+  )$$,
+  'Insufficient stock'
+);
+
+-- 11. Multiple successive stock_in calls accumulate correctly
+SELECT perform_stock_operation_v1('aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'::uuid, 'stock_in'::stock_op_type, 10, null, null, null);
+SELECT perform_stock_operation_v1('aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'::uuid, 'stock_in'::stock_op_type, 5,  null, null, null);
+
+SELECT is(
+  (SELECT current_stock FROM inventory_item WHERE id = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'),
+  15,
+  'Successive stock_in operations accumulate: 0+10+5=15'
+);
+
+-- 12. Each operation writes its own audit row (total rows ≥ 6 after all ops above)
+SELECT ok(
+  (SELECT count(*)::int FROM stock_operation
+   WHERE item_id = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') >= 6,
+  'Each stock operation creates its own audit row'
+);
+
+-- 13. stock_operation row has a created_at timestamp
+SELECT ok(
+  EXISTS(
+    SELECT 1 FROM stock_operation
+    WHERE item_id = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
+      AND created_at IS NOT NULL
+  ),
+  'stock_operation audit rows have created_at timestamp'
+);
+
+-- 14. item_id column references inventory_item (FK constraint present)
+SELECT fk_ok(
+  'public', 'stock_operation', 'item_id',
+  'public', 'inventory_item', 'id',
+  'stock_operation.item_id has FK to inventory_item.id'
 );
 
 SELECT * FROM finish();

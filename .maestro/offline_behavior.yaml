@@ -1,0 +1,33 @@
+appId: com.tilemaster.app
+---
+# E2E-011: Offline behavior — verify app handles no-network gracefully
+- launchApp
+- assertVisible: "Dashboard"
+- takeScreenshot: offline_start_online
+
+# Disable network (airplane mode simulation via Maestro)
+- setAirplaneMode: true
+
+# App should still show cached content or a graceful error
+- assertVisible: "Dashboard"
+- takeScreenshot: offline_dashboard_no_network
+
+# Attempt to navigate to Invoices — should show error or cached list
+- tapOn: "Invoices"
+- takeScreenshot: offline_invoices_no_network
+
+# Navigate to Inventory — should show error or cached data
+- tapOn: "Inventory"
+- takeScreenshot: offline_inventory_no_network
+
+# Re-enable network
+- setAirplaneMode: false
+
+# App should recover and reload data
+- tapOn: "Dashboard"
+- assertVisible: "Dashboard"
+- takeScreenshot: offline_recovered
+
+# Verify data loads after reconnect
+- assertVisible: "Today's Sales"
+- takeScreenshot: offline_data_reloaded

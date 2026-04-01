@@ -32,7 +32,7 @@ describe('INT-003: Customer Flow', () => {
 			phone: '9876543210',
 			city: 'Morbi',
 			state: 'Gujarat',
-			type: 'wholesale' as const,
+			type: 'dealer' as const,
 		};
 
 		const customer = await customerRepository.create(input);
