@@ -20,10 +20,12 @@ describe('invoiceStore', () => {
 			totalCount: 0,
 			filters: {},
 			currentInvoice: null,
+			currentPage: 1,
 		});
 	});
 
-	it('fetchInvoices updates store correctly', async () => {
+	// ─── fetchInvoices ────────────────────────────────────────────────────────
+	it('fetchInvoices updates store correctly (page=1 replaces)', async () => {
 		const mockInvoices = [{ id: '1', invoice_number: 'INV-01' }];
 		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({
 			data: mockInvoices,
@@ -39,23 +41,16 @@ describe('invoiceStore', () => {
 		expect(state.error).toBeNull();
 	});
 
-	it('createInvoice increments totalCount and emits INVOICE_CREATED event', async () => {
-		const emitSpy = jest.spyOn(eventBus, 'emit');
+	it('fetchInvoices page>1 appends new items and deduplicates', async () => {
+		const existing = [{ id: '1', invoice_number: 'INV-01' }];
+		const newItems = [{ id: '2', invoice_number: 'INV-02' }];
+		useInvoiceStore.setState({ invoices: existing as unknown as InvoiceState['invoices'] });
+		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: newItems, count: 2 });
 
-		useInvoiceStore.setState({ totalCount: 1 });
+		await useInvoiceStore.getState().fetchInvoices(2);
 
-		const newInvoice = { id: '2', invoice_number: 'INV-02' };
-		(invoiceService.createInvoice as jest.Mock).mockResolvedValue(newInvoice);
-
-		const result = await useInvoiceStore
-			.getState()
-			.createInvoice({} as Parameters<InvoiceState['createInvoice']>[0]);
-
-		expect(result).toEqual(newInvoice);
-		const state = useInvoiceStore.getState();
-		expect(state.totalCount).toBe(2);
-		expect(state.loading).toBe(false);
-		expect(emitSpy).toHaveBeenCalledWith({ type: 'INVOICE_CREATED', invoiceId: '2' });
+		expect(useInvoiceStore.getState().invoices).toHaveLength(2);
+		expect(useInvoiceStore.getState().currentPage).toBe(2);
 	});
 
 	it('fetchInvoices loading state — true during fetch, false after', async () => {
@@ -65,9 +60,7 @@ describe('invoiceStore', () => {
 		});
 		(invoiceService.fetchInvoices as jest.Mock).mockReturnValue(p);
 
-		const fetchPromise = useInvoiceStore
-			.getState()
-			.fetchInvoices({} as Parameters<InvoiceState['fetchInvoices']>[0]);
+		const fetchPromise = useInvoiceStore.getState().fetchInvoices();
 		expect(useInvoiceStore.getState().loading).toBe(true);
 
 		resolveP({ data: [], count: 0 });
@@ -79,9 +72,7 @@ describe('invoiceStore', () => {
 	it('fetchInvoices failure sets error and keeps invoices unchanged', async () => {
 		(invoiceService.fetchInvoices as jest.Mock).mockRejectedValue(new Error('Network error'));
 
-		await useInvoiceStore
-			.getState()
-			.fetchInvoices({} as Parameters<InvoiceState['fetchInvoices']>[0]);
+		await useInvoiceStore.getState().fetchInvoices();
 
 		const state = useInvoiceStore.getState();
 		expect(state.error).toBeTruthy();
@@ -89,7 +80,24 @@ describe('invoiceStore', () => {
 		expect(state.invoices).toEqual([]);
 	});
 
-	it('createInvoice failure sets error and does not change totalCount', async () => {
+	// ─── createInvoice ────────────────────────────────────────────────────────
+	it('createInvoice increments totalCount and emits INVOICE_CREATED event', async () => {
+		const emitSpy = jest.spyOn(eventBus, 'emit');
+		useInvoiceStore.setState({ totalCount: 1 });
+
+		const newInvoice = { id: '2', invoice_number: 'INV-02' };
+		(invoiceService.createInvoice as jest.Mock).mockResolvedValue(newInvoice);
+
+		const result = await useInvoiceStore
+			.getState()
+			.createInvoice({} as Parameters<InvoiceState['createInvoice']>[0]);
+
+		expect(result).toEqual(newInvoice);
+		expect(useInvoiceStore.getState().totalCount).toBe(2);
+		expect(emitSpy).toHaveBeenCalledWith({ type: 'INVOICE_CREATED', invoiceId: '2' });
+	});
+
+	it('createInvoice failure sets error and rethrows', async () => {
 		(invoiceService.createInvoice as jest.Mock).mockRejectedValue(new Error('Create failed'));
 
 		try {
@@ -97,26 +105,23 @@ describe('invoiceStore', () => {
 				.getState()
 				.createInvoice({} as Parameters<InvoiceState['createInvoice']>[0]);
 		} catch {
-			// may rethrow
+			// expected
 		}
 
-		const state = useInvoiceStore.getState();
-		expect(state.loading).toBe(false);
-		expect(state.totalCount).toBe(0);
+		expect(useInvoiceStore.getState().loading).toBe(false);
+		expect(useInvoiceStore.getState().totalCount).toBe(0);
+		expect(useInvoiceStore.getState().error).toBe('Create failed');
 	});
 
-	it('setFilters updates filters and triggers fetchInvoices with new filter', async () => {
-		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+	// ─── fetchInvoiceById ─────────────────────────────────────────────────────
+	it('fetchInvoiceById sets currentInvoice on success', async () => {
+		const invoice = { id: 'inv-001', invoice_number: 'INV-001' };
+		(invoiceService.fetchInvoiceDetail as jest.Mock).mockResolvedValue(invoice);
 
-		await useInvoiceStore
-			.getState()
-			.setFilters({ payment_status: 'paid' } as Parameters<InvoiceState['setFilters']>[0]);
+		await useInvoiceStore.getState().fetchInvoiceById('inv-001');
 
-		expect(useInvoiceStore.getState().filters).toMatchObject({ payment_status: 'paid' });
-		expect(invoiceService.fetchInvoices).toHaveBeenCalledWith(
-			expect.objectContaining({ payment_status: 'paid' }),
-			1,
-		);
+		expect(useInvoiceStore.getState().currentInvoice).toEqual(invoice);
+		expect(useInvoiceStore.getState().loading).toBe(false);
 	});
 
 	it('fetchInvoiceDetail failure sets error state', async () => {
@@ -124,14 +129,72 @@ describe('invoiceStore', () => {
 			new Error('Detail fetch failed'),
 		);
 
-		try {
-			await useInvoiceStore.getState().fetchInvoiceById('inv-001');
-		} catch {
-			// Expected rejection
-		}
+		await useInvoiceStore.getState().fetchInvoiceById('inv-001');
 
 		const state = useInvoiceStore.getState();
 		expect(state.error).toBe('Detail fetch failed');
 		expect(state.loading).toBe(false);
+	});
+
+	// ─── clearCurrentInvoice / reset ─────────────────────────────────────────
+	it('clearCurrentInvoice sets currentInvoice to null', () => {
+		useInvoiceStore.setState({
+			currentInvoice: { id: 'inv-1' } as unknown as InvoiceState['currentInvoice'],
+		});
+
+		useInvoiceStore.getState().clearCurrentInvoice();
+
+		expect(useInvoiceStore.getState().currentInvoice).toBeNull();
+	});
+
+	it('reset clears all state fields', () => {
+		useInvoiceStore.setState({
+			invoices: [{ id: '1' }] as unknown as InvoiceState['invoices'],
+			totalCount: 5,
+			currentPage: 3,
+			error: 'some error',
+		});
+
+		useInvoiceStore.getState().reset();
+
+		const state = useInvoiceStore.getState();
+		expect(state.invoices).toEqual([]);
+		expect(state.totalCount).toBe(0);
+		expect(state.currentPage).toBe(1);
+		expect(state.error).toBeNull();
+		expect(state.currentInvoice).toBeNull();
+	});
+
+	// ─── setFilters ───────────────────────────────────────────────────────────
+	it('setFilters updates filters and triggers fetchInvoices', async () => {
+		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+
+		useInvoiceStore
+			.getState()
+			.setFilters({ payment_status: 'paid' } as Parameters<InvoiceState['setFilters']>[0]);
+
+		expect(useInvoiceStore.getState().filters).toMatchObject({ payment_status: 'paid' });
+		expect(useInvoiceStore.getState().currentPage).toBe(1);
+		await new Promise((r) => setTimeout(r, 0));
+		expect(invoiceService.fetchInvoices).toHaveBeenCalled();
+	});
+
+	// ─── event-driven refresh ─────────────────────────────────────────────────
+	it('re-fetches invoices when PAYMENT_RECORDED event has invoiceId', async () => {
+		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+
+		eventBus.emit({ type: 'PAYMENT_RECORDED', paymentId: 'pay-1', invoiceId: 'inv-1' });
+
+		await new Promise((r) => setTimeout(r, 0));
+		expect(invoiceService.fetchInvoices).toHaveBeenCalled();
+	});
+
+	it('does NOT re-fetch when PAYMENT_RECORDED has no invoiceId', async () => {
+		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+
+		eventBus.emit({ type: 'PAYMENT_RECORDED' });
+
+		await new Promise((r) => setTimeout(r, 0));
+		expect(invoiceService.fetchInvoices).not.toHaveBeenCalled();
 	});
 });

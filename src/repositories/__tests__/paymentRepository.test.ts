@@ -18,6 +18,7 @@ beforeEach(() => {
 	jest.clearAllMocks();
 });
 
+// ─── recordWithInvoiceUpdate ──────────────────────────────────────────────────
 describe('paymentRepository.recordWithInvoiceUpdate', () => {
 	const input = makePaymentInput();
 
@@ -44,13 +45,102 @@ describe('paymentRepository.recordWithInvoiceUpdate', () => {
 			paymentRepository.recordWithInvoiceUpdate(
 				input as Parameters<typeof paymentRepository.recordWithInvoiceUpdate>[0],
 			),
-		).rejects.toMatchObject({
-			message: 'RPC failed',
+		).rejects.toMatchObject({ message: 'RPC failed' });
+	});
+
+	it('uses RPC_ERROR code when error.code is missing', async () => {
+		mockRpc.mockResolvedValue({ data: null, error: { message: 'no code' } });
+
+		await expect(
+			paymentRepository.recordWithInvoiceUpdate(
+				input as Parameters<typeof paymentRepository.recordWithInvoiceUpdate>[0],
+			),
+		).rejects.toMatchObject({ code: 'RPC_ERROR' });
+	});
+});
+
+// ─── fetchPayments ────────────────────────────────────────────────────────────
+describe('paymentRepository.fetchPayments', () => {
+	it('queries payments with customer/supplier join when no filters provided', async () => {
+		const builder = makeBuilder({ data: [], count: 0, error: null });
+		mockFrom.mockReturnValue(builder);
+
+		const result = await paymentRepository.fetchPayments({});
+
+		expect(mockFrom).toHaveBeenCalledWith('payments');
+		expect(builder.select).toHaveBeenCalledWith(
+			expect.stringContaining('customer:customers(name)'),
+		);
+		expect(result).toEqual([]);
+	});
+
+	it('applies eq(customer_id) when customer_id filter is provided', async () => {
+		const builder = makeBuilder({ data: [], count: 0, error: null });
+		mockFrom.mockReturnValue(builder);
+
+		await paymentRepository.fetchPayments({ customer_id: 'cust-001' });
+
+		expect(builder.eq).toHaveBeenCalledWith('customer_id', 'cust-001');
+	});
+
+	it('applies eq(supplier_id) when supplier_id filter is provided', async () => {
+		const builder = makeBuilder({ data: [], count: 0, error: null });
+		mockFrom.mockReturnValue(builder);
+
+		await paymentRepository.fetchPayments({ supplier_id: 'sup-001' });
+
+		expect(builder.eq).toHaveBeenCalledWith('supplier_id', 'sup-001');
+	});
+
+	it('applies gte(payment_date) when dateFrom filter is provided', async () => {
+		const builder = makeBuilder({ data: [], count: 0, error: null });
+		mockFrom.mockReturnValue(builder);
+
+		await paymentRepository.fetchPayments({ dateFrom: '2026-01-01' });
+
+		expect(builder.gte).toHaveBeenCalledWith('payment_date', '2026-01-01');
+	});
+
+	it('applies lte(payment_date) when dateTo filter is provided', async () => {
+		const builder = makeBuilder({ data: [], count: 0, error: null });
+		mockFrom.mockReturnValue(builder);
+
+		await paymentRepository.fetchPayments({ dateTo: '2026-03-31' });
+
+		expect(builder.lte).toHaveBeenCalledWith('payment_date', '2026-03-31');
+	});
+
+	it('applies all filters simultaneously', async () => {
+		const builder = makeBuilder({ data: [], count: 0, error: null });
+		mockFrom.mockReturnValue(builder);
+
+		await paymentRepository.fetchPayments({
+			customer_id: 'cust-001',
+			dateFrom: '2026-01-01',
+			dateTo: '2026-03-31',
+		});
+
+		expect(builder.eq).toHaveBeenCalledWith('customer_id', 'cust-001');
+		expect(builder.gte).toHaveBeenCalledWith('payment_date', '2026-01-01');
+		expect(builder.lte).toHaveBeenCalledWith('payment_date', '2026-03-31');
+	});
+
+	it('throws when supabase returns an error', async () => {
+		const builder = makeBuilder({
+			data: null as unknown as [],
+			count: null,
+			error: { message: 'DB error' },
+		});
+		mockFrom.mockReturnValue(builder);
+
+		await expect(paymentRepository.fetchPayments({})).rejects.toMatchObject({
+			message: 'DB error',
 		});
 	});
 });
 
-describe('paymentRepository.findMany (base) — payment fetch', () => {
+// ─── findMany (base integration) ─────────────────────────────────────────────
+describe('paymentRepository.findMany (base)', () => {
 	it('queries the payments table with no eq when no filters', async () => {
 		const builder = makeBuilder({ data: [], count: 0, error: null });
 		mockFrom.mockReturnValue(builder);
@@ -59,26 +149,5 @@ describe('paymentRepository.findMany (base) — payment fetch', () => {
 
 		expect(mockFrom).toHaveBeenCalledWith('payments');
 		expect(result.data).toEqual([]);
-	});
-
-	it('applies eq(customer_id) when customer_id filter is set', async () => {
-		const builder = makeBuilder({ data: [], count: 0, error: null });
-		mockFrom.mockReturnValue(builder);
-
-		await paymentRepository.findMany({ filters: { customer_id: 'cust-001' } });
-
-		expect(builder.eq).toHaveBeenCalledWith('customer_id', 'cust-001');
-	});
-
-	it('applies gte + lte when date range filter is set', async () => {
-		const builder = makeBuilder({ data: [], count: 0, error: null });
-		mockFrom.mockReturnValue(builder);
-
-		await paymentRepository.findMany({
-			filters: { payment_date: { gte: '2026-01-01', lte: '2026-03-31' } },
-		});
-
-		expect(builder.gte).toHaveBeenCalledWith('payment_date', '2026-01-01');
-		expect(builder.lte).toHaveBeenCalledWith('payment_date', '2026-03-31');
 	});
 });
