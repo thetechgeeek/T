@@ -29,7 +29,7 @@ describe('INT-007: Order Import Flow', () => {
 	it('creates an order record and returns it', async () => {
 		const order = await orderRepository.create({
 			notes: `${prefix}Test order from supplier`,
-			status: 'pending' as const,
+			status: 'ordered' as const,
 		});
 
 		expect(order.id).toBeTruthy();
@@ -49,13 +49,15 @@ describe('INT-007: Order Import Flow', () => {
 	});
 
 	it('updates order status', async () => {
-		const updated = await orderRepository.update(orderId, { status: 'received' as const });
-		expect(updated.status).toBe('received');
+		const updated = await orderRepository.update(orderId, {
+			status: 'fully_received' as const,
+		});
+		expect(updated.status).toBe('fully_received');
 	});
 
 	it('findById after update returns updated status', async () => {
 		const order = await orderRepository.findById(orderId);
-		expect(order.status).toBe('received');
+		expect(order.status).toBe('fully_received');
 	});
 
 	it('findDuplicates returns empty array for unique design name', async () => {
@@ -89,7 +91,7 @@ describe('INT-007: Order Import Flow', () => {
 	it('removes order successfully', async () => {
 		const toDelete = await orderRepository.create({
 			notes: `${prefix}delete me order`,
-			status: 'pending' as const,
+			status: 'ordered' as const,
 		});
 
 		await expect(orderRepository.remove(toDelete.id)).resolves.toBeUndefined();

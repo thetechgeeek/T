@@ -931,7 +931,7 @@ BEGIN
     RETURN OLD;
   END IF;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Attach to critical tables
 CREATE OR REPLACE TRIGGER audit_invoices AFTER INSERT OR UPDATE OR DELETE ON invoices
@@ -1133,10 +1133,10 @@ $$;
 -- get_profit_loss_v1
 CREATE OR REPLACE FUNCTION get_profit_loss_v1(p_start DATE, p_end DATE)
 RETURNS TABLE (
-  revenue NUMERIC,
-  cogs NUMERIC,
+  total_revenue NUMERIC,
+  total_cogs NUMERIC,
   gross_profit NUMERIC,
-  expenses NUMERIC,
+  total_expenses NUMERIC,
   net_profit NUMERIC
 )
 LANGUAGE sql

@@ -30,7 +30,7 @@ BEGIN
     RETURN OLD;
   END IF;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Attach to critical tables
 CREATE TRIGGER audit_invoices AFTER INSERT OR UPDATE OR DELETE ON invoices

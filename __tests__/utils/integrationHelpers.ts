@@ -8,6 +8,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { supabase as singletonSupabase } from '@/src/config/supabase';
 
 /** Creates a Supabase client pointing at the TEST project (from .env.test). */
 export function createTestSupabaseClient() {
@@ -56,8 +57,19 @@ export async function signInTestUser(
 ): Promise<void> {
 	const email = process.env.INTEGRATION_TEST_EMAIL ?? 'test@tilemaster.dev';
 	const password = process.env.INTEGRATION_TEST_PASSWORD ?? 'TestPass123!';
-	const { error } = await supabase.auth.signInWithPassword({ email, password });
-	if (error) {
-		throw new Error(`Integration test sign-in failed: ${error.message}`);
+
+	// Sign in both the passed client and the app's singleton client
+	const [res1, res2] = await Promise.all([
+		supabase.auth.signInWithPassword({ email, password }),
+		singletonSupabase.auth.signInWithPassword({ email, password }),
+	]);
+
+	if (res1.error) {
+		throw new Error(`Integration test sign-in failed (test client): ${res1.error.message}`);
+	}
+	if (res2.error) {
+		throw new Error(
+			`Integration test sign-in failed (singleton client): ${res2.error.message}`,
+		);
 	}
 }
