@@ -68,20 +68,26 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
 	return (
 		<Modal visible={visible} transparent animationType="slide">
-			<View style={styles.overlay}>
+			{/* Overlay is decorative — hide from a11y to prevent confusion */}
+			<View style={styles.overlay} importantForAccessibility="no-hide-descendants">
 				<Screen
 					backgroundColor="transparent"
 					safeAreaEdges={[]}
 					style={styles.keyboardView}
 				>
-					<View style={[styles.content, { backgroundColor: theme.colors.background }]}>
+					<View
+						style={[styles.content, { backgroundColor: theme.colors.background }]}
+						accessibilityViewIsModal={true}
+						importantForAccessibility="yes"
+					>
 						<View style={styles.header}>
 							<ThemedText variant="h2">Record Payment</ThemedText>
 							<Button
 								variant="ghost"
 								size="sm"
 								onPress={onClose}
-								testID="close-modal-button"
+								accessibilityLabel="close-payment-modal"
+								accessibilityHint="Dismiss the payment dialog"
 								leftIcon={<X size={24} color={theme.colors.onSurface} />}
 							/>
 						</View>
@@ -99,6 +105,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
 							<TextInput
 								label="Amount (₹)"
+								accessibilityLabel="payment-amount-input"
+								accessibilityHint="Enter the payment amount in rupees"
 								value={amount}
 								onChangeText={setAmount}
 								keyboardType="numeric"
@@ -109,6 +117,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 							<ThemedText
 								variant="label"
 								color={theme.colors.onSurfaceVariant}
+								importantForAccessibility="no"
 								style={{
 									marginTop: 16,
 									marginBottom: 8,
@@ -117,11 +126,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 							>
 								Payment Mode
 							</ThemedText>
-							<View style={styles.modeGrid}>
+							<View
+								style={styles.modeGrid}
+								accessible={false}
+								accessibilityLabel="Select payment mode"
+							>
 								{modes.map((mode) => (
 									<Button
 										key={mode}
 										title={mode.replace('_', ' ').toUpperCase()}
+										accessibilityLabel={`payment-mode-${mode}`}
+										accessibilityHint={`Pay via ${mode.replace('_', ' ')}`}
 										variant={paymentMode === mode ? 'primary' : 'outline'}
 										size="sm"
 										style={styles.modeButton}
@@ -132,6 +147,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
 							<TextInput
 								label="Notes"
+								accessibilityLabel="payment-notes-input"
 								value={notes}
 								onChangeText={setNotes}
 								placeholder="Optional remarks"
@@ -142,9 +158,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
 							<Button
 								title={loading ? 'Processing...' : 'Record Payment'}
+								accessibilityLabel="submit-payment-button"
 								onPress={handleSave}
 								loading={loading}
-								testID="submit-payment-button"
 								style={styles.saveButton}
 							/>
 						</ScrollView>

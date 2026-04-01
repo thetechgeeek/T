@@ -8,6 +8,8 @@ import type { LucideIcon } from 'lucide-react-native';
 
 export interface QuickAction {
 	label: string;
+	/** Stable English identifier for screen readers and Maestro. Required. */
+	accessibilityLabel: string;
 	icon: LucideIcon;
 	route: string;
 	color: string;
@@ -50,7 +52,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions }) =
 						}
 						activeOpacity={0.8}
 						accessibilityRole="button"
-						accessibilityLabel={action.label}
+						accessibilityLabel={action.accessibilityLabel}
 					>
 						<View
 							style={{

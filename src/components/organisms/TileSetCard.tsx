@@ -62,13 +62,21 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 					</Text>
 					{lowStock && (
 						<View
+							accessible={true}
+							accessibilityLabel="Low stock warning"
 							style={[
 								styles.lowStockBadge,
 								{ backgroundColor: c.errorLight, borderRadius: r.sm },
 							]}
 						>
-							<AlertCircle size={12} color={c.error} strokeWidth={2.5} />
+							<AlertCircle
+								size={12}
+								color={c.error}
+								strokeWidth={2.5}
+								importantForAccessibility="no"
+							/>
 							<Text
+								importantForAccessibility="no"
 								style={[
 									{
 										color: c.error,
@@ -106,7 +114,12 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 							key={item.id}
 							activeOpacity={0.7}
 							accessibilityRole="button"
-							accessibilityLabel={item.design_name}
+							accessibilityLabel={`${item.design_name}, ${item.box_count} boxes in stock`}
+							accessibilityHint={
+								isLow
+									? 'Low stock. Double tap to view details'
+									: 'Double tap to view details'
+							}
 							style={[styles.variantRow, { marginTop: index > 0 ? s.md : 0 }]}
 							onPress={() => onPressItem(item)}
 						>
@@ -122,9 +135,16 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 										source={{ uri: getThumbUrl(item.tile_image_url, 88) }}
 										style={styles.image}
 										contentFit="cover"
+										accessible={true}
+										accessibilityLabel={item.design_name}
 									/>
 								) : (
-									<Package size={20} color={c.placeholder} strokeWidth={1.5} />
+									<Package
+										size={20}
+										color={c.placeholder}
+										strokeWidth={1.5}
+										importantForAccessibility="no"
+									/>
 								)}
 							</View>
 
@@ -155,6 +175,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 									</Text>
 									{item.category !== 'OTHER' && (
 										<View
+											importantForAccessibility="no"
 											style={[
 												styles.catBadge,
 												{

@@ -34,7 +34,12 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 		<View style={[styles.section, { paddingHorizontal: s.lg, marginTop: s.lg }]}>
 			<View style={[layout.rowBetween, { marginBottom: s.sm }]}>
 				<ThemedText variant="h3">{t('dashboard.recentInvoices')}</ThemedText>
-				<TouchableOpacity onPress={() => router.push('/(app)/(tabs)/invoices')}>
+				<TouchableOpacity
+					onPress={() => router.push('/(app)/(tabs)/invoices')}
+					accessibilityRole="button"
+					accessibilityLabel="see-all-invoices"
+					accessibilityHint="View all invoices"
+				>
 					<ThemedText variant="body2" color={c.primary}>
 						{t('common.seeAll')}
 					</ThemedText>
@@ -48,7 +53,12 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 						{ backgroundColor: c.surfaceVariant, borderRadius: r.md, padding: s.xl },
 					]}
 				>
-					<FileText size={32} color={c.placeholder} strokeWidth={1.5} />
+					<FileText
+						size={32}
+						color={c.placeholder}
+						strokeWidth={1.5}
+						importantForAccessibility="no"
+					/>
 					<ThemedText
 						variant="caption"
 						color={c.placeholder}
@@ -61,11 +71,14 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 					</ThemedText>
 				</View>
 			) : (
-				<View style={{ gap: s.sm }}>
+				<View accessibilityRole="list" style={{ gap: s.sm }}>
 					{invoices.map((inv) => (
 						<TouchableOpacity
 							key={inv.id}
 							onPress={() => router.push(`/(app)/invoices/${inv.id}` as Href)}
+							accessibilityRole="button"
+							accessibilityLabel={`invoice-${inv.invoice_number}`}
+							accessibilityHint={`${inv.payment_status}, ${formatCurrency(inv.grand_total)}. Double tap to open`}
 							style={[
 								styles.invoiceItem,
 								{
@@ -87,7 +100,10 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 									<ThemedText weight="bold" color={c.primary}>
 										{formatCurrency(inv.grand_total)}
 									</ThemedText>
+									{/* Status badge — color + text, not color-only */}
 									<View
+										accessible={true}
+										accessibilityLabel={inv.payment_status}
 										style={[
 											styles.statusBadge,
 											{
@@ -105,6 +121,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 										]}
 									>
 										<ThemedText
+											importantForAccessibility="no"
 											variant="caption"
 											style={{
 												fontSize: 10,
@@ -125,6 +142,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 									size={18}
 									color={c.placeholder}
 									style={{ marginLeft: s.xs }}
+									importantForAccessibility="no"
 								/>
 							</View>
 						</TouchableOpacity>

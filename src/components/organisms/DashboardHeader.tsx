@@ -25,6 +25,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName }
 
 	return (
 		<View
+			accessibilityLabel="dashboard-screen"
+			accessibilityRole="header"
 			style={[
 				styles.header,
 				{
@@ -35,7 +37,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName }
 				},
 			]}
 		>
-			<ThemedText variant="body1" color={c.onPrimary} opacity={0.9}>
+			{/* Greeting is decorative — business name is the meaningful heading */}
+			<ThemedText
+				variant="body1"
+				color={c.onPrimary}
+				opacity={0.9}
+				importantForAccessibility="no"
+			>
 				{t('dashboard.greeting')} 🙏
 			</ThemedText>
 
@@ -43,8 +51,16 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName }
 				<ThemedText variant="h2" color={c.onPrimary} style={{ flex: 1 }}>
 					{businessName}
 				</ThemedText>
-				<View style={[styles.dateBadge, { backgroundColor: 'rgba(255,255,255,0.15)' }]}>
-					<ThemedText variant="caption" color={c.onPrimary}>
+				<View
+					accessible={true}
+					accessibilityLabel={`Today: ${today}`}
+					style={[styles.dateBadge, { backgroundColor: 'rgba(255,255,255,0.15)' }]}
+				>
+					<ThemedText
+						variant="caption"
+						color={c.onPrimary}
+						importantForAccessibility="no"
+					>
 						{today}
 					</ThemedText>
 				</View>
