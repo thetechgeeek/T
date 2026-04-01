@@ -46,3 +46,7 @@ supabase/.config/
 # generated native folders
 /ios
 /android
+
+# test output
+test_output.txt
+test_results.json
