@@ -18,7 +18,7 @@ export function createPaymentService(repo = paymentRepository) {
 			// Notify other stores via event bus (standard project pattern)
 			eventBus.emit({
 				type: 'PAYMENT_RECORDED',
-				paymentId: result.id,
+				paymentId: result.id ?? undefined,
 				invoiceId: input.invoice_id,
 			});
 

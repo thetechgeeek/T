@@ -107,24 +107,39 @@ export const customerService = {
 		if (paymentsRes.error) throw paymentsRes.error;
 
 		const entries: CustomerLedgerEntry[] = [
-			...invoicesRes.data.map((inv) => ({
-				date: inv.invoice_date,
-				type: 'invoice' as const,
-				reference: inv.invoice_number,
-				debit: inv.grand_total,
-				credit: 0,
-				balance: 0, // Will calculate below
-				notes: inv.notes,
-			})),
-			...paymentsRes.data.map((p) => ({
-				date: p.payment_date,
-				type: 'payment' as const,
-				reference: `Payment (${p.payment_mode.toUpperCase()})`,
-				debit: 0,
-				credit: p.amount,
-				balance: 0, // Will calculate below
-				notes: p.notes,
-			})),
+			...invoicesRes.data.map(
+				(inv: {
+					invoice_date: string;
+					invoice_number: string;
+					grand_total: number;
+					notes: string | null;
+				}) => ({
+					date: inv.invoice_date,
+					type: 'invoice' as const,
+					reference: inv.invoice_number,
+					debit: inv.grand_total,
+					credit: 0,
+					balance: 0, // Will calculate below
+					notes: inv.notes ?? undefined,
+				}),
+			),
+			...paymentsRes.data.map(
+				(p: {
+					payment_date: string;
+					amount: number;
+					payment_mode: string;
+					direction: string;
+					notes: string | null;
+				}) => ({
+					date: p.payment_date,
+					type: 'payment' as const,
+					reference: `Payment (${p.payment_mode.toUpperCase()})`,
+					debit: 0,
+					credit: p.amount,
+					balance: 0, // Will calculate below
+					notes: p.notes ?? undefined,
+				}),
+			),
 		];
 
 		// Sort by date then type (invoice before payment if on same date)
