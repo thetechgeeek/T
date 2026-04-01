@@ -9,10 +9,34 @@ const mockPush = jest.fn();
 (useRouter as jest.Mock).mockReturnValue({ push: mockPush, replace: jest.fn(), back: jest.fn() });
 
 const testActions = [
-	{ label: 'New Invoice', icon: FilePlus, route: '/invoices/create', color: '#2196F3' },
-	{ label: 'Add Stock', icon: Package, route: '/inventory/stock-op', color: '#4CAF50' },
-	{ label: 'New Customer', icon: UserPlus, route: '/customers/add', color: '#FF9800' },
-	{ label: 'Record Payment', icon: CreditCard, route: '/finance/payments', color: '#9C27B0' },
+	{
+		label: 'New Invoice',
+		accessibilityLabel: 'new-invoice-button',
+		icon: FilePlus,
+		route: '/invoices/create',
+		color: '#2196F3',
+	},
+	{
+		label: 'Add Stock',
+		accessibilityLabel: 'add-stock-button',
+		icon: Package,
+		route: '/inventory/stock-op',
+		color: '#4CAF50',
+	},
+	{
+		label: 'New Customer',
+		accessibilityLabel: 'new-customer-button',
+		icon: UserPlus,
+		route: '/customers/add',
+		color: '#FF9800',
+	},
+	{
+		label: 'Record Payment',
+		accessibilityLabel: 'record-payment-button',
+		icon: CreditCard,
+		route: '/finance/payments',
+		color: '#9C27B0',
+	},
 ];
 
 const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);
@@ -37,19 +61,19 @@ describe('QuickActionsGrid', () => {
 
 	it('calls router.push with the correct route when an action is pressed', () => {
 		const { getByLabelText } = renderWithTheme(<QuickActionsGrid actions={testActions} />);
-		fireEvent.press(getByLabelText('New Invoice'));
+		fireEvent.press(getByLabelText('new-invoice-button'));
 		expect(mockPush).toHaveBeenCalledWith('/invoices/create');
 	});
 
 	it('navigates to stock-op route when Add Stock is pressed', () => {
 		const { getByLabelText } = renderWithTheme(<QuickActionsGrid actions={testActions} />);
-		fireEvent.press(getByLabelText('Add Stock'));
+		fireEvent.press(getByLabelText('add-stock-button'));
 		expect(mockPush).toHaveBeenCalledWith('/inventory/stock-op');
 	});
 
 	it('navigates to customers/add when New Customer is pressed', () => {
 		const { getByLabelText } = renderWithTheme(<QuickActionsGrid actions={testActions} />);
-		fireEvent.press(getByLabelText('New Customer'));
+		fireEvent.press(getByLabelText('new-customer-button'));
 		expect(mockPush).toHaveBeenCalledWith('/customers/add');
 	});
 

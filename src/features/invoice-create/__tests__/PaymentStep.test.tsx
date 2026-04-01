@@ -16,7 +16,7 @@ const sampleLineItems: InvoiceLineItemInput[] = [
 		rate_per_unit: 1000,
 		discount: 0,
 		gst_rate: 18,
-		inventory_item_id: 'item-1',
+		item_id: 'item-1',
 	},
 ];
 
@@ -74,11 +74,11 @@ describe('PaymentStep', () => {
 		expect(getByText('Balance Due: ₹11800.00')).toBeTruthy();
 	});
 
-	it('renders Balance Due = 0 when fully paid', () => {
+	it('renders "Fully Paid" when fully paid', () => {
 		const { getByText } = renderWithTheme(
 			<PaymentStep {...makeProps({ amountPaidNum: 11800 })} />,
 		);
-		expect(getByText('Balance Due: ₹0.00')).toBeTruthy();
+		expect(getByText('Fully Paid')).toBeTruthy();
 	});
 
 	it('renders Balance Due correctly for partial payment', () => {

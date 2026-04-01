@@ -73,13 +73,6 @@ export default function FinanceOverviewScreen() {
 					<Card key={i} style={styles.metricCard} padding="md" variant="elevated">
 						<View style={styles.metricHeader} importantForAccessibility="no">
 							{m.icon}
-							<ThemedText
-								variant="body2"
-								weight="semibold"
-								style={{ marginLeft: 12 }}
-							>
-								{m.title}
-							</ThemedText>
 						</View>
 						<StatCard
 							label={m.title}

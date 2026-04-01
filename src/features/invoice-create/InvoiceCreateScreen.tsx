@@ -104,7 +104,6 @@ export default function InvoiceCreateScreen() {
 				) : (
 					<Button
 						title={flow.submitting ? 'Generating...' : 'Generate Invoice'}
-						accessibilityLabel="generate-invoice-button"
 						onPress={flow.submitInvoice}
 						loading={flow.submitting}
 						style={{ flex: 1, marginLeft: s.xs }}

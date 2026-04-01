@@ -69,7 +69,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 	return (
 		<Modal visible={visible} transparent animationType="slide">
 			{/* Overlay is decorative — hide from a11y to prevent confusion */}
-			<View style={styles.overlay} importantForAccessibility="no-hide-descendants">
+			<View style={styles.overlay} importantForAccessibility="no">
 				<Screen
 					backgroundColor="transparent"
 					safeAreaEdges={[]}
@@ -87,6 +87,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 								size="sm"
 								onPress={onClose}
 								accessibilityLabel="close-payment-modal"
+								testID="close-modal-button"
 								accessibilityHint="Dismiss the payment dialog"
 								leftIcon={<X size={24} color={theme.colors.onSurface} />}
 							/>
@@ -159,6 +160,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 							<Button
 								title={loading ? 'Processing...' : 'Record Payment'}
 								accessibilityLabel="submit-payment-button"
+								testID="submit-payment-button"
 								onPress={handleSave}
 								loading={loading}
 								style={styles.saveButton}

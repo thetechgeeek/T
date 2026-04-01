@@ -55,7 +55,7 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 
 			<TouchableOpacity
 				onPress={() => setIsInterState(!isInterState)}
-				accessibilityRole="switch"
+				accessibilityRole="togglebutton"
 				accessibilityLabel="inter-state-igst-toggle"
 				accessibilityState={{ checked: isInterState }}
 				accessibilityHint="Enable if customer is in a different state — applies IGST instead of CGST and SGST"

@@ -23,6 +23,8 @@ import React from 'react';
 import '@testing-library/jest-native/extend-expect';
 import 'react-native-gesture-handler/jestSetup';
 
+require('dotenv').config({ path: '.env.test' });
+
 // Consolidated mock for react-native
 jest.mock('react-native', () => {
 	const React = require('react');
@@ -203,20 +205,47 @@ jest.mock('react-native', () => {
 });
 
 // Mock @shopify/flash-list
-jest.mock('@shopify/flash-list', () => ({
-	FlashList: ({ data, renderItem, keyExtractor, ListHeaderComponent, ListFooterComponent, ListEmptyComponent }: any) => {
-		const React = require('react');
-		const { View } = require('react-native');
-		return React.createElement(
-			View,
-			null,
-			ListHeaderComponent && (typeof ListHeaderComponent === 'function' ? React.createElement(ListHeaderComponent) : ListHeaderComponent),
-			data?.map((item: any, index: number) => React.createElement(View, { key: keyExtractor ? keyExtractor(item, index) : index }, renderItem({ item, index }))),
-			ListEmptyComponent && (!data || data.length === 0) && (typeof ListEmptyComponent === 'function' ? React.createElement(ListEmptyComponent) : ListEmptyComponent),
-			ListFooterComponent && (typeof ListFooterComponent === 'function' ? React.createElement(ListFooterComponent) : ListFooterComponent),
-		);
-	},
-}), { virtual: true });
+jest.mock(
+	'@shopify/flash-list',
+	() => ({
+		FlashList: ({
+			data,
+			renderItem,
+			keyExtractor,
+			ListHeaderComponent,
+			ListFooterComponent,
+			ListEmptyComponent,
+		}: any) => {
+			const React = require('react');
+			const { View } = require('react-native');
+			return React.createElement(
+				View,
+				null,
+				ListHeaderComponent &&
+					(typeof ListHeaderComponent === 'function'
+						? React.createElement(ListHeaderComponent)
+						: ListHeaderComponent),
+				data?.map((item: any, index: number) =>
+					React.createElement(
+						View,
+						{ key: keyExtractor ? keyExtractor(item, index) : index },
+						renderItem({ item, index }),
+					),
+				),
+				ListEmptyComponent &&
+					(!data || data.length === 0) &&
+					(typeof ListEmptyComponent === 'function'
+						? React.createElement(ListEmptyComponent)
+						: ListEmptyComponent),
+				ListFooterComponent &&
+					(typeof ListFooterComponent === 'function'
+						? React.createElement(ListFooterComponent)
+						: ListFooterComponent),
+			);
+		},
+	}),
+	{ virtual: true },
+);
 
 // Mock Supabase config globally to prevent "supabaseUrl is required" errors (QA issue 3.1)
 jest.mock('@/src/config/supabase', () => {
@@ -392,8 +421,8 @@ jest.mock('lucide-react-native', () => {
 	return new Proxy(
 		{},
 		{
-			get: (_target: any, prop: any) =>
-				(props: any) => React.createElement('Icon', { ...props, name: prop }),
+			get: (_target: any, prop: any) => (props: any) =>
+				React.createElement('Icon', { ...props, name: prop }),
 		},
 	);
 });
@@ -425,7 +454,8 @@ jest.mock('react-native-keyboard-controller', () => {
 			keyboardHeight: 0,
 		})),
 		KeyboardStickyView: ({ children }: any) => React.createElement('View', null, children),
-		KeyboardAwareScrollView: ({ children }: any) => React.createElement('ScrollView', null, children),
+		KeyboardAwareScrollView: ({ children }: any) =>
+			React.createElement('ScrollView', null, children),
 	};
 });
 

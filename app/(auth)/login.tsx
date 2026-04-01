@@ -120,6 +120,7 @@ export default function LoginScreen() {
 					activeOpacity={0.85}
 					accessibilityRole="button"
 					accessibilityLabel="sign-in-button"
+					testID="sign-in-button"
 					accessibilityState={{ busy: loading }}
 				>
 					{loading ? (

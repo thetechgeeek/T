@@ -99,7 +99,7 @@ describe('TileSetCard', () => {
 		const { getByLabelText } = renderWithTheme(
 			<TileSetCard group={group} onPressItem={onPressItem} />,
 		);
-		fireEvent.press(getByLabelText('GLOSSY WHITE 60x60'));
+		fireEvent.press(getByLabelText('GLOSSY WHITE 60x60, 50 boxes in stock'));
 		expect(onPressItem).toHaveBeenCalledWith(item);
 	});
 
