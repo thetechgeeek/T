@@ -29,20 +29,26 @@ module.exports = {
 	coverageReporters: ['text', 'lcov', 'html'],
 	coverageThreshold: {
 		global: {
-			branches: 70,
-			functions: 75,
-			lines: 75,
-			statements: 75,
+			branches: 90,
+			functions: 95,
+			lines: 95,
+			statements: 95,
 		},
-		'./src/services/': { lines: 80 },
-		'./src/repositories/': { lines: 80 },
-		'./src/utils/': { lines: 85 },
+		'./src/services/': { lines: 100, branches: 95 },
+		'./src/repositories/': { lines: 100, branches: 95 },
+		'./src/utils/': { lines: 100, branches: 95 },
 	},
 
 	// Explicit test discovery — prevents accidental collection of non-test files
+	// Integration tests live in __tests__/integration/ and run via jest.integration.config.js
 	testMatch: [
 		'<rootDir>/__tests__/**/*.test.{ts,tsx}',
 		'<rootDir>/src/**/*.test.{ts,tsx}',
+		'!<rootDir>/__tests__/integration/**',
+	],
+	testPathIgnorePatterns: [
+		'/node_modules/',
+		'<rootDir>/__tests__/integration/',
 	],
 
 	moduleNameMapper: {
