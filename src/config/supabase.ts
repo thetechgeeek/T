@@ -30,4 +30,4 @@ export const supabase =
 					detectSessionInUrl: false,
 				},
 			})
-		: ({} as any); // Type cast to avoid breaking existing service imports
+		: ({} as ReturnType<typeof createClient>); // Type cast to avoid breaking existing service imports

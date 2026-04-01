@@ -10,7 +10,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { Purchase } from '@/src/types/finance';
 
@@ -26,15 +26,15 @@ export default function PurchasesScreen() {
 	);
 
 	useEffect(() => {
-		fetchPurchases().catch((e) => {
+		fetchPurchases().catch((_e) => {
 			Alert.alert(t('common.errorTitle'), t('finance.loadPurchasesError'), [
 				{ text: t('common.ok') },
 			]);
 		});
-	}, []);
+	}, [fetchPurchases, t]);
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']}>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
 			<Stack.Screen options={{ title: 'Purchases' }} />
 
 			<FlashList
@@ -69,10 +69,7 @@ export default function PurchasesScreen() {
 						<View style={styles.details}>
 							<View style={styles.detailItem}>
 								<Calendar size={14} color={theme.colors.onSurfaceVariant} />
-								<ThemedText
-									variant="caption"
-									color={theme.colors.onSurfaceVariant}
-								>
+								<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
 									{formatDate(p.purchase_date)}
 								</ThemedText>
 							</View>
@@ -89,12 +86,11 @@ export default function PurchasesScreen() {
 					</Card>
 				)}
 			/>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1 },
 	scrollContent: { padding: 16 },
 	purchaseCard: { marginBottom: 16 },
 	header: {
@@ -104,10 +100,8 @@ const styles = StyleSheet.create({
 		marginBottom: 12,
 	},
 	supplierInfo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-	supplierName: { fontSize: 16 },
 	details: { marginBottom: 12 },
 	detailItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-	detailText: { fontSize: 13 },
 	footer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -116,6 +110,4 @@ const styles = StyleSheet.create({
 		borderTopColor: '#f0f0f0',
 		paddingTop: 12,
 	},
-	totalLabel: { fontSize: 14 },
-	totalValue: { fontSize: 18 },
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { waitFor, fireEvent } from '@testing-library/react-native';
 import InvoicesListScreen from '@/app/(app)/(tabs)/invoices';
-import { useInvoiceStore } from '@/src/stores/invoiceStore';
+import { useInvoiceStore, InvoiceState } from '@/src/stores/invoiceStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
 
@@ -49,13 +49,14 @@ beforeEach(() => {
 	jest.clearAllMocks();
 	mockFetchInvoices.mockResolvedValue(undefined);
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
-	(useInvoiceStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-		selector({
-			invoices: mockInvoices,
-			fetchInvoices: mockFetchInvoices,
-			loading: false,
-			totalCount: 2,
-		}),
+	(useInvoiceStore as unknown as jest.Mock).mockImplementation(
+		(selector: (state: InvoiceState) => unknown) =>
+			selector({
+				invoices: mockInvoices,
+				fetchInvoices: mockFetchInvoices,
+				loading: false,
+				totalCount: 2,
+			} as unknown as InvoiceState),
 	);
 });
 
@@ -110,13 +111,14 @@ describe('InvoicesListScreen', () => {
 	});
 
 	it('shows empty state when no invoices', async () => {
-		(useInvoiceStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({
-				invoices: [],
-				fetchInvoices: mockFetchInvoices,
-				loading: false,
-				totalCount: 0,
-			}),
+		(useInvoiceStore as unknown as jest.Mock).mockImplementation(
+			(selector: (state: InvoiceState) => unknown) =>
+				selector({
+					invoices: [],
+					fetchInvoices: mockFetchInvoices,
+					loading: false,
+					totalCount: 0,
+				} as unknown as InvoiceState),
 		);
 
 		const { getByText } = renderWithTheme(<InvoicesListScreen />);

@@ -1,6 +1,6 @@
-import { useInvoiceStore } from './invoiceStore';
+import { useInvoiceStore, InvoiceState } from './invoiceStore';
 import { invoiceService } from '../services/invoiceService';
-import { makeInvoice } from '../../__tests__/fixtures/invoiceFixtures';
+import { eventBus } from '../events/appEvents';
 
 jest.mock('../services/invoiceService', () => ({
 	invoiceService: {
@@ -40,7 +40,6 @@ describe('invoiceStore', () => {
 	});
 
 	it('createInvoice increments totalCount and emits INVOICE_CREATED event', async () => {
-		const { eventBus } = require('../events/appEvents');
 		const emitSpy = jest.spyOn(eventBus, 'emit');
 
 		useInvoiceStore.setState({ totalCount: 1 });
@@ -48,7 +47,9 @@ describe('invoiceStore', () => {
 		const newInvoice = { id: '2', invoice_number: 'INV-02' };
 		(invoiceService.createInvoice as jest.Mock).mockResolvedValue(newInvoice);
 
-		const result = await useInvoiceStore.getState().createInvoice({} as any);
+		const result = await useInvoiceStore
+			.getState()
+			.createInvoice({} as Parameters<InvoiceState['createInvoice']>[0]);
 
 		expect(result).toEqual(newInvoice);
 		const state = useInvoiceStore.getState();
@@ -64,7 +65,9 @@ describe('invoiceStore', () => {
 		});
 		(invoiceService.fetchInvoices as jest.Mock).mockReturnValue(p);
 
-		const fetchPromise = useInvoiceStore.getState().fetchInvoices({} as any);
+		const fetchPromise = useInvoiceStore
+			.getState()
+			.fetchInvoices({} as Parameters<InvoiceState['fetchInvoices']>[0]);
 		expect(useInvoiceStore.getState().loading).toBe(true);
 
 		resolveP({ data: [], count: 0 });
@@ -76,7 +79,9 @@ describe('invoiceStore', () => {
 	it('fetchInvoices failure sets error and keeps invoices unchanged', async () => {
 		(invoiceService.fetchInvoices as jest.Mock).mockRejectedValue(new Error('Network error'));
 
-		await useInvoiceStore.getState().fetchInvoices({} as any);
+		await useInvoiceStore
+			.getState()
+			.fetchInvoices({} as Parameters<InvoiceState['fetchInvoices']>[0]);
 
 		const state = useInvoiceStore.getState();
 		expect(state.error).toBeTruthy();
@@ -88,7 +93,9 @@ describe('invoiceStore', () => {
 		(invoiceService.createInvoice as jest.Mock).mockRejectedValue(new Error('Create failed'));
 
 		try {
-			await useInvoiceStore.getState().createInvoice({} as any);
+			await useInvoiceStore
+				.getState()
+				.createInvoice({} as Parameters<InvoiceState['createInvoice']>[0]);
 		} catch {
 			// may rethrow
 		}
@@ -101,17 +108,21 @@ describe('invoiceStore', () => {
 	it('setFilters updates filters and triggers fetchInvoices with new filter', async () => {
 		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
 
-		await useInvoiceStore.getState().setFilters({ payment_status: 'paid' } as any);
+		await useInvoiceStore
+			.getState()
+			.setFilters({ payment_status: 'paid' } as Parameters<InvoiceState['setFilters']>[0]);
 
 		expect(useInvoiceStore.getState().filters).toMatchObject({ payment_status: 'paid' });
 		expect(invoiceService.fetchInvoices).toHaveBeenCalledWith(
 			expect.objectContaining({ payment_status: 'paid' }),
-			1
+			1,
 		);
 	});
 
 	it('fetchInvoiceDetail failure sets error state', async () => {
-		(invoiceService.fetchInvoiceDetail as jest.Mock).mockRejectedValue(new Error('Detail fetch failed'));
+		(invoiceService.fetchInvoiceDetail as jest.Mock).mockRejectedValue(
+			new Error('Detail fetch failed'),
+		);
 
 		try {
 			await useInvoiceStore.getState().fetchInvoiceById('inv-001');

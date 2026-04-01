@@ -6,14 +6,14 @@ import { waitFor } from '@testing-library/react-native';
 
 // Mock Supabase with the shared builder
 jest.mock('@/src/config/supabase', () => {
-	const { createSupabaseMock } = require('../utils/supabaseMock');
+	const { createSupabaseMock } = jest.requireActual('../utils/supabaseMock');
 	return {
 		supabase: createSupabaseMock(),
 	};
 });
 
-// Access the mock instance
-const { supabase: mockSupabase } = require('@/src/config/supabase');
+import { supabase } from '@/src/config/supabase';
+const mockSupabase = supabase as unknown as { rpc: jest.Mock };
 
 // Mock routing
 jest.mock('expo-router', () => ({

@@ -138,7 +138,7 @@ describe('InvoiceInputSchema', () => {
 	it('rejects invalid payment_status enum value', () => {
 		const result = InvoiceInputSchema.safeParse({
 			...validInvoiceInput,
-			payment_status: 'bounced' as any,
+			payment_status: 'bounced' as unknown as 'unpaid',
 		});
 		expect(result.success).toBe(false);
 	});

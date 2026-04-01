@@ -8,7 +8,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Button } from '@/src/components/atoms/Button';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import logger from '@/src/utils/logger';
 
@@ -76,7 +76,7 @@ export default function ScanTab() {
 		setCapturing(true);
 		try {
 			// 1. Take photo
-			const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
+			await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
 
 			// 2. OCR placeholder: We will send photo.base64 to an LLM / Cloud Vision API
 			// Since LLM connectivity is planned for Phase 7 (along with PDF Parsing), we mock it for now.
@@ -104,15 +104,15 @@ export default function ScanTab() {
 
 	if (!permission) {
 		return (
-			<Screen>
+			<AtomicScreen>
 				<View />
-			</Screen>
+			</AtomicScreen>
 		);
 	}
 
 	if (!permission.granted) {
 		return (
-			<Screen style={{ justifyContent: 'center', padding: s.xl }}>
+			<AtomicScreen style={{ justifyContent: 'center', padding: s.xl }}>
 				<ThemedText align="center" style={{ marginBottom: s.lg, fontSize: 16 }}>
 					We need your permission to show the camera for scanning tile box text.
 				</ThemedText>
@@ -122,12 +122,12 @@ export default function ScanTab() {
 					accessibilityHint="Allow TileMaster to use your camera for scanning"
 					onPress={requestPermission}
 				/>
-			</Screen>
+			</AtomicScreen>
 		);
 	}
 
 	return (
-		<Screen backgroundColor="#000" safeAreaEdges={[]}>
+		<AtomicScreen backgroundColor="#000" safeAreaEdges={[]}>
 			<CameraView ref={cameraRef} style={StyleSheet.absoluteFillObject} facing="back" />
 			<View style={styles.overlay}>
 				{/* Top dark area */}
@@ -235,7 +235,7 @@ export default function ScanTab() {
 					</View>
 				</View>
 			</View>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

@@ -13,14 +13,16 @@ describe('Divider', () => {
 
 	it('renders a View with height 1 (horizontal divider by default)', () => {
 		const { toJSON } = renderWithTheme(<Divider />);
-		const json = toJSON() as any;
+		const json = toJSON() as { type: string };
 		// The outermost element is the styled View
 		expect(json.type).toBe('View');
 	});
 
 	it('applies no leftMargin when inset is not set', () => {
 		const { toJSON } = renderWithTheme(<Divider />);
-		const json = toJSON() as any;
+		const json = toJSON() as {
+			props: { style: Record<string, unknown> | Record<string, unknown>[] };
+		};
 		const flatStyle = Array.isArray(json.props.style)
 			? Object.assign({}, ...json.props.style)
 			: json.props.style;
@@ -29,7 +31,9 @@ describe('Divider', () => {
 
 	it('applies marginLeft when inset=true', () => {
 		const { toJSON } = renderWithTheme(<Divider inset />);
-		const json = toJSON() as any;
+		const json = toJSON() as {
+			props: { style: Record<string, unknown> | Record<string, unknown>[] };
+		};
 		const flatStyle = Array.isArray(json.props.style)
 			? Object.assign({}, ...json.props.style)
 			: json.props.style;
@@ -38,7 +42,9 @@ describe('Divider', () => {
 
 	it('merges custom style prop', () => {
 		const { toJSON } = renderWithTheme(<Divider style={{ marginVertical: 8 }} />);
-		const json = toJSON() as any;
+		const json = toJSON() as {
+			props: { style: Record<string, unknown> | Record<string, unknown>[] };
+		};
 		const flatStyle = Array.isArray(json.props.style)
 			? Object.assign({}, ...json.props.style)
 			: json.props.style;

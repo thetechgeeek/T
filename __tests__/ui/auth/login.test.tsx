@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { fireEvent, waitFor } from '@testing-library/react-native';
 
 import LoginScreen from '@/app/(auth)/login';
 import { useAuthStore } from '@/src/stores/authStore';
@@ -21,7 +21,7 @@ describe('LoginScreen', () => {
 	});
 
 	it('renders correctly', () => {
-		const { getByPlaceholderText, getByText, getAllByText } = renderWithTheme(<LoginScreen />);
+		const { getByPlaceholderText, getAllByText } = renderWithTheme(<LoginScreen />);
 
 		// Check exact text/placeholders from login.tsx
 		expect(getByPlaceholderText('you@example.com')).toBeTruthy();

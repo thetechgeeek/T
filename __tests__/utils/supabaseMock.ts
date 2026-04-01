@@ -16,7 +16,7 @@
 
 /** Chainable query builder mock. Every method returns `this` for chaining. */
 function createQueryBuilder() {
-	const builder: any = {
+	const builder: Record<string, jest.Mock | undefined> = {
 		select: jest.fn(),
 		insert: jest.fn(),
 		update: jest.fn(),
@@ -35,18 +35,31 @@ function createQueryBuilder() {
 		limit: jest.fn(),
 		single: jest.fn().mockResolvedValue({ data: null, error: null }),
 		maybeSingle: jest.fn().mockResolvedValue({ data: null, error: null }),
-		then: undefined, // Not a thenable by default — callers must .single()/.maybeSingle()
 	};
 
 	// All chainable methods return the builder itself
 	const chainableMethods = [
-		'select', 'insert', 'update', 'delete', 'upsert',
-		'eq', 'neq', 'gte', 'lte', 'ilike', 'or', 'in', 'is',
-		'order', 'range', 'limit',
+		'select',
+		'insert',
+		'update',
+		'delete',
+		'upsert',
+		'eq',
+		'neq',
+		'gte',
+		'lte',
+		'ilike',
+		'or',
+		'in',
+		'is',
+		'order',
+		'range',
+		'limit',
 	] as const;
 
 	for (const method of chainableMethods) {
-		builder[method].mockReturnValue(builder);
+		const m = builder[method];
+		if (m) m.mockReturnValue(builder);
 	}
 
 	return builder;
@@ -83,9 +96,7 @@ export function createSupabaseMock(): SupabaseMock {
 			signInWithPassword: jest
 				.fn()
 				.mockResolvedValue({ data: { user: {}, session: {} }, error: null }),
-			signUp: jest
-				.fn()
-				.mockResolvedValue({ data: { user: {}, session: null }, error: null }),
+			signUp: jest.fn().mockResolvedValue({ data: { user: {}, session: null }, error: null }),
 			onAuthStateChange: jest
 				.fn()
 				.mockReturnValue({ data: { subscription: { unsubscribe: jest.fn() } } }),

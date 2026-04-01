@@ -1,7 +1,7 @@
 import React from 'react';
 import { waitFor } from '@testing-library/react-native';
 import AgingReportScreen from '@/app/(app)/customers/aging';
-import { useCustomerStore } from '@/src/stores/customerStore';
+import { useCustomerStore, CustomerState } from '@/src/stores/customerStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 
 jest.mock('@/src/stores/customerStore', () => ({
@@ -24,12 +24,15 @@ beforeEach(() => {
 
 describe('AgingReportScreen', () => {
 	it('renders "No outstanding balances" empty state when no customers have balance', async () => {
-		(useCustomerStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({
-				customers: [{ id: 'c1', name: 'Zero Balance', type: 'retail', current_balance: 0 }],
-				fetchCustomers: mockFetchCustomers,
-				loading: false,
-			}),
+		(useCustomerStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: CustomerState) => unknown) =>
+				selector({
+					customers: [
+						{ id: 'c1', name: 'Zero Balance', type: 'retail', current_balance: 0 },
+					],
+					fetchCustomers: mockFetchCustomers,
+					loading: false,
+				} as unknown as CustomerState),
 		);
 
 		const { getByText } = renderWithTheme(<AgingReportScreen />);
@@ -40,12 +43,13 @@ describe('AgingReportScreen', () => {
 	});
 
 	it('calls fetchCustomers on mount', async () => {
-		(useCustomerStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({
-				customers: [],
-				fetchCustomers: mockFetchCustomers,
-				loading: false,
-			}),
+		(useCustomerStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: CustomerState) => unknown) =>
+				selector({
+					customers: [],
+					fetchCustomers: mockFetchCustomers,
+					loading: false,
+				} as unknown as CustomerState),
 		);
 
 		renderWithTheme(<AgingReportScreen />);
@@ -61,8 +65,13 @@ describe('AgingReportScreen', () => {
 			{ id: 'c2', name: 'Mohan Tiles', type: 'retail', current_balance: 5000 },
 		];
 
-		(useCustomerStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ customers, fetchCustomers: mockFetchCustomers, loading: false }),
+		(useCustomerStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: CustomerState) => unknown) =>
+				selector({
+					customers,
+					fetchCustomers: mockFetchCustomers,
+					loading: false,
+				} as unknown as CustomerState),
 		);
 
 		const { getByText } = renderWithTheme(<AgingReportScreen />);
@@ -79,8 +88,13 @@ describe('AgingReportScreen', () => {
 			{ id: 'c2', name: 'Owing Customer', type: 'wholesale', current_balance: 3000 },
 		];
 
-		(useCustomerStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ customers, fetchCustomers: mockFetchCustomers, loading: false }),
+		(useCustomerStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: CustomerState) => unknown) =>
+				selector({
+					customers,
+					fetchCustomers: mockFetchCustomers,
+					loading: false,
+				} as unknown as CustomerState),
 		);
 
 		const { getByText, queryByText } = renderWithTheme(<AgingReportScreen />);
@@ -97,8 +111,13 @@ describe('AgingReportScreen', () => {
 			{ id: 'c2', name: 'B', type: 'retail', current_balance: 7000 },
 		];
 
-		(useCustomerStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ customers, fetchCustomers: mockFetchCustomers, loading: false }),
+		(useCustomerStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: CustomerState) => unknown) =>
+				selector({
+					customers,
+					fetchCustomers: mockFetchCustomers,
+					loading: false,
+				} as unknown as CustomerState),
 		);
 
 		const { getByText } = renderWithTheme(<AgingReportScreen />);
@@ -110,8 +129,13 @@ describe('AgingReportScreen', () => {
 	});
 
 	it('renders "Total Outstanding" label', async () => {
-		(useCustomerStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ customers: [], fetchCustomers: mockFetchCustomers, loading: false }),
+		(useCustomerStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: CustomerState) => unknown) =>
+				selector({
+					customers: [],
+					fetchCustomers: mockFetchCustomers,
+					loading: false,
+				} as unknown as CustomerState),
 		);
 
 		const { getByText } = renderWithTheme(<AgingReportScreen />);
@@ -119,8 +143,13 @@ describe('AgingReportScreen', () => {
 	});
 
 	it('renders Customer Breakup heading', async () => {
-		(useCustomerStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ customers: [], fetchCustomers: mockFetchCustomers, loading: false }),
+		(useCustomerStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: CustomerState) => unknown) =>
+				selector({
+					customers: [],
+					fetchCustomers: mockFetchCustomers,
+					loading: false,
+				} as unknown as CustomerState),
 		);
 
 		const { getByText } = renderWithTheme(<AgingReportScreen />);

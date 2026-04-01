@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { waitFor, fireEvent } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import ExpensesScreen from '@/app/(app)/finance/expenses';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
@@ -100,7 +101,6 @@ describe('ExpensesScreen', () => {
 
 		fireEvent.press(getByText('Save Expense'));
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(mockAddExpense).toHaveBeenCalled();
 			expect(Alert.alert).toHaveBeenCalledWith(

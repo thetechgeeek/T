@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, ActivityIndicator } from 'react-native';
 import { render } from '@testing-library/react-native';
 import { QueryBoundary } from '../QueryBoundary';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
@@ -23,7 +23,6 @@ describe('QueryBoundary', () => {
 			</QueryBoundary>,
 		);
 		// ActivityIndicator should be present
-		const { ActivityIndicator } = require('react-native');
 		expect(UNSAFE_getByType(ActivityIndicator)).toBeTruthy();
 		expect(queryByText('Content')).toBeNull();
 	});

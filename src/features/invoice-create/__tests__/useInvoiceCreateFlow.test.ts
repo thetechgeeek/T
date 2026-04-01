@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react-native';
 import { useInvoiceCreateFlow } from '../useInvoiceCreateFlow';
+import { useInvoiceStore } from '@/src/stores/invoiceStore';
 
 // ─── Store mocks ─────────────────────────────────────────────────────────────
 // Note: jest.mock factories are hoisted — variables must be defined inline or
@@ -9,11 +10,11 @@ jest.mock('@/src/stores/inventoryStore', () => {
 	const mockFetchItems = jest.fn().mockResolvedValue(undefined);
 	const mockSetFilters = jest.fn();
 	const getState = jest.fn(() => ({ fetchItems: mockFetchItems }));
-	const useInventoryStore: any = jest.fn(() => ({
+	const useInventoryStore = jest.fn(() => ({
 		items: [],
 		loading: false,
 		setFilters: mockSetFilters,
-	}));
+	})) as unknown as { getState: typeof getState } & jest.Mock;
 	useInventoryStore.getState = getState;
 	return { useInventoryStore };
 });
@@ -21,12 +22,12 @@ jest.mock('@/src/stores/inventoryStore', () => {
 jest.mock('@/src/stores/invoiceStore', () => {
 	const mockCreateInvoice = jest.fn();
 	const getState = jest.fn(() => ({ createInvoice: mockCreateInvoice }));
-	const useInvoiceStore: any = jest.fn(() => ({
+	const mStore = jest.fn(() => ({
 		invoices: [],
 		fetchInvoices: jest.fn(),
-	}));
-	useInvoiceStore.getState = getState;
-	return { useInvoiceStore };
+	})) as unknown as { getState: typeof getState } & jest.Mock;
+	mStore.getState = getState;
+	return { useInvoiceStore: mStore };
 });
 
 jest.mock('expo-router', () => ({
@@ -50,9 +51,7 @@ describe('useInvoiceCreateFlow', () => {
 
 	beforeEach(() => {
 		jest.clearAllMocks();
-		// Access the mocked createInvoice via require after jest.mock is applied
-		const { useInvoiceStore } = require('@/src/stores/invoiceStore');
-		mockCreateInvoice = useInvoiceStore.getState().createInvoice;
+		mockCreateInvoice = (useInvoiceStore.getState as jest.Mock)().createInvoice;
 		mockCreateInvoice.mockResolvedValue({ id: 'new-inv-001' });
 	});
 
@@ -117,7 +116,9 @@ describe('useInvoiceCreateFlow', () => {
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
 		act(() => {
-			result.current.selectInventoryItem(sampleInventoryItem as any);
+			result.current.selectInventoryItem(
+				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			);
 		});
 		act(() => {
 			result.current.addLineItem();
@@ -130,9 +131,17 @@ describe('useInvoiceCreateFlow', () => {
 	it('selectInventoryItem + addLineItem twice results in 2 lineItems', () => {
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
-		act(() => result.current.selectInventoryItem(sampleInventoryItem as any));
+		act(() =>
+			result.current.selectInventoryItem(
+				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			),
+		);
 		act(() => result.current.addLineItem());
-		act(() => result.current.selectInventoryItem(sampleInventoryItem as any));
+		act(() =>
+			result.current.selectInventoryItem(
+				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			),
+		);
 		act(() => result.current.addLineItem());
 
 		expect(result.current.lineItems).toHaveLength(2);
@@ -142,9 +151,17 @@ describe('useInvoiceCreateFlow', () => {
 		const secondItem = { ...sampleInventoryItem, id: 'item-002', design_name: 'MATT GREY' };
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
-		act(() => result.current.selectInventoryItem(sampleInventoryItem as any));
+		act(() =>
+			result.current.selectInventoryItem(
+				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			),
+		);
 		act(() => result.current.addLineItem());
-		act(() => result.current.selectInventoryItem(secondItem as any));
+		act(() =>
+			result.current.selectInventoryItem(
+				secondItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			),
+		);
 		act(() => result.current.addLineItem());
 
 		expect(result.current.lineItems).toHaveLength(2);
@@ -161,7 +178,11 @@ describe('useInvoiceCreateFlow', () => {
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
 		act(() => result.current.setCustomer({ name: 'Test Customer', phone: '9876543210' }));
-		act(() => result.current.selectInventoryItem(sampleInventoryItem as any));
+		act(() =>
+			result.current.selectInventoryItem(
+				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			),
+		);
 		act(() => result.current.addLineItem());
 		act(() => result.current.setAmountPaid('0'));
 
@@ -190,7 +211,11 @@ describe('useInvoiceCreateFlow', () => {
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
 		act(() => result.current.setCustomer({ name: 'Customer' }));
-		act(() => result.current.selectInventoryItem(sampleInventoryItem as any));
+		act(() =>
+			result.current.selectInventoryItem(
+				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			),
+		);
 		act(() => result.current.addLineItem());
 
 		// Start submit without awaiting
@@ -214,7 +239,11 @@ describe('useInvoiceCreateFlow', () => {
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
 		act(() => result.current.setCustomer({ name: 'Customer' }));
-		act(() => result.current.selectInventoryItem(sampleInventoryItem as any));
+		act(() =>
+			result.current.selectInventoryItem(
+				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			),
+		);
 		act(() => result.current.addLineItem());
 
 		await act(async () => {

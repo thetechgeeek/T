@@ -28,7 +28,7 @@ describe('PaymentSchema', () => {
 	it('rejects invalid payment_mode', () => {
 		const result = PaymentSchema.safeParse({
 			...validPayment,
-			payment_mode: 'bitcoin' as any,
+			payment_mode: 'bitcoin' as unknown as 'cash',
 		});
 		expect(result.success).toBe(false);
 	});

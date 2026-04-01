@@ -5,7 +5,6 @@ import {
 	ArrowLeft,
 	Package,
 	Edit,
-	Clock,
 	HelpCircle,
 	ArrowUpRight,
 	ArrowDownRight,
@@ -14,9 +13,8 @@ import { Image } from 'expo-image';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
-import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import type { InventoryItem, StockOperation } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { layout } from '@/src/theme/layout';
@@ -24,7 +22,7 @@ import logger from '@/src/utils/logger';
 
 export default function ItemDetailScreen() {
 	const { theme, c, s, r } = useThemeTokens();
-	const { t, formatCurrency, formatDateShort } = useLocale();
+	const { formatCurrency, formatDateShort } = useLocale();
 	const router = useRouter();
 	const { id } = useLocalSearchParams<{ id: UUID }>();
 
@@ -77,7 +75,7 @@ export default function ItemDetailScreen() {
 
 	if (!item) {
 		return (
-			<Screen safeAreaEdges={['top']}>
+			<AtomicScreen safeAreaEdges={['top']}>
 				<View
 					style={[
 						styles.header,
@@ -98,14 +96,14 @@ export default function ItemDetailScreen() {
 					<HelpCircle size={48} color={c.placeholder} strokeWidth={1} />
 					<ThemedText style={{ marginTop: 16 }}>Item not found</ThemedText>
 				</View>
-			</Screen>
+			</AtomicScreen>
 		);
 	}
 
 	const isLowStock = item.box_count <= item.low_stock_threshold;
 
 	return (
-		<Screen safeAreaEdges={['top']} withKeyboard={false}>
+		<AtomicScreen safeAreaEdges={['top']} withKeyboard={false}>
 			{/* Header */}
 			<View
 				style={[
@@ -305,7 +303,7 @@ export default function ItemDetailScreen() {
 					)}
 				</View>
 			</ScrollView>
-		</Screen>
+		</AtomicScreen>
 	);
 
 	function SpecBox({

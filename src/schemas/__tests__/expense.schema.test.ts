@@ -37,7 +37,10 @@ describe('ExpenseSchema', () => {
 	});
 
 	it('rejects amount as string (type safety)', () => {
-		const result = ExpenseSchema.safeParse({ ...validExpense, amount: '1500' as any });
+		const result = ExpenseSchema.safeParse({
+			...validExpense,
+			amount: '1500' as unknown as number,
+		});
 		expect(result.success).toBe(false);
 	});
 
@@ -94,7 +97,6 @@ describe('ExpenseSchema', () => {
 	});
 
 	it('description is optional and can be omitted', () => {
-		const { description: _d, ...withoutDesc } = { ...validExpense, description: undefined };
 		const result = ExpenseSchema.safeParse(validExpense);
 		expect(result.success).toBe(true);
 	});

@@ -8,7 +8,7 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { SearchBar } from '@/src/components/molecules/SearchBar';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { Button } from '@/src/components/atoms/Button';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { Badge } from '@/src/components/atoms/Badge';
@@ -18,7 +18,7 @@ import type { Customer } from '@/src/types/customer';
 export default function CustomersScreen() {
 	const { theme } = useThemeTokens();
 	const router = useRouter();
-	const { t, formatCurrency } = useLocale();
+	const { t } = useLocale();
 	const { customers, loading, fetchCustomers, setFilters, filters } = useCustomerStore(
 		useShallow((s) => ({
 			customers: s.customers,
@@ -37,7 +37,7 @@ export default function CustomersScreen() {
 				{ text: t('common.ok') },
 			]);
 		});
-	}, []);
+	}, [fetchCustomers, t]);
 
 	const handleSearch = (text: string) => {
 		setSearch(text);
@@ -61,7 +61,7 @@ export default function CustomersScreen() {
 	);
 
 	return (
-		<Screen safeAreaEdges={['top']} withKeyboard={false}>
+		<AtomicScreen safeAreaEdges={['top']} withKeyboard={false}>
 			<Stack.Screen
 				options={{
 					title: 'Customers',
@@ -122,7 +122,7 @@ export default function CustomersScreen() {
 					) : null
 				}
 			/>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

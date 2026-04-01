@@ -16,25 +16,28 @@
  */
 
 // React Native uses __DEV__ inside node_modules
-(global as any).__DEV__ = true;
+(global as unknown as { __DEV__: boolean }).__DEV__ = true;
 
 import React from 'react';
-
 import '@testing-library/jest-native/extend-expect';
 import 'react-native-gesture-handler/jestSetup';
+import { config } from 'dotenv';
 
-require('dotenv').config({ path: '.env.test' });
+config({ path: '.env.test' });
+
+import { ViewProps, TextProps, ScrollViewProps, TouchableOpacityProps } from 'react-native';
 
 // Consolidated mock for react-native
 jest.mock('react-native', () => {
-	const React = require('react');
+	const React = jest.requireActual('react');
 	const RN = jest.requireActual('react-native');
 
 	// Components
-	const View = ({ children, ...props }: any) => React.createElement('View', props, children);
-	const Text = ({ children, ...props }: any) => {
+	const View = ({ children, ...props }: ViewProps & { children?: React.ReactNode }) =>
+		React.createElement('View', props, children);
+	const Text = ({ children, ...props }: TextProps & { children?: React.ReactNode }) => {
 		const content = React.Children.toArray(children)
-			.map((child: any) =>
+			.map((child: unknown) =>
 				typeof child === 'string' || typeof child === 'number' ? child : '',
 			)
 			.join('')
@@ -42,9 +45,14 @@ jest.mock('react-native', () => {
 			.replace(/\s+/g, ' ');
 		return React.createElement('Text', props, content);
 	};
-	const ScrollView = ({ children, ...props }: any) =>
+	const ScrollView = ({ children, ...props }: ScrollViewProps & { children?: React.ReactNode }) =>
 		React.createElement('ScrollView', props, children);
-	const TouchableOpacity = ({ children, onPress, disabled, ...props }: any) => {
+	const TouchableOpacity = ({
+		children,
+		onPress,
+		disabled,
+		...props
+	}: TouchableOpacityProps & { children?: React.ReactNode; onPress?: () => void }) => {
 		const handlePress = () => {
 			if (!disabled && onPress) {
 				onPress();
@@ -62,29 +70,45 @@ jest.mock('react-native', () => {
 			children,
 		);
 	};
-	const TextInput = (props: any) => React.createElement('TextInput', props);
-	const ActivityIndicator = (props: any) =>
+	const TextInput = (props: React.ComponentProps<typeof RN.TextInput>) =>
+		React.createElement('TextInput', props);
+	const ActivityIndicator = (props: React.ComponentProps<typeof RN.ActivityIndicator>) =>
 		React.createElement('ActivityIndicator', { testID: 'ActivityIndicator', ...props });
 
 	const Platform = {
 		OS: 'ios' as string,
 		Version: 1,
-		select: (obj: any) => obj[(Platform as any).OS] ?? obj.default,
+		select: (obj: Record<string, unknown>) => obj[Platform.OS] ?? obj.default,
 	};
-	const StyleSheet = { create: (s: any) => s, flatten: (s: any) => s, hairlineWidth: 1 };
+	const StyleSheet = {
+		create: (s: Record<string, unknown>) => s,
+		flatten: (s: Record<string, unknown>) => s,
+		hairlineWidth: 1,
+	};
 	const Appearance = {
 		getColorScheme: jest.fn(() => 'light'),
 		addChangeListener: jest.fn(() => ({ remove: jest.fn() })),
 	};
 	const Alert = { alert: jest.fn() };
-	const KeyboardAvoidingView = ({ children, ...props }: any) =>
+	const KeyboardAvoidingView = ({
+		children,
+		...props
+	}: { children?: React.ReactNode } & Record<string, unknown>) =>
 		React.createElement('KeyboardAvoidingView', props, children);
 	const Touchable = { Mixin: {} };
-	const Pressable = ({ children, ...props }: any) =>
+	const Pressable = ({
+		children,
+		...props
+	}: { children?: React.ReactNode } & Record<string, unknown>) =>
 		React.createElement('Pressable', props, children);
-	const Modal = ({ children, visible, ...props }: any) =>
+	const Modal = ({
+		children,
+		visible,
+		...props
+	}: { children?: React.ReactNode; visible?: boolean } & Record<string, unknown>) =>
 		visible ? React.createElement('Modal', props, children) : null;
-	const RefreshControl = (props: any) => React.createElement('RefreshControl', props);
+	const RefreshControl = (props: Record<string, unknown>) =>
+		React.createElement('RefreshControl', props);
 
 	const FlatList = ({
 		data,
@@ -94,7 +118,15 @@ jest.mock('react-native', () => {
 		ListFooterComponent,
 		ListEmptyComponent,
 		onEndReached,
-	}: any) => {
+	}: {
+		data?: unknown[];
+		renderItem: ({ item, index }: { item: unknown; index: number }) => React.ReactNode;
+		keyExtractor?: (item: unknown, index: number) => string;
+		ListHeaderComponent?: React.ReactNode | React.ComponentType;
+		ListFooterComponent?: React.ReactNode | React.ComponentType;
+		ListEmptyComponent?: React.ReactNode | React.ComponentType;
+		onEndReached?: () => void;
+	}) => {
 		const header = ListHeaderComponent
 			? React.createElement(
 					'View',
@@ -115,7 +147,7 @@ jest.mock('react-native', () => {
 			: null;
 		const items =
 			data && data.length > 0
-				? data.map((item: any, index: number) =>
+				? data.map((item: unknown, index: number) =>
 						React.createElement(
 							'View',
 							{ key: keyExtractor ? keyExtractor(item, index) : String(index) },
@@ -140,16 +172,34 @@ jest.mock('react-native', () => {
 		);
 	};
 
-	const SectionList = ({ sections, renderItem, renderSectionHeader, keyExtractor }: any) => {
+	const SectionList = ({
+		sections,
+		renderItem,
+		renderSectionHeader,
+		keyExtractor,
+	}: {
+		sections: Array<{ data: unknown[] } & Record<string, unknown>>;
+		renderItem: ({
+			item,
+			index,
+			section,
+		}: {
+			item: unknown;
+			index: number;
+			section: unknown;
+		}) => React.ReactNode;
+		renderSectionHeader?: ({ section }: { section: unknown }) => React.ReactNode;
+		keyExtractor?: (item: unknown, index: number) => string;
+	}) => {
 		return React.createElement(
 			'View',
 			null,
-			sections.map((section: any, sIndex: number) =>
+			sections.map((section: { data: unknown[] }, sIndex: number) =>
 				React.createElement(
 					'View',
 					{ key: sIndex },
 					renderSectionHeader && renderSectionHeader({ section }),
-					section.data.map((item: any, index: number) =>
+					section.data.map((item: unknown, index: number) =>
 						React.createElement(
 							'View',
 							{ key: keyExtractor ? keyExtractor(item, index) : index },
@@ -215,9 +265,16 @@ jest.mock(
 			ListHeaderComponent,
 			ListFooterComponent,
 			ListEmptyComponent,
-		}: any) => {
-			const React = require('react');
-			const { View } = require('react-native');
+		}: {
+			data?: unknown[];
+			renderItem: ({ item, index }: { item: unknown; index: number }) => React.ReactNode;
+			keyExtractor?: (item: unknown, index: number) => string;
+			ListHeaderComponent?: React.ReactNode | React.ComponentType;
+			ListFooterComponent?: React.ReactNode | React.ComponentType;
+			ListEmptyComponent?: React.ReactNode | React.ComponentType;
+		}) => {
+			const React = jest.requireActual('react');
+			const { View } = jest.requireActual('react-native');
 			return React.createElement(
 				View,
 				null,
@@ -225,7 +282,7 @@ jest.mock(
 					(typeof ListHeaderComponent === 'function'
 						? React.createElement(ListHeaderComponent)
 						: ListHeaderComponent),
-				data?.map((item: any, index: number) =>
+				data?.map((item: unknown, index: number) =>
 					React.createElement(
 						View,
 						{ key: keyExtractor ? keyExtractor(item, index) : index },
@@ -249,6 +306,7 @@ jest.mock(
 
 // Mock Supabase config globally to prevent "supabaseUrl is required" errors (QA issue 3.1)
 jest.mock('@/src/config/supabase', () => {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const { createSupabaseMock } = require('./__tests__/utils/supabaseMock');
 	return {
 		supabase: createSupabaseMock(),
@@ -256,10 +314,12 @@ jest.mock('@/src/config/supabase', () => {
 });
 
 jest.mock('@react-native-async-storage/async-storage', () =>
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 
 jest.mock('react-native-reanimated', () => {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const Reanimated = require('react-native-reanimated/mock');
 	Reanimated.default.call = () => {};
 	return Reanimated;
@@ -280,9 +340,11 @@ jest.mock('expo-router', () => {
 });
 
 jest.mock('expo-image', () => {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const React = require('react');
 	return {
-		Image: ({ children, ...props }: any) => React.createElement('Image', props, children),
+		Image: ({ children, ...props }: { children?: React.ReactNode } & Record<string, unknown>) =>
+			React.createElement('Image', props, children),
 	};
 });
 
@@ -326,7 +388,7 @@ jest.mock('expo-camera', () => ({
 
 // Mock i18next globally to prevent import issues in non-React files
 jest.mock('i18next', () => {
-	const t = (key: string, opts?: any) => {
+	const t = (key: string, opts?: { defaultValue?: string }) => {
 		const SHARED_TRANSLATIONS: Record<string, string> = {
 			'common.add': 'Add',
 			'common.save': 'Save',
@@ -382,11 +444,14 @@ jest.mock('i18next', () => {
 // Helper for shared translations to avoid discrepancies between different i18n mocks
 // Note: We used to have separate mocks for @/src/i18n and i18next, but i18next mock is more fundamental.
 // We'll keep @/src/i18n mock as a simple re-export of the i18next mock for completeness.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 jest.mock('@/src/i18n', () => require('i18next'));
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 jest.mock('./src/i18n', () => require('i18next'));
 
 // react-i18next — fallback returns last key segment so tests don't assert raw keys (QA issue 3.4)
 jest.mock('react-i18next', () => {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const i18n = require('i18next').default;
 	return {
 		useTranslation: () => ({
@@ -402,6 +467,7 @@ jest.mock('react-i18next', () => {
 
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => {
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const i18n = require('i18next').default;
 		return {
 			t: i18n.t,
@@ -417,11 +483,12 @@ jest.mock('@/src/hooks/useLocale', () => ({
 
 // Mock lucide-react-native to avoid SVG issues
 jest.mock('lucide-react-native', () => {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const React = require('react');
 	return new Proxy(
 		{},
 		{
-			get: (_target: any, prop: any) => (props: any) =>
+			get: (_target: unknown, prop: string) => (props: Record<string, unknown>) =>
 				React.createElement('Icon', { ...props, name: prop }),
 		},
 	);
@@ -431,8 +498,8 @@ jest.mock('lucide-react-native', () => {
 jest.mock('react-native-safe-area-context', () => {
 	const inset = { top: 0, right: 0, bottom: 0, left: 0 };
 	return {
-		SafeAreaProvider: ({ children }: any) => children,
-		SafeAreaView: ({ children }: any) => children,
+		SafeAreaProvider: ({ children }: { children?: React.ReactNode }) => children,
+		SafeAreaView: ({ children }: { children?: React.ReactNode }) => children,
 		useSafeAreaInsets: () => inset,
 		useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
 		initialWindowMetrics: {
@@ -444,17 +511,20 @@ jest.mock('react-native-safe-area-context', () => {
 
 // Mock react-native-keyboard-controller
 jest.mock('react-native-keyboard-controller', () => {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const React = require('react');
 	return {
-		KeyboardAvoidingView: ({ children }: any) => React.createElement('View', null, children),
-		KeyboardProvider: ({ children }: any) => children,
+		KeyboardAvoidingView: ({ children }: { children?: React.ReactNode }) =>
+			React.createElement('View', null, children),
+		KeyboardProvider: ({ children }: { children?: React.ReactNode }) => children,
 		useKeyboardHandler: jest.fn(),
 		useKeyboardController: jest.fn(() => ({
 			isKeyboardVisible: false,
 			keyboardHeight: 0,
 		})),
-		KeyboardStickyView: ({ children }: any) => React.createElement('View', null, children),
-		KeyboardAwareScrollView: ({ children }: any) =>
+		KeyboardStickyView: ({ children }: { children?: React.ReactNode }) =>
+			React.createElement('View', null, children),
+		KeyboardAwareScrollView: ({ children }: { children?: React.ReactNode }) =>
 			React.createElement('ScrollView', null, children),
 	};
 });

@@ -14,7 +14,7 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { Button } from '@/src/components/atoms/Button';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function OrdersListScreen() {
@@ -27,9 +27,9 @@ export default function OrdersListScreen() {
 	);
 	const [refreshing, setRefreshing] = useState(false);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		fetchOrders();
-	}, []);
+	}, [fetchOrders]);
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
@@ -38,7 +38,7 @@ export default function OrdersListScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']}>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
 				<ThemedText variant="h2" accessibilityLabel="orders-screen">
 					Purchase Orders
@@ -142,7 +142,7 @@ export default function OrdersListScreen() {
 					)}
 				/>
 			)}
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { waitFor, fireEvent } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import CreateInvoiceScreen from '@/app/(app)/invoices/create';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
@@ -49,9 +50,7 @@ describe('CreateInvoiceScreen', () => {
 	});
 
 	it('completes the full invoice creation flow', async () => {
-		const { getByText, getByPlaceholderText, queryByText } = renderWithTheme(
-			<CreateInvoiceScreen />,
-		);
+		const { getByText, getByPlaceholderText } = renderWithTheme(<CreateInvoiceScreen />);
 
 		// Step 1: Customer Details
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
@@ -191,7 +190,6 @@ describe('CreateInvoiceScreen', () => {
 		fireEvent.changeText(getByPlaceholderText('Enter quantity'), '60');
 		fireEvent.press(getByText('Confirm'));
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(Alert.alert).toHaveBeenCalledWith(
 				'Insufficient Stock',
@@ -225,7 +223,6 @@ describe('CreateInvoiceScreen', () => {
 		await waitFor(() => expect(getByText('3. Review')).toBeTruthy());
 		fireEvent.press(getByText('Generate Invoice'));
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(mockCreateInvoice).toHaveBeenCalled();
 			expect(Alert.alert).toHaveBeenCalledWith(

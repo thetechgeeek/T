@@ -1,7 +1,9 @@
 export type AppEvent =
-	| { type: 'INVOICE_CREATED'; invoiceId: string }
+	| { type: 'INVOICE_CREATED'; invoiceId: string; customerId?: string }
 	| { type: 'STOCK_CHANGED'; itemId: string }
-	| { type: 'PAYMENT_RECORDED'; paymentId: string; invoiceId: string };
+	| { type: 'PAYMENT_RECORDED'; paymentId?: string; invoiceId?: string; customerId?: string }
+	| { type: 'CUSTOMER_UPDATED'; customerId: string }
+	| { type: 'EXPENSE_CREATED'; expenseId: string };
 
 type EventHandler = (event: AppEvent) => void;
 

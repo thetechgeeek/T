@@ -17,7 +17,9 @@ describe('paymentService', () => {
 		fetchPayments: jest.fn(),
 	};
 
-	const service = createPaymentService(mockRepo as any);
+	const service = createPaymentService(
+		mockRepo as unknown as Parameters<typeof createPaymentService>[0],
+	);
 
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -42,7 +44,10 @@ describe('paymentService', () => {
 
 		it('throws ValidationError for invalid payment_mode', async () => {
 			await expect(
-				service.recordPayment({ ...validPayment, payment_mode: 'bitcoin' as any }),
+				service.recordPayment({
+					...validPayment,
+					payment_mode: 'bitcoin' as unknown as 'upi',
+				}),
 			).rejects.toBeInstanceOf(ValidationError);
 		});
 
@@ -78,7 +83,9 @@ describe('paymentService', () => {
 		it('missing both customer_id and supplier_id throws ValidationError', async () => {
 			const noParty = { ...validPayment } as Partial<PaymentInput>;
 			delete noParty.customer_id;
-			await expect(service.recordPayment(noParty as PaymentInput)).rejects.toBeInstanceOf(ValidationError);
+			await expect(service.recordPayment(noParty as PaymentInput)).rejects.toBeInstanceOf(
+				ValidationError,
+			);
 		});
 	});
 

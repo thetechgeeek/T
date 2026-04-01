@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Animated, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { FileUp, FileText, CheckCircle2, ChevronRight, Save, KeyRound } from 'lucide-react-native';
+import { FileUp, FileText, KeyRound } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { pdfService } from '@/src/services/pdfService';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Button } from '@/src/components/atoms/Button';
 import { TextInput } from '@/src/components/atoms/TextInput';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function ImportOrderScreen() {
@@ -74,7 +74,7 @@ export default function ImportOrderScreen() {
 
 	if (isParsing) {
 		return (
-			<Screen
+			<AtomicScreen
 				safeAreaEdges={['top', 'bottom']}
 				style={{ alignItems: 'center', justifyContent: 'center' }}
 			>
@@ -92,13 +92,13 @@ export default function ImportOrderScreen() {
 					Our AI is reading your document to automatically extract exactly what was
 					ordered.
 				</ThemedText>
-			</Screen>
+			</AtomicScreen>
 		);
 	}
 
 	if (parsedData) {
 		return (
-			<Screen safeAreaEdges={['top', 'bottom']}>
+			<AtomicScreen safeAreaEdges={['top', 'bottom']}>
 				<View style={[styles.header, { borderBottomColor: c.border }]}>
 					<ThemedText variant="h2">Review Import</ThemedText>
 					<TouchableOpacity onPress={clearParsedData}>
@@ -166,12 +166,12 @@ export default function ImportOrderScreen() {
 						loading={saving}
 					/>
 				</View>
-			</Screen>
+			</AtomicScreen>
 		);
 	}
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']}>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
 				<ThemedText variant="h2">Import Order (AI)</ThemedText>
 			</View>
@@ -236,7 +236,7 @@ export default function ImportOrderScreen() {
 					/>
 				</View>
 			</ScrollView>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

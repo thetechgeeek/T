@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, waitFor } from '@testing-library/react-native';
+import { fireEvent } from '@testing-library/react-native';
 import MoreTab from '@/app/(app)/(tabs)/more';
 import { useAuthStore } from '@/src/stores/authStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';

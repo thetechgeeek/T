@@ -16,7 +16,7 @@ export interface Customer extends Timestamps {
 	current_balance?: number;
 }
 
-export interface CustomerInsert extends Omit<Customer, 'id' | 'created_at' | 'updated_at'> {}
+export type CustomerInsert = Omit<Customer, 'id' | 'created_at' | 'updated_at'>;
 
 export interface CustomerLedgerEntry {
 	date: string;

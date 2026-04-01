@@ -13,7 +13,7 @@ function defaultDateRange() {
 	};
 }
 
-interface FinanceState {
+export interface FinanceState {
 	expenses: Expense[];
 	purchases: Purchase[];
 	summary: ProfitLossSummary | null;

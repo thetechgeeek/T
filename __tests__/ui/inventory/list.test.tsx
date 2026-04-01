@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
+import { waitFor } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import InventoryTab from '@/app/(app)/(tabs)/inventory';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
@@ -74,7 +75,6 @@ describe('InventoryTab', () => {
 
 		renderWithTheme(<InventoryTab />);
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(mockFetchItems).toHaveBeenCalled();
 			expect(Alert.alert).toHaveBeenCalledWith(

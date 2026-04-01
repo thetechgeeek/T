@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
 import { validateWith } from './validation';
 import { ValidationError } from '../errors';
 
@@ -18,7 +18,6 @@ describe('validateWith', () => {
 	});
 
 	it('does not throw ZodError directly — always wraps in ValidationError', () => {
-		const { ZodError } = require('zod');
 		expect(() => validateWith(NameSchema, { name: '', age: -1 })).not.toThrow(ZodError);
 	});
 

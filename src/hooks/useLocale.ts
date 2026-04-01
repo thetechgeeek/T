@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import i18n from '@/src/i18n';
 import { formatINR, formatINRShort } from '@/src/utils/currency';
 import { formatDate, formatRelativeDate, formatShortDate } from '@/src/utils/dateUtils';
 
@@ -19,10 +18,13 @@ export function useLocale() {
 		await AsyncStorage.setItem(STORAGE_KEY, next);
 	}, [currentLanguage, i18n]);
 
-	const setLanguage = useCallback(async (lang: SupportedLanguage) => {
-		await i18n.changeLanguage(lang);
-		await AsyncStorage.setItem(STORAGE_KEY, lang);
-	}, []);
+	const setLanguage = useCallback(
+		async (lang: SupportedLanguage) => {
+			await i18n.changeLanguage(lang);
+			await AsyncStorage.setItem(STORAGE_KEY, lang);
+		},
+		[i18n],
+	);
 
 	const formatCurrency = useCallback((amount: number, showSymbol = true) => {
 		return formatINR(amount, showSymbol);

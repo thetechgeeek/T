@@ -24,7 +24,9 @@ describe('expenseRepository.create', () => {
 		mockFrom.mockReturnValue(builder);
 
 		const input = { category: 'Transport', amount: 500, expense_date: '2026-01-15', notes: '' };
-		const result = await expenseRepository.create(input as any);
+		const result = await expenseRepository.create(
+			input as Parameters<typeof expenseRepository.create>[0],
+		);
 
 		expect(mockFrom).toHaveBeenCalledWith('expenses');
 		expect(builder.insert).toHaveBeenCalledWith(input);

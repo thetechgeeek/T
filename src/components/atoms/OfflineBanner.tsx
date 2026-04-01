@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { WifiOff } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';

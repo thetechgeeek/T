@@ -2,8 +2,8 @@ import { supabase } from '@/src/config/supabase';
 import type { ParsedOrderItem } from './pdfService';
 import type { UUID } from '@/src/types/common';
 import { inventoryService } from './inventoryService';
-import logger from '../utils/logger';
 import type { Order } from '../types/order';
+import type { TileCategory } from '../types/inventory';
 export type { Order };
 
 export const orderService = {
@@ -84,7 +84,7 @@ export const orderService = {
 				// Item does not exist, use inventoryService to create it
 				const newItem = await inventoryService.createItem({
 					design_name: item.design_name,
-					category: (item.category as any) || 'OTHER',
+					category: (item.category as TileCategory) || 'OTHER',
 					size_name: item.size || undefined,
 					brand_name: item.brand || undefined,
 					box_count: 0, // Set to 0, let performStockOperation handle it

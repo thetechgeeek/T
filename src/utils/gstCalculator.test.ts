@@ -27,8 +27,18 @@ describe('GST Calculator', () => {
 
 	it('calculates invoice totals correctly', () => {
 		const items = [
-			{ quantity: 2, rate_per_unit: 1000, discount: 0, gst_rate: 18 } as any,
-			{ quantity: 1, rate_per_unit: 5000, discount: 500, gst_rate: 12 } as any,
+			{
+				quantity: 2,
+				rate_per_unit: 1000,
+				discount: 0,
+				gst_rate: 18,
+			} as unknown as Parameters<typeof calculateInvoiceTotals>[0][number],
+			{
+				quantity: 1,
+				rate_per_unit: 5000,
+				discount: 500,
+				gst_rate: 12,
+			} as unknown as Parameters<typeof calculateInvoiceTotals>[0][number],
 		];
 
 		const totals = calculateInvoiceTotals(items, true); // Inter-state
@@ -105,21 +115,39 @@ describe('calculateLineItemTax — edge cases', () => {
 describe('calculateInvoiceTotals — edge cases', () => {
 	it('two items with different GST rates intra-state: CGST+SGST>0, IGST=0', () => {
 		const items = [
-			{ quantity: 1, rate_per_unit: 1000, discount: 0, gst_rate: 12 } as any,
-			{ quantity: 1, rate_per_unit: 1000, discount: 0, gst_rate: 18 } as any,
+			{
+				quantity: 1,
+				rate_per_unit: 1000,
+				discount: 0,
+				gst_rate: 12,
+			} as unknown as Parameters<typeof calculateInvoiceTotals>[0][number],
+			{
+				quantity: 1,
+				rate_per_unit: 1000,
+				discount: 0,
+				gst_rate: 18,
+			} as unknown as Parameters<typeof calculateInvoiceTotals>[0][number],
 		];
 		const totals = calculateInvoiceTotals(items, false);
 		expect(totals.cgst_total).toBeGreaterThan(0);
 		expect(totals.sgst_total).toBeGreaterThan(0);
 		expect(totals.igst_total).toBe(0);
-		expect(totals.cgst_total + totals.sgst_total).toBeCloseTo(totals.cgst_total + totals.sgst_total);
+		expect(totals.cgst_total + totals.sgst_total).toBeCloseTo(
+			totals.cgst_total + totals.sgst_total,
+		);
 	});
 
 	it('slabBreakdown is sorted ascending by rate', () => {
 		const items = [
-			{ quantity: 1, rate_per_unit: 100, discount: 0, gst_rate: 28 } as any,
-			{ quantity: 1, rate_per_unit: 100, discount: 0, gst_rate: 5 } as any,
-			{ quantity: 1, rate_per_unit: 100, discount: 0, gst_rate: 18 } as any,
+			{ quantity: 1, rate_per_unit: 100, discount: 0, gst_rate: 28 } as unknown as Parameters<
+				typeof calculateInvoiceTotals
+			>[0][number],
+			{ quantity: 1, rate_per_unit: 100, discount: 0, gst_rate: 5 } as unknown as Parameters<
+				typeof calculateInvoiceTotals
+			>[0][number],
+			{ quantity: 1, rate_per_unit: 100, discount: 0, gst_rate: 18 } as unknown as Parameters<
+				typeof calculateInvoiceTotals
+			>[0][number],
 		];
 		const { slabBreakdown } = calculateInvoiceTotals(items, false);
 		expect(slabBreakdown[0].rate).toBe(5);
@@ -128,7 +156,11 @@ describe('calculateInvoiceTotals — edge cases', () => {
 	});
 
 	it('single zero-rated item: slabBreakdown has one entry with 0 total_tax', () => {
-		const items = [{ quantity: 1, rate_per_unit: 500, discount: 0, gst_rate: 0 } as any];
+		const items = [
+			{ quantity: 1, rate_per_unit: 500, discount: 0, gst_rate: 0 } as unknown as Parameters<
+				typeof calculateInvoiceTotals
+			>[0][number],
+		];
 		const { slabBreakdown } = calculateInvoiceTotals(items, false);
 		expect(slabBreakdown).toHaveLength(1);
 		expect(slabBreakdown[0].rate).toBe(0);

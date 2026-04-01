@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
+import { waitFor } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import PurchasesScreen from '@/app/(app)/finance/purchases';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
@@ -64,7 +65,6 @@ describe('PurchasesScreen', () => {
 
 		renderWithTheme(<PurchasesScreen />);
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(mockFetchPurchases).toHaveBeenCalled();
 			expect(Alert.alert).toHaveBeenCalledWith(

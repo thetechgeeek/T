@@ -50,13 +50,13 @@ jest.mock('../useInvoiceCreateFlow', () => ({
 	useInvoiceCreateFlow: jest.fn(() => mockDefaultFlow),
 }));
 
-const { useInvoiceCreateFlow } = require('../useInvoiceCreateFlow');
+import { useInvoiceCreateFlow } from '../useInvoiceCreateFlow';
 
 const mockPush = jest.fn();
 beforeEach(() => {
 	jest.clearAllMocks();
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
-	useInvoiceCreateFlow.mockReturnValue({ ...mockDefaultFlow });
+	(useInvoiceCreateFlow as jest.Mock).mockReturnValue({ ...mockDefaultFlow });
 });
 
 describe('InvoiceCreateScreen', () => {
@@ -73,13 +73,13 @@ describe('InvoiceCreateScreen', () => {
 	});
 
 	it('renders LineItemsStep on step 2', () => {
-		useInvoiceCreateFlow.mockReturnValue({ ...mockDefaultFlow, step: 2 });
+		(useInvoiceCreateFlow as jest.Mock).mockReturnValue({ ...mockDefaultFlow, step: 2 });
 		const { getByText } = renderWithTheme(<InvoiceCreateScreen />);
 		expect(getByText('Line Items')).toBeTruthy();
 	});
 
 	it('renders PaymentStep on step 3', () => {
-		useInvoiceCreateFlow.mockReturnValue({
+		(useInvoiceCreateFlow as jest.Mock).mockReturnValue({
 			...mockDefaultFlow,
 			step: 3,
 			customer: { name: 'Test', phone: '', gstin: '' },
@@ -101,7 +101,7 @@ describe('InvoiceCreateScreen', () => {
 	});
 
 	it('calls handleBack when Back pressed on step 2', () => {
-		useInvoiceCreateFlow.mockReturnValue({ ...mockDefaultFlow, step: 2 });
+		(useInvoiceCreateFlow as jest.Mock).mockReturnValue({ ...mockDefaultFlow, step: 2 });
 		const { getByText } = renderWithTheme(<InvoiceCreateScreen />);
 		fireEvent.press(getByText('Back'));
 		expect(mockHandleBack).toHaveBeenCalled();
@@ -113,7 +113,7 @@ describe('InvoiceCreateScreen', () => {
 	});
 
 	it('renders "Generate Invoice" button on step 3', () => {
-		useInvoiceCreateFlow.mockReturnValue({
+		(useInvoiceCreateFlow as jest.Mock).mockReturnValue({
 			...mockDefaultFlow,
 			step: 3,
 			customer: { name: 'Test', phone: '', gstin: '' },
@@ -123,7 +123,7 @@ describe('InvoiceCreateScreen', () => {
 	});
 
 	it('calls submitInvoice when Generate Invoice pressed', () => {
-		useInvoiceCreateFlow.mockReturnValue({
+		(useInvoiceCreateFlow as jest.Mock).mockReturnValue({
 			...mockDefaultFlow,
 			step: 3,
 			customer: { name: 'Test', phone: '', gstin: '' },
@@ -134,7 +134,7 @@ describe('InvoiceCreateScreen', () => {
 	});
 
 	it('renders loading indicator when submitting=true on step 3', () => {
-		useInvoiceCreateFlow.mockReturnValue({
+		(useInvoiceCreateFlow as jest.Mock).mockReturnValue({
 			...mockDefaultFlow,
 			step: 3,
 			submitting: true,

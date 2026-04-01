@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { fireEvent, waitFor } from '@testing-library/react-native';
 
 import SetupScreen from '@/app/(auth)/setup';
 import { useAuthStore } from '@/src/stores/authStore';

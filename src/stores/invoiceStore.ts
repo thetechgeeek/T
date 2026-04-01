@@ -5,7 +5,7 @@ import { eventBus } from '../events/appEvents';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
 import type { UUID } from '../types/common';
 
-interface InvoiceState {
+export interface InvoiceState {
 	invoices: Invoice[];
 	currentInvoice: Invoice | null;
 	loading: boolean;

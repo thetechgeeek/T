@@ -11,7 +11,7 @@ import { Divider } from '@/src/components/atoms/Divider';
 import { Button } from '@/src/components/atoms/Button';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { PaymentModal } from '@/src/components/organisms/PaymentModal';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { CustomerLedgerEntry } from '@/src/types/customer';
 
@@ -33,7 +33,7 @@ export default function CustomerDetailScreen() {
 
 	useEffect(() => {
 		if (id) fetchCustomerDetail(id);
-	}, [id]);
+	}, [id, fetchCustomerDetail]);
 
 	const renderLedgerItem = ({ item }: { item: CustomerLedgerEntry }) => (
 		<View
@@ -93,7 +93,7 @@ export default function CustomerDetailScreen() {
 	if (!customer) return null;
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']}>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
 			<Stack.Screen options={{ title: customer.name }} />
 
 			<FlatList
@@ -242,7 +242,7 @@ export default function CustomerDetailScreen() {
 					onSuccess={() => fetchCustomerDetail(customer.id)}
 				/>
 			)}
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

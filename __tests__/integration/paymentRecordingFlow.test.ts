@@ -4,17 +4,18 @@ import { invoiceService } from '@/src/services/invoiceService';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore'; // IMPORTED
 import { waitFor } from '@testing-library/react-native';
+import type { DashboardStats } from '@/src/types/finance';
 
 // Mock only the Supabase network boundary (as per Phase 12 requirement)
 jest.mock('@/src/config/supabase', () => {
-	const { createSupabaseMock } = require('../utils/supabaseMock');
+	const { createSupabaseMock } = jest.requireActual('../utils/supabaseMock');
 	return {
 		supabase: createSupabaseMock(),
 	};
 });
 
-// Access the mock instance
-const { supabase: mockSupabase } = require('@/src/config/supabase');
+import { supabase } from '@/src/config/supabase';
+const mockSupabase = supabase as unknown as { rpc: jest.Mock };
 
 describe('Payment Recording Flow Integration', () => {
 	beforeEach(() => {
@@ -76,7 +77,7 @@ describe('Payment Recording Flow Integration', () => {
 		// Spy on services that stores use to refresh
 		const dashboardSpy = jest
 			.spyOn(dashboardService, 'fetchDashboardStats')
-			.mockResolvedValue({} as any);
+			.mockResolvedValue({} as unknown as DashboardStats);
 		const invoiceSpy = jest
 			.spyOn(invoiceService, 'fetchInvoices')
 			.mockResolvedValue({ data: [], count: 0 });
@@ -98,7 +99,7 @@ describe('Payment Recording Flow Integration', () => {
 			payment_date: '2026-03-31',
 			customer_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b1',
 			supplier_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b2', // Both present
-		} as any;
+		} as unknown as Parameters<typeof paymentService.recordPayment>[0];
 
 		await expect(paymentService.recordPayment(invalidInput)).rejects.toThrow(
 			'Validation failed',

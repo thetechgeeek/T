@@ -4,6 +4,8 @@ import ScanTab from '@/app/(app)/(tabs)/scan';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
 import { inventoryService } from '@/src/services/inventoryService';
+import { useCameraPermissions } from 'expo-camera';
+import { Alert } from 'react-native';
 
 jest.mock('expo-camera', () => ({
 	CameraView: 'CameraView',
@@ -36,31 +38,31 @@ beforeEach(() => {
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
 });
 
-const { useCameraPermissions } = require('expo-camera');
+// Permission hook is already imported at top level
 
 describe('ScanTab — permission states', () => {
 	it('renders nothing while permission is loading (null)', () => {
-		useCameraPermissions.mockReturnValue([null, jest.fn()]);
+		(useCameraPermissions as jest.Mock).mockReturnValue([null, jest.fn()]);
 		const { toJSON } = renderWithTheme(<ScanTab />);
 		expect(toJSON()).not.toBeNull();
 	});
 
 	it('renders Grant Permission button when permission denied', () => {
-		useCameraPermissions.mockReturnValue([{ granted: false }, jest.fn()]);
+		(useCameraPermissions as jest.Mock).mockReturnValue([{ granted: false }, jest.fn()]);
 		const { getByText } = renderWithTheme(<ScanTab />);
 		expect(getByText('Grant Permission')).toBeTruthy();
 	});
 
 	it('calls requestPermission on Grant Permission press', () => {
 		const mockRequest = jest.fn();
-		useCameraPermissions.mockReturnValue([{ granted: false }, mockRequest]);
+		(useCameraPermissions as jest.Mock).mockReturnValue([{ granted: false }, mockRequest]);
 		const { getByText } = renderWithTheme(<ScanTab />);
 		fireEvent.press(getByText('Grant Permission'));
 		expect(mockRequest).toHaveBeenCalled();
 	});
 
 	it('renders Manual Entry when camera permission granted', () => {
-		useCameraPermissions.mockReturnValue([{ granted: true }, jest.fn()]);
+		(useCameraPermissions as jest.Mock).mockReturnValue([{ granted: true }, jest.fn()]);
 		const { getByText } = renderWithTheme(<ScanTab />);
 		expect(getByText('Manual Entry')).toBeTruthy();
 	});
@@ -68,7 +70,7 @@ describe('ScanTab — permission states', () => {
 
 describe('ScanTab — manual search', () => {
 	beforeEach(() => {
-		useCameraPermissions.mockReturnValue([{ granted: true }, jest.fn()]);
+		(useCameraPermissions as jest.Mock).mockReturnValue([{ granted: true }, jest.fn()]);
 	});
 
 	it('navigates to inventory item when single result found', async () => {
@@ -101,7 +103,6 @@ describe('ScanTab — manual search', () => {
 		fireEvent.changeText(getByPlaceholderText('Enter item or design #'), 'Nonexistent');
 		fireEvent.press(getByText(''));
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(Alert.alert).toHaveBeenCalledWith(
 				'Not Found',

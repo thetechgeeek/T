@@ -1,8 +1,7 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, RefreshControl } from 'react-native';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
@@ -39,7 +38,7 @@ export default function DashboardScreen() {
 	React.useEffect(() => {
 		fetchStats();
 		fetchInvoices(1);
-	}, []);
+	}, [fetchStats, fetchInvoices]);
 
 	const quickActions = [
 		{
@@ -108,7 +107,7 @@ export default function DashboardScreen() {
 	}, [fetchStats, fetchInvoices]);
 
 	return (
-		<Screen
+		<AtomicScreen
 			scrollable
 			safeAreaEdges={[]}
 			scrollViewProps={{
@@ -147,6 +146,6 @@ export default function DashboardScreen() {
 			<RecentInvoicesList
 				invoices={recentInvoices as Parameters<typeof RecentInvoicesList>[0]['invoices']}
 			/>
-		</Screen>
+		</AtomicScreen>
 	);
 }

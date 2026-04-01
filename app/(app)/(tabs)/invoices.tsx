@@ -7,7 +7,7 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { FileText, Plus } from 'lucide-react-native';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function InvoicesListScreen() {
@@ -15,23 +15,22 @@ export default function InvoicesListScreen() {
 	const { theme, c, s } = useThemeTokens();
 	const { t, formatCurrency } = useLocale();
 
-	const { invoices, fetchInvoices, loading, totalCount } = useInvoiceStore(
+	const { invoices, fetchInvoices, loading } = useInvoiceStore(
 		useShallow((s) => ({
 			invoices: s.invoices,
 			fetchInvoices: s.fetchInvoices,
 			loading: s.loading,
-			totalCount: s.totalCount,
 		})),
 	);
 
 	useEffect(() => {
-		fetchInvoices().catch((e) => {
+		fetchInvoices().catch((_e) => {
 			Alert.alert(t('common.errorTitle'), t('invoice.loadError'), [{ text: t('common.ok') }]);
 		});
-	}, [fetchInvoices]);
+	}, [fetchInvoices, t]);
 
 	return (
-		<Screen safeAreaEdges={['top']}>
+		<AtomicScreen safeAreaEdges={['top']}>
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
 				<ThemedText variant="h1" accessibilityLabel="invoices-screen">
 					Invoices
@@ -117,7 +116,7 @@ export default function InvoicesListScreen() {
 					</TouchableOpacity>
 				)}
 			/>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

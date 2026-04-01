@@ -40,7 +40,9 @@ describe('ThemedText', () => {
 
 	it('applies custom color prop', () => {
 		const { toJSON } = renderWithTheme(<ThemedText color="#FF0000">Red Text</ThemedText>);
-		const json = toJSON() as any;
+		const json = toJSON() as {
+			props: { style: Record<string, unknown> | Record<string, unknown>[] };
+		};
 		const flatStyle = Array.isArray(json.props.style)
 			? Object.assign({}, ...json.props.style)
 			: json.props.style;
@@ -49,7 +51,9 @@ describe('ThemedText', () => {
 
 	it('applies opacity prop', () => {
 		const { toJSON } = renderWithTheme(<ThemedText opacity={0.5}>Faded</ThemedText>);
-		const json = toJSON() as any;
+		const json = toJSON() as {
+			props: { style: Record<string, unknown> | Record<string, unknown>[] };
+		};
 		const flatStyle = Array.isArray(json.props.style)
 			? Object.assign({}, ...json.props.style)
 			: json.props.style;
@@ -58,7 +62,9 @@ describe('ThemedText', () => {
 
 	it('applies textAlign via align prop', () => {
 		const { toJSON } = renderWithTheme(<ThemedText align="center">Centered</ThemedText>);
-		const json = toJSON() as any;
+		const json = toJSON() as {
+			props: { style: Record<string, unknown> | Record<string, unknown>[] };
+		};
 		const flatStyle = Array.isArray(json.props.style)
 			? Object.assign({}, ...json.props.style)
 			: json.props.style;
@@ -67,7 +73,9 @@ describe('ThemedText', () => {
 
 	it('overrides weight when weight prop provided', () => {
 		const { toJSON } = renderWithTheme(<ThemedText weight="bold">Bold Text</ThemedText>);
-		const json = toJSON() as any;
+		const json = toJSON() as {
+			props: { style: Record<string, unknown> | Record<string, unknown>[] };
+		};
 		const flatStyle = Array.isArray(json.props.style)
 			? Object.assign({}, ...json.props.style)
 			: json.props.style;
@@ -78,7 +86,9 @@ describe('ThemedText', () => {
 		const { toJSON } = renderWithTheme(
 			<ThemedText style={{ marginTop: 16 }}>Spaced</ThemedText>,
 		);
-		const json = toJSON() as any;
+		const json = toJSON() as {
+			props: { style: Record<string, unknown> | Record<string, unknown>[] };
+		};
 		const mergedStyles = Array.isArray(json.props.style)
 			? Object.assign({}, ...json.props.style)
 			: json.props.style;

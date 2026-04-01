@@ -6,14 +6,35 @@
  *  - The terminal pattern: `await query.single()` (used by findById / create / update)
  */
 export function makeBuilder(
-	thenResult: { data: any; count?: number | null; error: any | null } = { data: [], count: 0, error: null },
-	singleResult: { data: any; error: any | null } = { data: null, error: null },
+	thenResult: {
+		data: unknown;
+		count?: number | null;
+		error: { message: string; code?: string } | null;
+	} = { data: [], count: 0, error: null },
+	singleResult: { data: unknown; error: { message: string; code?: string } | null } = {
+		data: null,
+		error: null,
+	},
 ) {
-	const builder: any = {};
+	const builder: Record<string, jest.Mock> = {};
 	const chainable = [
-		'select', 'insert', 'update', 'delete', 'upsert',
-		'eq', 'neq', 'gte', 'lte', 'ilike', 'or', 'in', 'is',
-		'order', 'range', 'limit', 'not',
+		'select',
+		'insert',
+		'update',
+		'delete',
+		'upsert',
+		'eq',
+		'neq',
+		'gte',
+		'lte',
+		'ilike',
+		'or',
+		'in',
+		'is',
+		'order',
+		'range',
+		'limit',
+		'not',
 	];
 	chainable.forEach((m) => {
 		builder[m] = jest.fn().mockReturnValue(builder);
@@ -21,6 +42,8 @@ export function makeBuilder(
 	builder.single = jest.fn().mockResolvedValue(singleResult);
 	builder.maybeSingle = jest.fn().mockResolvedValue(singleResult);
 	// Thenable for `await query` (findMany / direct query awaiting)
-	builder.then = jest.fn((resolve: any, _reject: any) => Promise.resolve(thenResult).then(resolve));
+	builder.then = jest.fn((resolve: (val: unknown) => void) =>
+		Promise.resolve(thenResult).then(resolve),
+	);
 	return builder;
 }

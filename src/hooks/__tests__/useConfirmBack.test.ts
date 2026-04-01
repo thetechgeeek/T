@@ -71,11 +71,10 @@ describe('useConfirmBack', () => {
 		handler({ preventDefault: jest.fn(), data: { action: mockAction } });
 
 		// Find the "Discard" button onPress in Alert.alert call
-		const buttons: any[] = alertSpy.mock.calls[0][2];
-		const discardButton = buttons.find((b: any) => b.style === 'destructive');
+		const buttons = alertSpy.mock.calls[0][2] as { style?: string; onPress?: () => void }[];
+		const discardButton = buttons.find((b) => b.style === 'destructive');
 		expect(discardButton).toBeDefined();
-
-		discardButton.onPress();
+		discardButton?.onPress?.();
 
 		expect(mockDispatch).toHaveBeenCalledWith(mockAction);
 	});
@@ -87,12 +86,12 @@ describe('useConfirmBack', () => {
 		handler({ preventDefault: jest.fn(), data: { action: { type: 'GO_BACK' } } });
 
 		// Find the "Stay" (cancel) button onPress
-		const buttons: any[] = alertSpy.mock.calls[0][2];
-		const cancelButton = buttons.find((b: any) => b.style === 'cancel');
+		const buttons = alertSpy.mock.calls[0][2] as { style?: string; onPress?: () => void }[];
+		const cancelButton = buttons.find((b) => b.style === 'cancel');
 		expect(cancelButton).toBeDefined();
 
 		// Cancel buttons typically have no onPress or a no-op
-		if (cancelButton.onPress) {
+		if (cancelButton?.onPress) {
 			cancelButton.onPress();
 		}
 
@@ -100,8 +99,8 @@ describe('useConfirmBack', () => {
 	});
 
 	it('unsubscribes listener when isDirty becomes false', () => {
-		const { rerender } = renderHook(({ isDirty }: { isDirty: boolean }) =>
-			useConfirmBack(isDirty),
+		const { rerender } = renderHook(
+			({ isDirty }: { isDirty: boolean }) => useConfirmBack(isDirty),
 			{ initialProps: { isDirty: true } },
 		);
 

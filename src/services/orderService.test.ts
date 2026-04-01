@@ -7,7 +7,7 @@ import { inventoryService } from './inventoryService';
  * Replaced broken `then: jest.fn(resolve => resolve({...}))` singleton pattern (QA issue 3.2).
  * .single() is now a proper jest.fn().mockResolvedValue() so per-test overrides work correctly.
  */
-const mockQuery: any = {
+const mockQuery: Record<string, jest.Mock> = {
 	select: jest.fn().mockReturnThis(),
 	insert: jest.fn().mockReturnThis(),
 	eq: jest.fn().mockReturnThis(),
@@ -16,7 +16,9 @@ const mockQuery: any = {
 	range: jest.fn().mockReturnThis(),
 	single: jest.fn().mockResolvedValue({ data: null, error: null }),
 	// Thenable for `await query` pattern (fetchOrders, importOrder item search)
-	then: jest.fn((resolve) => Promise.resolve({ data: [], error: null }).then(resolve)),
+	then: jest.fn((resolve: (val: unknown) => void) =>
+		Promise.resolve({ data: [], error: null }).then(resolve),
+	),
 };
 
 jest.mock('@/src/config/supabase', () => ({
@@ -39,7 +41,7 @@ describe('orderService', () => {
 
 	describe('fetchOrders', () => {
 		it('applies eq(status) when status filter is set', async () => {
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
 				Promise.resolve({ data: [{ id: '1' }], error: null }).then(resolve),
 			);
 			const result = await orderService.fetchOrders({ status: 'ordered' });
@@ -50,14 +52,14 @@ describe('orderService', () => {
 		});
 
 		it('does NOT call eq(status) when no status filter provided', async () => {
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
 				Promise.resolve({ data: [], error: null }).then(resolve),
 			);
 
 			await orderService.fetchOrders({});
 
 			const eqCalls = (mockQuery.eq as jest.Mock).mock.calls;
-			expect(eqCalls.find((c: any[]) => c[0] === 'status')).toBeUndefined();
+			expect(eqCalls.find((c: unknown[]) => (c as string[])[0] === 'status')).toBeUndefined();
 		});
 	});
 
@@ -70,11 +72,15 @@ describe('orderService', () => {
 			mockQuery.single.mockResolvedValueOnce({ data: { id: 'order-123' }, error: null });
 
 			// Mock item search: item exists
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
 				Promise.resolve({ data: [{ id: 'item-1' }], error: null }).then(resolve),
 			);
 
-			await orderService.importOrder(partyName, items as any, {});
+			await orderService.importOrder(
+				partyName,
+				items as Parameters<typeof orderService.importOrder>[1],
+				{},
+			);
 
 			expect(supabase.from).toHaveBeenCalledWith('orders');
 			expect(inventoryService.performStockOperation).toHaveBeenCalledWith(
@@ -95,11 +101,15 @@ describe('orderService', () => {
 			mockQuery.single.mockResolvedValueOnce({ data: { id: 'order-456' }, error: null });
 
 			// Mock item search: no existing item
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
 				Promise.resolve({ data: [], error: null }).then(resolve),
 			);
 
-			await orderService.importOrder(partyName, items as any, {});
+			await orderService.importOrder(
+				partyName,
+				items as Parameters<typeof orderService.importOrder>[1],
+				{},
+			);
 
 			// createItem should be called to create the new inventory item
 			expect(inventoryService.createItem).toHaveBeenCalled();
@@ -112,9 +122,18 @@ describe('orderService', () => {
 			const items = [{ design_name: 'Any Tile', box_count: 3 }];
 
 			// Mock order creation failure
-			mockQuery.single.mockResolvedValueOnce({ data: null, error: { message: 'insert failed' } });
+			mockQuery.single.mockResolvedValueOnce({
+				data: null,
+				error: { message: 'insert failed' },
+			});
 
-			await expect(orderService.importOrder(partyName, items as any, {})).rejects.toBeDefined();
+			await expect(
+				orderService.importOrder(
+					partyName,
+					items as Parameters<typeof orderService.importOrder>[1],
+					{},
+				),
+			).rejects.toBeDefined();
 			expect(inventoryService.performStockOperation).not.toHaveBeenCalled();
 		});
 	});

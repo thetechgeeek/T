@@ -23,7 +23,9 @@ describe('orderRepository.create (base)', () => {
 		const builder = makeBuilder({ data: [], error: null }, { data: order, error: null });
 		mockFrom.mockReturnValue(builder);
 
-		const result = await orderRepository.create({ party_name: 'Test Party' } as any);
+		const result = await orderRepository.create({ party_name: 'Test Party' } as Parameters<
+			typeof orderRepository.create
+		>[0]);
 
 		expect(mockFrom).toHaveBeenCalledWith('orders');
 		expect(builder.insert).toHaveBeenCalled();
@@ -49,7 +51,7 @@ describe('orderRepository.findMany (base) — filter variations', () => {
 		await orderRepository.findMany({});
 
 		const eqCalls = (builder.eq as jest.Mock).mock.calls;
-		expect(eqCalls.find((c: any[]) => c[0] === 'status')).toBeUndefined();
+		expect(eqCalls.find((c: unknown[]) => (c as string[])[0] === 'status')).toBeUndefined();
 	});
 
 	it('returns array of orders from the mock data', async () => {

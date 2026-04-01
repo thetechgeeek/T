@@ -1,7 +1,7 @@
 import React from 'react';
 import { waitFor, fireEvent } from '@testing-library/react-native';
 import FinanceOverviewScreen from '@/app/(app)/finance/index';
-import { useFinanceStore } from '@/src/stores/financeStore';
+import { useFinanceStore, FinanceState } from '@/src/stores/financeStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
 
@@ -29,8 +29,13 @@ beforeEach(() => {
 	jest.clearAllMocks();
 	mockFetchSummary.mockResolvedValue(undefined);
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
-	(useFinanceStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-		selector({ summary: mockSummary, loading: false, fetchSummary: mockFetchSummary }),
+	(useFinanceStore as unknown as jest.Mock).mockImplementation(
+		(selector: (s: FinanceState) => unknown) =>
+			selector({
+				summary: mockSummary,
+				loading: false,
+				fetchSummary: mockFetchSummary,
+			} as unknown as FinanceState),
 	);
 });
 
@@ -67,8 +72,13 @@ describe('FinanceOverviewScreen', () => {
 	});
 
 	it('renders ₹0.00 when summary is null', async () => {
-		(useFinanceStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ summary: null, loading: false, fetchSummary: mockFetchSummary }),
+		(useFinanceStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: FinanceState) => unknown) =>
+				selector({
+					summary: null,
+					loading: false,
+					fetchSummary: mockFetchSummary,
+				} as unknown as FinanceState),
 		);
 
 		const { getAllByText } = renderWithTheme(<FinanceOverviewScreen />);

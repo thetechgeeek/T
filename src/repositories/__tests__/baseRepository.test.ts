@@ -18,7 +18,7 @@ beforeEach(() => {
 });
 
 describe('createRepository — findById', () => {
-	const repo = createRepository<any>('test_table');
+	const repo = createRepository<{ id: string; name: string }>('test_table');
 
 	it('calls .from(table).select(*).eq(id, value).single()', async () => {
 		const item = { id: 'test-id', name: 'Item' };
@@ -35,7 +35,10 @@ describe('createRepository — findById', () => {
 	});
 
 	it('throws AppError when supabase returns an error', async () => {
-		const builder = makeBuilder(undefined, { data: null, error: { message: 'Not found', code: 'PGRST116' } });
+		const builder = makeBuilder(undefined, {
+			data: null,
+			error: { message: 'Not found', code: 'PGRST116' },
+		});
 		mockFrom.mockReturnValue(builder);
 
 		await expect(repo.findById('bad-id')).rejects.toMatchObject({ message: 'Not found' });
@@ -43,7 +46,7 @@ describe('createRepository — findById', () => {
 });
 
 describe('createRepository — create', () => {
-	const repo = createRepository<any>('test_table');
+	const repo = createRepository<{ id: string; name: string }>('test_table');
 
 	it('calls .from(table).insert(payload).select().single()', async () => {
 		const payload = { name: 'New Item' };
@@ -61,7 +64,7 @@ describe('createRepository — create', () => {
 });
 
 describe('createRepository — update', () => {
-	const repo = createRepository<any>('test_table');
+	const repo = createRepository<{ id: string; name: string }>('test_table');
 
 	it('calls .from(table).update(payload).eq(id, value).select().single()', async () => {
 		const updated = { id: 'upd-id', name: 'Updated' };
@@ -78,12 +81,14 @@ describe('createRepository — update', () => {
 });
 
 describe('createRepository — remove', () => {
-	const repo = createRepository<any>('test_table');
+	const repo = createRepository<{ id: string }>('test_table');
 
 	it('calls .from(table).delete().eq(id, value) and resolves void', async () => {
 		const builder = makeBuilder({ data: null, error: null });
 		// Override then to resolve without data (delete returns no data)
-		builder.then = jest.fn((resolve: any) => Promise.resolve({ data: null, error: null }).then(resolve));
+		builder.then = jest.fn((resolve: (val: unknown) => void) =>
+			Promise.resolve({ data: null, error: null }).then(resolve),
+		);
 		mockFrom.mockReturnValue(builder);
 
 		await expect(repo.remove('del-id')).resolves.toBeUndefined();
@@ -92,7 +97,10 @@ describe('createRepository — remove', () => {
 	});
 
 	it('throws when deletion fails', async () => {
-		const builder = makeBuilder({ data: null, error: { message: 'delete failed', code: 'DB_ERROR' } });
+		const builder = makeBuilder({
+			data: null,
+			error: { message: 'delete failed', code: 'DB_ERROR' },
+		});
 		mockFrom.mockReturnValue(builder);
 
 		await expect(repo.remove('del-id')).rejects.toMatchObject({ message: 'delete failed' });
@@ -100,7 +108,13 @@ describe('createRepository — remove', () => {
 });
 
 describe('createRepository — findMany with pagination', () => {
-	const repo = createRepository<any>('test_table');
+	const repo = createRepository<{
+		id: string;
+		name: string;
+		phone?: string;
+		status?: string;
+		created_at?: string;
+	}>('test_table');
 
 	it('applies pagination range: page 2, pageSize 10 → range(10, 19)', async () => {
 		const builder = makeBuilder({ data: [], count: 0, error: null });
@@ -171,7 +185,11 @@ describe('createRepository — findMany with pagination', () => {
 	});
 
 	it('throws when supabase returns an error', async () => {
-		const builder = makeBuilder({ data: null, count: null, error: { message: 'DB error', code: 'XX000' } });
+		const builder = makeBuilder({
+			data: null,
+			count: null,
+			error: { message: 'DB error', code: 'XX000' },
+		});
 		mockFrom.mockReturnValue(builder);
 
 		await expect(repo.findMany({})).rejects.toMatchObject({ message: 'DB error' });

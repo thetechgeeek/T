@@ -12,7 +12,7 @@ export interface Supplier extends Timestamps {
 	notes?: string;
 }
 
-export interface SupplierInsert extends Omit<Supplier, 'id' | 'created_at' | 'updated_at'> {}
+export type SupplierInsert = Omit<Supplier, 'id' | 'created_at' | 'updated_at'>;
 
 export interface SupplierLedgerSummary {
 	supplier_id: UUID;

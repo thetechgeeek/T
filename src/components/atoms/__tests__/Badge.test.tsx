@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { render } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../__tests__/utils/renderWithTheme';
 import { Badge } from '../Badge';
 
@@ -16,13 +15,9 @@ describe('Badge', () => {
 	});
 
 	it('variant="success" — text element has a defined color style', () => {
-		const { UNSAFE_getAllByType } = renderWithTheme(
-			<Badge label="Paid" variant="success" />,
-		);
+		const { UNSAFE_getAllByType } = renderWithTheme(<Badge label="Paid" variant="success" />);
 		const texts = UNSAFE_getAllByType(Text);
-		const labelText = texts.find((t) =>
-			(t.props.children as string | undefined) === 'Paid',
-		);
+		const labelText = texts.find((t) => (t.props.children as string | undefined) === 'Paid');
 		expect(labelText).toBeDefined();
 		const styles = Array.isArray(labelText!.props.style)
 			? Object.assign({}, ...labelText!.props.style)
@@ -36,9 +31,7 @@ describe('Badge', () => {
 	});
 
 	it('variant="error" — text element has a defined color style', () => {
-		const { UNSAFE_getAllByType } = renderWithTheme(
-			<Badge label="Overdue" variant="error" />,
-		);
+		const { UNSAFE_getAllByType } = renderWithTheme(<Badge label="Overdue" variant="error" />);
 		const texts = UNSAFE_getAllByType(Text);
 		const labelText = texts.find((t) => t.props.children === 'Overdue');
 		expect(labelText).toBeDefined();

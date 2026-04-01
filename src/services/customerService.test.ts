@@ -11,13 +11,21 @@ jest.mock('../config/supabase', () => ({
 }));
 
 /** Chainable + thenable builder for query-awaiting service methods. */
-function makeListBuilder(result: { data: any[]; count: number | null; error: any | null } = { data: [] as any[], count: 0, error: null }) {
-	const b: any = {};
-	['select', 'insert', 'update', 'or', 'eq', 'gte', 'lte', 'ilike', 'order', 'range'].forEach((m) => {
-		b[m] = jest.fn().mockReturnValue(b);
-	});
+function makeListBuilder(
+	result: {
+		data: unknown[] | null;
+		count: number | null;
+		error: { message: string; code?: string } | null;
+	} = { data: [], count: 0, error: null },
+) {
+	const b: Record<string, jest.Mock> = {};
+	['select', 'insert', 'update', 'or', 'eq', 'gte', 'lte', 'ilike', 'order', 'range'].forEach(
+		(m) => {
+			b[m] = jest.fn().mockReturnValue(b);
+		},
+	);
 	b.single = jest.fn().mockResolvedValue({ data: result.data?.[0] ?? null, error: result.error });
-	b.then = jest.fn((resolve: any) => Promise.resolve(result).then(resolve));
+	b.then = jest.fn((resolve: (val: unknown) => void) => Promise.resolve(result).then(resolve));
 	return b;
 }
 
@@ -39,7 +47,11 @@ describe('customerService', () => {
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			// Fixed: use toMatchObject instead of toEqual to avoid brittle equality on error shape
-			await expect(customerService.createCustomer({ name: 'Test' } as any)).rejects.toMatchObject({
+			await expect(
+				customerService.createCustomer({ name: 'Test' } as Parameters<
+					typeof customerService.createCustomer
+				>[0]),
+			).rejects.toMatchObject({
 				code: 'PGRST205',
 			});
 			expect(supabase.from).toHaveBeenCalledWith('customers');
@@ -51,7 +63,9 @@ describe('customerService', () => {
 			builder.single.mockResolvedValue({ data: customer, error: null });
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			const result = await customerService.createCustomer({ name: 'Test Customer' } as any);
+			const result = await customerService.createCustomer({
+				name: 'Test Customer',
+			} as Parameters<typeof customerService.createCustomer>[0]);
 			expect(result).toEqual(customer);
 		});
 	});
@@ -79,7 +93,11 @@ describe('customerService', () => {
 		});
 
 		it('error path: rejects when supabase returns an error', async () => {
-			const builder = makeListBuilder({ data: null as any, count: null as any, error: { message: 'DB error' } });
+			const builder = makeListBuilder({
+				data: null as unknown as unknown[],
+				count: null as unknown as number,
+				error: { message: 'DB error' },
+			});
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			await expect(customerService.fetchCustomers({})).rejects.toBeDefined();
@@ -93,7 +111,9 @@ describe('customerService', () => {
 			builder.single.mockResolvedValue({ data: updated, error: null });
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			const result = await customerService.updateCustomer('cust-uuid-001', { name: 'Updated Name' });
+			const result = await customerService.updateCustomer('cust-uuid-001', {
+				name: 'Updated Name',
+			});
 
 			expect(builder.update).toHaveBeenCalledWith({ name: 'Updated Name' });
 			expect(builder.eq).toHaveBeenCalledWith('id', 'cust-uuid-001');

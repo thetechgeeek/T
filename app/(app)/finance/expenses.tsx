@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, RefreshControl, Modal, Alert, Platform } from 'react-native';
+import { View, StyleSheet, RefreshControl, Modal, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
@@ -11,8 +11,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { Button } from '@/src/components/atoms/Button';
-import { Screen } from '@/src/components/atoms/Screen';
-import { TextInput } from '@/src/components/atoms/TextInput';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { FormField } from '@/src/components/molecules/FormField';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import type { Expense } from '@/src/types/finance';
@@ -47,7 +46,7 @@ export default function ExpensesScreen() {
 				[{ text: t('common.ok') }],
 			);
 		});
-	}, []);
+	}, [fetchExpenses, t]);
 
 	const handleSave = async () => {
 		if (!amount || !category) return;
@@ -75,7 +74,7 @@ export default function ExpensesScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
 			<Stack.Screen options={{ title: 'Expenses' }} />
 
 			<FlashList
@@ -100,10 +99,7 @@ export default function ExpensesScreen() {
 						<View style={layout.rowBetween}>
 							<View style={{ flex: 1 }}>
 								<ThemedText weight="bold">{exp.category}</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={theme.colors.onSurfaceVariant}
-								>
+								<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
 									{formatDate(exp.expense_date)}
 								</ThemedText>
 								{exp.notes && (
@@ -135,7 +131,7 @@ export default function ExpensesScreen() {
 
 			<Modal visible={modalVisible} animationType="slide" transparent>
 				<View style={styles.modalOverlay}>
-					<Screen
+					<AtomicScreen
 						backgroundColor="transparent"
 						safeAreaEdges={['top']}
 						style={{ width: '100%' }}
@@ -189,15 +185,14 @@ export default function ExpensesScreen() {
 								style={{ marginTop: 16 }}
 							/>
 						</View>
-					</Screen>
+					</AtomicScreen>
 				</View>
 			</Modal>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1 },
 	scrollContent: { padding: 16, paddingBottom: 100 },
 	expenseCard: { marginBottom: 12 },
 	fabContainer: { position: 'absolute', bottom: 32, left: 16, right: 16 },

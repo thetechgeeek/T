@@ -60,7 +60,11 @@ describe('inventoryStore', () => {
 
 	it('performStockOperation updates the local state correctly after a successful API call', async () => {
 		// Initial state with 1 item
-		useInventoryStore.setState({ items: [mockItems[0] as any], loading: false, error: null });
+		useInventoryStore.setState({
+			items: [mockItems[0] as unknown as ReturnType<typeof makeInventoryItem>],
+			loading: false,
+			error: null,
+		});
 
 		// Mock API success returning new quantity: 50 + 20 = 70
 		(inventoryService.performStockOperation as jest.Mock).mockResolvedValue(70);
@@ -112,7 +116,10 @@ describe('inventoryStore', () => {
 
 	it('updateItem success replaces the item in place', async () => {
 		const original = makeInventoryItem({ id: 'item-1', box_count: 10 });
-		useInventoryStore.setState({ items: [original as any], totalCount: 1 });
+		useInventoryStore.setState({
+			items: [original as unknown as ReturnType<typeof makeInventoryItem>],
+			totalCount: 1,
+		});
 
 		const updated = makeInventoryItem({ id: 'item-1', box_count: 20 });
 		(inventoryService.updateItem as jest.Mock).mockResolvedValue(updated);
@@ -127,25 +134,32 @@ describe('inventoryStore', () => {
 	it('deleteItem success removes item and decrements totalCount', async () => {
 		const itemA = makeInventoryItem({ id: 'item-1' });
 		const itemB = makeInventoryItem({ id: 'item-2' });
-		useInventoryStore.setState({ items: [itemA, itemB] as any, totalCount: 2 });
+		useInventoryStore.setState({
+			items: [itemA, itemB] as unknown as ReturnType<typeof makeInventoryItem>[],
+			totalCount: 2,
+		});
 		(inventoryService.deleteItem as jest.Mock).mockResolvedValue(undefined);
 
 		await useInventoryStore.getState().deleteItem('item-1');
 
 		const state = useInventoryStore.getState();
-		expect(state.items.find((i: any) => i.id === 'item-1')).toBeUndefined();
+		expect(state.items.find((i: { id: string }) => i.id === 'item-1')).toBeUndefined();
 		expect(state.totalCount).toBe(1);
 	});
 
 	it('performStockOperation failure sets error and does not modify box_count', async () => {
 		const original = makeInventoryItem({ id: 'item-1', box_count: 50 });
-		useInventoryStore.setState({ items: [original as any] });
+		useInventoryStore.setState({
+			items: [original as unknown as ReturnType<typeof makeInventoryItem>],
+		});
 		(inventoryService.performStockOperation as jest.Mock).mockRejectedValue(
 			new Error('Stock op failed'),
 		);
 
 		try {
-			await useInventoryStore.getState().performStockOperation('item-1', 'stock_out', 10, 'Sale');
+			await useInventoryStore
+				.getState()
+				.performStockOperation('item-1', 'stock_out', 10, 'Sale');
 		} catch {
 			// Expected error
 		}

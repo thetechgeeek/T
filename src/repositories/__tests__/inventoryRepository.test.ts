@@ -49,7 +49,7 @@ describe('inventoryRepository.findMany (base) — filter variations', () => {
 		await inventoryRepository.findMany({});
 
 		const eqCalls = (builder.eq as jest.Mock).mock.calls;
-		const categoryCall = eqCalls.find((c: any[]) => c[0] === 'category');
+		const categoryCall = eqCalls.find((c: unknown[]) => (c as string[])[0] === 'category');
 		expect(categoryCall).toBeUndefined();
 	});
 
@@ -62,7 +62,9 @@ describe('inventoryRepository.findMany (base) — filter variations', () => {
 		});
 
 		expect(builder.or).toHaveBeenCalledWith(
-			expect.stringMatching(/design_name.*white.*base_item_number|base_item_number.*white.*design_name/),
+			expect.stringMatching(
+				/design_name.*white.*base_item_number|base_item_number.*white.*design_name/,
+			),
 		);
 	});
 });
@@ -81,10 +83,15 @@ describe('inventoryRepository.findLowStock', () => {
 	});
 
 	it('throws when supabase returns an error', async () => {
-		const builder = makeBuilder({ data: null, error: { message: 'view error', code: 'XX000' } });
+		const builder = makeBuilder({
+			data: null,
+			error: { message: 'view error', code: 'XX000' },
+		});
 		mockFrom.mockReturnValue(builder);
 
-		await expect(inventoryRepository.findLowStock()).rejects.toMatchObject({ message: 'view error' });
+		await expect(inventoryRepository.findLowStock()).rejects.toMatchObject({
+			message: 'view error',
+		});
 	});
 });
 
@@ -94,7 +101,9 @@ describe('inventoryRepository.create (base)', () => {
 		const builder = makeBuilder({ data: [], error: null }, { data: item, error: null });
 		mockFrom.mockReturnValue(builder);
 
-		const result = await inventoryRepository.create({ design_name: 'GLOSSY WHITE 60x60' } as any);
+		const result = await inventoryRepository.create({
+			design_name: 'GLOSSY WHITE 60x60',
+		} as Parameters<typeof inventoryRepository.create>[0]);
 
 		expect(builder.insert).toHaveBeenCalled();
 		expect(builder.single).toHaveBeenCalled();
@@ -132,7 +141,14 @@ describe('inventoryRepository.performStockOp', () => {
 	it('calls rpc(perform_stock_operation_v1, { p_item_id, p_operation_type, ... })', async () => {
 		mockRpc.mockResolvedValue({ data: null, error: null });
 
-		await inventoryRepository.performStockOp('item-uuid-001', 'stock_in', 10, 'Test', 'purchase', 'ref-001');
+		await inventoryRepository.performStockOp(
+			'item-uuid-001',
+			'stock_in',
+			10,
+			'Test',
+			'purchase',
+			'ref-001',
+		);
 
 		expect(mockRpc).toHaveBeenCalledWith('perform_stock_operation_v1', {
 			p_item_id: 'item-uuid-001',
@@ -145,7 +161,10 @@ describe('inventoryRepository.performStockOp', () => {
 	});
 
 	it('throws when RPC returns an error', async () => {
-		mockRpc.mockResolvedValue({ data: null, error: { message: 'stock op failed', code: 'P0001' } });
+		mockRpc.mockResolvedValue({
+			data: null,
+			error: { message: 'stock op failed', code: 'P0001' },
+		});
 
 		await expect(
 			inventoryRepository.performStockOp('item-uuid-001', 'stock_in', 5),

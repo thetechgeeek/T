@@ -1,8 +1,8 @@
 import React from 'react';
 import { waitFor } from '@testing-library/react-native';
 import DashboardScreen from '@/app/(app)/(tabs)/index';
-import { useDashboardStore } from '@/src/stores/dashboardStore';
-import { useInvoiceStore } from '@/src/stores/invoiceStore';
+import { useDashboardStore, DashboardState } from '@/src/stores/dashboardStore';
+import { useInvoiceStore, InvoiceState } from '@/src/stores/invoiceStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { makeDashboardStats } from '../../fixtures/financeFixtures';
 
@@ -29,28 +29,31 @@ const mockFetchInvoices = jest.fn().mockResolvedValue(undefined);
 describe('DashboardScreen', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
-		(useDashboardStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({
-				stats: null,
-				fetchStats: mockFetchStats,
-				loading: false,
-				error: null,
-			}),
+		(useDashboardStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: DashboardState) => unknown) =>
+				selector({
+					stats: null,
+					fetchStats: mockFetchStats,
+					loading: false,
+					error: null,
+				} as unknown as DashboardState),
 		);
-		(useInvoiceStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({
-				invoices: [],
-				fetchInvoices: mockFetchInvoices,
-				loading: false,
-				error: null,
-			}),
+		(useInvoiceStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: InvoiceState) => unknown) =>
+				selector({
+					invoices: [],
+					fetchInvoices: mockFetchInvoices,
+					loading: false,
+					error: null,
+				} as unknown as InvoiceState),
 		);
 	});
 
 	it('renders today_sales stat from dashboardStore.stats', async () => {
 		const stats = makeDashboardStats({ today_sales: 12345 });
-		(useDashboardStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ stats, fetchStats: mockFetchStats }),
+		(useDashboardStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: DashboardState) => unknown) =>
+				selector({ stats, fetchStats: mockFetchStats } as unknown as DashboardState),
 		);
 
 		const { getByText } = renderWithTheme(<DashboardScreen />);
@@ -62,8 +65,9 @@ describe('DashboardScreen', () => {
 
 	it('renders total_outstanding_credit stat', async () => {
 		const stats = makeDashboardStats({ total_outstanding_credit: 8000 });
-		(useDashboardStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ stats, fetchStats: mockFetchStats }),
+		(useDashboardStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: DashboardState) => unknown) =>
+				selector({ stats, fetchStats: mockFetchStats } as unknown as DashboardState),
 		);
 
 		const { getByText } = renderWithTheme(<DashboardScreen />);
@@ -75,8 +79,9 @@ describe('DashboardScreen', () => {
 
 	it('renders low_stock_count stat', async () => {
 		const stats = makeDashboardStats({ low_stock_count: 3 });
-		(useDashboardStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ stats, fetchStats: mockFetchStats }),
+		(useDashboardStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: DashboardState) => unknown) =>
+				selector({ stats, fetchStats: mockFetchStats } as unknown as DashboardState),
 		);
 
 		const { getByText } = renderWithTheme(<DashboardScreen />);
@@ -87,8 +92,9 @@ describe('DashboardScreen', () => {
 	});
 
 	it('shows "0 items" for low_stock_count when stats is null', () => {
-		(useDashboardStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({ stats: null, fetchStats: mockFetchStats }),
+		(useDashboardStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: DashboardState) => unknown) =>
+				selector({ stats: null, fetchStats: mockFetchStats } as unknown as DashboardState),
 		);
 
 		const { getByText } = renderWithTheme(<DashboardScreen />);

@@ -42,7 +42,6 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 	) => {
 		const { theme } = useTheme();
 		const c = theme.colors;
-		const s = theme.spacing;
 		const r = theme.borderRadius;
 
 		const [isFocused, setIsFocused] = useState(false);

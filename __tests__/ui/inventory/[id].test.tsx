@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { waitFor, fireEvent } from '@testing-library/react-native';
 import ItemDetailScreen from '@/app/(app)/inventory/[id]';
 import { inventoryService } from '@/src/services/inventoryService';
 import { renderWithTheme } from '../../utils/renderWithTheme';

@@ -5,12 +5,12 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
 import { businessProfileService } from '@/src/services/businessProfileService';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput } from '@/src/components/atoms/TextInput';
 
 export default function SetupScreen() {
-	const { theme, c, s, r } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const { register } = useAuthStore();
 	const router = useRouter();
@@ -22,8 +22,6 @@ export default function SetupScreen() {
 	const [phone, setPhone] = useState('');
 	const [gstin, setGstin] = useState('');
 	const [loading, setLoading] = useState(false);
-
-	const typo = theme.typography;
 
 	const handleCreateAccount = async () => {
 		if (!email || !password)
@@ -67,7 +65,7 @@ export default function SetupScreen() {
 	};
 
 	return (
-		<Screen scrollable>
+		<AtomicScreen scrollable>
 			<View style={{ padding: s.lg }}>
 				<ThemedText variant="h1" color={c.primary} style={{ marginBottom: s.sm }}>
 					🏺 TileMaster
@@ -168,7 +166,7 @@ export default function SetupScreen() {
 					</>
 				)}
 			</View>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

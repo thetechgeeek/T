@@ -44,15 +44,12 @@ export const pdfService = {
 		let itemsTableRows =
 			invoice.line_items
 				?.map((item, index) => {
-					let taxCols = '';
-					if (isInterState) {
-						taxCols = `<td>₹${item.igst_amount.toFixed(2)} (${item.gst_rate}%)</td>`;
-					} else {
-						taxCols = `
+					const taxCols = isInterState
+						? `<td>₹${item.igst_amount.toFixed(2)} (${item.gst_rate}%)</td>`
+						: `
           <td>₹${item.cgst_amount.toFixed(2)} (${item.gst_rate / 2}%)</td>
           <td>₹${item.sgst_amount.toFixed(2)} (${item.gst_rate / 2}%)</td>
         `;
-					}
 
 					return `
         <tr>

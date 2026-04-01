@@ -24,6 +24,8 @@ const globals = {
 	URLSearchParams: 'readonly',
 	global: 'readonly',
 	Buffer: 'readonly',
+	__dirname: 'readonly',
+	__filename: 'readonly',
 };
 
 const testGlobals = {
@@ -43,6 +45,17 @@ module.exports = [
 	js.configs.recommended,
 	{
 		ignores: ['supabase/functions/**', 'node_modules/**', 'dist/**', '.expo/**'],
+	},
+	{
+		files: ['*.js', 'supabase/migrations/*.js'],
+		languageOptions: {
+			globals: {
+				...globals,
+				require: 'readonly',
+				module: 'readonly',
+				__dirname: 'readonly',
+			},
+		},
 	},
 	{
 		files: ['**/*.{ts,tsx}'],
@@ -76,6 +89,7 @@ module.exports = [
 			'react-hooks/exhaustive-deps': 'warn',
 			'react-native/no-unused-styles': 'error',
 			'react/react-in-jsx-scope': 'off',
+			'react/prop-types': 'off',
 			// Disable base rule in favour of TypeScript-aware version
 			'no-undef': 'off',
 		},

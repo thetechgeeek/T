@@ -1,7 +1,7 @@
 import { waitFor } from '@testing-library/react-native';
 import { useDashboardStore } from './dashboardStore';
 import { dashboardService } from '../services/dashboardService';
-import { eventBus } from '../events/appEvents';
+import { eventBus, type AppEvent } from '../events/appEvents';
 import type { DashboardStats } from '../types/finance';
 
 jest.mock('../services/dashboardService', () => ({
@@ -22,7 +22,6 @@ const mockStats: DashboardStats = {
 describe('dashboardStore', () => {
 	// Capture unsubscribe functions to prevent listener leaks between tests
 	const unsubscribers: Array<() => void> = [];
-	const originalSubscribe = eventBus.subscribe.bind(eventBus);
 
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -114,8 +113,8 @@ describe('dashboardStore', () => {
 		it('does NOT re-fetch on unrelated events', async () => {
 			(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
 
-			eventBus.emit({ type: 'CUSTOMER_UPDATED' as any, customerId: 'cust-1' });
-			eventBus.emit({ type: 'EXPENSE_CREATED' as any, expenseId: 'exp-1' });
+			eventBus.emit({ type: 'CUSTOMER_UPDATED', customerId: 'cust-1' });
+			eventBus.emit({ type: 'EXPENSE_CREATED', expenseId: 'exp-1' });
 			await Promise.resolve();
 
 			expect(dashboardService.fetchDashboardStats).not.toHaveBeenCalled();
@@ -126,10 +125,12 @@ describe('dashboardStore', () => {
 
 			// Capture a temporary subscription so we can verify unsubscribe works
 			const mockUnsub = jest.fn();
-			const onSpy = jest.spyOn(eventBus, 'subscribe').mockImplementation((_handler) => {
-				// Return a mock unsubscribe; the real store listeners are already set up
-				return mockUnsub;
-			});
+			const onSpy = jest
+				.spyOn(eventBus, 'subscribe')
+				.mockImplementation((_handler: (ev: AppEvent) => void) => {
+					// Return a mock unsubscribe; the real store listeners are already set up
+					return mockUnsub;
+				});
 
 			// Register via the spy to capture the unsubscribe mechanism
 			const unsub = eventBus.subscribe(() => {});

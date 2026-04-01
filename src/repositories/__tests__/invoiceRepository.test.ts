@@ -36,7 +36,10 @@ describe('invoiceRepository.findWithLineItems', () => {
 	});
 
 	it('error: throws AppError when supabase returns an error', async () => {
-		const builder = makeBuilder({ data: [], error: null }, { data: null, error: { message: 'Not found', code: 'PGRST116' } });
+		const builder = makeBuilder(
+			{ data: [], error: null },
+			{ data: null, error: { message: 'Not found', code: 'PGRST116' } },
+		);
 		mockFrom.mockReturnValue(builder);
 
 		await expect(invoiceRepository.findWithLineItems(id)).rejects.toMatchObject({
@@ -65,7 +68,10 @@ describe('invoiceRepository.createAtomic', () => {
 		const rpcData = { id: 'new-inv-id', invoice_number: 'TM/2025-26/0002' };
 		mockRpc.mockResolvedValue({ data: rpcData, error: null });
 
-		const result = await invoiceRepository.createAtomic(invoice as any, lineItems);
+		const result = await invoiceRepository.createAtomic(
+			invoice as Parameters<typeof invoiceRepository.createAtomic>[0],
+			lineItems,
+		);
 
 		expect(mockRpc).toHaveBeenCalledWith(
 			'create_invoice_with_items_v1',
@@ -81,7 +87,12 @@ describe('invoiceRepository.createAtomic', () => {
 	it('error: throws AppError when RPC returns an error', async () => {
 		mockRpc.mockResolvedValue({ data: null, error: { message: 'RPC failed', code: 'P0001' } });
 
-		await expect(invoiceRepository.createAtomic(invoice as any, lineItems)).rejects.toMatchObject({
+		await expect(
+			invoiceRepository.createAtomic(
+				invoice as Parameters<typeof invoiceRepository.createAtomic>[0],
+				lineItems,
+			),
+		).rejects.toMatchObject({
 			message: 'RPC failed',
 		});
 	});

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { waitFor, fireEvent } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import StockOpScreen from '@/app/(app)/inventory/stock-op';
 import { inventoryService } from '@/src/services/inventoryService';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
@@ -99,7 +100,6 @@ describe('StockOpScreen', () => {
 		fireEvent.changeText(getByPlaceholderText('e.g. 50'), '0');
 		fireEvent.press(getByText('Confirm'));
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(Alert.alert).toHaveBeenCalledWith(
 				'Error',
@@ -119,7 +119,6 @@ describe('StockOpScreen', () => {
 		fireEvent.changeText(getByPlaceholderText('e.g. 50'), '10');
 		fireEvent.press(getByText('Confirm'));
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(mockPerformStockOperation).toHaveBeenCalled();
 			expect(Alert.alert).toHaveBeenCalledWith(

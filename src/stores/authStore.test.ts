@@ -53,8 +53,8 @@ describe('authStore', () => {
 
 	it('logout resets the state', async () => {
 		useAuthStore.setState({
-			user: { id: '1' } as any,
-			session: {} as any,
+			user: { id: '1' } as unknown as ReturnType<typeof makeUser>,
+			session: {} as unknown as ReturnType<typeof makeSession>,
 			isAuthenticated: true,
 		});
 
@@ -108,7 +108,10 @@ describe('authStore', () => {
 	});
 
 	it('logout calls authService.signOut and sets isAuthenticated false', async () => {
-		useAuthStore.setState({ user: makeUser() as any, isAuthenticated: true });
+		useAuthStore.setState({
+			user: makeUser() as unknown as ReturnType<typeof makeUser>,
+			isAuthenticated: true,
+		});
 		(authService.signOut as jest.Mock).mockResolvedValue(undefined);
 
 		await useAuthStore.getState().logout();

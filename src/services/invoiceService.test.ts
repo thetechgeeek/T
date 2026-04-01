@@ -1,5 +1,6 @@
 import { invoiceService } from '@/src/services/invoiceService';
 import { supabase } from '../config/supabase';
+import { ValidationError } from '../errors/AppError';
 
 jest.mock('../config/supabase', () => ({
 	supabase: {
@@ -9,12 +10,18 @@ jest.mock('../config/supabase', () => ({
 }));
 
 /** Chainable + thenable builder for fetchInvoices tests (`await query` pattern). */
-function makeListBuilder(result: { data: any[]; count: number | null; error: any | null } = { data: [] as any[], count: 0, error: null }) {
-	const b: any = {};
+function makeListBuilder(
+	result: { data: unknown[] | null; count: number | null; error: { message: string } | null } = {
+		data: [],
+		count: 0,
+		error: null,
+	},
+) {
+	const b: Record<string, jest.Mock> = {};
 	['select', 'or', 'eq', 'gte', 'lte', 'order', 'range'].forEach((m) => {
 		b[m] = jest.fn().mockReturnValue(b);
 	});
-	b.then = jest.fn((resolve: any) => Promise.resolve(result).then(resolve));
+	b.then = jest.fn((resolve: (val: unknown) => void) => Promise.resolve(result).then(resolve));
 	return b;
 }
 
@@ -51,7 +58,9 @@ describe('invoiceService', () => {
 				amount_paid: 1180,
 			};
 
-			const result = await invoiceService.createInvoice(mockInput as any);
+			const result = await invoiceService.createInvoice(
+				mockInput as Parameters<typeof invoiceService.createInvoice>[0],
+			);
 
 			expect(result.invoice_number).toBe(mockInvoiceNum);
 			expect(result.id).toBe(mockInvoiceId);
@@ -75,7 +84,6 @@ describe('invoiceService', () => {
 		});
 
 		it('throws ValidationError for invalid input', async () => {
-			const { ValidationError } = require('../errors/AppError');
 			await expect(
 				invoiceService.createInvoice({
 					customer_name: '',
@@ -84,7 +92,7 @@ describe('invoiceService', () => {
 					payment_status: 'paid',
 					line_items: [],
 					amount_paid: 0,
-				} as any),
+				} as Parameters<typeof invoiceService.createInvoice>[0]),
 			).rejects.toBeInstanceOf(ValidationError);
 		});
 
@@ -103,9 +111,18 @@ describe('invoiceService', () => {
 				payment_status: 'unpaid',
 				payment_mode: 'cash',
 				notes: 'test',
-				line_items: [{ item_id: itemId, design_name: 'X', quantity: 1, rate_per_unit: 1000, gst_rate: 18, discount: 0 }],
+				line_items: [
+					{
+						item_id: itemId,
+						design_name: 'X',
+						quantity: 1,
+						rate_per_unit: 1000,
+						gst_rate: 18,
+						discount: 0,
+					},
+				],
 				amount_paid: 0,
-			} as any);
+			} as Parameters<typeof invoiceService.createInvoice>[0]);
 			expect(supabase.rpc).toHaveBeenCalledWith(
 				'create_invoice_with_items_v1',
 				expect.objectContaining({
@@ -134,9 +151,18 @@ describe('invoiceService', () => {
 				is_inter_state: false,
 				invoice_date: '2026-03-28',
 				payment_status: 'unpaid',
-				line_items: [{ item_id: itemId, design_name: 'X', quantity: 1, rate_per_unit: 1000, gst_rate: 18, discount: 0 }],
+				line_items: [
+					{
+						item_id: itemId,
+						design_name: 'X',
+						quantity: 1,
+						rate_per_unit: 1000,
+						gst_rate: 18,
+						discount: 0,
+					},
+				],
 				amount_paid: 0,
-			} as any);
+			} as Parameters<typeof invoiceService.createInvoice>[0]);
 			expect(supabase.rpc).toHaveBeenCalledWith(
 				'create_invoice_with_items_v1',
 				expect.objectContaining({
@@ -165,9 +191,17 @@ describe('invoiceService', () => {
 				is_inter_state: false,
 				invoice_date: '2026-03-28',
 				payment_status: 'unpaid',
-				line_items: [{ item_id: itemId, design_name: 'X', quantity: 1, rate_per_unit: 500, gst_rate: 18 }],
+				line_items: [
+					{
+						item_id: itemId,
+						design_name: 'X',
+						quantity: 1,
+						rate_per_unit: 500,
+						gst_rate: 18,
+					},
+				],
 				amount_paid: 0,
-			} as any);
+			} as Parameters<typeof invoiceService.createInvoice>[0]);
 			const rpcArgs = (supabase.rpc as jest.Mock).mock.calls[0][1];
 			expect(rpcArgs.p_line_items[0].discount).toBe(0);
 		});
@@ -183,9 +217,17 @@ describe('invoiceService', () => {
 					is_inter_state: false,
 					invoice_date: '2026-03-28',
 					payment_status: 'unpaid',
-					line_items: [{ item_id: '123e4567-e89b-12d3-a456-426614174000', design_name: 'X', quantity: 1, rate_per_unit: 500, gst_rate: 18 }],
+					line_items: [
+						{
+							item_id: '123e4567-e89b-12d3-a456-426614174000',
+							design_name: 'X',
+							quantity: 1,
+							rate_per_unit: 500,
+							gst_rate: 18,
+						},
+					],
 					amount_paid: 0,
-				} as any),
+				} as Parameters<typeof invoiceService.createInvoice>[0]),
 			).rejects.toBeDefined();
 		});
 	});
@@ -213,7 +255,9 @@ describe('invoiceService', () => {
 			await invoiceService.fetchInvoices({ search: 'marble' });
 
 			expect(builder.or).toHaveBeenCalledWith(
-				expect.stringMatching(/invoice_number.*marble.*customer_name|customer_name.*marble.*invoice_number/),
+				expect.stringMatching(
+					/invoice_number.*marble.*customer_name|customer_name.*marble.*invoice_number/,
+				),
 			);
 		});
 
@@ -250,10 +294,12 @@ describe('invoiceService', () => {
 			const builder = makeListBuilder();
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			await invoiceService.fetchInvoices({ payment_status: 'ALL' as any });
+			await invoiceService.fetchInvoices({ payment_status: 'ALL' });
 
 			const eqCalls = (builder.eq as jest.Mock).mock.calls;
-			expect(eqCalls.find((c: any[]) => c[0] === 'payment_status')).toBeUndefined();
+			expect(
+				eqCalls.find((c: unknown[]) => (c as string[])[0] === 'payment_status'),
+			).toBeUndefined();
 		});
 
 		it('date filters: .gte(invoice_date) and .lte(invoice_date) are called', async () => {
@@ -285,7 +331,11 @@ describe('invoiceService', () => {
 		});
 
 		it('error path: rejects when supabase returns an error', async () => {
-			const builder = makeListBuilder({ data: null as any, count: null as any, error: { message: 'DB error' } });
+			const builder = makeListBuilder({
+				data: null as unknown as unknown[],
+				count: null as unknown as number,
+				error: { message: 'DB error' },
+			});
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			await expect(invoiceService.fetchInvoices({})).rejects.toBeDefined();
@@ -297,9 +347,11 @@ describe('invoiceService', () => {
 			const invoiceWithItems = { id: 'inv-001', invoice_number: 'TM/001' };
 			// fetchInvoiceDetail calls repo.findWithLineItems → invoiceRepository.findWithLineItems
 			// which calls supabase.from('invoices').select(...).eq(...).single()
-			const builder: any = {};
-			['select', 'eq'].forEach((m) => { builder[m] = jest.fn().mockReturnValue(builder); });
-			builder.single = jest.fn().mockResolvedValue({ data: invoiceWithItems, error: null });
+			const builder: Record<string, jest.Mock> = {};
+			['select', 'eq', 'single'].forEach((m) => {
+				builder[m] = jest.fn().mockReturnValue(builder);
+			});
+			builder.single.mockResolvedValue({ data: invoiceWithItems, error: null });
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			const result = await invoiceService.fetchInvoiceDetail('inv-001');

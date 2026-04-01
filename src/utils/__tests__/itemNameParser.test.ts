@@ -78,7 +78,7 @@ describe('groupByBaseItemNumber', () => {
 		const items = [{ design_name: 'BRAND', id: '1' }];
 		const groups = groupByBaseItemNumber(items);
 		// Should not produce an undefined key — item is grouped under 'BRAND'
-		expect(groups.has(undefined as any)).toBe(false);
+		expect(groups.has(undefined as unknown as string)).toBe(false);
 		expect(groups.size).toBe(1);
 	});
 });

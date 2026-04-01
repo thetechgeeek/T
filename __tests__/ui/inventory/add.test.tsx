@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { fireEvent, waitFor } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import AddItemScreen from '@/app/(app)/inventory/add';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
@@ -86,7 +87,6 @@ describe('AddItemScreen', () => {
 
 		fireEvent.press(getByText('Save Item'));
 
-		const { Alert } = require('react-native');
 		await waitFor(() => {
 			expect(mockCreateItem).toHaveBeenCalled();
 			expect(Alert.alert).toHaveBeenCalledWith(

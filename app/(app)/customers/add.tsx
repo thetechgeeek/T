@@ -1,15 +1,15 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, ScrollView, StyleSheet, Platform, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { FormField } from '@/src/components/molecules/FormField';
 import { layout } from '@/src/theme/layout';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -52,7 +52,7 @@ export default function AddCustomerScreen() {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<CustomerFormData>({
-		resolver: zodResolver(customerSchema) as any,
+		resolver: zodResolver(customerSchema) as Resolver<CustomerFormData>,
 		defaultValues: {
 			type: 'retail',
 			credit_limit: 0,
@@ -74,7 +74,7 @@ export default function AddCustomerScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']} withKeyboard>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']} withKeyboard>
 			<Stack.Screen options={{ title: 'Add Customer' }} />
 			<ScrollView
 				keyboardDismissMode="on-drag"
@@ -205,7 +205,7 @@ export default function AddCustomerScreen() {
 					</Card>
 				</View>
 			</ScrollView>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

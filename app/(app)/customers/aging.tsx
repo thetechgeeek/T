@@ -8,23 +8,22 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function AgingReportScreen() {
 	const { theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
-	const { customers, fetchCustomers, loading } = useCustomerStore(
+	const { customers, fetchCustomers } = useCustomerStore(
 		useShallow((s) => ({
 			customers: s.customers,
 			fetchCustomers: s.fetchCustomers,
-			loading: s.loading,
 		})),
 	);
 
 	useEffect(() => {
 		fetchCustomers();
-	}, []);
+	}, [fetchCustomers]);
 
 	// Simple aging logic: just group by balance for now as a placeholder for real date-based aging
 	const agingData = customers
@@ -32,7 +31,7 @@ export default function AgingReportScreen() {
 		.sort((a, b) => (b.current_balance || 0) - (a.current_balance || 0));
 
 	return (
-		<Screen scrollable contentContainerStyle={styles.scrollContent}>
+		<AtomicScreen scrollable contentContainerStyle={styles.scrollContent}>
 			<Stack.Screen options={{ title: 'Aging Report' }} />
 			<View style={styles.summaryCard}>
 				<Card padding="lg" variant="elevated">
@@ -87,7 +86,7 @@ export default function AgingReportScreen() {
 					</Card>
 				))
 			)}
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

@@ -1,5 +1,6 @@
 import { useFinanceStore } from './financeStore';
 import { financeService } from '../services/financeService';
+import type { ProfitLossReport } from '../types/finance';
 
 jest.mock('../services/financeService', () => ({
 	financeService: {
@@ -41,7 +42,9 @@ describe('financeStore', () => {
 		const newExpense = { amount: 50, category: 'Tools', expense_date: '2026-03-22' };
 		const savedExpense = { id: '2', ...newExpense };
 		(financeService.createExpense as jest.Mock).mockResolvedValue(savedExpense);
-		(financeService.getProfitLoss as jest.Mock).mockResolvedValue({ net_profit: -50 } as any);
+		(financeService.getProfitLoss as jest.Mock).mockResolvedValue({
+			net_profit: -50,
+		} as unknown as ProfitLossReport);
 
 		await useFinanceStore.getState().addExpense(newExpense);
 

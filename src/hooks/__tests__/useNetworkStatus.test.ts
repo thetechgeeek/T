@@ -7,7 +7,6 @@ import { useNetworkStatus } from '../useNetworkStatus';
  * Tests mock global fetch to control reachability checks.
  */
 
-const mockAddEventListener = jest.fn();
 const mockRemove = jest.fn();
 
 describe('useNetworkStatus', () => {

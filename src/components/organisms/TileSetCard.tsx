@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
-import { Package, AlertCircle, TrendingUp } from 'lucide-react-native';
+import { Package, AlertCircle } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ViewStyle } from 'react-native';
@@ -22,7 +22,6 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 	const r = theme.borderRadius;
 
 	// We'll show the main image as the first item's image, or placeholder
-	const mainImage = group.items.find((i) => i.tile_image_url)?.tile_image_url;
 
 	// Total stock across all variants in this set
 	const totalStock = group.items.reduce((sum, item) => sum + item.box_count, 0);

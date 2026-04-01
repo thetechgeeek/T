@@ -5,7 +5,7 @@ import { X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
 import { TextInput } from '@/src/components/atoms/TextInput';
-import { Card } from '@/src/components/atoms/Card';
+
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { UUID } from '@/src/types/common';

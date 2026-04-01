@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { waitFor, fireEvent } from '@testing-library/react-native';
 import OrdersListScreen from '@/app/(app)/orders/index';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';

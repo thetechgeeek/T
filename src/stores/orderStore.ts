@@ -3,7 +3,7 @@ import { orderService } from '../services/orderService';
 import { pdfService } from '../services/pdfService';
 import { eventBus } from '../events/appEvents';
 import type { ParsedOrderItem } from '../services/pdfService';
-import type { UUID } from '@/src/types/common';
+
 import type { Order } from '../types/order';
 export type { Order };
 

@@ -28,7 +28,6 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 	const c = theme.colors;
 	const s = theme.spacing;
 	const r = theme.borderRadius;
-	const typo = theme.typography;
 
 	return (
 		<View style={[styles.section, { paddingHorizontal: s.lg, marginTop: s.lg }]}>
@@ -155,13 +154,6 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 
 const styles = StyleSheet.create({
 	section: {},
-	sectionHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		marginBottom: 12,
-	},
-	sectionTitle: {},
 	emptyCard: { alignItems: 'center' },
 	invoiceItem: { marginBottom: 8 },
 	statusBadge: { alignSelf: 'flex-start' },

@@ -7,10 +7,9 @@ import {
 	ScrollView,
 	Alert,
 	ActivityIndicator,
-	Platform,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, Save, Image as ImageIcon } from 'lucide-react-native';
+import { ArrowLeft, Save } from 'lucide-react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,7 +18,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { FormField } from '@/src/components/molecules/FormField';
 import type { TileCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
@@ -63,7 +62,6 @@ export default function AddItemScreen() {
 	const { createItem, updateItem } = useInventoryStore(
 		useShallow((s) => ({ createItem: s.createItem, updateItem: s.updateItem })),
 	);
-	const [submitting, setSubmitting] = useState(false);
 	const [loading, setLoading] = useState(isEditing);
 
 	const {
@@ -105,17 +103,17 @@ export default function AddItemScreen() {
 					});
 					setLoading(false);
 				})
-			.catch((err) => {
-				Alert.alert(t('common.errorTitle'), t('inventory.loadError'), [
-					{ text: t('common.ok') },
-				]);
-				router.back();
-			});
+				.catch((_err) => {
+					Alert.alert(t('common.errorTitle'), t('inventory.loadError'), [
+						{ text: t('common.ok') },
+					]);
+					router.back();
+				});
 		}
-	}, [id, isEditing]);
+	}, [id, isEditing, reset, router, t]);
 
 	const onSubmit = async (data: FormData) => {
-		setSubmitting(true);
+		setLoading(true);
 		try {
 			const payload = {
 				design_name: data.design_name,
@@ -148,7 +146,7 @@ export default function AddItemScreen() {
 				[{ text: t('common.ok') }],
 			);
 		} finally {
-			setSubmitting(false);
+			setLoading(false);
 		}
 	};
 
@@ -166,7 +164,7 @@ export default function AddItemScreen() {
 	}
 
 	return (
-		<Screen withKeyboard safeAreaEdges={['top', 'bottom']}>
+		<AtomicScreen withKeyboard safeAreaEdges={['top', 'bottom']}>
 			<View
 				style={[
 					styles.header,
@@ -452,7 +450,7 @@ export default function AddItemScreen() {
 					leftIcon={<Save size={20} color="white" />}
 				/>
 			</View>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

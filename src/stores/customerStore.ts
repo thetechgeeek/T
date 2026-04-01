@@ -11,7 +11,7 @@ import type {
 } from '../types/customer';
 import type { UUID } from '../types/common';
 
-interface CustomerState {
+export interface CustomerState {
 	customers: Customer[];
 	totalCount: number;
 	loading: boolean;
@@ -55,7 +55,7 @@ export const useCustomerStore = create<CustomerState>()(
 			get().fetchCustomers(true);
 		},
 
-		fetchCustomers: async (reset = false) => {
+		fetchCustomers: async (_reset = false) => {
 			set((s) => {
 				s.loading = true;
 				s.error = null;

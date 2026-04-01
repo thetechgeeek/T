@@ -25,7 +25,9 @@ describe('paymentRepository.recordWithInvoiceUpdate', () => {
 		const rpcData = { id: 'pay-uuid-001', new_status: 'paid' };
 		mockRpc.mockResolvedValue({ data: rpcData, error: null });
 
-		const result = await paymentRepository.recordWithInvoiceUpdate(input as any);
+		const result = await paymentRepository.recordWithInvoiceUpdate(
+			input as Parameters<typeof paymentRepository.recordWithInvoiceUpdate>[0],
+		);
 
 		expect(mockRpc).toHaveBeenCalledWith(
 			'record_payment_with_invoice_update_v1',
@@ -38,7 +40,11 @@ describe('paymentRepository.recordWithInvoiceUpdate', () => {
 	it('throws AppError when RPC returns an error', async () => {
 		mockRpc.mockResolvedValue({ data: null, error: { message: 'RPC failed', code: 'P0001' } });
 
-		await expect(paymentRepository.recordWithInvoiceUpdate(input as any)).rejects.toMatchObject({
+		await expect(
+			paymentRepository.recordWithInvoiceUpdate(
+				input as Parameters<typeof paymentRepository.recordWithInvoiceUpdate>[0],
+			),
+		).rejects.toMatchObject({
 			message: 'RPC failed',
 		});
 	});

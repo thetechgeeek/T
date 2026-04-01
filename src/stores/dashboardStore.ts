@@ -4,7 +4,7 @@ import { dashboardService } from '../services/dashboardService';
 import { eventBus } from '../events/appEvents';
 import type { DashboardStats } from '../types/finance';
 
-interface DashboardState {
+export interface DashboardState {
 	stats: DashboardStats | null;
 	loading: boolean;
 	error: string | null;

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-	View,
-	StyleSheet,
-	TouchableOpacity,
-	Alert,
-	ActivityIndicator,
-	Platform,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,7 +12,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Button } from '@/src/components/atoms/Button';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import type { UUID } from '@/src/types/common';
 import type { StockOpType, InventoryItem } from '@/src/types/inventory';
 import { layout } from '@/src/theme/layout';
@@ -106,7 +99,7 @@ export default function StockOpScreen() {
 	}
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']} withKeyboard>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']} withKeyboard>
 			<View
 				style={[
 					styles.header,
@@ -187,7 +180,7 @@ export default function StockOpScreen() {
 					leftIcon={<Save size={20} color={c.onPrimary} />}
 				/>
 			</View>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

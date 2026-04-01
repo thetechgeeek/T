@@ -1,5 +1,5 @@
 import { pdfService } from './pdfService';
-import { businessProfileService } from './businessProfileService';
+import { getDocumentAsync } from 'expo-document-picker';
 import type { Invoice } from '../types/invoice';
 
 jest.mock('./businessProfileService', () => ({
@@ -66,7 +66,7 @@ const minimalInvoice: Partial<Invoice> = {
 			igst_amount: 0,
 			line_total: 1180,
 			gst_rate: 18,
-		} as any,
+		} as unknown as Invoice['line_items'] extends (infer T)[] ? T : never, // Cast is fine here for partially defined mock
 	],
 };
 
@@ -113,8 +113,7 @@ describe('pdfService', () => {
 
 	describe('pickPdfDocument', () => {
 		it('returns null when user cancels', async () => {
-			const { getDocumentAsync } = require('expo-document-picker');
-			getDocumentAsync.mockResolvedValue({ canceled: true });
+			(getDocumentAsync as jest.Mock).mockResolvedValue({ canceled: true });
 
 			const result = await pdfService.pickPdfDocument();
 
@@ -122,10 +121,16 @@ describe('pdfService', () => {
 		});
 
 		it('returns document metadata when file is selected', async () => {
-			const { getDocumentAsync } = require('expo-document-picker');
-			getDocumentAsync.mockResolvedValue({
+			(getDocumentAsync as jest.Mock).mockResolvedValue({
 				canceled: false,
-				assets: [{ uri: 'file://doc.pdf', name: 'doc.pdf', size: 1024, mimeType: 'application/pdf' }],
+				assets: [
+					{
+						uri: 'file://doc.pdf',
+						name: 'doc.pdf',
+						size: 1024,
+						mimeType: 'application/pdf',
+					},
+				],
 			});
 
 			const result = await pdfService.pickPdfDocument();

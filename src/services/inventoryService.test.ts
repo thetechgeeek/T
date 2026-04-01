@@ -7,16 +7,36 @@ import { makeInventoryItem } from '../../__tests__/fixtures/inventoryFixtures';
  * Replaces the broken `then: jest.fn(resolve => resolve({...}))` pattern (QA issue 3.2)
  * that caused fetchItemById to use the wrong mock path.
  */
-function makeBuilder(result: { data: any; count?: number | null; error: any } = { data: [], count: 0, error: null }) {
-	const b: any = {};
-	const chainable = ['select', 'insert', 'update', 'delete', 'eq', 'or', 'order', 'range', 'limit', 'lte', 'ilike'];
-	chainable.forEach((m) => { b[m] = jest.fn().mockReturnValue(b); });
+function makeBuilder(
+	result: {
+		data: unknown;
+		count?: number | null;
+		error: { message: string; code?: string } | null;
+	} = { data: [], count: 0, error: null },
+) {
+	const b: Record<string, jest.Mock> = {};
+	const chainable = [
+		'select',
+		'insert',
+		'update',
+		'delete',
+		'eq',
+		'or',
+		'order',
+		'range',
+		'limit',
+		'lte',
+		'ilike',
+	];
+	chainable.forEach((m) => {
+		b[m] = jest.fn().mockReturnValue(b);
+	});
 	// .single() is a real promise (terminal call)
 	const singleData = Array.isArray(result.data) ? (result.data[0] ?? null) : result.data;
 	b.single = jest.fn().mockResolvedValue({ data: singleData, error: result.error });
 	b.maybeSingle = jest.fn().mockResolvedValue({ data: singleData, error: result.error });
 	// Thenable for `await query` (fetchItems, fetchStockHistory use this)
-	b.then = jest.fn((resolve: any) => Promise.resolve(result).then(resolve));
+	b.then = jest.fn((resolve: (val: unknown) => void) => Promise.resolve(result).then(resolve));
 	return b;
 }
 
@@ -71,11 +91,17 @@ describe('inventoryService', () => {
 			await inventoryService.fetchItems({ category: 'ALL' });
 
 			const eqCalls = (builder.eq as jest.Mock).mock.calls;
-			expect(eqCalls.find((c: any[]) => c[0] === 'category')).toBeUndefined();
+			expect(
+				eqCalls.find((c: unknown[]) => (c as string[])[0] === 'category'),
+			).toBeUndefined();
 		});
 
 		it('throws error when supabase returns an error', async () => {
-			const builder = makeBuilder({ data: null, count: null, error: { message: 'DB Error' } });
+			const builder = makeBuilder({
+				data: null,
+				count: null,
+				error: { message: 'DB Error' },
+			});
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			await expect(inventoryService.fetchItems({})).rejects.toBeDefined();
@@ -106,7 +132,9 @@ describe('inventoryService', () => {
 			builder.single.mockResolvedValue({ data: item, error: null });
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			const result = await inventoryService.createItem({ design_name: 'GLOSSY WHITE 60x60' } as any);
+			const result = await inventoryService.createItem({
+				design_name: 'GLOSSY WHITE 60x60',
+			} as Parameters<typeof inventoryService.createItem>[0]);
 
 			expect(supabase.from).toHaveBeenCalledWith('inventory_items');
 			expect(builder.insert).toHaveBeenCalled();
@@ -133,7 +161,12 @@ describe('inventoryService', () => {
 		it('calls the supabase RPC correctly', async () => {
 			(supabase.rpc as jest.Mock).mockResolvedValueOnce({ data: 100, error: null });
 
-			const result = await inventoryService.performStockOperation('item1', 'stock_in', 10, 'Restock');
+			const result = await inventoryService.performStockOperation(
+				'item1',
+				'stock_in',
+				10,
+				'Restock',
+			);
 
 			expect(supabase.rpc).toHaveBeenCalledWith('perform_stock_operation_v1', {
 				p_item_id: 'item1',
@@ -147,7 +180,10 @@ describe('inventoryService', () => {
 		});
 
 		it('propagates RPC error (does not swallow it)', async () => {
-			(supabase.rpc as jest.Mock).mockResolvedValue({ data: null, error: { message: 'RPC error', code: 'P0001' } });
+			(supabase.rpc as jest.Mock).mockResolvedValue({
+				data: null,
+				error: { message: 'RPC error', code: 'P0001' },
+			});
 
 			await expect(
 				inventoryService.performStockOperation('item1', 'stock_in', 10),

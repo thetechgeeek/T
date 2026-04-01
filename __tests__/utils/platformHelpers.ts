@@ -15,12 +15,12 @@ const DEFAULT_OS = 'ios';
  * Override Platform.OS for the current test.
  */
 export function setPlatformOS(os: 'ios' | 'android' | 'web'): void {
-	(Platform as any).OS = os;
+	(Platform as unknown as { OS: string }).OS = os;
 }
 
 /**
  * Reset Platform.OS back to the default ('ios').
  */
 export function resetPlatformOS(): void {
-	(Platform as any).OS = DEFAULT_OS;
+	(Platform as unknown as { OS: string }).OS = DEFAULT_OS;
 }

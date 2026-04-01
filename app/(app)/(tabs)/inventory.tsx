@@ -10,20 +10,13 @@ import {
 	Alert,
 } from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
-import {
-	Plus,
-	Package,
-	Search,
-	SlidersHorizontal,
-	Grid as GridIcon,
-	List as ListIcon,
-} from 'lucide-react-native';
+import { Plus, Package, Search, SlidersHorizontal } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { TileSetCard } from '@/src/components/organisms/TileSetCard';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Chip } from '@/src/components/atoms/Chip';
 import type { TileSetGroup, TileCategory } from '@/src/types/inventory';
@@ -62,13 +55,13 @@ export default function InventoryTab() {
 	useEffect(() => {
 		// Initial fetch if empty and not loading
 		if (items.length === 0 && !loading && page === 1) {
-			fetchItems(true).catch((e) => {
+			fetchItems(true).catch((_e) => {
 				Alert.alert(t('common.errorTitle'), t('inventory.loadError'), [
 					{ text: t('common.ok') },
 				]);
 			});
 		}
-	}, []);
+	}, [fetchItems, items.length, loading, page, t]);
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
@@ -122,7 +115,7 @@ export default function InventoryTab() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['top']} withKeyboard={false}>
+		<AtomicScreen safeAreaEdges={['top']} withKeyboard={false}>
 			{/* Header */}
 			<View
 				style={[
@@ -249,7 +242,7 @@ export default function InventoryTab() {
 					importantForAccessibility="no"
 				/>
 			</TouchableOpacity>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

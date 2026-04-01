@@ -4,17 +4,18 @@ import { dashboardService } from '@/src/services/dashboardService';
 import { inventoryService } from '@/src/services/inventoryService';
 import { makeInventoryItem } from '../fixtures/inventoryFixtures';
 import { waitFor } from '@testing-library/react-native';
+import type { DashboardStats } from '@/src/types/finance';
 
 // Mock only the Supabase network boundary (as per Phase 12 requirement)
 jest.mock('@/src/config/supabase', () => {
-	const { createSupabaseMock } = require('../utils/supabaseMock');
+	const { createSupabaseMock } = jest.requireActual('../utils/supabaseMock');
 	return {
 		supabase: createSupabaseMock(),
 	};
 });
 
-// Access the mock instance
-const { supabase: mockSupabase } = require('@/src/config/supabase');
+import { supabase } from '@/src/config/supabase';
+const mockSupabase = supabase as unknown as { rpc: jest.Mock };
 
 describe('Stock Operation Flow Integration', () => {
 	beforeEach(() => {
@@ -68,7 +69,7 @@ describe('Stock Operation Flow Integration', () => {
 
 		// Spy on dashboard service
 		const dashboardSpy = jest.spyOn(dashboardService, 'fetchDashboardStats');
-		dashboardSpy.mockResolvedValue({} as any);
+		dashboardSpy.mockResolvedValue({} as unknown as DashboardStats);
 
 		// Spy on inventoryService.fetchItems (called by store listener)
 		const fetchItemsSpy = jest.spyOn(inventoryService, 'fetchItems');

@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react-native';
+import i18n from 'i18next';
 import { useLocale } from '../useLocale';
 
 jest.unmock('@/src/hooks/useLocale');
@@ -31,7 +32,6 @@ describe('useLocale', () => {
 	});
 
 	it('toggleLanguage switches from en to hi then back to en', async () => {
-		const i18n = require('i18next').default;
 		// Start in English
 		i18n.language = 'en';
 

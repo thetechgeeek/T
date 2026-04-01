@@ -17,8 +17,8 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 	);
 }
 
-function ScanTabIcon({ focused }: { focused: boolean }) {
-	const { theme, c } = useThemeTokens();
+function ScanTabIcon({ _focused }: { _focused: boolean }) {
+	const { theme } = useThemeTokens();
 	return (
 		<View
 			style={[
@@ -61,9 +61,7 @@ export default function TabLayout() {
 				options={{
 					title: t('dashboard.greeting'),
 					tabBarAccessibilityLabel: 'tab-dashboard',
-					tabBarIcon: ({ color, size }) => (
-						<Home size={22} color={color} strokeWidth={2} />
-					),
+					tabBarIcon: ({ color }) => <Home size={22} color={color} strokeWidth={2} />,
 				}}
 			/>
 			<Tabs.Screen
@@ -79,7 +77,7 @@ export default function TabLayout() {
 				options={{
 					title: t('scanner.title'),
 					tabBarAccessibilityLabel: 'tab-scan',
-					tabBarIcon: ({ focused }) => <ScanTabIcon focused={focused} />,
+					tabBarIcon: ({ focused }) => <ScanTabIcon _focused={focused} />,
 					tabBarLabel: () => null,
 				}}
 			/>

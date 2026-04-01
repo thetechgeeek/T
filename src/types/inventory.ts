@@ -31,10 +31,10 @@ export interface InventoryItem extends Timestamps {
 	notes?: string;
 }
 
-export interface InventoryItemInsert extends Omit<
+export type InventoryItemInsert = Omit<
 	InventoryItem,
 	'id' | 'created_at' | 'updated_at' | 'base_item_number'
-> {}
+>;
 
 export interface StockOperation extends Pick<Timestamps, 'created_at'> {
 	id: UUID;

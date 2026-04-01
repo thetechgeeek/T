@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { orderService, Order } from '@/src/services/orderService';
 import type { InventoryItem } from '@/src/types/inventory';
 import { Package, CheckCircle2 } from 'lucide-react-native';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import logger from '@/src/utils/logger';
 
@@ -14,7 +14,6 @@ export default function OrderDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { c, s, r } = useThemeTokens();
 	const { formatDateShort } = useLocale();
-	const router = useRouter();
 
 	const [order, setOrder] = useState<Order | null>(null);
 	const [items, setItems] = useState<InventoryItem[]>([]);
@@ -27,8 +26,8 @@ export default function OrderDetailScreen() {
 				const orderData = await orderService.fetchOrderById(id);
 				const itemsData = await orderService.fetchItemsByOrderId(id);
 				setOrder(orderData);
-				setItems(itemsData as any);
-			} catch (err: any) {
+				setItems(itemsData as InventoryItem[]);
+			} catch (err: unknown) {
 				logger.error('error', err);
 			} finally {
 				setLoading(false);
@@ -39,17 +38,17 @@ export default function OrderDetailScreen() {
 
 	if (loading || !order) {
 		return (
-			<Screen
+			<AtomicScreen
 				safeAreaEdges={['top', 'bottom']}
 				style={{ justifyContent: 'center', alignItems: 'center' }}
 			>
 				<ActivityIndicator size="large" color={c.primary} />
-			</Screen>
+			</AtomicScreen>
 		);
 	}
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']}>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
 			<ScrollView>
 				<View style={styles.headerArea}>
 					<Package size={48} color={c.primary} style={{ marginBottom: s.md }} />
@@ -103,7 +102,7 @@ export default function OrderDetailScreen() {
 						Items Processed ({items.length})
 					</ThemedText>
 
-					{items.map((item: any, index: number) => (
+					{items.map((item: InventoryItem, index: number) => (
 						<View
 							key={item.id || index}
 							style={[
@@ -147,7 +146,7 @@ export default function OrderDetailScreen() {
 					)}
 				</View>
 			</ScrollView>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 

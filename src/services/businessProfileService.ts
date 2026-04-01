@@ -11,10 +11,14 @@ export interface BusinessProfileInput {
 	invoice_sequence?: number;
 }
 
+export interface BusinessProfile extends BusinessProfileInput {
+	id: string;
+}
+
 export const businessProfileService = {
 	async upsert(data: BusinessProfileInput): Promise<void> {
-		const existing = await this.fetch();
-		const doc = existing ? { ...data, id: (existing as any).id } : data;
+		const existing = (await this.fetch()) as BusinessProfile | null;
+		const doc = existing ? { ...data, id: existing.id } : data;
 		const { error } = await supabase.from('business_profile').upsert(doc);
 		if (error) throw new Error(error.message);
 	},

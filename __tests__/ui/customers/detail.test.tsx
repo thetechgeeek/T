@@ -18,7 +18,8 @@ jest.mock('@/src/hooks/useLocale', () => ({
 }));
 
 jest.mock('@/src/components/organisms/PaymentModal', () => {
-	const React = require('react');
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
+	require('react');
 	return { PaymentModal: () => null };
 });
 

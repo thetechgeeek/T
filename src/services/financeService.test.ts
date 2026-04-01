@@ -3,7 +3,7 @@ import { supabase } from '../config/supabase';
 import { makeExpense } from '../../__tests__/fixtures/financeFixtures';
 
 // Mock query object
-const mockQuery: any = {
+const mockQuery: Record<string, jest.Mock> = {
 	select: jest.fn().mockReturnThis(),
 	insert: jest.fn().mockReturnThis(),
 	ilike: jest.fn().mockReturnThis(),
@@ -12,7 +12,9 @@ const mockQuery: any = {
 	order: jest.fn().mockReturnThis(),
 	single: jest.fn().mockReturnThis(),
 	eq: jest.fn().mockReturnThis(),
-	then: jest.fn((resolve) => resolve({ data: [], error: null, count: 0 })),
+	then: jest.fn((resolve: (val: unknown) => void) =>
+		resolve({ data: [], error: null, count: 0 }),
+	),
 };
 
 jest.mock('../config/supabase', () => ({
@@ -27,7 +29,7 @@ jest.mock('../config/supabase', () => ({
 describe('financeService', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
-		mockQuery.then.mockImplementation((resolve: any) =>
+		mockQuery.then.mockImplementation((resolve: (val: unknown) => void) =>
 			resolve({ data: [], error: null, count: 0 }),
 		);
 	});
@@ -45,7 +47,7 @@ describe('financeService', () => {
 
 		it('returns { data, count } from the mock data', async () => {
 			const expenses = [makeExpense()];
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
 				resolve({ data: expenses, error: null, count: 1 }),
 			);
 
@@ -56,7 +58,7 @@ describe('financeService', () => {
 		});
 
 		it('error path: rejects when supabase returns an error', async () => {
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
 				resolve({ data: null, error: { message: 'DB error' }, count: null }),
 			);
 
@@ -66,7 +68,7 @@ describe('financeService', () => {
 
 	describe('fetchPurchases', () => {
 		it('queries the purchases table with no filters by default', async () => {
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
 				resolve({ data: [], error: null }),
 			);
 
@@ -76,7 +78,7 @@ describe('financeService', () => {
 		});
 
 		it('applies eq(supplier_id) when supplierId filter is set', async () => {
-			mockQuery.then.mockImplementationOnce((resolve: any) =>
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
 				resolve({ data: [], error: null }),
 			);
 
@@ -107,16 +109,29 @@ describe('financeService', () => {
 			const expense = makeExpense();
 			mockQuery.single.mockResolvedValueOnce({ data: expense, error: null });
 
-			const result = await financeService.createExpense({ category: 'Fuel', amount: 300, expense_date: '2026-01-10', notes: '' });
+			const result = await financeService.createExpense({
+				category: 'Fuel',
+				amount: 300,
+				expense_date: '2026-01-10',
+				notes: '',
+			});
 
 			expect(result.id).toBeDefined();
 		});
 
 		it('error path: rejects when supabase returns an error', async () => {
-			mockQuery.single.mockResolvedValueOnce({ data: null, error: { message: 'insert failed' } });
+			mockQuery.single.mockResolvedValueOnce({
+				data: null,
+				error: { message: 'insert failed' },
+			});
 
 			await expect(
-				financeService.createExpense({ category: 'Fuel', amount: 300, expense_date: '2026-01-10', notes: '' }),
+				financeService.createExpense({
+					category: 'Fuel',
+					amount: 300,
+					expense_date: '2026-01-10',
+					notes: '',
+				}),
 			).rejects.toBeDefined();
 		});
 	});

@@ -1,5 +1,4 @@
 import React from 'react';
-import { fireEvent } from '@testing-library/react-native';
 import PaymentsScreen from '@/app/(app)/finance/payments';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';

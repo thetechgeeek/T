@@ -33,10 +33,15 @@ describe('customerRepository.findById (base)', () => {
 	});
 
 	it('error: throws when supabase returns an error', async () => {
-		const builder = makeBuilder({ data: [], error: null }, { data: null, error: { message: 'DB error', code: 'XX000' } });
+		const builder = makeBuilder(
+			{ data: [], error: null },
+			{ data: null, error: { message: 'DB error', code: 'XX000' } },
+		);
 		mockFrom.mockReturnValue(builder);
 
-		await expect(customerRepository.findById('bad-id')).rejects.toMatchObject({ message: 'DB error' });
+		await expect(customerRepository.findById('bad-id')).rejects.toMatchObject({
+			message: 'DB error',
+		});
 	});
 });
 
@@ -65,10 +70,15 @@ describe('customerRepository.search', () => {
 	});
 
 	it('throws when supabase returns an error', async () => {
-		const builder = makeBuilder({ data: null, error: { message: 'search failed', code: 'XX000' } });
+		const builder = makeBuilder({
+			data: null,
+			error: { message: 'search failed', code: 'XX000' },
+		});
 		mockFrom.mockReturnValue(builder);
 
-		await expect(customerRepository.search('test')).rejects.toMatchObject({ message: 'search failed' });
+		await expect(customerRepository.search('test')).rejects.toMatchObject({
+			message: 'search failed',
+		});
 	});
 });
 
@@ -100,7 +110,9 @@ describe('customerRepository.create (base)', () => {
 		const builder = makeBuilder({ data: [], error: null }, { data: customer, error: null });
 		mockFrom.mockReturnValue(builder);
 
-		const result = await customerRepository.create({ name: 'Test Customer' } as any);
+		const result = await customerRepository.create({ name: 'Test Customer' } as Parameters<
+			typeof customerRepository.create
+		>[0]);
 
 		expect(builder.insert).toHaveBeenCalledWith({ name: 'Test Customer' });
 		expect(builder.select).toHaveBeenCalled();

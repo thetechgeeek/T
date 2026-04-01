@@ -55,7 +55,7 @@ describe('CustomerSchema', () => {
 	it('rejects invalid customer type', () => {
 		const result = CustomerSchema.safeParse({
 			...validCustomer,
-			type: 'unknown' as any,
+			type: 'unknown' as unknown as 'retail',
 		});
 		expect(result.success).toBe(false);
 	});

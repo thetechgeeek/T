@@ -1,5 +1,5 @@
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter, type Href } from 'expo-router';
 import {
 	Users,
 	Truck,
@@ -12,7 +12,7 @@ import {
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useAuthStore } from '@/src/stores/authStore';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function MoreTab() {
@@ -60,7 +60,7 @@ export default function MoreTab() {
 	];
 
 	return (
-		<Screen safeAreaEdges={['top', 'bottom']} scrollable>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']} scrollable>
 			<View
 				style={[
 					styles.header,
@@ -89,7 +89,7 @@ export default function MoreTab() {
 								...(theme.shadows.sm as object),
 							},
 						]}
-						onPress={() => router.push(item.route as any)}
+						onPress={() => router.push(item.route as Href)}
 						activeOpacity={0.8}
 						accessibilityRole="button"
 						accessibilityLabel={item.accessibilityLabel}
@@ -175,12 +175,11 @@ export default function MoreTab() {
 					</ThemedText>
 				</TouchableOpacity>
 			</View>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1 },
 	header: { paddingVertical: 12 },
 	menuItem: { flexDirection: 'row', alignItems: 'center', padding: 14 },
 	iconWrap: {

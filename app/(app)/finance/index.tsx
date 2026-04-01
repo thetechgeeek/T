@@ -9,7 +9,7 @@ import { Card } from '@/src/components/atoms/Card';
 import { StatCard } from '@/src/components/molecules/StatCard';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { Divider } from '@/src/components/atoms/Divider';
-import { Screen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import React, { useEffect } from 'react';
 
@@ -27,7 +27,7 @@ export default function FinanceOverviewScreen() {
 
 	useEffect(() => {
 		fetchSummary();
-	}, []);
+	}, [fetchSummary]);
 
 	const metrics = [
 		{
@@ -54,7 +54,7 @@ export default function FinanceOverviewScreen() {
 	];
 
 	return (
-		<Screen
+		<AtomicScreen
 			scrollable
 			scrollViewProps={{
 				refreshControl: (
@@ -135,7 +135,7 @@ export default function FinanceOverviewScreen() {
 					}
 				/>
 			</View>
-		</Screen>
+		</AtomicScreen>
 	);
 }
 
