@@ -30,8 +30,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 				style,
 			]}
 		>
-			<Search size={20} color={theme.colors.onSurfaceVariant} style={styles.icon} />
+			<Search
+				size={20}
+				color={theme.colors.onSurfaceVariant}
+				style={styles.icon}
+				importantForAccessibility="no"
+			/>
 			<TextInput
+				accessible={true}
+				accessibilityLabel="Search"
+				accessibilityHint="Type to filter results"
 				style={[
 					styles.input,
 					{
@@ -47,8 +55,17 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 				autoCorrect={false}
 			/>
 			{value.length > 0 && (
-				<Pressable onPress={() => onChangeText('')} hitSlop={10}>
-					<X size={20} color={theme.colors.onSurfaceVariant} />
+				<Pressable
+					onPress={() => onChangeText('')}
+					hitSlop={10}
+					accessibilityRole="button"
+					accessibilityLabel="Clear search"
+				>
+					<X
+						size={20}
+						color={theme.colors.onSurfaceVariant}
+						importantForAccessibility="no"
+					/>
 				</Pressable>
 			)}
 		</View>

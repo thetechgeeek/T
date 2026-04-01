@@ -24,8 +24,13 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
 	return (
 		<View style={[styles.container, style]}>
-			{icon && <View style={styles.icon}>{icon}</View>}
+			{icon && (
+				<View style={styles.icon} importantForAccessibility="no">
+					{icon}
+				</View>
+			)}
 			<Text
+				accessibilityRole="header"
 				style={[
 					styles.title,
 					{

@@ -11,6 +11,8 @@ interface StatCardProps {
 	trend?: string;
 	trendLabel?: string;
 	style?: ViewStyle;
+	/** Stable English identifier for screen readers and Maestro. Overrides computed label. */
+	accessibilityLabel?: string;
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -21,6 +23,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 	trend,
 	trendLabel,
 	style,
+	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
 	const c = theme.colors;
@@ -30,7 +33,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 	return (
 		<View
 			accessibilityRole="summary"
-			accessibilityLabel={`${label}: ${value}`}
+			accessibilityLabel={accessibilityLabel ?? `${label}: ${value}`}
 			style={[
 				styles.container,
 				{
@@ -43,7 +46,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 			]}
 		>
 			{Icon && (
-				<View style={styles.iconContainer}>
+				<View style={styles.iconContainer} importantForAccessibility="no">
 					<Icon size={20} color={color || c.primary} strokeWidth={2} />
 				</View>
 			)}

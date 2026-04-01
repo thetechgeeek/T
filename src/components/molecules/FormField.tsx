@@ -7,6 +7,8 @@ import { layout } from '@/src/theme/layout';
 
 export interface FormFieldProps extends TextInputProps {
 	label: string;
+	/** Stable English identifier passed to the underlying input. Screen readers and Maestro use this. */
+	accessibilityLabel?: string;
 	error?: string;
 	required?: boolean;
 	helperText?: string;
@@ -16,6 +18,7 @@ export interface FormFieldProps extends TextInputProps {
 
 export const FormField: React.FC<FormFieldProps> = ({
 	label,
+	accessibilityLabel,
 	error,
 	required,
 	helperText,
@@ -26,9 +29,16 @@ export const FormField: React.FC<FormFieldProps> = ({
 	const { theme } = useTheme();
 	const c = theme.colors;
 
+	// Compose a full hint so required/error state is announced with the field
+	const hint =
+		[required ? 'Required' : null, error ? `Error: ${error}` : (helperText ?? null)]
+			.filter(Boolean)
+			.join('. ') || undefined;
+
 	return (
 		<View style={[styles.container, containerStyle]}>
-			<View style={[layout.row, { marginBottom: 4 }]}>
+			{/* Visual label row — hidden from a11y tree; input carries the label */}
+			<View importantForAccessibility="no" style={[layout.row, { marginBottom: 4 }]}>
 				<ThemedText variant="label" color={c.onSurfaceVariant}>
 					{label}
 				</ThemedText>
@@ -38,9 +48,18 @@ export const FormField: React.FC<FormFieldProps> = ({
 					</ThemedText>
 				)}
 			</View>
-			<AtomTextInput {...props} editable={editable} error={undefined} label={undefined} />
+			<AtomTextInput
+				{...props}
+				editable={editable}
+				accessibilityLabel={accessibilityLabel ?? label}
+				accessibilityHint={hint}
+				error={undefined}
+				label={undefined}
+			/>
+			{/* Visual error/helper — announced via input hint, kept visual-only */}
 			{!!(error || helperText) && (
 				<ThemedText
+					importantForAccessibility="no"
 					variant="caption"
 					color={error ? c.error : c.onSurfaceVariant}
 					style={{ marginTop: 4 }}

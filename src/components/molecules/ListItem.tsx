@@ -11,6 +11,9 @@ interface ListItemProps {
 	onPress?: () => void;
 	style?: ViewStyle;
 	showChevron?: boolean;
+	/** Stable English identifier. Defaults to combining title + subtitle. */
+	accessibilityLabel?: string;
+	accessibilityHint?: string;
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
@@ -21,14 +24,19 @@ export const ListItem: React.FC<ListItemProps> = ({
 	onPress,
 	style,
 	showChevron = true,
+	accessibilityLabel,
+	accessibilityHint,
 }) => {
 	const { theme } = useTheme();
+
+	const composedLabel = accessibilityLabel ?? [title, subtitle].filter(Boolean).join(', ');
 
 	return (
 		<Pressable
 			onPress={onPress}
 			accessibilityRole="button"
-			accessibilityLabel={title}
+			accessibilityLabel={composedLabel}
+			accessibilityHint={accessibilityHint ?? (onPress ? 'Double tap to open' : undefined)}
 			style={({ pressed }) => [
 				styles.container,
 				{ borderBottomWidth: 1, borderBottomColor: theme.colors.separator },
@@ -72,6 +80,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 						size={20}
 						color={theme.colors.onSurfaceVariant}
 						style={styles.chevron}
+						importantForAccessibility="no"
 					/>
 				)}
 			</View>
