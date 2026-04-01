@@ -2,14 +2,17 @@ appId: com.tilemaster.app
 ---
 # E2E-009: Order import — navigate to orders, view import screen
 - launchApp
-- tapOn: "More"
-- tapOn: "Orders"
-- assertVisible: "Orders"
+- tapOn:
+    label: "tab-more"
+- tapOn:
+    label: "menu-orders"
+- assertVisible:
+    label: "orders-screen"
 - takeScreenshot: orders_list
 
 # Tap import button if available
 - tapOn:
-    text: "Import"
+    label: "import-pdf-button"
     optional: true
 - assertVisible:
     text: "Import"
@@ -17,7 +20,9 @@ appId: com.tilemaster.app
 - takeScreenshot: order_import_screen
 
 # Go back to orders
-- tapOn: "Back"
+- tapOn:
+    text: "Back"
     optional: true
-- assertVisible: "Orders"
+- assertVisible:
+    label: "orders-screen"
     optional: true

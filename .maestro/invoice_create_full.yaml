@@ -2,42 +2,53 @@ appId: com.tilemaster.app
 ---
 # E2E-003: Full invoice creation wizard
 - launchApp
-- tapOn: "Invoices"
-- tapOn: "New Invoice"
-- assertVisible: "1. Customer"
+- tapOn:
+    label: "tab-invoices"
+- tapOn:
+    label: "new-invoice-button"
+- assertVisible:
+    label: "invoice-step-1"
 - takeScreenshot: invoice_step1_customer
 
 # Step 1: Enter customer name
 - tapOn:
-    id: "customer-name-input"
+    label: "customer-name-input"
 - inputText: "E2E Test Customer"
 - hideKeyboard
-- tapOn: "Next"
+- tapOn:
+    label: "invoice-next-button"
 
 # Step 2: Add items
-- assertVisible: "2. Items"
+- assertVisible:
+    label: "invoice-step-2"
 - takeScreenshot: invoice_step2_items
-- tapOn: "+ Add Item"
+- tapOn:
+    label: "add-item-button"
 - assertVisible: "GLOSSY WHITE 60x60"
 - tapOn: "GLOSSY WHITE 60x60"
 - tapOn:
-    id: "item-quantity-input"
+    label: "item-quantity-input"
 - clearText
 - inputText: "5"
 - hideKeyboard
-- tapOn: "Confirm"
+- tapOn:
+    label: "confirm-add-item"
 
 # Verify item added
 - assertVisible: "GLOSSY WHITE 60x60"
-- tapOn: "Next"
+- tapOn:
+    label: "invoice-next-button"
 
 # Step 3: Review
-- assertVisible: "3. Review"
+- assertVisible:
+    label: "invoice-step-3"
 - assertVisible: "E2E Test Customer"
 - assertVisible: "GLOSSY WHITE 60x60"
 - takeScreenshot: invoice_step3_review
 
 # Generate
-- tapOn: "Generate Invoice"
-- assertVisible: "Invoice Created"
+- tapOn:
+    label: "generate-invoice-button"
+- assertVisible:
+    label: "invoice-detail-screen"
 - takeScreenshot: invoice_created_success

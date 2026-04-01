@@ -2,11 +2,12 @@ appId: com.tilemaster.app
 ---
 # E2E-Scan: Scan tab — manual entry search
 - launchApp
-- tapOn: "Scan"
+- tapOn:
+    label: "tab-scan"
 
 # Grant camera permission if prompted
 - tapOn:
-    text: "Grant Permission"
+    label: "grant-camera-permission"
     optional: true
 
 # Manual entry should be visible after permission granted
@@ -17,11 +18,11 @@ appId: com.tilemaster.app
 
 # Test manual search
 - tapOn:
-    placeholder: "Enter item or design #"
+    label: "manual-entry-input"
     optional: true
 - inputText: "GLOSSY"
 - hideKeyboard
 - tapOn:
-    id: "search-button"
+    label: "scan-search-button"
     optional: true
 - takeScreenshot: scan_search_result

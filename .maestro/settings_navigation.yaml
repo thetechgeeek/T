@@ -2,11 +2,17 @@ appId: com.tilemaster.app
 ---
 # E2E-010: Settings navigation — access settings screens
 - launchApp
-- tapOn: "More"
-- tapOn: "Settings"
-- assertVisible: "Settings"
-- assertVisible: "Settings — coming soon"
+- tapOn:
+    label: "tab-more"
+- tapOn:
+    label: "menu-settings"
+- assertVisible:
+    label: "settings-screen"
+- assertVisible:
+    label: "settings-coming-soon"
 - takeScreenshot: settings_screen
 
-- tapOn: "Back"
-- assertVisible: "More"
+- tapOn:
+    label: "settings-back-button"
+- assertVisible:
+    label: "more-screen"
