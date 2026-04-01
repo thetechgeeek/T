@@ -28,6 +28,7 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 
 			<FormField
 				label="Name"
+				accessibilityLabel="customer-name-input"
 				required
 				placeholder="e.g. Rahul Sharma"
 				value={customer?.name || ''}
@@ -36,6 +37,7 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 
 			<FormField
 				label="Phone"
+				accessibilityLabel="customer-phone-input"
 				placeholder="10-digit mobile number"
 				keyboardType="phone-pad"
 				value={customer?.phone || ''}
@@ -44,6 +46,7 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 
 			<FormField
 				label="GSTIN (Optional)"
+				accessibilityLabel="customer-gstin-input"
 				placeholder="22AAAAA0000A1Z5"
 				autoCapitalize="characters"
 				value={customer?.gstin || ''}
@@ -52,8 +55,10 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 
 			<TouchableOpacity
 				onPress={() => setIsInterState(!isInterState)}
-				accessibilityRole="togglebutton"
-				accessibilityState={{ selected: isInterState }}
+				accessibilityRole="switch"
+				accessibilityLabel="inter-state-igst-toggle"
+				accessibilityState={{ checked: isInterState }}
+				accessibilityHint="Enable if customer is in a different state — applies IGST instead of CGST and SGST"
 				style={{
 					marginTop: s.lg,
 					padding: s.md,
@@ -66,7 +71,12 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 				<ThemedText weight={isInterState ? 'bold' : 'regular'}>
 					Inter-State (IGST): {isInterState ? 'Yes' : 'No'}
 				</ThemedText>
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginTop: 4 }}>
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					importantForAccessibility="no"
+					style={{ marginTop: 4 }}
+				>
 					Toggle this if the customer is located in a different state.
 				</ThemedText>
 			</TouchableOpacity>

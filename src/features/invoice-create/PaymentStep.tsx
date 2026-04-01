@@ -87,13 +87,19 @@ export function PaymentStep({
 
 			<FormField
 				label="Amount Paid (₹)"
+				accessibilityLabel="amount-paid-input"
 				value={amountPaid}
 				placeholder="Enter amount paid"
 				keyboardType="numeric"
 				onChangeText={setAmountPaid}
 			/>
 
-			<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginBottom: 4 }}>
+			<ThemedText
+				variant="caption"
+				color={c.onSurfaceVariant}
+				importantForAccessibility="no"
+				style={{ marginBottom: 4 }}
+			>
 				Payment Mode
 			</ThemedText>
 			<View style={[layout.row, { gap: s.sm, marginBottom: s.xl, flexWrap: 'wrap' }]}>
@@ -102,6 +108,8 @@ export function PaymentStep({
 						key={mode}
 						onPress={() => setPaymentMode(mode)}
 						accessibilityRole="togglebutton"
+						accessibilityLabel={`payment-mode-${mode}`}
+						accessibilityHint={`Pay via ${mode.replace('_', ' ')}`}
 						accessibilityState={{ selected: paymentMode === mode }}
 						style={{
 							paddingHorizontal: s.md,
@@ -123,16 +131,26 @@ export function PaymentStep({
 				))}
 			</View>
 
-			{/* Balance */}
+			{/* Balance — not color-only; label + value announced together */}
 			<View
+				accessible={true}
+				accessibilityRole="summary"
+				accessibilityLabel="balance-due-indicator"
+				accessibilityValue={{
+					text: isPaid ? 'Fully paid' : `Balance due: ₹${balanceDue.toFixed(2)}`,
+				}}
 				style={{
 					padding: s.md,
 					backgroundColor: isPaid ? c.success + '20' : c.warning + '20',
 					borderRadius: r.md,
 				}}
 			>
-				<ThemedText weight="bold" color={isPaid ? c.success : c.warning}>
-					Balance Due: ₹{balanceDue.toFixed(2)}
+				<ThemedText
+					weight="bold"
+					color={isPaid ? c.success : c.warning}
+					importantForAccessibility="no"
+				>
+					{isPaid ? 'Fully Paid' : `Balance Due: ₹${balanceDue.toFixed(2)}`}
 				</ThemedText>
 			</View>
 		</View>

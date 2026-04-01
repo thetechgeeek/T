@@ -52,7 +52,12 @@ export function LineItemsStep({
 		<View>
 			<View style={[layout.rowBetween, { marginBottom: s.md }]}>
 				<ThemedText variant="h3">Line Items</ThemedText>
-				<Button title="+ Add Item" onPress={() => setIsAddingItem(true)} size="sm" />
+				<Button
+					title="+ Add Item"
+					accessibilityLabel="add-item-button"
+					onPress={() => setIsAddingItem(true)}
+					size="sm"
+				/>
 			</View>
 
 			{lineItems.length === 0 ? (
@@ -99,7 +104,8 @@ export function LineItemsStep({
 							onPress={() => removeLineItem(index)}
 							style={{ alignSelf: 'flex-end', marginTop: 8 }}
 							accessibilityRole="button"
-							accessibilityLabel={`Remove ${item.design_name}`}
+							accessibilityLabel={`remove-line-item-${index}`}
+							accessibilityHint={`Remove ${item.design_name} from invoice`}
 						>
 							<ThemedText variant="caption" color={c.error}>
 								Remove
@@ -128,11 +134,13 @@ export function LineItemsStep({
 					{!selectedItem ? (
 						<>
 							<AppTextInput
+								accessibilityLabel="inventory-search-input"
+								accessibilityHint="Type a design name to search inventory"
 								placeholder="Search design name..."
 								value={searchQuery}
 								onChangeText={setSearchQuery}
 							/>
-							<ScrollView style={{ maxHeight: 200 }}>
+							<ScrollView accessibilityRole="list" style={{ maxHeight: 200 }}>
 								{inventoryItems.length === 0 && !inventoryLoading ? (
 									<ThemedText
 										variant="caption"
@@ -186,6 +194,7 @@ export function LineItemsStep({
 							</ThemedText>
 							<FormField
 								label="Quantity"
+								accessibilityLabel="item-quantity-input"
 								value={inputQuantity}
 								placeholder="Enter quantity"
 								keyboardType="numeric"
@@ -198,6 +207,7 @@ export function LineItemsStep({
 							/>
 							<FormField
 								label="Discount (₹ total)"
+								accessibilityLabel="item-discount-input"
 								value={inputDiscount}
 								placeholder="Enter discount amount"
 								keyboardType="numeric"
@@ -206,11 +216,17 @@ export function LineItemsStep({
 							<View style={{ flexDirection: 'row', gap: s.sm, marginTop: s.md }}>
 								<Button
 									title="Cancel"
+									accessibilityLabel="cancel-add-item"
 									onPress={cancelItemSelection}
 									variant="outline"
 									style={{ flex: 1 }}
 								/>
-								<Button title="Confirm" onPress={addLineItem} style={{ flex: 1 }} />
+								<Button
+									title="Confirm"
+									accessibilityLabel="confirm-add-item"
+									onPress={addLineItem}
+									style={{ flex: 1 }}
+								/>
 							</View>
 						</View>
 					)}

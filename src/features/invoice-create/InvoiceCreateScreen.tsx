@@ -16,12 +16,19 @@ export default function InvoiceCreateScreen() {
 
 	return (
 		<Screen withKeyboard safeAreaEdges={['top', 'bottom']}>
-			{/* Stepper */}
-			<View style={[styles.stepper, { borderBottomColor: c.border }]}>
+			{/* Stepper — announced as a progress indicator */}
+			<View
+				style={[styles.stepper, { borderBottomColor: c.border }]}
+				accessibilityRole="progressbar"
+				accessibilityValue={{ now: flow.step, min: 1, max: 3 }}
+				accessibilityLabel={`Step ${flow.step} of 3: ${['Customer', 'Items', 'Review'][flow.step - 1]}`}
+			>
 				{(['Customer', 'Items', 'Review'] as const).map((label, i) => (
 					<ThemedText
 						key={label}
 						variant="label"
+						accessibilityLabel={`invoice-step-${i + 1}`}
+						importantForAccessibility={flow.step === i + 1 ? 'yes' : 'no'}
 						color={flow.step === i + 1 ? c.primary : c.onSurfaceVariant}
 					>
 						{i + 1}. {label}
@@ -76,6 +83,10 @@ export default function InvoiceCreateScreen() {
 			<View style={[styles.footer, { borderTopColor: c.border, backgroundColor: c.surface }]}>
 				<Button
 					title="Back"
+					accessibilityLabel="invoice-back-button"
+					accessibilityHint={
+						flow.step > 1 ? `Go back to step ${flow.step - 1}` : undefined
+					}
 					variant="ghost"
 					onPress={flow.handleBack}
 					disabled={flow.step === 1 || flow.submitting}
@@ -84,6 +95,8 @@ export default function InvoiceCreateScreen() {
 				{flow.step < 3 ? (
 					<Button
 						title="Next"
+						accessibilityLabel="invoice-next-button"
+						accessibilityHint={`Proceed to step ${flow.step + 1}`}
 						onPress={flow.handleNext}
 						disabled={!flow.canGoNext}
 						style={{ flex: 1, marginLeft: s.xs }}
@@ -91,6 +104,7 @@ export default function InvoiceCreateScreen() {
 				) : (
 					<Button
 						title={flow.submitting ? 'Generating...' : 'Generate Invoice'}
+						accessibilityLabel="generate-invoice-button"
 						onPress={flow.submitInvoice}
 						loading={flow.submitting}
 						style={{ flex: 1, marginLeft: s.xs }}
