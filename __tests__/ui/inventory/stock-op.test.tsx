@@ -128,4 +128,56 @@ describe('StockOpScreen', () => {
 			);
 		});
 	});
+
+	// ─── Phase 2: Navigation ─────────────────────────────────────────────────
+
+	it('after successful submit calls router.back() not router.push()', async () => {
+		mockPerformStockOperation.mockResolvedValue(undefined);
+		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
+		await waitFor(() => getByPlaceholderText('e.g. 50'));
+
+		fireEvent.changeText(getByPlaceholderText('e.g. 50'), '10');
+		fireEvent.press(getByText('Confirm'));
+
+		await waitFor(() => expect(mockBack).toHaveBeenCalled());
+		expect((useRouter as jest.Mock)().push).toBeUndefined();
+	});
+
+	// ─── Phase 3: Loading & Error State ──────────────────────────────────────
+
+	it('shows loading state (no form) while item is fetching', async () => {
+		// fetchItemById never resolves — simulates slow network
+		(inventoryService.fetchItemById as jest.Mock).mockReturnValue(new Promise(() => {}));
+
+		const { queryByPlaceholderText, queryByText } = renderWithTheme(<StockOpScreen />);
+
+		// Form inputs and Confirm button should NOT be present while loading
+		await new Promise((r) => setTimeout(r, 50));
+		expect(queryByPlaceholderText('e.g. 50')).toBeNull();
+		expect(queryByText('Confirm')).toBeNull();
+	});
+
+	it('form is never shown when fetchItemById rejects — documents the infinite spinner bug', async () => {
+		// Bug: catch only logs the error, never sets error state or clears loading
+		// Result: item stays null, form never renders, spinner persists forever
+		(inventoryService.fetchItemById as jest.Mock).mockRejectedValue(new Error('Network Error'));
+
+		const { queryByPlaceholderText, queryByText } = renderWithTheme(<StockOpScreen />);
+
+		// Wait for the rejection to settle
+		await new Promise((r) => setTimeout(r, 100));
+
+		// Bug confirmed: form never shown after rejection
+		expect(queryByPlaceholderText('e.g. 50')).toBeNull();
+		expect(queryByText('Confirm')).toBeNull();
+	});
+
+	it('renders form with no spinner when fetchItemById resolves successfully', async () => {
+		const { getByPlaceholderText, getByText } = renderWithTheme(<StockOpScreen />);
+
+		await waitFor(() => {
+			expect(getByPlaceholderText('e.g. 50')).toBeTruthy();
+			expect(getByText('Confirm')).toBeTruthy();
+		});
+	});
 });
