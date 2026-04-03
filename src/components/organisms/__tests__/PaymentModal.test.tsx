@@ -28,9 +28,7 @@ describe('PaymentModal', () => {
 	});
 
 	it('does NOT render content when visible=false', () => {
-		const { queryByText } = renderWithTheme(
-			<PaymentModal {...baseProps} visible={false} />,
-		);
+		const { queryByText } = renderWithTheme(<PaymentModal {...baseProps} visible={false} />);
 		// Modal mock returns null when visible=false
 		expect(queryByText('Record Payment')).toBeNull();
 	});
@@ -64,9 +62,7 @@ describe('PaymentModal', () => {
 	});
 
 	it('does NOT call paymentService.recordPayment when amount is empty on submit', () => {
-		const { getByTestId } = renderWithTheme(
-			<PaymentModal {...baseProps} totalAmount={0} />,
-		);
+		const { getByTestId } = renderWithTheme(<PaymentModal {...baseProps} totalAmount={0} />);
 
 		// Press "Record Payment" submit button
 		const submitButton = getByTestId('submit-payment-button');
@@ -77,13 +73,69 @@ describe('PaymentModal', () => {
 
 	it('calls onClose when close (ghost) button is pressed', () => {
 		const onClose = jest.fn();
-		const { getByTestId } = renderWithTheme(
-			<PaymentModal {...baseProps} onClose={onClose} />,
-		);
+		const { getByTestId } = renderWithTheme(<PaymentModal {...baseProps} onClose={onClose} />);
 
 		// Find and press the close button
 		const closeButton = getByTestId('close-modal-button');
 		fireEvent.press(closeButton);
 		expect(onClose).toHaveBeenCalled();
+	});
+
+	// ─── Phase 3: Loading state tests ────────────────────────────────────────
+
+	it('Record Payment button shows loading indicator (ActivityIndicator) while loading', async () => {
+		// Make recordPayment never resolve — simulates in-flight request
+		(paymentService.recordPayment as jest.Mock).mockReturnValue(new Promise(() => {}));
+
+		const { getByPlaceholderText, getByTestId } = renderWithTheme(
+			<PaymentModal {...baseProps} totalAmount={0} />,
+		);
+		fireEvent.changeText(getByPlaceholderText('0.00'), '1000');
+		fireEvent.press(getByTestId('submit-payment-button'));
+
+		// After press, button should show loading indicator
+		await new Promise((r) => setTimeout(r, 0));
+		expect(getByTestId('loading-indicator')).toBeTruthy();
+	});
+
+	it('Record Payment button is disabled (accessibilityState.disabled) while loading', async () => {
+		(paymentService.recordPayment as jest.Mock).mockReturnValue(new Promise(() => {}));
+
+		const { getByPlaceholderText, getByTestId } = renderWithTheme(
+			<PaymentModal {...baseProps} totalAmount={0} />,
+		);
+		fireEvent.changeText(getByPlaceholderText('0.00'), '1000');
+		fireEvent.press(getByTestId('submit-payment-button'));
+
+		await new Promise((r) => setTimeout(r, 0));
+		const submitButton = getByTestId('submit-payment-button');
+		expect(submitButton.props.accessibilityState?.disabled).toBe(true);
+	});
+
+	it('loading clears and modal stays open after recordPayment throws', async () => {
+		(paymentService.recordPayment as jest.Mock).mockRejectedValue(new Error('Network error'));
+
+		const onClose = jest.fn();
+		const { getByPlaceholderText, getByTestId, queryByText } = renderWithTheme(
+			<PaymentModal {...baseProps} totalAmount={0} onClose={onClose} />,
+		);
+		fireEvent.changeText(getByPlaceholderText('0.00'), '1000');
+		fireEvent.press(getByTestId('submit-payment-button'));
+
+		await new Promise((r) => setTimeout(r, 50));
+
+		// Loading cleared (button text reverts) and modal stays open (onClose not called)
+		expect(queryByText('Processing...')).toBeNull();
+		expect(onClose).not.toHaveBeenCalled();
+	});
+
+	it('amount=0: submit button press does nothing (loading state never entered)', () => {
+		const { getByTestId, queryByText } = renderWithTheme(
+			<PaymentModal {...baseProps} totalAmount={0} />,
+		);
+		fireEvent.press(getByTestId('submit-payment-button'));
+
+		expect(queryByText('Processing...')).toBeNull();
+		expect(paymentService.recordPayment).not.toHaveBeenCalled();
 	});
 });

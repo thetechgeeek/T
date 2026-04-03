@@ -83,4 +83,32 @@ describe('CustomersScreen', () => {
 		fireEvent.press(getByText('John Doe'));
 		expect(mockPush).toHaveBeenCalledWith('/customers/c-1');
 	});
+
+	// ─── Phase 3: Loading & Empty UI States ──────────────────────────────────
+
+	it('shows empty state when customers=[] and loading=false', async () => {
+		(useCustomerStore as unknown as jest.Mock).mockReturnValue({
+			customers: [],
+			loading: false,
+			fetchCustomers: mockFetchCustomers,
+			setFilters: mockSetFilters,
+			filters: {},
+		});
+
+		const { getByText } = renderWithTheme(<CustomersScreen />);
+		await waitFor(() => expect(getByText('No customers found')).toBeTruthy());
+	});
+
+	it('does NOT show empty state while loading=true', () => {
+		(useCustomerStore as unknown as jest.Mock).mockReturnValue({
+			customers: [],
+			loading: true,
+			fetchCustomers: mockFetchCustomers,
+			setFilters: mockSetFilters,
+			filters: {},
+		});
+
+		const { queryByText } = renderWithTheme(<CustomersScreen />);
+		expect(queryByText('No customers found')).toBeNull();
+	});
 });

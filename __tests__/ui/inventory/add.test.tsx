@@ -108,4 +108,43 @@ describe('AddItemScreen', () => {
 		// However, if it's a raw string child, it should be caught by RNTL if it's strict.
 		expect(json).not.toContain('""');
 	});
+
+	// ─── Phase 3: Loading state tests ────────────────────────────────────────
+
+	it('shows full-screen ActivityIndicator while submitting (loading=true)', async () => {
+		// createItem never resolves — simulates in-flight request
+		mockCreateItem.mockReturnValue(new Promise(() => {}));
+
+		const { getByText, getByPlaceholderText, UNSAFE_getByType } = renderWithTheme(
+			<AddItemScreen />,
+		);
+
+		fireEvent.changeText(getByPlaceholderText('e.g. 10526-HL-1-A'), 'Marble 101');
+		fireEvent.changeText(getByPlaceholderText('Enter selling price'), '500');
+		fireEvent.changeText(getByPlaceholderText('Enter initial stock'), '100');
+		fireEvent.changeText(getByPlaceholderText('Enter low stock alert'), '15');
+		fireEvent.changeText(getByPlaceholderText('Enter GST rate'), '12');
+		fireEvent.press(getByText('Save Item'));
+
+		const { ActivityIndicator } = require('react-native');
+		await waitFor(() => expect(UNSAFE_getByType(ActivityIndicator)).toBeTruthy());
+	});
+
+	it('form re-appears after createItem rejects — loading clears via finally', async () => {
+		mockCreateItem.mockRejectedValue(new Error('DB error'));
+
+		const { getByText, getByPlaceholderText, queryByText } = renderWithTheme(<AddItemScreen />);
+
+		fireEvent.changeText(getByPlaceholderText('e.g. 10526-HL-1-A'), 'Marble 101');
+		fireEvent.changeText(getByPlaceholderText('Enter selling price'), '500');
+		fireEvent.changeText(getByPlaceholderText('Enter initial stock'), '100');
+		fireEvent.changeText(getByPlaceholderText('Enter low stock alert'), '15');
+		fireEvent.changeText(getByPlaceholderText('Enter GST rate'), '12');
+		fireEvent.press(getByText('Save Item'));
+
+		await waitFor(() => {
+			// Form is visible again — Save Item button re-appears
+			expect(queryByText('Save Item')).toBeTruthy();
+		});
+	});
 });

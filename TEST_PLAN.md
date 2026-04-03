@@ -95,7 +95,7 @@ with unit tests, not integration tests.
 **Principle**: Every store action must have 5 test cases minimum: success path,
 loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 
-### [ ] Step 1.1 — `inventoryStore.test.ts` — extend to ~120 cases for this store alone
+### [x] Step 1.1 — `inventoryStore.test.ts` — extend to ~120 cases for this store alone
 
 **`fetchItems`**:
 
@@ -140,7 +140,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 - After seeding items/page/filters: returns state to exact `DEFAULT_FILTERS`,
   `items=[]`, `page=1`, `hasMore=true`, `error=null`, `loading=false`
 
-### [ ] Step 1.2 — `invoiceStore.test.ts` — extend to ~40 tests
+### [x] Step 1.2 — `invoiceStore.test.ts` — extend to ~40 tests
 
 **`createInvoice`**:
 
@@ -159,7 +159,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 
 **`reset`**: all fields return to defaults
 
-### [ ] Step 1.3 — `customerStore.test.ts` — extend to ~40 tests
+### [x] Step 1.3 — `customerStore.test.ts` — extend to ~40 tests
 
 - `fetchCustomers` loading/error/pagination (same pattern)
 - `createCustomer`: success prepends, `totalCount` incremented, emits event
@@ -177,7 +177,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 - Stale summary retained until new fetch succeeds (not wiped to null during loading)
 - Error: `loading=false`, `error` set, `summary` retains previous value
 
-### [ ] Step 1.5 — `authStore.test.ts` — extend to ~25 tests
+### [x] Step 1.5 — `authStore.test.ts` — extend to ~25 tests
 
 - `signIn`: `loading=true` during call, session set on success, `loading=false`
 - `signIn` with wrong credentials: `error` set, `session` remains null,
@@ -186,20 +186,20 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 - `initialize`: reads session from Supabase on mount, sets `user` if present,
   handles null session gracefully
 
-### [ ] Step 1.6 — `dashboardStore.test.ts` — ~15 tests
+### [x] Step 1.6 — `dashboardStore.test.ts` — ~15 tests
 
 - `fetchStats`: loading lifecycle, all stat fields updated on success, error path
 - `fetchStats` during existing fetch: race guard
 - `reset`
 
-### [ ] Step 1.7 — `notificationStore.test.ts` — ~15 tests
+### [x] Step 1.7 — `notificationStore.test.ts` — ~15 tests
 
 - `fetchNotifications`: loading/error/data
 - `markAsRead(id)`: single notification marked, others unchanged
 - `markAllRead`: all notifications have `read=true`
 - `clearAll`: `notifications=[]`
 
-### [ ] Step 1.8 — `orderStore.test.ts` — ~15 tests
+### [x] Step 1.8 — `orderStore.test.ts` — ~15 tests
 
 - `fetchOrders`: loading/error/pagination
 - `createOrder`: success/error
@@ -212,7 +212,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 **Principle**: One `it()` per tappable interactive element on every screen.
 Assert the exact route string passed to `router.push`, not just "router called."
 
-### [ ] Step 2.1 — Create `__tests__/ui/navigation/` with one file per screen
+### [x] Step 2.1 — Create `__tests__/ui/navigation/` with one file per screen
 
 **`financeIndex.nav.test.tsx`** (4 tests):
 
@@ -279,7 +279,7 @@ interactive element with an `onPress` that is supposed to navigate.
 (A) spinner visible while loading, (B) error UI visible when error set,
 (C) no spinner when fetch fails — never an infinite loading state.
 
-### [ ] Step 3.1 — `__tests__/ui/loading-states/` — one file per screen
+### [x] Step 3.1 — `__tests__/ui/loading-states/` — one file per screen
 
 **`stockOp.loading.test.tsx`** — the critical bug #3 scenario:
 

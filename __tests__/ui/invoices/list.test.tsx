@@ -10,6 +10,20 @@ jest.mock('@/src/stores/invoiceStore', () => ({
 	useInvoiceStore: jest.fn(),
 }));
 
+jest.mock('@/src/hooks/useLocale', () => ({
+	useLocale: () => ({
+		t: (key: string) => {
+			const map: Record<string, string> = {
+				'common.errorTitle': 'Error',
+				'common.ok': 'OK',
+				'invoice.loadError': 'Failed to load invoices',
+			};
+			return map[key] ?? key.split('.').pop() ?? key;
+		},
+		formatCurrency: (amount: number) => `₹${amount}`,
+	}),
+}));
+
 const mockInvoices = [
 	{
 		id: 'inv-1',
@@ -55,18 +69,39 @@ describe('InvoicesListScreen', () => {
 	});
 
 	it('shows an alert when fetching invoices fails', async () => {
-		const errorMessage = 'Public table missing';
-		mockFetchInvoices.mockRejectedValue(new Error(errorMessage));
+		mockFetchInvoices.mockRejectedValue(new Error('Public table missing'));
 
 		renderWithTheme(<InvoicesListScreen />);
 
 		await waitFor(() => {
 			expect(mockFetchInvoices).toHaveBeenCalled();
+			// Component shows translated 'invoice.loadError' string, not raw error
 			expect(Alert.alert).toHaveBeenCalledWith(
 				'Error',
-				expect.stringContaining(errorMessage),
+				'Failed to load invoices',
 				expect.any(Array),
 			);
 		});
+	});
+
+	// ─── Phase 3: Loading & Empty UI States ──────────────────────────────────
+
+	it('shows empty state text when invoices=[] and loading=false', async () => {
+		const { getByText } = renderWithTheme(<InvoicesListScreen />);
+		await waitFor(() => expect(getByText('No invoices found.')).toBeTruthy());
+	});
+
+	it('shows empty state even when loading=true — documents absence of loading guard', async () => {
+		// Unlike inventory tab, invoices list has no ActivityIndicator guard —
+		// ListEmptyComponent renders regardless of loading state.
+		(useInvoiceStore as unknown as jest.Mock).mockReturnValue({
+			invoices: [],
+			loading: true,
+			totalCount: 0,
+			fetchInvoices: mockFetchInvoices,
+		});
+
+		const { getByText } = renderWithTheme(<InvoicesListScreen />);
+		await waitFor(() => expect(getByText('No invoices found.')).toBeTruthy());
 	});
 });
