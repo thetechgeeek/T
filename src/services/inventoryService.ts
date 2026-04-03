@@ -1,4 +1,5 @@
 import { supabase } from '@/src/config/supabase';
+import { toAppError } from '@/src/errors/AppError';
 import type {
 	InventoryItem,
 	InventoryItemInsert,
@@ -54,7 +55,7 @@ export const inventoryService = {
 
 		const { data, error, count } = await query;
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 
 		return {
 			data: data as InventoryItem[],
@@ -72,7 +73,7 @@ export const inventoryService = {
 			.eq('id', id)
 			.single();
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as InventoryItem;
 	},
 
@@ -86,7 +87,7 @@ export const inventoryService = {
 			.select()
 			.single();
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as InventoryItem;
 	},
 
@@ -101,7 +102,7 @@ export const inventoryService = {
 			.select()
 			.single();
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as InventoryItem;
 	},
 
@@ -125,7 +126,7 @@ export const inventoryService = {
 			p_reference_id: referenceId || null,
 		});
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data;
 	},
 
@@ -140,19 +141,16 @@ export const inventoryService = {
 			.order('created_at', { ascending: false })
 			.limit(limit);
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as StockOperation[];
 	},
 	/**
 	 * Delete an inventory item
 	 */
 	async deleteItem(id: UUID) {
-		const { error } = await supabase
-			.from('inventory_items')
-			.delete()
-			.eq('id', id);
+		const { error } = await supabase.from('inventory_items').delete().eq('id', id);
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return true;
 	},
 };

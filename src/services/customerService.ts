@@ -1,4 +1,5 @@
 import { supabase } from '../config/supabase';
+import { toAppError } from '../errors/AppError';
 import type {
 	Customer,
 	CustomerInsert,
@@ -32,14 +33,14 @@ export const customerService = {
 
 		const { data, count, error } = await query;
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return { data: data as Customer[], count: count || 0 };
 	},
 
 	async fetchCustomerById(id: UUID): Promise<Customer> {
 		const { data, error } = await supabase.from('customers').select('*').eq('id', id).single();
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as Customer;
 	},
 
@@ -50,7 +51,7 @@ export const customerService = {
 			.select()
 			.single();
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as Customer;
 	},
 
@@ -62,7 +63,7 @@ export const customerService = {
 			.select()
 			.single();
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as Customer;
 	},
 
@@ -73,7 +74,7 @@ export const customerService = {
 			.eq('customer_id', customerId)
 			.single();
 
-		if (error && error.code !== 'PGRST116') throw error; // PGRST116 is 'no rows found'
+		if (error && error.code !== 'PGRST116') throw toAppError(error); // PGRST116 is 'no rows found'
 
 		if (!data) {
 			return {
@@ -103,8 +104,8 @@ export const customerService = {
 				.order('payment_date', { ascending: true }),
 		]);
 
-		if (invoicesRes.error) throw invoicesRes.error;
-		if (paymentsRes.error) throw paymentsRes.error;
+		if (invoicesRes.error) throw toAppError(invoicesRes.error);
+		if (paymentsRes.error) throw toAppError(paymentsRes.error);
 
 		const entries: CustomerLedgerEntry[] = [
 			...invoicesRes.data.map(
@@ -164,7 +165,7 @@ export const customerService = {
 			p_customer_id: customerId || null,
 		});
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as AgingBucket[];
 	},
 };

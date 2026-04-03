@@ -1,4 +1,5 @@
 import { supabase } from '../config/supabase';
+import { toAppError } from '../errors/AppError';
 import { invoiceRepository } from '../repositories/invoiceRepository';
 import { calculateInvoiceTotals, calculateLineItemTax } from '../utils/gstCalculator';
 import { validateWith } from '../utils/validation';
@@ -33,12 +34,16 @@ export function createInvoiceService(repo = invoiceRepository) {
 				.range(from, from + limit - 1);
 
 			const { data, count, error } = await query;
-			if (error) throw error;
+			if (error) throw toAppError(error);
 			return { data: (data ?? []) as Invoice[], count: count || 0 };
 		},
 
 		async fetchInvoiceDetail(id: UUID): Promise<Invoice> {
-			return repo.findWithLineItems(id);
+			try {
+				return await repo.findWithLineItems(id);
+			} catch (error) {
+				throw toAppError(error);
+			}
 		},
 
 		/**
@@ -96,10 +101,14 @@ export function createInvoiceService(repo = invoiceRepository) {
 				};
 			});
 
-			return repo.createAtomic(
-				invoiceData as unknown as Parameters<typeof repo.createAtomic>[0],
-				lineItems,
-			);
+			try {
+				return await repo.createAtomic(
+					invoiceData as unknown as Parameters<typeof repo.createAtomic>[0],
+					lineItems,
+				);
+			} catch (error) {
+				throw toAppError(error);
+			}
 		},
 	};
 }

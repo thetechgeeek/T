@@ -1,4 +1,5 @@
 import { paymentRepository, type PaymentInput } from '../repositories/paymentRepository';
+import { toAppError } from '../errors/AppError';
 import { validateWith } from '../utils/validation';
 import { PaymentSchema } from '../schemas/payment';
 import { eventBus } from '../events/appEvents';
@@ -13,16 +14,20 @@ export function createPaymentService(repo = paymentRepository) {
 		 */
 		async recordPayment(input: PaymentInput) {
 			validateWith(PaymentSchema, input);
-			const result = await repo.recordWithInvoiceUpdate(input);
+			try {
+				const result = await repo.recordWithInvoiceUpdate(input);
 
-			// Notify other stores via event bus (standard project pattern)
-			eventBus.emit({
-				type: 'PAYMENT_RECORDED',
-				paymentId: result.id ?? undefined,
-				invoiceId: input.invoice_id,
-			});
+				// Notify other stores via event bus (standard project pattern)
+				eventBus.emit({
+					type: 'PAYMENT_RECORDED',
+					paymentId: result.id ?? undefined,
+					invoiceId: input.invoice_id,
+				});
 
-			return result;
+				return result;
+			} catch (error) {
+				throw toAppError(error);
+			}
 		},
 
 		async fetchPayments(filters: {
@@ -31,7 +36,11 @@ export function createPaymentService(repo = paymentRepository) {
 			dateFrom?: string;
 			dateTo?: string;
 		}) {
-			return repo.fetchPayments(filters);
+			try {
+				return await repo.fetchPayments(filters);
+			} catch (error) {
+				throw toAppError(error);
+			}
 		},
 	};
 }
