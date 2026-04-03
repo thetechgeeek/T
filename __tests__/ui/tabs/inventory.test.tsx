@@ -149,4 +149,18 @@ describe('InventoryTab', () => {
 		const json = JSON.stringify(toJSON());
 		expect(json).toContain('"Plus"');
 	});
+
+	// ─── Navigation ───────────────────────────────────────────────────────────
+
+	it('FAB press navigates to /(app)/inventory/add', () => {
+		const { getByLabelText } = renderWithTheme(<InventoryTab />);
+		fireEvent.press(getByLabelText('add-inventory-button'));
+		expect(mockPush).toHaveBeenCalledWith('/(app)/inventory/add');
+	});
+
+	it('category chip press does NOT call router (no navigation)', () => {
+		const { getByText } = renderWithTheme(<InventoryTab />);
+		fireEvent.press(getByText('GLOSSY'));
+		expect(mockPush).not.toHaveBeenCalled();
+	});
 });

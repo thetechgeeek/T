@@ -70,6 +70,23 @@ describe('dashboardStore', () => {
 		expect(state.error).toBe('Network error');
 	});
 
+	it('fetchStats: stale stats retained until new fetch succeeds (not wiped to null during loading)', async () => {
+		useDashboardStore.setState({ stats: mockStats });
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(dashboardService.fetchDashboardStats as jest.Mock).mockReturnValue(p);
+
+		const fetchPromise = useDashboardStore.getState().fetchStats();
+		// During loading, existing stats should not be wiped
+		expect(useDashboardStore.getState().stats).toEqual(mockStats);
+		expect(useDashboardStore.getState().loading).toBe(true);
+
+		resolve(mockStats);
+		await fetchPromise;
+	});
+
 	it('fetchStats clears previous error before retrying', async () => {
 		useDashboardStore.setState({ error: 'stale error' });
 		(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);

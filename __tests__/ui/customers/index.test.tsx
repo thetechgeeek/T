@@ -1,5 +1,5 @@
 import React from 'react';
-import { waitFor } from '@testing-library/react-native';
+import { waitFor, fireEvent } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import CustomersScreen from '@/app/(app)/customers/index';
 import { useCustomerStore } from '@/src/stores/customerStore';
@@ -58,5 +58,29 @@ describe('CustomersScreen', () => {
 				expect.any(Array),
 			);
 		});
+	});
+
+	// ─── Navigation ───────────────────────────────────────────────────────────
+
+	it('pressing "Add Customer" empty-state action navigates to /customers/add', async () => {
+		// Render with no customers to show empty state
+		(useCustomerStore as unknown as jest.Mock).mockReturnValue({
+			customers: [],
+			loading: false,
+			fetchCustomers: mockFetchCustomers,
+			setFilters: mockSetFilters,
+			filters: {},
+		});
+		const { getByText } = renderWithTheme(<CustomersScreen />);
+		await waitFor(() => expect(getByText('Add Customer')).toBeTruthy());
+		fireEvent.press(getByText('Add Customer'));
+		expect(mockPush).toHaveBeenCalledWith('/customers/add');
+	});
+
+	it('pressing a customer row navigates to /customers/:id', async () => {
+		const { getByText } = renderWithTheme(<CustomersScreen />);
+		await waitFor(() => expect(getByText('John Doe')).toBeTruthy());
+		fireEvent.press(getByText('John Doe'));
+		expect(mockPush).toHaveBeenCalledWith('/customers/c-1');
 	});
 });

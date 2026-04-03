@@ -115,4 +115,20 @@ describe('FinanceOverviewScreen', () => {
 		const { getByText } = renderWithTheme(<FinanceOverviewScreen />);
 		expect(getByText('Reports & Management')).toBeTruthy();
 	});
+
+	it('navigates to aging report on press', async () => {
+		const { getByText } = renderWithTheme(<FinanceOverviewScreen />);
+		await waitFor(() => expect(getByText('Aging Report')).toBeTruthy());
+		fireEvent.press(getByText('Aging Report'));
+		expect(mockPush).toHaveBeenCalledWith('/customers/aging');
+	});
+
+	it('Profit & Loss button does NOT navigate — documents the () => {} bug', async () => {
+		const { getByText } = renderWithTheme(<FinanceOverviewScreen />);
+		await waitFor(() => expect(getByText('Profit & Loss')).toBeTruthy());
+		fireEvent.press(getByText('Profit & Loss'));
+		// Bug: onPress is () => {} so router.push is never called.
+		// Fix: replace () => {} with router.push('/(app)/finance/profit-loss')
+		expect(mockPush).not.toHaveBeenCalled();
+	});
 });
