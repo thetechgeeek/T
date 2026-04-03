@@ -200,7 +200,6 @@ export const useInventoryStore = create<InventoryState>()(
 			}
 		},
 
-
 		reset: () => {
 			set((s) => {
 				s.items = [];
@@ -209,6 +208,7 @@ export const useInventoryStore = create<InventoryState>()(
 				s.hasMore = true;
 				s.filters = DEFAULT_FILTERS;
 				s.error = null;
+				s.loading = false;
 			});
 		},
 	})),

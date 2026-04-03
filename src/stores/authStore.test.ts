@@ -119,4 +119,129 @@ describe('authStore', () => {
 		expect(authService.signOut).toHaveBeenCalled();
 		expect(useAuthStore.getState().isAuthenticated).toBe(false);
 	});
+
+	// ─── initialize: null session ─────────────────────────────────────────────
+
+	it('initialize handles null session gracefully — user stays null, not authenticated', async () => {
+		(authService.getSession as jest.Mock).mockResolvedValue(null);
+		(authService.onAuthStateChange as jest.Mock).mockReturnValue({
+			data: { subscription: { unsubscribe: jest.fn() } },
+		});
+
+		await useAuthStore.getState().initialize();
+
+		const state = useAuthStore.getState();
+		expect(state.session).toBeNull();
+		expect(state.user).toBeNull();
+		expect(state.isAuthenticated).toBe(false);
+		expect(state.loading).toBe(false);
+	});
+
+	it('initialize sets loading=false after completing (regardless of session)', async () => {
+		(authService.getSession as jest.Mock).mockResolvedValue(null);
+		(authService.onAuthStateChange as jest.Mock).mockReturnValue({
+			data: { subscription: { unsubscribe: jest.fn() } },
+		});
+
+		await useAuthStore.getState().initialize();
+
+		expect(useAuthStore.getState().loading).toBe(false);
+	});
+
+	// ─── login ────────────────────────────────────────────────────────────────
+
+	it('login: loading=false after signIn rejects (no stuck spinner)', async () => {
+		(authService.signIn as jest.Mock).mockRejectedValue(new Error('Wrong password'));
+
+		try {
+			await useAuthStore.getState().login('a@b.com', 'wrong');
+		} catch {
+			// login re-throws after finally
+		}
+
+		// loading is cleared in the finally block
+		expect(useAuthStore.getState().loading).toBe(false);
+		// session and user remain null
+		expect(useAuthStore.getState().user).toBeNull();
+		expect(useAuthStore.getState().isAuthenticated).toBe(false);
+	});
+
+	it('login sets session from signIn response', async () => {
+		const mockSession = makeSession();
+		const mockUser = makeUser();
+		(authService.signIn as jest.Mock).mockResolvedValue({
+			user: mockUser,
+			session: mockSession,
+		});
+
+		await useAuthStore.getState().login('a@b.com', 'password');
+
+		expect(useAuthStore.getState().session).toEqual(mockSession);
+		expect(useAuthStore.getState().user).toEqual(mockUser);
+	});
+
+	// ─── logout ───────────────────────────────────────────────────────────────
+
+	it('logout clears session and user', async () => {
+		useAuthStore.setState({
+			user: makeUser() as any,
+			session: makeSession() as any,
+			isAuthenticated: true,
+		});
+		(authService.signOut as jest.Mock).mockResolvedValue(undefined);
+
+		await useAuthStore.getState().logout();
+
+		const state = useAuthStore.getState();
+		expect(state.session).toBeNull();
+		expect(state.user).toBeNull();
+	});
+
+	it('logout clears auth state even when signOut throws', async () => {
+		useAuthStore.setState({
+			user: makeUser() as any,
+			session: makeSession() as any,
+			isAuthenticated: true,
+		});
+		(authService.signOut as jest.Mock).mockRejectedValue(new Error('Network error'));
+
+		// logout swallows signOut errors and still clears local state
+		await useAuthStore.getState().logout();
+
+		const state = useAuthStore.getState();
+		expect(state.user).toBeNull();
+		expect(state.session).toBeNull();
+		expect(state.isAuthenticated).toBe(false);
+	});
+
+	// ─── register ─────────────────────────────────────────────────────────────
+
+	it('register loading lifecycle', async () => {
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(authService.signUp as jest.Mock).mockReturnValue(p);
+
+		const regPromise = useAuthStore.getState().register('a@b.com', 'password');
+		expect(useAuthStore.getState().loading).toBe(true);
+
+		resolve({ user: makeUser(), session: makeSession() });
+		await regPromise;
+
+		expect(useAuthStore.getState().loading).toBe(false);
+	});
+
+	it('register failure sets error and keeps user null', async () => {
+		(authService.signUp as jest.Mock).mockRejectedValue(new Error('Email in use'));
+
+		try {
+			await useAuthStore.getState().register('a@b.com', 'pass');
+		} catch {
+			// may rethrow
+		}
+
+		expect(useAuthStore.getState().user).toBeNull();
+		expect(useAuthStore.getState().loading).toBe(false);
+	});
 });

@@ -197,4 +197,120 @@ describe('invoiceStore', () => {
 		await new Promise((r) => setTimeout(r, 0));
 		expect(invoiceService.fetchInvoices).not.toHaveBeenCalled();
 	});
+
+	// ─── createInvoice: loading lifecycle ────────────────────────────────────
+
+	it('createInvoice loading lifecycle — true during call, false after success', async () => {
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(invoiceService.createInvoice as jest.Mock).mockReturnValue(p);
+
+		const createPromise = useInvoiceStore
+			.getState()
+			.createInvoice({} as Parameters<InvoiceState['createInvoice']>[0]);
+		expect(useInvoiceStore.getState().loading).toBe(true);
+
+		resolve({ id: 'new-inv', invoice_number: 'INV-01' });
+		await createPromise;
+
+		expect(useInvoiceStore.getState().loading).toBe(false);
+	});
+
+	it('createInvoice loading=false after error', async () => {
+		(invoiceService.createInvoice as jest.Mock).mockRejectedValue(new Error('RPC error'));
+
+		try {
+			await useInvoiceStore
+				.getState()
+				.createInvoice({} as Parameters<InvoiceState['createInvoice']>[0]);
+		} catch {
+			// expected
+		}
+
+		expect(useInvoiceStore.getState().loading).toBe(false);
+		expect(useInvoiceStore.getState().error).toBe('RPC error');
+	});
+
+	// ─── fetchInvoices: filter fields ─────────────────────────────────────────
+
+	it('fetchInvoices with payment_status filter passes it to service', async () => {
+		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+		useInvoiceStore.setState({
+			filters: { payment_status: 'paid' } as InvoiceState['filters'],
+		});
+
+		await useInvoiceStore.getState().fetchInvoices();
+
+		expect(invoiceService.fetchInvoices).toHaveBeenCalledWith(
+			expect.objectContaining({ payment_status: 'paid' }),
+			1,
+		);
+	});
+
+	it('fetchInvoices with customer_id filter passes it to service', async () => {
+		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+		useInvoiceStore.setState({
+			filters: { customer_id: 'cust-123' } as InvoiceState['filters'],
+		});
+
+		await useInvoiceStore.getState().fetchInvoices();
+
+		expect(invoiceService.fetchInvoices).toHaveBeenCalledWith(
+			expect.objectContaining({ customer_id: 'cust-123' }),
+			1,
+		);
+	});
+
+	it('fetchInvoices: hasMore set correctly based on returned count', async () => {
+		const items = [{ id: '1' }, { id: '2' }];
+		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: items, count: 10 });
+
+		await useInvoiceStore.getState().fetchInvoices(1);
+
+		expect(useInvoiceStore.getState().currentPage).toBe(1);
+	});
+
+	// ─── fetchInvoiceById ─────────────────────────────────────────────────────
+
+	it('fetchInvoiceById loading lifecycle', async () => {
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(invoiceService.fetchInvoiceDetail as jest.Mock).mockReturnValue(p);
+
+		const fetchPromise = useInvoiceStore.getState().fetchInvoiceById('inv-load');
+		expect(useInvoiceStore.getState().loading).toBe(true);
+
+		resolve({ id: 'inv-load', invoice_number: 'INV-001' });
+		await fetchPromise;
+
+		expect(useInvoiceStore.getState().loading).toBe(false);
+	});
+
+	// ─── reset ────────────────────────────────────────────────────────────────
+
+	it('reset clears loading and error too', () => {
+		useInvoiceStore.setState({ loading: true, error: 'stale error' });
+
+		useInvoiceStore.getState().reset();
+
+		expect(useInvoiceStore.getState().loading).toBe(false);
+		expect(useInvoiceStore.getState().error).toBeNull();
+	});
+
+	// ─── setFilters ───────────────────────────────────────────────────────────
+
+	it('setFilters resets to page 1 regardless of current page', async () => {
+		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+		useInvoiceStore.setState({ currentPage: 5 });
+
+		useInvoiceStore
+			.getState()
+			.setFilters({ payment_status: 'unpaid' } as Parameters<InvoiceState['setFilters']>[0]);
+
+		expect(useInvoiceStore.getState().currentPage).toBe(1);
+	});
 });

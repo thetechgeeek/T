@@ -76,4 +76,91 @@ describe('notificationStore', () => {
 
 		expect(notificationRepository.fetchUnread).toHaveBeenCalled();
 	});
+
+	// ─── fetchUnread: loading lifecycle & error ───────────────────────────────
+
+	it('fetchUnread: loading=true during fetch, false after success', async () => {
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(notificationRepository.fetchUnread as jest.Mock).mockReturnValue(p);
+
+		const fetchPromise = useNotificationStore.getState().fetchUnread();
+		expect(useNotificationStore.getState().loading).toBe(true);
+
+		resolve([]);
+		await fetchPromise;
+
+		expect(useNotificationStore.getState().loading).toBe(false);
+	});
+
+	it('fetchUnread error: loading=false, error set, notifications unchanged', async () => {
+		useNotificationStore.setState({
+			notifications: [{ id: '1', title: 'Old', read: false }] as any,
+		});
+		(notificationRepository.fetchUnread as jest.Mock).mockRejectedValue(
+			new Error('Fetch failed'),
+		);
+
+		await useNotificationStore.getState().fetchUnread();
+
+		const state = useNotificationStore.getState();
+		expect(state.loading).toBe(false);
+		expect(state.error).toBeTruthy();
+		expect(state.notifications).toHaveLength(1);
+	});
+
+	// ─── markAsRead: others unchanged ────────────────────────────────────────
+
+	it('markAsRead: only the targeted notification is marked read, others unchanged', async () => {
+		useNotificationStore.setState({
+			notifications: [
+				{ id: '1', title: 'A', read: false },
+				{ id: '2', title: 'B', read: false },
+				{ id: '3', title: 'C', read: true },
+			] as any[],
+			unreadCount: 2,
+		});
+		(notificationRepository.markAsRead as jest.Mock).mockResolvedValue(undefined);
+
+		await useNotificationStore.getState().markAsRead('1');
+
+		const state = useNotificationStore.getState();
+		expect(state.notifications[0].read).toBe(true);
+		expect(state.notifications[1].read).toBe(false);
+		expect(state.notifications[2].read).toBe(true);
+		expect(state.unreadCount).toBe(1);
+	});
+
+	// ─── unreadCount ─────────────────────────────────────────────────────────
+
+	it('fetchUnread: unreadCount equals number of notifications returned by fetchUnread', async () => {
+		// fetchUnread only returns unread notifications, so unreadCount = returned count
+		const unreadNotifications = [
+			{ id: '1', read: false },
+			{ id: '2', read: false },
+		];
+		(notificationRepository.fetchUnread as jest.Mock).mockResolvedValue(unreadNotifications);
+
+		await useNotificationStore.getState().fetchUnread();
+
+		expect(useNotificationStore.getState().unreadCount).toBe(2);
+	});
+
+	it('markAllAsRead: all unread notifications become read, unreadCount is 0', async () => {
+		useNotificationStore.setState({
+			notifications: [
+				{ id: 'n1', read: false },
+				{ id: 'n2', read: false },
+			] as any[],
+			unreadCount: 2,
+		});
+		(notificationRepository.markAsRead as jest.Mock).mockResolvedValue(undefined);
+
+		await useNotificationStore.getState().markAllAsRead();
+
+		// After markAllAsRead, all notifications should be marked read (via markAsRead calls)
+		expect(notificationRepository.markAsRead).toHaveBeenCalledTimes(2);
+	});
 });

@@ -108,6 +108,7 @@ export const useInvoiceStore = create<InvoiceState>()(
 				s.currentPage = 1;
 				s.filters = {};
 				s.error = null;
+				s.loading = false;
 			});
 		},
 	})),

@@ -84,4 +84,90 @@ describe('orderStore', () => {
 		expect(state.error).toBeNull();
 		expect(state.parsedData).toBeNull();
 	});
+
+	// ─── fetchOrders: loading lifecycle & error ───────────────────────────────
+
+	it('fetchOrders: loading=true during fetch, false after success', async () => {
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(orderService.fetchOrders as jest.Mock).mockReturnValue(p);
+
+		const fetchPromise = useOrderStore.getState().fetchOrders();
+		expect(useOrderStore.getState().loading).toBe(true);
+
+		resolve([]);
+		await fetchPromise;
+
+		expect(useOrderStore.getState().loading).toBe(false);
+	});
+
+	it('fetchOrders error: loading=false, error set, orders unchanged', async () => {
+		useOrderStore.setState({ orders: [{ id: 'o1' }] as any[] });
+		(orderService.fetchOrders as jest.Mock).mockRejectedValue(new Error('Network error'));
+
+		await useOrderStore.getState().fetchOrders();
+
+		const state = useOrderStore.getState();
+		expect(state.loading).toBe(false);
+		expect(state.error).toBeTruthy();
+		expect(state.orders).toHaveLength(1);
+	});
+
+	// ─── parseDocument ────────────────────────────────────────────────────────
+
+	it('parseDocument: isParsing=true during call, false after', async () => {
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(pdfService.parseDocumentWithLLM as jest.Mock).mockReturnValue(p);
+
+		const parsePromise = useOrderStore.getState().parseDocument('uri', 'application/pdf');
+		expect(useOrderStore.getState().isParsing).toBe(true);
+
+		resolve([]);
+		await parsePromise;
+
+		expect(useOrderStore.getState().isParsing).toBe(false);
+	});
+
+	it('parseDocument error: isParsing=false, error set', async () => {
+		(pdfService.parseDocumentWithLLM as jest.Mock).mockRejectedValue(new Error('Parse failed'));
+
+		try {
+			await useOrderStore.getState().parseDocument('bad-uri', 'application/pdf');
+		} catch {
+			// parseDocument re-throws
+		}
+
+		const state = useOrderStore.getState();
+		expect(state.isParsing).toBe(false);
+		expect(state.error).toBe('Parse failed');
+	});
+
+	// ─── importParsedData ────────────────────────────────────────────────────
+
+	it('importParsedData error: loading=false, error set', async () => {
+		(orderService.importOrder as jest.Mock).mockRejectedValue(new Error('Import failed'));
+
+		await expect(useOrderStore.getState().importParsedData('Party', [])).rejects.toThrow(
+			'Import failed',
+		);
+
+		const state = useOrderStore.getState();
+		expect(state.loading).toBe(false);
+		expect(state.error).toBeTruthy();
+	});
+
+	it('importParsedData refreshes order list after success', async () => {
+		(orderService.importOrder as jest.Mock).mockResolvedValue({ id: 'o2' });
+		(orderService.fetchOrders as jest.Mock).mockResolvedValue([{ id: 'o2' }]);
+
+		await useOrderStore.getState().importParsedData('Party', []);
+
+		expect(orderService.fetchOrders).toHaveBeenCalled();
+		expect(useOrderStore.getState().orders).toHaveLength(1);
+	});
 });

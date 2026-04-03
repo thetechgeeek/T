@@ -34,7 +34,7 @@
 `jest.integration.config.js`, they never touch the DB. The other 11
 integration files correctly use `integrationHelpers.ts` and hit the real DB.
 
-### Step 0.1 — Create `__tests__/chain/` directory
+### [ ] Step 0.1 — Create `__tests__/chain/` directory
 
 Move the 3 files there verbatim. Rename for clarity:
 
@@ -45,18 +45,18 @@ Move the 3 files there verbatim. Rename for clarity:
 These verify Store → Service → Repository → Supabase _call shape_. They belong
 with unit tests, not integration tests.
 
-### Step 0.2 — Update `jest.config.js`
+### [ ] Step 0.2 — Update `jest.config.js`
 
 - Add `'<rootDir>/__tests__/chain/**'` to `testMatch`
 - Remove `__tests__/chain/` from `testPathIgnorePatterns`
 - No other changes — Supabase is still mocked per-file in these chain tests
 
-### Step 0.3 — Update `jest.integration.config.js`
+### [ ] Step 0.3 — Update `jest.integration.config.js`
 
 - `testMatch` already points to `__tests__/integration/**` only — no change needed
 - Verify `setupFilesAfterEnv` uses `integrationSetup.ts` (not the RN mock setup) — already correct
 
-### Step 0.4 — Write real DB replacements for the 3 moved files (~20 new tests)
+### [x] Step 0.4 — Write real DB replacements for the 3 moved files (~20 new tests)
 
 **`__tests__/integration/invoiceCreation.real.test.ts`** — using `integrationHelpers.ts` pattern:
 
@@ -95,7 +95,7 @@ with unit tests, not integration tests.
 **Principle**: Every store action must have 5 test cases minimum: success path,
 loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 
-### Step 1.1 — `inventoryStore.test.ts` — extend to ~120 cases for this store alone
+### [ ] Step 1.1 — `inventoryStore.test.ts` — extend to ~120 cases for this store alone
 
 **`fetchItems`**:
 
@@ -140,7 +140,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 - After seeding items/page/filters: returns state to exact `DEFAULT_FILTERS`,
   `items=[]`, `page=1`, `hasMore=true`, `error=null`, `loading=false`
 
-### Step 1.2 — `invoiceStore.test.ts` — extend to ~40 tests
+### [ ] Step 1.2 — `invoiceStore.test.ts` — extend to ~40 tests
 
 **`createInvoice`**:
 
@@ -159,7 +159,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 
 **`reset`**: all fields return to defaults
 
-### Step 1.3 — `customerStore.test.ts` — extend to ~40 tests
+### [ ] Step 1.3 — `customerStore.test.ts` — extend to ~40 tests
 
 - `fetchCustomers` loading/error/pagination (same pattern)
 - `createCustomer`: success prepends, `totalCount` incremented, emits event
@@ -169,7 +169,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
   full re-fetch of all customers
 - `reset`
 
-### Step 1.4 — `financeStore.test.ts` — extend to ~25 tests
+### [ ] Step 1.4 — `financeStore.test.ts` — extend to ~25 tests
 
 - `fetchSummary`: loading lifecycle, error, data set correctly
 - `fetchSummary` called twice rapidly: only one in-flight (race guard — second call
@@ -177,7 +177,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 - Stale summary retained until new fetch succeeds (not wiped to null during loading)
 - Error: `loading=false`, `error` set, `summary` retains previous value
 
-### Step 1.5 — `authStore.test.ts` — extend to ~25 tests
+### [ ] Step 1.5 — `authStore.test.ts` — extend to ~25 tests
 
 - `signIn`: `loading=true` during call, session set on success, `loading=false`
 - `signIn` with wrong credentials: `error` set, `session` remains null,
@@ -186,20 +186,20 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 - `initialize`: reads session from Supabase on mount, sets `user` if present,
   handles null session gracefully
 
-### Step 1.6 — `dashboardStore.test.ts` — ~15 tests
+### [ ] Step 1.6 — `dashboardStore.test.ts` — ~15 tests
 
 - `fetchStats`: loading lifecycle, all stat fields updated on success, error path
 - `fetchStats` during existing fetch: race guard
 - `reset`
 
-### Step 1.7 — `notificationStore.test.ts` — ~15 tests
+### [ ] Step 1.7 — `notificationStore.test.ts` — ~15 tests
 
 - `fetchNotifications`: loading/error/data
 - `markAsRead(id)`: single notification marked, others unchanged
 - `markAllRead`: all notifications have `read=true`
 - `clearAll`: `notifications=[]`
 
-### Step 1.8 — `orderStore.test.ts` — ~15 tests
+### [ ] Step 1.8 — `orderStore.test.ts` — ~15 tests
 
 - `fetchOrders`: loading/error/pagination
 - `createOrder`: success/error
@@ -212,7 +212,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 **Principle**: One `it()` per tappable interactive element on every screen.
 Assert the exact route string passed to `router.push`, not just "router called."
 
-### Step 2.1 — Create `__tests__/ui/navigation/` with one file per screen
+### [ ] Step 2.1 — Create `__tests__/ui/navigation/` with one file per screen
 
 **`financeIndex.nav.test.tsx`** (4 tests):
 
@@ -266,7 +266,7 @@ Assert the exact route string passed to `router.push`, not just "router called."
 
 - Every menu item navigates to its declared route
 
-### Step 2.2 — Remaining screens
+### [ ] Step 2.2 — Remaining screens
 
 One file each for: `auth/login`, `orders/`, `expenses/add`, `suppliers/` — every
 interactive element with an `onPress` that is supposed to navigate.
@@ -279,7 +279,7 @@ interactive element with an `onPress` that is supposed to navigate.
 (A) spinner visible while loading, (B) error UI visible when error set,
 (C) no spinner when fetch fails — never an infinite loading state.
 
-### Step 3.1 — `__tests__/ui/loading-states/` — one file per screen
+### [ ] Step 3.1 — `__tests__/ui/loading-states/` — one file per screen
 
 **`stockOp.loading.test.tsx`** — the critical bug #3 scenario:
 
@@ -341,7 +341,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 
 ## Phase 4 — Unit: Component Variants (337 → 520)
 
-### Step 4.1 — `TextInput` deep tests
+### [ ] Step 4.1 — `TextInput` deep tests
 
 - Renders with `label` prop → label text visible
 - Renders without `label` → no label element in tree
@@ -356,7 +356,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 - `multiline` → prop passed through
 - Dark mode: `c.onSurface` text colour contrasts against `c.surface` background
 
-### Step 4.2 — `PaymentModal` variant tests
+### [ ] Step 4.2 — `PaymentModal` variant tests
 
 - `invoiceNumber` provided → shows "Invoice: INV-001" not customer name
 - `invoiceNumber` absent → shows "Customer: Name"
@@ -367,7 +367,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 - Pressing already-active mode → stays active (no toggle-off)
 - All visible in dark mode
 
-### Step 4.3 — `Button` component variants
+### [ ] Step 4.3 — `Button` component variants
 
 - `variant="primary"`: background = `c.primary`, text = `c.onPrimary`
 - `variant="outline"`: transparent background, border visible
@@ -377,7 +377,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 - `leftIcon` renders to left of title
 - `size="sm"` / `size="lg"`: renders without crash
 
-### Step 4.4 — `Screen` component safe area variants
+### [ ] Step 4.4 — `Screen` component safe area variants
 
 - `safeAreaEdges=['top', 'bottom']`: `paddingTop = insets.top`,
   `paddingBottom = insets.bottom`
@@ -387,7 +387,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 - `scrollable=true`: `ScrollView` rendered instead of `View`
 - `withKeyboard=true`: `KeyboardAvoidingView` wraps content
 
-### Step 4.5 — All remaining components
+### [ ] Step 4.5 — All remaining components
 
 For every component in `src/components/`: ensure every exported prop combination
 has at least one test. Specifically add tests for:
@@ -398,7 +398,7 @@ has at least one test. Specifically add tests for:
 
 ## Phase 5 — Unit: Service & Repository Gaps (199 → 350)
 
-### Step 5.1 — Service error paths
+### [ ] Step 5.1 — Service error paths
 
 **`invoiceService`**:
 
@@ -429,7 +429,7 @@ has at least one test. Specifically add tests for:
 - Empty date range → service still calls RPC (no short-circuit)
 - RPC returns null data → handled gracefully, no crash
 
-### Step 5.2 — Repository error propagation
+### [ ] Step 5.2 — Repository error propagation
 
 For every repository method, test that when Supabase returns
 `{ data: null, error: { message: 'X', code: 'PGRST301' } }`:
@@ -451,7 +451,7 @@ all `baseRepository` CRUD methods.
 The existing 11 real DB test files test CRUD. They need extending for constraints,
 RPC side effects, and atomic guarantees.
 
-### Step 6.1 — Extend `inventoryFlow.test.ts`
+### [ ] Step 6.1 — Extend `inventoryFlow.test.ts`
 
 - `stock_in` RPC: `box_count` increases by exactly the specified quantity
 - `stock_out` below zero: error returned or `box_count` floors at 0
@@ -460,7 +460,7 @@ RPC side effects, and atomic guarantees.
 - `stock_logs` table: one row per operation with correct `quantity_change` and
   `operation_type`
 
-### Step 6.2 — Extend `invoiceCreation.real.test.ts` (new from Phase 0)
+### [ ] Step 6.2 — Extend `invoiceCreation.real.test.ts` (new from Phase 0)
 
 - Line items written atomically: partial DB failure → invoice row does NOT exist
 - `invoice_number` format matches expected pattern (`TM/YYYY-YY/NNNN`)
@@ -468,7 +468,7 @@ RPC side effects, and atomic guarantees.
 - `inventory_items.box_count` decremented by line item `quantity`
 - Creating invoice with non-existent `item_id` → RPC error, no rows left behind
 
-### Step 6.3 — Extend `paymentRecording.real.test.ts` (new from Phase 0)
+### [ ] Step 6.3 — Extend `paymentRecording.real.test.ts` (new from Phase 0)
 
 - Full pay → `payment_status = 'paid'`
 - Partial pay → `payment_status = 'partial'`, `amount_paid` = recorded amount
@@ -476,13 +476,13 @@ RPC side effects, and atomic guarantees.
 - `payments` row has correct `direction`, `payment_date`, `customer_id`, `invoice_id`
 - Customer balance reflects new payment (if a DB view exists)
 
-### Step 6.4 — Add `__tests__/integration/concurrency.real.test.ts`
+### [ ] Step 6.4 — Add `__tests__/integration/concurrency.real.test.ts`
 
 - Two parallel invoice creation calls: both succeed, each gets unique `invoice_number`
 - Two parallel payments on same invoice: correct final `amount_paid`
 - Two parallel stock ops: correct final `box_count`
 
-### Step 6.5 — Extend all existing flow tests with error paths
+### [ ] Step 6.5 — Extend all existing flow tests with error paths
 
 For each of the 11 existing real DB test files, add:
 
@@ -496,7 +496,7 @@ For each of the 11 existing real DB test files, add:
 **Approach**: Seed the store, perform the action via store method, then render
 the destination screen and assert it shows updated state.
 
-### Step 7.1 — `__tests__/cross-screen/` directory
+### [ ] Step 7.1 — `__tests__/cross-screen/` directory
 
 **`stockOp-to-itemDetail.test.tsx`** (the exact bug #2 scenario):
 
@@ -568,7 +568,7 @@ it('setting search filter while loading does not cause stuck loading state')
 **Tooling**: `jest-image-snapshot`.
 Install: `npm install --save-dev jest-image-snapshot`.
 
-### Step 8.1 — Setup
+### [ ] Step 8.1 — Setup
 
 Create `__tests__/visual/setup/renderToSnapshot.tsx`:
 
@@ -578,7 +578,7 @@ Create `__tests__/visual/setup/renderToSnapshot.tsx`:
 
 Add `snapshotResolver` to `jest.config.js` pointing to the visual directory.
 
-### Step 8.2 — Snapshot test files (`__tests__/visual/screens/`)
+### [ ] Step 8.2 — Snapshot test files (`__tests__/visual/screens/`)
 
 One file per screen, 4 snapshots each (light/dark × normal/loading):
 
@@ -601,7 +601,7 @@ One file per screen, 4 snapshots each (light/dark × normal/loading):
 
 **Tooling**: `npm install --save-dev color` (has `.contrast()` method).
 
-### Step 9.1 — `__tests__/visual/contrast/contrastRatios.test.ts`
+### [ ] Step 9.1 — `__tests__/visual/contrast/contrastRatios.test.ts`
 
 ```typescript
 import Color from 'color';
@@ -646,7 +646,7 @@ function assertContrast(fg: string, bg: string, minRatio = 4.5) {
 **Tooling**: Configure `react-native-safe-area-context` jest mock to return
 specific inset values per test.
 
-### Step 10.1 — `__tests__/visual/safeArea/`
+### [ ] Step 10.1 — `__tests__/visual/safeArea/`
 
 **`paymentModal.safeArea.test.tsx`** (the exact bug #6 scenario):
 
@@ -682,7 +682,7 @@ it('PaymentModal clears Android navigation bar (bottom inset 48px)')
 
 **Tooling**: Maestro. Install: `npm install -g @maestro/cli`
 
-### Step 11.1 — Setup
+### [ ] Step 11.1 — Setup
 
 ```
 .maestro/
@@ -704,7 +704,7 @@ it('PaymentModal clears Android navigation bar (bottom inset 48px)')
 Create `scripts/seed-e2e-db.ts` — creates a known test account with baseline
 inventory data before the E2E suite runs.
 
-### Step 11.2 — Happy Path Flows (~30 flows, run on iOS + Android = 60 test runs)
+### [ ] Step 11.2 — Happy Path Flows (~30 flows, run on iOS + Android = 60 test runs)
 
 `.maestro/flows/auth/login-success.yaml`:
 
@@ -754,7 +754,7 @@ Additional happy path flows:
 - `dashboard/refresh-stats.yaml` — pull to refresh, assert loading indicator,
   assert stats visible
 
-### Step 11.3 — Error & Edge Flows (~40 flows ×2 platforms = 80)
+### [ ] Step 11.3 — Error & Edge Flows (~40 flows ×2 platforms = 80)
 
 `.maestro/flows/errors/login-invalid.yaml`:
 
@@ -813,7 +813,7 @@ Additional error flows:
 - Payment > outstanding amount → expected behaviour shown
 - Stock out exceeding available quantity → expected error
 
-### Step 11.4 — Keyboard & Touch Flows (~30 ×2 platforms = 60)
+### [ ] Step 11.4 — Keyboard & Touch Flows (~30 ×2 platforms = 60)
 
 `.maestro/flows/keyboard/payment-amount-tap-anywhere.yaml`:
 
@@ -852,7 +852,7 @@ Additional error flows:
 **Tooling**: `@testing-library/react-native` `getByRole`, `getByLabelText`,
 `getByHint`. Touch target size asserted via component style inspection.
 
-### Step 12.1 — `__tests__/accessibility/` — one file per screen
+### [ ] Step 12.1 — `__tests__/accessibility/` — one file per screen
 
 **`financeOverview.a11y.test.tsx`**:
 
@@ -886,7 +886,7 @@ it('FAB has accessibilityLabel="add-inventory-button"')
 
 Apply same pattern to every remaining screen.
 
-### Step 12.2 — Touch target size tests
+### [ ] Step 12.2 — Touch target size tests
 
 `__tests__/accessibility/touchTargets.test.tsx`:
 
@@ -900,7 +900,7 @@ Apply same pattern to every remaining screen.
 **Tooling**: `jest.useFakeTimers()`, manual timing with `performance.now()`,
 spy on render counts.
 
-### Step 13.1 — `__tests__/performance/`
+### [ ] Step 13.1 — `__tests__/performance/`
 
 **`inventoryList.perf.test.tsx`**:
 
@@ -953,7 +953,7 @@ it('eventBus STOCK_CHANGED fires exactly once per performStockOperation')
 **Tooling**: Mock `global.fetch` or use `jest-fetch-mock`. Mock
 `useNetworkStatus` hook.
 
-### Step 14.1 — `__tests__/resilience/`
+### [ ] Step 14.1 — `__tests__/resilience/`
 
 **`networkError.test.ts`**:
 
@@ -1040,7 +1040,7 @@ Now living in `__tests__/chain/`, the 3 moved files need more scenarios.
 
 **Tooling**: Real Supabase test DB via `jest.integration.config.js`.
 
-### Step 16.1 — `__tests__/integration/schemaIntegrity.real.test.ts`
+### [ ] Step 16.1 — `__tests__/integration/schemaIntegrity.real.test.ts`
 
 **Table existence** (select with LIMIT 0 to verify columns without returning data):
 
