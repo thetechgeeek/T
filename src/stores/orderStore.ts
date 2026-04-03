@@ -26,6 +26,7 @@ interface OrderState {
 	) => Promise<void>;
 	importParsedData: (partyName: string, items: ParsedOrderItem[]) => Promise<void>;
 	clearParsedData: () => void;
+	reset: () => void;
 }
 
 export const useOrderStore = create<OrderState>((set, get) => ({
@@ -83,5 +84,16 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 
 	clearParsedData: () => {
 		set({ parsedData: null, rawResponse: null });
+	},
+
+	reset: () => {
+		set({
+			orders: [],
+			loading: false,
+			error: null,
+			parsedData: null,
+			rawResponse: null,
+			isParsing: false,
+		});
 	},
 }));

@@ -29,6 +29,7 @@ export interface CustomerState {
 	fetchCustomerDetail: (id: UUID) => Promise<void>;
 	createCustomer: (customer: CustomerInsert) => Promise<Customer>;
 	updateCustomer: (id: UUID, updates: Partial<CustomerInsert>) => Promise<Customer>;
+	reset: () => void;
 }
 
 export const useCustomerStore = create<CustomerState>()(
@@ -55,7 +56,7 @@ export const useCustomerStore = create<CustomerState>()(
 			get().fetchCustomers(true);
 		},
 
-		fetchCustomers: async (_reset = false) => {
+		fetchCustomers: async (reset = false) => {
 			set((s) => {
 				s.loading = true;
 				s.error = null;
@@ -63,7 +64,13 @@ export const useCustomerStore = create<CustomerState>()(
 			try {
 				const { data, count } = await customerService.fetchCustomers(get().filters);
 				set((s) => {
-					s.customers = data;
+					if (reset) {
+						s.customers = data;
+					} else {
+						const existingIds = new Set(s.customers.map((c) => c.id));
+						const newItems = data.filter((c) => !existingIds.has(c.id));
+						s.customers.push(...newItems);
+					}
 					s.totalCount = count;
 					s.loading = false;
 				});
@@ -73,6 +80,23 @@ export const useCustomerStore = create<CustomerState>()(
 					s.loading = false;
 				});
 			}
+		},
+
+		reset: () => {
+			set((s) => {
+				s.customers = [];
+				s.totalCount = 0;
+				s.selectedCustomer = null;
+				s.ledger = [];
+				s.summary = null;
+				s.error = null;
+				s.filters = {
+					search: '',
+					type: 'ALL',
+					sortBy: 'name',
+					sortDir: 'asc',
+				};
+			});
 		},
 
 		fetchCustomerDetail: async (id: UUID) => {

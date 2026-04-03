@@ -14,6 +14,7 @@ interface NotificationState {
 	fetchUnread: () => Promise<void>;
 	markAsRead: (id: UUID) => Promise<void>;
 	markAllAsRead: () => Promise<void>;
+	reset: () => void;
 }
 
 export const useNotificationStore = create<NotificationState>()(
@@ -63,6 +64,15 @@ export const useNotificationStore = create<NotificationState>()(
 		markAllAsRead: async () => {
 			const unread = get().notifications.filter((n) => !n.read);
 			await Promise.all(unread.map((n) => get().markAsRead(n.id)));
+		},
+
+		reset: () => {
+			set((s) => {
+				s.notifications = [];
+				s.unreadCount = 0;
+				s.loading = false;
+				s.error = null;
+			});
 		},
 	})),
 );
