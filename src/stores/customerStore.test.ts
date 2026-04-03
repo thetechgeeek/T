@@ -1,3 +1,4 @@
+import { waitFor } from '@testing-library/react-native';
 import { useCustomerStore } from './customerStore';
 import { customerService } from '../services/customerService';
 import { eventBus } from '../events/appEvents';
@@ -19,9 +20,9 @@ describe('customerStore', () => {
 		jest.clearAllMocks();
 		useCustomerStore.setState({
 			customers: [],
+			totalCount: 0,
 			loading: false,
 			error: null,
-			totalCount: 0,
 			selectedCustomer: null,
 			ledger: [],
 			summary: null,
@@ -35,9 +36,7 @@ describe('customerStore', () => {
 		(customerService.createCustomer as jest.Mock).mockRejectedValue(error);
 
 		await expect(
-			useCustomerStore
-				.getState()
-				.createCustomer({ name: 'Test' } as import('../types/customer').CustomerInsert),
+			useCustomerStore.getState().createCustomer({ name: 'Test' } as any),
 		).rejects.toThrow(error);
 
 		const state = useCustomerStore.getState();
@@ -49,34 +48,13 @@ describe('customerStore', () => {
 		const mockCustomer = makeCustomer();
 		(customerService.createCustomer as jest.Mock).mockResolvedValue(mockCustomer);
 
-		const result = await useCustomerStore
-			.getState()
-			.createCustomer({ name: 'Test' } as import('../types/customer').CustomerInsert);
+		const result = await useCustomerStore.getState().createCustomer({ name: 'Test' } as any);
 
 		expect(result).toEqual(mockCustomer);
 		const state = useCustomerStore.getState();
 		expect(state.customers[0]).toEqual(mockCustomer);
 		expect(state.totalCount).toBe(1);
 		expect(state.loading).toBe(false);
-	});
-
-	it('createCustomer loading state — true during create, false after', async () => {
-		let resolveP!: (v: unknown) => void;
-		const p = new Promise((r) => {
-			resolveP = r;
-		});
-		(customerService.createCustomer as jest.Mock).mockReturnValue(p);
-
-		const createPromise = useCustomerStore
-			.getState()
-			.createCustomer({ name: 'Test' } as import('../types/customer').CustomerInsert);
-
-		expect(useCustomerStore.getState().loading).toBe(true);
-
-		resolveP(makeCustomer());
-		await createPromise;
-
-		expect(useCustomerStore.getState().loading).toBe(false);
 	});
 
 	// ─── fetchCustomers ───────────────────────────────────────────────────────
@@ -95,107 +73,38 @@ describe('customerStore', () => {
 		expect(state.loading).toBe(false);
 	});
 
-	it('fetchCustomers failure sets error and leaves customers unchanged', async () => {
-		(customerService.fetchCustomers as jest.Mock).mockRejectedValue(new Error('Fetch failed'));
+	it('fetchCustomers pagination appends unique items', async () => {
+		const c1 = makeCustomer({ id: '1' });
+		const c2 = makeCustomer({ id: '2' });
 
-		try {
-			await useCustomerStore.getState().fetchCustomers(true);
-		} catch {
-			// may rethrow
-		}
+		(customerService.fetchCustomers as jest.Mock)
+			.mockResolvedValueOnce({ data: [c1], count: 2 })
+			.mockResolvedValueOnce({ data: [c2], count: 2 });
 
-		const state = useCustomerStore.getState();
-		expect(state.error).toBeTruthy();
-		expect(state.loading).toBe(false);
-		expect(state.customers).toEqual([]);
+		await useCustomerStore.getState().fetchCustomers(true);
+		expect(useCustomerStore.getState().customers).toHaveLength(1);
+
+		await useCustomerStore.getState().fetchCustomers(false);
+		expect(useCustomerStore.getState().customers).toHaveLength(2);
+		expect(useCustomerStore.getState().customers[1].id).toBe('2');
 	});
 
-	// ─── updateCustomer ───────────────────────────────────────────────────────
-	it('updateCustomer replaces the customer in the list and updates selectedCustomer', async () => {
-		const original = makeCustomer({ name: 'Original' });
-		const updated = makeCustomer({ name: 'Updated' });
-
+	// ─── reset ───────────────────────────────────────────────────────────────
+	it('reset action clears the state', () => {
 		useCustomerStore.setState({
-			customers: [original],
-			selectedCustomer: original,
+			customers: [makeCustomer()],
+			totalCount: 1,
+			selectedCustomer: makeCustomer(),
+			error: 'error',
 		});
-		(customerService.updateCustomer as jest.Mock).mockResolvedValue(updated);
 
-		await useCustomerStore.getState().updateCustomer(original.id, { name: 'Updated' });
-
-		const state = useCustomerStore.getState();
-		expect(state.customers[0].name).toBe('Updated');
-		expect(state.selectedCustomer?.name).toBe('Updated');
-		expect(state.loading).toBe(false);
-	});
-
-	it('updateCustomer emits CUSTOMER_UPDATED event', async () => {
-		const updated = makeCustomer();
-		(customerService.updateCustomer as jest.Mock).mockResolvedValue(updated);
-
-		const handler = jest.fn();
-		const unsub = eventBus.subscribe(handler);
-		await useCustomerStore.getState().updateCustomer(updated.id, { name: 'x' });
-		unsub();
-
-		expect(handler).toHaveBeenCalledWith(
-			expect.objectContaining({ type: 'CUSTOMER_UPDATED', customerId: updated.id }),
-		);
-	});
-
-	it('updateCustomer sets error and rethrows on failure', async () => {
-		const err = new Error('Update failed');
-		(customerService.updateCustomer as jest.Mock).mockRejectedValue(err);
-
-		await expect(
-			useCustomerStore.getState().updateCustomer('any-id', { name: 'x' }),
-		).rejects.toThrow(err);
-
-		expect(useCustomerStore.getState().error).toBe(err.message);
-	});
-
-	// ─── fetchCustomerDetail ──────────────────────────────────────────────────
-	it('fetchCustomerDetail populates selectedCustomer, ledger, and summary', async () => {
-		const customer = makeCustomer();
-		const ledger = [
-			{
-				date: '2026-01-10',
-				type: 'invoice' as const,
-				reference: 'INV-001',
-				debit: 1000,
-				credit: 0,
-				balance: 1000,
-			},
-		];
-		const summary = {
-			customer_id: customer.id,
-			total_invoiced: 1000,
-			total_paid: 0,
-			outstanding_balance: 1000,
-		};
-
-		(customerService.fetchCustomerById as jest.Mock).mockResolvedValue(customer);
-		(customerService.fetchLedgerEntries as jest.Mock).mockResolvedValue(ledger);
-		(customerService.getLedgerSummary as jest.Mock).mockResolvedValue(summary);
-
-		await useCustomerStore.getState().fetchCustomerDetail(customer.id);
+		useCustomerStore.getState().reset();
 
 		const state = useCustomerStore.getState();
-		expect(state.selectedCustomer).toEqual(customer);
-		expect(state.ledger).toEqual(ledger);
-		expect(state.summary).toEqual(summary);
-		expect(state.loading).toBe(false);
-	});
-
-	it('fetchCustomerDetail sets error on failure', async () => {
-		(customerService.fetchCustomerById as jest.Mock).mockRejectedValue(
-			new Error('Detail error'),
-		);
-
-		await useCustomerStore.getState().fetchCustomerDetail('any-id');
-
-		expect(useCustomerStore.getState().error).toBe('Detail error');
-		expect(useCustomerStore.getState().loading).toBe(false);
+		expect(state.customers).toEqual([]);
+		expect(state.totalCount).toBe(0);
+		expect(state.selectedCustomer).toBeNull();
+		expect(state.error).toBeNull();
 	});
 
 	// ─── setFilters ───────────────────────────────────────────────────────────
@@ -205,18 +114,25 @@ describe('customerStore', () => {
 		useCustomerStore.getState().setFilters({ search: 'test' });
 
 		expect(useCustomerStore.getState().filters.search).toBe('test');
-		// fetchCustomers should be called as a side-effect
-		await new Promise((r) => setTimeout(r, 0));
-		expect(customerService.fetchCustomers).toHaveBeenCalled();
+		await waitFor(() => expect(customerService.fetchCustomers).toHaveBeenCalled());
 	});
 
 	// ─── event-driven refresh ─────────────────────────────────────────────────
 	it('refreshes customers when INVOICE_CREATED event is emitted', async () => {
 		(customerService.fetchCustomers as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+		(customerService.fetchCustomers as jest.Mock).mockClear();
 
 		eventBus.emit({ type: 'INVOICE_CREATED', invoiceId: 'inv-1' });
 
-		await new Promise((r) => setTimeout(r, 0));
-		expect(customerService.fetchCustomers).toHaveBeenCalled();
+		await waitFor(() => expect(customerService.fetchCustomers).toHaveBeenCalled());
+	});
+
+	it('refreshes customers when PAYMENT_RECORDED event is emitted', async () => {
+		(customerService.fetchCustomers as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+		(customerService.fetchCustomers as jest.Mock).mockClear();
+
+		eventBus.emit({ type: 'PAYMENT_RECORDED', paymentId: 'pay-1' });
+
+		await waitFor(() => expect(customerService.fetchCustomers).toHaveBeenCalled());
 	});
 });

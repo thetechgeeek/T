@@ -155,9 +155,7 @@ describe('customerService', () => {
 			builder.single.mockResolvedValue({ data: null, error: { message: 'Not found' } });
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			await expect(customerService.fetchCustomerById('bad-id')).rejects.toMatchObject({
-				message: 'Not found',
-			});
+			await expect(customerService.fetchCustomerById('bad-id')).rejects.toThrow('Not found');
 		});
 	});
 
@@ -184,7 +182,7 @@ describe('customerService', () => {
 			const builder = makeListBuilder();
 			builder.single.mockResolvedValue({
 				data: null,
-				error: { code: 'PGRST116', message: 'No rows' },
+				error: { code: 'PGRST116', message: 'Record with id "requested" not found' },
 			});
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
@@ -206,9 +204,9 @@ describe('customerService', () => {
 			});
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			await expect(customerService.getLedgerSummary('cust-uuid-001')).rejects.toMatchObject({
-				message: 'DB error',
-			});
+			await expect(customerService.getLedgerSummary('cust-uuid-001')).rejects.toThrow(
+				'DB error',
+			);
 		});
 	});
 
@@ -287,10 +285,8 @@ describe('customerService', () => {
 				.mockReturnValueOnce(invoicesBuilder)
 				.mockReturnValueOnce(paymentsBuilder);
 
-			await expect(customerService.fetchLedgerEntries('cust-uuid-001')).rejects.toMatchObject(
-				{
-					message: 'Invoices error',
-				},
+			await expect(customerService.fetchLedgerEntries('cust-uuid-001')).rejects.toThrow(
+				'Invoices error',
 			);
 		});
 
@@ -364,9 +360,7 @@ describe('customerService', () => {
 				error: { message: 'RPC failed' },
 			});
 
-			await expect(customerService.getAgingReport()).rejects.toMatchObject({
-				message: 'RPC failed',
-			});
+			await expect(customerService.getAgingReport()).rejects.toThrow('RPC failed');
 		});
 	});
 });

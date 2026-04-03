@@ -1,6 +1,6 @@
 import { invoiceService } from '@/src/services/invoiceService';
 import { supabase } from '../config/supabase';
-import { ValidationError } from '../errors/AppError';
+import { ValidationError, ConflictError } from '../errors/AppError';
 
 jest.mock('../config/supabase', () => ({
 	supabase: {
@@ -11,7 +11,11 @@ jest.mock('../config/supabase', () => ({
 
 /** Chainable + thenable builder for fetchInvoices tests (`await query` pattern). */
 function makeListBuilder(
-	result: { data: unknown[] | null; count: number | null; error: { message: string } | null } = {
+	result: {
+		data: unknown[] | null;
+		count: number | null;
+		error: { message: string; code?: string } | null;
+	} = {
 		data: [],
 		count: 0,
 		error: null,
@@ -206,10 +210,10 @@ describe('invoiceService', () => {
 			expect(rpcArgs.p_line_items[0].discount).toBe(0);
 		});
 
-		it('RPC error propagates as rejection', async () => {
+		it('throws ConflictError when RPC returns 23505 (unique violation)', async () => {
 			(supabase.rpc as jest.Mock).mockResolvedValue({
 				data: null,
-				error: { message: 'RPC failed', code: 'P0001' },
+				error: { message: 'Already exists', code: '23505' },
 			});
 			await expect(
 				invoiceService.createInvoice({
@@ -228,7 +232,32 @@ describe('invoiceService', () => {
 					],
 					amount_paid: 0,
 				} as Parameters<typeof invoiceService.createInvoice>[0]),
-			).rejects.toBeDefined();
+			).rejects.toMatchObject({ code: 'CONFLICT' });
+		});
+
+		it('throws AppError with INSUFFICIENT_STOCK when RPC returns stock error message', async () => {
+			(supabase.rpc as jest.Mock).mockResolvedValue({
+				data: null,
+				error: { message: 'Insufficient stock for item', code: 'P0001' },
+			});
+			await expect(
+				invoiceService.createInvoice({
+					customer_name: 'John',
+					is_inter_state: false,
+					invoice_date: '2026-03-28',
+					payment_status: 'unpaid',
+					line_items: [
+						{
+							item_id: '123e4567-e89b-12d3-a456-426614174000',
+							design_name: 'X',
+							quantity: 1,
+							rate_per_unit: 500,
+							gst_rate: 18,
+						},
+					],
+					amount_paid: 0,
+				} as Parameters<typeof invoiceService.createInvoice>[0]),
+			).rejects.toMatchObject({ code: 'INSUFFICIENT_STOCK' });
 		});
 	});
 
@@ -330,15 +359,17 @@ describe('invoiceService', () => {
 			expect(builder.order).toHaveBeenCalledWith('invoice_date', { ascending: true });
 		});
 
-		it('error path: rejects when supabase returns an error', async () => {
+		it('throws NotFoundError when supabase returns PGRST116 (no rows found)', async () => {
 			const builder = makeListBuilder({
-				data: null as unknown as unknown[],
-				count: null as unknown as number,
-				error: { message: 'DB error' },
+				data: null as any,
+				count: null as any,
+				error: { message: 'Not found', code: 'PGRST116' },
 			});
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			await expect(invoiceService.fetchInvoices({})).rejects.toBeDefined();
+			await expect(invoiceService.fetchInvoices({})).rejects.toThrow(
+				'Record with id "requested" not found',
+			);
 		});
 	});
 

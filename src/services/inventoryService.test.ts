@@ -1,6 +1,7 @@
 import { inventoryService } from './inventoryService';
 import { supabase } from '@/src/config/supabase';
 import { makeInventoryItem } from '../../__tests__/fixtures/inventoryFixtures';
+import { ConflictError, ValidationError } from '../errors/AppError';
 
 /**
  * Chainable + thenable builder.
@@ -27,6 +28,7 @@ function makeBuilder(
 		'limit',
 		'lte',
 		'ilike',
+		'in',
 	];
 	chainable.forEach((m) => {
 		b[m] = jest.fn().mockReturnValue(b);
@@ -96,15 +98,39 @@ describe('inventoryService', () => {
 			).toBeUndefined();
 		});
 
-		it('throws error when supabase returns an error', async () => {
+		it('throws ConflictError when supabase returns 23505 (unique violation)', async () => {
 			const builder = makeBuilder({
 				data: null,
-				count: null,
-				error: { message: 'DB Error' },
+				error: { message: 'Already exists', code: '23505' },
 			});
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
-			await expect(inventoryService.fetchItems({})).rejects.toBeDefined();
+			await expect(inventoryService.fetchItems({})).rejects.toThrow(ConflictError);
+		});
+
+		it('throws ValidationError when supabase returns 23502 (not null violation)', async () => {
+			const builder = makeBuilder({
+				data: null,
+				error: { message: 'Required', code: '23502', column: 'name' } as any,
+			});
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await expect(inventoryService.fetchItems({})).rejects.toThrow(ValidationError);
+		});
+
+		it('handles lowStockOnly filter by querying low_stock_items view first', async () => {
+			const lowStockBuilder = makeBuilder({ data: [{ id: 'low-1' }], error: null });
+			const itemsBuilder = makeBuilder({ data: [], error: null });
+
+			(supabase.from as jest.Mock)
+				.mockReturnValueOnce(itemsBuilder) // inventory_items
+				.mockReturnValueOnce(lowStockBuilder); // low_stock_items
+
+			await inventoryService.fetchItems({ lowStockOnly: true });
+
+			expect(supabase.from).toHaveBeenCalledWith('low_stock_items');
+			expect(supabase.from).toHaveBeenCalledWith('inventory_items');
+			expect(itemsBuilder.in).toHaveBeenCalledWith('id', ['low-1']);
 		});
 	});
 
@@ -179,15 +205,29 @@ describe('inventoryService', () => {
 			expect(result).toBe(100);
 		});
 
-		it('propagates RPC error (does not swallow it)', async () => {
+		it('throws AppError with INSUFFICIENT_STOCK when RPC returns P0001 with stock message', async () => {
 			(supabase.rpc as jest.Mock).mockResolvedValue({
 				data: null,
-				error: { message: 'RPC error', code: 'P0001' },
+				error: { message: 'Insufficient stock for item', code: 'P0001' },
+			});
+
+			try {
+				await inventoryService.performStockOperation('item1', 'stock_out', 100);
+				fail('Should have thrown');
+			} catch (err: any) {
+				expect(err.code).toBe('INSUFFICIENT_STOCK');
+			}
+		});
+
+		it('propagates other RPC errors as ValidationError', async () => {
+			(supabase.rpc as jest.Mock).mockResolvedValue({
+				data: null,
+				error: { message: 'Some other error', code: 'P0001' },
 			});
 
 			await expect(
 				inventoryService.performStockOperation('item1', 'stock_in', 10),
-			).rejects.toBeDefined();
+			).rejects.toThrow(ValidationError);
 		});
 	});
 
