@@ -71,8 +71,44 @@ export class ConflictError extends AppError {
 
 export function toAppError(err: unknown): AppError {
 	if (err instanceof AppError) return err;
-	if (err instanceof Error) {
-		return new AppError(err.message, 'UNKNOWN', 'An unexpected error occurred', err);
+
+	const errObj = err as any;
+	const code = errObj?.code;
+	const message = errObj?.message || String(err);
+
+	// Handle Postgres/Supabase error codes (§17.1)
+	switch (code) {
+		case '23505': // Unique violation
+			return new ConflictError(message, 'This record already exists');
+		case '23503': // Foreign key violation
+			return new AppError(
+				message,
+				'FK_VIOLATION',
+				'This record is in use and cannot be modified',
+			);
+		case '23502': // Not null violation
+			return new ValidationError(message, { [errObj?.column || 'field']: ['isRequired'] });
+		case 'P0001': // custom Raise Exception from PL/pgSQL
+			if (message.toLowerCase().includes('insufficient stock')) {
+				return new AppError(message, 'INSUFFICIENT_STOCK', message);
+			}
+			return new ValidationError(message, { base: [message] });
+		case 'PGRST116': // JSON object requested, but no rows returned (single() failure)
+			return new NotFoundError('Record', 'requested');
+		case 'PGRST204': // Column not found
+		case 'PGRST205': // Table/Column missing from schema
+		case '42703': // Undefined column
+		case '42P01': // Undefined table
+			return new AppError(
+				message,
+				code,
+				'Database schema mismatch. Please contact support.',
+				err,
+			);
 	}
-	return new AppError(String(err), 'UNKNOWN', 'An unexpected error occurred');
+
+	if (err instanceof Error) {
+		return new AppError(message, 'UNKNOWN', 'An unexpected error occurred', err);
+	}
+	return new AppError(message, 'UNKNOWN', 'An unexpected error occurred');
 }
