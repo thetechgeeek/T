@@ -1,86 +1,128 @@
-import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { useDashboardStore } from '@/src/stores/dashboardStore'; // IMPORTED
-import { dashboardService } from '@/src/services/dashboardService';
-import { inventoryService } from '@/src/services/inventoryService';
-import { makeInventoryItem } from '../fixtures/inventoryFixtures';
-import { waitFor } from '@testing-library/react-native';
-import type { DashboardStats } from '@/src/types/finance';
+/**
+ * Real DB integration test for stock operations.
+ * Verifies RPC stock increment/decrement and logs.
+ */
+import {
+	createTestSupabaseClient,
+	testPrefix,
+	cleanupByPrefix,
+	signInTestUser,
+} from '../utils/integrationHelpers';
+import { inventoryRepository } from '@/src/repositories/inventoryRepository';
+import { AppError } from '@/src/errors';
 
-// Mock only the Supabase network boundary (as per Phase 12 requirement)
-jest.mock('@/src/config/supabase', () => {
-	const { createSupabaseMock } = jest.requireActual('../utils/supabaseMock');
-	return {
-		supabase: createSupabaseMock(),
-	};
+const supabase = createTestSupabaseClient();
+const prefix = testPrefix();
+
+beforeAll(async () => {
+	await signInTestUser(supabase);
 });
 
-import { supabase } from '@/src/config/supabase';
-const mockSupabase = supabase as unknown as { rpc: jest.Mock };
+afterAll(async () => {
+	await cleanupByPrefix(supabase, prefix);
+	await supabase.auth.signOut();
+});
 
-describe('Stock Operation Flow Integration', () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-		useInventoryStore.getState().reset();
-		useDashboardStore.getState(); // Initialize
+describe('Stock Operation Real DB', () => {
+	let itemId: string;
+
+	beforeAll(async () => {
+		// Seed an item with known stock
+		const item = await inventoryRepository.create({
+			design_name: `${prefix}Test Stock Op`,
+			base_item_number: `${prefix}TSO-001`,
+			category: 'OTHER',
+			box_count: 50,
+			cost_price: 100,
+			selling_price: 100,
+			hsn_code: '6908',
+			low_stock_threshold: 5,
+		});
+		itemId = item.id;
 	});
 
-	it('completes the full call chain for stock operation', async () => {
-		const itemId = 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b5';
+	it('stock_in increases box_count and creates a log', async () => {
+		await inventoryRepository.performStockOp(itemId, 'stock_in', 10, `${prefix} Stock-In Test`);
 
-		// Mock RPC response
-		mockSupabase.rpc.mockResolvedValue({
-			data: { new_box_count: 60 },
-			error: null,
-		});
+		const updatedItem = await inventoryRepository.findById(itemId);
+		expect(updatedItem.box_count).toBe(60);
 
-		// Mock fetchItemById (called after performStockOperation to refresh state)
-		const mockItem = makeInventoryItem({ id: itemId, box_count: 60 });
-		const fetchSpy = jest.spyOn(inventoryService, 'fetchItemById');
-		fetchSpy.mockResolvedValue(mockItem);
+		// Verify status
+		const { data: ops, error } = await supabase
+			.from('stock_operations')
+			.select('*')
+			.eq('item_id', itemId)
+			.order('created_at', { ascending: false });
 
-		// Seed store with initial item
-		useInventoryStore.setState((s) => {
-			s.items = [makeInventoryItem({ id: itemId, box_count: 50 })];
-		});
-
-		await useInventoryStore.getState().performStockOperation(itemId, 'stock_in', 10, 'Arrival');
-
-		// 1. Verify RPC call with correct params
-		expect(mockSupabase.rpc).toHaveBeenCalledWith(
-			'perform_stock_operation_v1',
-			expect.objectContaining({
-				p_item_id: itemId,
-				p_operation_type: 'stock_in',
-				p_quantity_change: 10,
-				p_reason: 'Arrival',
-			}),
-		);
-
-		// 2. Verify Store state was updated
-		expect(useInventoryStore.getState().items[0].box_count).toBe(60);
+		if (error) throw error;
+		expect(ops).toHaveLength(1);
+		expect(ops![0].operation_type).toBe('stock_in');
+		expect(Math.abs(ops![0].quantity_change)).toBe(10);
 	});
 
-	it('triggers cross-store refreshes via eventBus after stock change', async () => {
-		const itemId = 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b5';
-		mockSupabase.rpc.mockResolvedValue({ data: {}, error: null });
-		jest.spyOn(inventoryService, 'fetchItemById').mockResolvedValue(
-			makeInventoryItem({ id: itemId }),
+	it('stock_out decreases box_count (using negative value) and creates a log', async () => {
+		// Based on UI test observation, stock_out needs a negative value
+		await inventoryRepository.performStockOp(
+			itemId,
+			'stock_out',
+			-5,
+			`${prefix} Stock-Out Test`,
 		);
 
-		// Spy on dashboard service
-		const dashboardSpy = jest.spyOn(dashboardService, 'fetchDashboardStats');
-		dashboardSpy.mockResolvedValue({} as unknown as DashboardStats);
+		const updatedItem = await inventoryRepository.findById(itemId);
+		expect(updatedItem.box_count).toBe(55);
 
-		// Spy on inventoryService.fetchItems (called by store listener)
-		const fetchItemsSpy = jest.spyOn(inventoryService, 'fetchItems');
-		fetchItemsSpy.mockResolvedValue({ data: [], count: 0 });
+		const { data: ops, error } = await supabase
+			.from('stock_operations')
+			.select('*')
+			.eq('item_id', itemId)
+			.order('created_at', { ascending: false });
 
-		await useInventoryStore.getState().performStockOperation(itemId, 'stock_in', 5);
+		if (error) throw error;
+		expect(ops).toHaveLength(2);
+		expect(ops![0].operation_type).toBe('stock_out');
+		expect(ops![0].quantity_change).toBe(-5);
+	});
 
-		// Verify refreshes triggered by STOCK_CHANGED event
-		await waitFor(() => {
-			expect(dashboardSpy).toHaveBeenCalled();
-			expect(fetchItemsSpy).toHaveBeenCalled();
-		});
+	it('throws AppError from database for non-existent itemID', async () => {
+		try {
+			await inventoryRepository.performStockOp(
+				'00000000-0000-0000-0000-000000000000',
+				'stock_in',
+				10,
+			);
+			fail('Should have thrown');
+		} catch (e) {
+			expect(e).toBeInstanceOf(AppError);
+			if (e instanceof AppError) {
+				expect([
+					'RPC_ERROR',
+					'FK_VIOLATION',
+					'VALIDATION_ERROR',
+					'NOT_FOUND',
+					'P0001',
+					'22P02',
+					'UNKNOWN',
+				]).toContain(e.code);
+			}
+		}
+	});
+
+	it('throws AppError on database error for invalid operation', async () => {
+		try {
+			await inventoryRepository.performStockOp(itemId, 'invalid_type' as any, -10);
+			fail('Should have thrown');
+		} catch (e) {
+			expect(e).toBeInstanceOf(AppError);
+			if (e instanceof AppError) {
+				expect([
+					'RPC_ERROR',
+					'VALIDATION_ERROR',
+					'NOT_FOUND',
+					'22P02',
+					'UNKNOWN',
+				]).toContain(e.code);
+			}
+		}
 	});
 });

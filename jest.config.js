@@ -52,6 +52,7 @@ module.exports = {
 	testMatch: [
 		'<rootDir>/__tests__/**/*.test.{ts,tsx}',
 		'<rootDir>/src/**/*.test.{ts,tsx}',
+		'<rootDir>/__tests__/chain/**/*.test.{ts,tsx}',
 		'!<rootDir>/__tests__/integration/**',
 	],
 	testPathIgnorePatterns: [

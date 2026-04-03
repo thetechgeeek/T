@@ -1,110 +1,145 @@
-import { paymentService } from '@/src/services/paymentService';
-import { dashboardService } from '@/src/services/dashboardService';
-import { invoiceService } from '@/src/services/invoiceService';
-import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { useDashboardStore } from '@/src/stores/dashboardStore'; // IMPORTED
-import { waitFor } from '@testing-library/react-native';
-import type { DashboardStats } from '@/src/types/finance';
+/**
+ * Real DB integration test for payment recording.
+ * Verifies RPC status transitions.
+ */
+import {
+	createTestSupabaseClient,
+	testPrefix,
+	cleanupByPrefix,
+	signInTestUser,
+} from '../utils/integrationHelpers';
+import { paymentRepository } from '@/src/repositories/paymentRepository';
+import { invoiceRepository } from '@/src/repositories/invoiceRepository';
+import { customerRepository } from '@/src/repositories/customerRepository';
+import { AppError } from '@/src/errors';
 
-// Mock only the Supabase network boundary (as per Phase 12 requirement)
-jest.mock('@/src/config/supabase', () => {
-	const { createSupabaseMock } = jest.requireActual('../utils/supabaseMock');
-	return {
-		supabase: createSupabaseMock(),
-	};
+const supabase = createTestSupabaseClient();
+const prefix = testPrefix();
+
+beforeAll(async () => {
+	await signInTestUser(supabase);
 });
 
-import { supabase } from '@/src/config/supabase';
-const mockSupabase = supabase as unknown as { rpc: jest.Mock };
+afterAll(async () => {
+	await cleanupByPrefix(supabase, prefix);
+	await supabase.auth.signOut();
+});
 
-describe('Payment Recording Flow Integration', () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-		if (useInvoiceStore.getState().reset) {
-			useInvoiceStore.getState().reset();
-		}
-		// Ensure dashboard store is initialized
-		useDashboardStore.getState();
+describe('Payment Recording Real DB', () => {
+	let customerId: string;
+	let invoiceId: string;
+
+	beforeAll(async () => {
+		// Seed a customer
+		const customer = await customerRepository.create({
+			name: `${prefix}Pay Customer`,
+			phone: '1234567890',
+		});
+		customerId = customer.id;
+
+		// Seed an invoice with all required fields
+		const res = await invoiceRepository.createAtomic(
+			{
+				customer_id: customerId,
+				customer_name: `${prefix}Pay Customer`,
+				invoice_date: new Date().toISOString().split('T')[0],
+				subtotal: 1000,
+				cgst_total: 0,
+				sgst_total: 0,
+				igst_total: 0,
+				discount_total: 0,
+				grand_total: 1000,
+				is_inter_state: false,
+				payment_status: 'unpaid' as const,
+				amount_paid: 0,
+				notes: prefix,
+			} as any,
+			[],
+		);
+		invoiceId = res.id;
 	});
 
-	it('completes the full call chain for payment recording and updates status', async () => {
+	it('records payment and updates status to partial', async () => {
 		const paymentInput = {
-			amount: 1000,
+			customer_id: customerId,
+			invoice_id: invoiceId,
+			amount: 400,
 			payment_mode: 'cash' as const,
+			payment_date: new Date().toISOString(),
+			notes: prefix,
 			direction: 'received' as const,
-			payment_date: '2026-03-31',
-			customer_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b1',
-			invoice_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4',
 		};
 
-		mockSupabase.rpc.mockResolvedValue({
-			data: { id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b789', new_status: 'paid' },
-			error: null,
-		});
+		const result = await paymentRepository.recordWithInvoiceUpdate(paymentInput);
 
-		const result = await paymentService.recordPayment(paymentInput);
+		expect(result.id).toBeTruthy();
+		expect(result.new_status).toBe('partial');
 
-		// 1. Verify RPC call
-		expect(mockSupabase.rpc).toHaveBeenCalledWith(
-			'record_payment_with_invoice_update_v1',
-			expect.objectContaining({
-				p_payment: expect.objectContaining({
-					amount: 1000,
-					invoice_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4',
-				}),
-			}),
-		);
-
-		// 2. Verify result
-		expect(result.new_status).toBe('paid');
+		const updatedInvoice = await invoiceRepository.findById(invoiceId);
+		expect(updatedInvoice.payment_status).toBe('partial');
+		expect(updatedInvoice.amount_paid).toBe(400);
 	});
 
-	it('triggers cross-store refreshes after payment is recorded', async () => {
+	it('updates status to paid after full payment', async () => {
 		const paymentInput = {
-			amount: 500,
+			customer_id: customerId,
+			invoice_id: invoiceId,
+			amount: 600,
 			payment_mode: 'upi' as const,
+			payment_date: new Date().toISOString(),
+			notes: prefix,
 			direction: 'received' as const,
-			payment_date: '2026-03-31',
-			customer_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b1',
-			invoice_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4',
 		};
 
-		mockSupabase.rpc.mockResolvedValue({
-			data: { id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b789', new_status: 'partial' },
-			error: null,
-		});
+		const result = await paymentRepository.recordWithInvoiceUpdate(paymentInput);
 
-		// Spy on services that stores use to refresh
-		const dashboardSpy = jest
-			.spyOn(dashboardService, 'fetchDashboardStats')
-			.mockResolvedValue({} as unknown as DashboardStats);
-		const invoiceSpy = jest
-			.spyOn(invoiceService, 'fetchInvoices')
-			.mockResolvedValue({ data: [], count: 0 });
+		expect(result.new_status).toBe('paid');
 
-		await paymentService.recordPayment(paymentInput);
-
-		// Verify refreshes triggered by PAYMENT_RECORDED event
-		await waitFor(() => {
-			expect(dashboardSpy).toHaveBeenCalled();
-			expect(invoiceSpy).toHaveBeenCalled();
-		});
+		const updatedInvoice = await invoiceRepository.findById(invoiceId);
+		expect(updatedInvoice.payment_status).toBe('paid');
+		expect(updatedInvoice.amount_paid).toBe(1000);
 	});
 
-	it('prevents recording payment with both customer and supplier (schema validation)', async () => {
-		const invalidInput = {
-			amount: 1000,
-			payment_mode: 'cash' as const,
+	it('records payment without invoice_id (customer level)', async () => {
+		const paymentInput = {
+			customer_id: customerId,
+			amount: 500,
+			payment_mode: 'bank_transfer' as const,
+			payment_date: new Date().toISOString(),
+			notes: prefix,
 			direction: 'received' as const,
-			payment_date: '2026-03-31',
-			customer_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b1',
-			supplier_id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b2', // Both present
-		} as unknown as Parameters<typeof paymentService.recordPayment>[0];
+		};
 
-		await expect(paymentService.recordPayment(invalidInput)).rejects.toThrow(
-			'Validation failed',
-		);
+		const result = await paymentRepository.recordWithInvoiceUpdate(paymentInput);
 
-		expect(mockSupabase.rpc).not.toHaveBeenCalled();
+		expect(result.id).toBeTruthy();
+		expect(result.new_status).toBeNull();
+	});
+
+	it('throws AppError on database failure if parameters are invalid', async () => {
+		const paymentInput = {
+			customer_id: '00000000-0000-0000-0000-000000000000',
+			amount: 100,
+		} as any;
+
+		try {
+			await paymentRepository.recordWithInvoiceUpdate(paymentInput);
+			fail('Should have thrown');
+		} catch (e) {
+			expect(e).toBeInstanceOf(AppError);
+			if (e instanceof AppError) {
+				expect([
+					'RPC_ERROR',
+					'FK_VIOLATION',
+					'VALIDATION_ERROR',
+					'NOT_FOUND',
+					'23503',
+					'22P02',
+					'P0001',
+					'23502',
+					'UNKNOWN',
+				]).toContain(e.code);
+			}
+		}
 	});
 });

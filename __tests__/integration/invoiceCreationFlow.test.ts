@@ -1,87 +1,197 @@
-import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { useDashboardStore } from '@/src/stores/dashboardStore'; // IMPORTED
-import { makeInvoiceInput } from '../fixtures/invoiceFixtures';
-import { dashboardService } from '@/src/services/dashboardService';
-import { waitFor } from '@testing-library/react-native';
+/**
+ * Real DB integration test for invoice creation.
+ * Verifies RPC atomicity, sequence generation, and stock decrement.
+ */
+import {
+	createTestSupabaseClient,
+	testPrefix,
+	cleanupByPrefix,
+	signInTestUser,
+} from '../utils/integrationHelpers';
+import { invoiceRepository } from '@/src/repositories/invoiceRepository';
+import { inventoryRepository } from '@/src/repositories/inventoryRepository';
+import { customerRepository } from '@/src/repositories/customerRepository';
+import { AppError } from '@/src/errors';
 
-// Mock Supabase with the shared builder
-jest.mock('@/src/config/supabase', () => {
-	const { createSupabaseMock } = jest.requireActual('../utils/supabaseMock');
-	return {
-		supabase: createSupabaseMock(),
-	};
+const supabase = createTestSupabaseClient();
+const prefix = testPrefix();
+
+beforeAll(async () => {
+	await signInTestUser(supabase);
 });
 
-import { supabase } from '@/src/config/supabase';
-const mockSupabase = supabase as unknown as { rpc: jest.Mock };
+afterAll(async () => {
+	await cleanupByPrefix(supabase, prefix);
+	await supabase.auth.signOut();
+});
 
-// Mock routing
-jest.mock('expo-router', () => ({
-	useRouter: () => ({
-		replace: jest.fn(),
-	}),
-}));
+describe('Invoice Creation Real DB', () => {
+	let customerId: string;
+	let itemId: string;
 
-describe('Invoice Creation Flow Integration', () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-		useInvoiceStore.getState().reset();
-		useDashboardStore.getState(); // Initialize
+	beforeAll(async () => {
+		// Clean start for business profile to avoid sequence collisions
+		await supabase
+			.from('business_profile')
+			.delete()
+			.neq('id', '00000000-0000-0000-0000-000000000000');
+		await supabase.from('business_profile').insert({
+			business_name: `${prefix} Test Business`,
+			invoice_prefix: `T${Date.now().toString().slice(-6)}`,
+			invoice_sequence: 0,
+		});
+
+		// Seed a customer
+		const customer = await customerRepository.create({
+			name: `${prefix}Test Customer`,
+			phone: '1234567890',
+		});
+		customerId = customer.id;
+
+		// Seed an item with known stock
+		const item = await inventoryRepository.create({
+			design_name: `${prefix}Test Tile`,
+			base_item_number: `${prefix}TT-001`,
+			category: 'GLOSSY',
+			box_count: 100,
+			cost_price: 1000,
+			selling_price: 1000,
+			hsn_code: '6908',
+			low_stock_threshold: 10,
+		});
+		itemId = item.id;
 	});
 
-	it('completes the full call chain Store -> Service -> Repository -> Supabase RPC', async () => {
-		const invoiceInput = makeInvoiceInput();
-		mockSupabase.rpc.mockResolvedValue({
-			data: { id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4', invoice_number: 'TM/2026-27/0001' },
-			error: null,
-		});
+	it('creates invoice and decrements stock atomically', async () => {
+		const invoiceInput = {
+			customer_id: customerId,
+			customer_name: `${prefix}Test Customer`,
+			invoice_date: new Date().toISOString().split('T')[0],
+			subtotal: 5000,
+			cgst_total: 0,
+			sgst_total: 0,
+			igst_total: 0,
+			discount_total: 0,
+			grand_total: 5000,
+			is_inter_state: false,
+			payment_status: 'unpaid' as const,
+			amount_paid: 0,
+			notes: prefix,
+		} as any;
 
-		const result = await useInvoiceStore.getState().createInvoice(invoiceInput);
+		const lineItems = [
+			{
+				item_id: itemId,
+				design_name: `${prefix}Test Tile`,
+				quantity: 5,
+				rate_per_unit: 1000,
+				taxable_amount: 5000,
+				line_total: 5000,
+				gst_rate: 0,
+				cgst_amount: 0,
+				sgst_amount: 0,
+				igst_amount: 0,
+				discount: 0,
+				sort_order: 1, // Required by not-null constraint
+			} as any,
+		];
 
-		// 1. Check Store result
-		expect(result.id).toBe('b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4');
+		const result = await invoiceRepository.createAtomic(invoiceInput, lineItems);
 
-		// 2. Verify Repository/Service layer passed correct params to Supabase RPC
-		expect(mockSupabase.rpc).toHaveBeenCalledWith(
-			'create_invoice_with_items_v1',
-			expect.objectContaining({
-				p_invoice: expect.objectContaining({
-					customer_name: invoiceInput.customer_name,
-				}),
-			}),
-		);
+		expect(result.id).toBeTruthy();
+		expect(result.invoice_number).toMatch(/^T\d*\/202\d-\d{2}\/\d{4}$/);
+
+		const fullInvoice = await invoiceRepository.findWithLineItems(result.id);
+		expect(fullInvoice.line_items).toBeDefined();
+		expect(fullInvoice.line_items?.length).toBe(1);
+
+		const updatedItem = await inventoryRepository.findById(itemId);
+		expect(updatedItem.box_count).toBe(100 - 5);
 	});
 
-	it('triggers dashboard refresh via eventBus after successful creation', async () => {
-		const invoiceInput = makeInvoiceInput();
-		mockSupabase.rpc.mockResolvedValue({
-			data: { id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4', invoice_number: 'TM/2026-27/0001' },
-			error: null,
-		});
+	it('generates sequential invoice numbers for same business', async () => {
+		const invoiceInput = {
+			customer_id: customerId,
+			customer_name: `${prefix}Seq Test`,
+			invoice_date: new Date().toISOString().split('T')[0],
+			subtotal: 1000,
+			cgst_total: 0,
+			sgst_total: 0,
+			igst_total: 0,
+			discount_total: 0,
+			grand_total: 1000,
+			is_inter_state: false,
+			payment_status: 'unpaid' as const,
+			amount_paid: 0,
+			notes: prefix,
+		} as any;
 
-		const dashboardSpy = jest.spyOn(dashboardService, 'fetchDashboardStats');
-		dashboardSpy.mockResolvedValue({
-			today_sales: 100,
-			today_invoice_count: 1,
-			total_outstanding_credit: 50,
-			total_outstanding_customers: 2,
-			low_stock_count: 5,
-			monthly_revenue: 1000,
-		});
+		const res1 = await invoiceRepository.createAtomic(invoiceInput, []);
+		const res2 = await invoiceRepository.createAtomic(invoiceInput, []);
 
-		await useInvoiceStore.getState().createInvoice(invoiceInput);
-
-		// Allow async event handler to fire
-		await waitFor(() => {
-			expect(dashboardSpy).toHaveBeenCalled();
-		});
+		const num1 = parseInt(res1.invoice_number.split('/').pop()!);
+		const num2 = parseInt(res2.invoice_number.split('/').pop()!);
+		expect(num2).toBe(num1 + 1);
 	});
 
-	it('propagates domain validation errors without calling Supabase', async () => {
-		const invalidInput = makeInvoiceInput({ customer_name: '' });
+	it('fails and rolls back if a line item is invalid', async () => {
+		const beforeItem = await inventoryRepository.findById(itemId);
+		const invoiceInput = {
+			customer_id: customerId,
+			customer_name: `${prefix}Fail Test`,
+			invoice_date: new Date().toISOString().split('T')[0],
+			subtotal: 100,
+			grand_total: 100,
+			payment_status: 'unpaid' as const,
+			notes: prefix,
+		} as any;
 
-		await expect(useInvoiceStore.getState().createInvoice(invalidInput)).rejects.toThrow();
+		const invalidLineItems = [
+			{
+				item_id: '00000000-0000-0000-0000-000000000000',
+				design_name: 'Invalid',
+				quantity: 1,
+				rate_per_unit: 100,
+				taxable_amount: 100,
+				line_total: 100,
+				gst_rate: 0,
+				sort_order: 1,
+			} as any,
+		];
 
-		expect(mockSupabase.rpc).not.toHaveBeenCalled();
+		await expect(
+			invoiceRepository.createAtomic(invoiceInput, invalidLineItems),
+		).rejects.toThrow();
+
+		const afterItem = await inventoryRepository.findById(itemId);
+		expect(afterItem.box_count).toBe(beforeItem.box_count);
+	});
+
+	it('throws AppError from database on failure', async () => {
+		const invoiceInput = {
+			customer_id: '00000000-0000-0000-0000-000000000000',
+			customer_name: 'Ghost',
+			invoice_date: new Date().toISOString().split('T')[0],
+			grand_total: 100,
+		} as any;
+
+		try {
+			await invoiceRepository.createAtomic(invoiceInput, []);
+			fail('Should have thrown');
+		} catch (e) {
+			expect(e).toBeInstanceOf(AppError);
+			if (e instanceof AppError) {
+				expect([
+					'RPC_ERROR',
+					'FK_VIOLATION',
+					'VALIDATION_ERROR',
+					'NOT_FOUND',
+					'23503',
+					'23502',
+					'P0001',
+					'UNKNOWN',
+				]).toContain(e.code);
+			}
+		}
 	});
 });
