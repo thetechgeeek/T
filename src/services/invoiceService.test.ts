@@ -1,6 +1,6 @@
 import { invoiceService } from '@/src/services/invoiceService';
 import { supabase } from '../config/supabase';
-import { ValidationError, ConflictError } from '../errors/AppError';
+import { ValidationError } from '../errors/AppError';
 
 jest.mock('../config/supabase', () => ({
 	supabase: {

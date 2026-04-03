@@ -72,7 +72,7 @@ export class ConflictError extends AppError {
 export function toAppError(err: unknown): AppError {
 	if (err instanceof AppError) return err;
 
-	const errObj = err as any;
+	const errObj = err as { code?: string; message?: string; column?: string };
 	const code = errObj?.code;
 	const message = errObj?.message || String(err);
 
