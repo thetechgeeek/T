@@ -32,12 +32,12 @@ describe('financeRepository.fetchDashboardStats', () => {
 
 	it('throws AppError when RPC returns an error', async () => {
 		mockRpc.mockReturnValue({
-			single: jest.fn().mockResolvedValue({ data: null, error: { message: 'RPC error', code: 'P0001' } }),
+			single: jest
+				.fn()
+				.mockResolvedValue({ data: null, error: { message: 'RPC error', code: 'P0001' } }),
 		});
 
-		await expect(financeRepository.fetchDashboardStats()).rejects.toMatchObject({
-			message: 'RPC error',
-		});
+		await expect(financeRepository.fetchDashboardStats()).rejects.toThrow('RPC error');
 	});
 });
 

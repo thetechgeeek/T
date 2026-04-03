@@ -39,9 +39,7 @@ describe('customerRepository.findById (base)', () => {
 		);
 		mockFrom.mockReturnValue(builder);
 
-		await expect(customerRepository.findById('bad-id')).rejects.toMatchObject({
-			message: 'DB error',
-		});
+		await expect(customerRepository.findById('bad-id')).rejects.toThrow('DB error');
 	});
 });
 
@@ -76,9 +74,7 @@ describe('customerRepository.search', () => {
 		});
 		mockFrom.mockReturnValue(builder);
 
-		await expect(customerRepository.search('test')).rejects.toMatchObject({
-			message: 'search failed',
-		});
+		await expect(customerRepository.search('test')).rejects.toThrow('search failed');
 	});
 });
 

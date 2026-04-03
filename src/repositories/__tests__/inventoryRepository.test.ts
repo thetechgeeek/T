@@ -89,9 +89,7 @@ describe('inventoryRepository.findLowStock', () => {
 		});
 		mockFrom.mockReturnValue(builder);
 
-		await expect(inventoryRepository.findLowStock()).rejects.toMatchObject({
-			message: 'view error',
-		});
+		await expect(inventoryRepository.findLowStock()).rejects.toThrow('view error');
 	});
 });
 
@@ -168,6 +166,6 @@ describe('inventoryRepository.performStockOp', () => {
 
 		await expect(
 			inventoryRepository.performStockOp('item-uuid-001', 'stock_in', 5),
-		).rejects.toMatchObject({ message: 'stock op failed' });
+		).rejects.toThrow('stock op failed');
 	});
 });

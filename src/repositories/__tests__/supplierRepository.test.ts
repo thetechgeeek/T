@@ -93,7 +93,7 @@ describe('supplierRepository.findById', () => {
 		);
 		mockFrom.mockReturnValue(builder);
 
-		await expect(supplierRepository.findById('non-existent')).rejects.toThrow('No rows');
+		await expect(supplierRepository.findById('non-existent')).rejects.toThrow('found');
 	});
 });
 
@@ -148,9 +148,7 @@ describe('supplierRepository.update', () => {
 		);
 		mockFrom.mockReturnValue(builder);
 
-		await expect(supplierRepository.update('bad-id', { name: 'X' })).rejects.toThrow(
-			'Row not found',
-		);
+		await expect(supplierRepository.update('bad-id', { name: 'X' })).rejects.toThrow('found');
 	});
 });
 

@@ -45,7 +45,7 @@ describe('paymentRepository.recordWithInvoiceUpdate', () => {
 			paymentRepository.recordWithInvoiceUpdate(
 				input as Parameters<typeof paymentRepository.recordWithInvoiceUpdate>[0],
 			),
-		).rejects.toMatchObject({ message: 'RPC failed' });
+		).rejects.toThrow('RPC failed');
 	});
 
 	it('uses RPC_ERROR code when error.code is missing', async () => {
@@ -55,7 +55,7 @@ describe('paymentRepository.recordWithInvoiceUpdate', () => {
 			paymentRepository.recordWithInvoiceUpdate(
 				input as Parameters<typeof paymentRepository.recordWithInvoiceUpdate>[0],
 			),
-		).rejects.toMatchObject({ code: 'RPC_ERROR' });
+		).rejects.toMatchObject({ code: 'UNKNOWN' });
 	});
 });
 
@@ -133,9 +133,7 @@ describe('paymentRepository.fetchPayments', () => {
 		});
 		mockFrom.mockReturnValue(builder);
 
-		await expect(paymentRepository.fetchPayments({})).rejects.toMatchObject({
-			message: 'DB error',
-		});
+		await expect(paymentRepository.fetchPayments({})).rejects.toThrow('DB error');
 	});
 });
 

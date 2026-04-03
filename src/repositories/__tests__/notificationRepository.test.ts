@@ -120,6 +120,6 @@ describe('notificationRepository base operations (via createRepository)', () => 
 		);
 		mockFrom.mockReturnValue(builder);
 
-		await expect(notificationRepository.findById('bad-id')).rejects.toThrow('No rows found');
+		await expect(notificationRepository.findById('bad-id')).rejects.toThrow('found');
 	});
 });

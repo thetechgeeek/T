@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { AppError } from '../errors';
+import { toAppError } from '../errors';
 import { createRepository } from './baseRepository';
 import type { Invoice, InvoiceLineItemInput } from '../types/invoice';
 import type { UUID } from '../types/common';
@@ -15,9 +15,7 @@ export const invoiceRepository = {
 			.select('*, line_items:invoice_line_items(*)')
 			.eq('id', id)
 			.single();
-		if (error) {
-			throw new AppError(error.message, error.code ?? 'DB_ERROR', 'Invoice not found', error);
-		}
+		if (error) throw toAppError(error);
 		return data as Invoice;
 	},
 
@@ -30,14 +28,7 @@ export const invoiceRepository = {
 			p_invoice: invoice,
 			p_line_items: lineItems,
 		});
-		if (error) {
-			throw new AppError(
-				error.message,
-				error.code ?? 'RPC_ERROR',
-				'Failed to create invoice',
-				error,
-			);
-		}
+		if (error) throw toAppError(error);
 		return data as { id: UUID; invoice_number: string };
 	},
 };

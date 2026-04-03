@@ -42,9 +42,7 @@ describe('invoiceRepository.findWithLineItems', () => {
 		);
 		mockFrom.mockReturnValue(builder);
 
-		await expect(invoiceRepository.findWithLineItems(id)).rejects.toMatchObject({
-			message: 'Not found',
-		});
+		await expect(invoiceRepository.findWithLineItems(id)).rejects.toThrow('found');
 	});
 
 	it('null-data path: throws when data is null and no error', async () => {

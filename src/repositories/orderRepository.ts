@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { AppError } from '../errors';
+import { toAppError } from '../errors';
 import { createRepository } from './baseRepository';
 import type { Order } from '../types/order';
 
@@ -16,14 +16,7 @@ export const orderRepository = {
 			.select('id, design_name')
 			.ilike('design_name', escaped)
 			.limit(10);
-		if (error) {
-			throw new AppError(
-				error.message,
-				error.code ?? 'DB_ERROR',
-				'Failed to check duplicates',
-				error,
-			);
-		}
+		if (error) throw toAppError(error);
 		return (data ?? []) as unknown as Order[];
 	},
 };

@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { AppError } from '../errors';
+import { toAppError } from '../errors';
 import { createRepository } from './baseRepository';
 import type { Expense, Purchase, ProfitLossReport, DashboardStats } from '../types/finance';
 
@@ -14,27 +14,13 @@ export const financeRepository = {
 		const { data, error } = await supabase
 			.rpc('get_profit_loss_v1', { p_start: startDate, p_end: endDate })
 			.single();
-		if (error) {
-			throw new AppError(
-				error.message,
-				error.code ?? 'RPC_ERROR',
-				'Failed to fetch profit/loss report',
-				error,
-			);
-		}
+		if (error) throw toAppError(error);
 		return data as ProfitLossReport;
 	},
 
 	async fetchDashboardStats(): Promise<DashboardStats> {
 		const { data, error } = await supabase.rpc('get_dashboard_stats_v1').single();
-		if (error) {
-			throw new AppError(
-				error.message,
-				error.code ?? 'RPC_ERROR',
-				'Failed to fetch dashboard stats',
-				error,
-			);
-		}
+		if (error) throw toAppError(error);
 		return data as DashboardStats;
 	},
 };

@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { AppError } from '../errors';
+import { toAppError } from '../errors';
 import { createRepository } from './baseRepository';
 import type { Customer } from '../types/customer';
 
@@ -17,14 +17,7 @@ export const customerRepository = {
 			.or(`name.ilike.%${escaped}%,phone.ilike.%${escaped}%`)
 			.order('name', { ascending: true })
 			.limit(50);
-		if (error) {
-			throw new AppError(
-				error.message,
-				error.code ?? 'DB_ERROR',
-				'Failed to search customers',
-				error,
-			);
-		}
+		if (error) throw toAppError(error);
 		return (data ?? []) as Customer[];
 	},
 };

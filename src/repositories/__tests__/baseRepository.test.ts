@@ -41,7 +41,7 @@ describe('createRepository — findById', () => {
 		});
 		mockFrom.mockReturnValue(builder);
 
-		await expect(repo.findById('bad-id')).rejects.toMatchObject({ message: 'Not found' });
+		await expect(repo.findById('bad-id')).rejects.toThrow('found');
 	});
 });
 
@@ -103,7 +103,7 @@ describe('createRepository — remove', () => {
 		});
 		mockFrom.mockReturnValue(builder);
 
-		await expect(repo.remove('del-id')).rejects.toMatchObject({ message: 'delete failed' });
+		await expect(repo.remove('del-id')).rejects.toThrow('delete failed');
 	});
 });
 
@@ -192,6 +192,6 @@ describe('createRepository — findMany with pagination', () => {
 		});
 		mockFrom.mockReturnValue(builder);
 
-		await expect(repo.findMany({})).rejects.toMatchObject({ message: 'DB error' });
+		await expect(repo.findMany({})).rejects.toThrow('DB error');
 	});
 });

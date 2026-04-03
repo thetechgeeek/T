@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { AppError } from '../errors';
+import { toAppError } from '../errors';
 import { createRepository } from './baseRepository';
 import type { InventoryItem, StockOpType } from '../types/inventory';
 import type { UUID } from '../types/common';
@@ -15,14 +15,7 @@ export const inventoryRepository = {
 			.from('low_stock_items')
 			.select('*')
 			.order('box_count', { ascending: true });
-		if (error) {
-			throw new AppError(
-				error.message,
-				error.code ?? 'DB_ERROR',
-				'Failed to fetch low stock items',
-				error,
-			);
-		}
+		if (error) throw toAppError(error);
 		return (data ?? []) as InventoryItem[];
 	},
 
@@ -42,13 +35,6 @@ export const inventoryRepository = {
 			p_reference_type: referenceType,
 			p_reference_id: referenceId,
 		});
-		if (error) {
-			throw new AppError(
-				error.message,
-				error.code ?? 'RPC_ERROR',
-				'Failed to perform stock operation',
-				error,
-			);
-		}
+		if (error) throw toAppError(error);
 	},
 };

@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { AppError } from '../errors';
+import { toAppError } from '../errors';
 import logger from '../utils/logger';
 import type { UUID } from '../types/common';
 
@@ -93,14 +93,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 				op: 'findMany',
 				duration_ms: Math.round(performance.now() - start),
 			});
-			if (error) {
-				throw new AppError(
-					error.message,
-					error.code ?? 'DB_ERROR',
-					'Failed to fetch data',
-					error,
-				);
-			}
+			if (error) throw toAppError(error);
 			const rows = (data ?? []) as T[];
 			const pageSize = options.cursorPageSize ?? 20;
 			const nextCursor =
@@ -122,14 +115,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 				op: 'findById',
 				duration_ms: Math.round(performance.now() - start),
 			});
-			if (error) {
-				throw new AppError(
-					error.message,
-					error.code ?? 'DB_ERROR',
-					'Record not found',
-					error,
-				);
-			}
+			if (error) throw toAppError(error);
 			return data as T;
 		},
 
@@ -145,14 +131,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 				op: 'create',
 				duration_ms: Math.round(performance.now() - start),
 			});
-			if (error) {
-				throw new AppError(
-					error.message,
-					error.code ?? 'DB_ERROR',
-					'Failed to create record',
-					error,
-				);
-			}
+			if (error) throw toAppError(error);
 			return data as T;
 		},
 
@@ -169,14 +148,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 				op: 'update',
 				duration_ms: Math.round(performance.now() - start),
 			});
-			if (error) {
-				throw new AppError(
-					error.message,
-					error.code ?? 'DB_ERROR',
-					'Failed to update record',
-					error,
-				);
-			}
+			if (error) throw toAppError(error);
 			return data as T;
 		},
 
@@ -188,14 +160,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 				op: 'remove',
 				duration_ms: Math.round(performance.now() - start),
 			});
-			if (error) {
-				throw new AppError(
-					error.message,
-					error.code ?? 'DB_ERROR',
-					'Failed to delete record',
-					error,
-				);
-			}
+			if (error) throw toAppError(error);
 		},
 
 		async rpc<R>(fnName: string, params: Record<string, unknown>): Promise<R> {
@@ -207,14 +172,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 				fn: fnName,
 				duration_ms: Math.round(performance.now() - start),
 			});
-			if (error) {
-				throw new AppError(
-					error.message,
-					error.code ?? 'RPC_ERROR',
-					'Operation failed',
-					error,
-				);
-			}
+			if (error) throw toAppError(error);
 			return data as R;
 		},
 	};
