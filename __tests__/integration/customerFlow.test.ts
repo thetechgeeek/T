@@ -10,6 +10,7 @@ import {
 	signInTestUser,
 } from '../utils/integrationHelpers';
 import { customerRepository } from '@/src/repositories/customerRepository';
+import { invoiceRepository } from '@/src/repositories/invoiceRepository';
 
 const supabase = createTestSupabaseClient();
 const prefix = testPrefix();
@@ -111,14 +112,50 @@ describe('INT-003: Customer Flow', () => {
 		).rejects.toThrow();
 	});
 
-	it('removes customer successfully', async () => {
+	it('removes customer successfully when no invoices linked', async () => {
 		const toDelete = await customerRepository.create({
 			name: `${prefix}To Delete`,
 			type: 'retail' as const,
 		});
 
 		await expect(customerRepository.remove(toDelete.id)).resolves.toBeUndefined();
-
 		await expect(customerRepository.findById(toDelete.id)).rejects.toThrow();
+	});
+
+	it('sets customer_id to null when deleting customer with linked invoice (ON DELETE SET NULL)', async () => {
+		const customer = await customerRepository.create({
+			name: `${prefix}Invoiced`,
+			type: 'dealer',
+		});
+
+		// Create a minimal invoice linked to this customer
+		const invRes = await invoiceRepository.createAtomic(
+			{
+				customer_id: customer.id,
+				customer_name: customer.name,
+				invoice_date: new Date().toISOString().split('T')[0],
+				subtotal: 100,
+				cgst_total: 0,
+				sgst_total: 0,
+				igst_total: 0,
+				discount_total: 0,
+				grand_total: 100,
+				is_inter_state: false,
+				payment_status: 'unpaid',
+				amount_paid: 0,
+			} as any,
+			[],
+		);
+
+		// Deleting customer should succeed (SET NULL)
+		await customerRepository.remove(customer.id);
+
+		const { data: inv } = await supabase
+			.from('invoices')
+			.select('customer_id')
+			.eq('id', invRes.id)
+			.single();
+
+		expect(inv?.customer_id).toBeNull();
 	});
 });

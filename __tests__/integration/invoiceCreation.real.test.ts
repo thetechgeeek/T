@@ -177,7 +177,7 @@ describe('Invoice Creation Real DB', () => {
 
 		try {
 			await invoiceRepository.createAtomic(invoiceInput, []);
-			fail('Should have thrown');
+			throw new Error('Should have thrown');
 		} catch (e) {
 			expect(e).toBeInstanceOf(AppError);
 			if (e instanceof AppError) {

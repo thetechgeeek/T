@@ -92,6 +92,9 @@ export function toAppError(err: unknown): AppError {
 			if (message.toLowerCase().includes('insufficient stock')) {
 				return new AppError(message, 'INSUFFICIENT_STOCK', message);
 			}
+			if (message.toLowerCase().includes('not found')) {
+				return new NotFoundError('Record', 'database');
+			}
 			return new ValidationError(message, { base: [message] });
 		case 'PGRST116': // JSON object requested, but no rows returned (single() failure)
 			return new NotFoundError('Record', 'requested');

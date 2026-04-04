@@ -396,9 +396,9 @@ has at least one test. Specifically add tests for:
 
 ---
 
-## Phase 5 — Unit: Service & Repository Gaps (199 → 350)
+## [x] Phase 5 — Unit: Service & Repository Gaps (199 → 350)
 
-### [ ] Step 5.1 — Service error paths
+### [x] Step 5.1 — Service error paths
 
 **`invoiceService`**:
 
@@ -429,7 +429,7 @@ has at least one test. Specifically add tests for:
 - Empty date range → service still calls RPC (no short-circuit)
 - RPC returns null data → handled gracefully, no crash
 
-### [ ] Step 5.2 — Repository error propagation
+### [x] Step 5.2 — Repository error propagation
 
 For every repository method, test that when Supabase returns
 `{ data: null, error: { message: 'X', code: 'PGRST301' } }`:
