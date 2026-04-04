@@ -124,8 +124,9 @@ describe('Concurrency Real DB', () => {
 			[],
 		);
 
-		// Use 2 parallel payments (reduced from 4 to avoid deadlocks on shared DB)
-		const payments = Array(2)
+		// Use 4 parallel payments. This requires the SQL fix in migration 012
+		// (locking the Invoice row first) to avoid deadlocks.
+		const payments = Array(4)
 			.fill(0)
 			.map(() =>
 				paymentRepository.recordWithInvoiceUpdate({
@@ -141,7 +142,7 @@ describe('Concurrency Real DB', () => {
 		await Promise.all(payments);
 
 		const updatedInv = await invoiceRepository.findById(inv.id);
-		expect(updatedInv.amount_paid).toBe(400);
+		expect(updatedInv.amount_paid).toBe(800);
 		expect(updatedInv.payment_status).toBe('partial');
 	});
 });

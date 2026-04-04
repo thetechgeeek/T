@@ -83,6 +83,7 @@ export const useInvoiceStore = create<InvoiceState>()(
 			try {
 				const result = await invoiceService.createInvoice(input);
 				set((state) => {
+					state.invoices.unshift(result);
 					state.totalCount += 1;
 					state.loading = false;
 				});
@@ -122,5 +123,11 @@ export const useInvoiceStore = create<InvoiceState>()(
 eventBus.subscribe((event) => {
 	if (event.type === 'PAYMENT_RECORDED' && event.invoiceId) {
 		useInvoiceStore.getState().fetchInvoices(1);
+
+		// If we are currently viewing the invoice that was paid, refresh it
+		const current = useInvoiceStore.getState().currentInvoice;
+		if (current && current.id === event.invoiceId) {
+			useInvoiceStore.getState().fetchInvoiceById(event.invoiceId);
+		}
 	}
 });

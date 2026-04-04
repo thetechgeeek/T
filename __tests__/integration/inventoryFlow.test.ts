@@ -78,20 +78,64 @@ describe('INT-004: Inventory Flow', () => {
 		expect(updated.design_name).toBe(`${prefix}Marble Elite Pro`);
 	});
 
-	it('stock increase: update box_count to higher value', async () => {
-		const current = await inventoryRepository.findById(itemId);
-		const newCount = current.box_count + 20;
+	it('stock_in increases box_count and creates a log', async () => {
+		const initialCount = (await inventoryRepository.findById(itemId)).box_count;
+		await inventoryRepository.performStockOp(itemId, 'stock_in', 10, `${prefix} Stock-In Test`);
 
-		const updated = await inventoryRepository.update(itemId, { box_count: newCount });
-		expect(updated.box_count).toBe(newCount);
+		const updatedItem = await inventoryRepository.findById(itemId);
+		expect(updatedItem.box_count).toBe(initialCount + 10);
+
+		const { data: ops } = await supabase
+			.from('stock_operations')
+			.select('*')
+			.eq('item_id', itemId)
+			.order('created_at', { ascending: false });
+
+		expect(ops).toHaveLength(1);
+		expect(ops![0].operation_type).toBe('stock_in');
+		expect(Math.abs(ops![0].quantity_change)).toBe(10);
 	});
 
-	it('stock decrease: update box_count to lower value', async () => {
-		const current = await inventoryRepository.findById(itemId);
-		const newCount = Math.max(0, current.box_count - 10);
+	it('stock_out decreases box_count (using negative value) and creates a log', async () => {
+		const initialCount = (await inventoryRepository.findById(itemId)).box_count;
+		await inventoryRepository.performStockOp(
+			itemId,
+			'stock_out',
+			-5,
+			`${prefix} Stock-Out Test`,
+		);
 
-		const updated = await inventoryRepository.update(itemId, { box_count: newCount });
-		expect(updated.box_count).toBe(newCount);
+		const updatedItem = await inventoryRepository.findById(itemId);
+		expect(updatedItem.box_count).toBe(initialCount - 5);
+
+		const { data: ops } = await supabase
+			.from('stock_operations')
+			.select('*')
+			.eq('item_id', itemId)
+			.order('created_at', { ascending: false });
+
+		expect(ops![0].operation_type).toBe('stock_out');
+		expect(ops![0].quantity_change).toBe(-5);
+	});
+
+	it('stock_out below zero: throws Insufficient stock error from DB', async () => {
+		const current = await inventoryRepository.findById(itemId);
+		try {
+			await inventoryRepository.performStockOp(itemId, 'stock_out', -(current.box_count + 1));
+			throw new Error('Should have thrown');
+		} catch (e: any) {
+			expect(e.code).toBe('INSUFFICIENT_STOCK');
+		}
+	});
+
+	it('sequential operations: final box_count reflects all operations accurately', async () => {
+		const startCount = (await inventoryRepository.findById(itemId)).box_count;
+		await inventoryRepository.performStockOp(itemId, 'stock_in', 5);
+		await inventoryRepository.performStockOp(itemId, 'stock_out', -10);
+		await inventoryRepository.performStockOp(itemId, 'stock_in', 25);
+
+		const item = await inventoryRepository.findById(itemId);
+		expect(item.box_count).toBe(startCount + 5 - 10 + 25);
 	});
 
 	it('creates multiple items with same base_item_number (variants)', async () => {

@@ -51,7 +51,7 @@ export function createInvoiceService(repo = invoiceRepository) {
 		 * Invoice number, line items, and stock deductions happen in a single
 		 * DB transaction — no partial failures possible.
 		 */
-		async createInvoice(input: InvoiceInput): Promise<{ id: UUID; invoice_number: string }> {
+		async createInvoice(input: InvoiceInput): Promise<Invoice> {
 			validateWith(InvoiceInputSchema, input);
 			const totals = calculateInvoiceTotals(input.line_items, input.is_inter_state);
 
@@ -102,10 +102,12 @@ export function createInvoiceService(repo = invoiceRepository) {
 			});
 
 			try {
-				return await repo.createAtomic(
+				const result = await repo.createAtomic(
 					invoiceData as unknown as Parameters<typeof repo.createAtomic>[0],
 					lineItems,
 				);
+				// Re-fetch to return full Invoice type for store consistency
+				return await repo.findById(result.id);
 			} catch (error) {
 				throw toAppError(error);
 			}
