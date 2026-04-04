@@ -13,10 +13,10 @@
 | **4**  | Component variants — props, dark mode, edge   | Unit          | +185      | 1,658         | None                 |
 | **5**  | Service & repository gaps                     | Unit          | +151      | 1,809         | None                 |
 | **6**  | Real DB — constraints, RPCs, triggers, schema | Integration   | +120      | 1,929         | Phase 0              |
-| **7**  | Cross-screen state — action A → screen B      | Integration   | +70       | 1,999         | Phase 1              |
-| **8**  | Visual regression — screen snapshots          | Visual        | +120      | 2,119         | Phase 4              |
-| **9**  | Colour/contrast — WCAG programmatic           | Visual        | +60       | 2,179         | None                 |
-| **10** | Safe area & layout — real device insets       | Visual        | +50       | 2,229         | Phase 4              |
+| **7**  | [x] Cross-screen state — action A → screen B  | Integration   | +70       | 1,999         | Phase 1              |
+| **8**  | [/] Visual regression — screen snapshots      | Visual        | +120      | 2,119         | Phase 4              |
+| **9**  | [x] Colour/contrast — WCAG programmatic       | Visual        | +60       | 2,179         | None                 |
+| **10** | [x] Safe area & layout — real device insets   | Visual        | +50       | 2,229         | Phase 4              |
 | **11** | E2E — Maestro happy path + error + edge       | E2E           | +250      | 2,479         | All phases done      |
 | **12** | Accessibility — labels, roles, touch targets  | Accessibility | +100      | 2,579         | Phase 4              |
 | **13** | Performance — renders, debounce, pagination   | Performance   | +30       | 2,609         | Phase 1              |

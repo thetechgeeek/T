@@ -70,11 +70,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 		<Modal visible={visible} transparent animationType="slide">
 			{/* Overlay is decorative — hide from a11y to prevent confusion */}
 			<View style={styles.overlay} importantForAccessibility="no">
-				<Screen
-					backgroundColor="transparent"
-					safeAreaEdges={[]}
-					style={styles.keyboardView}
-				>
+				<Screen backgroundColor="transparent" style={styles.keyboardView}>
 					<View
 						style={[styles.content, { backgroundColor: theme.colors.background }]}
 						accessibilityViewIsModal={true}
