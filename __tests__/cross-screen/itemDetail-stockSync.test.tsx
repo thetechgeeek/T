@@ -1,4 +1,3 @@
-import { waitFor } from '@testing-library/react-native';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { inventoryService } from '@/src/services/inventoryService';
 

@@ -9,7 +9,7 @@ jest.mock('@/src/services/dashboardService');
 
 describe('Cross-Screen Sync: Invoice Creation Sync', () => {
 	// Explicitly reference the stores to ensure their top-level listeners are registered by Jest
-	const dashboard = useDashboardStore.getState();
+	useDashboardStore.getState();
 
 	beforeEach(() => {
 		jest.clearAllMocks();
