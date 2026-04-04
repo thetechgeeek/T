@@ -22,6 +22,7 @@ export function createPaymentService(repo = paymentRepository) {
 					type: 'PAYMENT_RECORDED',
 					paymentId: result.id ?? undefined,
 					invoiceId: input.invoice_id,
+					customerId: input.customer_id,
 				});
 
 				return result;

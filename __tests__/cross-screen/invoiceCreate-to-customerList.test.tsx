@@ -8,12 +8,11 @@ jest.mock('@/src/services/invoiceService');
 jest.mock('@/src/services/customerService');
 
 /**
- * Phase 7: Cross-Screen State Documentation
- * Documents BUG #5: Customer appears in customer list after invoice creation with new customer name.
- * CURRENT STATUS: FAILING (Expected).
+ * Phase 7: Cross-Screen State
+ * Verifies that the customer list appropriately refreshes when a new invoice is created.
  */
-describe('Cross-Screen Sync: Bug #5 Documentation', () => {
-	it('customer list DOES NOT currently update when a new customer is created inside an invoice', async () => {
+describe('Cross-Screen Sync: Customer List Refresh', () => {
+	it('refreshes customer list when a new invoice is created', async () => {
 		const newCustomerName = 'Brand New Customer Ltd';
 
 		(invoiceService.createInvoice as jest.Mock).mockResolvedValue({
@@ -22,11 +21,7 @@ describe('Cross-Screen Sync: Bug #5 Documentation', () => {
 			customer_name: newCustomerName,
 		});
 
-		// Initial count
-		useCustomerStore.setState({ customers: [], totalCount: 0 });
-
 		// 1. Create invoice with a "new" customer name
-		// In a real fix, the invoiceService would also trigger a customer creation or store-refresh.
 		await useInvoiceStore.getState().createInvoice({
 			customer_name: newCustomerName,
 			customer_phone: '1234567890',
@@ -35,12 +30,12 @@ describe('Cross-Screen Sync: Bug #5 Documentation', () => {
 			grand_total: 1000,
 		} as any);
 
-		// 2. Verify that customerStore.fetchCustomers was NOT called (Current Broken State)
-		// If we wanted it to pass in the future, we'd expect it TO be called.
-		expect(customerService.fetchCustomers).not.toHaveBeenCalled();
+		// 2. Verify that customerStore.fetchCustomers WAS called (Sync Fixed)
+		await waitFor(() => {
+			expect(customerService.fetchCustomers).toHaveBeenCalled();
+		});
 
-		// 3. Document the failure: count remains 0 because the invoice creation
-		// didn't trigger a customer refresh/creation.
-		expect(useCustomerStore.getState().totalCount).toBe(0);
+		// 3. Verify store state update
+		expect(useCustomerStore.getState().loading).toBe(false);
 	});
 });

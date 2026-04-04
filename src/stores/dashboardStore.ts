@@ -10,6 +10,7 @@ export interface DashboardState {
 	error: string | null;
 
 	fetchStats: () => Promise<void>;
+	reset: () => void;
 }
 
 export const useDashboardStore = create<DashboardState>()(
@@ -35,6 +36,14 @@ export const useDashboardStore = create<DashboardState>()(
 					s.loading = false;
 				});
 			}
+		},
+
+		reset: () => {
+			set((s) => {
+				s.stats = null;
+				s.loading = false;
+				s.error = null;
+			});
 		},
 	})),
 );
