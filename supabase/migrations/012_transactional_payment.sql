@@ -11,7 +11,15 @@ DECLARE
 BEGIN
   v_invoice_id := (p_payment->>'invoice_id')::UUID;
 
-  -- 1. Insert payment
+  -- 1. If linked to an invoice, atomically lock it first to prevent deadlocks
+  IF v_invoice_id IS NOT NULL THEN
+    SELECT grand_total, amount_paid INTO v_grand_total, v_new_paid
+    FROM invoices
+    WHERE id = v_invoice_id
+    FOR UPDATE;
+  END IF;
+
+  -- 2. Insert payment
   INSERT INTO payments (
     payment_date, amount, payment_mode, direction,
     customer_id, supplier_id, invoice_id, purchase_id, notes
@@ -28,14 +36,9 @@ BEGIN
     p_payment->>'notes'
   RETURNING id INTO v_payment_id;
 
-  -- 2. If linked to an invoice, atomically update amount_paid + status
+  -- 3. Update invoice if linked
   IF v_invoice_id IS NOT NULL THEN
-    SELECT grand_total, amount_paid + (p_payment->>'amount')::NUMERIC
-    INTO v_grand_total, v_new_paid
-    FROM invoices
-    WHERE id = v_invoice_id
-    FOR UPDATE;  -- row lock prevents concurrent payment race condition
-
+    v_new_paid := v_new_paid + (p_payment->>'amount')::NUMERIC;
     v_new_status := CASE
       WHEN v_new_paid >= v_grand_total THEN 'paid'::payment_status
       WHEN v_new_paid > 0 THEN 'partial'::payment_status
