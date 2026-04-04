@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
-import { Phone, MapPin, Wallet, Plus } from 'lucide-react-native';
+import { View, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Phone, MapPin, Wallet, Plus, ArrowLeft } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -13,11 +13,12 @@ import { ListItem } from '@/src/components/molecules/ListItem';
 import { PaymentModal } from '@/src/components/organisms/PaymentModal';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { layout } from '@/src/theme/layout';
 import type { CustomerLedgerEntry } from '@/src/types/customer';
 
 export default function CustomerDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { theme } = useThemeTokens();
+	const { theme, c, s } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 
@@ -93,15 +94,38 @@ export default function CustomerDetailScreen() {
 	if (!customer) return null;
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
-			<Stack.Screen options={{ title: customer.name }} />
+		<AtomicScreen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
+			<View
+				style={[
+					styles.header,
+					layout.rowBetween,
+					{ borderBottomColor: c.border, borderBottomWidth: 1, paddingBottom: s.md },
+				]}
+			>
+				<View style={[layout.row, { flex: 1 }]}>
+					<TouchableOpacity
+						onPress={() => router.back()}
+						accessibilityLabel="back-button"
+						style={{ padding: 4 }}
+					>
+						<ArrowLeft size={24} color={c.onBackground} strokeWidth={2.5} />
+					</TouchableOpacity>
+					<ThemedText
+						variant="h2"
+						style={{ marginLeft: s.md, flex: 1 }}
+						numberOfLines={1}
+					>
+						{customer.name}
+					</ThemedText>
+				</View>
+			</View>
 
 			<FlatList
 				data={ledger}
 				renderItem={renderLedgerItem}
 				keyExtractor={(item, index) => `${item.reference}-${index}`}
 				ListHeaderComponent={
-					<View style={styles.header}>
+					<View style={styles.summaryContainer}>
 						<Card style={styles.summaryCard}>
 							<ThemedText
 								variant="caption"
@@ -170,7 +194,7 @@ export default function CustomerDetailScreen() {
 								style={{ flex: 1, marginLeft: 8 }}
 								onPress={() =>
 									router.push({
-										pathname: '/invoices/create',
+										pathname: '/(app)/invoices/create',
 										params: { customerId: customer.id },
 									})
 								}
@@ -248,6 +272,7 @@ export default function CustomerDetailScreen() {
 
 const styles = StyleSheet.create({
 	header: { padding: 16 },
+	summaryContainer: { padding: 16, paddingTop: 0 },
 	summaryCard: { padding: 20, alignItems: 'center' },
 	statsRow: { flexDirection: 'row', width: '100%' },
 	stat: { flex: 1, alignItems: 'center' },

@@ -34,7 +34,7 @@
 `jest.integration.config.js`, they never touch the DB. The other 11
 integration files correctly use `integrationHelpers.ts` and hit the real DB.
 
-### [ ] Step 0.1 — Create `__tests__/chain/` directory
+### [x] Step 0.1 — Create `__tests__/chain/` directory
 
 Move the 3 files there verbatim. Rename for clarity:
 
@@ -45,13 +45,13 @@ Move the 3 files there verbatim. Rename for clarity:
 These verify Store → Service → Repository → Supabase _call shape_. They belong
 with unit tests, not integration tests.
 
-### [ ] Step 0.2 — Update `jest.config.js`
+### [x] Step 0.2 — Update `jest.config.js`
 
 - Add `'<rootDir>/__tests__/chain/**'` to `testMatch`
 - Remove `__tests__/chain/` from `testPathIgnorePatterns`
 - No other changes — Supabase is still mocked per-file in these chain tests
 
-### [ ] Step 0.3 — Update `jest.integration.config.js`
+### [x] Step 0.3 — Update `jest.integration.config.js`
 
 - `testMatch` already points to `__tests__/integration/**` only — no change needed
 - Verify `setupFilesAfterEnv` uses `integrationSetup.ts` (not the RN mock setup) — already correct
@@ -169,7 +169,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
   full re-fetch of all customers
 - `reset`
 
-### [ ] Step 1.4 — `financeStore.test.ts` — extend to ~25 tests
+### [x] Step 1.4 — `financeStore.test.ts` — extend to ~25 tests
 
 - `fetchSummary`: loading lifecycle, error, data set correctly
 - `fetchSummary` called twice rapidly: only one in-flight (race guard — second call
@@ -207,7 +207,7 @@ loading flag lifecycle, error flag lifecycle, race condition guard, and reset.
 
 ---
 
-## Phase 2 — Unit: Navigation Wiring (scattered 26 → 130 dedicated)
+## [x] Phase 2 — Unit: Navigation Wiring (scattered 26 → 130 dedicated)
 
 **Principle**: One `it()` per tappable interactive element on every screen.
 Assert the exact route string passed to `router.push`, not just "router called."
@@ -273,7 +273,7 @@ interactive element with an `onPress` that is supposed to navigate.
 
 ---
 
-## Phase 3 — Unit: Loading & Error UI States (scattered 32 → 200 dedicated)
+## [x] Phase 3 — Unit: Loading & Error UI States (scattered 32 → 200 dedicated)
 
 **Principle**: Three mandatory tests per screen with async operations:
 (A) spinner visible while loading, (B) error UI visible when error set,
@@ -339,7 +339,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 
 ---
 
-## Phase 4 — Unit: Component Variants (337 → 520)
+## [x] Phase 4 — Unit: Component Variants (337 → 520)
 
 ### [ ] Step 4.1 — `TextInput` deep tests
 

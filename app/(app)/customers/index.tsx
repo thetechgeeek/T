@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, FlatList, StyleSheet, RefreshControl, Alert } from 'react-native';
+import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
@@ -9,7 +9,6 @@ import { SearchBar } from '@/src/components/molecules/SearchBar';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { Button } from '@/src/components/atoms/Button';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -33,9 +32,11 @@ export default function CustomersScreen() {
 
 	useEffect(() => {
 		fetchCustomers().catch((e) => {
-			Alert.alert(t('common.errorTitle'), t('customer.loadError') + ' ' + e.message, [
-				{ text: t('common.ok') },
-			]);
+			Alert.alert(
+				t('common.errorTitle'),
+				t('customer.loadError') + ' ' + (e?.message || ''),
+				[{ text: t('common.ok') }],
+			);
 		});
 	}, [fetchCustomers, t]);
 
@@ -65,22 +66,6 @@ export default function CustomersScreen() {
 			<Stack.Screen
 				options={{
 					title: 'Customers',
-					headerRight: () => (
-						<Button
-							variant="ghost"
-							size="sm"
-							accessibilityLabel="add-customer-button"
-							accessibilityHint="Add a new customer"
-							onPress={() => router.push('/customers/add')}
-							leftIcon={
-								<UserPlus
-									size={22}
-									color={theme.colors.primary}
-									importantForAccessibility="no"
-								/>
-							}
-						/>
-					),
 				}}
 			/>
 
@@ -105,7 +90,7 @@ export default function CustomersScreen() {
 				contentContainerStyle={styles.list}
 				refreshControl={
 					<RefreshControl
-						refreshing={loading && customers.length > 0}
+						refreshing={loading}
 						onRefresh={() => fetchCustomers(true)}
 						tintColor={theme.colors.primary}
 					/>
@@ -113,7 +98,7 @@ export default function CustomersScreen() {
 				ListEmptyComponent={
 					!loading ? (
 						<EmptyState
-							title="No customers found"
+							title={t('customer.noCustomers')}
 							description="Start by adding your first customer to manage their credit and invoices."
 							icon={<UserPlus size={48} color={theme.colors.placeholder} />}
 							actionLabel="Add Customer"
@@ -122,6 +107,21 @@ export default function CustomersScreen() {
 					) : null
 				}
 			/>
+
+			{/* FAB */}
+			<TouchableOpacity
+				style={[
+					styles.fab,
+					{ backgroundColor: theme.colors.primary, ...(theme.shadows?.lg || {}) },
+				]}
+				onPress={() => router.push('/customers/add')}
+				activeOpacity={0.85}
+				accessibilityRole="button"
+				accessibilityLabel="add-customer-button"
+				accessibilityHint="Add a new customer"
+			>
+				<UserPlus size={26} color="white" strokeWidth={2.5} />
+			</TouchableOpacity>
 		</AtomicScreen>
 	);
 }
@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
 	},
 	list: {
 		flexGrow: 1,
+		paddingBottom: 80,
 	},
 	avatar: {
 		width: 40,
@@ -142,5 +143,16 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	fab: {
+		position: 'absolute',
+		right: 20,
+		bottom: 20,
+		width: 60,
+		height: 60,
+		borderRadius: 30,
+		justifyContent: 'center',
+		alignItems: 'center',
+		elevation: 8,
 	},
 });

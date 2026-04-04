@@ -10,6 +10,8 @@ import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Share2, ArrowLeft } from 'lucide-react-native';
 import { layout } from '@/src/theme/layout';
+import { PaymentModal } from '@/src/components/organisms/PaymentModal';
+import type { UUID } from '@/src/types/common';
 
 export default function InvoiceDetailScreen() {
 	const { id } = useLocalSearchParams();
@@ -20,6 +22,7 @@ export default function InvoiceDetailScreen() {
 	const { currentInvoice, fetchInvoiceById, loading, error, clearCurrentInvoice } =
 		useInvoiceStore();
 	const [sharing, setSharing] = useState(false);
+	const [paymentModalVisible, setPaymentModalVisible] = useState(false);
 
 	useEffect(() => {
 		if (id) {
@@ -152,6 +155,7 @@ export default function InvoiceDetailScreen() {
 						borderRadius: r.md,
 						borderWidth: 1,
 						borderColor: c.border,
+						bottom: 0,
 					}}
 				>
 					<View style={layout.rowBetween}>
@@ -191,6 +195,7 @@ export default function InvoiceDetailScreen() {
 								borderTopColor: c.border,
 								paddingTop: s.sm,
 								marginTop: s.sm,
+								marginBottom: s.sm,
 							},
 						]}
 					>
@@ -206,7 +211,7 @@ export default function InvoiceDetailScreen() {
 						</ThemedText>
 					</View>
 					{currentInvoice.grand_total - currentInvoice.amount_paid > 0 && (
-						<View style={layout.rowBetween}>
+						<View style={[layout.rowBetween, { marginTop: s.sm }]}>
 							<ThemedText color={c.error}>Balance Due</ThemedText>
 							<ThemedText variant="h3" color={c.error}>
 								{formatCurrency(
@@ -215,8 +220,28 @@ export default function InvoiceDetailScreen() {
 							</ThemedText>
 						</View>
 					)}
+
+					{currentInvoice.grand_total - currentInvoice.amount_paid > 0 && (
+						<Button
+							title="Record Payment"
+							accessibilityLabel="record-payment-button"
+							onPress={() => setPaymentModalVisible(true)}
+							style={{ marginTop: s.lg }}
+						/>
+					)}
 				</View>
 			</ScrollView>
+
+			<PaymentModal
+				visible={paymentModalVisible}
+				onClose={() => setPaymentModalVisible(false)}
+				customerId={currentInvoice.customer_id as UUID}
+				customerName={currentInvoice.customer_name}
+				invoiceId={currentInvoice.id as UUID}
+				invoiceNumber={currentInvoice.invoice_number}
+				totalAmount={currentInvoice.grand_total - currentInvoice.amount_paid}
+				onSuccess={() => fetchInvoiceById(id as string)}
+			/>
 		</Screen>
 	);
 }

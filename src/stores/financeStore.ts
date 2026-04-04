@@ -45,6 +45,8 @@ export const useFinanceStore = create<FinanceState>()(
 		dateRange: { startDate: '', endDate: '' },
 
 		initialize: async () => {
+			if (get().loading) return;
+
 			// Ensure date range is set before fetching
 			if (!get().dateRange.startDate) {
 				set((s) => {
@@ -92,6 +94,8 @@ export const useFinanceStore = create<FinanceState>()(
 		},
 
 		fetchExpenses: async (search) => {
+			if (get().loading) return;
+
 			if (!get().dateRange.startDate) {
 				set((s) => {
 					s.dateRange = defaultDateRange();
@@ -120,6 +124,8 @@ export const useFinanceStore = create<FinanceState>()(
 		},
 
 		fetchPurchases: async () => {
+			if (get().loading) return;
+
 			if (!get().dateRange.startDate) {
 				set((s) => {
 					s.dateRange = defaultDateRange();
@@ -147,6 +153,8 @@ export const useFinanceStore = create<FinanceState>()(
 		},
 
 		fetchSummary: async () => {
+			if (get().loading) return;
+
 			if (!get().dateRange.startDate) {
 				set((s) => {
 					s.dateRange = defaultDateRange();

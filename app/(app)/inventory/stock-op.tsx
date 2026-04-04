@@ -93,7 +93,7 @@ export default function StockOpScreen() {
 					{ backgroundColor: c.background, justifyContent: 'center' },
 				]}
 			>
-				<ActivityIndicator size="large" color={c.primary} />
+				<ActivityIndicator testID="loading-spinner" size="large" color={c.primary} />
 			</View>
 		);
 	}
@@ -115,7 +115,11 @@ export default function StockOpScreen() {
 						{title}
 					</ThemedText>
 				</View>
-				<TouchableOpacity onPress={() => router.back()} style={{ padding: 4 }}>
+				<TouchableOpacity
+					onPress={() => router.back()}
+					style={{ padding: 4 }}
+					accessibilityLabel="back-button"
+				>
 					<X size={24} color={c.placeholder} strokeWidth={2} />
 				</TouchableOpacity>
 			</View>

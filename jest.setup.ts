@@ -421,6 +421,10 @@ jest.mock('i18next', () => {
 			'auth.setupBusiness': 'Set Up Your Business',
 			'auth.email': 'Email',
 			'auth.password': 'Password',
+			'inventory.noItems': 'No items in inventory',
+			'inventory.title': 'Inventory',
+			'invoice.noInvoices': 'No invoices found.',
+			'customer.noCustomers': 'No customers found',
 		};
 		if (SHARED_TRANSLATIONS[key]) return SHARED_TRANSLATIONS[key];
 		const shortKey = key.split('.').pop() || key;

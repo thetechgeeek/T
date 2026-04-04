@@ -33,6 +33,8 @@ const CATEGORIES: ('ALL' | TileCategory)[] = [
 	'OTHER',
 ];
 
+const FiltersIcon = SlidersHorizontal;
+
 export default function InventoryTab() {
 	const { theme, c, s, r } = useThemeTokens();
 	const { t } = useLocale();
@@ -91,7 +93,7 @@ export default function InventoryTab() {
 		if (loading && items.length === 0) {
 			return (
 				<View style={styles.centerFlex}>
-					<ActivityIndicator size="large" color={c.primary} />
+					<ActivityIndicator testID="loading-spinner" size="large" color={c.primary} />
 				</View>
 			);
 		}
@@ -218,7 +220,11 @@ export default function InventoryTab() {
 				onEndReachedThreshold={0.5}
 				ListFooterComponent={
 					loading && items.length > 0 ? (
-						<ActivityIndicator style={{ padding: s.md }} color={c.primary} />
+						<ActivityIndicator
+							testID="loading-spinner"
+							style={{ padding: s.md }}
+							color={c.primary}
+						/>
 					) : null
 				}
 			/>
@@ -247,7 +253,6 @@ export default function InventoryTab() {
 }
 
 // Map the icon since SlidersHorizontal isn't standard in older lucide but we imported it, if it fails we can fallback.
-const FiltersIcon = SlidersHorizontal;
 
 const styles = StyleSheet.create({
 	filterBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },

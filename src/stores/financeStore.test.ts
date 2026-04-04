@@ -130,16 +130,51 @@ describe('financeStore', () => {
 		expect(useFinanceStore.getState().dateRange.startDate).not.toBe('');
 	});
 
-	it('fetchSummary failure sets error', async () => {
+	it('fetchSummary failure sets error and preserves previous summary', async () => {
+		useFinanceStore.setState({ summary: mockSummary });
 		(financeService.getProfitLoss as jest.Mock).mockRejectedValue(new Error('Summary error'));
 
-		try {
-			await useFinanceStore.getState().fetchSummary();
-		} catch {
-			/* noop */
-		}
+		await useFinanceStore.getState().fetchSummary();
 
-		expect(useFinanceStore.getState().error).toBeTruthy();
+		const state = useFinanceStore.getState();
+		expect(state.error).toBeTruthy();
+		expect(state.loading).toBe(false);
+		expect(state.summary).toEqual(mockSummary); // preserved
+	});
+
+	it('fetchSummary: second call while loading=true returns immediately (race guard)', async () => {
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(financeService.getProfitLoss as jest.Mock).mockReturnValue(p);
+
+		const firstFetch = useFinanceStore.getState().fetchSummary();
+		expect(useFinanceStore.getState().loading).toBe(true);
+
+		// Second call should return immediately
+		await useFinanceStore.getState().fetchSummary();
+		expect(financeService.getProfitLoss).toHaveBeenCalledTimes(1);
+
+		resolve(mockSummary);
+		await firstFetch;
+	});
+
+	it('fetchSummary: summary is retained during loading (no wipe)', async () => {
+		useFinanceStore.setState({ summary: mockSummary });
+		let resolve!: (v: unknown) => void;
+		const p = new Promise((r) => {
+			resolve = r;
+		});
+		(financeService.getProfitLoss as jest.Mock).mockReturnValue(p);
+
+		const fetchPromise = useFinanceStore.getState().fetchSummary();
+
+		expect(useFinanceStore.getState().loading).toBe(true);
+		expect(useFinanceStore.getState().summary).toEqual(mockSummary); // still there
+
+		resolve(mockSummary);
+		await fetchPromise;
 	});
 
 	// ─── addExpense ───────────────────────────────────────────────────────────

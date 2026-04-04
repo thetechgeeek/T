@@ -88,7 +88,11 @@ export default function ItemDetailScreen() {
 						},
 					]}
 				>
-					<TouchableOpacity onPress={() => router.back()} style={styles.back}>
+					<TouchableOpacity
+						onPress={() => router.back()}
+						style={styles.back}
+						accessibilityLabel="back-button"
+					>
 						<ArrowLeft size={22} color={c.primary} strokeWidth={2} />
 					</TouchableOpacity>
 				</View>
@@ -118,7 +122,11 @@ export default function ItemDetailScreen() {
 				]}
 			>
 				<View style={[layout.row, { flex: 1 }]}>
-					<TouchableOpacity onPress={() => router.back()} style={styles.back}>
+					<TouchableOpacity
+						onPress={() => router.back()}
+						style={styles.back}
+						accessibilityLabel="back-button"
+					>
 						<ArrowLeft size={24} color={c.onBackground} strokeWidth={2.5} />
 					</TouchableOpacity>
 					<ThemedText
@@ -145,7 +153,7 @@ export default function ItemDetailScreen() {
 						{
 							backgroundColor: c.surface,
 							borderRadius: r.lg,
-							...(theme.shadows.sm as object),
+							...(theme.shadows?.sm || {}),
 						},
 					]}
 				>
