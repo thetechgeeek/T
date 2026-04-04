@@ -1,25 +1,44 @@
-interface RetryOptions {
-	maxAttempts?: number;
-	baseDelay?: number;
-	shouldRetry?: (error: unknown) => boolean;
-}
-
 /**
- * Retry a promise-returning function with exponential back-off.
- * Only use for idempotent read operations — writes need explicit idempotency keys.
+ * Retry utility for network operations with exponential backoff.
  */
 export async function withRetry<T>(
-	fn: () => Promise<T>,
-	{ maxAttempts = 3, baseDelay = 1000, shouldRetry = () => true }: RetryOptions = {},
+	operation: () => Promise<T>,
+	options: {
+		retries?: number;
+		delay?: number;
+		factor?: number;
+		shouldRetry?: (error: any) => boolean;
+	} = {},
 ): Promise<T> {
-	for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+	const {
+		retries = 3,
+		delay = 1000,
+		factor = 2,
+		shouldRetry = (err) => {
+			// Retry on network errors or specific Supabase errors that imply transient failure
+			const msg = err?.message?.toLowerCase() || '';
+			return msg.includes('network') || msg.includes('fetch') || msg.includes('timeout');
+		},
+	} = options;
+
+	let lastError: any;
+	let currentDelay = delay;
+
+	for (let i = 0; i <= retries; i++) {
 		try {
-			return await fn();
-		} catch (e) {
-			if (attempt === maxAttempts || !shouldRetry(e)) throw e;
-			await new Promise((r) => setTimeout(r, baseDelay * 2 ** (attempt - 1)));
+			return await operation();
+		} catch (error) {
+			lastError = error;
+
+			if (i < retries && shouldRetry(error)) {
+				await new Promise((resolve) => setTimeout(resolve, currentDelay));
+				currentDelay *= factor;
+				continue;
+			}
+
+			throw lastError;
 		}
 	}
-	// TypeScript requires this but it is unreachable
-	throw new Error('withRetry: unreachable');
+
+	throw lastError;
 }

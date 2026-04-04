@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { invoiceService } from '../services/invoiceService';
 import { eventBus } from '../events/appEvents';
+import { withRetry } from '../utils/retry';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
 import type { UUID } from '../types/common';
 
@@ -24,101 +27,113 @@ export interface InvoiceState {
 }
 
 export const useInvoiceStore = create<InvoiceState>()(
-	immer((set, get) => ({
-		invoices: [],
-		currentInvoice: null,
-		loading: false,
-		error: null,
-		filters: {},
-		totalCount: 0,
-		currentPage: 1,
+	persist(
+		immer((set, get) => ({
+			invoices: [],
+			currentInvoice: null,
+			loading: false,
+			error: null,
+			filters: {},
+			totalCount: 0,
+			currentPage: 1,
 
-		setFilters: (newFilters) => {
-			set((state) => {
-				state.filters = { ...state.filters, ...newFilters };
-				state.currentPage = 1;
-			});
-			get().fetchInvoices(1);
-		},
-
-		fetchInvoices: async (page = 1) => {
-			set({ loading: true, error: null });
-			try {
-				const { filters } = get();
-				const { data, count } = await invoiceService.fetchInvoices(filters, page);
+			setFilters: (newFilters) => {
 				set((state) => {
-					if (page === 1) {
-						state.invoices = data;
-					} else {
-						const newIds = new Set(data.map((i) => i.id));
-						state.invoices = [
-							...state.invoices.filter((i) => !newIds.has(i.id)),
-							...data,
-						];
-					}
-					state.totalCount = count;
-					state.currentPage = page;
-					state.loading = false;
+					state.filters = { ...state.filters, ...newFilters };
+					state.currentPage = 1;
 				});
-			} catch (error: unknown) {
-				set({ error: (error as Error).message, loading: false });
-			}
-		},
+				get().fetchInvoices(1);
+			},
 
-		fetchInvoiceById: async (id) => {
-			set({ loading: true, error: null });
-			try {
-				const invoice = await invoiceService.fetchInvoiceDetail(id);
-				set((state) => {
-					state.currentInvoice = invoice;
-					state.loading = false;
+			fetchInvoices: async (page = 1) => {
+				set({ loading: true, error: null });
+				try {
+					const { filters } = get();
+					const { data, count } = await withRetry(() =>
+						invoiceService.fetchInvoices(filters, page),
+					);
+					set((state) => {
+						if (page === 1) {
+							state.invoices = data;
+						} else {
+							const newIds = new Set(data.map((i: Invoice) => i.id));
+							state.invoices = [
+								...state.invoices.filter((i: Invoice) => !newIds.has(i.id)),
+								...data,
+							];
+						}
+						state.totalCount = count;
+						state.currentPage = page;
+						state.loading = false;
+					});
+				} catch (error: unknown) {
+					set({ error: (error as Error).message, loading: false });
+				}
+			},
+
+			fetchInvoiceById: async (id) => {
+				set({ loading: true, error: null });
+				try {
+					const invoice = await withRetry(() => invoiceService.fetchInvoiceDetail(id));
+					set((state) => {
+						state.currentInvoice = invoice;
+						state.loading = false;
+					});
+				} catch (error: unknown) {
+					set({ error: (error as Error).message, loading: false });
+				}
+			},
+
+			createInvoice: async (input) => {
+				set({ loading: true, error: null });
+				try {
+					const result = await invoiceService.createInvoice(input);
+					set((state) => {
+						state.invoices.unshift(result);
+						state.totalCount += 1;
+						state.loading = false;
+					});
+
+					// Notify other stores via event bus (replaces brittle require())
+					eventBus.emit({
+						type: 'INVOICE_CREATED',
+						invoiceId: result.id,
+						customerId: input.customer_id,
+					});
+
+					return result;
+				} catch (error: unknown) {
+					set({ error: (error as Error).message, loading: false });
+					throw error;
+				}
+			},
+
+			clearCurrentInvoice: () => {
+				set({ currentInvoice: null });
+			},
+			reset: () => {
+				set((s) => {
+					s.invoices = [];
+					s.currentInvoice = null;
+					s.totalCount = 0;
+					s.currentPage = 1;
+					s.filters = {};
+					s.error = null;
+					s.loading = false;
 				});
-			} catch (error: unknown) {
-				set({ error: (error as Error).message, loading: false });
-			}
+			},
+		})),
+		{
+			name: 'invoice-storage',
+			storage: createJSONStorage(() => AsyncStorage),
+			partialize: (state: InvoiceState) => ({
+				invoices: state.invoices,
+				totalCount: state.totalCount,
+				filters: state.filters,
+			}),
 		},
-
-		createInvoice: async (input) => {
-			set({ loading: true, error: null });
-			try {
-				const result = await invoiceService.createInvoice(input);
-				set((state) => {
-					state.invoices.unshift(result);
-					state.totalCount += 1;
-					state.loading = false;
-				});
-
-				// Notify other stores via event bus (replaces brittle require())
-				eventBus.emit({
-					type: 'INVOICE_CREATED',
-					invoiceId: result.id,
-					customerId: input.customer_id,
-				});
-
-				return result;
-			} catch (error: unknown) {
-				set({ error: (error as Error).message, loading: false });
-				throw error;
-			}
-		},
-
-		clearCurrentInvoice: () => {
-			set({ currentInvoice: null });
-		},
-		reset: () => {
-			set((s) => {
-				s.invoices = [];
-				s.currentInvoice = null;
-				s.totalCount = 0;
-				s.currentPage = 1;
-				s.filters = {};
-				s.error = null;
-				s.loading = false;
-			});
-		},
-	})),
+	),
 );
-
 // Refresh invoice list when a payment is recorded against an invoice
 eventBus.subscribe((event) => {
 	if (event.type === 'PAYMENT_RECORDED' && event.invoiceId) {
