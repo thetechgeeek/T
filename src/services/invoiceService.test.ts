@@ -359,6 +359,33 @@ describe('invoiceService', () => {
 			expect(builder.order).toHaveBeenCalledWith('invoice_date', { ascending: true });
 		});
 
+		it('combined filters: search, status, and dates simultaneously', async () => {
+			const builder = makeListBuilder();
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await invoiceService.fetchInvoices({
+				search: 'marble',
+				payment_status: 'unpaid',
+				dateFrom: '2026-01-01',
+				dateTo: '2026-01-31',
+			});
+
+			expect(builder.or).toHaveBeenCalledWith(expect.stringContaining('marble'));
+			expect(builder.eq).toHaveBeenCalledWith('payment_status', 'unpaid');
+			expect(builder.gte).toHaveBeenCalledWith('invoice_date', '2026-01-01');
+			expect(builder.lte).toHaveBeenCalledWith('invoice_date', '2026-01-31');
+		});
+
+		it('customer_id filter: .eq("customer_id", uuid) is called', async () => {
+			const builder = makeListBuilder();
+			const customerId = 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await invoiceService.fetchInvoices({ customer_id: customerId });
+
+			expect(builder.eq).toHaveBeenCalledWith('customer_id', customerId);
+		});
+
 		it('throws NotFoundError when supabase returns PGRST116 (no rows found)', async () => {
 			const builder = makeListBuilder({
 				data: null as any,
@@ -370,6 +397,20 @@ describe('invoiceService', () => {
 			await expect(invoiceService.fetchInvoices({})).rejects.toThrow(
 				'Record with id "requested" not found',
 			);
+		});
+
+		it('throws generic AppError for other Supabase errors', async () => {
+			const builder = makeListBuilder({
+				data: null as any,
+				count: null as any,
+				error: { message: 'Database is down', code: 'PGRST000' },
+			});
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await expect(invoiceService.fetchInvoices({})).rejects.toMatchObject({
+				message: 'Database is down',
+				code: 'PGRST000',
+			});
 		});
 	});
 

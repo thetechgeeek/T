@@ -100,4 +100,18 @@ describe('paymentService', () => {
 			expect(result).toEqual(payments);
 		});
 	});
+
+	describe('payment_modes validation', () => {
+		const { PAYMENT_MODES } = require('@/src/constants/paymentModes');
+
+		PAYMENT_MODES.forEach(({ value }: { value: string }) => {
+			it(`accepts and passes through valid payment_mode: ${value}`, async () => {
+				mockRepo.recordWithInvoiceUpdate.mockResolvedValue({ id: '1' });
+				await service.recordPayment({ ...validPayment, payment_mode: value as any });
+				expect(mockRepo.recordWithInvoiceUpdate).toHaveBeenCalledWith(
+					expect.objectContaining({ payment_mode: value }),
+				);
+			});
+		});
+	});
 });

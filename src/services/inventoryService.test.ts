@@ -149,6 +149,22 @@ describe('inventoryService', () => {
 			expect(builder.single).toHaveBeenCalled();
 			expect(result).toEqual(item);
 		});
+
+		it('throws NotFoundError when item is missing (PGRST116)', async () => {
+			const builder = makeBuilder({
+				data: null,
+				error: { message: 'Not found', code: 'PGRST116' },
+			});
+			builder.single.mockResolvedValue({
+				data: null,
+				error: { message: 'Not found', code: 'PGRST116' },
+			});
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await expect(inventoryService.fetchItemById('missing-uuid')).rejects.toMatchObject({
+				code: 'NOT_FOUND',
+			});
+		});
 	});
 
 	describe('createItem', () => {
@@ -203,6 +219,12 @@ describe('inventoryService', () => {
 				p_reference_type: null,
 			});
 			expect(result).toBe(100);
+		});
+
+		it('throws ValidationError for qty=0', async () => {
+			await expect(
+				inventoryService.performStockOperation('item1', 'stock_in', 0),
+			).rejects.toBeInstanceOf(ValidationError);
 		});
 
 		it('throws AppError with INSUFFICIENT_STOCK when RPC returns P0001 with stock message', async () => {

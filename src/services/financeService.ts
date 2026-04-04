@@ -60,6 +60,15 @@ export const financeService = {
 	},
 
 	async getProfitLoss(startDate: string, endDate: string): Promise<ProfitLossSummary> {
+		if (startDate > endDate) {
+			const { AppError } = require('../errors/AppError');
+			throw new AppError(
+				'Start date cannot be after end date',
+				'VALIDATION_ERROR',
+				'Invalid date range',
+			);
+		}
+
 		const { data, error } = await supabase
 			.rpc('get_profit_loss_v1', {
 				p_start: startDate,
@@ -68,6 +77,12 @@ export const financeService = {
 			.single();
 
 		if (error) throw error;
-		return data as ProfitLossSummary;
+		return (
+			(data as ProfitLossSummary) || {
+				total_revenue: 0,
+				total_expenses: 0,
+				net_profit: 0,
+			}
+		);
 	},
 };

@@ -108,7 +108,7 @@ export function toAppError(err: unknown): AppError {
 	}
 
 	if (err instanceof Error) {
-		return new AppError(message, 'UNKNOWN', 'An unexpected error occurred', err);
+		return new AppError(message, code || 'UNKNOWN', 'An unexpected error occurred', err);
 	}
-	return new AppError(message, 'UNKNOWN', 'An unexpected error occurred');
+	return new AppError(message, code || 'UNKNOWN', 'An unexpected error occurred');
 }

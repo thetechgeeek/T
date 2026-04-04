@@ -151,5 +151,24 @@ describe('financeService', () => {
 			});
 			expect(result).toEqual(mockSummary);
 		});
+
+		it('throws ValidationError for invalid date range (start > end)', async () => {
+			await expect(
+				financeService.getProfitLoss('2026-12-31', '2026-01-01'),
+			).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
+		});
+
+		it('handles null data from RPC by returning default zero summary', async () => {
+			(supabase.rpc as jest.Mock).mockReturnValue({
+				single: jest.fn().mockResolvedValue({ data: null, error: null }),
+			});
+
+			const result = await financeService.getProfitLoss('2026-01-01', '2026-01-31');
+			expect(result).toMatchObject({
+				total_revenue: 0,
+				total_expenses: 0,
+				net_profit: 0,
+			});
+		});
 	});
 });

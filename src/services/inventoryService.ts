@@ -1,5 +1,5 @@
 import { supabase } from '@/src/config/supabase';
-import { toAppError } from '@/src/errors/AppError';
+import { toAppError, ValidationError } from '@/src/errors/AppError';
 import type {
 	InventoryItem,
 	InventoryItemInsert,
@@ -117,6 +117,9 @@ export const inventoryService = {
 		referenceType?: string,
 		referenceId?: UUID,
 	) {
+		if (quantityChange <= 0) {
+			throw new ValidationError('Quantity must be positive', { quantity_change: ['min'] });
+		}
 		const { data, error } = await supabase.rpc('perform_stock_operation_v1', {
 			p_item_id: itemId,
 			p_operation_type: operationType,
