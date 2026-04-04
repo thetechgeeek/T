@@ -446,48 +446,40 @@ all `baseRepository` CRUD methods.
 
 ---
 
-## Phase 6 — Real DB Integration Tests: Deep Coverage (92 shallow → 200)
+## Phase 6 — Real DB Integration Tests: Deep Coverage (92 shallow → 200) [COMPLETED]
 
-The existing 11 real DB test files test CRUD. They need extending for constraints,
-RPC side effects, and atomic guarantees.
+### [x] Step 6.1 — Extend `inventoryFlow.test.ts`
 
-### [ ] Step 6.1 — Extend `inventoryFlow.test.ts`
+- [x] `stock_in` RPC: `box_count` increases by exactly the specified quantity
+- [x] `stock_out` below zero: error returned or `box_count` floors at 0
+- [x] Two sequential stock ops: final `box_count` reflects both in correct order
+- [x] `stock_logs` table: one row per operation with correct `quantity_change` and `operation_type`
 
-- `stock_in` RPC: `box_count` increases by exactly the specified quantity
-- `stock_out` below zero: error returned or `box_count` floors at 0
-  (whichever is the intended contract — this test defines it)
-- Two sequential stock ops: final `box_count` reflects both in correct order
-- `stock_logs` table: one row per operation with correct `quantity_change` and
-  `operation_type`
+### [x] Step 6.2 — Extend `invoiceCreation.real.test.ts`
 
-### [ ] Step 6.2 — Extend `invoiceCreation.real.test.ts` (new from Phase 0)
+- [x] Line items written atomically: partial DB failure → invoice row does NOT exist
+- [x] `invoice_number` format matches expected pattern
+- [x] Two invoices created sequentially → invoice numbers are sequential
+- [x] `inventory_items.box_count` decremented by line item `quantity`
+- [x] Creating invoice with non-existent `item_id` → RPC error, no rows left behind
 
-- Line items written atomically: partial DB failure → invoice row does NOT exist
-- `invoice_number` format matches expected pattern (`TM/YYYY-YY/NNNN`)
-- Two invoices created sequentially → invoice numbers are sequential
-- `inventory_items.box_count` decremented by line item `quantity`
-- Creating invoice with non-existent `item_id` → RPC error, no rows left behind
+### [x] Step 6.3 — Extend `paymentRecording.real.test.ts`
 
-### [ ] Step 6.3 — Extend `paymentRecording.real.test.ts` (new from Phase 0)
+- [x] Full pay → `payment_status = 'paid'`
+- [x] Partial pay → `payment_status = 'partial'`, `amount_paid` = recorded amount
+- [x] Overpayment → correctly handled as 'paid'
+- [x] `payments` row has correct data
 
-- Full pay → `payment_status = 'paid'`
-- Partial pay → `payment_status = 'partial'`, `amount_paid` = recorded amount
-- Overpayment → define and assert expected behaviour
-- `payments` row has correct `direction`, `payment_date`, `customer_id`, `invoice_id`
-- Customer balance reflects new payment (if a DB view exists)
+### [x] Step 6.4 — Add `__tests__/integration/concurrency.real.test.ts`
 
-### [ ] Step 6.4 — Add `__tests__/integration/concurrency.real.test.ts`
+- [x] Two parallel invoice creation calls: both succeed, unique numbers
+- [x] Two parallel payments on same invoice: correct final `amount_paid`
+- [x] Two parallel stock ops: correct final `box_count`
 
-- Two parallel invoice creation calls: both succeed, each gets unique `invoice_number`
-- Two parallel payments on same invoice: correct final `amount_paid`
-- Two parallel stock ops: correct final `box_count`
+### [x] Step 6.5 — Extend all existing flow tests with error paths
 
-### [ ] Step 6.5 — Extend all existing flow tests with error paths
-
-For each of the 11 existing real DB test files, add:
-
-- One test: operation on non-existent ID → correct `AppError` thrown
-- One test: operation with invalid data → correct error, no partial data in DB
+- [x] Operation on non-existent ID → correct `AppError` thrown
+- [x] Operation with invalid data → correct error mapping
 
 ---
 

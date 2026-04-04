@@ -88,7 +88,11 @@ export const useInvoiceStore = create<InvoiceState>()(
 				});
 
 				// Notify other stores via event bus (replaces brittle require())
-				eventBus.emit({ type: 'INVOICE_CREATED', invoiceId: result.id });
+				eventBus.emit({
+					type: 'INVOICE_CREATED',
+					invoiceId: result.id,
+					customerId: input.customer_id,
+				});
 
 				return result;
 			} catch (error: unknown) {

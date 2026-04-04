@@ -179,5 +179,11 @@ export const useCustomerStore = create<CustomerState>()(
 eventBus.subscribe((event) => {
 	if (event.type === 'INVOICE_CREATED' || event.type === 'PAYMENT_RECORDED') {
 		useCustomerStore.getState().fetchCustomers(true);
+
+		// If we are looking at this specific customer's ledger, refresh it too
+		const { selectedCustomer } = useCustomerStore.getState();
+		if (selectedCustomer && event.customerId === selectedCustomer.id) {
+			useCustomerStore.getState().fetchCustomerDetail(selectedCustomer.id);
+		}
 	}
 });
