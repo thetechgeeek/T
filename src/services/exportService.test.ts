@@ -77,7 +77,8 @@ describe('exportService', () => {
 
 			await exportService.exportGSTR1('2026-04-01', '2026-06-30');
 
-			const csvContent = (FileSystem.writeAsStringAsync as jest.Mock).mock.calls[0][1] as string;
+			const csvContent = (FileSystem.writeAsStringAsync as jest.Mock).mock
+				.calls[0][1] as string;
 			expect(csvContent).toContain('B2B');
 			expect(csvContent).toContain('27AAAAA0000A1Z5');
 			expect(csvContent).toContain('B2C Large');

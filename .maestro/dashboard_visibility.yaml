@@ -2,7 +2,7 @@ appId: com.tilemaster.app
 ---
 - launchApp
 - assertVisible:
-    label: "dashboard-screen"
+      label: 'dashboard-screen'
 - assertVisible:
-    label: "stat-today-sales"
+      label: 'stat-today-sales'
 - takeScreenshot: dashboard_initial

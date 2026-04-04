@@ -3,31 +3,31 @@ appId: com.tilemaster.app
 # E2E-004: Invoice list and detail view
 - launchApp
 - tapOn:
-    label: "tab-invoices"
+      label: 'tab-invoices'
 - assertVisible:
-    label: "invoices-screen"
+      label: 'invoices-screen'
 - takeScreenshot: invoice_list
 
 # Check list items are rendered (at least one invoice)
 - assertVisible:
-    text: "TM-"
-    optional: true
+      text: 'TM-'
+      optional: true
 
 # Tap first invoice in list
 - tapOn:
-    index: 0
-    text: "TM-"
-    optional: true
+      index: 0
+      text: 'TM-'
+      optional: true
 
 # If invoice detail loads, assert key fields
 - assertVisible:
-    label: "invoice-detail-screen"
-    optional: true
+      label: 'invoice-detail-screen'
+      optional: true
 
 - takeScreenshot: invoice_detail
 
 # Navigate back
 - tapOn:
-    label: "back-button"
+      label: 'back-button'
 - assertVisible:
-    label: "invoices-screen"
+      label: 'invoices-screen'

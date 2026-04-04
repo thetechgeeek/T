@@ -2,6 +2,10 @@ import { waitFor } from '@testing-library/react-native';
 import { useDashboardStore } from './dashboardStore';
 import { dashboardService } from '../services/dashboardService';
 import { eventBus, type AppEvent } from '../events/appEvents';
+
+jest.mock('../utils/retry', () => ({
+	withRetry: jest.fn((fn) => fn()),
+}));
 import type { DashboardStats } from '../types/finance';
 
 jest.mock('../services/dashboardService', () => ({

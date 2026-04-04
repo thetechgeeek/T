@@ -46,8 +46,8 @@ export const authService = {
 				return data.session;
 			},
 			{
-				maxAttempts: 3,
-				baseDelay: 500,
+				retries: 3,
+				delay: 500,
 				// Only retry on network errors; auth errors (expired refresh token) are terminal
 				shouldRetry: (e) => e instanceof NetworkError,
 			},

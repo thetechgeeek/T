@@ -22,7 +22,19 @@ function makeListBuilder(
 	},
 ) {
 	const b: Record<string, jest.Mock> = {};
-	['select', 'or', 'eq', 'gte', 'lte', 'order', 'range'].forEach((m) => {
+	[
+		'select',
+		'or',
+		'eq',
+		'gte',
+		'lte',
+		'order',
+		'range',
+		'single',
+		'insert',
+		'update',
+		'delete',
+	].forEach((m) => {
 		b[m] = jest.fn().mockReturnValue(b);
 	});
 	b.then = jest.fn((resolve: (val: unknown) => void) => Promise.resolve(result).then(resolve));
@@ -32,6 +44,10 @@ function makeListBuilder(
 describe('invoiceService', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
+		// Set up default fluent builder for from() calls
+		const builder = makeListBuilder();
+		(supabase.from as jest.Mock).mockReturnValue(builder);
+		(supabase.rpc as jest.Mock).mockResolvedValue({ data: null, error: null });
 	});
 
 	describe('createInvoice', () => {
@@ -44,6 +60,13 @@ describe('invoiceService', () => {
 				data: { id: mockInvoiceId, invoice_number: mockInvoiceNum },
 				error: null,
 			});
+
+			const builder = makeListBuilder({
+				data: { id: mockInvoiceId, invoice_number: mockInvoiceNum } as any,
+				count: 1,
+				error: null,
+			});
+			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			const mockInput = {
 				customer_name: 'John Doe',

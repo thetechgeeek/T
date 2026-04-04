@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase';
+import { supabase as defaultClient } from '../config/supabase';
 import { toAppError } from '../errors';
 import logger from '../utils/logger';
 import type { UUID } from '../types/common';
@@ -78,11 +78,26 @@ function applyFilters<Q extends QueryBuilder>(query: Q, options: QueryOptions): 
 	return query;
 }
 
+/**
+ * Access the supabase client lazily to ensure we catch the latest mocked version
+ * during tests, falling back to an empty object if uninitialized.
+ */
+function getClient() {
+	try {
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
+		const mod = require('../config/supabase');
+		return mod.supabase || defaultClient || ({} as any);
+	} catch {
+		return defaultClient || ({} as any);
+	}
+}
+
 export function createRepository<T extends { id: UUID }>(tableName: string) {
 	return {
 		async findMany(options: QueryOptions = {}): Promise<PaginatedResult<T>> {
 			const start = performance.now();
 			const useCursor = !!(options.cursor !== undefined || options.cursorPageSize);
+			const supabase = getClient();
 			let query = supabase
 				.from(tableName)
 				.select('*', { count: useCursor ? undefined : 'exact' });
@@ -105,6 +120,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 
 		async findById(id: UUID): Promise<T> {
 			const start = performance.now();
+			const supabase = getClient();
 			const { data, error } = await supabase
 				.from(tableName)
 				.select('*')
@@ -121,6 +137,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 
 		async create(payload: Partial<T>): Promise<T> {
 			const start = performance.now();
+			const supabase = getClient();
 			const { data, error } = await supabase
 				.from(tableName)
 				.insert(payload)
@@ -137,6 +154,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 
 		async update(id: UUID, payload: Partial<T>): Promise<T> {
 			const start = performance.now();
+			const supabase = getClient();
 			const { data, error } = await supabase
 				.from(tableName)
 				.update(payload)
@@ -154,6 +172,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 
 		async remove(id: UUID): Promise<void> {
 			const start = performance.now();
+			const supabase = getClient();
 			const { error } = await supabase.from(tableName).delete().eq('id', id);
 			logger.info('db_query', {
 				table: tableName,
@@ -165,6 +184,7 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 
 		async rpc<R>(fnName: string, params: Record<string, unknown>): Promise<R> {
 			const start = performance.now();
+			const supabase = getClient();
 			const { data, error } = await supabase.rpc(fnName, params);
 			logger.info('db_query', {
 				table: tableName,

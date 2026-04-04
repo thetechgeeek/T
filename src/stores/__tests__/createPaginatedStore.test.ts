@@ -115,7 +115,11 @@ describe('createPaginatedStore', () => {
 	it('does not start a second fetch while one is in progress', async () => {
 		const { store, fetchFn } = makeStore();
 		let resolve!: (v: { data: TestItem[]; count: number }) => void;
-		fetchFn.mockReturnValue(new Promise<{ data: TestItem[]; count: number }>((r) => { resolve = r; }));
+		fetchFn.mockReturnValue(
+			new Promise<{ data: TestItem[]; count: number }>((r) => {
+				resolve = r;
+			}),
+		);
 
 		store.getState().fetch();
 		store.getState().fetch();

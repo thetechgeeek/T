@@ -11,8 +11,13 @@ jest.mock('@/src/services/inventoryService');
  */
 describe('Cross-Screen Sync: Bug #4 Documentation', () => {
 	beforeEach(() => {
+		jest.useFakeTimers();
 		jest.clearAllMocks();
 		useInventoryStore.getState().reset();
+	});
+
+	afterEach(() => {
+		jest.useRealTimers();
 	});
 
 	it('ignores subsequent filter updates if already loading (Race Condition)', async () => {
@@ -26,11 +31,13 @@ describe('Cross-Screen Sync: Bug #4 Documentation', () => {
 
 		// 1. Initial trigger
 		useInventoryStore.getState().setFilters({ search: 'A' });
+		jest.advanceTimersByTime(310);
 		expect(useInventoryStore.getState().loading).toBe(true);
 		expect(inventoryService.fetchItems).toHaveBeenCalledTimes(1);
 
 		// 2. Rapid update while loading
 		useInventoryStore.getState().setFilters({ search: 'AB' });
+		jest.advanceTimersByTime(310);
 
 		// BUG: In the current implementation, fetchItems returns immediately if loading=true
 		// even if reset=true was passed by setFilters.

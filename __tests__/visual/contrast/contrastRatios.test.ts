@@ -8,6 +8,7 @@ function assertContrast(fg: string, bg: string, minRatio = 4.5, context = '') {
 	} catch (e) {
 		throw new Error(
 			`Contrast ratio for ${context} (${fg} on ${bg}) is ${ratio.toFixed(2)}, which is below the required ${minRatio}`,
+			{ cause: e },
 		);
 	}
 }

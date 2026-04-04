@@ -26,6 +26,16 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 			error: null,
 		});
 
+		// Also mock the re-fetch that happens in invoiceService after creation
+		mockSupabase
+			.from('invoices')
+			.select()
+			.eq()
+			.single.mockResolvedValue({
+				data: { id: 'inv-456', invoice_number: 'TM/2026-27/0001' },
+				error: null,
+			});
+
 		// Spy on eventBus
 		const emitSpy = jest.spyOn(eventBus, 'emit');
 

@@ -2,6 +2,10 @@ import { waitFor } from '@testing-library/react-native';
 import { useInventoryStore } from './inventoryStore';
 import { inventoryService } from '../services/inventoryService';
 import { eventBus } from '../events/appEvents';
+
+jest.mock('../utils/retry', () => ({
+	withRetry: jest.fn((fn) => fn()),
+}));
 import {
 	makeInventoryItem,
 	makeInventoryItemInput,

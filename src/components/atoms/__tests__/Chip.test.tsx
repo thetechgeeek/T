@@ -23,13 +23,17 @@ describe('Chip', () => {
 	});
 
 	it('selected=true applies selected accessibilityState', () => {
-		const { getByTestId } = renderWithTheme(<Chip label="selected" selected={true} testID="chip-unit" />);
+		const { getByTestId } = renderWithTheme(
+			<Chip label="selected" selected={true} testID="chip-unit" />,
+		);
 		const chip = getByTestId('chip-unit');
 		expect(chip.props.accessibilityState?.selected).toBe(true);
 	});
 
 	it('selected=false applies unselected accessibilityState', () => {
-		const { getByTestId } = renderWithTheme(<Chip label="unselected" selected={false} testID="chip-unit" />);
+		const { getByTestId } = renderWithTheme(
+			<Chip label="unselected" selected={false} testID="chip-unit" />,
+		);
 		const chip = getByTestId('chip-unit');
 		expect(chip.props.accessibilityState?.selected).toBe(false);
 	});

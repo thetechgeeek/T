@@ -16,8 +16,24 @@ jest.mock('../../events/appEvents', () => ({
 }));
 
 const mockNotifications = [
-	{ id: 'n1', title: 'Low stock', body: 'Reorder soon', read: false, created_at: '2026-03-29T00:00:00Z', type: 'low_stock' as const, metadata: {} },
-	{ id: 'n2', title: 'Payment received', body: '₹1000 from Rajesh', read: false, created_at: '2026-03-28T00:00:00Z', type: 'payment' as const, metadata: {} },
+	{
+		id: 'n1',
+		title: 'Low stock',
+		body: 'Reorder soon',
+		read: false,
+		created_at: '2026-03-29T00:00:00Z',
+		type: 'low_stock' as const,
+		metadata: {},
+	},
+	{
+		id: 'n2',
+		title: 'Payment received',
+		body: '₹1000 from Rajesh',
+		read: false,
+		created_at: '2026-03-28T00:00:00Z',
+		type: 'payment' as const,
+		metadata: {},
+	},
 ];
 
 describe('notificationStore', () => {

@@ -3,49 +3,49 @@ appId: com.tilemaster.app
 # E2E-007: Payments flow — record payment against an invoice
 - launchApp
 - tapOn:
-    label: "tab-invoices"
+      label: 'tab-invoices'
 - assertVisible:
-    label: "invoices-screen"
+      label: 'invoices-screen'
 - takeScreenshot: payments_invoice_list
 
 # Open first available invoice (must have at least one unpaid/partial)
 - tapOn:
-    index: 0
-    optional: true
+      index: 0
+      optional: true
 - assertVisible:
-    label: "invoice-detail-screen"
-    optional: true
+      label: 'invoice-detail-screen'
+      optional: true
 - takeScreenshot: payments_invoice_detail
 
 # Tap Record Payment if visible
 - tapOn:
-    text: "Record Payment"
-    optional: true
+      text: 'Record Payment'
+      optional: true
 - assertVisible:
-    text: "Amount"
-    optional: true
+      text: 'Amount'
+      optional: true
 - takeScreenshot: payments_record_form
 
 # Enter amount
 - tapOn:
-    label: "payment-amount-input"
-    optional: true
-- inputText: "1000"
+      label: 'payment-amount-input'
+      optional: true
+- inputText: '1000'
 - hideKeyboard
 
 # Select payment mode UPI
 - tapOn:
-    label: "payment-mode-upi"
-    optional: true
+      label: 'payment-mode-upi'
+      optional: true
 
 # Submit
 - tapOn:
-    label: "submit-payment-button"
-    optional: true
+      label: 'submit-payment-button'
+      optional: true
 
 - takeScreenshot: payments_recorded
 
 # Navigate back
 - tapOn:
-    text: "Back"
-    optional: true
+      text: 'Back'
+      optional: true

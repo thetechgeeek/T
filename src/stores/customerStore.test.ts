@@ -2,6 +2,10 @@ import { waitFor } from '@testing-library/react-native';
 import { useCustomerStore } from './customerStore';
 import { customerService } from '../services/customerService';
 import { eventBus } from '../events/appEvents';
+
+jest.mock('../utils/retry', () => ({
+	withRetry: jest.fn((fn) => fn()),
+}));
 import { makeCustomer } from '../../__tests__/fixtures/customerFixtures';
 
 jest.mock('../services/customerService', () => ({

@@ -4,6 +4,7 @@
 **Sequencing principle**: Every task builds on completed foundations. Later phases never require undoing earlier work. Database changes land before the code that calls them. Types land before the code that uses them. Infrastructure lands before the code it enforces.
 
 > **Formatting convention for all code in this plan and in the codebase:**
+>
 > - **Indentation**: Tabs (displayed as 4 spaces) — matches IntelliJ `Default.xml` → `USE_TAB_CHARACTER: true`, `TAB_SIZE: 4`
 > - **Quotes**: Single quotes (`'`) — matches codebase convention (488 single-quote imports vs 2 double-quote in Deno only)
 > - **Semicolons**: Yes — matches codebase convention
@@ -45,26 +46,26 @@
 
 > Review §10.2
 
-| Detail | Value |
-|--------|-------|
-| **Files** | `.gitignore` |
-| **What** | Add `.env` to the ignore list (currently only `.env*.local` is ignored). |
-| **Steps** | 1. Open `.gitignore`. 2. Add a line: `.env`. 3. If `.env` is already tracked, run `git rm --cached .env` to untrack it. |
+| Detail     | Value                                                                                                                                   |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Files**  | `.gitignore`                                                                                                                            |
+| **What**   | Add `.env` to the ignore list (currently only `.env*.local` is ignored).                                                                |
+| **Steps**  | 1. Open `.gitignore`. 2. Add a line: `.env`. 3. If `.env` is already tracked, run `git rm --cached .env` to untrack it.                 |
 | **Create** | `.env.example` with all required keys (blank values): `EXPO_PUBLIC_SUPABASE_URL=`, `EXPO_PUBLIC_SUPABASE_ANON_KEY=`, `GEMINI_API_KEY=`. |
-| **Verify** | `git status` should not show `.env` as tracked. |
+| **Verify** | `git status` should not show `.env` as tracked.                                                                                         |
 
 ### ✅ 0.2 — Configure ESLint
 
 > Review §11.1
 
-| Detail | Value |
-|--------|-------|
-| **Files** | New: `.eslintrc.js` |
-| **Install** | `npx expo install -- --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-native` |
+| Detail                | Value                                                                                                                                                                                                                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Files**             | New: `.eslintrc.js`                                                                                                                                                                                                                                                          |
+| **Install**           | `npx expo install -- --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-native`                                                                                                  |
 | **Config highlights** | (a) `@typescript-eslint/no-explicit-any`: error — blocks new `any` from entering. (b) `@typescript-eslint/no-unused-vars`: error — catches dead imports. (c) `react-hooks/exhaustive-deps`: warn. (d) `react-native/no-unused-styles`: error — catches dead StyleSheet keys. |
-| **Scope exclusions** | Exclude `supabase/functions/` (Deno, different runtime). |
-| **Script** | Add `"lint": "eslint . --ext .ts,.tsx"` and `"lint:fix": "eslint . --ext .ts,.tsx --fix"` to `package.json` scripts. |
-| **Note** | Do NOT auto-fix the existing codebase yet. Run `eslint .` once to generate a baseline count of violations. Record this count in a comment in the PR so regressions are measurable. |
+| **Scope exclusions**  | Exclude `supabase/functions/` (Deno, different runtime).                                                                                                                                                                                                                     |
+| **Script**            | Add `"lint": "eslint . --ext .ts,.tsx"` and `"lint:fix": "eslint . --ext .ts,.tsx --fix"` to `package.json` scripts.                                                                                                                                                         |
+| **Note**              | Do NOT auto-fix the existing codebase yet. Run `eslint .` once to generate a baseline count of violations. Record this count in a comment in the PR so regressions are measurable.                                                                                           |
 
 ### ✅ 0.3 — Configure Prettier
 
@@ -72,40 +73,40 @@
 
 Must align with the IntelliJ code style (`intellij_settings/codestyles/Default.xml`) so that IDE auto-format and Prettier produce identical output — no format ping-pong between developers using the IDE vs CLI.
 
-| Detail | Value |
-|--------|-------|
-| **Files** | New: `.prettierrc`, `.prettierignore` |
+| Detail      | Value                                                    |
+| ----------- | -------------------------------------------------------- |
+| **Files**   | New: `.prettierrc`, `.prettierignore`                    |
 | **Install** | `npm install --save-dev prettier eslint-config-prettier` |
 
 **`.prettierrc`** — derived from IntelliJ `Default.xml`:
 
 ```json
 {
-  "useTabs": true,
-  "tabWidth": 4,
-  "singleQuote": true,
-  "trailingComma": "all",
-  "printWidth": 100,
-  "semi": true,
-  "bracketSpacing": true,
-  "arrowParens": "always",
-  "endOfLine": "lf"
+	"useTabs": true,
+	"tabWidth": 4,
+	"singleQuote": true,
+	"trailingComma": "all",
+	"printWidth": 100,
+	"semi": true,
+	"bracketSpacing": true,
+	"arrowParens": "always",
+	"endOfLine": "lf"
 }
 ```
 
 **Rationale for each setting (mapped from IntelliJ → Prettier):**
 
-| Prettier Option | Value | IntelliJ Source |
-|-----------------|-------|-----------------|
-| `useTabs` | `true` | `<option name="USE_TAB_CHARACTER" value="true" />` — set globally and per-language (JS, TS, HTML, XML, LESS, Scala) |
-| `tabWidth` | `4` | IntelliJ default tab size is 4; Scala section explicitly sets `<option name="TAB_SIZE" value="4" />`. User confirms 4-space tabs. |
-| `singleQuote` | `true` | IntelliJ has no explicit quote preference configured, but the codebase uses single quotes overwhelmingly (488 single-quote imports across 100 files vs 2 double-quote imports in the Deno Edge Function only). Single quotes are the React/React Native community standard. |
-| `bracketSpacing` | `true` | `<option name="SPACES_WITHIN_IMPORTS" value="true" />` in both `JSCodeStyleSettings` and `TypeScriptCodeStyleSettings` — renders as `import { X } from '...'` (space after `{` and before `}`). |
-| `trailingComma` | `"all"` | Not configured in IntelliJ. `"all"` is the TypeScript/modern JS standard — enables cleaner git diffs and prevents comma-insertion bugs. |
-| `semi` | `true` | Not configured in IntelliJ. The codebase consistently uses semicolons. |
-| `printWidth` | `100` | Not configured in IntelliJ. 100 is the industry standard for TypeScript projects (Airbnb, Google, Expo all use 80-120). |
-| `arrowParens` | `"always"` | Prettier default. Consistent with TypeScript's type annotation style `(x: number) => x`. |
-| `endOfLine` | `"lf"` | Standard for cross-platform projects to avoid `\r\n` diffs. |
+| Prettier Option  | Value      | IntelliJ Source                                                                                                                                                                                                                                                             |
+| ---------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useTabs`        | `true`     | `<option name="USE_TAB_CHARACTER" value="true" />` — set globally and per-language (JS, TS, HTML, XML, LESS, Scala)                                                                                                                                                         |
+| `tabWidth`       | `4`        | IntelliJ default tab size is 4; Scala section explicitly sets `<option name="TAB_SIZE" value="4" />`. User confirms 4-space tabs.                                                                                                                                           |
+| `singleQuote`    | `true`     | IntelliJ has no explicit quote preference configured, but the codebase uses single quotes overwhelmingly (488 single-quote imports across 100 files vs 2 double-quote imports in the Deno Edge Function only). Single quotes are the React/React Native community standard. |
+| `bracketSpacing` | `true`     | `<option name="SPACES_WITHIN_IMPORTS" value="true" />` in both `JSCodeStyleSettings` and `TypeScriptCodeStyleSettings` — renders as `import { X } from '...'` (space after `{` and before `}`).                                                                             |
+| `trailingComma`  | `"all"`    | Not configured in IntelliJ. `"all"` is the TypeScript/modern JS standard — enables cleaner git diffs and prevents comma-insertion bugs.                                                                                                                                     |
+| `semi`           | `true`     | Not configured in IntelliJ. The codebase consistently uses semicolons.                                                                                                                                                                                                      |
+| `printWidth`     | `100`      | Not configured in IntelliJ. 100 is the industry standard for TypeScript projects (Airbnb, Google, Expo all use 80-120).                                                                                                                                                     |
+| `arrowParens`    | `"always"` | Prettier default. Consistent with TypeScript's type annotation style `(x: number) => x`.                                                                                                                                                                                    |
+| `endOfLine`      | `"lf"`     | Standard for cross-platform projects to avoid `\r\n` diffs.                                                                                                                                                                                                                 |
 
 **`.prettierignore`:**
 
@@ -120,9 +121,9 @@ supabase/functions
 
 (`supabase/functions` excluded because it's Deno runtime with different import conventions — double-quote URL imports are idiomatic in Deno.)
 
-| Detail | Value |
-|--------|-------|
-| **Script** | Add `"format": "prettier --write \"**/*.{ts,tsx,json,md}\""` to `package.json`. |
+| Detail          | Value                                                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **Script**      | Add `"format": "prettier --write \"**/*.{ts,tsx,json,md}\""` to `package.json`.                                            |
 | **Integration** | Add `eslint-config-prettier` to `.eslintrc.js` extends array (last position) so Prettier rules don't conflict with ESLint. |
 
 **IntelliJ integration note**: If developers use IntelliJ's built-in formatter, they should enable **Settings → Languages & Frameworks → JavaScript → Prettier → Run on save** and set it to use the project's `.prettierrc`. This avoids the IntelliJ formatter and Prettier producing different output for edge cases (trailing commas, arrow parens) that IntelliJ's `Default.xml` doesn't explicitly configure. Alternatively, the EditorConfig integration (currently disabled: `<option name="ENABLED" value="false" />`) can be re-enabled alongside a `.editorconfig` file that mirrors the Prettier config for non-JS files.
@@ -131,41 +132,41 @@ supabase/functions
 
 > Review §11.1
 
-| Detail | Value |
-|--------|-------|
-| **Install** | `npm install --save-dev husky lint-staged && npx husky init` |
-| **`.husky/pre-commit`** | `npx lint-staged` |
+| Detail                      | Value                                                                                                                         |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **Install**                 | `npm install --save-dev husky lint-staged && npx husky init`                                                                  |
+| **`.husky/pre-commit`**     | `npx lint-staged`                                                                                                             |
 | **`package.json` addition** | `"lint-staged": { "*.{ts,tsx}": ["eslint --fix --max-warnings=0", "prettier --write"], "*.{json,md}": ["prettier --write"] }` |
-| **Verify** | Make a small change, commit. Husky should run lint-staged. If a lint error exists, the commit should be blocked. |
+| **Verify**                  | Make a small change, commit. Husky should run lint-staged. If a lint error exists, the commit should be blocked.              |
 
 ### ✅ 0.5 — Add `typecheck` and `validate` scripts
 
 > Review §11.2
 
-| Detail | Value |
-|--------|-------|
-| **Files** | `package.json` |
+| Detail          | Value                                                                                            |
+| --------------- | ------------------------------------------------------------------------------------------------ |
+| **Files**       | `package.json`                                                                                   |
 | **Add scripts** | `"typecheck": "tsc --noEmit"`, `"validate": "npm run typecheck && npm run lint && npm run test"` |
-| **Verify** | `npm run typecheck` passes (it should — `strict: true` is already on). |
+| **Verify**      | `npm run typecheck` passes (it should — `strict: true` is already on).                           |
 
 ### ✅ 0.6 — GitHub Actions CI
 
 > Review §11.3
 
-| Detail | Value |
-|--------|-------|
-| **Files** | New: `.github/workflows/ci.yml` |
+| Detail       | Value                                                                                                                                          |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Files**    | New: `.github/workflows/ci.yml`                                                                                                                |
 | **Workflow** | Trigger on push + PR to `main`. Steps: checkout → setup-node → `npm ci` → `npm run typecheck` → `npm run lint` → `npm run test -- --coverage`. |
-| **Coverage** | Add `codecov/codecov-action@v4` step (optional, but recommended for tracking progress). |
-| **Verify** | Push a branch, confirm the workflow runs green. |
+| **Coverage** | Add `codecov/codecov-action@v4` step (optional, but recommended for tracking progress).                                                        |
+| **Verify**   | Push a branch, confirm the workflow runs green.                                                                                                |
 
 ### ✅ 0.7 — Run Prettier on entire codebase (one-time formatting commit)
 
-| Detail | Value |
-|--------|-------|
-| **Why now** | After Prettier is configured, run it once across the entire codebase so that all subsequent diffs are formatting-noise-free. |
-| **Command** | `npx prettier --write "**/*.{ts,tsx,json,md}"` |
-| **Commit** | Single commit: `"chore: format entire codebase with Prettier"` — this commit is large but contains zero logic changes. It must land before any other code changes so git blame stays clean for functional commits. |
+| Detail      | Value                                                                                                                                                                                                              |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Why now** | After Prettier is configured, run it once across the entire codebase so that all subsequent diffs are formatting-noise-free.                                                                                       |
+| **Command** | `npx prettier --write "**/*.{ts,tsx,json,md}"`                                                                                                                                                                     |
+| **Commit**  | Single commit: `"chore: format entire codebase with Prettier"` — this commit is large but contains zero logic changes. It must land before any other code changes so git blame stays clean for functional commits. |
 
 **Important — this is a significant reformat:** The existing codebase uses 2-space indentation (likely from Expo scaffolding defaults), but the IntelliJ config and your preference is tabs with 4-space width. Prettier will rewrite indentation across every file. To preserve meaningful `git blame`:
 
@@ -192,8 +193,8 @@ Also commit `.git-blame-ignore-revs` to the repo so all developers benefit.
 
 > Review §6.4, §6.5, §28.1
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                           |
+| -------- | ----------------------------------------------- |
 | **File** | New: `supabase/migrations/008_schema_fixes.sql` |
 
 **Contents:**
@@ -229,8 +230,8 @@ ALTER TABLE invoices ADD COLUMN IF NOT EXISTS reverse_charge BOOLEAN NOT NULL DE
 
 > Review §6.3, §26.6
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                              |
+| -------- | -------------------------------------------------- |
 | **File** | New: `supabase/migrations/009_missing_indexes.sql` |
 
 **Contents:**
@@ -256,8 +257,8 @@ CREATE INDEX IF NOT EXISTS idx_purchase_line_items_purchase ON purchase_line_ite
 
 > Review §6.2
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                              |
+| -------- | -------------------------------------------------- |
 | **File** | New: `supabase/migrations/010_fix_profit_loss.sql` |
 
 **What**: Rewrite `get_profit_loss(p_start, p_end)` to use local variables instead of executing the same subquery 3x for revenue and 3x for COGS. |
@@ -299,11 +300,12 @@ $$ LANGUAGE plpgsql STABLE;
 
 > Review §2 (full section), §24.5, §28.2
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                                    |
+| -------- | -------------------------------------------------------- |
 | **File** | New: `supabase/migrations/011_transactional_invoice.sql` |
 
 **This is the single most important migration. It solves:**
+
 - Non-transactional 4-step invoice creation (§2)
 - Invoice sequence gap risk (§24.5, §28.2)
 - Stock deduction silent failure (Appendix A)
@@ -410,8 +412,8 @@ $$ LANGUAGE plpgsql;
 
 > Review §2 (payment race condition)
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                                    |
+| -------- | -------------------------------------------------------- |
 | **File** | New: `supabase/migrations/012_transactional_payment.sql` |
 
 **Contents:**
@@ -475,8 +477,8 @@ $$ LANGUAGE plpgsql;
 
 > Review §28.3
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                                |
+| -------- | ---------------------------------------------------- |
 | **File** | New: `supabase/migrations/013_fy_sequence_reset.sql` |
 
 **What**: Modify `generate_invoice_number()` to reset the sequence to 1 when the financial year changes (April 1).
@@ -528,8 +530,8 @@ $$ LANGUAGE plpgsql;
 
 > Review §28.4
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                        |
+| -------- | -------------------------------------------- |
 | **File** | New: `supabase/migrations/014_audit_log.sql` |
 
 **Contents:**
@@ -591,8 +593,8 @@ CREATE POLICY "audit_read_only" ON audit_log FOR SELECT TO authenticated USING (
 
 > Review §30.5
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                                     |
+| -------- | --------------------------------------------------------- |
 | **File** | New: `supabase/migrations/015_low_stock_notification.sql` |
 
 **Contents:**
@@ -651,11 +653,12 @@ CREATE TRIGGER trg_notify_low_stock
 
 > Review §12
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                         |
+| -------- | ----------------------------- |
 | **File** | New: `src/errors/AppError.ts` |
 
 **Contents** (exact implementation from review §12):
+
 - `AppError` base class with `code`, `userMessage`, `cause`
 - `ValidationError` with `fieldErrors: Record<string, string[]>`
 - `NetworkError` wrapping underlying cause
@@ -677,9 +680,9 @@ export function toAppError(err: unknown): AppError {
 
 ### ✅ 2.2 — Create `src/errors/index.ts` barrel export
 
-| Detail | Value |
-|--------|-------|
-| **File** | New: `src/errors/index.ts` |
+| Detail       | Value                                                                                    |
+| ------------ | ---------------------------------------------------------------------------------------- |
+| **File**     | New: `src/errors/index.ts`                                                               |
 | **Contents** | Re-export everything from `AppError.ts` for clean imports: `export * from './AppError';` |
 
 ### ✅ 2.3 — Fix all type files to match new DB schema
@@ -691,12 +694,12 @@ export function toAppError(err: unknown): AppError {
 #### 2.3a — `src/types/common.ts`
 
 - Change `type UUID = string` to branded type:
-  ```typescript
-  declare const __brand: unique symbol;
-  type Brand<T, B extends string> = T & { readonly [__brand]: B };
-  export type UUID = Brand<string, 'UUID'>;
-  ```
-  (Note: Type-level code — indentation doesn't apply at top-level declarations.)
+    ```typescript
+    declare const __brand: unique symbol;
+    type Brand<T, B extends string> = T & { readonly [__brand]: B };
+    export type UUID = Brand<string, 'UUID'>;
+    ```
+    (Note: Type-level code — indentation doesn't apply at top-level declarations.)
 - Add helper: `export function toUUID(s: string): UUID { return s as UUID; }`
 - Verify `LoadingState`, `ApiError`, `PaginationState` are exported (they exist but are underused).
 
@@ -722,9 +725,9 @@ export function toAppError(err: unknown): AppError {
 #### 2.3e — `src/types/order.ts`
 
 - Replace `raw_llm_response: any` with:
-  ```typescript
-  raw_llm_response: Record<string, unknown> | null;
-  ```
+    ```typescript
+    raw_llm_response: Record<string, unknown> | null;
+    ```
 
 #### 2.3f — New: `src/types/businessProfile.ts`
 
@@ -741,18 +744,18 @@ export function toAppError(err: unknown): AppError {
 
 This is a file-by-file sweep. Each bullet is an atomic change:
 
-| File | Line(s) | Current | Fix |
-|------|---------|---------|-----|
-| `invoiceService.ts` | 36 | `data as any[]` | Type the select query: `.select('*, line_items:invoice_line_items(*)')` returns `Invoice & { line_items: InvoiceLineItem[] }`. Use a typed response. |
-| `inventoryStore.ts` | 19-20 | `createItem: (item: any)`, `updateItem: (id, updates: any)` | Change to `InventoryItemInsert` and `Partial<InventoryItemInsert>`. Create `InventoryItemInsert` type in `types/inventory.ts` if missing. |
-| `financeService.ts` | 75 | `(p.suppliers as any)?.name` | Create a typed join interface: `PurchaseWithSupplier = Purchase & { suppliers: { name: string } | null }`. Use it in the select. |
-| `orderService.ts` | 17 | `raw_llm_response: any` | Already fixed by 2.3e above. |
-| `invoiceStore.ts` | 87 | `require('./inventoryStore')` — untyped | Will be replaced entirely in Phase 4 (event bus). For now, add a `// @ts-expect-error — replaced in Phase 4` or convert to static import. |
-| `app/_layout.tsx` | 36 | `useTheme() as any` | Fix the `useTheme` return type in `ThemeProvider.tsx` to be properly typed (see Phase 6). |
-| `pdfService.ts` | 29 | `businessProfile: any` | Change to `BusinessProfile` (created in 2.3f). |
-| `pdfService.ts` | 7 | Dead `useLocale` import | Delete the import line. |
-| `Screen.tsx` | 61 | `contentProps as any` | Fix in Phase 7 (§14.2 — split into two branches). |
-| `invoices/create.tsx` | 39, 44, 115, 123, 131 | Multiple `any` casts | Will be replaced entirely in Phase 8 (screen decomposition). For now, add typed interfaces. |
+| File                  | Line(s)               | Current                                                     | Fix                                                                                                                                                  |
+| --------------------- | --------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `invoiceService.ts`   | 36                    | `data as any[]`                                             | Type the select query: `.select('*, line_items:invoice_line_items(*)')` returns `Invoice & { line_items: InvoiceLineItem[] }`. Use a typed response. |
+| `inventoryStore.ts`   | 19-20                 | `createItem: (item: any)`, `updateItem: (id, updates: any)` | Change to `InventoryItemInsert` and `Partial<InventoryItemInsert>`. Create `InventoryItemInsert` type in `types/inventory.ts` if missing.            |
+| `financeService.ts`   | 75                    | `(p.suppliers as any)?.name`                                | Create a typed join interface: `PurchaseWithSupplier = Purchase & { suppliers: { name: string }                                                      | null }`. Use it in the select. |
+| `orderService.ts`     | 17                    | `raw_llm_response: any`                                     | Already fixed by 2.3e above.                                                                                                                         |
+| `invoiceStore.ts`     | 87                    | `require('./inventoryStore')` — untyped                     | Will be replaced entirely in Phase 4 (event bus). For now, add a `// @ts-expect-error — replaced in Phase 4` or convert to static import.            |
+| `app/_layout.tsx`     | 36                    | `useTheme() as any`                                         | Fix the `useTheme` return type in `ThemeProvider.tsx` to be properly typed (see Phase 6).                                                            |
+| `pdfService.ts`       | 29                    | `businessProfile: any`                                      | Change to `BusinessProfile` (created in 2.3f).                                                                                                       |
+| `pdfService.ts`       | 7                     | Dead `useLocale` import                                     | Delete the import line.                                                                                                                              |
+| `Screen.tsx`          | 61                    | `contentProps as any`                                       | Fix in Phase 7 (§14.2 — split into two branches).                                                                                                    |
+| `invoices/create.tsx` | 39, 44, 115, 123, 131 | Multiple `any` casts                                        | Will be replaced entirely in Phase 8 (screen decomposition). For now, add typed interfaces.                                                          |
 
 ---
 
@@ -767,8 +770,8 @@ This is a file-by-file sweep. Each bullet is an atomic change:
 
 > Review §3, step 1
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                     |
+| -------- | ----------------------------------------- |
 | **File** | New: `src/repositories/baseRepository.ts` |
 
 **Implementation:**
@@ -806,16 +809,27 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 			}
 			return { data: (data ?? []) as T[], total: count ?? 0 };
 		},
-		async findById(id: UUID): Promise<T> { /* ... */ },
-		async create(payload: Partial<T>): Promise<T> { /* ... */ },
-		async update(id: UUID, payload: Partial<T>): Promise<T> { /* ... */ },
-		async remove(id: UUID): Promise<void> { /* ... */ },
-		async rpc<R>(fnName: string, params: Record<string, unknown>): Promise<R> { /* ... */ },
+		async findById(id: UUID): Promise<T> {
+			/* ... */
+		},
+		async create(payload: Partial<T>): Promise<T> {
+			/* ... */
+		},
+		async update(id: UUID, payload: Partial<T>): Promise<T> {
+			/* ... */
+		},
+		async remove(id: UUID): Promise<void> {
+			/* ... */
+		},
+		async rpc<R>(fnName: string, params: Record<string, unknown>): Promise<R> {
+			/* ... */
+		},
 	};
 }
 ```
 
 Include a private `applyFilters` function that handles:
+
 - `.ilike()` for search (with proper escaping of `%` and `_` — §10.1)
 - `.eq()` / `.gte()` / `.lte()` for exact/range filters
 - `.order()` for sorting
@@ -827,17 +841,17 @@ Include a private `applyFilters` function that handles:
 
 One file per domain, each extending the base:
 
-| File | Special Methods |
-|------|-----------------|
-| `src/repositories/invoiceRepository.ts` | `findWithLineItems(id)`, `createAtomic(invoice, lineItems)` (calls RPC from migration 011) |
-| `src/repositories/paymentRepository.ts` | `recordWithInvoiceUpdate(payment)` (calls RPC from migration 012) |
-| `src/repositories/inventoryRepository.ts` | `findLowStock()` (uses `low_stock_items` view — fixes §17.5), `performStockOp(...)` |
-| `src/repositories/customerRepository.ts` | `search(term)` — searches both `name` AND `phone` (fixes §customerService.ts:19) |
-| `src/repositories/financeRepository.ts` | `fetchProfitLoss(start, end)`, `fetchDashboardStats()` (calls existing RPCs) |
-| `src/repositories/orderRepository.ts` | `findDuplicates(designName)` — case-insensitive (fixes §orderService.ts:91-94) |
-| `src/repositories/supplierRepository.ts` | Base only. |
-| `src/repositories/expenseRepository.ts` | Base only. |
-| `src/repositories/notificationRepository.ts` | `markAsRead(id)`, `fetchUnread()`. |
+| File                                         | Special Methods                                                                            |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `src/repositories/invoiceRepository.ts`      | `findWithLineItems(id)`, `createAtomic(invoice, lineItems)` (calls RPC from migration 011) |
+| `src/repositories/paymentRepository.ts`      | `recordWithInvoiceUpdate(payment)` (calls RPC from migration 012)                          |
+| `src/repositories/inventoryRepository.ts`    | `findLowStock()` (uses `low_stock_items` view — fixes §17.5), `performStockOp(...)`        |
+| `src/repositories/customerRepository.ts`     | `search(term)` — searches both `name` AND `phone` (fixes §customerService.ts:19)           |
+| `src/repositories/financeRepository.ts`      | `fetchProfitLoss(start, end)`, `fetchDashboardStats()` (calls existing RPCs)               |
+| `src/repositories/orderRepository.ts`        | `findDuplicates(designName)` — case-insensitive (fixes §orderService.ts:91-94)             |
+| `src/repositories/supplierRepository.ts`     | Base only.                                                                                 |
+| `src/repositories/expenseRepository.ts`      | Base only.                                                                                 |
+| `src/repositories/notificationRepository.ts` | `markAsRead(id)`, `fetchUnread()`.                                                         |
 
 Also create: `src/repositories/index.ts` — barrel export.
 
@@ -875,6 +889,7 @@ export const invoiceService = createInvoiceService();
 ```
 
 **Key changes from current:**
+
 - All Supabase calls go through `repo`, not direct `supabase.from()`
 - The 4-step non-transactional flow is replaced by a single `repo.createAtomic()` call
 - The silent `console.error` on stock deduction failure is gone (the RPC transaction handles it)
@@ -928,20 +943,20 @@ export const invoiceService = createInvoiceService();
 > Review §30.2
 
 - Centralize all report-related RPC calls:
-  ```typescript
-  export const reportService = {
-    getDashboardStats: () => financeRepo.fetchDashboardStats(),
-    getProfitLoss: (start, end) => financeRepo.fetchProfitLoss(start, end),
-    getAgingReport: (customerId?) => financeRepo.fetchAgingReport(customerId),
-  };
-  ```
+    ```typescript
+    export const reportService = {
+    	getDashboardStats: () => financeRepo.fetchDashboardStats(),
+    	getProfitLoss: (start, end) => financeRepo.fetchProfitLoss(start, end),
+    	getAgingReport: (customerId?) => financeRepo.fetchAgingReport(customerId),
+    };
+    ```
 
 ### ✅ 3.4 — Create event bus for cross-store decoupling
 
 > Review §4.1
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                          |
+| -------- | ------------------------------ |
 | **File** | New: `src/events/appEvents.ts` |
 
 **Contents:**
@@ -983,11 +998,12 @@ export const eventBus = {
 
 > Review §4.2
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                     |
+| -------- | ----------------------------------------- |
 | **File** | New: `src/stores/createPaginatedStore.ts` |
 
 **Implementation** (from review §4.2):
+
 - Generic parameters: `<T, F extends Record<string, unknown>>`
 - Config: `fetchFn`, `defaultFilters`, `pageSize`
 - Built-in state: `items`, `totalCount`, `loading`, `error`, `filters`, `page`, `hasMore`, `initialized`
@@ -998,6 +1014,7 @@ export const eventBus = {
 ### ✅ 4.2 — Rewrite all stores using factory + event bus
 
 Each store conversion follows this pattern:
+
 1. Replace boilerplate with `createPaginatedStore()`
 2. Replace `require()` cross-store coupling with `eventBus.subscribe()`
 3. Replace `any` types with proper types
@@ -1196,39 +1213,39 @@ export function validateWith<T>(schema: ZodSchema<T>, data: unknown): T {
 
 > Review §16.1
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/theme/ThemeProvider.tsx` |
-| **Change** | Line 55: Replace `const theme = buildTheme(isDark);` with `const theme = useMemo(() => buildTheme(isDark), [isDark]);` |
+| Detail     | Value                                                                                                                         |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **File**   | `src/theme/ThemeProvider.tsx`                                                                                                 |
+| **Change** | Line 55: Replace `const theme = buildTheme(isDark);` with `const theme = useMemo(() => buildTheme(isDark), [isDark]);`        |
 | **Impact** | Highest single-line performance fix in the codebase. Eliminates unnecessary re-renders of every component using `useTheme()`. |
 
 ### ✅ 6.2 — Fix theme type exports
 
 > Review §16.2
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/theme/index.ts` |
+| Detail     | Value                                                                                                                                                              |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **File**   | `src/theme/index.ts`                                                                                                                                               |
 | **Change** | Replace `shadows: { sm: object; md: object; lg: object }` with `shadows: { sm: ViewStyle; md: ViewStyle; lg: ViewStyle }`. Import `ViewStyle` from `react-native`. |
 
 ### ✅ 6.3 — Extract static layout utilities from theme context
 
 > Review §16.3
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                      |
+| -------- | -------------------------- |
 | **File** | New: `src/theme/layout.ts` |
 
 ```typescript
 import { StyleSheet } from 'react-native';
 
 export const layout = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center' },
-  rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  rowEnd: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' },
-  center: { alignItems: 'center', justifyContent: 'center' },
-  flex: { flex: 1 },
-  absoluteFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
+	row: { flexDirection: 'row', alignItems: 'center' },
+	rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+	rowEnd: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' },
+	center: { alignItems: 'center', justifyContent: 'center' },
+	flex: { flex: 1 },
+	absoluteFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
 });
 ```
 
@@ -1240,37 +1257,37 @@ Then remove `layout` from the theme context object in `colors.ts` (lines 135-141
 
 > Review §5.1 — `app/_layout.tsx:36` uses `useTheme() as any`
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/theme/ThemeProvider.tsx` |
+| Detail   | Value                                                                                                                                                                                                                       |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File** | `src/theme/ThemeProvider.tsx`                                                                                                                                                                                               |
 | **What** | Ensure the `ThemeContext` is typed with the full `Theme` interface, so `useTheme()` returns `{ theme: Theme; isDark: boolean; toggleTheme: () => void; setThemeMode: (mode: ThemeMode) => void }` without needing `as any`. |
-| **Then** | Remove `as any` from `app/_layout.tsx:36`. |
+| **Then** | Remove `as any` from `app/_layout.tsx:36`.                                                                                                                                                                                  |
 
 ### ✅ 6.5 — Fix `currency.ts` — negative zero bug
 
 > Review §17.1
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/utils/currency.ts` |
+| Detail     | Value                                                                                                                                               |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**   | `src/utils/currency.ts`                                                                                                                             |
 | **Change** | Line 18: Replace `const sign = num < 0 ? '-' : '';` with `const sign = amount < 0 ? '-' : '';` (use original `amount` parameter, not parsed `num`). |
 
 ### ✅ 6.6 — Create `escapeHtml` utility
 
 > Review §18.1
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                    |
+| -------- | ------------------------ |
 | **File** | New: `src/utils/html.ts` |
 
 ```typescript
 export function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+	return str
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;');
 }
 ```
 
@@ -1278,18 +1295,18 @@ export function escapeHtml(str: string): string {
 
 > Review §14.4
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                     |
+| -------- | ------------------------- |
 | **File** | New: `src/utils/color.ts` |
 
 ```typescript
 export function withOpacity(hexColor: string, opacity: number): string {
-  // Parse 3, 4, 6, or 8 char hex → rgba
-  const hex = hexColor.replace('#', '');
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+	// Parse 3, 4, 6, or 8 char hex → rgba
+	const hex = hexColor.replace('#', '');
+	const r = parseInt(hex.substring(0, 2), 16);
+	const g = parseInt(hex.substring(2, 4), 16);
+	const b = parseInt(hex.substring(4, 6), 16);
+	return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 ```
 
@@ -1299,11 +1316,11 @@ Then replace all `color + '20'` string concatenation across the codebase (~8 loc
 
 > Review §17.4
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/utils/dateUtils.ts` |
+| Detail     | Value                                                                                                                                                          |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**   | `src/utils/dateUtils.ts`                                                                                                                                       |
 | **Change** | Lines 18-19: Replace hardcoded `'Today'` and `'Yesterday'` with `i18n.t('common.today')` and `i18n.t('common.yesterday')`. Import `i18n` from the i18n config. |
-| **Also** | Add `'common.today'` and `'common.yesterday'` keys to `src/i18n/locales/en.json` and `hi.json`. |
+| **Also**   | Add `'common.today'` and `'common.yesterday'` keys to `src/i18n/locales/en.json` and `hi.json`.                                                                |
 
 ### ✅ 6.9 — Create shared hooks
 
@@ -1313,12 +1330,12 @@ Then replace all `color + '20'` string concatenation across the codebase (~8 loc
 
 ```typescript
 export function useDebounce<T>(value: T, delay = 300): T {
-  const [debounced, setDebounced] = useState(value);
-  useEffect(() => {
-    const timer = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-  return debounced;
+	const [debounced, setDebounced] = useState(value);
+	useEffect(() => {
+		const timer = setTimeout(() => setDebounced(value), delay);
+		return () => clearTimeout(timer);
+	}, [value, delay]);
+	return debounced;
 }
 ```
 
@@ -1326,12 +1343,16 @@ export function useDebounce<T>(value: T, delay = 300): T {
 
 ```typescript
 export function useThemeTokens() {
-  const { theme, isDark } = useTheme();
-  return {
-    theme, isDark,
-    c: theme.colors, s: theme.spacing, r: theme.borderRadius, typo: theme.typography,
-    shadows: theme.shadows,
-  };
+	const { theme, isDark } = useTheme();
+	return {
+		theme,
+		isDark,
+		c: theme.colors,
+		s: theme.spacing,
+		r: theme.borderRadius,
+		typo: theme.typography,
+		shadows: theme.shadows,
+	};
 }
 ```
 
@@ -1347,9 +1368,9 @@ Prevents accidental back navigation when there are unsaved form changes. Uses `b
 
 > Review §17.2, §18.4
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/services/pdfService.ts` |
+| Detail    | Value                                                                                                                                                                                                                                                                                                     |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**  | `src/services/pdfService.ts`                                                                                                                                                                                                                                                                              |
 | **Steps** | 1. Delete the stub `convertNumberToWords` function (lines 289-291). 2. Add `import { numberToIndianWords } from '../utils/currency';` 3. Replace all calls to `convertNumberToWords(amount)` with `numberToIndianWords(amount)`. 4. Apply `escapeHtml()` to all interpolated values in the HTML template. |
 
 ### ✅ 6.11 — Create `src/config/featureFlags.ts`
@@ -1358,11 +1379,11 @@ Prevents accidental back navigation when there are unsaved form changes. Uses `b
 
 ```typescript
 export const Features = {
-  PURCHASE_RETURNS: false,
-  AI_ORDER_PARSING: true,
-  MULTI_WAREHOUSE: false,
-  GST_E_INVOICE: false,
-  NOTIFICATIONS: true,
+	PURCHASE_RETURNS: false,
+	AI_ORDER_PARSING: true,
+	MULTI_WAREHOUSE: false,
+	GST_E_INVOICE: false,
+	NOTIFICATIONS: true,
 } as const;
 ```
 
@@ -1379,51 +1400,51 @@ export const Features = {
 
 > Review §14.1
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/components/atoms/TextInput.tsx` |
+| Detail     | Value                                                                                                                                                                                                                                           |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**   | `src/components/atoms/TextInput.tsx`                                                                                                                                                                                                            |
 | **Change** | Line 30: Replace `const isFocused = false;` with proper state tracking: `const [isFocused, setIsFocused] = useState(false);`. Wire `onFocus` and `onBlur` props to `setIsFocused(true)` / `setIsFocused(false)`, forwarding original callbacks. |
 
 ### ✅ 7.2 — Fix `Screen.tsx` — remove `as any`
 
 > Review §14.2
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/components/atoms/Screen.tsx` |
+| Detail     | Value                                                                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **File**   | `src/components/atoms/Screen.tsx`                                                                                                          |
 | **Change** | Line 61: Replace conditional content component with two explicit branches — one `ScrollView` path and one `View` path. No `as any` needed. |
 
 ### ✅ 7.3 — Fix `Button.tsx` — add accessibility
 
 > Review §14.3
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/components/atoms/Button.tsx` |
-| **Add** | `accessibilityRole="button"`, `accessibilityLabel={title}`, `accessibilityState={{ disabled: isDisabled, busy: loading }}` to the `TouchableOpacity`. |
+| Detail   | Value                                                                                                                                                 |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File** | `src/components/atoms/Button.tsx`                                                                                                                     |
+| **Add**  | `accessibilityRole="button"`, `accessibilityLabel={title}`, `accessibilityState={{ disabled: isDisabled, busy: loading }}` to the `TouchableOpacity`. |
 
 ### ✅ 7.4 — Fix `Badge.tsx` — replace color string concatenation
 
 > Review §14.4
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/components/atoms/Badge.tsx` |
+| Detail     | Value                                                                                                           |
+| ---------- | --------------------------------------------------------------------------------------------------------------- |
+| **File**   | `src/components/atoms/Badge.tsx`                                                                                |
 | **Change** | Replace all `c.primary + '20'` patterns with `withOpacity(c.primary, 0.12)` (import from `src/utils/color.ts`). |
 
 ### ✅ 7.5 — Fix `Chip.tsx` — add accessibility
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/components/atoms/Chip.tsx` |
-| **Add** | `accessibilityRole="togglebutton"`, `accessibilityState={{ selected }}` |
+| Detail   | Value                                                                   |
+| -------- | ----------------------------------------------------------------------- |
+| **File** | `src/components/atoms/Chip.tsx`                                         |
+| **Add**  | `accessibilityRole="togglebutton"`, `accessibilityState={{ selected }}` |
 
 ### ✅ 7.6 — Create `QueryBoundary` component
 
 > Review §8.3
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                         |
+| -------- | --------------------------------------------- |
 | **File** | New: `src/components/atoms/QueryBoundary.tsx` |
 
 ```typescript
@@ -1449,8 +1470,8 @@ export function QueryBoundary({ loading, error, empty, children, onRetry, emptyS
 
 > Review §25.2
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                         |
+| -------- | --------------------------------------------- |
 | **File** | New: `src/components/atoms/ErrorBoundary.tsx` |
 
 Class component implementing `componentDidCatch`. Shows a fallback UI with error message and "Try Again" button. Logs the error to the logger (Phase 10).
@@ -1459,27 +1480,27 @@ Class component implementing `componentDidCatch`. Shows a fallback UI with error
 
 > Review §14.5, §21.2
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/components/organisms/PaymentModal.tsx` |
+| Detail      | Value                                                                                                                                                                                                                                                                                                                       |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**    | `src/components/organisms/PaymentModal.tsx`                                                                                                                                                                                                                                                                                 |
 | **Changes** | 1. Lines 57-58: Replace `console.error(e)` with `Alert.alert('Payment Failed', e instanceof Error ? e.message : 'An unexpected error occurred')`. 2. Line 64: Add `'credit'` to payment mode options (derive from `PAYMENT_MODES` constant). 3. Remove unused StyleSheet keys `title`, `subtitle`, `label` (lines 155-170). |
 
 ### ✅ 7.9 — Fix `DashboardHeader.tsx` — locale-aware date
 
 > Review §14.6
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/components/organisms/DashboardHeader.tsx` |
+| Detail     | Value                                                                                        |
+| ---------- | -------------------------------------------------------------------------------------------- |
+| **File**   | `src/components/organisms/DashboardHeader.tsx`                                               |
 | **Change** | Line 19: Replace hardcoded `'hi-IN'` with dynamic locale from `useLocale().currentLanguage`. |
 
 ### ✅ 7.10 — Fix `QuickActionsGrid.tsx` — remove dead styles
 
 > Review §14.8
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/components/organisms/QuickActionsGrid.tsx` |
+| Detail     | Value                                                                                                                                                                |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**   | `src/components/organisms/QuickActionsGrid.tsx`                                                                                                                      |
 | **Change** | Delete empty unused StyleSheet keys: `section`, `sectionTitle`, `actionBtn`, `actionIcon`, `actionLabel` (lines 63-69). Replace `color + '20'` with `withOpacity()`. |
 
 ### ✅ 7.11 — Add accessibility to all interactive molecules/organisms
@@ -1488,12 +1509,12 @@ Class component implementing `componentDidCatch`. Shows a fallback UI with error
 
 For each file, add appropriate `accessibilityRole`, `accessibilityLabel`, and `accessibilityState`:
 
-| Component | accessibilityRole |
-|-----------|-------------------|
-| `ListItem.tsx` | `"button"` |
-| `StatCard.tsx` | `"summary"` |
-| `SearchBar.tsx` | already handled by TextInput inside it |
-| `TileSetCard.tsx` | `"button"` (if pressable) |
+| Component         | accessibilityRole                      |
+| ----------------- | -------------------------------------- |
+| `ListItem.tsx`    | `"button"`                             |
+| `StatCard.tsx`    | `"summary"`                            |
+| `SearchBar.tsx`   | already handled by TextInput inside it |
+| `TileSetCard.tsx` | `"button"` (if pressable)              |
 
 ---
 
@@ -1510,19 +1531,20 @@ For each file, add appropriate `accessibilityRole`, `accessibilityLabel`, and `a
 
 This is the largest single refactor. Create a feature module:
 
-| File | Purpose | What it extracts from the god screen |
-|------|---------|--------------------------------------|
-| `src/features/invoice-create/schemas.ts` | Zod schemas for all 3 steps | Line item validation, customer validation, payment validation |
-| `src/features/invoice-create/useInvoiceCreateFlow.ts` | State machine: step navigation, submission orchestration | `step` state, `handleNext`, `handleBack`, `handleSubmit` |
-| `src/features/invoice-create/useCustomerStep.ts` | Customer search/selection + form state | Lines ~100-140 (customer `useState`, `as any` casts) |
-| `src/features/invoice-create/useLineItemsStep.ts` | Line item CRUD, inventory search (debounced), item selection | Lines ~40-80 (`searchQuery`, `selectedItem`, `inputQuantity`, `inputDiscount`, `isAddingItem` — all `useState` hooks) |
-| `src/features/invoice-create/usePaymentStep.ts` | Payment mode, amount, status derivation | Lines ~35-40 (`amountPaid`, `paymentMode`) |
-| `src/features/invoice-create/CustomerStep.tsx` | Pure UI for step 1 | JSX from `{step === 1 && ...}` block |
-| `src/features/invoice-create/LineItemsStep.tsx` | Pure UI for step 2 | JSX from `{step === 2 && ...}` block |
-| `src/features/invoice-create/PaymentStep.tsx` | Pure UI for step 3 | JSX from `{step === 3 && ...}` block |
-| `src/features/invoice-create/InvoiceCreateScreen.tsx` | Thin orchestrator (~40 lines) | Wires hooks to step components |
+| File                                                  | Purpose                                                      | What it extracts from the god screen                                                                                  |
+| ----------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `src/features/invoice-create/schemas.ts`              | Zod schemas for all 3 steps                                  | Line item validation, customer validation, payment validation                                                         |
+| `src/features/invoice-create/useInvoiceCreateFlow.ts` | State machine: step navigation, submission orchestration     | `step` state, `handleNext`, `handleBack`, `handleSubmit`                                                              |
+| `src/features/invoice-create/useCustomerStep.ts`      | Customer search/selection + form state                       | Lines ~100-140 (customer `useState`, `as any` casts)                                                                  |
+| `src/features/invoice-create/useLineItemsStep.ts`     | Line item CRUD, inventory search (debounced), item selection | Lines ~40-80 (`searchQuery`, `selectedItem`, `inputQuantity`, `inputDiscount`, `isAddingItem` — all `useState` hooks) |
+| `src/features/invoice-create/usePaymentStep.ts`       | Payment mode, amount, status derivation                      | Lines ~35-40 (`amountPaid`, `paymentMode`)                                                                            |
+| `src/features/invoice-create/CustomerStep.tsx`        | Pure UI for step 1                                           | JSX from `{step === 1 && ...}` block                                                                                  |
+| `src/features/invoice-create/LineItemsStep.tsx`       | Pure UI for step 2                                           | JSX from `{step === 2 && ...}` block                                                                                  |
+| `src/features/invoice-create/PaymentStep.tsx`         | Pure UI for step 3                                           | JSX from `{step === 3 && ...}` block                                                                                  |
+| `src/features/invoice-create/InvoiceCreateScreen.tsx` | Thin orchestrator (~40 lines)                                | Wires hooks to step components                                                                                        |
 
 **Specific bugs fixed by this decomposition:**
+
 - Line 39: `paymentMode` typed as `any` → properly typed in `usePaymentStep`
 - Line 44: `selectedItem` typed as `any` → typed as `InventoryItem | null` in `useLineItemsStep`
 - Lines 115, 123, 131: `as any` casts → proper typed customer state
@@ -1531,6 +1553,7 @@ This is the largest single refactor. Create a feature module:
 - Manual setTimeout debounce → `useDebounce` hook
 
 **Then**: Update `app/(app)/invoices/create.tsx` to:
+
 ```typescript
 export { default } from '@/src/features/invoice-create/InvoiceCreateScreen';
 ```
@@ -1539,126 +1562,126 @@ export { default } from '@/src/features/invoice-create/InvoiceCreateScreen';
 
 > Review §15.3
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/(app)/(tabs)/index.tsx` |
+| Detail     | Value                                                                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **File**   | `app/(app)/(tabs)/index.tsx`                                                                                                                                             |
 | **Change** | Remove client-side `useMemo` aggregation on lines 42-58. Replace with `useDashboardStore()` (created in Phase 4.3) which calls the existing `get_dashboard_stats()` RPC. |
 
 ### ✅ 8.3 — Fix `(tabs)/inventory.tsx`
 
 > Review §15.2, §21.1
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/(app)/(tabs)/inventory.tsx` |
+| Detail      | Value                                                                                                                                                                                                                                                                                                                                                                                |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **File**    | `app/(app)/(tabs)/inventory.tsx`                                                                                                                                                                                                                                                                                                                                                     |
 | **Changes** | 1. Line 15: Replace hardcoded `CATEGORIES` array with derived list from `TILE_CATEGORIES` constant (adds missing 'SATIN'). 2. Line 91: Replace hardcoded English fallback string with `t('inventory.emptyFilterHint')`. 3. Line 213: Remove empty unused `header` StyleSheet key. 4. Replace `theme.layout.X` with imported `layout.X`. 5. Replace 4-space indentation with 2-space. |
 
 ### ✅ 8.4 — Fix `(tabs)/more.tsx` and `_layout.tsx`
 
 > Review §15.4
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/(app)/(tabs)/_layout.tsx` |
+| Detail     | Value                                                                                          |
+| ---------- | ---------------------------------------------------------------------------------------------- |
+| **File**   | `app/(app)/(tabs)/_layout.tsx`                                                                 |
 | **Change** | Line 75: Replace hardcoded `'More'` with `t('tabs.more')`. Add key to `en.json` and `hi.json`. |
 
 ### ✅ 8.5 — Fix `app/_layout.tsx`
 
 > Review §5.1
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/_layout.tsx` |
+| Detail      | Value                                                                                                                                                       |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**    | `app/_layout.tsx`                                                                                                                                           |
 | **Changes** | 1. Line 2: Remove duplicate `useCallback` import. 2. Line 36: Remove `as any` (fixed by Phase 6.4). 3. Wrap app in `<ErrorBoundary>` component (Phase 7.7). |
 
 ### ✅ 8.6 — Fix `app/(app)/_layout.tsx` — prefetch strategy
 
 > Review §19.1, §24.3
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/(app)/_layout.tsx` |
+| Detail      | Value                                                                                                                                                                                                                                                                                                                                                            |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**    | `app/(app)/_layout.tsx`                                                                                                                                                                                                                                                                                                                                          |
 | **Changes** | 1. Replace `Promise.all` with `Promise.allSettled`. 2. Add per-domain error state tracking. 3. Prioritize critical path (dashboard stats, inventory) over deferred data (finance, orders). 4. Batch `financeStore.fetchExpenses/Purchases/Summary` into single `financeStore.initialize()`. 5. Add `AppState` listener for refresh-on-foreground (§19.1 fix #3). |
 
 ### ✅ 8.7 — Fix `(auth)/login.tsx`
 
 > Review §login.tsx analysis
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/(auth)/login.tsx` |
+| Detail      | Value                                                                                                                                                       |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**    | `app/(auth)/login.tsx`                                                                                                                                      |
 | **Changes** | 1. Add basic email format validation before submit. 2. Wire react-hook-form + Zod schema (from 5.1). 3. Replace `catch (e: any)` with typed error handling. |
 
 ### ✅ 8.8 — Fix `(auth)/setup.tsx` — move Supabase call to service layer
 
 > Review §setup.tsx analysis
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/(auth)/setup.tsx` |
+| Detail     | Value                                                                                                                                                          |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**   | `app/(auth)/setup.tsx`                                                                                                                                         |
 | **Change** | Line 51: Replace direct `supabase.from('business_profile').upsert()` call with `businessProfileService.upsert()`. Wire react-hook-form + Zod schema from 5.1f. |
 
 ### ✅ 8.9 — Fix `finance/expenses.tsx` — form validation
 
 > Review §8.2
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/(app)/finance/expenses.tsx` |
+| Detail      | Value                                                                                                                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**    | `app/(app)/finance/expenses.tsx`                                                                                                                                                      |
 | **Changes** | 1. Lines 37-39: Replace `parseFloat(amount)` without validation with Zod schema from 5.1c. 2. Replace freeform text category input with a picker using `EXPENSE_CATEGORIES` constant. |
 
 ### ✅ 8.10 — Add `RefreshControl` to screens missing it
 
 > Review §20.4
 
-| Files | `customers/index.tsx`, `finance/index.tsx`, `orders/index.tsx`, `finance/payments.tsx`, `finance/purchases.tsx` |
-|-------|---|
+| Files      | `customers/index.tsx`, `finance/index.tsx`, `orders/index.tsx`, `finance/payments.tsx`, `finance/purchases.tsx`                         |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **Change** | Wrap list in `FlatList` (or `FlashList`) with `refreshControl={<RefreshControl refreshing={loading} onRefresh={() => fetch(true)} />}`. |
 
 ### ✅ 8.11 — Add `keyboardDismissMode` to scroll views
 
 > Review §20.5
 
-| Detail | Value |
-|--------|-------|
-| **Files** | All screens with `ScrollView` and text inputs |
+| Detail     | Value                                                           |
+| ---------- | --------------------------------------------------------------- |
+| **Files**  | All screens with `ScrollView` and text inputs                   |
 | **Change** | Add `keyboardDismissMode="on-drag"` to `ScrollView` components. |
 
 ### ⬜ 8.12 — Replace `ScrollView` + `.map()` with `FlashList`
 
 > Review §26.1
 
-| Detail | Value |
-|--------|-------|
-| **Install** | `npx expo install @shopify/flash-list` |
-| **Files** | `expenses.tsx`, `customers/index.tsx`, `orders/index.tsx`, `finance/payments.tsx`, `finance/purchases.tsx`, any other list screen using `ScrollView` + `.map()` |
-| **Change** | Replace with `<FlashList data={items} renderItem={...} estimatedItemSize={80} />` |
+| Detail      | Value                                                                                                                                                           |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Install** | `npx expo install @shopify/flash-list`                                                                                                                          |
+| **Files**   | `expenses.tsx`, `customers/index.tsx`, `orders/index.tsx`, `finance/payments.tsx`, `finance/purchases.tsx`, any other list screen using `ScrollView` + `.map()` |
+| **Change**  | Replace with `<FlashList data={items} renderItem={...} estimatedItemSize={80} />`                                                                               |
 
 ### ✅ 8.13 — Replace bare `useXStore()` with slice selectors
 
 > Review §26.3
 
-| Detail | Value |
-|--------|-------|
-| **Files** | Every screen file that calls a store hook |
+| Detail     | Value                                                                                                                                                                                                                                |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Files**  | Every screen file that calls a store hook                                                                                                                                                                                            |
 | **Change** | Replace `const { items, loading, error } = useInventoryStore();` with individual selectors: `const items = useInventoryStore(s => s.items);` etc. Or use `useShallow` from `zustand/react/shallow` for multi-property subscriptions. |
 
 ### ✅ 8.14 — Replace `useTheme()` + manual destructuring with `useThemeTokens()`
 
 > Review §15.6
 
-| Detail | Value |
-|--------|-------|
-| **Files** | All ~20 screen files that have the 4-line boilerplate pattern |
+| Detail     | Value                                                                                                                                                                       |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Files**  | All ~20 screen files that have the 4-line boilerplate pattern                                                                                                               |
 | **Change** | Replace: `const { theme } = useTheme(); const c = theme.colors; const s = theme.spacing; const r = theme.borderRadius;` with: `const { c, s, r, typo } = useThemeTokens();` |
 
 ### 🔧 8.15 — Audit and fix all remaining hardcoded i18n strings
 
 > Review §13.1, §13.2
 
-| Detail | Value |
-|--------|-------|
-| **What** | Grep for English strings in all `.tsx` files that are user-visible. Add missing keys to `en.json` and `hi.json`. |
+| Detail          | Value                                                                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **What**        | Grep for English strings in all `.tsx` files that are user-visible. Add missing keys to `en.json` and `hi.json`.                              |
 | **Key targets** | `invoiceService.ts:130` ("Invoice #..."), `orderService.ts:103` ("Imported from Order..."), all `Alert.alert()` calls with hardcoded strings. |
 
 ---
@@ -1674,54 +1697,54 @@ export { default } from '@/src/features/invoice-create/InvoiceCreateScreen';
 
 > Review §27.1
 
-| Detail | Value |
-|--------|-------|
-| **File** | `supabase/functions/parse-order-pdf/index.ts` |
-| **Change** | Line 55: Remove `aiKey` from the destructured request body. Line 61: Change `const geminiKey = aiKey || Deno.env.get('GEMINI_API_KEY');` to `const geminiKey = Deno.env.get('GEMINI_API_KEY');`. |
+| Detail     | Value                                                                                                |
+| ---------- | ---------------------------------------------------------------------------------------------------- | --- | -------------------------------------------------------------------------------------- |
+| **File**   | `supabase/functions/parse-order-pdf/index.ts`                                                        |
+| **Change** | Line 55: Remove `aiKey` from the destructured request body. Line 61: Change `const geminiKey = aiKey |     | Deno.env.get('GEMINI_API_KEY');`to`const geminiKey = Deno.env.get('GEMINI_API_KEY');`. |
 
 ### ✅ 9.2 — Add input validation to Edge Function
 
 > Review §27.4
 
-| Detail | Value |
-|--------|-------|
-| **File** | `supabase/functions/parse-order-pdf/index.ts` |
+| Detail                | Value                                                                                                                                                                                                                                                      |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**              | `supabase/functions/parse-order-pdf/index.ts`                                                                                                                                                                                                              |
 | **Add after line 57** | Size check: `if (base64Data.length > 10_000_000) return errorResponse('File too large (max 7.5MB)', 413);`. MIME type check: `if (!['application/pdf', 'image/png', 'image/jpeg'].includes(mimeType)) return errorResponse('Unsupported file type', 415);` |
 
 ### ✅ 9.3 — Add request timeout to Gemini API call
 
 > Review §24.4
 
-| Detail | Value |
-|--------|-------|
-| **File** | `supabase/functions/parse-order-pdf/index.ts` |
+| Detail     | Value                                                                   |
+| ---------- | ----------------------------------------------------------------------- |
+| **File**   | `supabase/functions/parse-order-pdf/index.ts`                           |
 | **Change** | Wrap the `fetch()` call with `AbortController` and a 30-second timeout. |
 
 ### ✅ 9.4 — Restrict CORS
 
 > Review §27.2
 
-| Detail | Value |
-|--------|-------|
-| **File** | `supabase/functions/parse-order-pdf/index.ts` |
+| Detail     | Value                                                                                                                            |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **File**   | `supabase/functions/parse-order-pdf/index.ts`                                                                                    |
 | **Change** | Line 9: Replace `'Access-Control-Allow-Origin': '*'` with `'Access-Control-Allow-Origin': Deno.env.get('ALLOWED_ORIGIN') ?? ''`. |
 
 ### ✅ 9.5 — Upgrade to modern `Deno.serve`
 
 > Review §29.3
 
-| Detail | Value |
-|--------|-------|
-| **File** | `supabase/functions/parse-order-pdf/index.ts` |
+| Detail      | Value                                                                                                                                                                                                                                                                                                                                                      |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**    | `supabase/functions/parse-order-pdf/index.ts`                                                                                                                                                                                                                                                                                                              |
 | **Changes** | 1. Remove `import { serve } from "https://deno.land/std@0.177.0/http/server.ts";`. 2. Replace `serve(async (req: any) => { ... })` with `Deno.serve(async (req: Request) => { ... })`. 3. Remove `declare var Deno: any` (line 6). 4. Update Supabase client import to use `npm:` specifier: `import { createClient } from 'npm:@supabase/supabase-js@2';` |
 
 ### ✅ 9.6 — Add request ID for log correlation
 
 > Review §25.4
 
-| Detail | Value |
-|--------|-------|
-| **File** | `supabase/functions/parse-order-pdf/index.ts` |
+| Detail      | Value                                                                                                                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **File**    | `supabase/functions/parse-order-pdf/index.ts`                                                                                                                                                    |
 | **Changes** | 1. Read `x-request-id` header from the request (or generate one). 2. Include it in all `console.error` / `console.log` calls. 3. Return it in error response bodies for client-side correlation. |
 
 ---
@@ -1737,25 +1760,31 @@ export { default } from '@/src/features/invoice-create/InvoiceCreateScreen';
 
 > Review §25.1
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                      |
+| -------- | -------------------------- |
 | **File** | New: `src/utils/logger.ts` |
 
 ```typescript
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LogMeta {
-  [key: string]: unknown;
+	[key: string]: unknown;
 }
 
 const logger = {
-  debug(msg: string, meta?: LogMeta) { if (__DEV__) console.debug(`[DEBUG] ${msg}`, meta); },
-  info(msg: string, meta?: LogMeta) { if (__DEV__) console.info(`[INFO] ${msg}`, meta); },
-  warn(msg: string, meta?: LogMeta) { console.warn(`[WARN] ${msg}`, meta); },
-  error(msg: string, error?: Error, meta?: LogMeta) {
-    console.error(`[ERROR] ${msg}`, error, meta);
-    // TODO: Wire to Sentry/Datadog when ready
-  },
+	debug(msg: string, meta?: LogMeta) {
+		if (__DEV__) console.debug(`[DEBUG] ${msg}`, meta);
+	},
+	info(msg: string, meta?: LogMeta) {
+		if (__DEV__) console.info(`[INFO] ${msg}`, meta);
+	},
+	warn(msg: string, meta?: LogMeta) {
+		console.warn(`[WARN] ${msg}`, meta);
+	},
+	error(msg: string, error?: Error, meta?: LogMeta) {
+		console.error(`[ERROR] ${msg}`, error, meta);
+		// TODO: Wire to Sentry/Datadog when ready
+	},
 };
 
 export default logger;
@@ -1767,30 +1796,30 @@ Then: Replace every `console.error`, `console.warn`, `console.log` across the co
 
 > Review §24.1
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                     |
+| -------- | ------------------------- |
 | **File** | New: `src/utils/retry.ts` |
 
 ```typescript
 interface RetryOptions {
-  maxAttempts?: number;
-  baseDelay?: number;
-  shouldRetry?: (error: unknown) => boolean;
+	maxAttempts?: number;
+	baseDelay?: number;
+	shouldRetry?: (error: unknown) => boolean;
 }
 
 export async function withRetry<T>(
-  fn: () => Promise<T>,
-  { maxAttempts = 3, baseDelay = 1000, shouldRetry = () => true }: RetryOptions = {},
+	fn: () => Promise<T>,
+	{ maxAttempts = 3, baseDelay = 1000, shouldRetry = () => true }: RetryOptions = {},
 ): Promise<T> {
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    try {
-      return await fn();
-    } catch (e) {
-      if (attempt === maxAttempts || !shouldRetry(e)) throw e;
-      await new Promise(r => setTimeout(r, baseDelay * 2 ** (attempt - 1)));
-    }
-  }
-  throw new Error('Unreachable');
+	for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+		try {
+			return await fn();
+		} catch (e) {
+			if (attempt === maxAttempts || !shouldRetry(e)) throw e;
+			await new Promise((r) => setTimeout(r, baseDelay * 2 ** (attempt - 1)));
+		}
+	}
+	throw new Error('Unreachable');
 }
 ```
 
@@ -1800,39 +1829,40 @@ Wire into repository `findMany` and `findById` methods (read operations only —
 
 > Review §25.2
 
-| Detail | Value |
-|--------|-------|
-| **File** | `app/_layout.tsx` |
+| Detail     | Value                                                                                              |
+| ---------- | -------------------------------------------------------------------------------------------------- |
+| **File**   | `app/_layout.tsx`                                                                                  |
 | **Change** | Wrap the `<Stack>` in `<ErrorBoundary>`. Add per-tab boundaries in `app/(app)/(tabs)/_layout.tsx`. |
 
 ### ✅ 10.4 — Add network status detection + offline banner
 
 > Review §24.2
 
-| Detail | Value |
-|--------|-------|
-| **Install** | `npx expo install @react-native-community/netinfo` |
-| **File** | New: `src/hooks/useNetworkStatus.ts` |
-| **File** | New: `src/components/atoms/OfflineBanner.tsx` |
-| **Wire** | Add `<OfflineBanner />` to `app/(app)/_layout.tsx` above the `<Stack>`. |
+| Detail      | Value                                                                   |
+| ----------- | ----------------------------------------------------------------------- |
+| **Install** | `npx expo install @react-native-community/netinfo`                      |
+| **File**    | New: `src/hooks/useNetworkStatus.ts`                                    |
+| **File**    | New: `src/components/atoms/OfflineBanner.tsx`                           |
+| **Wire**    | Add `<OfflineBanner />` to `app/(app)/_layout.tsx` above the `<Stack>`. |
 
 ### ✅ 10.5 — Add session expiry handling
 
 > Review §27.5
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/stores/authStore.ts` (or `app/_layout.tsx`) |
-| **Add** | `supabase.auth.onAuthStateChange` listener that: (a) on `TOKEN_REFRESHED` with null session → force logout. (b) on `SIGNED_OUT` → navigate to login. (c) Log events to structured logger. |
+| Detail   | Value                                                                                                                                                                                     |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File** | `src/stores/authStore.ts` (or `app/_layout.tsx`)                                                                                                                                          |
+| **Add**  | `supabase.auth.onAuthStateChange` listener that: (a) on `TOKEN_REFRESHED` with null session → force logout. (b) on `SIGNED_OUT` → navigate to login. (c) Log events to structured logger. |
 
 ### ✅ 10.6 — Add performance instrumentation on critical paths
 
 > Review §25.3
 
-| Detail | Value |
-|--------|-------|
-| **File** | `src/repositories/baseRepository.ts` |
-| **Change** | Wrap every query method with timing:
+| Detail     | Value                                |
+| ---------- | ------------------------------------ |
+| **File**   | `src/repositories/baseRepository.ts` |
+| **Change** | Wrap every query method with timing: |
+
 ```typescript
 const start = performance.now();
 const result = await query;
@@ -1852,15 +1882,15 @@ logger.info('db_query', { table: tableName, duration_ms: Math.round(performance.
 
 > Review §7.4
 
-| File | Test File | Key Cases |
-|------|-----------|-----------|
-| `currency.ts` | `currency.test.ts` | Negative zero bug (verify fix), lakhs/crores formatting, `numberToIndianWords` for 0, 1, 100000, boundary values |
-| `dateUtils.ts` | `dateUtils.test.ts` | FY boundary (March 31 vs April 1), leap year, timezone, `formatRelativeDate` i18n |
-| `itemNameParser.ts` | `itemNameParser.test.ts` | Various suffix patterns, edge cases matching the PostgreSQL regex |
-| `gstCalculator.ts` | Expand existing | 0% rate, 100% discount, floating point precision, inter-state vs intra-state |
-| `html.ts` | `html.test.ts` | `escapeHtml` with `<script>`, `&`, quotes, empty string |
-| `color.ts` | `color.test.ts` | `withOpacity` for 3-char hex, 6-char hex, edge values |
-| `retry.ts` | `retry.test.ts` | Success on first try, success on retry, max attempts exceeded, `shouldRetry` false |
+| File                | Test File                | Key Cases                                                                                                        |
+| ------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `currency.ts`       | `currency.test.ts`       | Negative zero bug (verify fix), lakhs/crores formatting, `numberToIndianWords` for 0, 1, 100000, boundary values |
+| `dateUtils.ts`      | `dateUtils.test.ts`      | FY boundary (March 31 vs April 1), leap year, timezone, `formatRelativeDate` i18n                                |
+| `itemNameParser.ts` | `itemNameParser.test.ts` | Various suffix patterns, edge cases matching the PostgreSQL regex                                                |
+| `gstCalculator.ts`  | Expand existing          | 0% rate, 100% discount, floating point precision, inter-state vs intra-state                                     |
+| `html.ts`           | `html.test.ts`           | `escapeHtml` with `<script>`, `&`, quotes, empty string                                                          |
+| `color.ts`          | `color.test.ts`          | `withOpacity` for 3-char hex, 6-char hex, edge values                                                            |
+| `retry.ts`          | `retry.test.ts`          | Success on first try, success on retry, max attempts exceeded, `shouldRetry` false                               |
 
 ### 🔧 11.2 — Service tests (inject mock repositories)
 
@@ -1868,14 +1898,14 @@ logger.info('db_query', { table: tableName, duration_ms: Math.round(performance.
 
 For each service, inject a mock repository and test business logic:
 
-| Service | Test File | Key Cases |
-|---------|-----------|-----------|
-| `invoiceService` | `invoiceService.test.ts` | Correct GST totals (intra/inter-state), rejects empty line items, rejects negative quantities, calculates correct payment status |
-| `paymentService` | `paymentService.test.ts` | Correct status derivation (unpaid → partial → paid), rejects negative amounts |
-| `inventoryService` | `inventoryService.test.ts` | Low stock filter delegates to view, search works across name + phone |
-| `financeService` | `financeService.test.ts` | Date range passing, correct aggregation |
-| `pdfService` | `pdfService.test.ts` | HTML escaping applied, `numberToIndianWords` used (not stub) |
-| `dashboardService` | `dashboardService.test.ts` | Delegates to RPC, returns correct shape |
+| Service            | Test File                  | Key Cases                                                                                                                        |
+| ------------------ | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `invoiceService`   | `invoiceService.test.ts`   | Correct GST totals (intra/inter-state), rejects empty line items, rejects negative quantities, calculates correct payment status |
+| `paymentService`   | `paymentService.test.ts`   | Correct status derivation (unpaid → partial → paid), rejects negative amounts                                                    |
+| `inventoryService` | `inventoryService.test.ts` | Low stock filter delegates to view, search works across name + phone                                                             |
+| `financeService`   | `financeService.test.ts`   | Date range passing, correct aggregation                                                                                          |
+| `pdfService`       | `pdfService.test.ts`       | HTML escaping applied, `numberToIndianWords` used (not stub)                                                                     |
+| `dashboardService` | `dashboardService.test.ts` | Delegates to RPC, returns correct shape                                                                                          |
 
 ### 🔧 11.3 — Store tests (inject mock services)
 
@@ -1883,11 +1913,11 @@ For each service, inject a mock repository and test business logic:
 
 For each store, test state transitions with mock services:
 
-| Store | Key Cases |
-|-------|-----------|
+| Store            | Key Cases                                                                                                                                            |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `inventoryStore` | `setFilters` resets page, `fetch(true)` replaces items, `fetch(false)` appends, error handling sets error state, event subscription triggers refresh |
-| `invoiceStore` | Same pattern + `createInvoice` emits `INVOICE_CREATED` event |
-| `dashboardStore` | Calls RPC, stores stats, refreshes on events |
+| `invoiceStore`   | Same pattern + `createInvoice` emits `INVOICE_CREATED` event                                                                                         |
+| `dashboardStore` | Calls RPC, stores stats, refreshes on events                                                                                                         |
 
 ### ✅ 11.4 — Component tests
 
@@ -1895,45 +1925,45 @@ For each store, test state transitions with mock services:
 
 Using `@testing-library/react-native`:
 
-| Component | Key Cases |
-|-----------|-----------|
-| `TextInput` | Focus border color changes, error state shows red, label renders |
-| `Button` | Loading shows spinner, disabled prevents press, accessibility props present |
-| `QueryBoundary` | Shows loader, shows error with retry, shows empty state, shows children |
-| `ErrorBoundary` | Catches error, renders fallback, "Try Again" resets |
-| `PaymentModal` | All 5 payment modes shown (including credit), error shown on failure |
-| `DashboardHeader` | Date uses correct locale |
+| Component         | Key Cases                                                                   |
+| ----------------- | --------------------------------------------------------------------------- |
+| `TextInput`       | Focus border color changes, error state shows red, label renders            |
+| `Button`          | Loading shows spinner, disabled prevents press, accessibility props present |
+| `QueryBoundary`   | Shows loader, shows error with retry, shows empty state, shows children     |
+| `ErrorBoundary`   | Catches error, renders fallback, "Try Again" resets                         |
+| `PaymentModal`    | All 5 payment modes shown (including credit), error shown on failure        |
+| `DashboardHeader` | Date uses correct locale                                                    |
 
 ### ✅ 11.5 — Screen integration tests
 
-| Screen | Key Cases |
-|--------|-----------|
+| Screen                | Key Cases                                                                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `InvoiceCreateScreen` | Step navigation, customer selection, line item add/remove, GST rate from item, payment mode includes credit, submission calls service |
-| `LoginScreen` | Email validation, submit disabled while loading |
-| `DashboardScreen` | Uses RPC stats (not client-side aggregation) |
+| `LoginScreen`         | Email validation, submit disabled while loading                                                                                       |
+| `DashboardScreen`     | Uses RPC stats (not client-side aggregation)                                                                                          |
 
 ### ✅ 11.6 — Database function tests (pgTAP)
 
 > Review §7.2
 
-| Function | Key Cases |
-|----------|-----------|
-| `create_invoice_with_items` | Succeeds atomically, rolls back on stock failure, generates sequential numbers |
+| Function                             | Key Cases                                                                         |
+| ------------------------------------ | --------------------------------------------------------------------------------- |
+| `create_invoice_with_items`          | Succeeds atomically, rolls back on stock failure, generates sequential numbers    |
 | `record_payment_with_invoice_update` | Updates status correctly (partial → paid), handles concurrent payments (row lock) |
-| `generate_invoice_number` | Sequential, resets on FY boundary, locked row prevents race |
-| `get_profit_loss` | Correct revenue/COGS/expenses for date range, handles empty range |
-| `get_dashboard_stats` | Returns correct today_sales, outstanding, low_stock_count |
-| `audit_trigger_fn` | INSERT/UPDATE/DELETE logged correctly, old_data and new_data captured |
+| `generate_invoice_number`            | Sequential, resets on FY boundary, locked row prevents race                       |
+| `get_profit_loss`                    | Correct revenue/COGS/expenses for date range, handles empty range                 |
+| `get_dashboard_stats`                | Returns correct today_sales, outstanding, low_stock_count                         |
+| `audit_trigger_fn`                   | INSERT/UPDATE/DELETE logged correctly, old_data and new_data captured             |
 
 ### ✅ 11.7 — Fix existing broken tests
 
 > Review §14.7
 
-| Test | Issue | Fix |
-|------|-------|-----|
-| `Button.test.tsx` | Tests for `testID` that the implementation doesn't set | Update either test to use proper query (by text/role) or add `testID` to component |
-| `financeService.test.ts` | Tests implementation details (`.ilike` call) | Rewrite to test behavior through injected mock repo |
-| `customerStore.test.ts` | Structural tests (mock interactions) | Rewrite to test state transitions |
+| Test                     | Issue                                                  | Fix                                                                                |
+| ------------------------ | ------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `Button.test.tsx`        | Tests for `testID` that the implementation doesn't set | Update either test to use proper query (by text/role) or add `testID` to component |
+| `financeService.test.ts` | Tests implementation details (`.ilike` call)           | Rewrite to test behavior through injected mock repo                                |
+| `customerStore.test.ts`  | Structural tests (mock interactions)                   | Rewrite to test state transitions                                                  |
 
 ---
 
@@ -1947,72 +1977,72 @@ Using `@testing-library/react-native`:
 
 > Review §23.1
 
-| Detail | Value |
-|--------|-------|
-| **Files** | `src/repositories/baseRepository.ts`, all repository `findMany` methods |
-| **Change** | Replace `.range(from, to)` with keyset cursor: `.lt('created_at', cursor.lastDate).order('created_at', { ascending: false }).limit(pageSize)` |
-| **Store changes** | `createPaginatedStore` needs a `cursor` field instead of `page` number. `hasMore` derived from result count < pageSize. |
+| Detail            | Value                                                                                                                                         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Files**         | `src/repositories/baseRepository.ts`, all repository `findMany` methods                                                                       |
+| **Change**        | Replace `.range(from, to)` with keyset cursor: `.lt('created_at', cursor.lastDate).order('created_at', { ascending: false }).limit(pageSize)` |
+| **Store changes** | `createPaginatedStore` needs a `cursor` field instead of `page` number. `hasMore` derived from result count < pageSize.                       |
 
 ### ✅ 12.2 — Materialize ledger summary views
 
 > Review §23.2
 
-| Detail | Value |
-|--------|-------|
-| **File** | New migration: `016_materialized_views.sql` |
+| Detail       | Value                                                                                                                                                                                                                                                                                  |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File**     | New migration: `016_materialized_views.sql`                                                                                                                                                                                                                                            |
 | **Contents** | Convert `customer_ledger_summary` and `supplier_ledger_summary` to `MATERIALIZED VIEW`. Add `REFRESH MATERIALIZED VIEW CONCURRENTLY` calls in the invoice/payment RPCs. Or, add a denormalized `balance` column to `customers`/`suppliers` updated atomically in the transaction RPCs. |
 
 ### ✅ 12.3 — Image transforms for list views
 
 > Review §23.3
 
-| Detail | Value |
-|--------|-------|
-| **Files** | `TileSetCard.tsx`, any component displaying `tile_image_url` |
+| Detail     | Value                                                                                                     |
+| ---------- | --------------------------------------------------------------------------------------------------------- |
+| **Files**  | `TileSetCard.tsx`, any component displaying `tile_image_url`                                              |
 | **Change** | Use Supabase Storage transform URL: `?width=200&quality=75` for list views. Use `expo-image` for caching. |
 
 ### ✅ 12.4 — Add GSTR export capability
 
 > Review §28.5
 
-| Detail | Value |
-|--------|-------|
-| **Files** | New: `src/services/exportService.ts`, new screen `app/(app)/settings/export.tsx` |
-| **What** | Export invoice data in GSTR-1 format (CSV with columns matching the GST portal upload template). |
+| Detail    | Value                                                                                            |
+| --------- | ------------------------------------------------------------------------------------------------ |
+| **Files** | New: `src/services/exportService.ts`, new screen `app/(app)/settings/export.tsx`                 |
+| **What**  | Export invoice data in GSTR-1 format (CSV with columns matching the GST portal upload template). |
 
 ### ✅ 12.5 — Add RLS policies for multi-tenant readiness
 
 > Review §6.1, §10, §27.6
 
-| Detail | Value |
-|--------|-------|
-| **When** | Only if multi-tenant is planned. Keep the `USING (true)` policies for single-tenant. |
+| Detail        | Value                                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **When**      | Only if multi-tenant is planned. Keep the `USING (true)` policies for single-tenant.                                      |
 | **Migration** | Add `user_id UUID NOT NULL DEFAULT auth.uid()` to all tables. Replace `USING (true)` with `USING (user_id = auth.uid())`. |
 
 ### ✅ 12.6 — Version RPC functions
 
 > Review §29.4
 
-| Detail | Value |
-|--------|-------|
+| Detail   | Value                                                                                                                                                 |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **What** | Rename `create_invoice_with_items` → `create_invoice_with_items_v1`. Future changes create `_v2`. Old versions maintained for backward compatibility. |
 
 ### ⬜ 12.7 — Enable `pg_stat_statements`
 
 > Review §25.5
 
-| Detail | Value |
-|--------|-------|
-| **Where** | Supabase dashboard → Extensions → enable `pg_stat_statements`. |
-| **What** | Baseline slow query monitoring. Set up alerts for queries > 500ms. |
+| Detail    | Value                                                              |
+| --------- | ------------------------------------------------------------------ |
+| **Where** | Supabase dashboard → Extensions → enable `pg_stat_statements`.     |
+| **What**  | Baseline slow query monitoring. Set up alerts for queries > 500ms. |
 
 ### ✅ 12.8 — Upload PDF via Storage instead of base64 in request body
 
 > Review §23.4
 
-| Detail | Value |
-|--------|-------|
-| **Files** | Client-side: `orderService.ts` (or wherever `parse-order-pdf` is called). Server-side: `parse-order-pdf/index.ts` |
+| Detail     | Value                                                                                                                                                             |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Files**  | Client-side: `orderService.ts` (or wherever `parse-order-pdf` is called). Server-side: `parse-order-pdf/index.ts`                                                 |
 | **Change** | Client uploads PDF to Supabase Storage first, sends storage path to the Edge Function. Edge Function fetches from storage server-side. Eliminates 2MB body limit. |
 
 ---
@@ -2059,6 +2089,7 @@ Phase 9: Edge Fn     Phase 10: Observability   Phase 11: Testing
 **Critical path**: 0 → 1 → 2 → 3 → 4 → 5 → 8 → 11
 
 **Parallelizable**:
+
 - Phase 6 can run in parallel with Phase 3 (no dependencies between them)
 - Phase 7 can run in parallel with Phase 4 (components don't depend on stores)
 - Phases 9, 10, 11 can run in parallel with each other after Phase 8
@@ -2067,24 +2098,24 @@ Phase 9: Edge Fn     Phase 10: Observability   Phase 11: Testing
 
 ## Estimated Timeline
 
-| Phase | Effort | Parallelizable With |
-|-------|--------|---------------------|
-| 0: Tooling | 1 day | — |
-| 1: Migrations | 2 days | — |
-| 2: Types & Errors | 1.5 days | — |
-| 3: Core Architecture | 4 days | Phase 6 |
-| 4: Store Overhaul | 3 days | Phase 7 |
-| 5: Validation | 2 days | — |
-| 6: Theme/Utils/Hooks | 2 days | Phase 3 |
-| 7: Component Fixes | 2 days | Phase 4 |
-| 8: Screen Refactors | 5 days | — |
-| 9: Edge Functions | 1 day | Phases 10, 11 |
-| 10: Observability | 2 days | Phases 9, 11 |
-| 11: Testing | 5 days | Phases 9, 10 |
-| 12: Compliance | 3 days | — |
-| **Total (sequential)** | **~33.5 days** | |
-| **Total (with parallelism)** | **~24 days** | |
+| Phase                        | Effort         | Parallelizable With |
+| ---------------------------- | -------------- | ------------------- |
+| 0: Tooling                   | 1 day          | —                   |
+| 1: Migrations                | 2 days         | —                   |
+| 2: Types & Errors            | 1.5 days       | —                   |
+| 3: Core Architecture         | 4 days         | Phase 6             |
+| 4: Store Overhaul            | 3 days         | Phase 7             |
+| 5: Validation                | 2 days         | —                   |
+| 6: Theme/Utils/Hooks         | 2 days         | Phase 3             |
+| 7: Component Fixes           | 2 days         | Phase 4             |
+| 8: Screen Refactors          | 5 days         | —                   |
+| 9: Edge Functions            | 1 day          | Phases 10, 11       |
+| 10: Observability            | 2 days         | Phases 9, 11        |
+| 11: Testing                  | 5 days         | Phases 9, 10        |
+| 12: Compliance               | 3 days         | —                   |
+| **Total (sequential)**       | **~33.5 days** |                     |
+| **Total (with parallelism)** | **~24 days**   |                     |
 
 ---
 
-*Each phase is designed to leave the codebase in a shippable state. If you stop after any phase, the app still works — it's just progressively cleaner, safer, and more extensible.*
+_Each phase is designed to leave the codebase in a shippable state. If you stop after any phase, the app still works — it's just progressively cleaner, safer, and more extensible._

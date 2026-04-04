@@ -41,9 +41,6 @@ describe('TextInput', () => {
 	it('changes border color on focus and blur', () => {
 		const { getByPlaceholderText } = renderWithTheme(<TextInput placeholder="Input" />);
 		const input = getByPlaceholderText('Input');
-		const container = input.parent?.parent; // RNTextInput -> View (wrapper) -> View (inputContainer)
-
-		// Initial state (blurred)
 		// Accessing internal styles is brittle, but we can verify onFocus/onBlur callbacks
 		const onFocus = jest.fn();
 		const onBlur = jest.fn();

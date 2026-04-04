@@ -22,7 +22,12 @@ describe('reportService', () => {
 
 	describe('getDashboardStats', () => {
 		it('delegates to financeRepository.fetchDashboardStats', async () => {
-			const mockStats = { today_sales: 1000, outstanding_credit: 5000, low_stock_count: 2, monthly_revenue: 50000 };
+			const mockStats = {
+				today_sales: 1000,
+				outstanding_credit: 5000,
+				low_stock_count: 2,
+				monthly_revenue: 50000,
+			};
 			(financeRepository.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
 
 			const result = await reportService.getDashboardStats();
@@ -39,7 +44,10 @@ describe('reportService', () => {
 
 			const result = await reportService.getProfitLoss('2026-01-01', '2026-03-31');
 
-			expect(financeRepository.fetchProfitLoss).toHaveBeenCalledWith('2026-01-01', '2026-03-31');
+			expect(financeRepository.fetchProfitLoss).toHaveBeenCalledWith(
+				'2026-01-01',
+				'2026-03-31',
+			);
 			expect(result).toEqual(mockReport);
 		});
 	});

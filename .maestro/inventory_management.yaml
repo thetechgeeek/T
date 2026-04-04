@@ -3,21 +3,21 @@ appId: com.tilemaster.app
 # E2E-005: Inventory management — browse, search, add item
 - launchApp
 - tapOn:
-    label: "tab-inventory"
+      label: 'tab-inventory'
 - assertVisible:
-    label: "inventory-screen"
+      label: 'inventory-screen'
 - takeScreenshot: inventory_list
 
 # Category filter chips visible
 - assertVisible:
-    label: "category-chip-ALL"
+      label: 'category-chip-ALL'
 - assertVisible:
-    label: "category-chip-GLOSSY"
+      label: 'category-chip-GLOSSY'
 
 # Search for an item
 - tapOn:
-    label: "inventory-search-input"
-- inputText: "Marble"
+      label: 'inventory-search-input'
+- inputText: 'Marble'
 - hideKeyboard
 - takeScreenshot: inventory_search_results
 
@@ -27,16 +27,16 @@ appId: com.tilemaster.app
 
 # Tap FAB to add new item
 - tapOn:
-    label: "add-inventory-button"
-    optional: true
+      label: 'add-inventory-button'
+      optional: true
 - assertVisible:
-    text: "Add Item"
-    optional: true
+      text: 'Add Item'
+      optional: true
 - takeScreenshot: inventory_add_form
 
 # Navigate back if form opened
 - tapOn:
-    text: "Back"
-    optional: true
+      text: 'Back'
+      optional: true
 - assertVisible:
-    label: "inventory-screen"
+      label: 'inventory-screen'

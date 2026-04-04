@@ -3,28 +3,28 @@ appId: com.tilemaster.app
 # E2E-002: Dashboard full flow — stats, quick actions, recent invoices
 - launchApp
 - assertVisible:
-    label: "dashboard-screen"
+      label: 'dashboard-screen'
 - assertVisible:
-    label: "stat-today-sales"
+      label: 'stat-today-sales'
 - assertVisible:
-    label: "stat-outstanding"
+      label: 'stat-outstanding'
 - assertVisible:
-    label: "stat-low-stock"
+      label: 'stat-low-stock'
 - takeScreenshot: dashboard_stats_visible
 
 # Quick Actions are visible
 - assertVisible:
-    label: "quick-action-new-invoice"
+      label: 'quick-action-new-invoice'
 - assertVisible:
-    label: "quick-action-add-stock"
+      label: 'quick-action-add-stock'
 
 # Pull to refresh dashboard
 - scroll:
-    direction: DOWN
-    duration: 300
+      direction: DOWN
+      duration: 300
 - scroll:
-    direction: UP
-    duration: 300
+      direction: UP
+      duration: 300
 - assertVisible:
-    label: "dashboard-screen"
+      label: 'dashboard-screen'
 - takeScreenshot: dashboard_after_refresh

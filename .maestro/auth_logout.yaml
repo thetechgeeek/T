@@ -3,13 +3,13 @@ appId: com.tilemaster.app
 # E2E-001c: Logout flow
 - launchApp
 - assertVisible:
-    label: "dashboard-screen"
+      label: 'dashboard-screen'
 - tapOn:
-    label: "tab-more"
+      label: 'tab-more'
 - assertVisible:
-    label: "sign-out-button"
+      label: 'sign-out-button'
 - tapOn:
-    label: "sign-out-button"
+      label: 'sign-out-button'
 - assertVisible:
-    label: "sign-in-heading"
+      label: 'sign-in-heading'
 - takeScreenshot: auth_logout_success

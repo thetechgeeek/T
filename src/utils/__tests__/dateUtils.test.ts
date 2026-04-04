@@ -78,13 +78,13 @@ describe('formatRelativeDate', () => {
 		jest.useRealTimers();
 	});
 
-	it('returns Today when called with today\'s date', () => {
+	it("returns Today when called with today's date", () => {
 		jest.useFakeTimers();
 		jest.setSystemTime(new Date('2026-03-29T12:00:00.000Z'));
 		expect(formatRelativeDate('2026-03-29')).toBe('Today');
 	});
 
-	it('returns Yesterday when called with yesterday\'s date', () => {
+	it("returns Yesterday when called with yesterday's date", () => {
 		jest.useFakeTimers();
 		jest.setSystemTime(new Date('2026-03-29T12:00:00.000Z'));
 		expect(formatRelativeDate('2026-03-28')).toBe('Yesterday');

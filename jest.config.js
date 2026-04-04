@@ -55,10 +55,7 @@ module.exports = {
 		'<rootDir>/__tests__/chain/**/*.test.{ts,tsx}',
 		'!<rootDir>/__tests__/integration/**',
 	],
-	testPathIgnorePatterns: [
-		'/node_modules/',
-		'<rootDir>/__tests__/integration/',
-	],
+	testPathIgnorePatterns: ['/node_modules/', '<rootDir>/__tests__/integration/'],
 
 	moduleNameMapper: {
 		// Canonical alias: @/src/hooks/useLocale → src/hooks/useLocale

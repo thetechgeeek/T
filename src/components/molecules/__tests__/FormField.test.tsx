@@ -25,9 +25,7 @@ describe('FormField', () => {
 	});
 
 	it('does NOT render error text when no error prop', () => {
-		const { queryByText } = renderWithTheme(
-			<FormField label="Due Date" placeholder="Date" />,
-		);
+		const { queryByText } = renderWithTheme(<FormField label="Due Date" placeholder="Date" />);
 		expect(queryByText(/required/i)).toBeNull();
 	});
 });

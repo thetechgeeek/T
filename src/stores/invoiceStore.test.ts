@@ -2,6 +2,10 @@ import { useInvoiceStore, InvoiceState } from './invoiceStore';
 import { invoiceService } from '../services/invoiceService';
 import { eventBus } from '../events/appEvents';
 
+jest.mock('../utils/retry', () => ({
+	withRetry: jest.fn((fn) => fn()),
+}));
+
 jest.mock('../services/invoiceService', () => ({
 	invoiceService: {
 		fetchInvoices: jest.fn(),

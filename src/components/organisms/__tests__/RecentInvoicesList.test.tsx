@@ -25,9 +25,7 @@ const makeInvoice = (overrides?: Partial<Invoice>): Invoice => ({
 
 describe('RecentInvoicesList', () => {
 	it('renders invoice number, customer name, and formatted amount', () => {
-		const { getByText } = renderWithTheme(
-			<RecentInvoicesList invoices={[makeInvoice()]} />,
-		);
+		const { getByText } = renderWithTheme(<RecentInvoicesList invoices={[makeInvoice()]} />);
 		expect(getByText('Test Customer')).toBeTruthy();
 		expect(getByText(/TM\/2025-26\/0001/)).toBeTruthy();
 		expect(getByText(/₹5000/)).toBeTruthy();
@@ -39,15 +37,11 @@ describe('RecentInvoicesList', () => {
 		pushMock.mockClear();
 
 		const invoice = makeInvoice({ id: 'inv-uuid-001' });
-		const { getByText } = renderWithTheme(
-			<RecentInvoicesList invoices={[invoice]} />,
-		);
+		const { getByText } = renderWithTheme(<RecentInvoicesList invoices={[invoice]} />);
 
 		fireEvent.press(getByText('Test Customer'));
 
-		expect(pushMock).toHaveBeenCalledWith(
-			expect.stringContaining('inv-uuid-001'),
-		);
+		expect(pushMock).toHaveBeenCalledWith(expect.stringContaining('inv-uuid-001'));
 	});
 
 	it('renders empty state when invoices array is empty', () => {

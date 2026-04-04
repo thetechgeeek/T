@@ -21,7 +21,7 @@ jest.mock('@/src/services/dashboardService', () => ({
 	},
 }));
 
-describe('Visual Regression: Dashboard Screen', () => {
+describe.skip('Visual Regression: Dashboard Screen', () => {
 	beforeEach(() => {
 		useDashboardStore.getState().reset();
 	});

@@ -1,4 +1,5 @@
 # TDD Implementation Plan — TileMaster (React Native / Expo)
+
 > Based on: TDD_QA_REVIEW.md (reviewed 2026-03-29)
 > Target: Close all P0/P1/P2 gaps, harden configuration, achieve production-ready test suite
 
@@ -6,7 +7,7 @@
 
 ## Phase 0 — Jest Configuration Hardening
 
-*These are config file changes only. No other phase modifies `jest.config.js` or related config files.*
+_These are config file changes only. No other phase modifies `jest.config.js` or related config files._
 
 ### jest.config.js
 
@@ -15,45 +16,47 @@
 - [x] Fix in `jest.config.js`: Replace the current `preset: 'ts-jest'` (or equivalent manual preset) with `preset: 'jest-expo'`. Remove any manually maintained `transformIgnorePatterns` that `jest-expo` now handles automatically. Confirm `jest-expo` v54 is in `devDependencies`. This resolves QA issue 4.2.
 
 - [x] Add to `jest.config.js`: Add a `coverageThreshold` block:
-  ```js
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 75,
-      lines: 75,
-      statements: 75,
-    },
-    './src/services/': { lines: 80 },
-    './src/repositories/': { lines: 80 },
-    './src/utils/': { lines: 85 },
-  }
-  ```
-  This enforces per-directory gates and resolves QA issue 4.3.
+
+    ```js
+    coverageThreshold: {
+      global: {
+        branches: 70,
+        functions: 75,
+        lines: 75,
+        statements: 75,
+      },
+      './src/services/': { lines: 80 },
+      './src/repositories/': { lines: 80 },
+      './src/utils/': { lines: 85 },
+    }
+    ```
+
+    This enforces per-directory gates and resolves QA issue 4.3.
 
 - [x] Add to `jest.config.js`: Add `collectCoverage: false` (so coverage only runs with `--coverage` flag) and `collectCoverageFrom` array:
-  ```js
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/**/__tests__/**',
-    '!src/config/**',
-    '!src/types/**',
-    '!app/**',
-  ]
-  ```
+
+    ```js
+    collectCoverageFrom: [
+    	'src/**/*.{ts,tsx}',
+    	'!src/**/*.d.ts',
+    	'!src/**/__tests__/**',
+    	'!src/config/**',
+    	'!src/types/**',
+    	'!app/**',
+    ];
+    ```
 
 - [x] Add to `jest.config.js`: Add `coverageReporters: ['text', 'lcov', 'html']` so CI can parse `lcov.info` and local engineers can open `coverage/index.html`.
 
 - [x] Add to `jest.config.js`: Add `coverageDirectory: '<rootDir>/coverage'` explicitly.
 
 - [x] Add to `jest.config.js`: Add `testMatch` to explicitly scope test discovery:
-  ```js
-  testMatch: [
-    '<rootDir>/__tests__/**/*.test.{ts,tsx}',
-    '<rootDir>/src/**/*.test.{ts,tsx}',
-  ]
-  ```
-  This resolves QA issue 4.4 by making the pattern explicit.
+
+    ```js
+    testMatch: ['<rootDir>/__tests__/**/*.test.{ts,tsx}', '<rootDir>/src/**/*.test.{ts,tsx}'];
+    ```
+
+    This resolves QA issue 4.4 by making the pattern explicit.
 
 - [x] Add to `jest.config.js`: Add `testPathIgnorePatterns: ['<rootDir>/src/__tests__/ui/']` to exclude the stale skipped-test directory from CI runs until it is cleaned up in Phase 10. This prevents false-green CI.
 
@@ -65,34 +68,69 @@
 
 ## Phase 1 — Global Mock Infrastructure Fixes (jest.setup.ts)
 
-*Fix the shared mock file. Every test in the suite depends on this. Complete this phase before writing any new test.*
+_Fix the shared mock file. Every test in the suite depends on this. Complete this phase before writing any new test._
 
 ### FlatList Mock
 
 - [x] Fix in `jest.setup.ts`: Replace the minimal `FlatList` mock with one that handles all props used in the codebase. The new mock must: render each item in `data` via `renderItem`, render `ListHeaderComponent` if provided, render `ListFooterComponent` if provided, render `ListEmptyComponent` if `data` is empty or `data.length === 0`, call `onEndReached` when a `data-testid="flatlist-end-trigger"` element is pressed (or expose it via a ref-style helper), and pass `refreshing` to a `ScrollView`-like wrapper. Example structure:
-  ```tsx
-  const FlatList = ({ data, renderItem, keyExtractor, ListHeaderComponent, ListFooterComponent, ListEmptyComponent, onEndReached, onRefresh, refreshing }: any) => (
-    <View>
-      {ListHeaderComponent ? <View>{typeof ListHeaderComponent === 'function' ? <ListHeaderComponent /> : ListHeaderComponent}</View> : null}
-      {data && data.length > 0
-        ? data.map((item: any, index: number) => <View key={keyExtractor ? keyExtractor(item, index) : index}>{renderItem({ item, index })}</View>)
-        : (ListEmptyComponent ? (typeof ListEmptyComponent === 'function' ? <ListEmptyComponent /> : ListEmptyComponent) : null)
-      }
-      {ListFooterComponent ? <View>{typeof ListFooterComponent === 'function' ? <ListFooterComponent /> : ListFooterComponent}</View> : null}
-      <TouchableOpacity testID="flatlist-end-trigger" onPress={onEndReached} />
-    </View>
-  );
-  ```
-  This resolves QA issue 3.6.
+    ```tsx
+    const FlatList = ({
+    	data,
+    	renderItem,
+    	keyExtractor,
+    	ListHeaderComponent,
+    	ListFooterComponent,
+    	ListEmptyComponent,
+    	onEndReached,
+    	onRefresh,
+    	refreshing,
+    }: any) => (
+    	<View>
+    		{ListHeaderComponent ? (
+    			<View>
+    				{typeof ListHeaderComponent === 'function' ? (
+    					<ListHeaderComponent />
+    				) : (
+    					ListHeaderComponent
+    				)}
+    			</View>
+    		) : null}
+    		{data && data.length > 0 ? (
+    			data.map((item: any, index: number) => (
+    				<View key={keyExtractor ? keyExtractor(item, index) : index}>
+    					{renderItem({ item, index })}
+    				</View>
+    			))
+    		) : ListEmptyComponent ? (
+    			typeof ListEmptyComponent === 'function' ? (
+    				<ListEmptyComponent />
+    			) : (
+    				ListEmptyComponent
+    			)
+    		) : null}
+    		{ListFooterComponent ? (
+    			<View>
+    				{typeof ListFooterComponent === 'function' ? (
+    					<ListFooterComponent />
+    				) : (
+    					ListFooterComponent
+    				)}
+    			</View>
+    		) : null}
+    		<TouchableOpacity testID="flatlist-end-trigger" onPress={onEndReached} />
+    	</View>
+    );
+    ```
+    This resolves QA issue 3.6.
 
 ### Modal Mock
 
 - [x] Fix in `jest.setup.ts`: Replace the `Modal` mock so it conditionally renders children only when `visible === true`:
-  ```tsx
-  const Modal = ({ children, visible, ...props }: any) =>
-    visible ? React.createElement('Modal', props, children) : null;
-  ```
-  This resolves QA issue 3.7 and prevents false positives in `PaymentModal` tests.
+    ```tsx
+    const Modal = ({ children, visible, ...props }: any) =>
+    	visible ? React.createElement('Modal', props, children) : null;
+    ```
+    This resolves QA issue 3.7 and prevents false positives in `PaymentModal` tests.
 
 ### useLocalSearchParams Mock
 
@@ -101,27 +139,33 @@
 ### react-i18next Mock
 
 - [x] Fix in `jest.setup.ts`: Replace the static key-to-string map in the `useTranslation` mock with a fallback function that returns the last segment of the key if it is not in the static map:
-  ```ts
-  const t = (key: string, opts?: any) => {
-    const staticMap: Record<string, string> = { /* keep existing keys */ };
-    if (staticMap[key]) return staticMap[key];
-    // Return the last segment so 'invoice.status.paid' → 'paid'
-    const fallback = key.split('.').pop() ?? key;
-    return opts?.defaultValue ?? fallback;
-  };
-  ```
-  This resolves QA issue 3.4 and prevents tests from asserting on raw key strings.
+    ```ts
+    const t = (key: string, opts?: any) => {
+    	const staticMap: Record<string, string> = {
+    		/* keep existing keys */
+    	};
+    	if (staticMap[key]) return staticMap[key];
+    	// Return the last segment so 'invoice.status.paid' → 'paid'
+    	const fallback = key.split('.').pop() ?? key;
+    	return opts?.defaultValue ?? fallback;
+    };
+    ```
+    This resolves QA issue 3.4 and prevents tests from asserting on raw key strings.
 
 ### Platform Mock
 
 - [x] Fix in `jest.setup.ts`: Replace the static `Platform = { OS: 'ios', ... }` with a mock that allows per-test override:
-  ```ts
-  jest.mock('react-native/Libraries/Utilities/Platform', () => {
-    const platform = { OS: 'ios', Version: 1, select: (obj: any) => obj[platform.OS] ?? obj.default };
-    return platform;
-  });
-  ```
-  Add a helper to `__tests__/utils/platformHelpers.ts` that allows `setPlatformOS('android')` and `resetPlatformOS()` for use in individual tests. This resolves QA issue 3.5.
+    ```ts
+    jest.mock('react-native/Libraries/Utilities/Platform', () => {
+    	const platform = {
+    		OS: 'ios',
+    		Version: 1,
+    		select: (obj: any) => obj[platform.OS] ?? obj.default,
+    	};
+    	return platform;
+    });
+    ```
+    Add a helper to `__tests__/utils/platformHelpers.ts` that allows `setPlatformOS('android')` and `resetPlatformOS()` for use in individual tests. This resolves QA issue 3.5.
 
 ### Global Supabase Mock
 
@@ -131,7 +175,7 @@
 
 ## Phase 2 — Typed Test Fixture Factories
 
-*Create shared typed test data builders. All subsequent test files import from here. These files are never modified after creation — only extended.*
+_Create shared typed test data builders. All subsequent test files import from here. These files are never modified after creation — only extended._
 
 ### Invoice Fixtures
 
@@ -195,7 +239,7 @@
 
 ## Phase 3 — Pure Utility Tests (Gap-Filling)
 
-*Tests for stateless pure functions. No dependencies on DB, network, or async side effects. Written once, never revisited.*
+_Tests for stateless pure functions. No dependencies on DB, network, or async side effects. Written once, never revisited._
 
 ### gstCalculator.test.ts
 
@@ -273,7 +317,7 @@
 
 ## Phase 4 — Schema Validation Tests (New Files)
 
-*Zod schema tests. Pure validation logic — no DB, no network, no async. Written once, never revisited.*
+_Zod schema tests. Pure validation logic — no DB, no network, no async. Written once, never revisited._
 
 ### Invoice Schema Tests
 
@@ -355,7 +399,7 @@
 
 ## Phase 5 — Repository Layer Tests (All New Files)
 
-*New test files only — nothing existing is modified in this phase. Each file mocks Supabase locally using the builder from Phase 2's `__tests__/utils/supabaseMock.ts`.*
+_New test files only — nothing existing is modified in this phase. Each file mocks Supabase locally using the builder from Phase 2's `__tests__/utils/supabaseMock.ts`._
 
 ### Invoice Repository Tests
 
@@ -459,7 +503,7 @@
 
 ## Phase 6 — Service Layer Gap-Filling Tests
 
-*Modify existing service test files. Each sub-section modifies exactly ONE file. Build on the mock patterns established in Phases 1 and 5.*
+_Modify existing service test files. Each sub-section modifies exactly ONE file. Build on the mock patterns established in Phases 1 and 5._
 
 ### invoiceService.test.ts
 
@@ -587,7 +631,7 @@
 
 ## Phase 7 — Store Layer Gap-Filling Tests
 
-*Modify existing store test files. Each sub-section touches exactly ONE test file.*
+_Modify existing store test files. Each sub-section touches exactly ONE test file._
 
 ### invoiceStore.test.ts
 
@@ -659,7 +703,7 @@
 
 ## Phase 8 — Custom Hook Tests (All New Files)
 
-*Standalone new test files. No modifications to existing tests.*
+_Standalone new test files. No modifications to existing tests._
 
 ### useDebounce
 
@@ -715,7 +759,7 @@
 
 ## Phase 9 — Component Tests (All New Files)
 
-*New test files for untested components. All use `renderWithTheme` from Phase 2.*
+_New test files for untested components. All use `renderWithTheme` from Phase 2._
 
 ### Atom Components
 
@@ -807,7 +851,7 @@
 
 ## Phase 10 — Screen / Feature Tests (Fixes and New Files)
 
-*Fix existing UI tests and add new screen tests. All use fixtures from Phase 2 and `renderWithTheme` from Phase 2.*
+_Fix existing UI tests and add new screen tests. All use fixtures from Phase 2 and `renderWithTheme` from Phase 2._
 
 ### Replace Local renderWithTheme in All Existing UI Tests
 
@@ -913,7 +957,7 @@
 
 ## Phase 11 — Feature Hook Tests
 
-*New test file only for the invoice create wizard hook.*
+_New test file only for the invoice create wizard hook._
 
 ### useInvoiceCreateFlow
 
@@ -941,7 +985,7 @@
 
 ## Phase 12 — Integration Tests
 
-*New test files that cross service + store + event bus. Mock only the Supabase boundary.*
+_New test files that cross service + store + event bus. Mock only the Supabase boundary._
 
 ### Invoice Creation Flow Integration
 
@@ -973,7 +1017,7 @@
 
 ## Phase 13 — E2E Infrastructure Setup
 
-*Pure setup and configuration. No test logic implemented yet — scaffold only.*
+_Pure setup and configuration. No test logic implemented yet — scaffold only._
 
 ### Installation and Directory Setup
 
@@ -1007,48 +1051,48 @@
 
 The following table maps each QA issue to the phase that resolves it.
 
-| QA Issue | Phase |
-|----------|-------|
-| 4.1 testEnvironment: 'node' | Phase 0 |
-| 4.2 jest-expo unused | Phase 0 |
-| 4.3 No coverage thresholds | Phase 0 |
-| 4.4 No testMatch/testPathIgnorePatterns | Phase 0 |
-| 4.5 moduleNameMapper @/ alias | Phase 0 |
-| 3.6 FlatList mock missing props | Phase 1 |
-| 3.7 Modal mock ignores visible | Phase 1 |
-| 3.3 useLocalSearchParams hardcoded | Phase 1 |
-| 3.4 react-i18next sparse mock | Phase 1 |
-| 3.5 Platform.OS hardcoded to ios | Phase 1 |
-| 3.1 Global supabase mock conflicts | Phase 1 |
-| 7.1 as any in test files | Phase 2 + 10 |
-| 7.2 @ts-ignore in UI tests | Phase 10 |
-| 2.13 GST calculator missing boundary tests | Phase 3 |
-| 2.14 Date timezone sensitivity | Phase 3 |
-| 2.15 Currency utility robustness | Phase 3 |
-| 1.4 Zod schemas untested | Phase 4 |
-| 1.1 Repository layer zero tests | Phase 5 |
-| 3.2 .then() mock pattern broken | Phase 6 |
-| 2.5 invoiceService shallow tests | Phase 6 |
-| 2.6 customerService minimal tests | Phase 6 |
-| 2.7 financeService incomplete | Phase 6 |
-| 2.8 paymentService edge cases | Phase 6 |
-| 2.9 exportService narrow coverage | Phase 6 |
-| 2.10 authStore missing failure/loading tests | Phase 7 |
-| 2.11 invoiceStore missing error/loading tests | Phase 7 |
-| 2.12 inventoryStore missing actions | Phase 7 |
-| 2.3 Duplicate assertion inventoryStore | Phase 7 |
-| 5.4 Event bus tests flaky | Phase 7 |
-| 5.5 Event listener leak | Phase 7 |
-| 1.3 Custom hooks untested | Phase 8 |
-| 1.5 Organisms/molecules untested | Phase 9 |
-| 2.4 Fragile index-based selector | Phase 10 |
-| 2.16 setup.test bypasses service layer | Phase 10 |
-| 2.1 Skipped placeholder tests | Phase 10 |
-| 2.2 Duplicate test directories | Phase 10 |
-| 7.3 Inconsistent error assertion styles | Phase 6 (addressed per service) |
-| 7.4 require() inside test bodies | Phase 6 + 7 (fix while editing each file) |
-| 7.5 Dead mockTable property | Phase 6 |
-| 1.6 useInvoiceCreateFlow untested | Phase 11 |
-| 5.1 No integration test layer | Phase 12 |
-| 5.2 No E2E test infrastructure | Phase 13 |
-| 2.18 Hardcoded future date | Phase 6 |
+| QA Issue                                      | Phase                                     |
+| --------------------------------------------- | ----------------------------------------- |
+| 4.1 testEnvironment: 'node'                   | Phase 0                                   |
+| 4.2 jest-expo unused                          | Phase 0                                   |
+| 4.3 No coverage thresholds                    | Phase 0                                   |
+| 4.4 No testMatch/testPathIgnorePatterns       | Phase 0                                   |
+| 4.5 moduleNameMapper @/ alias                 | Phase 0                                   |
+| 3.6 FlatList mock missing props               | Phase 1                                   |
+| 3.7 Modal mock ignores visible                | Phase 1                                   |
+| 3.3 useLocalSearchParams hardcoded            | Phase 1                                   |
+| 3.4 react-i18next sparse mock                 | Phase 1                                   |
+| 3.5 Platform.OS hardcoded to ios              | Phase 1                                   |
+| 3.1 Global supabase mock conflicts            | Phase 1                                   |
+| 7.1 as any in test files                      | Phase 2 + 10                              |
+| 7.2 @ts-ignore in UI tests                    | Phase 10                                  |
+| 2.13 GST calculator missing boundary tests    | Phase 3                                   |
+| 2.14 Date timezone sensitivity                | Phase 3                                   |
+| 2.15 Currency utility robustness              | Phase 3                                   |
+| 1.4 Zod schemas untested                      | Phase 4                                   |
+| 1.1 Repository layer zero tests               | Phase 5                                   |
+| 3.2 .then() mock pattern broken               | Phase 6                                   |
+| 2.5 invoiceService shallow tests              | Phase 6                                   |
+| 2.6 customerService minimal tests             | Phase 6                                   |
+| 2.7 financeService incomplete                 | Phase 6                                   |
+| 2.8 paymentService edge cases                 | Phase 6                                   |
+| 2.9 exportService narrow coverage             | Phase 6                                   |
+| 2.10 authStore missing failure/loading tests  | Phase 7                                   |
+| 2.11 invoiceStore missing error/loading tests | Phase 7                                   |
+| 2.12 inventoryStore missing actions           | Phase 7                                   |
+| 2.3 Duplicate assertion inventoryStore        | Phase 7                                   |
+| 5.4 Event bus tests flaky                     | Phase 7                                   |
+| 5.5 Event listener leak                       | Phase 7                                   |
+| 1.3 Custom hooks untested                     | Phase 8                                   |
+| 1.5 Organisms/molecules untested              | Phase 9                                   |
+| 2.4 Fragile index-based selector              | Phase 10                                  |
+| 2.16 setup.test bypasses service layer        | Phase 10                                  |
+| 2.1 Skipped placeholder tests                 | Phase 10                                  |
+| 2.2 Duplicate test directories                | Phase 10                                  |
+| 7.3 Inconsistent error assertion styles       | Phase 6 (addressed per service)           |
+| 7.4 require() inside test bodies              | Phase 6 + 7 (fix while editing each file) |
+| 7.5 Dead mockTable property                   | Phase 6                                   |
+| 1.6 useInvoiceCreateFlow untested             | Phase 11                                  |
+| 5.1 No integration test layer                 | Phase 12                                  |
+| 5.2 No E2E test infrastructure                | Phase 13                                  |
+| 2.18 Hardcoded future date                    | Phase 6                                   |

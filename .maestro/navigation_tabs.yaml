@@ -3,38 +3,38 @@ appId: com.tilemaster.app
 # E2E-012: Tab navigation — all bottom tabs accessible
 - launchApp
 - assertVisible:
-    label: "dashboard-screen"
+      label: 'dashboard-screen'
 - takeScreenshot: nav_dashboard
 
 # Navigate to Invoices tab
 - tapOn:
-    label: "tab-invoices"
+      label: 'tab-invoices'
 - assertVisible:
-    label: "invoices-screen"
+      label: 'invoices-screen'
 - takeScreenshot: nav_invoices
 
 # Navigate to Inventory tab
 - tapOn:
-    label: "tab-inventory"
+      label: 'tab-inventory'
 - assertVisible:
-    label: "inventory-screen"
+      label: 'inventory-screen'
 - takeScreenshot: nav_inventory
 
 # Navigate to Scan tab
 - tapOn:
-    label: "tab-scan"
+      label: 'tab-scan'
 - takeScreenshot: nav_scan
 
 # Navigate to More tab
 - tapOn:
-    label: "tab-more"
+      label: 'tab-more'
 - assertVisible:
-    label: "more-screen"
+      label: 'more-screen'
 - takeScreenshot: nav_more
 
 # Return to Dashboard
 - tapOn:
-    label: "tab-dashboard"
+      label: 'tab-dashboard'
 - assertVisible:
-    label: "dashboard-screen"
+      label: 'dashboard-screen'
 - takeScreenshot: nav_return_dashboard
