@@ -86,9 +86,9 @@ function getClient() {
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const mod = require('../config/supabase');
-		return mod.supabase || defaultClient || ({} as any);
+		return mod.supabase || defaultClient || ({} as Record<string, unknown>);
 	} catch {
-		return defaultClient || ({} as any);
+		return defaultClient || ({} as Record<string, unknown>);
 	}
 }
 

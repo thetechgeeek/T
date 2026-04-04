@@ -32,6 +32,7 @@ export interface FinanceState {
 	fetchSummary: () => Promise<void>;
 	setDateRange: (start: string, end: string) => void;
 	addExpense: (expense: Omit<Expense, 'id' | 'created_at' | 'updated_at'>) => Promise<void>;
+	reset: () => void;
 }
 
 export const useFinanceStore = create<FinanceState>()(
@@ -201,6 +202,17 @@ export const useFinanceStore = create<FinanceState>()(
 				});
 				throw err;
 			}
+		},
+
+		reset: () => {
+			set((s) => {
+				s.expenses = [];
+				s.purchases = [];
+				s.summary = null;
+				s.loading = false;
+				s.error = null;
+				s.dateRange = { startDate: '', endDate: '' };
+			});
 		},
 	})),
 );

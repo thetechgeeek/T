@@ -2,6 +2,8 @@ import { supabase } from '../config/supabase';
 import type { UUID } from '../types/common';
 import type { Expense, Purchase, ProfitLossReport as ProfitLossSummary } from '../types/finance';
 
+import { AppError } from '../errors/AppError';
+
 type PurchaseWithSupplier = Purchase & { suppliers: { name: string } | null };
 
 export const financeService = {
@@ -61,7 +63,6 @@ export const financeService = {
 
 	async getProfitLoss(startDate: string, endDate: string): Promise<ProfitLossSummary> {
 		if (startDate > endDate) {
-			const { AppError } = require('../errors/AppError');
 			throw new AppError(
 				'Start date cannot be after end date',
 				'VALIDATION_ERROR',

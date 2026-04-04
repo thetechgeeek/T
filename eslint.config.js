@@ -95,13 +95,20 @@ module.exports = [
 		},
 	},
 	{
-		files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.{ts,tsx}', 'jest.setup.ts'],
+		files: [
+			'**/*.test.{ts,tsx}',
+			'**/*.spec.{ts,tsx}',
+			'**/__tests__/**/*.{ts,tsx}',
+			'jest.setup.ts',
+		],
 		languageOptions: {
 			globals: testGlobals,
 		},
 		rules: {
 			// Relax rules for test files
 			'@typescript-eslint/no-explicit-any': 'warn',
+			'@typescript-eslint/no-require-imports': 'warn',
+			'@typescript-eslint/no-unused-vars': 'warn',
 		},
 	},
 	prettierConfig,

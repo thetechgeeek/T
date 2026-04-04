@@ -12,6 +12,7 @@ interface AuthState {
 	login: (email: string, password: string) => Promise<void>;
 	register: (email: string, password: string) => Promise<void>;
 	logout: () => Promise<void>;
+	reset: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -79,5 +80,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			// Ignore sign-out errors — clear local state regardless
 		}
 		set({ user: null, session: null, isAuthenticated: false });
+	},
+
+	reset: () => {
+		set({
+			user: null,
+			session: null,
+			loading: false,
+			isAuthenticated: false,
+		});
 	},
 }));

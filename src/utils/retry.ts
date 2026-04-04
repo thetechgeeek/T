@@ -7,21 +7,23 @@ export async function withRetry<T>(
 		retries?: number;
 		delay?: number;
 		factor?: number;
-		shouldRetry?: (error: any) => boolean;
+		shouldRetry?: (error: unknown) => boolean;
+		_delayFn?: (ms: number) => Promise<void>;
 	} = {},
 ): Promise<T> {
 	const {
 		retries = 3,
 		delay = 1000,
 		factor = 2,
-		shouldRetry = (err) => {
+		shouldRetry = (err: unknown) => {
 			// Retry on network errors or specific Supabase errors that imply transient failure
-			const msg = err?.message?.toLowerCase() || '';
+			const msg = (err as Error)?.message?.toLowerCase() || '';
 			return msg.includes('network') || msg.includes('fetch') || msg.includes('timeout');
 		},
+		_delayFn = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 	} = options;
 
-	let lastError: any;
+	let lastError: unknown;
 	let currentDelay = delay;
 
 	for (let i = 0; i <= retries; i++) {
@@ -31,7 +33,7 @@ export async function withRetry<T>(
 			lastError = error;
 
 			if (i < retries && shouldRetry(error)) {
-				await new Promise((resolve) => setTimeout(resolve, currentDelay));
+				await _delayFn(currentDelay);
 				currentDelay *= factor;
 				continue;
 			}
