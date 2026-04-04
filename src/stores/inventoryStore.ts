@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { inventoryService } from '../services/inventoryService';
 import { eventBus } from '../events/appEvents';
+import { debounce } from '../utils/perf';
 import type {
 	InventoryItem,
 	InventoryItemInsert,
@@ -44,6 +45,11 @@ const DEFAULT_FILTERS: InventoryFilters = {
 
 const PAGE_SIZE = 20;
 
+// Helper to handle debounced fetches across store instances
+const debouncedFetchItems = debounce((get: () => InventoryState) => {
+	get().fetchItems(true);
+}, 300);
+
 export const useInventoryStore = create<InventoryState>()(
 	immer((set, get) => ({
 		items: [],
@@ -58,7 +64,8 @@ export const useInventoryStore = create<InventoryState>()(
 			set((state) => {
 				state.filters = { ...state.filters, ...newFilters };
 			});
-			get().fetchItems(true);
+			// Debounce the fetch to avoid spamming the server on rapid keystrokes
+			debouncedFetchItems(get);
 		},
 
 		fetchItems: async (reset = false) => {

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { customerService } from '../services/customerService';
 import { eventBus } from '../events/appEvents';
+import { debounce } from '../utils/perf';
 import type {
 	Customer,
 	CustomerInsert,
@@ -32,6 +33,11 @@ export interface CustomerState {
 	reset: () => void;
 }
 
+// Helper to handle debounced fetches
+const debouncedFetchCustomers = debounce((get: () => CustomerState) => {
+	get().fetchCustomers(true);
+}, 300);
+
 export const useCustomerStore = create<CustomerState>()(
 	immer((set, get) => ({
 		customers: [],
@@ -53,7 +59,8 @@ export const useCustomerStore = create<CustomerState>()(
 			set((state) => {
 				state.filters = { ...state.filters, ...newFilters };
 			});
-			get().fetchCustomers(true);
+			// Debounce the fetch to avoid spamming the server on rapid keystrokes
+			debouncedFetchCustomers(get);
 		},
 
 		fetchCustomers: async (reset = false) => {
