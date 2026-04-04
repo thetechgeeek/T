@@ -1,0 +1,2172 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Visual Regression: Component Snapshots CustomerDetail matches snapshot 1`] = `
+<View
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      {
+        "backgroundColor": "#FAFAF8",
+        "paddingBottom": 0,
+        "paddingTop": 0,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "flex": 1,
+        },
+        undefined,
+      ]
+    }
+  >
+    <View
+      style={
+        [
+          {
+            "padding": 16,
+          },
+          {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+          },
+          {
+            "borderBottomColor": "#E0D8D2",
+            "borderBottomWidth": 1,
+            "paddingBottom": 16,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+            },
+            {
+              "flex": 1,
+            },
+          ]
+        }
+      >
+        <TouchableOpacity
+          accessibilityLabel="back-button"
+          accessibilityRole="button"
+          onPress={[Function]}
+          style={
+            {
+              "padding": 4,
+            }
+          }
+        >
+          <Icon
+            color="#1A1412"
+            name="ArrowLeft"
+            size={24}
+            strokeWidth={2.5}
+          />
+        </TouchableOpacity>
+        <Text
+          accessibilityRole="header"
+          numberOfLines={1}
+          style={
+            [
+              {
+                "color": "#2C2420",
+                "fontSize": 24,
+                "fontWeight": "700",
+                "lineHeight": 30,
+                "opacity": undefined,
+                "textAlign": undefined,
+              },
+              {
+                "flex": 1,
+                "marginLeft": 16,
+              },
+            ]
+          }
+        >
+          John Doe
+        </Text>
+      </View>
+    </View>
+    <View>
+      <View>
+        <View
+          style={
+            {
+              "padding": 16,
+              "paddingTop": 0,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "overflow": "hidden",
+                },
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderRadius": 12,
+                },
+                {
+                  "shadowColor": "#4A3828",
+                  "shadowOffset": {
+                    "height": 1,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0.08,
+                  "shadowRadius": 2,
+                },
+                false,
+                false,
+                false,
+                {
+                  "padding": 16,
+                },
+                false,
+                {
+                  "alignItems": "center",
+                  "padding": 20,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                [
+                  {
+                    "color": "#6B5E57",
+                    "fontSize": 13,
+                    "fontWeight": "400",
+                    "lineHeight": 18,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                  },
+                  {
+                    "letterSpacing": 1,
+                    "marginBottom": 4,
+                    "textTransform": "uppercase",
+                  },
+                ]
+              }
+            >
+              Outstanding Balance
+            </Text>
+            <Text
+              accessibilityRole="header"
+              style={
+                [
+                  {
+                    "color": "#2C2420",
+                    "fontSize": 30,
+                    "fontWeight": "700",
+                    "lineHeight": 36,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                  },
+                  {
+                    "color": "#2C2420",
+                    "fontSize": 32,
+                  },
+                ]
+              }
+            >
+              ₹0
+            </Text>
+            <View
+              accessible={false}
+              importantForAccessibility="no"
+              style={
+                [
+                  {
+                    "height": 1,
+                    "width": "100%",
+                  },
+                  {
+                    "backgroundColor": "#EDE8E4",
+                    "marginLeft": 0,
+                  },
+                  {
+                    "marginVertical": 12,
+                  },
+                ]
+              }
+            />
+            <View
+              style={
+                {
+                  "flexDirection": "row",
+                  "width": "100%",
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    [
+                      {
+                        "color": "#6B5E57",
+                        "fontSize": 13,
+                        "fontWeight": "400",
+                        "lineHeight": 18,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                      },
+                      undefined,
+                    ]
+                  }
+                >
+                  Total Invoiced
+                </Text>
+                <Text
+                  style={
+                    [
+                      {
+                        "color": "#2C2420",
+                        "fontSize": 15,
+                        "fontWeight": "700",
+                        "lineHeight": 22,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                      },
+                      undefined,
+                    ]
+                  }
+                >
+                  ₹0
+                </Text>
+              </View>
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    [
+                      {
+                        "color": "#6B5E57",
+                        "fontSize": 13,
+                        "fontWeight": "400",
+                        "lineHeight": 18,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                      },
+                      undefined,
+                    ]
+                  }
+                >
+                  Total Paid
+                </Text>
+                <Text
+                  style={
+                    [
+                      {
+                        "color": "#2D7A3E",
+                        "fontSize": 15,
+                        "fontWeight": "700",
+                        "lineHeight": 22,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                      },
+                      undefined,
+                    ]
+                  }
+                >
+                  ₹0
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              {
+                "flexDirection": "row",
+                "marginTop": 16,
+              }
+            }
+          >
+            <TouchableOpacity
+              accessibilityLabel="Record Payment"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": false,
+                  "disabled": false,
+                }
+              }
+              activeOpacity={0.7}
+              disabled={false}
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                    "justifyContent": "center",
+                  },
+                  {
+                    "backgroundColor": "#C1440E",
+                    "borderColor": "transparent",
+                    "borderRadius": 12,
+                    "borderWidth": 0,
+                    "height": 48,
+                    "paddingHorizontal": 24,
+                  },
+                  {
+                    "flex": 1,
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Icon
+                color="white"
+                name="Wallet"
+                size={18}
+              />
+              <Text
+                style={
+                  [
+                    {},
+                    {
+                      "color": "#FFFFFF",
+                      "fontSize": 15,
+                      "fontWeight": "600",
+                      "marginLeft": 8,
+                      "marginRight": 0,
+                    },
+                  ]
+                }
+              >
+                Record Payment
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              accessibilityLabel="New Invoice"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": false,
+                  "disabled": false,
+                }
+              }
+              activeOpacity={0.7}
+              disabled={false}
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                    "justifyContent": "center",
+                  },
+                  {
+                    "backgroundColor": "transparent",
+                    "borderColor": "#C1440E",
+                    "borderRadius": 12,
+                    "borderWidth": 1,
+                    "height": 48,
+                    "paddingHorizontal": 24,
+                  },
+                  {
+                    "flex": 1,
+                    "marginLeft": 8,
+                  },
+                ]
+              }
+            >
+              <Icon
+                color="#C1440E"
+                name="Plus"
+                size={18}
+              />
+              <Text
+                style={
+                  [
+                    {},
+                    {
+                      "color": "#C1440E",
+                      "fontSize": 15,
+                      "fontWeight": "600",
+                      "marginLeft": 8,
+                      "marginRight": 0,
+                    },
+                  ]
+                }
+              >
+                New Invoice
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text
+            accessibilityRole="header"
+            style={
+              [
+                {
+                  "color": "#2C2420",
+                  "fontSize": 20,
+                  "fontWeight": "700",
+                  "lineHeight": 26,
+                  "opacity": undefined,
+                  "textAlign": undefined,
+                },
+                {
+                  "marginBottom": 8,
+                  "marginTop": 16,
+                  "paddingHorizontal": 4,
+                },
+              ]
+            }
+          >
+            Customer Info
+          </Text>
+          <View
+            style={
+              [
+                {
+                  "overflow": "hidden",
+                },
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderRadius": 12,
+                },
+                {
+                  "shadowColor": "#4A3828",
+                  "shadowOffset": {
+                    "height": 1,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0.08,
+                  "shadowRadius": 2,
+                },
+                false,
+                false,
+                false,
+                {
+                  "padding": 16,
+                },
+                false,
+                {
+                  "padding": 0,
+                },
+              ]
+            }
+          >
+            <Pressable
+              accessibilityLabel="1234567890"
+              accessibilityRole="button"
+              style={[Function]}
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <View
+                  style={
+                    {
+                      "marginRight": 16,
+                    }
+                  }
+                >
+                  <Icon
+                    color="#6B5E57"
+                    name="Phone"
+                    size={18}
+                  />
+                </View>
+                <View
+                  style={
+                    {
+                      "flex": 1,
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      [
+                        {
+                          "marginBottom": 2,
+                        },
+                        {
+                          "color": "#2C2420",
+                          "fontFamily": "System",
+                          "fontSize": 15,
+                        },
+                      ]
+                    }
+                  >
+                    1234567890
+                  </Text>
+                </View>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityLabel="Type: RETAIL"
+              accessibilityRole="button"
+              style={[Function]}
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                  }
+                }
+              >
+                <View
+                  style={
+                    {
+                      "marginRight": 16,
+                    }
+                  }
+                >
+                  <View
+                    accessibilityLabel="R"
+                    accessibilityRole="text"
+                    accessible={true}
+                    style={
+                      [
+                        {
+                          "alignItems": "center",
+                          "alignSelf": "flex-start",
+                          "justifyContent": "center",
+                        },
+                        {
+                          "backgroundColor": "#F5F0EC",
+                          "borderRadius": 9999,
+                          "paddingHorizontal": 6,
+                          "paddingVertical": 2,
+                        },
+                        undefined,
+                      ]
+                    }
+                  >
+                    <Text
+                      importantForAccessibility="no"
+                      style={
+                        [
+                          {
+                            "textAlign": "center",
+                          },
+                          {
+                            "color": "#6B5E57",
+                            "fontFamily": "System",
+                            "fontSize": 11,
+                            "fontWeight": "600",
+                          },
+                          undefined,
+                        ]
+                      }
+                    >
+                      R
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={
+                    {
+                      "flex": 1,
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      [
+                        {
+                          "marginBottom": 2,
+                        },
+                        {
+                          "color": "#2C2420",
+                          "fontFamily": "System",
+                          "fontSize": 15,
+                        },
+                      ]
+                    }
+                  >
+                    Type: RETAIL
+                  </Text>
+                </View>
+              </View>
+            </Pressable>
+          </View>
+          <Text
+            accessibilityRole="header"
+            style={
+              [
+                {
+                  "color": "#2C2420",
+                  "fontSize": 20,
+                  "fontWeight": "700",
+                  "lineHeight": 26,
+                  "opacity": undefined,
+                  "textAlign": undefined,
+                },
+                {
+                  "marginBottom": 8,
+                  "marginTop": 16,
+                  "paddingHorizontal": 4,
+                },
+              ]
+            }
+          >
+            Ledger History
+          </Text>
+        </View>
+      </View>
+      <TouchableOpacity
+        accessibilityRole="button"
+        onPress={[Function]}
+        testID="flatlist-end-trigger"
+      />
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Visual Regression: Component Snapshots InventoryManagement matches snapshot 1`] = `
+<View
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      {
+        "backgroundColor": "#FAFAF8",
+        "paddingBottom": 0,
+        "paddingTop": 0,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "flex": 1,
+        },
+        undefined,
+      ]
+    }
+  >
+    <View
+      style={
+        [
+          {
+            "borderBottomColor": "#E0D8D2",
+            "borderBottomWidth": 1,
+            "paddingBottom": 16,
+            "paddingHorizontal": 24,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+            },
+            {
+              "marginBottom": 16,
+            },
+          ]
+        }
+      >
+        <Text
+          accessibilityLabel="inventory-screen"
+          accessibilityRole="header"
+          style={
+            [
+              {
+                "color": "#2C2420",
+                "fontSize": 30,
+                "fontWeight": "700",
+                "lineHeight": 36,
+                "opacity": undefined,
+                "textAlign": undefined,
+              },
+              undefined,
+            ]
+          }
+        >
+          Inventory
+        </Text>
+      </View>
+      <View
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+            },
+            {
+              "gap": 12,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "marginBottom": 16,
+                },
+                {
+                  "marginBottom": 0,
+                },
+              ]
+            }
+          >
+            <View
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                    "minHeight": 48,
+                    "paddingHorizontal": 12,
+                  },
+                  {
+                    "backgroundColor": "#FFFFFF",
+                    "borderColor": "#E0D8D2",
+                    "borderRadius": 12,
+                    "borderWidth": 1,
+                  },
+                ]
+              }
+            >
+              <View
+                importantForAccessibility="no"
+                style={
+                  {
+                    "marginRight": 8,
+                  }
+                }
+              >
+                <Icon
+                  color="#A89B94"
+                  name="Search"
+                  size={18}
+                />
+              </View>
+              <TextInput
+                accessibilityHint="Search by design name or item number"
+                accessibilityLabel="inventory-search-input"
+                accessible={true}
+                onBlur={[Function]}
+                onChangeText={[Function]}
+                onFocus={[Function]}
+                onSubmitEditing={[Function]}
+                placeholder="Search design or item number..."
+                placeholderTextColor="#A89B94"
+                ref={null}
+                returnKeyType="search"
+                style={
+                  [
+                    {
+                      "flex": 1,
+                      "height": "100%",
+                      "paddingVertical": 10,
+                    },
+                    {
+                      "color": "#2C2420",
+                      "fontSize": 15,
+                    },
+                    undefined,
+                  ]
+                }
+                value=""
+              />
+            </View>
+          </View>
+        </View>
+        <TouchableOpacity
+          accessibilityHint="Open category and filter options"
+          accessibilityLabel="inventory-filter-button"
+          accessibilityRole="button"
+          onPress={[Function]}
+          style={
+            [
+              {
+                "alignItems": "center",
+                "height": 44,
+                "justifyContent": "center",
+                "width": 44,
+              },
+              {
+                "backgroundColor": "#F5F0EC",
+                "borderRadius": 12,
+              },
+            ]
+          }
+        >
+          <Icon
+            color="#6B5E57"
+            importantForAccessibility="no"
+            name="SlidersHorizontal"
+            size={20}
+          />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={
+          {
+            "marginHorizontal": -20,
+            "marginTop": 8,
+            "paddingHorizontal": 20,
+          }
+        }
+      >
+        <View>
+          <View>
+            <TouchableOpacity
+              accessibilityHint="Double tap to deselect"
+              accessibilityLabel="category-chip-ALL"
+              accessibilityRole="togglebutton"
+              accessibilityState={
+                {
+                  "selected": true,
+                }
+              }
+              activeOpacity={0.7}
+              hitSlop={
+                {
+                  "bottom": 10,
+                  "left": 10,
+                  "right": 10,
+                  "top": 10,
+                }
+              }
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  },
+                  {
+                    "backgroundColor": "#C1440E",
+                    "borderRadius": 9999,
+                  },
+                  {
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#FFFFFF",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                ALL
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              accessibilityHint="Double tap to select"
+              accessibilityLabel="category-chip-GLOSSY"
+              accessibilityRole="togglebutton"
+              accessibilityState={
+                {
+                  "selected": false,
+                }
+              }
+              activeOpacity={0.7}
+              hitSlop={
+                {
+                  "bottom": 10,
+                  "left": 10,
+                  "right": 10,
+                  "top": 10,
+                }
+              }
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  },
+                  {
+                    "backgroundColor": "#F5F0EC",
+                    "borderRadius": 9999,
+                  },
+                  {
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#6B5E57",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                GLOSSY
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              accessibilityHint="Double tap to select"
+              accessibilityLabel="category-chip-MATT"
+              accessibilityRole="togglebutton"
+              accessibilityState={
+                {
+                  "selected": false,
+                }
+              }
+              activeOpacity={0.7}
+              hitSlop={
+                {
+                  "bottom": 10,
+                  "left": 10,
+                  "right": 10,
+                  "top": 10,
+                }
+              }
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  },
+                  {
+                    "backgroundColor": "#F5F0EC",
+                    "borderRadius": 9999,
+                  },
+                  {
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#6B5E57",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                MATT
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              accessibilityHint="Double tap to select"
+              accessibilityLabel="category-chip-ELEVATION"
+              accessibilityRole="togglebutton"
+              accessibilityState={
+                {
+                  "selected": false,
+                }
+              }
+              activeOpacity={0.7}
+              hitSlop={
+                {
+                  "bottom": 10,
+                  "left": 10,
+                  "right": 10,
+                  "top": 10,
+                }
+              }
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  },
+                  {
+                    "backgroundColor": "#F5F0EC",
+                    "borderRadius": 9999,
+                  },
+                  {
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#6B5E57",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                ELEVATION
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              accessibilityHint="Double tap to select"
+              accessibilityLabel="category-chip-FLOOR"
+              accessibilityRole="togglebutton"
+              accessibilityState={
+                {
+                  "selected": false,
+                }
+              }
+              activeOpacity={0.7}
+              hitSlop={
+                {
+                  "bottom": 10,
+                  "left": 10,
+                  "right": 10,
+                  "top": 10,
+                }
+              }
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  },
+                  {
+                    "backgroundColor": "#F5F0EC",
+                    "borderRadius": 9999,
+                  },
+                  {
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#6B5E57",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                FLOOR
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              accessibilityHint="Double tap to select"
+              accessibilityLabel="category-chip-WOODEN"
+              accessibilityRole="togglebutton"
+              accessibilityState={
+                {
+                  "selected": false,
+                }
+              }
+              activeOpacity={0.7}
+              hitSlop={
+                {
+                  "bottom": 10,
+                  "left": 10,
+                  "right": 10,
+                  "top": 10,
+                }
+              }
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  },
+                  {
+                    "backgroundColor": "#F5F0EC",
+                    "borderRadius": 9999,
+                  },
+                  {
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#6B5E57",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                WOODEN
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              accessibilityHint="Double tap to select"
+              accessibilityLabel="category-chip-SATIN"
+              accessibilityRole="togglebutton"
+              accessibilityState={
+                {
+                  "selected": false,
+                }
+              }
+              activeOpacity={0.7}
+              hitSlop={
+                {
+                  "bottom": 10,
+                  "left": 10,
+                  "right": 10,
+                  "top": 10,
+                }
+              }
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  },
+                  {
+                    "backgroundColor": "#F5F0EC",
+                    "borderRadius": 9999,
+                  },
+                  {
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#6B5E57",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                SATIN
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              accessibilityHint="Double tap to select"
+              accessibilityLabel="category-chip-OTHER"
+              accessibilityRole="togglebutton"
+              accessibilityState={
+                {
+                  "selected": false,
+                }
+              }
+              activeOpacity={0.7}
+              hitSlop={
+                {
+                  "bottom": 10,
+                  "left": 10,
+                  "right": 10,
+                  "top": 10,
+                }
+              }
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "paddingHorizontal": 16,
+                    "paddingVertical": 8,
+                  },
+                  {
+                    "backgroundColor": "#F5F0EC",
+                    "borderRadius": 9999,
+                  },
+                  {
+                    "marginRight": 8,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#6B5E57",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                OTHER
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            accessibilityRole="button"
+            onPress={[Function]}
+            testID="flatlist-end-trigger"
+          />
+        </View>
+      </View>
+    </View>
+    <View>
+      <View>
+        <View
+          style={
+            [
+              {
+                "overflow": "hidden",
+              },
+              {
+                "backgroundColor": "#FFFFFF",
+                "borderRadius": 20,
+                "shadowColor": "#4A3828",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.08,
+                "shadowRadius": 2,
+              },
+              {
+                "marginBottom": 16,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              [
+                {},
+                {
+                  "borderBottomColor": "#E0D8D2",
+                  "borderBottomWidth": 1,
+                  "padding": 16,
+                },
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "space-between",
+                }
+              }
+            >
+              <Text
+                numberOfLines={1}
+                style={
+                  [
+                    {
+                      "color": "#2C2420",
+                      "fontSize": 17,
+                      "fontWeight": "700",
+                    },
+                  ]
+                }
+              >
+                UNKNOWN
+              </Text>
+            </View>
+            <Text
+              style={
+                [
+                  {
+                    "color": "#6B5E57",
+                    "fontSize": 13,
+                    "marginTop": 2,
+                  },
+                ]
+              }
+            >
+              2 Variants • 55 Boxes Total
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "padding": 16,
+              }
+            }
+          >
+            <TouchableOpacity
+              accessibilityHint="Double tap to view details"
+              accessibilityLabel="D1, 50 boxes in stock"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                  },
+                  {
+                    "marginTop": 0,
+                  },
+                ]
+              }
+            >
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "height": 44,
+                      "justifyContent": "center",
+                      "marginRight": 12,
+                      "overflow": "hidden",
+                      "width": 44,
+                    },
+                    {
+                      "backgroundColor": "#FFFFFF",
+                      "borderRadius": 12,
+                    },
+                  ]
+                }
+              >
+                <Icon
+                  color="#A89B94"
+                  importantForAccessibility="no"
+                  name="Package"
+                  size={20}
+                  strokeWidth={1.5}
+                />
+              </View>
+              <View
+                style={
+                  {
+                    "flex": 1,
+                    "justifyContent": "center",
+                  }
+                }
+              >
+                <Text
+                  numberOfLines={1}
+                  style={
+                    [
+                      {
+                        "color": "#2C2420",
+                        "fontSize": 15,
+                        "fontWeight": "600",
+                      },
+                    ]
+                  }
+                >
+                  D1
+                </Text>
+                <View
+                  style={
+                    {
+                      "alignItems": "center",
+                      "flexDirection": "row",
+                      "marginTop": 4,
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      [
+                        {
+                          "color": "#6B5E57",
+                          "fontSize": 11,
+                        },
+                      ]
+                    }
+                  >
+                    Size N/A
+                  </Text>
+                  <View
+                    importantForAccessibility="no"
+                    style={
+                      [
+                        {
+                          "marginLeft": 8,
+                          "paddingHorizontal": 6,
+                          "paddingVertical": 2,
+                        },
+                        {
+                          "backgroundColor": "#C1440E15",
+                          "borderRadius": 6,
+                        },
+                      ]
+                    }
+                  >
+                    <Text
+                      style={
+                        [
+                          {
+                            "color": "#C1440E",
+                            "fontSize": 10,
+                            "fontWeight": "700",
+                          },
+                        ]
+                      }
+                    >
+                      GLOSSY
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={
+                  {
+                    "alignItems": "flex-end",
+                    "justifyContent": "center",
+                    "marginLeft": 12,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    [
+                      {
+                        "color": "#2D7A3E",
+                        "fontSize": 13,
+                        "fontWeight": "700",
+                      },
+                    ]
+                  }
+                >
+                  50 Box
+                </Text>
+                <Text
+                  style={
+                    [
+                      {
+                        "color": "#2C2420",
+                        "fontSize": 11,
+                        "fontWeight": "500",
+                        "marginTop": 2,
+                      },
+                    ]
+                  }
+                >
+                  ₹0
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              accessibilityHint="Double tap to view details"
+              accessibilityLabel="D2, 5 boxes in stock"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              onPress={[Function]}
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                  },
+                  {
+                    "marginTop": 16,
+                  },
+                ]
+              }
+            >
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "height": 44,
+                      "justifyContent": "center",
+                      "marginRight": 12,
+                      "overflow": "hidden",
+                      "width": 44,
+                    },
+                    {
+                      "backgroundColor": "#FFFFFF",
+                      "borderRadius": 12,
+                    },
+                  ]
+                }
+              >
+                <Icon
+                  color="#A89B94"
+                  importantForAccessibility="no"
+                  name="Package"
+                  size={20}
+                  strokeWidth={1.5}
+                />
+              </View>
+              <View
+                style={
+                  {
+                    "flex": 1,
+                    "justifyContent": "center",
+                  }
+                }
+              >
+                <Text
+                  numberOfLines={1}
+                  style={
+                    [
+                      {
+                        "color": "#2C2420",
+                        "fontSize": 15,
+                        "fontWeight": "600",
+                      },
+                    ]
+                  }
+                >
+                  D2
+                </Text>
+                <View
+                  style={
+                    {
+                      "alignItems": "center",
+                      "flexDirection": "row",
+                      "marginTop": 4,
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      [
+                        {
+                          "color": "#6B5E57",
+                          "fontSize": 11,
+                        },
+                      ]
+                    }
+                  >
+                    Size N/A
+                  </Text>
+                  <View
+                    importantForAccessibility="no"
+                    style={
+                      [
+                        {
+                          "marginLeft": 8,
+                          "paddingHorizontal": 6,
+                          "paddingVertical": 2,
+                        },
+                        {
+                          "backgroundColor": "#C1440E15",
+                          "borderRadius": 6,
+                        },
+                      ]
+                    }
+                  >
+                    <Text
+                      style={
+                        [
+                          {
+                            "color": "#C1440E",
+                            "fontSize": 10,
+                            "fontWeight": "700",
+                          },
+                        ]
+                      }
+                    >
+                      MATT
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={
+                  {
+                    "alignItems": "flex-end",
+                    "justifyContent": "center",
+                    "marginLeft": 12,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    [
+                      {
+                        "color": "#2D7A3E",
+                        "fontSize": 13,
+                        "fontWeight": "700",
+                      },
+                    ]
+                  }
+                >
+                  5 Box
+                </Text>
+                <Text
+                  style={
+                    [
+                      {
+                        "color": "#2C2420",
+                        "fontSize": 11,
+                        "fontWeight": "500",
+                        "marginTop": 2,
+                      },
+                    ]
+                  }
+                >
+                  ₹0
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      <TouchableOpacity
+        accessibilityRole="button"
+        onPress={[Function]}
+        testID="flatlist-end-trigger"
+      />
+    </View>
+    <TouchableOpacity
+      accessibilityHint="Add a new inventory item"
+      accessibilityLabel="add-inventory-button"
+      accessibilityRole="button"
+      activeOpacity={0.85}
+      onPress={[Function]}
+      style={
+        [
+          {
+            "alignItems": "center",
+            "borderRadius": 30,
+            "bottom": 20,
+            "height": 60,
+            "justifyContent": "center",
+            "position": "absolute",
+            "right": 20,
+            "width": 60,
+          },
+          {
+            "backgroundColor": "#C1440E",
+            "shadowColor": "#4A3828",
+            "shadowOffset": {
+              "height": 6,
+              "width": 0,
+            },
+            "shadowOpacity": 0.16,
+            "shadowRadius": 12,
+          },
+        ]
+      }
+    >
+      <Icon
+        color="#FFFFFF"
+        importantForAccessibility="no"
+        name="Plus"
+        size={28}
+        strokeWidth={2.5}
+      />
+    </TouchableOpacity>
+  </View>
+</View>
+`;
+
+exports[`Visual Regression: Component Snapshots InvoiceList matches snapshot 1`] = `
+<View
+  behavior="padding"
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      {
+        "backgroundColor": "#FAFAF8",
+        "paddingBottom": 0,
+        "paddingTop": 0,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "flex": 1,
+        },
+        undefined,
+      ]
+    }
+  >
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "borderBottomWidth": 1,
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "padding": 16,
+          },
+          {
+            "borderBottomColor": "#E0D8D2",
+          },
+        ]
+      }
+    >
+      <Text
+        accessibilityLabel="invoices-screen"
+        accessibilityRole="header"
+        style={
+          [
+            {
+              "color": "#2C2420",
+              "fontSize": 30,
+              "fontWeight": "700",
+              "lineHeight": 36,
+              "opacity": undefined,
+              "textAlign": undefined,
+            },
+            undefined,
+          ]
+        }
+      >
+        Invoices
+      </Text>
+      <TouchableOpacity
+        accessibilityLabel="new-invoice-button"
+        accessibilityRole="button"
+        accessibilityState={
+          {
+            "busy": false,
+            "disabled": false,
+          }
+        }
+        activeOpacity={0.7}
+        disabled={false}
+        onPress={[Function]}
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "center",
+            },
+            {
+              "backgroundColor": "#C1440E",
+              "borderColor": "transparent",
+              "borderRadius": 12,
+              "borderWidth": 0,
+              "height": 48,
+              "paddingHorizontal": 24,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Icon
+          color="#FFF"
+          name="Plus"
+          size={20}
+        />
+        <Text
+          style={
+            [
+              {},
+              {
+                "color": "#FFFFFF",
+                "fontSize": 15,
+                "fontWeight": "600",
+                "marginLeft": 8,
+                "marginRight": 0,
+              },
+            ]
+          }
+        >
+          New Invoice
+        </Text>
+      </TouchableOpacity>
+    </View>
+    <View>
+      <View>
+        <TouchableOpacity
+          accessibilityHint="undefined, ₹1000. Double tap to open"
+          accessibilityLabel="invoice-INV-001"
+          accessibilityRole="button"
+          onPress={[Function]}
+          style={
+            [
+              {
+                "borderRadius": 12,
+                "borderWidth": 1,
+                "marginBottom": 12,
+                "padding": 16,
+              },
+              {
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#E0D8D2",
+                "shadowColor": "#4A3828",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.08,
+                "shadowRadius": 2,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              {
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "marginBottom": 4,
+              }
+            }
+          >
+            <Text
+              style={
+                [
+                  {
+                    "color": "#2C2420",
+                    "fontSize": 15,
+                    "fontWeight": "700",
+                    "lineHeight": 22,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                  },
+                  {
+                    "fontSize": 16,
+                  },
+                ]
+              }
+            >
+              INV-001
+            </Text>
+            <Text
+              style={
+                [
+                  {
+                    "color": "#6B5E57",
+                    "fontSize": 13,
+                    "fontWeight": "400",
+                    "lineHeight": 18,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Invalid Date
+            </Text>
+          </View>
+          <Text
+            style={
+              [
+                {
+                  "color": "#6B5E57",
+                  "fontSize": 15,
+                  "fontWeight": "400",
+                  "lineHeight": 22,
+                  "opacity": undefined,
+                  "textAlign": undefined,
+                },
+                {
+                  "marginBottom": 8,
+                },
+              ]
+            }
+          />
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "marginTop": 8,
+              }
+            }
+          >
+            <View
+              style={
+                [
+                  {
+                    "borderRadius": 4,
+                    "paddingHorizontal": 8,
+                    "paddingVertical": 4,
+                  },
+                  {
+                    "backgroundColor": "#A85F0020",
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#A85F00",
+                      "fontSize": 15,
+                      "fontWeight": "600",
+                      "lineHeight": 22,
+                      "opacity": undefined,
+                      "textAlign": undefined,
+                    },
+                    {
+                      "fontSize": 12,
+                      "textTransform": "capitalize",
+                    },
+                  ]
+                }
+              />
+            </View>
+            <Text
+              accessibilityRole="header"
+              style={
+                [
+                  {
+                    "color": "#C1440E",
+                    "fontSize": 20,
+                    "fontWeight": "700",
+                    "lineHeight": 26,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                  },
+                  undefined,
+                ]
+              }
+            >
+              ₹1000
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <TouchableOpacity
+          accessibilityHint="undefined, ₹2000. Double tap to open"
+          accessibilityLabel="invoice-INV-002"
+          accessibilityRole="button"
+          onPress={[Function]}
+          style={
+            [
+              {
+                "borderRadius": 12,
+                "borderWidth": 1,
+                "marginBottom": 12,
+                "padding": 16,
+              },
+              {
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#E0D8D2",
+                "shadowColor": "#4A3828",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.08,
+                "shadowRadius": 2,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              {
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "marginBottom": 4,
+              }
+            }
+          >
+            <Text
+              style={
+                [
+                  {
+                    "color": "#2C2420",
+                    "fontSize": 15,
+                    "fontWeight": "700",
+                    "lineHeight": 22,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                  },
+                  {
+                    "fontSize": 16,
+                  },
+                ]
+              }
+            >
+              INV-002
+            </Text>
+            <Text
+              style={
+                [
+                  {
+                    "color": "#6B5E57",
+                    "fontSize": 13,
+                    "fontWeight": "400",
+                    "lineHeight": 18,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                  },
+                  undefined,
+                ]
+              }
+            >
+              Invalid Date
+            </Text>
+          </View>
+          <Text
+            style={
+              [
+                {
+                  "color": "#6B5E57",
+                  "fontSize": 15,
+                  "fontWeight": "400",
+                  "lineHeight": 22,
+                  "opacity": undefined,
+                  "textAlign": undefined,
+                },
+                {
+                  "marginBottom": 8,
+                },
+              ]
+            }
+          />
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "marginTop": 8,
+              }
+            }
+          >
+            <View
+              style={
+                [
+                  {
+                    "borderRadius": 4,
+                    "paddingHorizontal": 8,
+                    "paddingVertical": 4,
+                  },
+                  {
+                    "backgroundColor": "#A85F0020",
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#A85F00",
+                      "fontSize": 15,
+                      "fontWeight": "600",
+                      "lineHeight": 22,
+                      "opacity": undefined,
+                      "textAlign": undefined,
+                    },
+                    {
+                      "fontSize": 12,
+                      "textTransform": "capitalize",
+                    },
+                  ]
+                }
+              />
+            </View>
+            <Text
+              accessibilityRole="header"
+              style={
+                [
+                  {
+                    "color": "#C1440E",
+                    "fontSize": 20,
+                    "fontWeight": "700",
+                    "lineHeight": 26,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                  },
+                  undefined,
+                ]
+              }
+            >
+              ₹2000
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity
+        accessibilityRole="button"
+        onPress={[Function]}
+        testID="flatlist-end-trigger"
+      />
+    </View>
+  </View>
+</View>
+`;

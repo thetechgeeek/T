@@ -1,0 +1,17 @@
+appId: com.tilemaster.app
+---
+- clearState
+- launchApp:
+    permissions:
+      all: allow
+- tapOn: "Get Started"
+- tapOn: "Continue"
+- assertVisible: "Name is required"
+- inputText: "Error User"
+- tapOn: "Continue"
+- assertVisible: "Dashboard"
+- tapOn: "Inventory"
+- tapOn: "Add Item"
+- tapOn: "Save"
+- assertVisible: "Design Name is required"
+- stopApp

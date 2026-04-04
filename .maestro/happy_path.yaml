@@ -1,0 +1,23 @@
+appId: com.tilemaster.app
+---
+- clearState
+- launchApp:
+    permissions:
+      all: allow
+- assertVisible: "TILE MASTER"
+- tapOn: "Get Started"
+- assertVisible: "Full Name"
+- inputText: "Test User"
+- tapOn: "Continue"
+- assertVisible: "Dashboard"
+- tapOn: "Customers"
+- tapOn: "Add Customer"
+- inputText: "E2E Customer"
+- tapOn: "Save"
+- assertVisible: "E2E Customer"
+- tapOn: "E2E Customer"
+- tapOn: "Create Invoice"
+- assertVisible: "Select Items"
+- tapOn: "Add Item"
+- tapOn: "Save Invoice"
+- assertVisible: "Invoice Created"
