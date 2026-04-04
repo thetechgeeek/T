@@ -341,7 +341,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 
 ## [x] Phase 4 — Unit: Component Variants (337 → 520)
 
-### [ ] Step 4.1 — `TextInput` deep tests
+### [x] Step 4.1 — `TextInput` deep tests
 
 - Renders with `label` prop → label text visible
 - Renders without `label` → no label element in tree
@@ -356,7 +356,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 - `multiline` → prop passed through
 - Dark mode: `c.onSurface` text colour contrasts against `c.surface` background
 
-### [ ] Step 4.2 — `PaymentModal` variant tests
+### [x] Step 4.2 — `PaymentModal` variant tests
 
 - `invoiceNumber` provided → shows "Invoice: INV-001" not customer name
 - `invoiceNumber` absent → shows "Customer: Name"
@@ -367,7 +367,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 - Pressing already-active mode → stays active (no toggle-off)
 - All visible in dark mode
 
-### [ ] Step 4.3 — `Button` component variants
+### [x] Step 4.3 — `Button` component variants
 
 - `variant="primary"`: background = `c.primary`, text = `c.onPrimary`
 - `variant="outline"`: transparent background, border visible
@@ -377,7 +377,7 @@ Apply same pattern to: `invoiceList.loading.test.tsx`, `customerList.loading.tes
 - `leftIcon` renders to left of title
 - `size="sm"` / `size="lg"`: renders without crash
 
-### [ ] Step 4.4 — `Screen` component safe area variants
+### [x] Step 4.4 — `Screen` component safe area variants
 
 - `safeAreaEdges=['top', 'bottom']`: `paddingTop = insets.top`,
   `paddingBottom = insets.bottom`
