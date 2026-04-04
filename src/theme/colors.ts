@@ -65,7 +65,7 @@ const DARK_COLORS: ThemeColors = {
 	primary: '#E8622A', // brighter in dark mode for visibility
 	primaryLight: '#FF8A60',
 	primaryDark: '#C1440E',
-	onPrimary: '#FFFFFF',
+	onPrimary: '#000000',
 	// Semantic
 	success: '#4CAF70',
 	onSuccess: '#000000',
