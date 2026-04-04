@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
 import { Button } from '../Button';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
@@ -20,14 +21,27 @@ describe('Button', () => {
 		expect(onPressMock).toHaveBeenCalled();
 	});
 
-	it('is disabled when loading', () => {
+	it('does NOT call onPress when disabled', () => {
 		const onPressMock = jest.fn();
-		const { getByTestId, queryByText } = renderWithTheme(
-			<Button title="Save" loading onPress={onPressMock} />,
+		const { getByText } = renderWithTheme(
+			<Button title="Disabled" disabled onPress={onPressMock} />,
 		);
-		// When loading, title is hidden and ActivityIndicator is shown
-		expect(queryByText('Save')).toBeFalsy();
-		fireEvent.press(getByTestId('loading-indicator')); // This depends on your mock
+		fireEvent.press(getByText('Disabled'));
 		expect(onPressMock).not.toHaveBeenCalled();
+	});
+
+	it('renders with left icon', () => {
+		const { getByTestId, getByText } = renderWithTheme(
+			<Button title="Edit" leftIcon={<View testID="edit-icon" />} />,
+		);
+		expect(getByTestId('edit-icon')).toBeTruthy();
+		expect(getByText('Edit')).toBeTruthy();
+	});
+
+	it('renders with different sizes without crash', () => {
+		const { getByText: getSm } = renderWithTheme(<Button title="Small" size="sm" />);
+		const { getByText: getLg } = renderWithTheme(<Button title="Large" size="lg" />);
+		expect(getSm('Small')).toBeTruthy();
+		expect(getLg('Large')).toBeTruthy();
 	});
 });

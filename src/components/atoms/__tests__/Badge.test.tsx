@@ -58,4 +58,16 @@ describe('Badge', () => {
 			: labelText!.props.style;
 		expect(styles.color).toBeTruthy();
 	});
+
+	it('renders info and neutral variants correctly', () => {
+		const { getByText: getI } = renderWithTheme(<Badge label="Info" variant="info" />);
+		const { getByText: getN } = renderWithTheme(<Badge label="Neutral" variant="neutral" />);
+		expect(getI('Info')).toBeTruthy();
+		expect(getN('Neutral')).toBeTruthy();
+	});
+
+	it('renders small size correctly', () => {
+		const { getByText } = renderWithTheme(<Badge label="Small" size="sm" />);
+		expect(getByText('Small')).toBeTruthy();
+	});
 });

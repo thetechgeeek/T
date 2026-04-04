@@ -504,7 +504,7 @@ jest.mock('react-native-safe-area-context', () => {
 	return {
 		SafeAreaProvider: ({ children }: { children?: React.ReactNode }) => children,
 		SafeAreaView: ({ children }: { children?: React.ReactNode }) => children,
-		useSafeAreaInsets: () => inset,
+		useSafeAreaInsets: jest.fn(() => inset),
 		useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
 		initialWindowMetrics: {
 			frame: { x: 0, y: 0, width: 0, height: 0 },
@@ -518,8 +518,8 @@ jest.mock('react-native-keyboard-controller', () => {
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const React = require('react');
 	return {
-		KeyboardAvoidingView: ({ children }: { children?: React.ReactNode }) =>
-			React.createElement('View', null, children),
+		KeyboardAvoidingView: ({ children, ...props }: { children?: React.ReactNode }) =>
+			React.createElement('View', props, children),
 		KeyboardProvider: ({ children }: { children?: React.ReactNode }) => children,
 		useKeyboardHandler: jest.fn(),
 		useKeyboardController: jest.fn(() => ({

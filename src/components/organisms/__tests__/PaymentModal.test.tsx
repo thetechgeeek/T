@@ -138,4 +138,43 @@ describe('PaymentModal', () => {
 		expect(queryByText('Processing...')).toBeNull();
 		expect(paymentService.recordPayment).not.toHaveBeenCalled();
 	});
+
+	// ─── Phase 4: Variant tests ──────────────────────────────────────────────
+
+	it('shows "Customer: Name" when invoiceNumber is absent', () => {
+		const { getByText, queryByText } = renderWithTheme(
+			<PaymentModal {...baseProps} invoiceId={undefined} invoiceNumber={undefined} />,
+		);
+		expect(getByText(/Customer: Test Customer/)).toBeTruthy();
+		expect(queryByText(/Invoice:/)).toBeNull();
+	});
+
+	it('pre-fills amount input when totalAmount > 0', () => {
+		const { getByDisplayValue } = renderWithTheme(
+			<PaymentModal {...baseProps} totalAmount={1500} />,
+		);
+		expect(getByDisplayValue('1500')).toBeTruthy();
+	});
+
+	it('leaves amount input empty when totalAmount is 0', () => {
+		const { getByPlaceholderText } = renderWithTheme(
+			<PaymentModal {...baseProps} totalAmount={0} />,
+		);
+		const input = getByPlaceholderText('0.00');
+		expect(input.props.value).toBe('');
+	});
+
+	it('updates active payment mode and uses it on submit', async () => {
+		const { getByLabelText, getByTestId } = renderWithTheme(<PaymentModal {...baseProps} />);
+
+		const upiButton = getByLabelText('payment-mode-upi');
+		fireEvent.press(upiButton);
+
+		fireEvent.press(getByTestId('submit-payment-button'));
+
+		await new Promise(process.nextTick);
+		expect(paymentService.recordPayment).toHaveBeenCalledWith(
+			expect.objectContaining({ payment_mode: 'upi' }),
+		);
+	});
 });
