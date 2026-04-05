@@ -49,4 +49,4 @@ supabase/.config/
 
 # test output
 test_output.txt
-test_results.json
+test_results.json.env
