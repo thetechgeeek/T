@@ -7,7 +7,6 @@ import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@/src/components/atoms/Card';
-import { Badge } from '@/src/components/atoms/Badge';
 import { Divider } from '@/src/components/atoms/Divider';
 import { Button } from '@/src/components/atoms/Button';
 import { ListItem } from '@/src/components/molecules/ListItem';

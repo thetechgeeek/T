@@ -5,6 +5,7 @@ import {
 	BarChart2,
 	Settings,
 	Package,
+	Users,
 	Languages,
 	Moon,
 	Sun,
@@ -39,6 +40,13 @@ export default function MoreTab() {
 	const router = useRouter();
 
 	const reportsItems = [
+		{
+			label: t('customer.title'),
+			accessibilityLabel: 'menu-customers',
+			icon: Users,
+			route: '/(app)/customers/',
+			color: c.info,
+		},
 		{
 			label: t('supplier.title'),
 			accessibilityLabel: 'menu-suppliers',

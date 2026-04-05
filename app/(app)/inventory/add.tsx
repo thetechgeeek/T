@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import {
-	View,
-	StyleSheet,
-	ScrollView,
-	Alert,
-	ActivityIndicator,
-	TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Save } from 'lucide-react-native';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -153,14 +147,18 @@ export default function AddItemScreen() {
 
 	if (loading) {
 		return (
-			<View
-				style={[
-					styles.container,
-					{ backgroundColor: c.background, justifyContent: 'center' },
-				]}
-			>
-				<ActivityIndicator size="large" color={c.primary} />
-			</View>
+			<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+				<ScreenHeader title={isEditing ? 'Edit Item' : 'Add Item'} />
+				<View style={{ padding: s.lg, gap: s.md }}>
+					<SkeletonBlock height={52} borderRadius={r.md} />
+					<View style={{ flexDirection: 'row', gap: s.md }}>
+						<SkeletonBlock height={52} borderRadius={r.md} style={{ flex: 1 }} />
+						<SkeletonBlock height={52} borderRadius={r.md} style={{ flex: 1 }} />
+					</View>
+					<SkeletonBlock height={52} borderRadius={r.md} />
+					<SkeletonBlock height={52} borderRadius={r.md} />
+				</View>
+			</AtomicScreen>
 		);
 	}
 
@@ -444,6 +442,5 @@ export default function AddItemScreen() {
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1 },
 	footer: { borderTopWidth: 1 },
 });

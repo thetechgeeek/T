@@ -2,7 +2,6 @@ import { View, StyleSheet, RefreshControl } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 import { useRouter } from 'expo-router';
 import { TrendingUp, TrendingDown, Wallet, Receipt, ShoppingCart } from 'lucide-react-native';
-import type { LucideIcon } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -162,14 +161,6 @@ const styles = StyleSheet.create({
 	},
 	metricsGrid: {
 		gap: 16,
-	},
-	metricCard: {
-		marginBottom: 8,
-	},
-	metricHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: 12,
 	},
 	section: {
 		gap: 8,

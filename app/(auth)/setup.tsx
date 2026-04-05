@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
@@ -8,9 +8,10 @@ import { businessProfileService } from '@/src/services/businessProfileService';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput } from '@/src/components/atoms/TextInput';
+import { Button } from '@/src/components/atoms/Button';
 
 export default function SetupScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, s } = useThemeTokens();
 	const { t } = useLocale();
 	const { register } = useAuthStore();
 	const router = useRouter();
@@ -98,22 +99,13 @@ export default function SetupScreen() {
 							autoComplete="password"
 							containerStyle={{ marginTop: s.md }}
 						/>
-						<TouchableOpacity
-							style={[
-								styles.button,
-								{ backgroundColor: c.primary, borderRadius: r.md, marginTop: s.xl },
-							]}
+						<Button
+							title={`${t('common.add')} Account →`}
+							accessibilityLabel="create-account-button"
 							onPress={handleCreateAccount}
-							disabled={loading}
-						>
-							{loading ? (
-								<ActivityIndicator color={c.onPrimary} />
-							) : (
-								<ThemedText weight="semibold" style={{ color: c.onPrimary }}>
-									{t('common.add')} Account →
-								</ThemedText>
-							)}
-						</TouchableOpacity>
+							loading={loading}
+							style={{ marginTop: s.xl }}
+						/>
 						<TouchableOpacity
 							style={styles.linkBtn}
 							onPress={() => router.push('/(auth)/login')}
@@ -147,22 +139,13 @@ export default function SetupScreen() {
 							autoCapitalize="characters"
 							containerStyle={{ marginTop: s.md }}
 						/>
-						<TouchableOpacity
-							style={[
-								styles.button,
-								{ backgroundColor: c.primary, borderRadius: r.md, marginTop: s.xl },
-							]}
+						<Button
+							title={`${t('common.save')} & Continue →`}
+							accessibilityLabel="save-business-button"
 							onPress={handleSaveBusiness}
-							disabled={loading}
-						>
-							{loading ? (
-								<ActivityIndicator color={c.onPrimary} />
-							) : (
-								<ThemedText weight="semibold" style={{ color: c.onPrimary }}>
-									{t('common.save')} & Continue →
-								</ThemedText>
-							)}
-						</TouchableOpacity>
+							loading={loading}
+							style={{ marginTop: s.xl }}
+						/>
 					</>
 				)}
 			</View>
@@ -170,9 +153,6 @@ export default function SetupScreen() {
 	);
 }
 
-// Remove the obsolete InputField function
-
 const styles = StyleSheet.create({
-	button: { height: 52, alignItems: 'center', justifyContent: 'center' },
 	linkBtn: { alignItems: 'center', height: 44, justifyContent: 'center', marginTop: 8 },
 });

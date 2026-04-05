@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { Search, Aperture } from 'lucide-react-native';
@@ -8,6 +8,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Button } from '@/src/components/atoms/Button';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import logger from '@/src/utils/logger';
@@ -143,10 +144,11 @@ export default function ScanTab() {
 						]}
 					>
 						{capturing && (
-							<ActivityIndicator
-								color={c.primary}
-								style={{ marginTop: 70 }}
-								size="large"
+							<SkeletonBlock
+								width={56}
+								height={56}
+								borderRadius={28}
+								style={{ marginTop: 62, alignSelf: 'center' }}
 							/>
 						)}
 					</View>

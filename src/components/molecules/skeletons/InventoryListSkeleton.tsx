@@ -3,7 +3,8 @@ import { View } from 'react-native';
 import { SkeletonBlock } from '../SkeletonBlock';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 
-function VariantRowSkeleton({ s, r, c }: { s: any; r: any; c: any }) {
+function VariantRowSkeleton() {
+	const { s, r } = useThemeTokens();
 	return (
 		<View
 			style={{ flexDirection: 'row', alignItems: 'center', gap: s.md, paddingVertical: s.sm }}
@@ -26,7 +27,7 @@ export function InventoryListSkeleton() {
 	const { s, r, c } = useThemeTokens();
 
 	return (
-		<View style={{ padding: s.md, gap: s.md }}>
+		<View testID="loading-spinner" style={{ padding: s.md, gap: s.md }}>
 			{Array.from({ length: 3 }).map((_, i) => (
 				<View
 					key={i}
@@ -45,8 +46,8 @@ export function InventoryListSkeleton() {
 					</View>
 					{/* variant rows */}
 					<View style={{ padding: s.md, gap: s.sm }}>
-						<VariantRowSkeleton s={s} r={r} c={c} />
-						<VariantRowSkeleton s={s} r={r} c={c} />
+						<VariantRowSkeleton />
+						<VariantRowSkeleton />
 					</View>
 				</View>
 			))}

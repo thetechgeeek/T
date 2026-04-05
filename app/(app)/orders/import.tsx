@@ -16,7 +16,6 @@ import {
 	ClipboardList,
 	Trash2,
 	PlusCircle,
-	Pencil,
 	ChevronDown,
 	ChevronUp,
 } from 'lucide-react-native';

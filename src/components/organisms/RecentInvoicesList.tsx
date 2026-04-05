@@ -127,5 +127,4 @@ const styles = StyleSheet.create({
 	section: {},
 	emptyCard: { alignItems: 'center' },
 	invoiceItem: {},
-	statusBadge: { alignSelf: 'flex-start' },
 });

@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import {
-	View,
-	StyleSheet,
-	FlatList,
-	TouchableOpacity,
-	ActivityIndicator,
-	RefreshControl,
-} from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Plus, ChevronRight, FileText } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -17,6 +10,7 @@ import { Button } from '@/src/components/atoms/Button';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { OrderListSkeleton } from '@/src/components/molecules/skeletons/OrderListSkeleton';
 
 export default function OrdersListScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -57,9 +51,7 @@ export default function OrdersListScreen() {
 			/>
 
 			{loading && orders.length === 0 ? (
-				<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-					<ActivityIndicator size="large" color={c.primary} />
-				</View>
+				<OrderListSkeleton />
 			) : orders.length === 0 ? (
 				<View
 					style={{

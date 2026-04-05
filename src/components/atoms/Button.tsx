@@ -33,6 +33,7 @@ export function Button({
 	rightIcon,
 	style,
 	disabled,
+	onPress,
 	onPressIn,
 	onPressOut,
 	...props
@@ -90,10 +91,12 @@ export function Button({
 				accessibilityState={{ disabled: isDisabled, busy: loading }}
 				accessibilityHint={loading ? 'Loading, please wait' : undefined}
 				onPressIn={(e) => {
+					// eslint-disable-next-line react-hooks/immutability
 					scale.value = withSpring(PRESS_SCALE.pressed, SPRING_PRESS);
 					onPressIn?.(e);
 				}}
 				onPressOut={(e) => {
+					// eslint-disable-next-line react-hooks/immutability
 					scale.value = withSpring(PRESS_SCALE.released, SPRING_PRESS);
 					onPressOut?.(e);
 				}}
@@ -111,6 +114,7 @@ export function Button({
 						paddingHorizontal: s.px,
 					},
 				]}
+				onPress={isDisabled ? undefined : onPress}
 				{...props}
 			>
 				{loading ? (

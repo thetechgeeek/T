@@ -43,9 +43,11 @@ export const ListItem: React.FC<ListItemProps> = ({
 			<Pressable
 				onPress={onPress}
 				onPressIn={() => {
+					// eslint-disable-next-line react-hooks/immutability
 					if (onPress) scale.value = withSpring(PRESS_SCALE.pressed, SPRING_PRESS);
 				}}
 				onPressOut={() => {
+					// eslint-disable-next-line react-hooks/immutability
 					if (onPress) scale.value = withSpring(PRESS_SCALE.released, SPRING_PRESS);
 				}}
 				accessibilityRole={onPress ? 'button' : 'none'}

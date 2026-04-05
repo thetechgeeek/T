@@ -145,9 +145,4 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginTop: 8,
 	},
-	badge: {
-		paddingHorizontal: 8,
-		paddingVertical: 4,
-		borderRadius: 4,
-	},
 });

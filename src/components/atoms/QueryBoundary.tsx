@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SkeletonBlock } from '../molecules/SkeletonBlock';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { EmptyState } from '../molecules/EmptyState';
 import type { AppError } from '@/src/errors';
@@ -28,8 +29,10 @@ export function QueryBoundary({
 	if (loading && !React.Children.count(children)) {
 		return (
 			loadingComponent ?? (
-				<View style={styles.center}>
-					<ActivityIndicator size="large" color={theme.colors.primary} />
+				<View style={styles.loadingContainer}>
+					<SkeletonBlock height={14} style={{ marginBottom: 10 }} />
+					<SkeletonBlock width="75%" height={14} style={{ marginBottom: 10 }} />
+					<SkeletonBlock width="50%" height={14} />
 				</View>
 			)
 		);
@@ -63,6 +66,7 @@ export function QueryBoundary({
 
 const styles = StyleSheet.create({
 	center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
+	loadingContainer: { flex: 1, padding: 24 },
 	errorText: { textAlign: 'center', marginBottom: 12 },
 	retryButton: { paddingHorizontal: 16, paddingVertical: 8 },
 });

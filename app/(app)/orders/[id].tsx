@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -9,6 +9,7 @@ import { Package, CheckCircle2 } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import logger from '@/src/utils/logger';
 
 export default function OrderDetailScreen() {
@@ -39,11 +40,20 @@ export default function OrderDetailScreen() {
 
 	if (loading || !order) {
 		return (
-			<AtomicScreen
-				safeAreaEdges={['top', 'bottom']}
-				style={{ justifyContent: 'center', alignItems: 'center' }}
-			>
-				<ActivityIndicator size="large" color={c.primary} />
+			<AtomicScreen safeAreaEdges={['top', 'bottom']}>
+				<ScreenHeader title="" />
+				<View style={{ padding: s.lg, gap: s.md }}>
+					<SkeletonBlock width="60%" height={28} />
+					<SkeletonBlock width="40%" height={14} />
+					<View style={{ marginTop: s.lg, gap: s.sm }}>
+						<SkeletonBlock height={48} borderRadius={r.md} />
+						<SkeletonBlock height={48} borderRadius={r.md} />
+					</View>
+					<SkeletonBlock width="40%" height={20} style={{ marginTop: s.lg }} />
+					{[0, 1, 2].map((i) => (
+						<SkeletonBlock key={i} height={64} borderRadius={r.md} />
+					))}
+				</View>
 			</AtomicScreen>
 		);
 	}

@@ -1,14 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import {
-	View,
-	StyleSheet,
-	FlatList,
-	TouchableOpacity,
-	RefreshControl,
-	ActivityIndicator,
-	Alert,
-} from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
 import { Plus, Package, Search, SlidersHorizontal } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -17,6 +9,7 @@ import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { TileSetCard } from '@/src/components/organisms/TileSetCard';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { InventoryListSkeleton } from '@/src/components/molecules/skeletons/InventoryListSkeleton';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Chip } from '@/src/components/atoms/Chip';
@@ -219,11 +212,9 @@ export default function InventoryTab() {
 				onEndReachedThreshold={0.5}
 				ListFooterComponent={
 					loading && items.length > 0 ? (
-						<ActivityIndicator
-							testID="loading-spinner"
-							style={{ padding: s.md }}
-							color={c.primary}
-						/>
+						<View style={{ padding: s.md, gap: s.sm }}>
+							<SkeletonBlock height={80} borderRadius={r.lg} />
+						</View>
 					) : null
 				}
 			/>

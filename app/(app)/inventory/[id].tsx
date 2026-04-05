@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import { Package, Edit, HelpCircle, ArrowUpRight, ArrowDownRight } from 'lucide-react-native';
@@ -10,6 +10,7 @@ import { inventoryService } from '@/src/services/inventoryService';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { withOpacity } from '@/src/utils/color';
 import type { InventoryItem, StockOperation } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
@@ -61,9 +62,14 @@ export default function ItemDetailScreen() {
 
 	if (loading) {
 		return (
-			<AtomicScreen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
-				<View style={[styles.center, { flex: 1 }]}>
-					<ActivityIndicator size="large" color={c.primary} />
+			<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+				<ScreenHeader title="" />
+				<View style={{ padding: s.lg, gap: s.md }}>
+					<SkeletonBlock height={120} borderRadius={r.lg} />
+					<SkeletonBlock height={60} borderRadius={r.md} />
+					<SkeletonBlock height={60} borderRadius={r.md} />
+					<SkeletonBlock width="50%" height={20} style={{ marginTop: s.sm }} />
+					<SkeletonBlock height={80} borderRadius={r.md} />
 				</View>
 			</AtomicScreen>
 		);
@@ -73,7 +79,7 @@ export default function ItemDetailScreen() {
 		return (
 			<AtomicScreen safeAreaEdges={['bottom']}>
 				<ScreenHeader title="" />
-				<View style={styles.center}>
+				<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 					<HelpCircle size={48} color={c.placeholder} strokeWidth={1} />
 					<ThemedText style={{ marginTop: 16 }}>Item not found</ThemedText>
 				</View>
@@ -270,8 +276,6 @@ export default function ItemDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1 },
-	center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 	imageCard: { padding: 4 },
 	stockBox: { padding: 16, alignItems: 'center' },
 	actionBtn: { paddingVertical: 14 },

@@ -318,11 +318,55 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 	require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 
+// Manual Reanimated mock — avoids react-native-worklets native module init in Jest
 jest.mock('react-native-reanimated', () => {
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
-	const Reanimated = require('react-native-reanimated/mock');
-	Reanimated.default.call = () => {};
-	return Reanimated;
+	const ReactNative = require('react-native');
+	const sharedValueFactory = (val: unknown) => ({ value: val });
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const safeCall = (fn: () => unknown): any => {
+		try {
+			return fn();
+		} catch {
+			return {};
+		}
+	};
+	return {
+		__esModule: true,
+		default: {
+			View: ReactNative.View,
+			Text: ReactNative.Text,
+			Image: ReactNative.Image,
+			ScrollView: ReactNative.ScrollView,
+			FlatList: ReactNative.FlatList,
+			createAnimatedComponent: (c: unknown) => c,
+			call: () => {},
+		},
+		createAnimatedComponent: (c: unknown) => c,
+		useSharedValue: sharedValueFactory,
+		useAnimatedStyle: safeCall,
+		useAnimatedProps: safeCall,
+		useDerivedValue: (fn: () => unknown) => ({ value: safeCall(fn) }),
+		useAnimatedReaction: () => {},
+		useAnimatedScrollHandler: () => ({}),
+		useAnimatedRef: () => ({ current: null }),
+		withSpring: (val: unknown) => val,
+		withTiming: (val: unknown) => val,
+		withRepeat: (val: unknown) => val,
+		withSequence: (...args: unknown[]) => args[0],
+		withDelay: (_: number, val: unknown) => val,
+		cancelAnimation: () => {},
+		runOnUI: (fn: () => void) => fn,
+		runOnJS: (fn: () => void) => fn,
+		interpolate: (_i: number, _r: number[], output: number[]) => output[0] ?? 0,
+		Extrapolation: { CLAMP: 'clamp', EXTEND: 'extend', IDENTITY: 'identity' },
+		Easing: {
+			inOut: (fn: (t: number) => number) => fn,
+			ease: (t: number) => t,
+			linear: (t: number) => t,
+			bezier: () => (t: number) => t,
+		},
+	};
 });
 
 // expo-router — useLocalSearchParams returns {} by default (QA issue 3.3)

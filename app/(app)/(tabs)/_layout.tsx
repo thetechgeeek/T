@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
-import { Home, Package, QrCode, FileText, MoreHorizontal, Users } from 'lucide-react-native';
+import { Home, Package, QrCode, FileText, Users } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ErrorBoundaryProps } from 'expo-router';

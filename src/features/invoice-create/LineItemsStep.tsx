@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
@@ -7,6 +7,7 @@ import { TextInput as AppTextInput } from '@/src/components/atoms/TextInput';
 import { FormField } from '@/src/components/molecules/FormField';
 import { layout } from '@/src/theme/layout';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { InventoryItem } from '@/src/types/inventory';
 
 interface Props {
@@ -128,7 +129,9 @@ export function LineItemsStep({
 				>
 					<View style={[layout.rowBetween, { marginBottom: s.xs }]}>
 						<ThemedText weight="bold">Select from Inventory</ThemedText>
-						{inventoryLoading && <ActivityIndicator size="small" color={c.primary} />}
+						{inventoryLoading && (
+							<SkeletonBlock width={20} height={20} borderRadius={10} />
+						)}
 					</View>
 
 					{!selectedItem ? (
