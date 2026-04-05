@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Alert, Modal, View, StyleSheet, ScrollView } from 'react-native';
+import { Alert, Modal, View, StyleSheet, ScrollView, Platform } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
 import { X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
 import { TextInput } from '@/src/components/atoms/TextInput';
-
-import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { UUID } from '@/src/types/common';
 import { paymentService } from '@/src/services/paymentService';
@@ -33,6 +33,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 	onSuccess,
 }) => {
 	const { theme } = useTheme();
+	const insets = useSafeAreaInsets();
 	const [amount, setAmount] = useState(totalAmount > 0 ? totalAmount.toString() : '');
 	const [paymentMode, setPaymentMode] = useState(PAYMENT_MODES[0].value);
 	const [notes, setNotes] = useState('');
@@ -68,103 +69,113 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
 	return (
 		<Modal visible={visible} transparent animationType="slide">
-			{/* Overlay is decorative — hide from a11y to prevent confusion */}
-			<View style={styles.overlay} importantForAccessibility="no">
-				<Screen backgroundColor="transparent" style={styles.keyboardView}>
-					<View
-						style={[styles.content, { backgroundColor: theme.colors.background }]}
-						accessibilityViewIsModal={true}
-						importantForAccessibility="yes"
+			<KeyboardAvoidingView
+				style={styles.overlay}
+				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+			>
+				<View
+					style={[
+						styles.content,
+						{
+							backgroundColor: theme.colors.background,
+							paddingBottom: Math.max(insets.bottom, 16),
+						},
+					]}
+					accessibilityViewIsModal={true}
+					importantForAccessibility="yes"
+				>
+					<View style={styles.handle} />
+
+					<View style={styles.header}>
+						<ThemedText variant="h2">Record Payment</ThemedText>
+						<Button
+							variant="ghost"
+							size="sm"
+							onPress={onClose}
+							accessibilityLabel="close-payment-modal"
+							testID="close-modal-button"
+							accessibilityHint="Dismiss the payment dialog"
+							leftIcon={<X size={24} color={theme.colors.onSurface} />}
+						/>
+					</View>
+
+					<ScrollView
+						contentContainerStyle={styles.scroll}
+						keyboardShouldPersistTaps="handled"
 					>
-						<View style={styles.header}>
-							<ThemedText variant="h2">Record Payment</ThemedText>
-							<Button
-								variant="ghost"
-								size="sm"
-								onPress={onClose}
-								accessibilityLabel="close-payment-modal"
-								testID="close-modal-button"
-								accessibilityHint="Dismiss the payment dialog"
-								leftIcon={<X size={24} color={theme.colors.onSurface} />}
-							/>
+						<ThemedText
+							variant="body2"
+							color={theme.colors.onSurfaceVariant}
+							style={{ marginBottom: 20 }}
+						>
+							{invoiceNumber
+								? `Invoice: ${invoiceNumber}`
+								: `Customer: ${customerName}`}
+						</ThemedText>
+
+						<TextInput
+							label="Amount (₹)"
+							accessibilityLabel="payment-amount-input"
+							accessibilityHint="Enter the payment amount in rupees"
+							value={amount}
+							onChangeText={setAmount}
+							keyboardType="numeric"
+							placeholder="0.00"
+							autoFocus
+						/>
+
+						<ThemedText
+							variant="label"
+							color={theme.colors.onSurfaceVariant}
+							importantForAccessibility="no"
+							style={{
+								marginTop: 16,
+								marginBottom: 8,
+								textTransform: 'uppercase',
+							}}
+						>
+							Payment Mode
+						</ThemedText>
+						<View
+							style={styles.modeGrid}
+							accessible={false}
+							accessibilityLabel="Select payment mode"
+						>
+							{modes.map((mode) => (
+								<Button
+									key={mode}
+									title={mode.replace('_', ' ').toUpperCase()}
+									accessibilityLabel={`payment-mode-${mode}`}
+									accessibilityHint={`Pay via ${mode.replace('_', ' ')}`}
+									variant={paymentMode === mode ? 'primary' : 'outline'}
+									size="sm"
+									style={styles.modeButton}
+									onPress={() => setPaymentMode(mode)}
+								/>
+							))}
 						</View>
 
-						<ScrollView contentContainerStyle={styles.scroll}>
-							<ThemedText
-								variant="body2"
-								color={theme.colors.onSurfaceVariant}
-								style={{ marginBottom: 20 }}
-							>
-								{invoiceNumber
-									? `Invoice: ${invoiceNumber}`
-									: `Customer: ${customerName}`}
-							</ThemedText>
+						<TextInput
+							label="Notes"
+							accessibilityLabel="payment-notes-input"
+							value={notes}
+							onChangeText={setNotes}
+							placeholder="Optional remarks"
+							multiline
+							numberOfLines={2}
+						/>
 
-							<TextInput
-								label="Amount (₹)"
-								accessibilityLabel="payment-amount-input"
-								accessibilityHint="Enter the payment amount in rupees"
-								value={amount}
-								onChangeText={setAmount}
-								keyboardType="numeric"
-								placeholder="0.00"
-								style={styles.input}
-							/>
-
-							<ThemedText
-								variant="label"
-								color={theme.colors.onSurfaceVariant}
-								importantForAccessibility="no"
-								style={{
-									marginTop: 16,
-									marginBottom: 8,
-									textTransform: 'uppercase',
-								}}
-							>
-								Payment Mode
-							</ThemedText>
-							<View
-								style={styles.modeGrid}
-								accessible={false}
-								accessibilityLabel="Select payment mode"
-							>
-								{modes.map((mode) => (
-									<Button
-										key={mode}
-										title={mode.replace('_', ' ').toUpperCase()}
-										accessibilityLabel={`payment-mode-${mode}`}
-										accessibilityHint={`Pay via ${mode.replace('_', ' ')}`}
-										variant={paymentMode === mode ? 'primary' : 'outline'}
-										size="sm"
-										style={styles.modeButton}
-										onPress={() => setPaymentMode(mode)}
-									/>
-								))}
-							</View>
-
-							<TextInput
-								label="Notes"
-								accessibilityLabel="payment-notes-input"
-								value={notes}
-								onChangeText={setNotes}
-								placeholder="Optional remarks"
-								multiline
-								numberOfLines={2}
-								style={styles.input}
-							/>
-
-							<Button
-								title={loading ? 'Processing...' : 'Record Payment'}
-								accessibilityLabel="submit-payment-button"
-								testID="submit-payment-button"
-								onPress={handleSave}
-								loading={loading}
-								style={styles.saveButton}
-							/>
-						</ScrollView>
-					</View>
-				</Screen>
-			</View>
+						<Button
+							title={loading ? 'Processing...' : 'Record Payment'}
+							accessibilityLabel="submit-payment-button"
+							testID="submit-payment-button"
+							onPress={handleSave}
+							loading={loading}
+							style={styles.saveButton}
+						/>
+					</ScrollView>
+				</View>
+			</KeyboardAvoidingView>
 		</Modal>
 	);
 };
@@ -175,14 +186,20 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0,0,0,0.5)',
 		justifyContent: 'flex-end',
 	},
-	keyboardView: {
-		width: '100%',
+	handle: {
+		width: 40,
+		height: 4,
+		borderRadius: 2,
+		backgroundColor: 'rgba(128,128,128,0.4)',
+		alignSelf: 'center',
+		marginBottom: 12,
 	},
 	content: {
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
-		padding: 20,
-		maxHeight: '80%',
+		paddingTop: 12,
+		paddingHorizontal: 20,
+		maxHeight: '90%',
 	},
 	header: {
 		flexDirection: 'row',
@@ -191,7 +208,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	scroll: {
-		paddingBottom: 20,
+		paddingBottom: 8,
 	},
 	modeGrid: {
 		flexDirection: 'row',
@@ -202,9 +219,6 @@ const styles = StyleSheet.create({
 	modeButton: {
 		flex: 1,
 		minWidth: '45%',
-	},
-	input: {
-		marginBottom: 16,
 	},
 	saveButton: {
 		marginTop: 12,

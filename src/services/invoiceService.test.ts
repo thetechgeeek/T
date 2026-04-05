@@ -9,6 +9,15 @@ jest.mock('../config/supabase', () => ({
 	},
 }));
 
+// Mock crypto for global environment
+if (typeof crypto === 'undefined') {
+	Object.defineProperty(global, 'crypto', {
+		value: { randomUUID: () => '00000000-0000-0000-0000-000000000000' },
+	});
+} else if (!crypto.randomUUID) {
+	crypto.randomUUID = () => '00000000-0000-0000-0000-000000000000' as any;
+}
+
 /** Chainable + thenable builder for fetchInvoices tests (`await query` pattern). */
 function makeListBuilder(
 	result: {
@@ -34,6 +43,7 @@ function makeListBuilder(
 		'insert',
 		'update',
 		'delete',
+		'maybeSingle',
 	].forEach((m) => {
 		b[m] = jest.fn().mockReturnValue(b);
 	});
@@ -72,6 +82,7 @@ describe('invoiceService', () => {
 				customer_name: 'John Doe',
 				is_inter_state: false,
 				invoice_date: '2026-03-28',
+				customer_phone: '9876543210',
 				payment_status: 'paid' as const,
 				line_items: [
 					{
@@ -98,6 +109,7 @@ describe('invoiceService', () => {
 						customer_name: 'John Doe',
 						is_inter_state: false,
 						payment_status: 'paid',
+						idempotency_key: expect.any(String),
 					}),
 					p_line_items: expect.arrayContaining([
 						expect.objectContaining({
@@ -116,6 +128,7 @@ describe('invoiceService', () => {
 					customer_name: '',
 					is_inter_state: false,
 					invoice_date: 'bad-date',
+					customer_phone: '',
 					payment_status: 'paid',
 					line_items: [],
 					amount_paid: 0,
@@ -131,6 +144,7 @@ describe('invoiceService', () => {
 			const itemId = '123e4567-e89b-12d3-a456-426614174000';
 			await invoiceService.createInvoice({
 				customer_name: 'John',
+				customer_phone: '9876543210',
 				is_inter_state: false,
 				invoice_date: '2026-03-28',
 				place_of_supply: '27',
@@ -175,6 +189,7 @@ describe('invoiceService', () => {
 			const itemId = '123e4567-e89b-12d3-a456-426614174000';
 			await invoiceService.createInvoice({
 				customer_name: 'John',
+				customer_phone: '9876543210',
 				is_inter_state: false,
 				invoice_date: '2026-03-28',
 				payment_status: 'unpaid',
@@ -215,6 +230,7 @@ describe('invoiceService', () => {
 			const itemId = '123e4567-e89b-12d3-a456-426614174000';
 			await invoiceService.createInvoice({
 				customer_name: 'John',
+				customer_phone: '9876543210',
 				is_inter_state: false,
 				invoice_date: '2026-03-28',
 				payment_status: 'unpaid',
@@ -241,6 +257,7 @@ describe('invoiceService', () => {
 			await expect(
 				invoiceService.createInvoice({
 					customer_name: 'John',
+					customer_phone: '9876543210',
 					is_inter_state: false,
 					invoice_date: '2026-03-28',
 					payment_status: 'unpaid',
@@ -266,6 +283,7 @@ describe('invoiceService', () => {
 			await expect(
 				invoiceService.createInvoice({
 					customer_name: 'John',
+					customer_phone: '9876543210',
 					is_inter_state: false,
 					invoice_date: '2026-03-28',
 					payment_status: 'unpaid',
@@ -281,6 +299,102 @@ describe('invoiceService', () => {
 					amount_paid: 0,
 				} as Parameters<typeof invoiceService.createInvoice>[0]),
 			).rejects.toMatchObject({ code: 'INSUFFICIENT_STOCK' });
+		});
+
+		it('Link-or-Create: links existing customer by phone number', async () => {
+			const mockInvoiceId = 'inv-123';
+			const mockCustomerId = 'cust-123';
+			(supabase.rpc as jest.Mock).mockResolvedValue({
+				data: { id: mockInvoiceId, invoice_number: 'TM/001' },
+				error: null,
+			});
+
+			// Setup complex mock to return existing customer
+			const customerBuilder = makeListBuilder({
+				data: { id: mockCustomerId } as any,
+				count: 1,
+				error: null,
+			});
+			const invoiceBuilder = makeListBuilder({
+				data: { id: mockInvoiceId } as any,
+				count: 1,
+				error: null,
+			});
+
+			(supabase.from as jest.Mock).mockImplementation((table) => {
+				if (table === 'customers') return customerBuilder;
+				if (table === 'invoices') return invoiceBuilder;
+				return makeListBuilder();
+			});
+
+			await invoiceService.createInvoice({
+				customer_name: 'Existing Customer',
+				customer_phone: '9876543210',
+				is_inter_state: false,
+				invoice_date: '2026-03-28',
+				payment_status: 'unpaid',
+				line_items: [
+					{ design_name: 'Item', quantity: 1, rate_per_unit: 100, gst_rate: 18 },
+				],
+			} as any);
+
+			expect(customerBuilder.maybeSingle).toHaveBeenCalled();
+			expect(supabase.rpc).toHaveBeenCalledWith(
+				'create_invoice_with_items_v1',
+				expect.objectContaining({
+					p_invoice: expect.objectContaining({
+						customer_id: mockCustomerId,
+					}),
+				}),
+			);
+		});
+
+		it('Link-or-Create: creates new customer if phone number not found', async () => {
+			const mockInvoiceId = 'inv-123';
+			const mockNewCustomerId = 'new-cust-123';
+			(supabase.rpc as jest.Mock).mockResolvedValue({
+				data: { id: mockInvoiceId, invoice_number: 'TM/001' },
+				error: null,
+			});
+
+			// Setup complex mock: customers table returns null first (maybeSingle), then mock insert (single)
+			const customerBuilder = makeListBuilder({ data: null, count: 0, error: null });
+			customerBuilder.single.mockResolvedValue({
+				data: { id: mockNewCustomerId },
+				error: null,
+			});
+
+			(supabase.from as jest.Mock).mockImplementation((table) => {
+				if (table === 'customers') return customerBuilder;
+				return makeListBuilder({
+					data: { id: mockInvoiceId } as any,
+					count: 1,
+					error: null,
+				});
+			});
+
+			await invoiceService.createInvoice({
+				customer_name: 'New Customer',
+				customer_phone: '1122334455',
+				is_inter_state: false,
+				invoice_date: '2026-03-28',
+				payment_status: 'unpaid',
+				line_items: [
+					{ design_name: 'Item', quantity: 1, rate_per_unit: 100, gst_rate: 18 },
+				],
+			} as any);
+
+			expect(customerBuilder.insert).toHaveBeenCalledWith(
+				expect.objectContaining({ phone: '1122334455' }),
+			);
+			expect(supabase.rpc).toHaveBeenCalledWith(
+				'create_invoice_with_items_v1',
+				expect.objectContaining({
+					p_invoice: expect.objectContaining({
+						customer_id: mockNewCustomerId,
+					}),
+				}),
+			);
 		});
 	});
 

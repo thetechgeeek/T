@@ -66,6 +66,7 @@ describe('Invoice Creation Real DB', () => {
 		const invoiceInput = {
 			customer_id: customerId,
 			customer_name: `${prefix}Test Customer`,
+			customer_phone: '1234567890',
 			invoice_date: new Date().toISOString().split('T')[0],
 			subtotal: 5000,
 			cgst_total: 0,
@@ -113,6 +114,7 @@ describe('Invoice Creation Real DB', () => {
 		const invoiceInput = {
 			customer_id: customerId,
 			customer_name: `${prefix}Seq Test`,
+			customer_phone: '1234567890',
 			invoice_date: new Date().toISOString().split('T')[0],
 			subtotal: 1000,
 			cgst_total: 0,
@@ -139,6 +141,7 @@ describe('Invoice Creation Real DB', () => {
 		const invoiceInput = {
 			customer_id: customerId,
 			customer_name: `${prefix}Fail Test`,
+			customer_phone: '1234567890',
 			invoice_date: new Date().toISOString().split('T')[0],
 			subtotal: 100,
 			grand_total: 100,
@@ -171,6 +174,7 @@ describe('Invoice Creation Real DB', () => {
 		const invoiceInput = {
 			customer_id: '00000000-0000-0000-0000-000000000000',
 			customer_name: 'Ghost',
+			customer_phone: '1234567890',
 			invoice_date: new Date().toISOString().split('T')[0],
 			grand_total: 100,
 		} as any;

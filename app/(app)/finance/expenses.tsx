@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, RefreshControl, Modal, Alert } from 'react-native';
+import { View, StyleSheet, RefreshControl, Modal, Alert, Platform, ScrollView } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
@@ -130,28 +131,37 @@ export default function ExpensesScreen() {
 			</View>
 
 			<Modal visible={modalVisible} animationType="slide" transparent>
-				<View style={styles.modalOverlay}>
-					<AtomicScreen
-						backgroundColor="transparent"
-						safeAreaEdges={['top']}
-						style={{ width: '100%' }}
+				<KeyboardAvoidingView
+					style={styles.modalOverlay}
+					behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+				>
+					<View
+						style={[
+							styles.modalContent,
+							{
+								backgroundColor: theme.colors.background,
+								paddingBottom: Math.max(insets.bottom, 16),
+							},
+						]}
+						accessibilityViewIsModal={true}
+						importantForAccessibility="yes"
 					>
-						<View
-							style={[
-								styles.modalContent,
-								{ backgroundColor: theme.colors.background },
-							]}
-						>
-							<View style={[layout.rowBetween, { marginBottom: 20 }]}>
-								<ThemedText variant="h2">New Expense</ThemedText>
-								<Button
-									variant="ghost"
-									size="sm"
-									onPress={() => setModalVisible(false)}
-									leftIcon={<X size={24} color={theme.colors.onSurface} />}
-								/>
-							</View>
+						<View style={styles.modalHandle} />
 
+						<View style={[layout.rowBetween, styles.modalHeader]}>
+							<ThemedText variant="h2">New Expense</ThemedText>
+							<Button
+								variant="ghost"
+								size="sm"
+								onPress={() => setModalVisible(false)}
+								leftIcon={<X size={24} color={theme.colors.onSurface} />}
+							/>
+						</View>
+
+						<ScrollView
+							contentContainerStyle={styles.modalScroll}
+							keyboardShouldPersistTaps="handled"
+						>
 							<FormField
 								label="Amount (₹)"
 								required
@@ -159,6 +169,7 @@ export default function ExpensesScreen() {
 								onChangeText={setAmount}
 								keyboardType="numeric"
 								placeholder="0.00"
+								autoFocus
 							/>
 
 							<FormField
@@ -184,9 +195,9 @@ export default function ExpensesScreen() {
 								loading={saving}
 								style={{ marginTop: 16 }}
 							/>
-						</View>
-					</AtomicScreen>
-				</View>
+						</ScrollView>
+					</View>
+				</KeyboardAvoidingView>
 			</Modal>
 		</AtomicScreen>
 	);
@@ -204,5 +215,21 @@ const styles = StyleSheet.create({
 		shadowRadius: 3.84,
 	},
 	modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-	modalContent: { borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20 },
+	modalHandle: {
+		width: 40,
+		height: 4,
+		borderRadius: 2,
+		backgroundColor: 'rgba(128,128,128,0.4)',
+		alignSelf: 'center',
+		marginBottom: 12,
+	},
+	modalHeader: { marginBottom: 16 },
+	modalContent: {
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
+		paddingTop: 12,
+		paddingHorizontal: 20,
+		maxHeight: '90%',
+	},
+	modalScroll: { paddingBottom: 8 },
 });

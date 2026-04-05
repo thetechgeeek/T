@@ -27,11 +27,12 @@ export interface InvoiceLineItem {
 export interface Invoice extends Timestamps {
 	id: UUID;
 	invoice_number: string;
+	idempotency_key?: UUID;
 	invoice_date: string;
 	customer_id?: UUID;
 	customer_name: string;
 	customer_gstin?: string;
-	customer_phone?: string;
+	customer_phone: string;
 	customer_address?: string;
 	subtotal: number;
 	cgst_total: number;
@@ -64,11 +65,12 @@ export interface InvoiceLineItemInput {
 }
 
 export interface InvoiceInput {
+	idempotency_key?: UUID;
 	invoice_date: string;
 	customer_id?: UUID;
 	customer_name: string;
 	customer_gstin?: string;
-	customer_phone?: string;
+	customer_phone: string;
 	customer_address?: string;
 	is_inter_state: boolean;
 	place_of_supply?: string;

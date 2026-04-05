@@ -129,7 +129,7 @@ export default function FinanceOverviewScreen() {
 					subtitle="Detailed financial performance"
 					accessibilityLabel="menu-profit-loss"
 					accessibilityHint="Double tap to view profit and loss"
-					onPress={() => {}} // TODO
+					onPress={() => router.push('/(app)/finance/profit-loss')}
 					leftIcon={
 						<TrendingUp color={theme.colors.success} importantForAccessibility="no" />
 					}

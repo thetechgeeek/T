@@ -4,6 +4,14 @@ import MoreTab from '@/app/(app)/(tabs)/more';
 import { useAuthStore } from '@/src/stores/authStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
+import { lightTheme, darkTheme } from '@/src/theme/colors';
+
+jest.mock('@/src/theme/ThemeProvider', () => ({
+	...jest.requireActual('@/src/theme/ThemeProvider'),
+	useTheme: jest.fn(),
+}));
+
+import { useTheme } from '@/src/theme/ThemeProvider';
 
 jest.mock('@/src/stores/authStore', () => ({
 	useAuthStore: jest.fn(),
@@ -29,11 +37,19 @@ jest.mock('@/src/hooks/useLocale', () => ({
 
 const mockLogout = jest.fn();
 const mockPush = jest.fn();
+const mockToggleTheme = jest.fn();
 
 beforeEach(() => {
 	jest.clearAllMocks();
 	(useAuthStore as unknown as jest.Mock).mockReturnValue({ logout: mockLogout });
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
+	(useTheme as jest.Mock).mockReturnValue({
+		theme: lightTheme,
+		isDark: false,
+		toggleTheme: mockToggleTheme,
+		mode: 'light' as const,
+		setThemeMode: jest.fn(),
+	});
 });
 
 describe('MoreTab', () => {
@@ -83,5 +99,35 @@ describe('MoreTab', () => {
 	it('renders language toggle button', () => {
 		const { getByText } = renderWithTheme(<MoreTab />);
 		expect(getByText('Switch to Hindi (हिंदी)')).toBeTruthy();
+	});
+
+	it('renders dark mode toggle showing "Dark Mode" when in light mode', () => {
+		(useTheme as jest.Mock).mockReturnValue({
+			theme: lightTheme,
+			isDark: false,
+			toggleTheme: mockToggleTheme,
+			mode: 'light' as const,
+			setThemeMode: jest.fn(),
+		});
+		const { getByText } = renderWithTheme(<MoreTab />);
+		expect(getByText('Dark Mode')).toBeTruthy();
+	});
+
+	it('renders dark mode toggle showing "Light Mode" when in dark mode', () => {
+		(useTheme as jest.Mock).mockReturnValue({
+			theme: darkTheme,
+			isDark: true,
+			toggleTheme: mockToggleTheme,
+			mode: 'dark' as const,
+			setThemeMode: jest.fn(),
+		});
+		const { getByText } = renderWithTheme(<MoreTab />);
+		expect(getByText('Light Mode')).toBeTruthy();
+	});
+
+	it('calls toggleTheme when dark mode toggle is pressed', () => {
+		const { getByLabelText } = renderWithTheme(<MoreTab />);
+		fireEvent.press(getByLabelText('dark-mode-toggle'));
+		expect(mockToggleTheme).toHaveBeenCalled();
 	});
 });

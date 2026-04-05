@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { UserPlus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -30,15 +31,17 @@ export default function CustomersScreen() {
 
 	const [search, setSearch] = useState(filters.search || '');
 
-	useEffect(() => {
-		fetchCustomers().catch((e) => {
-			Alert.alert(
-				t('common.errorTitle'),
-				t('customer.loadError') + ' ' + (e?.message || ''),
-				[{ text: t('common.ok') }],
-			);
-		});
-	}, [fetchCustomers, t]);
+	useFocusEffect(
+		useCallback(() => {
+			fetchCustomers(true).catch((e) => {
+				Alert.alert(
+					t('common.errorTitle'),
+					t('customer.loadError') + ' ' + (e?.message || ''),
+					[{ text: t('common.ok') }],
+				);
+			});
+		}, [fetchCustomers, t]),
+	);
 
 	const handleSearch = (text: string) => {
 		setSearch(text);

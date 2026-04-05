@@ -11,6 +11,7 @@ export const InvoiceLineItemSchema = z.object({
 });
 
 export const InvoiceInputSchema = z.object({
+	idempotency_key: z.string().uuid().optional(),
 	invoice_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
 	customer_name: z.string().min(1, 'Customer name is required'),
 	customer_gstin: z
@@ -18,7 +19,10 @@ export const InvoiceInputSchema = z.object({
 		.regex(/^\d{2}[A-Z]{5}\d{4}[A-Z]\d[Z][A-Z\d]$/, 'Invalid GSTIN format')
 		.optional()
 		.or(z.literal('')),
-	customer_phone: z.string().optional(),
+	customer_phone: z
+		.string()
+		.min(10, 'Phone number must be at least 10 digits')
+		.regex(/^\d+$/, 'Phone number must contain only digits'),
 	customer_address: z.string().optional(),
 	is_inter_state: z.boolean(),
 	place_of_supply: z.string().optional(),

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import {
 	ArrowLeft,
 	Package,
@@ -30,31 +31,38 @@ export default function ItemDetailScreen() {
 	const [history, setHistory] = useState<StockOperation[]>([]);
 	const [loading, setLoading] = useState(true);
 
-	// Instead of only using local store, fetch fresh so we always have latest
-	useEffect(() => {
-		if (!id) return;
-		let isMounted = true;
-		const fetchAll = async () => {
-			try {
-				const [itemData, historyData] = await Promise.all([
-					inventoryService.fetchItemById(id),
-					inventoryService.fetchStockHistory(id),
-				]);
-				if (isMounted) {
-					setItem(itemData);
-					setHistory(historyData);
+	// Re-fetch every time screen comes into focus so stock counts are fresh after stock ops.
+	// Only show full-screen loading on first load (item is null); subsequent focus re-fetches
+	// update silently in the background to avoid blanking the screen.
+	useFocusEffect(
+		useCallback(() => {
+			if (!id) return;
+			let isMounted = true;
+			const isFirstLoad = item === null;
+			if (isFirstLoad) setLoading(true);
+			const fetchAll = async () => {
+				try {
+					const [itemData, historyData] = await Promise.all([
+						inventoryService.fetchItemById(id),
+						inventoryService.fetchStockHistory(id),
+					]);
+					if (isMounted) {
+						setItem(itemData);
+						setHistory(historyData);
+					}
+				} catch (err) {
+					logger.error('Failed to load item detail', err);
+				} finally {
+					if (isMounted) setLoading(false);
 				}
-			} catch (err) {
-				logger.error('Failed to load item detail', err);
-			} finally {
-				if (isMounted) setLoading(false);
-			}
-		};
-		fetchAll();
-		return () => {
-			isMounted = false;
-		};
-	}, [id]);
+			};
+			fetchAll();
+			return () => {
+				isMounted = false;
+			};
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [id]),
+	);
 
 	if (loading) {
 		return (

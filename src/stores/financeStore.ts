@@ -3,13 +3,16 @@ import { immer } from 'zustand/middleware/immer';
 import { financeService } from '../services/financeService';
 import { eventBus } from '../events/appEvents';
 import type { Expense, Purchase, ProfitLossReport as ProfitLossSummary } from '../types/finance';
-import { subMonths, format } from 'date-fns';
 
+// Returns the current Indian financial year range (April 1 – March 31)
 function defaultDateRange() {
 	const now = new Date();
+	const year = now.getFullYear();
+	const month = now.getMonth() + 1; // 1-based
+	const fyStartYear = month >= 4 ? year : year - 1;
 	return {
-		startDate: format(subMonths(now, 1), 'yyyy-MM-dd'),
-		endDate: format(now, 'yyyy-MM-dd'),
+		startDate: `${fyStartYear}-04-01`,
+		endDate: `${fyStartYear + 1}-03-31`,
 	};
 }
 

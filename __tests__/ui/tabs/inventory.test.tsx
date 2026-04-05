@@ -64,7 +64,8 @@ describe('InventoryTab', () => {
 		});
 	});
 
-	it('does not call fetchItems if items already loaded', async () => {
+	it('always calls fetchItems once on first mount regardless of items already loaded', async () => {
+		// The initialized ref ensures exactly one fetch on mount — no skipping, no looping.
 		(useInventoryStore as unknown as jest.Mock).mockImplementation(
 			(selector: (state: typeof defaultStoreState) => unknown) =>
 				selector({
@@ -89,7 +90,7 @@ describe('InventoryTab', () => {
 
 		renderWithTheme(<InventoryTab />);
 		await waitFor(() => {
-			expect(mockFetchItems).not.toHaveBeenCalled();
+			expect(mockFetchItems).toHaveBeenCalledTimes(1);
 		});
 	});
 
@@ -162,5 +163,20 @@ describe('InventoryTab', () => {
 		const { getByText } = renderWithTheme(<InventoryTab />);
 		fireEvent.press(getByText('GLOSSY'));
 		expect(mockPush).not.toHaveBeenCalled();
+	});
+
+	it('does not re-fetch after initial mount even when items is empty — no infinite loop', async () => {
+		// The old bug: useEffect re-triggered whenever items.length===0 && !loading && page===1
+		// which meant a search returning 0 results triggered another fetch, which cleared results,
+		// which triggered another fetch, ad infinitum.
+		// The fix: useRef(initialized) ensures fetchItems(true) is only called once on mount.
+		mockFetchItems.mockResolvedValue(undefined);
+		renderWithTheme(<InventoryTab />);
+
+		// Let all microtasks/timers settle
+		await new Promise((r) => setTimeout(r, 100));
+
+		// fetchItems should have been called exactly once (on mount), not repeatedly
+		expect(mockFetchItems).toHaveBeenCalledTimes(1);
 	});
 });

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -15,19 +15,28 @@ export default function InvoicesListScreen() {
 	const { theme, c, s } = useThemeTokens();
 	const { t, formatCurrency } = useLocale();
 
-	const { invoices, fetchInvoices, loading } = useInvoiceStore(
+	const { invoices, fetchInvoices } = useInvoiceStore(
 		useShallow((s) => ({
 			invoices: s.invoices,
 			fetchInvoices: s.fetchInvoices,
-			loading: s.loading,
 		})),
 	);
+	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
 		fetchInvoices().catch((_e) => {
 			Alert.alert(t('common.errorTitle'), t('invoice.loadError'), [{ text: t('common.ok') }]);
 		});
 	}, [fetchInvoices, t]);
+
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			await fetchInvoices(1);
+		} finally {
+			setRefreshing(false);
+		}
+	};
 
 	return (
 		<AtomicScreen safeAreaEdges={['top']}>
@@ -46,8 +55,8 @@ export default function InvoicesListScreen() {
 			<FlatList
 				data={invoices}
 				keyExtractor={(item) => item.id}
-				refreshing={loading}
-				onRefresh={() => fetchInvoices(1)}
+				refreshing={refreshing}
+				onRefresh={handleRefresh}
 				contentContainerStyle={{ padding: s.md }}
 				ListEmptyComponent={() => (
 					<View style={{ alignItems: 'center', marginTop: s['2xl'] }}>

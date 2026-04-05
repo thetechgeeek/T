@@ -3,6 +3,7 @@ import { toAppError } from '../errors/AppError';
 import { invoiceRepository } from '../repositories/invoiceRepository';
 import { calculateInvoiceTotals, calculateLineItemTax } from '../utils/gstCalculator';
 import { validateWith } from '../utils/validation';
+import { generateUUID } from '../utils/uuid';
 import { InvoiceInputSchema } from '../schemas/invoice';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
 import type { UUID } from '../types/common';
@@ -55,9 +56,37 @@ export function createInvoiceService(repo = invoiceRepository) {
 			validateWith(InvoiceInputSchema, input);
 			const totals = calculateInvoiceTotals(input.line_items, input.is_inter_state);
 
+			// Link-or-Create Customer Logic
+			let customerId = input.customer_id;
+			if (!customerId) {
+				const { data: existingCustomer } = await supabase
+					.from('customers')
+					.select('id')
+					.eq('phone', input.customer_phone)
+					.maybeSingle();
+
+				if (existingCustomer) {
+					customerId = existingCustomer.id;
+				} else {
+					const { data: newCustomer, error: createError } = await supabase
+						.from('customers')
+						.insert({
+							name: input.customer_name,
+							phone: input.customer_phone,
+							gstin: input.customer_gstin,
+							address: input.customer_address,
+						})
+						.select('id')
+						.single();
+
+					if (createError) throw toAppError(createError);
+					customerId = newCustomer.id as UUID;
+				}
+			}
+
 			const invoiceData = {
 				invoice_date: input.invoice_date,
-				customer_id: input.customer_id,
+				customer_id: customerId,
 				customer_name: input.customer_name,
 				customer_gstin: input.customer_gstin,
 				customer_phone: input.customer_phone,
@@ -70,6 +99,7 @@ export function createInvoiceService(repo = invoiceRepository) {
 				amount_paid: input.amount_paid || 0,
 				notes: input.notes,
 				terms: input.terms,
+				idempotency_key: input.idempotency_key || generateUUID(),
 				...totals,
 			};
 

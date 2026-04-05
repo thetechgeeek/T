@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
 	View,
@@ -53,17 +53,19 @@ export default function InventoryTab() {
 	);
 	const [refreshing, setRefreshing] = useState(false);
 	const [searchInput, setSearchInput] = useState(filters.search || '');
+	const initialized = useRef(false);
 
 	useEffect(() => {
-		// Initial fetch if empty and not loading
-		if (items.length === 0 && !loading && page === 1) {
+		// Only auto-fetch on first mount; after that, setFilters drives fetches
+		if (!initialized.current) {
+			initialized.current = true;
 			fetchItems(true).catch((_e) => {
 				Alert.alert(t('common.errorTitle'), t('inventory.loadError'), [
 					{ text: t('common.ok') },
 				]);
 			});
 		}
-	}, [fetchItems, items.length, loading, page, t]);
+	}, [fetchItems, t]);
 
 	const handleRefresh = async () => {
 		setRefreshing(true);

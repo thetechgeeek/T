@@ -8,9 +8,12 @@ import {
 	ChevronRight,
 	Package,
 	Languages,
+	Moon,
+	Sun,
 } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { useTheme } from '@/src/theme/ThemeProvider';
 import { useAuthStore } from '@/src/stores/authStore';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -18,6 +21,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 export default function MoreTab() {
 	const { theme, c, s } = useThemeTokens();
 	const { t, currentLanguage, toggleLanguage } = useLocale();
+	const { isDark, toggleTheme } = useTheme();
 	const { logout } = useAuthStore();
 	const router = useRouter();
 
@@ -147,6 +151,44 @@ export default function MoreTab() {
 						style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
 					>
 						{currentLanguage === 'en' ? 'Switch to Hindi (हिंदी)' : 'Switch to English'}
+					</ThemedText>
+					<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={[
+						styles.menuItem,
+						{
+							backgroundColor: c.card,
+							borderRadius: theme.borderRadius.md,
+							marginBottom: s.sm,
+							...(theme.shadows.sm as object),
+						},
+					]}
+					onPress={toggleTheme}
+					activeOpacity={0.8}
+					accessibilityRole="switch"
+					accessibilityLabel="dark-mode-toggle"
+					accessibilityState={{ checked: isDark }}
+					accessibilityHint={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+				>
+					<View
+						style={[
+							styles.iconWrap,
+							{ backgroundColor: c.onSurfaceVariant + '20', borderRadius: 10 },
+						]}
+					>
+						{isDark ? (
+							<Sun size={22} color={c.onSurfaceVariant} strokeWidth={2} />
+						) : (
+							<Moon size={22} color={c.onSurfaceVariant} strokeWidth={2} />
+						)}
+					</View>
+					<ThemedText
+						weight="medium"
+						style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
+					>
+						{isDark ? 'Light Mode' : 'Dark Mode'}
 					</ThemedText>
 					<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
 				</TouchableOpacity>

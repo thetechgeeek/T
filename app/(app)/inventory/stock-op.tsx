@@ -34,13 +34,17 @@ export default function StockOpScreen() {
 	const { performStockOperation } = useInventoryStore();
 	const [submitting, setSubmitting] = useState(false);
 	const [item, setItem] = useState<InventoryItem | null>(null);
+	const [loadError, setLoadError] = useState(false);
 
 	useEffect(() => {
 		if (id) {
 			inventoryService
 				.fetchItemById(id)
 				.then(setItem)
-				.catch((e) => logger.error('error', e instanceof Error ? e : new Error(String(e))));
+				.catch((e) => {
+					logger.error('error', e instanceof Error ? e : new Error(String(e)));
+					setLoadError(true);
+				});
 		}
 	}, [id]);
 
@@ -90,10 +94,23 @@ export default function StockOpScreen() {
 			<View
 				style={[
 					styles.container,
-					{ backgroundColor: c.background, justifyContent: 'center' },
+					{
+						backgroundColor: c.background,
+						justifyContent: 'center',
+						alignItems: 'center',
+					},
 				]}
 			>
-				<ActivityIndicator testID="loading-spinner" size="large" color={c.primary} />
+				{loadError ? (
+					<>
+						<ThemedText color={c.error}>Failed to load item.</ThemedText>
+						<TouchableOpacity onPress={() => router.back()} style={{ marginTop: 16 }}>
+							<ThemedText color={c.primary}>Go Back</ThemedText>
+						</TouchableOpacity>
+					</>
+				) : (
+					<ActivityIndicator testID="loading-spinner" size="large" color={c.primary} />
+				)}
 			</View>
 		);
 	}

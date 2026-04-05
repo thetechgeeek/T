@@ -59,7 +59,7 @@ export default function DashboardScreen() {
 			label: t('dashboard.addStock'),
 			accessibilityLabel: 'quick-action-add-stock',
 			icon: Package,
-			route: '/(app)/inventory/stock-op',
+			route: '/(app)/(tabs)/inventory',
 			color: c.success,
 		},
 		{

@@ -1,10 +1,11 @@
 import React from 'react';
-import { waitFor } from '@testing-library/react-native';
+import { waitFor, fireEvent } from '@testing-library/react-native';
 import DashboardScreen from '@/app/(app)/(tabs)/index';
 import { useDashboardStore, DashboardState } from '@/src/stores/dashboardStore';
 import { useInvoiceStore, InvoiceState } from '@/src/stores/invoiceStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { makeDashboardStats } from '../../fixtures/financeFixtures';
+import { useRouter } from 'expo-router';
 
 jest.mock('@/src/stores/dashboardStore', () => ({
 	useDashboardStore: jest.fn(),
@@ -25,10 +26,12 @@ jest.mock('@/src/hooks/useLocale', () => ({
 
 const mockFetchStats = jest.fn().mockResolvedValue(undefined);
 const mockFetchInvoices = jest.fn().mockResolvedValue(undefined);
+const mockPush = jest.fn();
 
 describe('DashboardScreen', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
+		(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
 		(useDashboardStore as unknown as jest.Mock).mockImplementation(
 			(selector: (s: DashboardState) => unknown) =>
 				selector({
@@ -113,5 +116,12 @@ describe('DashboardScreen', () => {
 		await waitFor(() => {
 			expect(mockFetchStats).toHaveBeenCalled();
 		});
+	});
+
+	it('Add Stock quick action navigates to inventory tab', async () => {
+		const { getByLabelText } = renderWithTheme(<DashboardScreen />);
+		await waitFor(() => expect(getByLabelText('quick-action-add-stock')).toBeTruthy());
+		fireEvent.press(getByLabelText('quick-action-add-stock'));
+		expect(mockPush).toHaveBeenCalledWith('/(app)/(tabs)/inventory');
 	});
 });

@@ -139,4 +139,21 @@ describe('InvoicesListScreen', () => {
 		fireEvent.press(getByText('TM-001'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/invoices/inv-1');
 	});
+
+	it('renders header when store loading is true on mount — local refreshing state not tied to store', () => {
+		(useInvoiceStore as unknown as jest.Mock).mockImplementation(
+			(selector: (state: InvoiceState) => unknown) =>
+				selector({
+					invoices: mockInvoices,
+					fetchInvoices: mockFetchInvoices,
+					loading: true,
+					totalCount: 2,
+				} as unknown as InvoiceState),
+		);
+
+		const { getByText } = renderWithTheme(<InvoicesListScreen />);
+		// Component must render the header — not stuck in a store-driven loading state
+		expect(getByText('Invoices')).toBeTruthy();
+		expect(getByText('New Invoice')).toBeTruthy();
+	});
 });

@@ -157,19 +157,13 @@ describe('StockOpScreen', () => {
 		expect(queryByText('Confirm')).toBeNull();
 	});
 
-	it('form is never shown when fetchItemById rejects — documents the infinite spinner bug', async () => {
-		// Bug: catch only logs the error, never sets error state or clears loading
-		// Result: item stays null, form never renders, spinner persists forever
+	it('shows error message and Go Back button when fetchItemById rejects', async () => {
 		(inventoryService.fetchItemById as jest.Mock).mockRejectedValue(new Error('Network Error'));
 
-		const { queryByPlaceholderText, queryByText } = renderWithTheme(<StockOpScreen />);
+		const { findByText } = renderWithTheme(<StockOpScreen />);
 
-		// Wait for the rejection to settle
-		await new Promise((r) => setTimeout(r, 100));
-
-		// Bug confirmed: form never shown after rejection
-		expect(queryByPlaceholderText('e.g. 50')).toBeNull();
-		expect(queryByText('Confirm')).toBeNull();
+		expect(await findByText('Failed to load item.')).toBeTruthy();
+		expect(await findByText('Go Back')).toBeTruthy();
 	});
 
 	it('renders form with no spinner when fetchItemById resolves successfully', async () => {
