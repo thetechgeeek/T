@@ -1,16 +1,15 @@
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 import {
-	Users,
 	Truck,
 	BarChart2,
 	Settings,
-	ChevronRight,
 	Package,
 	Languages,
 	Moon,
 	Sun,
 	LogOut,
+	ChevronRight,
 } from 'lucide-react-native';
 import { withOpacity } from '@/src/utils/color';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -19,6 +18,7 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { useAuthStore } from '@/src/stores/authStore';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Divider } from '@/src/components/atoms/Divider';
 
 export default function MoreTab() {
 	const { theme, c, s } = useThemeTokens();
@@ -38,14 +38,7 @@ export default function MoreTab() {
 	};
 	const router = useRouter();
 
-	const menuItems = [
-		{
-			label: t('customer.title'),
-			accessibilityLabel: 'menu-customers',
-			icon: Users,
-			route: '/(app)/customers/',
-			color: c.info,
-		},
+	const reportsItems = [
 		{
 			label: t('supplier.title'),
 			accessibilityLabel: 'menu-suppliers',
@@ -67,6 +60,9 @@ export default function MoreTab() {
 			route: '/(app)/finance/',
 			color: c.primary,
 		},
+	];
+
+	const settingsItems = [
 		{
 			label: t('settings.title'),
 			accessibilityLabel: 'menu-settings',
@@ -94,7 +90,11 @@ export default function MoreTab() {
 				</ThemedText>
 			</View>
 			<View style={{ padding: s.lg }}>
-				{menuItems.map((item) => (
+				{/* REPORTS section */}
+				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
+					REPORTS
+				</ThemedText>
+				{reportsItems.map((item) => (
 					<TouchableOpacity
 						key={item.route}
 						style={[
@@ -133,6 +133,58 @@ export default function MoreTab() {
 					</TouchableOpacity>
 				))}
 
+				<Divider style={{ marginVertical: s.md }} />
+
+				{/* SETTINGS section */}
+				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
+					SETTINGS
+				</ThemedText>
+				{settingsItems.map((item) => (
+					<TouchableOpacity
+						key={item.route}
+						style={[
+							styles.menuItem,
+							{
+								backgroundColor: c.card,
+								borderRadius: theme.borderRadius.md,
+								marginBottom: s.sm,
+								...(theme.shadows.sm as object),
+							},
+						]}
+						onPress={() => router.push(item.route as Href)}
+						activeOpacity={0.8}
+						accessibilityRole="button"
+						accessibilityLabel={item.accessibilityLabel}
+						accessibilityHint={`Open ${item.label}`}
+					>
+						<View
+							style={[
+								styles.iconWrap,
+								{
+									backgroundColor: withOpacity(item.color, 0.12),
+									borderRadius: 10,
+								},
+							]}
+						>
+							<item.icon size={22} color={item.color} strokeWidth={2} />
+						</View>
+						<ThemedText
+							weight="medium"
+							style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
+						>
+							{item.label}
+						</ThemedText>
+						<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
+					</TouchableOpacity>
+				))}
+
+				<Divider style={{ marginVertical: s.md }} />
+
+				{/* PREFERENCES section */}
+				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
+					PREFERENCES
+				</ThemedText>
+
 				<TouchableOpacity
 					style={[
 						styles.menuItem,
@@ -140,7 +192,6 @@ export default function MoreTab() {
 							backgroundColor: c.card,
 							borderRadius: theme.borderRadius.md,
 							marginBottom: s.sm,
-							marginTop: s.sm,
 							...(theme.shadows.sm as object),
 						},
 					]}
@@ -210,13 +261,19 @@ export default function MoreTab() {
 					</ThemedText>
 				</TouchableOpacity>
 
+				<Divider style={{ marginVertical: s.md }} />
+
+				{/* ACCOUNT section */}
+				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
+					ACCOUNT
+				</ThemedText>
+
 				<TouchableOpacity
 					style={[
 						styles.menuItem,
 						{
 							backgroundColor: c.errorLight,
 							borderRadius: theme.borderRadius.md,
-							marginTop: s.lg,
 						},
 					]}
 					onPress={handleLogout}

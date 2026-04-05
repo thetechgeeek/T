@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
-import { Home, Package, QrCode, FileText, MoreHorizontal } from 'lucide-react-native';
+import { Home, Package, QrCode, FileText, MoreHorizontal, Users } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ErrorBoundaryProps } from 'expo-router';
@@ -18,18 +18,34 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 }
 
 function ScanTabIcon({ _focused }: { _focused: boolean }) {
-	const { theme } = useThemeTokens();
+	const { theme, c } = useThemeTokens();
 	return (
-		<View
-			style={[
-				styles.scanIconOuter,
-				{
-					backgroundColor: theme.colors.primary,
-					...(theme.shadows.md as object),
-				},
-			]}
-		>
-			<QrCode size={26} color={theme.colors.onPrimary} strokeWidth={2} />
+		<View style={styles.scanIconWrap}>
+			{_focused && (
+				<View
+					style={[
+						styles.scanIconGlow,
+						{
+							backgroundColor: c.primary,
+							shadowColor: c.primary,
+							shadowOpacity: 0.4,
+							shadowRadius: 8,
+							shadowOffset: { width: 0, height: 0 },
+						},
+					]}
+				/>
+			)}
+			<View
+				style={[
+					styles.scanIconOuter,
+					{
+						backgroundColor: theme.colors.primary,
+						...(theme.shadows.md as object),
+					},
+				]}
+			>
+				<QrCode size={26} color={theme.colors.onPrimary} strokeWidth={2} />
+			</View>
 		</View>
 	);
 }
@@ -90,13 +106,17 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
+				name="customers"
+				options={{
+					title: t('customer.title'),
+					tabBarAccessibilityLabel: 'tab-customers',
+					tabBarIcon: ({ color }) => <Users size={22} color={color} strokeWidth={2} />,
+				}}
+			/>
+			<Tabs.Screen
 				name="more"
 				options={{
-					title: t('tabs.more'),
-					tabBarAccessibilityLabel: 'tab-more',
-					tabBarIcon: ({ color }) => (
-						<MoreHorizontal size={22} color={color} strokeWidth={2} />
-					),
+					href: null, // hidden from tab bar; accessible via deep link only
 				}}
 			/>
 		</Tabs>
@@ -104,13 +124,26 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
+	scanIconWrap: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: 56,
+		height: 56,
+		marginBottom: 20,
+	},
+	scanIconGlow: {
+		position: 'absolute',
+		width: 64,
+		height: 64,
+		borderRadius: 32,
+		opacity: 0.25,
+	},
 	scanIconOuter: {
 		width: 56,
 		height: 56,
 		borderRadius: 28,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginBottom: 20,
 	},
 	errorContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
 	errorTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
