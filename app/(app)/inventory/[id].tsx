@@ -1,21 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import {
-	ArrowLeft,
-	Package,
-	Edit,
-	HelpCircle,
-	ArrowUpRight,
-	ArrowDownRight,
-} from 'lucide-react-native';
+import { Package, Edit, HelpCircle, ArrowUpRight, ArrowDownRight } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import type { InventoryItem, StockOperation } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { layout } from '@/src/theme/layout';
@@ -83,27 +77,8 @@ export default function ItemDetailScreen() {
 
 	if (!item) {
 		return (
-			<AtomicScreen safeAreaEdges={['top']}>
-				<View
-					style={[
-						styles.header,
-						layout.rowBetween,
-						{
-							borderBottomColor: c.border,
-							borderBottomWidth: 1,
-							paddingHorizontal: 20,
-							paddingBottom: 16,
-						},
-					]}
-				>
-					<TouchableOpacity
-						onPress={() => router.back()}
-						style={styles.back}
-						accessibilityLabel="back-button"
-					>
-						<ArrowLeft size={22} color={c.primary} strokeWidth={2} />
-					</TouchableOpacity>
-				</View>
+			<AtomicScreen safeAreaEdges={['bottom']}>
+				<ScreenHeader title="" />
 				<View style={styles.center}>
 					<HelpCircle size={48} color={c.placeholder} strokeWidth={1} />
 					<ThemedText style={{ marginTop: 16 }}>Item not found</ThemedText>
@@ -115,43 +90,18 @@ export default function ItemDetailScreen() {
 	const isLowStock = item.box_count <= item.low_stock_threshold;
 
 	return (
-		<AtomicScreen safeAreaEdges={['top']} withKeyboard={false}>
-			{/* Header */}
-			<View
-				style={[
-					styles.header,
-					layout.rowBetween,
-					{
-						borderBottomColor: c.border,
-						borderBottomWidth: 1,
-						paddingHorizontal: s.lg,
-						paddingBottom: s.md,
-					},
-				]}
-			>
-				<View style={[layout.row, { flex: 1 }]}>
+		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+			<ScreenHeader
+				title={item.design_name}
+				rightElement={
 					<TouchableOpacity
-						onPress={() => router.back()}
-						style={styles.back}
-						accessibilityLabel="back-button"
+						style={{ padding: 4 }}
+						onPress={() => router.push(`/(app)/inventory/add?id=${item.id}`)}
 					>
-						<ArrowLeft size={24} color={c.onBackground} strokeWidth={2.5} />
+						<Edit size={22} color={c.primary} strokeWidth={2} />
 					</TouchableOpacity>
-					<ThemedText
-						variant="h2"
-						style={{ marginLeft: s.md, flex: 1 }}
-						numberOfLines={1}
-					>
-						{item.design_name}
-					</ThemedText>
-				</View>
-				<TouchableOpacity
-					style={{ padding: 4 }}
-					onPress={() => router.push(`/(app)/inventory/add?id=${item.id}`)}
-				>
-					<Edit size={22} color={c.primary} strokeWidth={2} />
-				</TouchableOpacity>
-			</View>
+				}
+			/>
 
 			<ScrollView contentContainerStyle={{ padding: s.lg }}>
 				{/* Image Card */}
@@ -363,8 +313,6 @@ export default function ItemDetailScreen() {
 
 const styles = StyleSheet.create({
 	container: { flex: 1 },
-	header: {},
-	back: {},
 	center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 	imageCard: { padding: 4 },
 	stockBox: { padding: 16, alignItems: 'center' },

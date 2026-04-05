@@ -1,6 +1,6 @@
 import { View, StyleSheet, RefreshControl } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { TrendingUp, TrendingDown, Wallet, Receipt, ShoppingCart } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -11,6 +11,7 @@ import { ListItem } from '@/src/components/molecules/ListItem';
 import { Divider } from '@/src/components/atoms/Divider';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import React, { useEffect, useState } from 'react';
 
 export default function FinanceOverviewScreen() {
@@ -66,6 +67,7 @@ export default function FinanceOverviewScreen() {
 	return (
 		<AtomicScreen
 			scrollable
+			safeAreaEdges={['bottom']}
 			scrollViewProps={{
 				refreshControl: (
 					<RefreshControl
@@ -77,7 +79,7 @@ export default function FinanceOverviewScreen() {
 			}}
 			contentContainerStyle={styles.scrollContent}
 		>
-			<Stack.Screen options={{ title: 'Finance Overview' }} />
+			<ScreenHeader title="Finance Overview" />
 			<View style={styles.metricsGrid}>
 				{metrics.map((m, i) => (
 					<Card key={i} style={styles.metricCard} padding="md" variant="elevated">

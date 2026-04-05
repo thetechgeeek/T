@@ -10,6 +10,7 @@ import { Button } from '@/src/components/atoms/Button';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 
 export default function ImportOrderScreen() {
 	const { c, s, theme } = useThemeTokens();
@@ -75,9 +76,10 @@ export default function ImportOrderScreen() {
 	if (isParsing) {
 		return (
 			<AtomicScreen
-				safeAreaEdges={['top', 'bottom']}
+				safeAreaEdges={['bottom']}
 				style={{ alignItems: 'center', justifyContent: 'center' }}
 			>
+				<ScreenHeader title="Import Order" />
 				<FileText
 					size={64}
 					color={c.primary}
@@ -98,13 +100,15 @@ export default function ImportOrderScreen() {
 
 	if (parsedData) {
 		return (
-			<AtomicScreen safeAreaEdges={['top', 'bottom']}>
-				<View style={[styles.header, { borderBottomColor: c.border }]}>
-					<ThemedText variant="h2">Review Import</ThemedText>
-					<TouchableOpacity onPress={clearParsedData}>
-						<ThemedText color={c.error}>Discard</ThemedText>
-					</TouchableOpacity>
-				</View>
+			<AtomicScreen safeAreaEdges={['bottom']}>
+				<ScreenHeader
+					title="Review Import"
+					rightElement={
+						<TouchableOpacity onPress={clearParsedData}>
+							<ThemedText color={c.error}>Discard</ThemedText>
+						</TouchableOpacity>
+					}
+				/>
 
 				<ScrollView style={{ flex: 1, padding: s.lg }}>
 					<View style={{ marginBottom: s.xl }}>
@@ -171,10 +175,8 @@ export default function ImportOrderScreen() {
 	}
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
-			<View style={[styles.header, { borderBottomColor: c.border }]}>
-				<ThemedText variant="h2">Import Order (AI)</ThemedText>
-			</View>
+		<AtomicScreen safeAreaEdges={['bottom']}>
+			<ScreenHeader title="Import Order (AI)" />
 
 			<ScrollView contentContainerStyle={{ padding: s.lg }}>
 				<ThemedText style={{ lineHeight: 22, marginBottom: s.xl }}>
@@ -241,14 +243,6 @@ export default function ImportOrderScreen() {
 }
 
 const styles = StyleSheet.create({
-	header: {
-		paddingHorizontal: 20,
-		paddingVertical: 12,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		borderBottomWidth: 1,
-	},
 	uploadBox: {
 		borderWidth: 2,
 		borderStyle: 'dashed',

@@ -16,6 +16,7 @@ import { useOrderStore } from '@/src/stores/orderStore';
 import { Button } from '@/src/components/atoms/Button';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 
 export default function OrdersListScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -38,20 +39,22 @@ export default function OrdersListScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
-			<View style={[styles.header, { borderBottomColor: c.border }]}>
-				<ThemedText variant="h2" accessibilityLabel="orders-screen">
-					Purchase Orders
-				</ThemedText>
-				<Button
-					title="Import PDF"
-					accessibilityLabel="import-pdf-button"
-					accessibilityHint="Import a supplier PDF to create a purchase order"
-					size="sm"
-					leftIcon={<Plus size={16} color={c.onPrimary} importantForAccessibility="no" />}
-					onPress={() => router.push('/(app)/orders/import')}
-				/>
-			</View>
+		<AtomicScreen safeAreaEdges={['bottom']}>
+			<ScreenHeader
+				title="Purchase Orders"
+				rightElement={
+					<Button
+						title="Import PDF"
+						accessibilityLabel="import-pdf-button"
+						accessibilityHint="Import a supplier PDF to create a purchase order"
+						size="sm"
+						leftIcon={
+							<Plus size={16} color={c.onPrimary} importantForAccessibility="no" />
+						}
+						onPress={() => router.push('/(app)/orders/import')}
+					/>
+				}
+			/>
 
 			{loading && orders.length === 0 ? (
 				<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -147,14 +150,6 @@ export default function OrdersListScreen() {
 }
 
 const styles = StyleSheet.create({
-	header: {
-		paddingHorizontal: 20,
-		paddingVertical: 12,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		borderBottomWidth: 1,
-	},
 	card: {
 		flexDirection: 'row',
 		padding: 16,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Share2 } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { pdfService } from '@/src/services/pdfService';
@@ -8,7 +9,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Screen } from '@/src/components/atoms/Screen';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Share2, ArrowLeft } from 'lucide-react-native';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { layout } from '@/src/theme/layout';
 import { PaymentModal } from '@/src/components/organisms/PaymentModal';
 import type { UUID } from '@/src/types/common';
@@ -64,42 +65,22 @@ export default function InvoiceDetailScreen() {
 	}
 
 	return (
-		<Screen safeAreaEdges={['top']} withKeyboard={false}>
-			<View
-				style={[
-					styles.header,
-					layout.rowBetween,
-					{ borderBottomColor: c.border, borderBottomWidth: 1 },
-				]}
-			>
-				<View style={[layout.row, { flex: 1 }]}>
-					<ArrowLeft
-						color={c.onBackground}
-						size={24}
-						onPress={() => router.back()}
-						style={{ marginRight: s.md }}
-						accessibilityRole="button"
-						accessibilityLabel="back-button"
-						accessibilityHint="Go back to invoice list"
+		<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
+			<ScreenHeader
+				title={currentInvoice.invoice_number}
+				rightElement={
+					<Button
+						title="Share PDF"
+						accessibilityLabel="share-pdf-button"
+						variant="outline"
+						leftIcon={
+							<Share2 size={20} color={c.primary} importantForAccessibility="no" />
+						}
+						onPress={handleShare}
+						loading={sharing}
 					/>
-					<ThemedText
-						variant="h2"
-						accessibilityLabel="invoice-detail-screen"
-						style={{ flex: 1 }}
-					>
-						{currentInvoice.invoice_number}
-					</ThemedText>
-				</View>
-				<Button
-					title="Share PDF"
-					accessibilityLabel="share-pdf-button"
-					variant="outline"
-					leftIcon={<Share2 size={20} color={c.primary} importantForAccessibility="no" />}
-					onPress={handleShare}
-					loading={sharing}
-				/>
-			</View>
-
+				}
+			/>
 			<ScrollView contentContainerStyle={{ padding: s.lg }}>
 				<View style={{ marginBottom: s.xl }}>
 					<ThemedText variant="caption" color={c.onSurfaceVariant}>
@@ -248,7 +229,4 @@ export default function InvoiceDetailScreen() {
 
 const styles = StyleSheet.create({
 	center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-	header: {
-		padding: 16,
-	},
 });

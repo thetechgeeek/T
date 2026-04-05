@@ -3,13 +3,14 @@ import { useShallow } from 'zustand/react/shallow';
 import {
 	View,
 	StyleSheet,
-	TouchableOpacity,
 	ScrollView,
 	Alert,
 	ActivityIndicator,
+	TouchableOpacity,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, Save } from 'lucide-react-native';
+import { Save } from 'lucide-react-native';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -164,20 +165,8 @@ export default function AddItemScreen() {
 	}
 
 	return (
-		<AtomicScreen withKeyboard safeAreaEdges={['top', 'bottom']}>
-			<View
-				style={[
-					styles.header,
-					layout.rowBetween,
-					{ borderBottomColor: c.border, borderBottomWidth: 1, paddingHorizontal: s.lg },
-				]}
-			>
-				<TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-					<ArrowLeft size={24} color={c.onBackground} strokeWidth={2.5} />
-				</TouchableOpacity>
-				<ThemedText variant="h2">{isEditing ? 'Edit Item' : 'Add Item'}</ThemedText>
-				<View style={{ width: 40 }} />
-			</View>
+		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
+			<ScreenHeader title={isEditing ? 'Edit Item' : 'Add Item'} />
 
 			<ScrollView
 				keyboardDismissMode="on-drag"
@@ -456,12 +445,5 @@ export default function AddItemScreen() {
 
 const styles = StyleSheet.create({
 	container: { flex: 1 },
-	header: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		paddingVertical: 16,
-	},
-	backBtn: { width: 40, alignItems: 'flex-start' },
 	footer: { borderTopWidth: 1 },
 });

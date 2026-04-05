@@ -1,7 +1,8 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, ScrollView, StyleSheet, Alert } from 'react-native';
-import { useRouter, Stack } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useForm, Controller, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -74,8 +75,8 @@ export default function AddCustomerScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']} withKeyboard>
-			<Stack.Screen options={{ title: 'Add Customer' }} />
+		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard>
+			<ScreenHeader title="Add Customer" />
 			<ScrollView
 				keyboardDismissMode="on-drag"
 				style={[styles.container, { backgroundColor: theme.colors.background }]}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, RefreshControl, Alert } from 'react-native';
-import { Stack } from 'expo-router';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Calendar, User } from 'lucide-react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
@@ -45,8 +45,8 @@ export default function PurchasesScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
-			<Stack.Screen options={{ title: 'Purchases' }} />
+		<AtomicScreen safeAreaEdges={['bottom']}>
+			<ScreenHeader title="Purchases" />
 
 			<FlashList
 				data={purchases}

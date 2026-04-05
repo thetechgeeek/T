@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
-import { useRouter, Stack } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { UserPlus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SearchBar } from '@/src/components/molecules/SearchBar';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -75,12 +76,8 @@ export default function CustomersScreen() {
 	);
 
 	return (
-		<AtomicScreen safeAreaEdges={['top']} withKeyboard={false}>
-			<Stack.Screen
-				options={{
-					title: 'Customers',
-				}}
-			/>
+		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+			<ScreenHeader title="Customers" />
 
 			<View
 				style={[

@@ -3,8 +3,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, RefreshControl, Modal, Alert, Platform, ScrollView } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Stack } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -76,8 +76,8 @@ export default function ExpensesScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
-			<Stack.Screen options={{ title: 'Expenses' }} />
+		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+			<ScreenHeader title="Expenses" />
 
 			<FlashList
 				data={expenses}

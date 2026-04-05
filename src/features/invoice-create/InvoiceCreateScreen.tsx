@@ -8,6 +8,7 @@ import { useInvoiceCreateFlow } from './useInvoiceCreateFlow';
 import { CustomerStep } from './CustomerStep';
 import { LineItemsStep } from './LineItemsStep';
 import { PaymentStep } from './PaymentStep';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 
 export default function InvoiceCreateScreen() {
 	const { c, s } = useThemeTokens();
@@ -15,7 +16,8 @@ export default function InvoiceCreateScreen() {
 	const flow = useInvoiceCreateFlow();
 
 	return (
-		<Screen withKeyboard safeAreaEdges={['top', 'bottom']}>
+		<Screen withKeyboard safeAreaEdges={['bottom']}>
+			<ScreenHeader title="Create Invoice" />
 			{/* Stepper — announced as a progress indicator */}
 			<View
 				style={[styles.stepper, { borderBottomColor: c.border }]}

@@ -8,6 +8,7 @@ import type { InventoryItem } from '@/src/types/inventory';
 import { Package, CheckCircle2 } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import logger from '@/src/utils/logger';
 
 export default function OrderDetailScreen() {
@@ -48,7 +49,8 @@ export default function OrderDetailScreen() {
 	}
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
+		<AtomicScreen safeAreaEdges={['bottom']}>
+			<ScreenHeader title={order.party_name || 'Order Details'} />
 			<ScrollView>
 				<View style={styles.headerArea}>
 					<Package size={48} color={c.primary} style={{ marginBottom: s.md }} />
