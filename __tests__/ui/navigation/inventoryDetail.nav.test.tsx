@@ -64,8 +64,8 @@ describe('InventoryDetail Navigation Wiring', () => {
 	it('Press back -> router.back() called', async () => {
 		const { getByLabelText } = renderWithTheme(<ItemDetailScreen />);
 		// Assuming there's a back button with this label (standard in our AppHeader/Screen)
-		await waitFor(() => expect(getByLabelText('back-button')).toBeTruthy());
-		fireEvent.press(getByLabelText('back-button'));
+		await waitFor(() => expect(getByLabelText('Go back')).toBeTruthy());
+		fireEvent.press(getByLabelText('Go back'));
 		expect(mockBack).toHaveBeenCalled();
 	});
 

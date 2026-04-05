@@ -44,8 +44,8 @@ describe('StockOp Navigation Wiring', () => {
 
 	it('Press back/cancel -> router.back() called', async () => {
 		const { getByLabelText } = renderWithTheme(<StockOpScreen />);
-		await waitFor(() => expect(getByLabelText('back-button')).toBeTruthy());
-		fireEvent.press(getByLabelText('back-button'));
+		await waitFor(() => expect(getByLabelText('Go back')).toBeTruthy());
+		fireEvent.press(getByLabelText('Go back'));
 		expect(mockBack).toHaveBeenCalled();
 	});
 });

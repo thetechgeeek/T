@@ -2,8 +2,9 @@ import React from 'react';
 import { waitFor, fireEvent } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import CustomersScreen from '@/app/(app)/customers/index';
-import { useCustomerStore } from '@/src/stores/customerStore';
+import { useCustomerStore, CustomerState } from '@/src/stores/customerStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
+import { makeCustomer } from '../../fixtures/customerFixtures';
 import { useRouter } from 'expo-router';
 
 // Mock store
@@ -74,14 +75,25 @@ describe('CustomersScreen', () => {
 		const { getByText } = renderWithTheme(<CustomersScreen />);
 		await waitFor(() => expect(getByText('Add Customer')).toBeTruthy());
 		fireEvent.press(getByText('Add Customer'));
-		expect(mockPush).toHaveBeenCalledWith('/customers/add');
+		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/add');
 	});
 
 	it('pressing a customer row navigates to /customers/:id', async () => {
+		const customers = [makeCustomer({ id: 'c-1', name: 'John Doe' })];
+		(useCustomerStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: CustomerState) => unknown) =>
+				selector({
+					customers,
+					fetchCustomers: mockFetchCustomers,
+					filters: { search: '' },
+				} as unknown as CustomerState),
+		);
+
 		const { getByText } = renderWithTheme(<CustomersScreen />);
+
 		await waitFor(() => expect(getByText('John Doe')).toBeTruthy());
 		fireEvent.press(getByText('John Doe'));
-		expect(mockPush).toHaveBeenCalledWith('/customers/c-1');
+		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/c-1');
 	});
 
 	// ─── Phase 3: Loading & Empty UI States ──────────────────────────────────

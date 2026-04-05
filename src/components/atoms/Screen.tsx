@@ -20,6 +20,7 @@ export interface ScreenProps {
 	safeAreaEdges?: ('top' | 'bottom' | 'left' | 'right')[];
 	scrollViewProps?: ScrollViewProps;
 	backgroundColor?: string;
+	accessibilityLabel?: string;
 }
 
 export const Screen: React.FC<ScreenProps> = ({
@@ -31,6 +32,7 @@ export const Screen: React.FC<ScreenProps> = ({
 	safeAreaEdges = ['top'],
 	scrollViewProps,
 	backgroundColor,
+	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
 	const insets = useSafeAreaInsets();
@@ -65,13 +67,18 @@ export const Screen: React.FC<ScreenProps> = ({
 			<KeyboardAvoidingView
 				style={containerStyle}
 				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+				accessibilityLabel={accessibilityLabel}
 			>
 				{inner}
 			</KeyboardAvoidingView>
 		);
 	}
 
-	return <View style={containerStyle}>{inner}</View>;
+	return (
+		<View style={containerStyle} accessibilityLabel={accessibilityLabel}>
+			{inner}
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({

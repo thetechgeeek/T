@@ -108,7 +108,7 @@ describe('FinanceOverviewScreen', () => {
 		const { getByText } = renderWithTheme(<FinanceOverviewScreen />);
 		await waitFor(() => expect(getByText('Purchases')).toBeTruthy());
 		fireEvent.press(getByText('Purchases'));
-		expect(mockPush).toHaveBeenCalledWith('/finance/purchases');
+		expect(mockPush).toHaveBeenCalledWith('/(app)/finance/purchases');
 	});
 
 	it('renders Reports & Management heading', async () => {
@@ -120,7 +120,7 @@ describe('FinanceOverviewScreen', () => {
 		const { getByText } = renderWithTheme(<FinanceOverviewScreen />);
 		await waitFor(() => expect(getByText('Aging Report')).toBeTruthy());
 		fireEvent.press(getByText('Aging Report'));
-		expect(mockPush).toHaveBeenCalledWith('/customers/aging');
+		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/aging');
 	});
 
 	it('navigates to profit-loss on Profit & Loss press', async () => {

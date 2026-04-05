@@ -6,6 +6,7 @@ import {
 	ActivityIndicator,
 	type PressableProps,
 	type ViewStyle,
+	type GestureResponderEvent,
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -82,20 +83,28 @@ export function Button({
 	const isOutline = variant === 'outline';
 	const isDisabled = disabled || loading;
 
+	const handlePress = (e: GestureResponderEvent) => {
+		if (isDisabled) return;
+		onPress?.(e);
+	};
+
 	return (
 		<Animated.View style={[animStyle, style]}>
 			<Pressable
+				{...props}
 				disabled={isDisabled}
 				accessibilityRole="button"
 				accessibilityLabel={accessibilityLabel ?? title}
 				accessibilityState={{ disabled: isDisabled, busy: loading }}
 				accessibilityHint={loading ? 'Loading, please wait' : undefined}
-				onPressIn={(e) => {
+				onPressIn={(e: GestureResponderEvent) => {
+					if (isDisabled) return;
 					// eslint-disable-next-line react-hooks/immutability
 					scale.value = withSpring(PRESS_SCALE.pressed, SPRING_PRESS);
 					onPressIn?.(e);
 				}}
-				onPressOut={(e) => {
+				onPressOut={(e: GestureResponderEvent) => {
+					if (isDisabled) return;
 					// eslint-disable-next-line react-hooks/immutability
 					scale.value = withSpring(PRESS_SCALE.released, SPRING_PRESS);
 					onPressOut?.(e);
@@ -114,8 +123,7 @@ export function Button({
 						paddingHorizontal: s.px,
 					},
 				]}
-				onPress={isDisabled ? undefined : onPress}
-				{...props}
+				onPress={handlePress}
 			>
 				{loading ? (
 					<ActivityIndicator

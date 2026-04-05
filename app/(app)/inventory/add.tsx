@@ -58,6 +58,7 @@ export default function AddItemScreen() {
 		useShallow((s) => ({ createItem: s.createItem, updateItem: s.updateItem })),
 	);
 	const [loading, setLoading] = useState(isEditing);
+	const [submitting, setSubmitting] = useState(false);
 
 	const {
 		control,
@@ -108,7 +109,7 @@ export default function AddItemScreen() {
 	}, [id, isEditing, reset, router, t]);
 
 	const onSubmit = async (data: FormData) => {
-		setLoading(true);
+		setSubmitting(true);
 		try {
 			const payload = {
 				design_name: data.design_name,
@@ -141,7 +142,7 @@ export default function AddItemScreen() {
 				[{ text: t('common.ok') }],
 			);
 		} finally {
-			setLoading(false);
+			setSubmitting(false);
 		}
 	};
 
@@ -434,7 +435,8 @@ export default function AddItemScreen() {
 				<Button
 					title="Save Item"
 					onPress={handleSubmit(onSubmit)}
-					leftIcon={<Save size={20} color="white" />}
+					loading={submitting}
+					leftIcon={!submitting && <Save size={20} color="white" />}
 				/>
 			</View>
 		</AtomicScreen>

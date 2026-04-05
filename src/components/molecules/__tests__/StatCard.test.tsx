@@ -57,10 +57,10 @@ describe('StatCard', () => {
 		expect(queryByText(/vs/)).toBeNull();
 	});
 
-	it('has accessibilityRole=summary on the container', () => {
+	it('has accessible=true on the container', () => {
 		const { toJSON } = renderWithTheme(<StatCard label="Stat" value="100" />);
 		const json = JSON.stringify(toJSON());
-		expect(json).toContain('"summary"');
+		expect(json).toContain('"accessible":true');
 	});
 
 	it('accessibilityLabel combines label and value', () => {

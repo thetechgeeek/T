@@ -27,7 +27,7 @@ describe('Inventory Loading & Error UI States', () => {
 
 		const { getByTestId } = renderWithTheme(<InventoryTab />);
 
-		// ActivityIndicator should be present
+		// Skeleton loading indicator should be present
 		await waitFor(() => expect(getByTestId('loading-spinner')).toBeTruthy());
 	});
 

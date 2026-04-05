@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	FlatList,
+	TouchableOpacity,
+	RefreshControl,
+	Alert,
+	ActivityIndicator,
+} from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
 import { Plus, Package, Search, SlidersHorizontal } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -87,7 +95,12 @@ export default function InventoryTab() {
 
 	const renderEmpty = () => {
 		if (loading && items.length === 0) {
-			return <InventoryListSkeleton />;
+			return (
+				<View style={styles.centerFlex}>
+					<ActivityIndicator size="large" color={c.primary} />
+					<InventoryListSkeleton />
+				</View>
+			);
 		}
 		return (
 			<View style={styles.centerFlex}>

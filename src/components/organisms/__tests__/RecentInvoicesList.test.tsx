@@ -51,24 +51,24 @@ describe('RecentInvoicesList', () => {
 		expect(queryByText('Test Customer')).toBeNull();
 	});
 
-	it('payment_status="paid" row renders "paid" badge text', () => {
+	it('payment_status="paid" row renders "Paid" badge text', () => {
 		const { getByText } = renderWithTheme(
 			<RecentInvoicesList invoices={[makeInvoice({ payment_status: 'paid' })]} />,
 		);
-		expect(getByText('paid')).toBeTruthy();
+		expect(getByText('Paid')).toBeTruthy();
 	});
 
-	it('payment_status="unpaid" row renders "unpaid" badge text', () => {
+	it('payment_status="unpaid" row renders "Unpaid" badge text', () => {
 		const { getByText } = renderWithTheme(
 			<RecentInvoicesList invoices={[makeInvoice({ payment_status: 'unpaid' })]} />,
 		);
-		expect(getByText('unpaid')).toBeTruthy();
+		expect(getByText('Unpaid')).toBeTruthy();
 	});
 
-	it('payment_status="partial" row renders "partial" badge text', () => {
+	it('payment_status="partial" row renders "Partial" badge text', () => {
 		const { getByText } = renderWithTheme(
 			<RecentInvoicesList invoices={[makeInvoice({ payment_status: 'partial' })]} />,
 		);
-		expect(getByText('partial')).toBeTruthy();
+		expect(getByText('Partial')).toBeTruthy();
 	});
 });

@@ -77,7 +77,7 @@ const renderWithTheme = (component: React.ReactElement) => {
 describe('Customer Detail Accessibility', () => {
 	it('has an identifiable Back button', async () => {
 		const { findByLabelText } = renderWithTheme(<CustomerDetailScreen />);
-		const backBtn = await findByLabelText('back-button');
+		const backBtn = await findByLabelText('Go back');
 		expect(backBtn).toBeTruthy();
 	});
 

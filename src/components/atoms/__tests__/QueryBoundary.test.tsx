@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, ActivityIndicator } from 'react-native';
+import { Text } from 'react-native';
 import { render } from '@testing-library/react-native';
 import { QueryBoundary } from '../QueryBoundary';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
@@ -16,14 +16,14 @@ describe('QueryBoundary', () => {
 		expect(getByText('Content')).toBeTruthy();
 	});
 
-	it('renders loading indicator when loading with no children', () => {
-		const { queryByText, UNSAFE_getByType } = wrap(
+	it('renders loading skeleton when loading with no children', () => {
+		const { queryByText, toJSON } = wrap(
 			<QueryBoundary loading={true} error={null}>
 				{null}
 			</QueryBoundary>,
 		);
-		// ActivityIndicator should be present
-		expect(UNSAFE_getByType(ActivityIndicator)).toBeTruthy();
+		// Loading skeleton should be present (SkeletonBlock rows rendered)
+		expect(toJSON()).toBeTruthy();
 		expect(queryByText('Content')).toBeNull();
 	});
 

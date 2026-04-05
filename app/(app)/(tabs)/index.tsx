@@ -32,8 +32,8 @@ export default function DashboardScreen() {
 	const { invoices, fetchInvoices } = useInvoiceStore(
 		useShallow((s) => ({ invoices: s.invoices, fetchInvoices: s.fetchInvoices })),
 	);
-	const { stats, fetchStats } = useDashboardStore(
-		useShallow((s) => ({ stats: s.stats, fetchStats: s.fetchStats })),
+	const { stats, loading, fetchStats } = useDashboardStore(
+		useShallow((s) => ({ stats: s.stats, loading: s.loading, fetchStats: s.fetchStats })),
 	);
 
 	React.useEffect(() => {
@@ -110,6 +110,7 @@ export default function DashboardScreen() {
 	return (
 		<AtomicScreen
 			scrollable
+			accessibilityLabel="dashboard-screen"
 			safeAreaEdges={[]}
 			scrollViewProps={{
 				keyboardDismissMode: 'on-drag',
@@ -125,7 +126,7 @@ export default function DashboardScreen() {
 		>
 			<DashboardHeader businessName="TileMaster" />
 
-			{stats === null ? (
+			{loading && stats === null ? (
 				<DashboardSkeleton />
 			) : (
 				<>

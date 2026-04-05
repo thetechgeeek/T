@@ -40,7 +40,7 @@ const mockInvoices = [
 		invoice_number: 'TM-002',
 		invoice_date: '2026-03-15',
 		customer_name: 'Mohan Tiles',
-		payment_status: 'pending',
+		payment_status: 'unpaid',
 		grand_total: 8500,
 	},
 ];
@@ -105,8 +105,8 @@ describe('InvoicesListScreen', () => {
 	it('renders payment status badges', async () => {
 		const { getByText } = renderWithTheme(<InvoicesListScreen />);
 		await waitFor(() => {
-			expect(getByText('paid')).toBeTruthy();
-			expect(getByText('pending')).toBeTruthy();
+			expect(getByText('Paid')).toBeTruthy();
+			expect(getByText('Unpaid')).toBeTruthy();
 		});
 	});
 

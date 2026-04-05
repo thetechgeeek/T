@@ -33,7 +33,7 @@ describe('CustomerList Navigation Wiring', () => {
 		// FAB might be labelled add-customer-button
 		await waitFor(() => expect(getByLabelText('add-customer-button')).toBeTruthy());
 		fireEvent.press(getByLabelText('add-customer-button'));
-		expect(mockPush).toHaveBeenCalledWith('/customers/add');
+		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/add');
 	});
 
 	it('Press customer row -> router.push("/(app)/customers/${id}") called', async () => {
@@ -54,6 +54,6 @@ describe('CustomerList Navigation Wiring', () => {
 		const { getByText } = renderWithTheme(<CustomersScreen />);
 		await waitFor(() => expect(getByText('John Doe')).toBeTruthy());
 		fireEvent.press(getByText('John Doe'));
-		expect(mockPush).toHaveBeenCalledWith('/customers/c-123');
+		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/c-123');
 	});
 });

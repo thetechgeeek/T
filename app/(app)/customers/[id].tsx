@@ -27,7 +27,13 @@ export default function CustomerDetailScreen() {
 	const [paymentModalVisible, setPaymentModalVisible] = React.useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 
-	const { selectedCustomer: customer, ledger, summary, fetchCustomerDetail } = useCustomerStore();
+	const {
+		selectedCustomer: customer,
+		ledger,
+		summary,
+		fetchCustomerDetail,
+		loading,
+	} = useCustomerStore();
 
 	// Refresh the customer detail (customer info + ledger + summary) every time
 	// this screen comes into focus. This ensures the ledger stays up-to-date
@@ -96,12 +102,15 @@ export default function CustomerDetailScreen() {
 	);
 
 	if (!customer) {
-		return (
-			<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-				<ScreenHeader title="" />
-				<CustomerDetailSkeleton />
-			</AtomicScreen>
-		);
+		if (loading) {
+			return (
+				<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+					<ScreenHeader title="" />
+					<CustomerDetailSkeleton />
+				</AtomicScreen>
+			);
+		}
+		return null;
 	}
 
 	return (
