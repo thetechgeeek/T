@@ -10,13 +10,13 @@
 		"test": "jest",
 		"test:coverage": "jest --coverage",
 		"test:integration": "jest --config jest.integration.config.js --runInBand",
+		"test:e2e": "maestro test .maestro/",
+		"test:e2e:report": "maestro test .maestro/ --format junit --output report.xml",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
 		"typecheck": "tsc --noEmit",
-		"validate": "npm run typecheck && npm run lint && npm run test",
-		"test:e2e": "maestro test .maestro/",
-		"test:e2e:report": "maestro test .maestro/ --format junit --output report.xml",
+		"validate": "npm run typecheck && npm run lint && npm run test && npm run test:integration",
 		"prepare": "husky"
 	},
 	"dependencies": {

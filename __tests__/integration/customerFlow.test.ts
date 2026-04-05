@@ -140,6 +140,7 @@ describe('INT-003: Customer Flow', () => {
 				igst_total: 0,
 				discount_total: 0,
 				grand_total: 100,
+				customer_phone: '1234567890',
 				is_inter_state: false,
 				payment_status: 'unpaid',
 				amount_paid: 0,

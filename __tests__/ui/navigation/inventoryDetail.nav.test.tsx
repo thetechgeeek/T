@@ -20,6 +20,7 @@ jest.mock('expo-router', () => {
 			setOptions: jest.fn(),
 		})),
 		useFocusEffect: jest.fn((cb: () => void) => {
+			const React = require('react');
 			React.useEffect(() => {
 				const cleanup = cb();
 				return cleanup;

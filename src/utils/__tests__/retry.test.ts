@@ -37,9 +37,9 @@ describe('withRetry', () => {
 		const fn = jest.fn().mockRejectedValue(new Error('no retry error'));
 		const _delayFn = jest.fn().mockResolvedValue(undefined);
 
-		await expect(withRetry(fn, { retries: 2, shouldRetry: () => false, _delayFn })).rejects.toThrow(
-			'no retry error',
-		);
+		await expect(
+			withRetry(fn, { retries: 2, shouldRetry: () => false, _delayFn }),
+		).rejects.toThrow('no retry error');
 		expect(fn).toHaveBeenCalledTimes(1);
 		expect(_delayFn).not.toHaveBeenCalled();
 	});
