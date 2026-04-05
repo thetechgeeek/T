@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
-import { Home, Package, QrCode, FileText, Users } from 'lucide-react-native';
+import { Home, Package, QrCode, FileText, MoreHorizontal } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ErrorBoundaryProps } from 'expo-router';
@@ -108,15 +108,17 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="customers"
 				options={{
-					title: t('customer.title'),
-					tabBarAccessibilityLabel: 'tab-customers',
-					tabBarIcon: ({ color }) => <Users size={22} color={color} strokeWidth={2} />,
+					href: null,
 				}}
 			/>
 			<Tabs.Screen
 				name="more"
 				options={{
-					href: null, // hidden from tab bar; accessible via deep link only
+					title: t('tabs.more'),
+					tabBarAccessibilityLabel: 'tab-more',
+					tabBarIcon: ({ color }) => (
+						<MoreHorizontal size={22} color={color} strokeWidth={2} />
+					),
 				}}
 			/>
 		</Tabs>
