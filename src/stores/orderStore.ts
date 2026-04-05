@@ -19,6 +19,7 @@ interface OrderState {
 
 	fetchOrders: () => Promise<void>;
 	parseDocument: (uri: string, mimeType: string, storagePath?: string) => Promise<void>;
+	parseText: (textContent: string) => Promise<void>;
 	importParsedData: (partyName: string, items: ParsedOrderItem[]) => Promise<void>;
 	clearParsedData: () => void;
 	reset: () => void;
@@ -47,6 +48,21 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 		set({ isParsing: true, error: null });
 		try {
 			const parsedItems = await pdfService.parseDocumentWithLLM(uri, mimeType, storagePath);
+			set({
+				parsedData: parsedItems,
+				rawResponse: parsedItems,
+				isParsing: false,
+			});
+		} catch (error: unknown) {
+			set({ error: (error as Error).message, isParsing: false });
+			throw error;
+		}
+	},
+
+	parseText: async (textContent: string) => {
+		set({ isParsing: true, error: null });
+		try {
+			const parsedItems = await pdfService.parseTextWithLLM(textContent);
 			set({
 				parsedData: parsedItems,
 				rawResponse: parsedItems,

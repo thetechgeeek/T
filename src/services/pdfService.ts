@@ -341,4 +341,31 @@ export const pdfService = {
 
 		return data.data.items as ParsedOrderItem[];
 	},
+
+	/**
+	 * Send raw pasted/typed text to the AI for order extraction.
+	 * Uses the text-content mode of the edge function — no file upload required.
+	 */
+	async parseTextWithLLM(textContent: string): Promise<ParsedOrderItem[]> {
+		const {
+			data: { session },
+		} = await supabase.auth.getSession();
+		const { data, error } = await supabase.functions.invoke('parse-order-pdf', {
+			body: { textContent },
+			headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
+		});
+
+		if (error) {
+			logger.error('Edge Function Error (text mode):', error);
+			throw new Error(
+				error.message || `Edge function returned ${error.status || 'unknown'} error`,
+			);
+		}
+
+		if (!data || !data.success || !data.data || !data.data.items) {
+			throw new Error(data?.error || 'Failed to parse text from Vision AI');
+		}
+
+		return data.data.items as ParsedOrderItem[];
+	},
 };

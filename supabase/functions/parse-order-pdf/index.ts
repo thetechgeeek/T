@@ -1,4 +1,5 @@
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { encodeBase64 } from "jsr:@std/encoding/base64";
 
 const corsHeaders = {
 	'Access-Control-Allow-Origin': Deno.env.get('ALLOWED_ORIGIN') ?? 'https://tilemaster.app',
@@ -57,53 +58,54 @@ Deno.serve(async (req: Request) => {
 		}
 
 		const body = await req.json();
-		const { mimeType } = body;
+		const { mimeType, textContent } = body;
 		let base64Data: string | undefined = body.base64Data;
 
-		if (!mimeType) {
-			return errorResponse('Missing mimeType', 400, requestId);
-		}
+		// --- Text paste mode: no file needed ---
+		const isTextMode = typeof textContent === 'string' && textContent.trim().length > 0;
 
-		if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
-			return errorResponse('Unsupported file type', 415, requestId);
-		}
-
-		// Storage path preferred over inline base64 (avoids large request payloads)
-		if (body.storagePath && !base64Data) {
-			const serviceClient = createClient(
-				Deno.env.get('SUPABASE_URL') ?? '',
-				Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-			);
-			const { data: fileData, error: downloadError } = await serviceClient.storage
-				.from('order-pdfs')
-				.download(body.storagePath);
-
-			if (downloadError || !fileData) {
-				return errorResponse('Failed to download file from storage', 500, requestId);
+		if (!isTextMode) {
+			if (!mimeType) {
+				return errorResponse('Missing mimeType or textContent', 400, requestId);
 			}
 
-			const arrayBuffer = await fileData.arrayBuffer();
-			const uint8Array = new Uint8Array(arrayBuffer);
-			
-			// Safe base64 encoding for large arrays (avoids "max call stack size exceeded")
-			let binary = '';
-			const len = uint8Array.byteLength;
-			for (let i = 0; i < len; i += 8192) {
-				const chunk = uint8Array.subarray(i, i + 8192);
-				binary += String.fromCharCode.apply(null, chunk as unknown as number[]);
+			if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
+				return errorResponse('Unsupported file type', 415, requestId);
 			}
-			base64Data = btoa(binary);
 
-			// Clean up the temporary upload after we've read it
-			serviceClient.storage.from('order-pdfs').remove([body.storagePath]).catch(() => {});
-		}
+			// Storage path preferred over inline base64 (avoids large request payloads)
+			if (body.storagePath && !base64Data) {
+				const serviceClient = createClient(
+					Deno.env.get('SUPABASE_URL') ?? '',
+					Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+				);
+				const { data: fileData, error: downloadError } = await serviceClient.storage
+					.from('order-pdfs')
+					.download(body.storagePath);
 
-		if (!base64Data) {
-			return errorResponse('Missing base64Data or storagePath', 400, requestId);
-		}
+				if (downloadError || !fileData) {
+					return errorResponse('Failed to download file from storage', 500, requestId);
+				}
 
-		if (base64Data.length > MAX_BASE64_LENGTH) {
-			return errorResponse('File too large (max 7.5MB)', 413, requestId);
+				const arrayBuffer = await fileData.arrayBuffer();
+				const uint8Array = new Uint8Array(arrayBuffer);
+
+				// Optimized base64 encoding for large files
+				const encodingStart = performance.now();
+				base64Data = encodeBase64(uint8Array);
+				console.log(`[${requestId}] Base64 encoding took ${Math.round(performance.now() - encodingStart)}ms`);
+
+				// Clean up the temporary upload after we've read it
+				serviceClient.storage.from('order-pdfs').remove([body.storagePath]).catch(() => {});
+			}
+
+			if (!base64Data) {
+				return errorResponse('Missing base64Data or storagePath', 400, requestId);
+			}
+
+			if (base64Data.length > MAX_BASE64_LENGTH) {
+				return errorResponse('File too large (max 7.5MB)', 413, requestId);
+			}
 		}
 
 		const geminiKey = Deno.env.get('GEMINI_API_KEY');
@@ -113,18 +115,26 @@ Deno.serve(async (req: Request) => {
 
 		const apiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
 
+		const contentParts = isTextMode
+			? [
+					{
+						text: `Extract inventory order items from this pasted text. Output strict JSON matching the schema.\n\n${textContent}`,
+					},
+			  ]
+			: [
+					{ inline_data: { mime_type: mimeType, data: base64Data } },
+					{
+						text: 'Extract the inventory order items from this document. Output strict JSON matching the schema.',
+					},
+			  ];
+
 		const requestPayload = {
 			system_instruction: {
 				parts: [{ text: SYSTEM_PROMPT }],
 			},
 			contents: [
 				{
-					parts: [
-						{ inline_data: { mime_type: mimeType, data: base64Data } },
-						{
-							text: 'Extract the inventory order items from this document. Output strict JSON matching the schema.',
-						},
-					],
+					parts: contentParts,
 				},
 			],
 			generationConfig: {
@@ -134,8 +144,9 @@ Deno.serve(async (req: Request) => {
 		};
 
 		const controller = new AbortController();
-		const timeout = setTimeout(() => controller.abort(), 30_000);
+		const timeout = setTimeout(() => controller.abort(), 50_000); // 50 seconds to allow for deep analysis
 
+		const apiStart = performance.now();
 		let response: Response;
 		try {
 			response = await fetch(apiEndpoint, {
@@ -144,6 +155,7 @@ Deno.serve(async (req: Request) => {
 				body: JSON.stringify(requestPayload),
 				signal: controller.signal,
 			});
+			console.log(`[${requestId}] Gemini API latency: ${Math.round(performance.now() - apiStart)}ms`);
 		} finally {
 			clearTimeout(timeout);
 		}
