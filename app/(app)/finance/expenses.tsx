@@ -77,7 +77,7 @@ export default function ExpensesScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="Expenses" />
+			<ScreenHeader title={t('finance.expenses')} />
 
 			<FlashList
 				data={expenses}
@@ -100,8 +100,8 @@ export default function ExpensesScreen() {
 				ListEmptyComponent={
 					!loading ? (
 						<EmptyState
-							title="No expenses found"
-							actionLabel="Add Expense"
+							title={t('finance.noExpenses')}
+							actionLabel={t('finance.addExpense')}
 							onAction={() => setModalVisible(true)}
 						/>
 					) : null
@@ -110,7 +110,9 @@ export default function ExpensesScreen() {
 					<Card style={styles.expenseCard} padding="md">
 						<View style={layout.rowBetween}>
 							<View style={{ flex: 1 }}>
-								<ThemedText weight="bold">{exp.category}</ThemedText>
+								<ThemedText weight="bold">
+									{t(`finance.expenseCategories.${exp.category}`)}
+								</ThemedText>
 								<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
 									{formatDate(exp.expense_date)}
 								</ThemedText>
@@ -134,7 +136,7 @@ export default function ExpensesScreen() {
 
 			<View style={[styles.fabContainer, { bottom: 32 + insets.bottom }]}>
 				<Button
-					title="Add Expense"
+					title={t('finance.addExpense')}
 					onPress={() => setModalVisible(true)}
 					leftIcon={<Plus color="white" size={24} />}
 					style={styles.fab}
@@ -160,7 +162,7 @@ export default function ExpensesScreen() {
 						<View style={styles.modalHandle} />
 
 						<View style={[layout.rowBetween, styles.modalHeader]}>
-							<ThemedText variant="h2">New Expense</ThemedText>
+							<ThemedText variant="h2">{t('finance.addExpense')}</ThemedText>
 							<Button
 								variant="ghost"
 								size="sm"
@@ -174,34 +176,34 @@ export default function ExpensesScreen() {
 							keyboardShouldPersistTaps="handled"
 						>
 							<FormField
-								label="Amount (₹)"
+								label={t('finance.amount')}
 								required
 								value={amount}
 								onChangeText={setAmount}
 								keyboardType="numeric"
-								placeholder="0.00"
+								placeholder={t('finance.placeholders.amount')}
 								autoFocus
 							/>
 
 							<FormField
-								label="Category"
+								label={t('finance.category')}
 								required
 								value={category}
 								onChangeText={setCategory}
-								placeholder="e.g. Electricity, Rent, Salary"
+								placeholder={t('finance.placeholders.category')}
 							/>
 
 							<FormField
-								label="Notes"
+								label={t('inventory.notes')}
 								value={notes}
 								onChangeText={setNotes}
-								placeholder="Optional description"
+								placeholder={t('finance.placeholders.notes')}
 								multiline
 								numberOfLines={2}
 							/>
 
 							<Button
-								title={saving ? 'Saving...' : 'Save Expense'}
+								title={saving ? t('common.loading') : t('common.save')}
 								onPress={handleSave}
 								loading={saving}
 								style={{ marginTop: 16 }}

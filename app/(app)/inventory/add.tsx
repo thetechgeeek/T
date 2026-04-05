@@ -20,22 +20,23 @@ import type { UUID } from '@/src/types/common';
 import { inventoryService } from '@/src/services/inventoryService';
 import { layout } from '@/src/theme/layout';
 
-const schema = z.object({
-	design_name: z.string().min(1, 'Design Name is required'),
-	category: z.enum(['GLOSSY', 'FLOOR', 'MATT', 'SATIN', 'WOODEN', 'ELEVATION', 'OTHER']),
-	size_name: z.string().optional(),
-	brand_name: z.string().optional(),
-	pcs_per_box: z.string().optional(),
-	sqft_per_box: z.string().optional(),
-	box_count: z.string().min(1, 'Required'),
-	selling_price: z.string().min(1, 'Required'),
-	cost_price: z.string().optional(),
-	low_stock_threshold: z.string().min(1, 'Required'),
-	gst_rate: z.string().min(1, 'Required'),
-	hsn_code: z.string().optional(),
-});
+const getSchema = (t: (key: string) => string) =>
+	z.object({
+		design_name: z.string().min(1, t('common.required')),
+		category: z.enum(['GLOSSY', 'FLOOR', 'MATT', 'SATIN', 'WOODEN', 'ELEVATION', 'OTHER']),
+		size_name: z.string().optional(),
+		brand_name: z.string().optional(),
+		pcs_per_box: z.string().optional(),
+		sqft_per_box: z.string().optional(),
+		box_count: z.string().min(1, t('common.required')),
+		selling_price: z.string().min(1, t('common.required')),
+		cost_price: z.string().optional(),
+		low_stock_threshold: z.string().min(1, t('common.required')),
+		gst_rate: z.string().min(1, t('common.required')),
+		hsn_code: z.string().optional(),
+	});
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<ReturnType<typeof getSchema>>;
 
 const CATEGORIES: TileCategory[] = [
 	'GLOSSY',
@@ -66,7 +67,7 @@ export default function AddItemScreen() {
 		reset,
 		formState: { errors },
 	} = useForm<FormData>({
-		resolver: zodResolver(schema),
+		resolver: zodResolver(getSchema(t)),
 		defaultValues: {
 			category: 'GLOSSY',
 			box_count: '0',
@@ -149,7 +150,9 @@ export default function AddItemScreen() {
 	if (loading) {
 		return (
 			<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-				<ScreenHeader title={isEditing ? 'Edit Item' : 'Add Item'} />
+				<ScreenHeader
+					title={isEditing ? t('inventory.editItem') : t('inventory.addItem')}
+				/>
 				<View style={{ padding: s.lg, gap: s.md }}>
 					<SkeletonBlock height={52} borderRadius={r.md} />
 					<View style={{ flexDirection: 'row', gap: s.md }}>
@@ -165,7 +168,7 @@ export default function AddItemScreen() {
 
 	return (
 		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
-			<ScreenHeader title={isEditing ? 'Edit Item' : 'Add Item'} />
+			<ScreenHeader title={isEditing ? t('inventory.editItem') : t('inventory.addItem')} />
 
 			<ScrollView
 				keyboardDismissMode="on-drag"
@@ -173,7 +176,7 @@ export default function AddItemScreen() {
 				keyboardShouldPersistTaps="handled"
 			>
 				<ThemedText variant="h3" style={{ marginBottom: s.md }}>
-					Basic Details
+					{t('auth.setupBusiness')}
 				</ThemedText>
 
 				<Controller
@@ -181,9 +184,9 @@ export default function AddItemScreen() {
 					name="design_name"
 					render={({ field: { onChange, onBlur, value } }) => (
 						<FormField
-							label="Design Name / Item Number"
+							label={t('inventory.designName')}
 							required
-							placeholder="e.g. 10526-HL-1-A"
+							placeholder={t('inventory.placeholders.designName')}
 							onBlur={onBlur}
 							onChangeText={onChange}
 							value={value}
@@ -199,8 +202,8 @@ export default function AddItemScreen() {
 							name="size_name"
 							render={({ field: { onChange, onBlur, value } }) => (
 								<FormField
-									label="Size"
-									placeholder="e.g. 600x600"
+									label={t('inventory.size')}
+									placeholder={t('inventory.placeholders.size')}
 									onBlur={onBlur}
 									onChangeText={onChange}
 									value={value}
@@ -214,8 +217,8 @@ export default function AddItemScreen() {
 							name="brand_name"
 							render={({ field: { onChange, onBlur, value } }) => (
 								<FormField
-									label="Brand"
-									placeholder="e.g. Somany"
+									label={t('inventory.brandName')}
+									placeholder={t('inventory.placeholders.brand')}
 									onBlur={onBlur}
 									onChangeText={onChange}
 									value={value}
@@ -226,7 +229,7 @@ export default function AddItemScreen() {
 				</View>
 
 				<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
-					Category *
+					{t('inventory.category')} *
 				</ThemedText>
 				<View style={[layout.row, { flexWrap: 'wrap', gap: 8, marginBottom: 16 }]}>
 					<Controller
@@ -261,7 +264,7 @@ export default function AddItemScreen() {
 				</View>
 
 				<ThemedText variant="h3" style={{ marginTop: s.md, marginBottom: s.md }}>
-					Pricing & Stock
+					{t('finance.title')} & {t('inventory.currentStock')}
 				</ThemedText>
 
 				<View style={{ flexDirection: 'row', gap: s.md }}>
@@ -271,9 +274,9 @@ export default function AddItemScreen() {
 							name="selling_price"
 							render={({ field: { onChange, onBlur, value } }) => (
 								<FormField
-									label="Selling Price"
+									label={t('inventory.sellingPrice')}
 									required
-									placeholder="Enter selling price"
+									placeholder={t('inventory.placeholders.price')}
 									keyboardType="numeric"
 									onBlur={onBlur}
 									onChangeText={onChange}
@@ -289,8 +292,8 @@ export default function AddItemScreen() {
 							name="cost_price"
 							render={({ field: { onChange, onBlur, value } }) => (
 								<FormField
-									label="Cost Price"
-									placeholder="Enter cost price"
+									label={t('inventory.costPrice')}
+									placeholder={t('inventory.placeholders.price')}
 									keyboardType="numeric"
 									onBlur={onBlur}
 									onChangeText={onChange}
@@ -309,9 +312,13 @@ export default function AddItemScreen() {
 							name="box_count"
 							render={({ field: { onChange, onBlur, value } }) => (
 								<FormField
-									label={isEditing ? 'Stock (Boxes)' : 'Initial Stock'}
+									label={
+										isEditing
+											? t('inventory.currentStock')
+											: t('dashboard.addStock')
+									}
 									required
-									placeholder="Enter initial stock"
+									placeholder={t('inventory.placeholders.stock')}
 									keyboardType="numeric"
 									onBlur={onBlur}
 									onChangeText={onChange}
@@ -319,7 +326,7 @@ export default function AddItemScreen() {
 									error={errors.box_count?.message}
 									editable={!isEditing}
 									helperText={
-										isEditing ? 'Use Stock In/Out to update' : undefined
+										isEditing ? t('inventory.emptyFilterHint') : undefined
 									}
 								/>
 							)}
@@ -331,9 +338,9 @@ export default function AddItemScreen() {
 							name="low_stock_threshold"
 							render={({ field: { onChange, onBlur, value } }) => (
 								<FormField
-									label="Low Alert At"
+									label={t('inventory.lowStockThreshold')}
 									required
-									placeholder="Enter low stock alert"
+									placeholder={t('inventory.placeholders.lowStock')}
 									keyboardType="numeric"
 									onBlur={onBlur}
 									onChangeText={onChange}
@@ -352,9 +359,9 @@ export default function AddItemScreen() {
 							name="gst_rate"
 							render={({ field: { onChange, onBlur, value } }) => (
 								<FormField
-									label="GST Rate"
+									label={t('inventory.gstRate')}
 									required
-									placeholder="Enter GST rate"
+									placeholder={t('inventory.placeholders.gst')}
 									keyboardType="numeric"
 									onBlur={onBlur}
 									onChangeText={onChange}
@@ -370,8 +377,8 @@ export default function AddItemScreen() {
 							name="hsn_code"
 							render={({ field: { onChange, onBlur, value } }) => (
 								<FormField
-									label="HSN Code"
-									placeholder="Enter HSN code"
+									label={t('inventory.hsnCode')}
+									placeholder={t('inventory.placeholders.hsn')}
 									keyboardType="numeric"
 									onBlur={onBlur}
 									onChangeText={onChange}
@@ -384,7 +391,7 @@ export default function AddItemScreen() {
 				</View>
 
 				<ThemedText variant="h3" style={{ marginTop: s.sm, marginBottom: s.md }}>
-					Packaging Details
+					{t('inventory.tileSet')}
 				</ThemedText>
 
 				<View style={{ flexDirection: 'row', gap: s.md }}>
@@ -394,7 +401,7 @@ export default function AddItemScreen() {
 							name="pcs_per_box"
 							render={({ field: { onChange, value } }) => (
 								<FormField
-									label="Pieces/Box"
+									label={t('inventory.pcsPerBox')}
 									keyboardType="numeric"
 									onChangeText={onChange}
 									value={value}
@@ -408,7 +415,7 @@ export default function AddItemScreen() {
 							name="sqft_per_box"
 							render={({ field: { onChange, value } }) => (
 								<FormField
-									label="SqFt/Box"
+									label={t('inventory.sqftPerBox')}
 									keyboardType="numeric"
 									onChangeText={onChange}
 									value={value}
@@ -433,7 +440,7 @@ export default function AddItemScreen() {
 				]}
 			>
 				<Button
-					title="Save Item"
+					title={t('common.save')}
 					onPress={handleSubmit(onSubmit)}
 					loading={submitting}
 					leftIcon={!submitting && <Save size={20} color="white" />}

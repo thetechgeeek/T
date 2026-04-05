@@ -63,7 +63,7 @@ export default function CustomersScreen() {
 	const renderCustomer = ({ item }: { item: Customer }) => (
 		<ListItem
 			title={item.name}
-			subtitle={item.phone || item.city || 'No contact info'}
+			subtitle={item.phone || item.city || t('customer.noContactInfo')}
 			onPress={() => router.push(`/(app)/customers/${item.id}`)}
 			leftIcon={
 				<View style={[styles.avatar, { backgroundColor: theme.colors.surfaceVariant }]}>
@@ -72,13 +72,19 @@ export default function CustomersScreen() {
 					</ThemedText>
 				</View>
 			}
-			rightElement={<Badge label={item.type.toUpperCase()} variant="neutral" size="sm" />}
+			rightElement={
+				<Badge
+					label={t(`customer.types.${item.type}`).toUpperCase()}
+					variant="neutral"
+					size="sm"
+				/>
+			}
 		/>
 	);
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="Customers" />
+			<ScreenHeader title={t('customer.title')} />
 
 			<View
 				style={[
@@ -89,7 +95,7 @@ export default function CustomersScreen() {
 				<SearchBar
 					value={search}
 					onChangeText={handleSearch}
-					placeholder="Search customers..."
+					placeholder={t('customer.placeholders.search')}
 					style={styles.searchBar}
 				/>
 			</View>
@@ -113,9 +119,9 @@ export default function CustomersScreen() {
 						!loading ? (
 							<EmptyState
 								title={t('customer.noCustomers')}
-								description="Start by adding your first customer to manage their credit and invoices."
+								description={t('customer.addFirstHint')}
 								icon={<UserPlus size={48} color={theme.colors.placeholder} />}
-								actionLabel="Add Customer"
+								actionLabel={t('customer.add')}
 								onAction={() => router.push('/(app)/customers/add')}
 							/>
 						) : null
@@ -133,7 +139,7 @@ export default function CustomersScreen() {
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-customer-button"
-				accessibilityHint="Add a new customer"
+				accessibilityHint={t('customer.addHint')}
 			>
 				<UserPlus size={26} color="white" strokeWidth={2.5} />
 			</TouchableOpacity>

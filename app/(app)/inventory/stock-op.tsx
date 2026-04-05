@@ -20,12 +20,13 @@ import type { StockOpType, InventoryItem } from '@/src/types/inventory';
 
 import logger from '@/src/utils/logger';
 
-const schema = z.object({
-	quantity: z.string().min(1, 'Quantity is required'),
-	reason: z.string().optional(),
-});
+const getSchema = (t: (key: string) => string) =>
+	z.object({
+		quantity: z.string().min(1, t('common.required')),
+		reason: z.string().optional(),
+	});
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<ReturnType<typeof getSchema>>;
 
 export default function StockOpScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -55,12 +56,14 @@ export default function StockOpScreen() {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormData>({
-		resolver: zodResolver(schema),
+		resolver: zodResolver(getSchema(t)),
 		defaultValues: { quantity: '', reason: '' },
 	});
 
 	const isStockIn = type === 'stock_in';
-	const title = isStockIn ? 'Stock In (Add)' : 'Stock Out (Remove)';
+	const title = isStockIn
+		? `${t('inventory.stockIn')} (${t('common.add')})`
+		: `${t('inventory.stockOut')} (${t('common.delete')})`;
 
 	const onSubmit = async (data: FormData) => {
 		if (!id || !type) return;
@@ -102,9 +105,9 @@ export default function StockOpScreen() {
 							padding: s.lg,
 						}}
 					>
-						<ThemedText color={c.error}>Failed to load item.</ThemedText>
+						<ThemedText color={c.error}>{t('inventory.loadError')}</ThemedText>
 						<Button
-							title="Go Back"
+							title={t('common.back')}
 							variant="ghost"
 							onPress={() => router.back()}
 							style={{ marginTop: s.md }}
@@ -137,13 +140,16 @@ export default function StockOpScreen() {
 					]}
 				>
 					<ThemedText variant="caption" color={c.onSurfaceVariant}>
-						Item
+						{t('invoice.addItem')}
 					</ThemedText>
 					<ThemedText weight="bold" style={{ marginTop: 4 }}>
 						{item.design_name}
 					</ThemedText>
 					<ThemedText variant="body2" style={{ marginTop: 4 }}>
-						Current Stock: <ThemedText weight="bold">{item.box_count} Boxes</ThemedText>
+						{t('inventory.currentStock')}:{' '}
+						<ThemedText weight="bold">
+							{item.box_count} {t('common.boxes')}
+						</ThemedText>
 					</ThemedText>
 				</View>
 
@@ -152,8 +158,8 @@ export default function StockOpScreen() {
 					name="quantity"
 					render={({ field: { onChange, onBlur, value } }) => (
 						<TextInput
-							label="Quantity (Boxes) *"
-							placeholder="e.g. 50"
+							label={t('inventory.placeholders.quantity')}
+							placeholder={t('inventory.placeholders.quantity')}
 							keyboardType="number-pad"
 							onBlur={onBlur}
 							onChangeText={onChange}
@@ -168,8 +174,8 @@ export default function StockOpScreen() {
 					name="reason"
 					render={({ field: { onChange, onBlur, value } }) => (
 						<TextInput
-							label="Reason / Note (Optional)"
-							placeholder="e.g. Broken tiles, Return, Missing piece"
+							label={t('inventory.reason')}
+							placeholder={t('inventory.placeholders.reason')}
 							onBlur={onBlur}
 							onChangeText={onChange}
 							value={value}
@@ -178,7 +184,7 @@ export default function StockOpScreen() {
 				/>
 
 				<Button
-					title="Confirm"
+					title={t('common.confirm')}
 					onPress={handleSubmit(onSubmit)}
 					loading={submitting}
 					style={{ marginTop: s.lg }}

@@ -3,14 +3,17 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useLocale } from '@/src/hooks/useLocale';
 
 export default function SupplierDetailScreen() {
 	const { c } = useThemeTokens();
+	const { t } = useLocale();
+
 	return (
 		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Supplier Detail" />
+			<ScreenHeader title={t('supplier.supplierDetail')} />
 			<View style={styles.center}>
-				<ThemedText color={c.placeholder}>Supplier Detail — coming soon</ThemedText>
+				<ThemedText color={c.placeholder}>{t('supplier.detailComingSoon')}</ThemedText>
 			</View>
 		</Screen>
 	);

@@ -10,6 +10,7 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { UUID } from '@/src/types/common';
 import { paymentService } from '@/src/services/paymentService';
+import { useLocale } from '@/src/hooks/useLocale';
 
 interface PaymentModalProps {
 	visible: boolean;
@@ -33,6 +34,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 	onSuccess,
 }) => {
 	const { theme } = useTheme();
+	const { t } = useLocale();
 	const insets = useSafeAreaInsets();
 	const [amount, setAmount] = useState(totalAmount > 0 ? totalAmount.toString() : '');
 	const [paymentMode, setPaymentMode] = useState(PAYMENT_MODES[0].value);
@@ -52,7 +54,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 	const handleSave = async () => {
 		const parsed = parseFloat(amount);
 		if (!amount || isNaN(parsed) || parsed <= 0) {
-			Alert.alert('Invalid Amount', 'Please enter a valid amount greater than zero.');
+			Alert.alert(t('common.errorTitle'), t('inventory.stockOpValidationError'));
 			return;
 		}
 
@@ -65,14 +67,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 				direction: 'received',
 				customer_id: customerId,
 				invoice_id: invoiceId,
-				notes: notes || (invoiceNumber ? `Payment for ${invoiceNumber}` : undefined),
+				notes:
+					notes ||
+					(invoiceNumber ? t('invoice.paymentFor', { invoiceNumber }) : undefined),
 			});
 			onSuccess();
 			onClose();
 		} catch (e) {
 			Alert.alert(
-				'Payment Failed',
-				e instanceof Error ? e.message : 'An unexpected error occurred',
+				t('common.errorTitle'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
 			);
 		} finally {
 			setLoading(false);
@@ -101,14 +105,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 					<View style={styles.handle} />
 
 					<View style={styles.header}>
-						<ThemedText variant="h2">Record Payment</ThemedText>
+						<ThemedText variant="h2">{t('invoice.recordPayment')}</ThemedText>
 						<Button
 							variant="ghost"
 							size="sm"
 							onPress={onClose}
-							accessibilityLabel="Close payment dialog"
+							accessibilityLabel={t('common.cancel')}
 							testID="close-modal-button"
-							accessibilityHint="Dismiss the payment dialog"
+							accessibilityHint={t('common.cancel')}
 							leftIcon={<X size={24} color={theme.colors.onSurface} />}
 						/>
 					</View>
@@ -123,18 +127,18 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 							style={{ marginBottom: 20 }}
 						>
 							{invoiceNumber
-								? `Invoice: ${invoiceNumber}`
-								: `Customer: ${customerName}`}
+								? t('invoice.invoiceNumber') + `: ${invoiceNumber}`
+								: t('invoice.customer') + `: ${customerName}`}
 						</ThemedText>
 
 						<TextInput
-							label="Amount (₹)"
+							label={t('finance.amount')}
 							accessibilityLabel="payment-amount-input"
-							accessibilityHint="Enter the payment amount in rupees"
+							accessibilityHint={t('finance.placeholders.amount')}
 							value={amount}
 							onChangeText={setAmount}
 							keyboardType="numeric"
-							placeholder="0.00"
+							placeholder={t('finance.placeholders.amount')}
 							autoFocus
 						/>
 
@@ -148,19 +152,19 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 								textTransform: 'uppercase',
 							}}
 						>
-							Payment Mode
+							{t('invoice.paymentMode')}
 						</ThemedText>
 						<View
 							style={styles.modeGrid}
 							accessible={false}
-							accessibilityLabel="Select payment mode"
+							accessibilityLabel={t('invoice.paymentMode')}
 						>
 							{modes.map((mode) => (
 								<Button
 									key={mode}
-									title={mode.replace('_', ' ').toUpperCase()}
+									title={t(`invoice.paymentModes.${mode}`).toUpperCase()}
 									accessibilityLabel={`payment-mode-${mode}`}
-									accessibilityHint={`Pay via ${mode.replace('_', ' ')}`}
+									accessibilityHint={t(`invoice.paymentModes.${mode}`)}
 									variant={paymentMode === mode ? 'primary' : 'outline'}
 									size="sm"
 									style={styles.modeButton}
@@ -170,17 +174,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 						</View>
 
 						<TextInput
-							label="Notes"
+							label={t('inventory.notes')}
 							accessibilityLabel="payment-notes-input"
 							value={notes}
 							onChangeText={setNotes}
-							placeholder="Optional remarks"
+							placeholder={t('finance.placeholders.notes')}
 							multiline
 							numberOfLines={2}
 						/>
 
 						<Button
-							title={loading ? 'Processing...' : 'Record Payment'}
+							title={loading ? t('common.loading') : t('invoice.recordPayment')}
 							accessibilityLabel="submit-payment-button"
 							testID="submit-payment-button"
 							onPress={handleSave}

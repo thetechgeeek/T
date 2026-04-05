@@ -17,7 +17,7 @@ interface TileSetCardProps {
 
 export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 	const { theme } = useTheme();
-	const { formatCurrency } = useLocale();
+	const { formatCurrency, t } = useLocale();
 	const c = theme.colors;
 	const s = theme.spacing;
 	const r = theme.borderRadius;
@@ -63,7 +63,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 					{lowStock && (
 						<View
 							accessible={true}
-							accessibilityLabel="Low stock warning"
+							accessibilityLabel={t('inventory.lowStockWarning')}
 							style={[
 								styles.lowStockBadge,
 								{ backgroundColor: c.errorLight, borderRadius: r.sm },
@@ -86,7 +86,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 									},
 								]}
 							>
-								LOW
+								{t('common.low').toUpperCase()}
 							</Text>
 						</View>
 					)}
@@ -100,8 +100,9 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 						},
 					]}
 				>
-					{group.items.length} Variant{group.items.length !== 1 ? 's' : ''} • {totalStock}{' '}
-					Boxes Total
+					{group.items.length}{' '}
+					{group.items.length === 1 ? t('inventory.variant') : t('inventory.variants')} •{' '}
+					{totalStock} {t('inventory.boxesTotal')}
 				</Text>
 			</View>
 
@@ -114,11 +115,11 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 							key={item.id}
 							activeOpacity={0.7}
 							accessibilityRole="button"
-							accessibilityLabel={`${item.design_name}, ${item.box_count} boxes in stock`}
+							accessibilityLabel={`${item.design_name}, ${t('inventory.stockStatus', { count: item.box_count })}`}
 							accessibilityHint={
 								isLow
-									? 'Low stock. Double tap to view details'
-									: 'Double tap to view details'
+									? `${t('inventory.lowStockWarning')}. ${t('common.doubleTapToView')}`
+									: t('common.doubleTapToView')
 							}
 							style={[styles.variantRow, { marginTop: index > 0 ? s.md : 0 }]}
 							onPress={() => onPressItem(item)}
@@ -171,7 +172,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 											},
 										]}
 									>
-										{item.size_name || 'Size N/A'}
+										{item.size_name || t('inventory.itemNotFound')}
 									</Text>
 									{item.category !== 'OTHER' && (
 										<View
@@ -193,7 +194,9 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 													},
 												]}
 											>
-												{item.category}
+												{t(
+													`inventory.categories.${item.category.toLowerCase()}`,
+												)}
 											</Text>
 										</View>
 									)}
@@ -211,7 +214,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 										},
 									]}
 								>
-									{item.box_count} Box
+									{t('inventory.stockStatus', { count: item.box_count })}
 								</Text>
 								<Text
 									style={[

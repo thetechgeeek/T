@@ -135,7 +135,7 @@ export default function InventoryTab() {
 				]}
 			>
 				<View style={[layout.rowBetween, { marginBottom: 16 }]}>
-					<ThemedText variant="h1" accessibilityLabel="inventory-screen">
+					<ThemedText variant="h1" accessibilityLabel="inventory-screen-title">
 						{t('inventory.title')}
 					</ThemedText>
 				</View>
@@ -145,8 +145,8 @@ export default function InventoryTab() {
 					<View style={{ flex: 1 }}>
 						<TextInput
 							accessibilityLabel="inventory-search-input"
-							accessibilityHint="Search by design name or item number"
-							placeholder="Search design or item number..."
+							accessibilityHint={t('inventory.searchHint')}
+							placeholder={t('inventory.placeholders.designName')}
 							value={searchInput}
 							onChangeText={setSearchInput}
 							leftIcon={<Search size={18} color={c.placeholder} />}
@@ -162,7 +162,7 @@ export default function InventoryTab() {
 						]}
 						accessibilityRole="button"
 						accessibilityLabel="inventory-filter-button"
-						accessibilityHint="Open category and filter options"
+						accessibilityHint={t('inventory.filterHint')}
 					>
 						<FiltersIcon
 							size={20}
@@ -182,9 +182,10 @@ export default function InventoryTab() {
 						contentContainerStyle={{ paddingVertical: s.sm }}
 						renderItem={({ item }) => {
 							const isActive = filters.category === item;
+							const categoryLabel = t(`inventory.categories.${item.toLowerCase()}`);
 							return (
 								<Chip
-									label={item}
+									label={categoryLabel}
 									accessibilityLabel={`category-chip-${item}`}
 									selected={isActive}
 									onPress={() => handleCategorySelect(item)}
@@ -242,7 +243,7 @@ export default function InventoryTab() {
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-inventory-button"
-				accessibilityHint="Add a new inventory item"
+				accessibilityHint={t('inventory.addHint')}
 			>
 				<Plus
 					size={28}

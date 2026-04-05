@@ -15,7 +15,7 @@ import React, { useEffect, useState } from 'react';
 
 export default function FinanceOverviewScreen() {
 	const { theme } = useThemeTokens();
-	const { formatCurrency } = useLocale();
+	const { formatCurrency, t } = useLocale();
 	const router = useRouter();
 	const [refreshing, setRefreshing] = useState(false);
 	const { summary, fetchSummary } = useFinanceStore(
@@ -40,21 +40,21 @@ export default function FinanceOverviewScreen() {
 
 	const metrics = [
 		{
-			title: 'Gross Profit',
+			title: t('finance.grossProfit'),
 			icon: TrendingUp,
 			color: theme.colors.success,
 			value: formatCurrency(summary?.gross_profit || 0),
 			accessibilityLabel: 'stat-gross-profit',
 		},
 		{
-			title: 'Net Profit',
+			title: t('finance.netProfit'),
 			icon: Wallet,
 			color: theme.colors.primary,
 			value: formatCurrency(summary?.net_profit || 0),
 			accessibilityLabel: 'stat-net-profit',
 		},
 		{
-			title: 'Total Expenses',
+			title: t('finance.expenses'),
 			icon: TrendingDown,
 			color: theme.colors.error,
 			value: formatCurrency(summary?.total_expenses || 0),
@@ -77,7 +77,7 @@ export default function FinanceOverviewScreen() {
 			}}
 			contentContainerStyle={styles.scrollContent}
 		>
-			<ScreenHeader title="Finance Overview" />
+			<ScreenHeader title={t('finance.title')} />
 			<View style={styles.metricsGrid}>
 				{metrics.map((m) => (
 					<StatCard
@@ -94,15 +94,15 @@ export default function FinanceOverviewScreen() {
 			<Divider style={{ marginVertical: 24 }} />
 
 			<ThemedText variant="h3" style={{ marginBottom: 16, paddingLeft: 4 }}>
-				Reports & Management
+				{t('finance.profitLoss')}
 			</ThemedText>
 
 			<View style={styles.section}>
 				<ListItem
-					title="Expenses"
-					subtitle="View and add business expenses"
+					title={t('finance.expenses')}
+					subtitle={t('finance.noExpenses')}
 					accessibilityLabel="menu-expenses"
-					accessibilityHint="Double tap to view expenses"
+					accessibilityHint={t('finance.viewExpenses')}
 					onPress={() => router.push('/(app)/finance/expenses')}
 					leftIcon={
 						<Receipt
@@ -113,10 +113,10 @@ export default function FinanceOverviewScreen() {
 					}
 				/>
 				<ListItem
-					title="Purchases"
-					subtitle="Supplier bills and inventory procurement"
+					title={t('finance.purchases')}
+					subtitle={t('finance.loadPurchasesError')}
 					accessibilityLabel="menu-purchases"
-					accessibilityHint="Double tap to view purchases"
+					accessibilityHint={t('finance.viewPurchases')}
 					onPress={() => router.push('/(app)/finance/purchases')}
 					leftIcon={
 						<ShoppingCart
@@ -127,10 +127,10 @@ export default function FinanceOverviewScreen() {
 					}
 				/>
 				<ListItem
-					title="Aging Report"
-					subtitle="Outstanding balances from customers"
+					title={t('customer.agingReport')}
+					subtitle={t('customer.outstanding')}
 					accessibilityLabel="menu-aging-report"
-					accessibilityHint="Double tap to view aging report"
+					accessibilityHint={t('finance.viewAging')}
 					onPress={() => router.push('/(app)/customers/aging')}
 					leftIcon={
 						<TrendingDown
@@ -141,10 +141,10 @@ export default function FinanceOverviewScreen() {
 					}
 				/>
 				<ListItem
-					title="Profit & Loss"
-					subtitle="Detailed financial performance"
+					title={t('finance.profitLoss')}
+					subtitle={t('finance.profitLoss')}
 					accessibilityLabel="menu-profit-loss"
-					accessibilityHint="Double tap to view profit and loss"
+					accessibilityHint={t('finance.viewProfitLoss')}
 					onPress={() => router.push('/(app)/finance/profit-loss')}
 					leftIcon={
 						<TrendingUp color={theme.colors.success} importantForAccessibility="no" />

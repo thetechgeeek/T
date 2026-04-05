@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useLocale } from '@/src/hooks/useLocale';
 
 interface Props {
 	children: React.ReactNode;
@@ -9,6 +10,19 @@ interface Props {
 interface State {
 	hasError: boolean;
 	error: Error | null;
+}
+
+function FallbackUI({ error, onReset }: { error: Error | null; onReset: () => void }) {
+	const { t } = useLocale();
+	return (
+		<View style={styles.container}>
+			<Text style={styles.title}>{t('error.boundaryTitle')}</Text>
+			<Text style={styles.message}>{error?.message || t('common.unexpectedError')}</Text>
+			<TouchableOpacity onPress={onReset} style={styles.button}>
+				<Text style={styles.buttonText}>{t('error.boundaryRetry')}</Text>
+			</TouchableOpacity>
+		</View>
+	);
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
@@ -33,15 +47,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 	render() {
 		if (this.state.hasError) {
 			if (this.props.fallback) return <>{this.props.fallback}</>;
-			return (
-				<View style={styles.container}>
-					<Text style={styles.title}>Something went wrong</Text>
-					<Text style={styles.message}>{this.state.error?.message}</Text>
-					<TouchableOpacity onPress={this.handleReset} style={styles.button}>
-						<Text style={styles.buttonText}>Try Again</Text>
-					</TouchableOpacity>
-				</View>
-			);
+			return <FallbackUI error={this.state.error} onReset={this.handleReset} />;
 		}
 		return this.props.children;
 	}

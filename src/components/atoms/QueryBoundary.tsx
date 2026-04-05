@@ -4,6 +4,7 @@ import { SkeletonBlock } from '../molecules/SkeletonBlock';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { EmptyState } from '../molecules/EmptyState';
 import type { AppError } from '@/src/errors';
+import { useLocale } from '@/src/hooks/useLocale';
 
 interface QueryBoundaryProps {
 	loading: boolean;
@@ -25,6 +26,7 @@ export function QueryBoundary({
 	loadingComponent,
 }: QueryBoundaryProps) {
 	const { theme } = useTheme();
+	const { t } = useLocale();
 
 	if (loading && !React.Children.count(children)) {
 		return (
@@ -50,7 +52,7 @@ export function QueryBoundary({
 				<Text style={[styles.errorText, { color: theme.colors.error }]}>{message}</Text>
 				{onRetry && (
 					<TouchableOpacity onPress={onRetry} style={styles.retryButton}>
-						<Text style={{ color: theme.colors.primary }}>Retry</Text>
+						<Text style={{ color: theme.colors.primary }}>{t('common.retry')}</Text>
 					</TouchableOpacity>
 				)}
 			</View>
@@ -58,7 +60,7 @@ export function QueryBoundary({
 	}
 
 	if (empty) {
-		return <>{emptyState ?? <EmptyState title="No results found" />}</>;
+		return <>{emptyState ?? <EmptyState title={t('common.noResults')} />}</>;
 	}
 
 	return <>{children}</>;

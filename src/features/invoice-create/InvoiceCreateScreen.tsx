@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -12,20 +13,31 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 
 export default function InvoiceCreateScreen() {
 	const { c, s } = useThemeTokens();
+	const { t } = useLocale();
 
 	const flow = useInvoiceCreateFlow();
 
+	const steps = [
+		t('invoice.stepCustomer'),
+		t('invoice.stepItems'),
+		t('invoice.stepReview'),
+	] as const;
+
 	return (
 		<Screen withKeyboard safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Create Invoice" />
+			<ScreenHeader title={t('invoice.createInvoice')} />
 			{/* Stepper — announced as a progress indicator */}
 			<View
 				style={[styles.stepper, { borderBottomColor: c.border }]}
 				accessibilityRole="progressbar"
 				accessibilityValue={{ now: flow.step, min: 1, max: 3 }}
-				accessibilityLabel={`Step ${flow.step} of 3: ${['Customer', 'Items', 'Review'][flow.step - 1]}`}
+				accessibilityLabel={t('common.stepIndicator', {
+					current: flow.step,
+					total: 3,
+					label: steps[flow.step - 1],
+				})}
 			>
-				{(['Customer', 'Items', 'Review'] as const).map((label, i) => (
+				{steps.map((label, i) => (
 					<ThemedText
 						key={label}
 						variant="label"
@@ -84,10 +96,12 @@ export default function InvoiceCreateScreen() {
 			{/* Footer nav */}
 			<View style={[styles.footer, { borderTopColor: c.border, backgroundColor: c.surface }]}>
 				<Button
-					title="Back"
+					title={t('common.back')}
 					accessibilityLabel="invoice-back-button"
 					accessibilityHint={
-						flow.step > 1 ? `Go back to step ${flow.step - 1}` : undefined
+						flow.step > 1
+							? t('common.goBackToStep', { step: flow.step - 1 })
+							: undefined
 					}
 					variant="ghost"
 					onPress={flow.handleBack}
@@ -96,16 +110,18 @@ export default function InvoiceCreateScreen() {
 				/>
 				{flow.step < 3 ? (
 					<Button
-						title="Next"
+						title={t('common.next')}
 						accessibilityLabel="invoice-next-button"
-						accessibilityHint={`Proceed to step ${flow.step + 1}`}
+						accessibilityHint={t('common.proceedToStep', { step: flow.step + 1 })}
 						onPress={flow.handleNext}
 						disabled={!flow.canGoNext}
 						style={{ flex: 1, marginLeft: s.xs }}
 					/>
 				) : (
 					<Button
-						title={flow.submitting ? 'Generating...' : 'Generate Invoice'}
+						title={
+							flow.submitting ? t('invoice.generating') : t('invoice.createInvoice')
+						}
 						onPress={flow.submitInvoice}
 						loading={flow.submitting}
 						style={{ flex: 1, marginLeft: s.xs }}

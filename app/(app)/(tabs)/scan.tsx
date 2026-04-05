@@ -43,19 +43,15 @@ export default function ScanTab() {
 					router.push(`/(app)/inventory/${exact ? exact.id : data[0].id}`);
 				}
 			} else {
-				Alert.alert(
-					'Not Found',
-					`No item found matching "${query}". Would you like to add it?`,
-					[
-						{ text: 'Cancel', style: 'cancel' },
-						{
-							text: 'Add Item',
-							onPress: () => {
-								router.push('/(app)/inventory/add');
-							},
+				Alert.alert(t('scanner.itemNotFound'), t('scanner.noMatchFound', { query }), [
+					{ t: t('common.cancel'), style: 'cancel' },
+					{
+						text: t('inventory.add'),
+						onPress: () => {
+							router.push('/(app)/inventory/add');
 						},
-					],
-				);
+					},
+				] as any);
 			}
 		} catch (err: unknown) {
 			logger.error(
@@ -80,13 +76,12 @@ export default function ScanTab() {
 			await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
 
 			// 2. OCR placeholder: We will send photo.base64 to an LLM / Cloud Vision API
-			// Since LLM connectivity is planned for Phase 7 (along with PDF Parsing), we mock it for now.
 			await new Promise((res) => setTimeout(res, 1500));
 
 			Alert.alert(
-				'Simulated OCR Success',
-				'Image captured! Cloud OCR integration will be wired up during Phase 7.\n\nFor now, please use the manual entry field to test search.',
-				[{ text: 'OK' }],
+				t('scanner.itemFound'),
+				`${t('scanner.ocrIntro')}\n\n${t('scanner.ocrDisclaimer')}`,
+				[{ text: t('common.ok') }],
 			);
 		} catch (err: unknown) {
 			logger.error(
@@ -115,12 +110,12 @@ export default function ScanTab() {
 		return (
 			<AtomicScreen style={{ justifyContent: 'center', padding: s.xl }}>
 				<ThemedText align="center" style={{ marginBottom: s.lg, fontSize: 16 }}>
-					We need your permission to show the camera for scanning tile box text.
+					{t('scanner.permissionText')}
 				</ThemedText>
 				<Button
-					title="Grant Permission"
+					title={t('scanner.grantPermission')}
 					accessibilityLabel="grant-camera-permission"
-					accessibilityHint="Allow TileMaster to use your camera for scanning"
+					accessibilityHint={t('scanner.cameraHint')}
 					onPress={requestPermission}
 				/>
 			</AtomicScreen>
@@ -163,9 +158,7 @@ export default function ScanTab() {
 						color="#fff"
 						style={{ fontSize: 14, opacity: 0.8, marginBottom: s.xl }}
 					>
-						{capturing
-							? 'Analyzing text...'
-							: 'Align item name / model number in frame'}
+						{capturing ? t('scanner.analyzing') : t('scanner.alignFrame')}
 					</ThemedText>
 
 					{/* Capture Button */}
@@ -174,7 +167,7 @@ export default function ScanTab() {
 						onPress={handleCaptureText}
 						accessibilityRole="button"
 						accessibilityLabel="capture-button"
-						accessibilityHint="Take a photo to scan item text"
+						accessibilityHint={t('scanner.cameraHint')}
 						accessibilityState={{ busy: capturing }}
 						style={[
 							styles.captureBtn,
@@ -202,14 +195,14 @@ export default function ScanTab() {
 							accessibilityRole="header"
 							style={{ marginBottom: s.sm }}
 						>
-							Manual Entry
+							{t('scanner.manualEntry')}
 						</ThemedText>
 						<View style={{ flexDirection: 'row', gap: s.sm }}>
 							<View style={{ flex: 1 }}>
 								<TextInput
 									accessibilityLabel="manual-entry-input"
-									accessibilityHint="Type an item name or design number to search"
-									placeholder="Enter item or design #"
+									accessibilityHint={t('scanner.searchHint')}
+									placeholder={t('scanner.manualEntry')}
 									value={manualInput}
 									onChangeText={setManualInput}
 									containerStyle={{ marginBottom: 0 }}
@@ -221,7 +214,7 @@ export default function ScanTab() {
 							<Button
 								title=""
 								accessibilityLabel="scan-search-button"
-								accessibilityHint="Search inventory for entered text"
+								accessibilityHint={t('scanner.searchInventoryHint')}
 								leftIcon={
 									<Search
 										size={20}

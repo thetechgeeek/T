@@ -5,6 +5,7 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { calculateInvoiceTotals } from '@/src/utils/gstCalculator';
 import logger from '@/src/utils/logger';
+import { useLocale } from '@/src/hooks/useLocale';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
 
 export interface CustomerDraft {
@@ -19,6 +20,7 @@ export type PaymentMode = 'cash' | 'upi' | 'bank_transfer' | 'cheque' | 'credit'
 
 export function useInvoiceCreateFlow() {
 	const router = useRouter();
+	const { t } = useLocale();
 
 	// Step state
 	const [step, setStep] = useState(1);
@@ -84,9 +86,12 @@ export function useInvoiceCreateFlow() {
 		// UI-level stock validation
 		if (quantity > selectedItem.box_count) {
 			Alert.alert(
-				'Insufficient Stock',
-				`You only have ${selectedItem.box_count} boxes of ${selectedItem.design_name} available.`,
-				[{ text: 'OK' }],
+				t('invoice.errors.insufficientStock'),
+				t('invoice.errors.stockLimitReached', {
+					count: selectedItem.box_count,
+					name: selectedItem.design_name,
+				}),
+				[{ text: t('common.ok') }],
 			);
 			return;
 		}
@@ -108,7 +113,7 @@ export function useInvoiceCreateFlow() {
 		setSearchQuery('');
 		setInputQuantity('1');
 		setInputDiscount('0');
-	}, [selectedItem, inputQuantity, inputDiscount]);
+	}, [selectedItem, inputQuantity, inputDiscount, t]);
 
 	const removeLineItem = useCallback((index: number) => {
 		setLineItems((prev) => prev.filter((_, i) => i !== index));
@@ -143,14 +148,14 @@ export function useInvoiceCreateFlow() {
 		} catch (e: unknown) {
 			logger.error('Failed to create invoice', e instanceof Error ? e : new Error(String(e)));
 			Alert.alert(
-				'Error Creating Invoice',
-				e instanceof Error ? e.message : 'An unexpected error occurred. Please try again.',
-				[{ text: 'OK' }],
+				t('invoice.errors.createFailed'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
+				[{ text: t('common.ok') }],
 			);
 		} finally {
 			setSubmitting(false);
 		}
-	}, [customer, lineItems, isInterState, amountPaidNum, grandTotal, paymentMode, router]);
+	}, [customer, lineItems, isInterState, amountPaidNum, grandTotal, paymentMode, router, t]);
 
 	return {
 		// Step navigation

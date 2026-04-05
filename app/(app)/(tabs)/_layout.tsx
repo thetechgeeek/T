@@ -4,15 +4,20 @@ import { Home, Package, QrCode, FileText, MoreHorizontal } from 'lucide-react-na
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ErrorBoundaryProps } from 'expo-router';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Button } from '@/src/components/atoms/Button';
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+	const { t } = useLocale();
 	return (
 		<View style={styles.errorContainer}>
-			<Text style={styles.errorTitle}>Something went wrong</Text>
-			<Text style={styles.errorMessage}>{error.message}</Text>
-			<TouchableOpacity onPress={retry} style={styles.retryButton}>
-				<Text style={styles.retryText}>Try Again</Text>
-			</TouchableOpacity>
+			<ThemedText variant="h2" style={{ marginBottom: 8 }}>
+				{t('common.error')}
+			</ThemedText>
+			<ThemedText align="center" style={{ marginBottom: 24, paddingHorizontal: 20 }}>
+				{error.message}
+			</ThemedText>
+			<Button title={t('common.retry')} onPress={retry} />
 		</View>
 	);
 }

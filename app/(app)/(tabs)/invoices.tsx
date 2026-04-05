@@ -16,7 +16,7 @@ import { InvoiceListSkeleton } from '@/src/components/molecules/skeletons/Invoic
 export default function InvoicesListScreen() {
 	const router = useRouter();
 	const { theme, c, s } = useThemeTokens();
-	const { t, formatCurrency } = useLocale();
+	const { t, formatCurrency, formatDate } = useLocale();
 
 	const { invoices, loading, fetchInvoices } = useInvoiceStore(
 		useShallow((s) => ({
@@ -45,11 +45,11 @@ export default function InvoicesListScreen() {
 	return (
 		<AtomicScreen safeAreaEdges={['top']}>
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
-				<ThemedText variant="h1" accessibilityLabel="invoices-screen">
-					Invoices
+				<ThemedText variant="h1" accessibilityLabel="invoices-screen-title">
+					{t('invoice.title')}
 				</ThemedText>
 				<Button
-					title="New Invoice"
+					title={t('common.add')}
 					accessibilityLabel="new-invoice-button"
 					leftIcon={<Plus color="#FFF" size={20} />}
 					onPress={() => router.push('/(app)/invoices/create')}
@@ -70,10 +70,10 @@ export default function InvoicesListScreen() {
 					<View style={{ alignItems: 'center', marginTop: s['2xl'] }}>
 						<FileText color={c.placeholder} size={64} />
 						<ThemedText color={c.onSurfaceVariant} style={{ marginTop: s.md }}>
-							No invoices found.
+							{t('invoice.noInvoices')}
 						</ThemedText>
 						<Button
-							title="Create your first invoice"
+							title={t('invoice.createFirst')}
 							variant="outline"
 							style={{ marginTop: s.lg }}
 							onPress={() => router.push('/(app)/invoices/create')}
@@ -91,7 +91,7 @@ export default function InvoicesListScreen() {
 						]}
 						accessibilityRole="button"
 						accessibilityLabel={`invoice-${item.invoice_number}`}
-						accessibilityHint={`${item.payment_status}, ${formatCurrency(item.grand_total)}. Double tap to open`}
+						accessibilityHint={`${t('invoice.' + item.payment_status)}, ${formatCurrency(item.grand_total)}. ${t('invoice.tapToOpen')}`}
 						onPress={() => router.push(`/(app)/invoices/${item.id}`)}
 					>
 						<View style={styles.cardHeader}>
@@ -99,7 +99,7 @@ export default function InvoicesListScreen() {
 								{item.invoice_number}
 							</ThemedText>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{new Date(item.invoice_date).toLocaleDateString('en-IN')}
+								{formatDate(item.invoice_date)}
 							</ThemedText>
 						</View>
 						<ThemedText color={c.onSurfaceVariant} style={{ marginBottom: s.sm }}>

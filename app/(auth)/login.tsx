@@ -60,11 +60,11 @@ export default function LoginScreen() {
 							fontWeight: '700',
 						}}
 					>
-						TM
+						{t('branding.appShortName')}
 					</ThemedText>
 				</View>
 				<ThemedText variant="h1" style={[styles.appName, { color: c.onPrimary }]}>
-					TileMaster
+					{t('branding.appName')}
 				</ThemedText>
 				<ThemedText
 					style={[
@@ -90,32 +90,34 @@ export default function LoginScreen() {
 				<TextInput
 					label={t('auth.email')}
 					accessibilityLabel="email-input"
-					accessibilityHint="Enter your registered email address"
+					accessibilityHint={t('auth.placeholders.email')}
 					value={email}
 					onChangeText={setEmail}
 					keyboardType="email-address"
 					autoCapitalize="none"
 					autoComplete="email"
-					placeholder="you@example.com"
+					placeholder={t('auth.placeholders.email')}
 				/>
 
 				{/* Password */}
 				<TextInput
 					label={t('auth.password')}
 					accessibilityLabel="password-input"
-					accessibilityHint="Enter your account password"
+					accessibilityHint={t('auth.placeholders.password')}
 					value={password}
 					onChangeText={setPassword}
 					secureTextEntry={!showPassword}
 					autoComplete="password"
-					placeholder="••••••••"
+					placeholder={t('auth.placeholders.password')}
 					rightIcon={
 						<TouchableOpacity
 							onPress={() => setShowPassword(!showPassword)}
 							accessibilityRole="button"
-							accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
+							accessibilityLabel={
+								showPassword ? t('auth.hidePassword') : t('auth.showPassword')
+							}
 							accessibilityHint={
-								showPassword ? 'Password will be hidden' : 'Password will be shown'
+								showPassword ? t('auth.passwordHidden') : t('auth.passwordShown')
 							}
 						>
 							{showPassword ? (

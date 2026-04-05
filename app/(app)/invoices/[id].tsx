@@ -20,7 +20,7 @@ export default function InvoiceDetailScreen() {
 	const { id } = useLocalSearchParams();
 	const router = useRouter();
 	const { theme, c, s, r } = useThemeTokens();
-	const { formatCurrency } = useLocale();
+	const { t, formatCurrency, formatDateShort } = useLocale();
 
 	const { currentInvoice, fetchInvoiceById, loading, error, clearCurrentInvoice } =
 		useInvoiceStore();
@@ -37,7 +37,7 @@ export default function InvoiceDetailScreen() {
 	const handleShare = async () => {
 		if (!currentInvoice) return;
 		setSharing(true);
-		await pdfService.printAndShareInvoice(currentInvoice);
+		await pdfService.printAndShareInvoice(currentInvoice, t, formatDateShort);
 		setSharing(false);
 	};
 
@@ -54,9 +54,9 @@ export default function InvoiceDetailScreen() {
 		return (
 			<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
 				<View style={styles.center}>
-					<ThemedText color={c.error}>Failed to load invoice.</ThemedText>
+					<ThemedText color={c.error}>{t('invoice.loadError')}</ThemedText>
 					<Button
-						title="Go Back"
+						title={t('common.back')}
 						onPress={() => router.back()}
 						style={{ marginTop: s.lg }}
 					/>
@@ -73,7 +73,7 @@ export default function InvoiceDetailScreen() {
 				title={currentInvoice.invoice_number}
 				rightElement={
 					<Button
-						title="Share PDF"
+						title={t('invoice.sharePdf')}
 						accessibilityLabel="share-pdf-button"
 						variant="outline"
 						leftIcon={
@@ -102,14 +102,14 @@ export default function InvoiceDetailScreen() {
 						]}
 					>
 						<ThemedText variant="overline" color={c.error} style={{ marginBottom: 4 }}>
-							Balance Due
+							{t('invoice.balance')}
 						</ThemedText>
 						<ThemedText variant="display" color={c.error}>
 							{formatCurrency(balanceDue)}
 						</ThemedText>
 						<ThemedText variant="caption" color={c.error} style={{ marginTop: 4 }}>
-							Grand Total {formatCurrency(currentInvoice.grand_total)} · Paid{' '}
-							{formatCurrency(currentInvoice.amount_paid)}
+							{t('invoice.grandTotal')} {formatCurrency(currentInvoice.grand_total)} ·{' '}
+							{t('invoice.paid')} {formatCurrency(currentInvoice.amount_paid)}
 						</ThemedText>
 					</View>
 				)}
@@ -137,7 +137,7 @@ export default function InvoiceDetailScreen() {
 						]}
 					>
 						<ThemedText variant="sectionLabel" color={c.onSurfaceVariant}>
-							BILLED TO
+							{t('invoice.billedTo')}
 						</ThemedText>
 					</View>
 					<View style={{ padding: s.md, gap: 2 }}>
@@ -149,7 +149,7 @@ export default function InvoiceDetailScreen() {
 						)}
 						{!!currentInvoice.customer_gstin && (
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								GSTIN: {currentInvoice.customer_gstin}
+								{t('customer.gstin')}: {currentInvoice.customer_gstin}
 							</ThemedText>
 						)}
 					</View>
@@ -182,10 +182,10 @@ export default function InvoiceDetailScreen() {
 							color={c.onSurfaceVariant}
 							style={{ flex: 1 }}
 						>
-							ITEM
+							{t('invoice.item')}
 						</ThemedText>
 						<ThemedText variant="sectionLabel" color={c.onSurfaceVariant}>
-							TOTAL
+							{t('invoice.total').toUpperCase()}
 						</ThemedText>
 					</View>
 					{currentInvoice.line_items?.map((item, index) => (
@@ -217,13 +217,16 @@ export default function InvoiceDetailScreen() {
 								color={c.onSurfaceVariant}
 								style={{ marginTop: 2 }}
 							>
-								{item.quantity} units @ {formatCurrency(item.rate_per_unit)}
+								{t('invoice.unitsAt', {
+									count: item.quantity,
+									price: formatCurrency(item.rate_per_unit),
+								})}
 							</ThemedText>
 						</View>
 					))}
 				</View>
 
-				{/* Totals */}
+				{/* Totals summary */}
 				<View
 					style={[
 						styles.section,
@@ -245,29 +248,37 @@ export default function InvoiceDetailScreen() {
 						]}
 					>
 						<ThemedText variant="sectionLabel" color={c.onSurfaceVariant}>
-							SUMMARY
+							{t('invoice.summary')}
 						</ThemedText>
 					</View>
 					<View style={{ padding: s.md, gap: s.sm }}>
 						<View style={layout.rowBetween}>
-							<ThemedText color={c.onSurfaceVariant}>Subtotal</ThemedText>
+							<ThemedText color={c.onSurfaceVariant}>
+								{t('invoice.subtotal')}
+							</ThemedText>
 							<ThemedText>{formatCurrency(currentInvoice.subtotal)}</ThemedText>
 						</View>
 						{currentInvoice.is_inter_state ? (
 							<View style={layout.rowBetween}>
-								<ThemedText color={c.onSurfaceVariant}>IGST</ThemedText>
+								<ThemedText color={c.onSurfaceVariant}>
+									{t('finance.igst')}
+								</ThemedText>
 								<ThemedText>{formatCurrency(currentInvoice.igst_total)}</ThemedText>
 							</View>
 						) : (
 							<>
 								<View style={layout.rowBetween}>
-									<ThemedText color={c.onSurfaceVariant}>CGST</ThemedText>
+									<ThemedText color={c.onSurfaceVariant}>
+										{t('finance.cgst')}
+									</ThemedText>
 									<ThemedText>
 										{formatCurrency(currentInvoice.cgst_total)}
 									</ThemedText>
 								</View>
 								<View style={layout.rowBetween}>
-									<ThemedText color={c.onSurfaceVariant}>SGST</ThemedText>
+									<ThemedText color={c.onSurfaceVariant}>
+										{t('finance.sgst')}
+									</ThemedText>
 									<ThemedText>
 										{formatCurrency(currentInvoice.sgst_total)}
 									</ThemedText>
@@ -278,20 +289,22 @@ export default function InvoiceDetailScreen() {
 						<Divider style={{ marginVertical: s.xs }} />
 
 						<View style={layout.rowBetween}>
-							<ThemedText weight="bold">Grand Total</ThemedText>
+							<ThemedText weight="bold">{t('invoice.grandTotal')}</ThemedText>
 							<ThemedText variant="h2" color={c.primary}>
 								{formatCurrency(currentInvoice.grand_total)}
 							</ThemedText>
 						</View>
 						<View style={layout.rowBetween}>
-							<ThemedText color={c.onSurfaceVariant}>Amount Paid</ThemedText>
+							<ThemedText color={c.onSurfaceVariant}>
+								{t('invoice.amountPaid')}
+							</ThemedText>
 							<ThemedText weight="semibold" color={c.success}>
 								{formatCurrency(currentInvoice.amount_paid)}
 							</ThemedText>
 						</View>
 						{balanceDue > 0 && (
 							<View style={layout.rowBetween}>
-								<ThemedText color={c.error}>Balance Due</ThemedText>
+								<ThemedText color={c.error}>{t('invoice.balance')}</ThemedText>
 								<ThemedText variant="h3" color={c.error}>
 									{formatCurrency(balanceDue)}
 								</ThemedText>
@@ -316,7 +329,7 @@ export default function InvoiceDetailScreen() {
 					]}
 				>
 					<Button
-						title="Record Payment"
+						title={t('invoice.recordPayment')}
 						accessibilityLabel="record-payment-button"
 						onPress={() => setPaymentModalVisible(true)}
 					/>

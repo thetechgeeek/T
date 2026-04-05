@@ -46,7 +46,7 @@ export default function PurchasesScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Purchases" />
+			<ScreenHeader title={t('finance.purchases')} />
 
 			<FlashList
 				data={purchases}
@@ -59,8 +59,8 @@ export default function PurchasesScreen() {
 				ListEmptyComponent={
 					!loading ? (
 						<EmptyState
-							title="No purchases found"
-							description="Track your supplier bills here"
+							title={t('finance.loadPurchasesError')}
+							description={t('finance.purchases')}
 						/>
 					) : null
 				}
@@ -70,11 +70,11 @@ export default function PurchasesScreen() {
 							<View style={styles.supplierInfo}>
 								<User size={16} color={theme.colors.primary} />
 								<ThemedText weight="bold" style={{ fontSize: 16 }}>
-									{p.supplier_name || 'Generic Supplier'}
+									{p.supplier_name || t('supplier.title')}
 								</ThemedText>
 							</View>
 							<Badge
-								label={p.payment_status.toUpperCase()}
+								label={t(`invoice.${p.payment_status}`).toUpperCase()}
 								variant={p.payment_status === 'paid' ? 'success' : 'warning'}
 							/>
 						</View>
@@ -90,7 +90,7 @@ export default function PurchasesScreen() {
 
 						<View style={styles.footer}>
 							<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
-								Total Amount
+								{t('invoice.total')}
 							</ThemedText>
 							<ThemedText weight="bold" style={{ fontSize: 18 }}>
 								{formatCurrency(p.grand_total)}

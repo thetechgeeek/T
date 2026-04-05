@@ -28,14 +28,10 @@ export default function MoreTab() {
 	const { logout } = useAuthStore();
 
 	const handleLogout = () => {
-		Alert.alert(
-			t('auth.signOut'),
-			t('auth.signOutConfirm') || 'Are you sure you want to sign out?',
-			[
-				{ text: t('common.cancel') || 'Cancel', style: 'cancel' },
-				{ text: t('auth.signOut'), style: 'destructive', onPress: logout },
-			],
-		);
+		Alert.alert(t('auth.signOut'), t('auth.signOutConfirm'), [
+			{ text: t('common.cancel'), style: 'cancel' },
+			{ text: t('auth.signOut'), style: 'destructive', onPress: logout },
+		]);
 	};
 	const router = useRouter();
 
@@ -93,14 +89,14 @@ export default function MoreTab() {
 					},
 				]}
 			>
-				<ThemedText variant="h1" accessibilityLabel="more-screen">
-					More
+				<ThemedText variant="h1" accessibilityLabel="more-screen-title">
+					{t('common.more')}
 				</ThemedText>
 			</View>
 			<View style={{ padding: s.lg }}>
 				{/* REPORTS section */}
 				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
-					REPORTS
+					{t('settings.sections.reports')}
 				</ThemedText>
 				{reportsItems.map((item) => (
 					<TouchableOpacity
@@ -118,7 +114,7 @@ export default function MoreTab() {
 						activeOpacity={0.8}
 						accessibilityRole="button"
 						accessibilityLabel={item.accessibilityLabel}
-						accessibilityHint={`Open ${item.label}`}
+						accessibilityHint={t('settings.openHint', { label: item.label })}
 					>
 						<View
 							style={[
@@ -145,7 +141,7 @@ export default function MoreTab() {
 
 				{/* SETTINGS section */}
 				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
-					SETTINGS
+					{t('settings.sections.settings')}
 				</ThemedText>
 				{settingsItems.map((item) => (
 					<TouchableOpacity
@@ -163,7 +159,7 @@ export default function MoreTab() {
 						activeOpacity={0.8}
 						accessibilityRole="button"
 						accessibilityLabel={item.accessibilityLabel}
-						accessibilityHint={`Open ${item.label}`}
+						accessibilityHint={t('settings.openHint', { label: item.label })}
 					>
 						<View
 							style={[
@@ -190,7 +186,7 @@ export default function MoreTab() {
 
 				{/* PREFERENCES section */}
 				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
-					PREFERENCES
+					{t('settings.sections.preferences')}
 				</ThemedText>
 
 				<TouchableOpacity
@@ -207,11 +203,9 @@ export default function MoreTab() {
 					activeOpacity={0.8}
 					accessibilityRole="button"
 					accessibilityLabel="language-toggle"
-					accessibilityHint={
-						currentLanguage === 'en'
-							? 'Switch app language to Hindi'
-							: 'Switch app language to English'
-					}
+					accessibilityHint={t('settings.switchLanguageHint', {
+						lang: currentLanguage === 'en' ? 'Hindi' : 'English',
+					})}
 				>
 					<View
 						style={[
@@ -225,7 +219,9 @@ export default function MoreTab() {
 						weight="medium"
 						style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
 					>
-						{currentLanguage === 'en' ? 'Switch to Hindi (हिंदी)' : 'Switch to English'}
+						{t('settings.switchLanguage', {
+							lang: currentLanguage === 'en' ? 'Hindi (हिंदी)' : 'English',
+						})}
 					</ThemedText>
 				</TouchableOpacity>
 
@@ -244,7 +240,9 @@ export default function MoreTab() {
 					accessibilityRole="switch"
 					accessibilityLabel="dark-mode-toggle"
 					accessibilityState={{ checked: isDark }}
-					accessibilityHint={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+					accessibilityHint={t('settings.switchThemeHint', {
+						theme: isDark ? t('settings.light') : t('settings.dark'),
+					})}
 				>
 					<View
 						style={[
@@ -265,7 +263,7 @@ export default function MoreTab() {
 						weight="medium"
 						style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
 					>
-						{isDark ? 'Light Mode' : 'Dark Mode'}
+						{isDark ? t('settings.lightMode') : t('settings.darkMode')}
 					</ThemedText>
 				</TouchableOpacity>
 
@@ -273,7 +271,7 @@ export default function MoreTab() {
 
 				{/* ACCOUNT section */}
 				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
-					ACCOUNT
+					{t('settings.sections.account')}
 				</ThemedText>
 
 				<TouchableOpacity
@@ -286,8 +284,8 @@ export default function MoreTab() {
 					]}
 					onPress={handleLogout}
 					accessibilityRole="button"
-					accessibilityLabel="Sign out of TileMaster"
-					accessibilityHint="Double tap to log out"
+					accessibilityLabel={t('auth.signOut')}
+					accessibilityHint={t('settings.signOutHint')}
 				>
 					<LogOut
 						size={20}

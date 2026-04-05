@@ -90,7 +90,7 @@ export default function DashboardScreen() {
 		{
 			label: t('dashboard.lowStock'),
 			accessibilityLabel: 'stat-low-stock',
-			value: `${stats?.low_stock_count ?? 0} items`,
+			value: t('inventory.stockStatus', { count: stats?.low_stock_count ?? 0 }),
 			icon: AlertTriangle,
 			color: c.error,
 		},
@@ -124,7 +124,7 @@ export default function DashboardScreen() {
 			}}
 			contentContainerStyle={{ paddingBottom: s.xl }}
 		>
-			<DashboardHeader businessName="TileMaster" />
+			<DashboardHeader businessName={t('branding.appName')} />
 
 			{loading && stats === null ? (
 				<DashboardSkeleton />

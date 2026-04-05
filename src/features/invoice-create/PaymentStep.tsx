@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { FormField } from '@/src/components/molecules/FormField';
 import { layout } from '@/src/theme/layout';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import type { CustomerDraft, PaymentMode } from './useInvoiceCreateFlow';
 
-const PAYMENT_MODES: PaymentMode[] = ['cash', 'upi', 'bank_transfer', 'cheque'];
+import { PAYMENT_MODES } from '@/src/constants/paymentModes';
 
 interface Props {
 	customer: CustomerDraft | null;
@@ -31,6 +32,7 @@ export function PaymentStep({
 	setPaymentMode,
 }: Props) {
 	const { c, s, r } = useThemeTokens();
+	const { t, formatCurrency } = useLocale();
 
 	const balanceDue = Math.max(0, grandTotal - amountPaidNum);
 	const isPaid = amountPaidNum >= grandTotal;
@@ -38,7 +40,7 @@ export function PaymentStep({
 	return (
 		<View>
 			<ThemedText variant="h3" style={{ marginBottom: s.md }}>
-				Review & Payment
+				{t('invoice.reviewAndPayment')}
 			</ThemedText>
 
 			{/* Order Summary */}
@@ -52,9 +54,11 @@ export function PaymentStep({
 					marginBottom: s.lg,
 				}}
 			>
-				<ThemedText weight="bold">Customer: {customer?.name}</ThemedText>
+				<ThemedText weight="bold">
+					{t('invoice.customer')}: {customer?.name}
+				</ThemedText>
 				<ThemedText variant="caption" color={c.onSurfaceVariant}>
-					{customer?.phone || 'No phone provided'}
+					{customer?.phone || t('invoice.noPhone')}
 				</ThemedText>
 
 				<View style={{ marginTop: s.md }}>
@@ -64,7 +68,7 @@ export function PaymentStep({
 								{item.quantity}x {item.design_name}
 							</ThemedText>
 							<ThemedText variant="body2">
-								₹{(item.quantity * item.rate_per_unit).toFixed(2)}
+								{formatCurrency(item.quantity * item.rate_per_unit)}
 							</ThemedText>
 						</View>
 					))}
@@ -73,23 +77,23 @@ export function PaymentStep({
 				<View style={{ height: 1, backgroundColor: c.border, marginVertical: s.md }} />
 
 				<View style={layout.rowBetween}>
-					<ThemedText weight="bold">Grand Total (inc. GST)</ThemedText>
+					<ThemedText weight="bold">{t('invoice.grandTotalIncGst')}</ThemedText>
 					<ThemedText variant="h3" color={c.primary}>
-						₹{grandTotal.toFixed(2)}
+						{formatCurrency(grandTotal)}
 					</ThemedText>
 				</View>
 			</View>
 
 			{/* Payment Collection */}
 			<ThemedText weight="bold" style={{ marginBottom: s.sm }}>
-				Payment Collection
+				{t('invoice.paymentCollection')}
 			</ThemedText>
 
 			<FormField
-				label="Amount Paid (₹)"
+				label={`${t('invoice.paymentCollection')} (${t('finance.currencySymbol')})`}
 				accessibilityLabel="amount-paid-input"
 				value={amountPaid}
-				placeholder="Enter amount paid"
+				placeholder={t('invoice.placeholders.enterAmountPaid')}
 				keyboardType="numeric"
 				onChangeText={setAmountPaid}
 			/>
@@ -100,16 +104,18 @@ export function PaymentStep({
 				importantForAccessibility="no"
 				style={{ marginBottom: 4 }}
 			>
-				Payment Mode
+				{t('invoice.paymentMode')}
 			</ThemedText>
 			<View style={[layout.row, { gap: s.sm, marginBottom: s.xl, flexWrap: 'wrap' }]}>
-				{PAYMENT_MODES.map((mode) => (
+				{PAYMENT_MODES.map(({ value: mode }) => (
 					<TouchableOpacity
 						key={mode}
 						onPress={() => setPaymentMode(mode)}
-						accessibilityRole="togglebutton"
+						accessibilityRole="button"
 						accessibilityLabel={`payment-mode-${mode}`}
-						accessibilityHint={`Pay via ${mode.replace('_', ' ')}`}
+						accessibilityHint={t('invoice.payVia', {
+							mode: t(`invoice.paymentModes.${mode}`),
+						})}
 						accessibilityState={{ selected: paymentMode === mode }}
 						style={{
 							paddingHorizontal: s.md,
@@ -123,9 +129,8 @@ export function PaymentStep({
 						<ThemedText
 							variant="caption"
 							color={paymentMode === mode ? '#FFF' : c.onSurface}
-							style={{ textTransform: 'capitalize' }}
 						>
-							{mode.replace('_', ' ')}
+							{t(`invoice.paymentModes.${mode}`)}
 						</ThemedText>
 					</TouchableOpacity>
 				))}
@@ -137,7 +142,9 @@ export function PaymentStep({
 				accessibilityRole="summary"
 				accessibilityLabel="balance-due-indicator"
 				accessibilityValue={{
-					text: isPaid ? 'Fully paid' : `Balance due: ₹${balanceDue.toFixed(2)}`,
+					text: isPaid
+						? t('invoice.fullyPaid')
+						: t('invoice.balanceDue', { amount: formatCurrency(balanceDue) }),
 				}}
 				style={{
 					padding: s.md,
@@ -150,7 +157,9 @@ export function PaymentStep({
 					color={isPaid ? c.success : c.warning}
 					importantForAccessibility="no"
 				>
-					{isPaid ? 'Fully Paid' : `Balance Due: ₹${balanceDue.toFixed(2)}`}
+					{isPaid
+						? t('invoice.fullyPaid')
+						: t('invoice.balanceDue', { amount: formatCurrency(balanceDue) })}
 				</ThemedText>
 			</View>
 		</View>

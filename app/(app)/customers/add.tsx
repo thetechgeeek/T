@@ -28,22 +28,28 @@ interface CustomerFormData {
 	notes?: string;
 }
 
-const customerSchema = z.object({
-	name: z.string().min(2, 'Name is required'),
-	phone: z.string().optional(),
-	gstin: z.string().length(15, 'GSTIN must be 15 characters').optional().or(z.literal('')),
-	address: z.string().optional(),
-	city: z.string().optional(),
-	state: z.string().optional(),
-	type: z.enum(['retail', 'contractor', 'builder', 'dealer']),
-	credit_limit: z.coerce.number().min(0),
-	notes: z.string().optional(),
-});
+const getCustomerSchema = (t: (key: string) => string) =>
+	z.object({
+		name: z.string().min(2, t('common.required')),
+		phone: z.string().optional(),
+		gstin: z
+			.string()
+			.length(15, t('customer.gstin') + ' ' + t('order.detailsMissing'))
+			.optional()
+			.or(z.literal('')),
+		address: z.string().optional(),
+		city: z.string().optional(),
+		state: z.string().optional(),
+		type: z.enum(['retail', 'contractor', 'builder', 'dealer']),
+		credit_limit: z.coerce.number().min(0),
+		notes: z.string().optional(),
+	});
 
 export default function AddCustomerScreen() {
 	const { theme } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
+	const customerSchema = getCustomerSchema(t);
 	const { createCustomer, loading } = useCustomerStore(
 		useShallow((s) => ({ createCustomer: s.createCustomer, loading: s.loading })),
 	);
@@ -67,7 +73,7 @@ export default function AddCustomerScreen() {
 		} catch (e: unknown) {
 			logger.error('Failed to save customer', e instanceof Error ? e : new Error(String(e)));
 			Alert.alert(
-				t('customers.addErrorTitle'),
+				t('customer.addErrorTitle'),
 				e instanceof Error ? e.message : t('common.unexpectedError'),
 				[{ text: t('common.ok') }],
 			);
@@ -76,7 +82,7 @@ export default function AddCustomerScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard>
-			<ScreenHeader title="Add Customer" />
+			<ScreenHeader title={t('customer.addCustomer')} />
 			<ScrollView
 				keyboardDismissMode="on-drag"
 				style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -88,10 +94,10 @@ export default function AddCustomerScreen() {
 							name="name"
 							render={({ field: { onChange, value } }) => (
 								<FormField
-									label="Customer Name"
+									label={t('customer.name')}
 									accessibilityLabel="customer-name-input"
 									required
-									placeholder="Enter full name"
+									placeholder={t('customer.form.placeholders.fullName')}
 									value={value}
 									onChangeText={onChange}
 									error={errors.name?.message}
@@ -104,9 +110,9 @@ export default function AddCustomerScreen() {
 							name="phone"
 							render={({ field: { onChange, value } }) => (
 								<FormField
-									label="Phone Number"
+									label={t('customer.phone')}
 									accessibilityLabel="customer-phone-input"
-									placeholder="Enter 10-digit number"
+									placeholder={t('customer.form.placeholders.phone')}
 									keyboardType="phone-pad"
 									value={value}
 									onChangeText={onChange}
@@ -120,9 +126,9 @@ export default function AddCustomerScreen() {
 							name="gstin"
 							render={({ field: { onChange, value } }) => (
 								<FormField
-									label="GSTIN"
+									label={t('customer.gstin')}
 									accessibilityLabel="customer-gstin-input"
-									placeholder="22AAAAA0000A1Z5"
+									placeholder={t('customer.form.placeholders.gstin')}
 									autoCapitalize="characters"
 									value={value}
 									onChangeText={onChange}
@@ -138,9 +144,9 @@ export default function AddCustomerScreen() {
 									name="city"
 									render={({ field: { onChange, value } }) => (
 										<FormField
-											label="City"
+											label={t('customer.city')}
 											accessibilityLabel="customer-city-input"
-											placeholder="e.g. Morbi"
+											placeholder={t('customer.form.placeholders.city')}
 											value={value}
 											onChangeText={onChange}
 										/>
@@ -153,9 +159,9 @@ export default function AddCustomerScreen() {
 									name="state"
 									render={({ field: { onChange, value } }) => (
 										<FormField
-											label="State"
+											label={t('customer.state')}
 											accessibilityLabel="customer-state-input"
-											placeholder="e.g. Gujarat"
+											placeholder={t('customer.form.placeholders.state')}
 											value={value}
 											onChangeText={onChange}
 										/>
@@ -169,9 +175,9 @@ export default function AddCustomerScreen() {
 							name="address"
 							render={({ field: { onChange, value } }) => (
 								<FormField
-									label="Address"
+									label={t('customer.address')}
 									accessibilityLabel="customer-address-input"
-									placeholder="Detailed address"
+									placeholder={t('customer.form.placeholders.address')}
 									multiline
 									numberOfLines={2}
 									value={value}
@@ -185,9 +191,9 @@ export default function AddCustomerScreen() {
 							name="credit_limit"
 							render={({ field: { onChange, value } }) => (
 								<FormField
-									label="Credit Limit (₹)"
+									label={t('customer.creditLimit')}
 									accessibilityLabel="customer-credit-limit-input"
-									placeholder="0"
+									placeholder={t('customer.form.placeholders.creditLimit')}
 									keyboardType="numeric"
 									value={value.toString()}
 									onChangeText={onChange}
@@ -196,7 +202,7 @@ export default function AddCustomerScreen() {
 						/>
 
 						<Button
-							title={loading ? 'Saving...' : 'Save Customer'}
+							title={loading ? t('common.loading') : t('common.save')}
 							accessibilityLabel="save-customer-button"
 							accessibilityState={{ busy: loading }}
 							onPress={handleSubmit(onSubmit)}

@@ -27,11 +27,16 @@ export const pdfService = {
 		return businessProfileService.fetch();
 	},
 
-	generateInvoiceHTML(invoice: Invoice, businessProfile: BusinessProfile | null) {
+	generateInvoiceHTML(
+		invoice: Invoice,
+		businessProfile: BusinessProfile | null,
+		t: (key: string, options?: any) => string,
+		formatDate: (date: string | Date) => string,
+	) {
 		const bp =
 			businessProfile ||
 			({
-				business_name: 'TileMaster',
+				business_name: t('branding.appName'),
 				phone: '',
 				email: '',
 				address: '',
@@ -41,7 +46,7 @@ export const pdfService = {
 
 		const isInterState = invoice.is_inter_state;
 
-		let itemsTableRows =
+		const itemsTableRows =
 			invoice.line_items
 				?.map((item, index) => {
 					const taxCols = isInterState
@@ -67,22 +72,24 @@ export const pdfService = {
 				})
 				.join('') || '';
 
-		const taxHeaderCols = isInterState ? '<th>IGST</th>' : '<th>CGST</th><th>SGST</th>';
+		const taxHeaderCols = isInterState
+			? `<th>${t('pdf.igst')}</th>`
+			: `<th>${t('pdf.cgst')}</th><th>${t('pdf.sgst')}</th>`;
 
 		const taxFooterCols = isInterState
 			? `
           <tr>
-            <td colspan="8" style="text-align:right; font-weight:bold">Total IGST:</td>
+            <td colspan="8" style="text-align:right; font-weight:bold">${t('pdf.igst')} ${t('pdf.total')}:</td>
             <td colspan="2" style="text-align:right">₹${invoice.igst_total.toFixed(2)}</td>
           </tr>
         `
 			: `
           <tr>
-            <td colspan="9" style="text-align:right; font-weight:bold">Total CGST:</td>
+            <td colspan="9" style="text-align:right; font-weight:bold">${t('pdf.cgst')} ${t('pdf.total')}:</td>
             <td colspan="2" style="text-align:right">₹${invoice.cgst_total.toFixed(2)}</td>
           </tr>
           <tr>
-            <td colspan="9" style="text-align:right; font-weight:bold">Total SGST:</td>
+            <td colspan="9" style="text-align:right; font-weight:bold">${t('pdf.sgst')} ${t('pdf.total')}:</td>
             <td colspan="2" style="text-align:right">₹${invoice.sgst_total.toFixed(2)}</td>
           </tr>
         `;
@@ -92,7 +99,7 @@ export const pdfService = {
       <html>
         <head>
           <meta charset="utf-8">
-          <title>Invoice ${invoice.invoice_number}</title>
+          <title>${t('invoice.title')} ${invoice.invoice_number}</title>
           <style>
             body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; padding: 30px; }
             .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #C1440E; padding-bottom: 20px; margin-bottom: 20px; }
@@ -123,36 +130,36 @@ export const pdfService = {
             <div class="business-info">
               <h1>${bp.business_name}</h1>
               <p>${bp.address || ''}</p>
-              <p>Phone: ${bp.phone || ''} ${bp.email ? ` | Email: ${bp.email}` : ''}</p>
-              ${bp.gstin ? `<p><strong>GSTIN:</strong> ${bp.gstin}</p>` : ''}
+              <p>${t('pdf.phone')}: ${bp.phone || ''} ${bp.email ? ` | ${t('pdf.email')}: ${bp.email}` : ''}</p>
+              ${bp.gstin ? `<p><strong>${t('customer.gstin')}:</strong> ${bp.gstin}</p>` : ''}
             </div>
             <div class="doc-details">
-              <h2>TAX INVOICE</h2>
-              <p><strong>Invoice #:</strong> ${invoice.invoice_number}</p>
-              <p><strong>Date:</strong> ${new Date(invoice.invoice_date).toLocaleDateString('en-IN')}</p>
+              <h2>${t('pdf.invoiceTitle')}</h2>
+              <p><strong>${t('invoice.invoiceNumber')}:</strong> ${invoice.invoice_number}</p>
+              <p><strong>${t('invoice.invoiceDate')}:</strong> ${formatDate(invoice.invoice_date)}</p>
             </div>
           </div>
 
           <div class="bill-to">
-            <h3>Bill To</h3>
+            <h3>${t('pdf.billTo')}</h3>
             <p><strong>${invoice.customer_name}</strong></p>
             ${invoice.customer_address ? `<p>${invoice.customer_address}</p>` : ''}
-            ${invoice.customer_phone ? `<p>Phone: ${invoice.customer_phone}</p>` : ''}
-            ${invoice.customer_gstin ? `<p><strong>GSTIN:</strong> ${invoice.customer_gstin}</p>` : ''}
+            ${invoice.customer_phone ? `<p>${t('pdf.phone')}: ${invoice.customer_phone}</p>` : ''}
+            ${invoice.customer_gstin ? `<p><strong>${t('customer.gstin')}:</strong> ${invoice.customer_gstin}</p>` : ''}
           </div>
 
           <table>
             <thead>
               <tr>
                 <th>#</th>
-                <th>Item Description</th>
-                <th>HSN/SAC</th>
-                <th>Qty</th>
-                <th>Rate</th>
-                <th>Disc</th>
-                <th>Taxable</th>
+                <th>${t('pdf.itemDescription')}</th>
+                <th>${t('pdf.hsnSac')}</th>
+                <th>${t('pdf.qty')}</th>
+                <th>${t('pdf.rate')}</th>
+                <th>${t('pdf.disc')}</th>
+                <th>${t('pdf.taxable')}</th>
                 ${taxHeaderCols}
-                <th style="text-align:right">Total</th>
+                <th style="text-align:right">${t('pdf.total')}</th>
               </tr>
             </thead>
             <tbody>
@@ -162,14 +169,14 @@ export const pdfService = {
 
           <table class="totals">
             <tr>
-              <td style="text-align:right; font-weight:bold">Subtotal:</td>
+              <td style="text-align:right; font-weight:bold">${t('pdf.subtotal')}:</td>
               <td style="text-align:right">₹${invoice.subtotal.toFixed(2)}</td>
             </tr>
             ${
 				invoice.discount_total > 0
 					? `
             <tr>
-              <td style="text-align:right; font-weight:bold; color:red">Discount:</td>
+              <td style="text-align:right; font-weight:bold; color:red">${t('pdf.discount')}:</td>
               <td style="text-align:right; color:red">-₹${invoice.discount_total.toFixed(2)}</td>
             </tr>
             `
@@ -177,29 +184,29 @@ export const pdfService = {
 			}
             ${taxFooterCols}
             <tr class="grand-total">
-              <td style="text-align:right; font-weight:bold">Grand Total:</td>
+              <td style="text-align:right; font-weight:bold">${t('pdf.grandTotal')}:</td>
               <td style="text-align:right; font-weight:bold">₹${invoice.grand_total.toFixed(2)}</td>
             </tr>
             <tr>
-               <td style="text-align:right; font-weight:bold">Amount Paid:</td>
-               <td style="text-align:right">₹${invoice.amount_paid.toFixed(2)} ${invoice.payment_mode ? `(${invoice.payment_mode.toUpperCase()})` : ''}</td>
+               <td style="text-align:right; font-weight:bold">${t('pdf.amountPaid')}:</td>
+               <td style="text-align:right">₹${invoice.amount_paid.toFixed(2)} ${invoice.payment_mode ? `(${t(`invoice.paymentModes.${invoice.payment_mode}`).toUpperCase()})` : ''}</td>
             </tr>
             <tr>
-               <td style="text-align:right; font-weight:bold">Balance Due:</td>
+               <td style="text-align:right; font-weight:bold">${t('pdf.balanceDue')}:</td>
                <td style="text-align:right; font-weight:bold">₹${Math.max(0, invoice.grand_total - invoice.amount_paid).toFixed(2)}</td>
             </tr>
           </table>
 
           <div class="amount-words">
-             Amount in words: ${escapeHtml(numberToIndianWords(invoice.grand_total))}.
+             ${t('pdf.amountInWords')}: ${escapeHtml(numberToIndianWords(invoice.grand_total))}.
           </div>
 
           <div class="footer">
-            <p>Notes: ${invoice.notes || '-'}</p>
-            <p>Terms & Conditions: ${invoice.terms || bp.terms_and_conditions || 'Errors and Omissions Excepted. Subject to local jurisdiction.'}</p>
+            <p>${t('pdf.notes')}: ${invoice.notes || '-'}</p>
+            <p>${t('pdf.terms')}: ${invoice.terms || bp.terms_and_conditions || t('pdf.termsDefault')}</p>
             <div style="text-align:right; margin-top:40px;">
                ___________________________<br>
-               Authorized Signatory
+               ${t('pdf.authorizedSignatory')}
             </div>
           </div>
         </body>
@@ -207,15 +214,19 @@ export const pdfService = {
     `;
 	},
 
-	async printAndShareInvoice(invoice: Invoice) {
+	async printAndShareInvoice(
+		invoice: Invoice,
+		t: (key: string, options?: any) => string,
+		formatDate: (date: string | Date) => string,
+	) {
 		try {
 			const bp = await this.getBusinessProfile();
-			const html = this.generateInvoiceHTML(invoice, bp);
+			const html = this.generateInvoiceHTML(invoice, bp, t, formatDate);
 
 			const { uri } = await Print.printToFileAsync({ html });
 
 			if (!(await Sharing.isAvailableAsync())) {
-				alert("Sharing isn't available on your device");
+				alert(t('pdf.sharingNotAvailable'));
 				return;
 			}
 
@@ -223,14 +234,17 @@ export const pdfService = {
 			await Sharing.shareAsync(uri, {
 				UTI: '.pdf',
 				mimeType: 'application/pdf',
-				dialogTitle: `Share Invoice ${invoice.invoice_number}`,
+				dialogTitle: `${t('common.share')} ${t('invoice.title')} ${invoice.invoice_number}`,
 			});
 		} catch (e: unknown) {
 			logger.error(
 				'Failed to generate/share PDF',
 				e instanceof Error ? e : new Error(String(e)),
 			);
-			alert('Error: ' + (e instanceof Error ? e.message : 'Failed to generate PDF.'));
+			alert(
+				`${t('common.error')}: ` +
+					(e instanceof Error ? e.message : t('common.unexpectedError')),
+			);
 		}
 	},
 

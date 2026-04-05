@@ -14,7 +14,7 @@ import { OrderListSkeleton } from '@/src/components/molecules/skeletons/OrderLis
 
 export default function OrdersListScreen() {
 	const { c, s, r } = useThemeTokens();
-	const { formatDateShort } = useLocale();
+	const { formatDateShort, t } = useLocale();
 	const router = useRouter();
 
 	const { orders, loading, fetchOrders } = useOrderStore(
@@ -35,12 +35,12 @@ export default function OrdersListScreen() {
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
 			<ScreenHeader
-				title="Purchase Orders"
+				title={t('order.title')}
 				rightElement={
 					<Button
-						title="Import PDF"
+						title={t('order.importBtn')}
 						accessibilityLabel="import-pdf-button"
-						accessibilityHint="Import a supplier PDF to create a purchase order"
+						accessibilityHint={t('order.importHint')}
 						size="sm"
 						leftIcon={
 							<Plus size={16} color={c.onPrimary} importantForAccessibility="no" />
@@ -63,14 +63,13 @@ export default function OrdersListScreen() {
 				>
 					<FileText size={64} color={c.placeholder} style={{ marginBottom: s.lg }} />
 					<ThemedText variant="h3" style={{ marginBottom: 8 }}>
-						No Orders Yet
+						{t('common.noResults')}
 					</ThemedText>
 					<ThemedText color={c.placeholder} align="center" style={{ marginBottom: s.xl }}>
-						Import a supplier performa invoice (PDF or Image) to automatically extract
-						items and restock inventory using AI.
+						{t('order.importFirst')}
 					</ThemedText>
 					<Button
-						title="Import First Order"
+						title={t('order.importBtn')}
 						accessibilityLabel="import-first-order-button"
 						onPress={() => router.push('/(app)/orders/import')}
 					/>
@@ -101,19 +100,19 @@ export default function OrdersListScreen() {
 							activeOpacity={0.7}
 							accessibilityRole="button"
 							accessibilityLabel={`order-${item.id}`}
-							accessibilityHint={`${item.party_name || 'Unknown Supplier'}, double tap to open`}
+							accessibilityHint={`${item.party_name || t('supplier.title')}, ${t('order.doubleTapToOpen')}`}
 						>
 							<View style={{ flex: 1 }}>
 								<ThemedText weight="bold" style={{ fontSize: 16 }}>
-									{item.party_name || 'Unknown Supplier'}
+									{item.party_name || t('supplier.title')}
 								</ThemedText>
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
 									style={{ marginTop: 4 }}
 								>
-									{formatDateShort(item.created_at)} • {item.total_quantity} items
-									imported
+									{formatDateShort(item.created_at)} •{' '}
+									{t('inventory.stockStatus', { count: item.total_quantity })}
 								</ThemedText>
 							</View>
 							<View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
@@ -123,7 +122,7 @@ export default function OrdersListScreen() {
 										weight="semibold"
 										style={{ fontSize: 12 }}
 									>
-										Imported
+										{t('common.successTitle')}
 									</ThemedText>
 								</View>
 								<ChevronRight

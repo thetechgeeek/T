@@ -19,7 +19,7 @@ import logger from '@/src/utils/logger';
 
 export default function ItemDetailScreen() {
 	const { theme, c, s, r } = useThemeTokens();
-	const { formatCurrency, formatDateShort } = useLocale();
+	const { formatCurrency, formatDateShort, t } = useLocale();
 	const router = useRouter();
 	const { id } = useLocalSearchParams<{ id: UUID }>();
 
@@ -81,7 +81,7 @@ export default function ItemDetailScreen() {
 				<ScreenHeader title="" />
 				<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 					<HelpCircle size={48} color={c.placeholder} strokeWidth={1} />
-					<ThemedText style={{ marginTop: 16 }}>Item not found</ThemedText>
+					<ThemedText style={{ marginTop: 16 }}>{t('inventory.itemNotFound')}</ThemedText>
 				</View>
 			</AtomicScreen>
 		);
@@ -144,14 +144,23 @@ export default function ItemDetailScreen() {
 						{ flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: -6 },
 					]}
 				>
-					<SpecBox label="Base Item" value={item.base_item_number} />
-					<SpecBox label="Category" value={item.category} />
-					<SpecBox label="Size" value={item.size_name || 'N/A'} />
-					<SpecBox label="Grade" value={item.grade || 'N/A'} />
-					<SpecBox label="Pcs / Box" value={item.pcs_per_box?.toString() || 'N/A'} />
-					<SpecBox label="Sqft / Box" value={item.sqft_per_box?.toString() || 'N/A'} />
+					<SpecBox label={t('inventory.addItem')} value={item.base_item_number} />
 					<SpecBox
-						label="Selling Price"
+						label={t('inventory.category')}
+						value={t(`inventory.categories.${item.category.toLowerCase()}`)}
+					/>
+					<SpecBox label={t('inventory.size')} value={item.size_name || t('common.na')} />
+					<SpecBox label={t('inventory.grade')} value={item.grade || t('common.na')} />
+					<SpecBox
+						label={t('inventory.pcsPerBox')}
+						value={item.pcs_per_box?.toString() || t('common.na')}
+					/>
+					<SpecBox
+						label={t('inventory.sqftPerBox')}
+						value={item.sqft_per_box?.toString() || t('common.na')}
+					/>
+					<SpecBox
+						label={t('inventory.sellingPrice')}
 						value={formatCurrency(item.selling_price)}
 						highlight
 					/>
@@ -173,14 +182,14 @@ export default function ItemDetailScreen() {
 					]}
 				>
 					<ThemedText variant="h3" color={isLowStock ? c.error : c.success}>
-						{item.box_count} Boxes in Stock
+						{t('inventory.stockStatus', { count: item.box_count })}
 					</ThemedText>
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
 						style={{ marginTop: 2 }}
 					>
-						Threshold: {item.low_stock_threshold} boxes
+						{t('inventory.thresholdStatus', { count: item.low_stock_threshold })}
 					</ThemedText>
 				</View>
 
@@ -198,7 +207,7 @@ export default function ItemDetailScreen() {
 					>
 						<ArrowDownRight size={20} color={c.success} strokeWidth={2.5} />
 						<ThemedText weight="semibold" style={{ marginLeft: 8 }}>
-							Stock In
+							{t('inventory.stockIn')}
 						</ThemedText>
 					</TouchableOpacity>
 					<TouchableOpacity
@@ -213,7 +222,7 @@ export default function ItemDetailScreen() {
 					>
 						<ArrowUpRight size={20} color={c.error} strokeWidth={2.5} />
 						<ThemedText weight="semibold" style={{ marginLeft: 8 }}>
-							Stock Out
+							{t('inventory.stockOut')}
 						</ThemedText>
 					</TouchableOpacity>
 				</View>
@@ -221,11 +230,11 @@ export default function ItemDetailScreen() {
 				{/* Stock History */}
 				<View style={{ marginTop: s.xl }}>
 					<ThemedText variant="h3" style={{ marginBottom: s.md }}>
-						Recent Operations
+						{t('inventory.stockHistory')}
 					</ThemedText>
 					{history.length === 0 ? (
 						<ThemedText color={c.placeholder}>
-							No stock operations recorded yet.
+							{t('inventory.emptyFilterHint')}
 						</ThemedText>
 					) : (
 						history.map((op, index) => (
@@ -248,7 +257,7 @@ export default function ItemDetailScreen() {
 										weight="semibold"
 										style={{ textTransform: 'capitalize' }}
 									>
-										{op.operation_type.replace('_', ' ')}
+										{t(`inventory.operations.${op.operation_type}`)}
 									</ThemedText>
 									<ThemedText
 										variant="caption"

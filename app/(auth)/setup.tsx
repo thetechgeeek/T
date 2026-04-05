@@ -26,9 +26,9 @@ export default function SetupScreen() {
 
 	const handleCreateAccount = async () => {
 		if (!email || !password)
-			return Alert.alert(t('common.errorTitle'), 'Email and password are required');
+			return Alert.alert(t('common.errorTitle'), t('auth.errorMissingFields'));
 		if (password.length < 6)
-			return Alert.alert(t('common.errorTitle'), 'Password must be at least 6 characters');
+			return Alert.alert(t('common.errorTitle'), t('auth.passwordLengthError'));
 		setLoading(true);
 		try {
 			await register(email, password);
@@ -44,14 +44,14 @@ export default function SetupScreen() {
 	};
 
 	const handleSaveBusiness = async () => {
-		if (!businessName) return Alert.alert(t('common.errorTitle'), 'Business name is required');
+		if (!businessName) return Alert.alert(t('common.errorTitle'), t('auth.errorMissingFields'));
 		setLoading(true);
 		try {
 			await businessProfileService.upsert({
 				business_name: businessName,
 				phone,
 				gstin,
-				invoice_prefix: 'TM',
+				invoice_prefix: t('branding.appShortName'),
 				invoice_sequence: 0,
 			});
 			router.replace('/(app)/(tabs)');
@@ -69,7 +69,7 @@ export default function SetupScreen() {
 		<AtomicScreen scrollable>
 			<View style={{ padding: s.lg }}>
 				<ThemedText variant="h1" color={c.primary} style={{ marginBottom: s.sm }}>
-					🏺 TileMaster
+					🏺 {t('branding.appName')}
 				</ThemedText>
 				<ThemedText
 					variant="body1"
@@ -83,7 +83,7 @@ export default function SetupScreen() {
 					<>
 						<TextInput
 							label={t('auth.email')}
-							placeholder="you@example.com"
+							placeholder={t('auth.placeholders.email')}
 							value={email}
 							onChangeText={setEmail}
 							keyboardType="email-address"
@@ -92,7 +92,7 @@ export default function SetupScreen() {
 						/>
 						<TextInput
 							label={t('auth.password')}
-							placeholder="••••••••"
+							placeholder={t('auth.placeholders.password')}
 							value={password}
 							onChangeText={setPassword}
 							secureTextEntry
@@ -100,7 +100,7 @@ export default function SetupScreen() {
 							containerStyle={{ marginTop: s.md }}
 						/>
 						<Button
-							title={`${t('common.add')} Account →`}
+							title={`${t('auth.signUp')} →`}
 							accessibilityLabel="create-account-button"
 							onPress={handleCreateAccount}
 							loading={loading}
@@ -111,36 +111,36 @@ export default function SetupScreen() {
 							onPress={() => router.push('/(auth)/login')}
 						>
 							<ThemedText color={c.primary} variant="body2">
-								Already have an account? {t('auth.signIn')}
+								{t('auth.alreadyHaveAccount')} {t('auth.signIn')}
 							</ThemedText>
 						</TouchableOpacity>
 					</>
 				) : (
 					<>
 						<TextInput
-							label="Business Name *"
-							placeholder="Enter business name"
+							label={`${t('auth.placeholders.businessName')} *`}
+							placeholder={t('auth.placeholders.businessName')}
 							value={businessName}
 							onChangeText={setBusinessName}
 						/>
 						<TextInput
-							label="Phone"
-							placeholder="Enter phone number"
+							label={t('common.phone')}
+							placeholder={t('auth.placeholders.phone')}
 							value={phone}
 							onChangeText={setPhone}
 							keyboardType="phone-pad"
 							containerStyle={{ marginTop: s.md }}
 						/>
 						<TextInput
-							label="GSTIN (optional)"
-							placeholder="Enter GSTIN"
+							label={`${t('customer.gstin')} ${t('common.optional')}`}
+							placeholder={t('auth.placeholders.gstin')}
 							value={gstin}
 							onChangeText={setGstin}
 							autoCapitalize="characters"
 							containerStyle={{ marginTop: s.md }}
 						/>
 						<Button
-							title={`${t('common.save')} & Continue →`}
+							title={`${t('common.save')} ${t('common.and')} ${t('common.done')} →`}
 							accessibilityLabel="save-business-button"
 							onPress={handleSaveBusiness}
 							loading={loading}

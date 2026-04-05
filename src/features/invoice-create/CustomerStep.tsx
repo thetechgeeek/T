@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { FormField } from '@/src/components/molecules/FormField';
 import { withOpacity } from '@/src/utils/color';
@@ -15,6 +16,7 @@ interface Props {
 
 export function CustomerStep({ customer, setCustomer, isInterState, setIsInterState }: Props) {
 	const { c, s, r } = useThemeTokens();
+	const { t } = useLocale();
 
 	const update = (field: keyof CustomerDraft) => (text: string) => {
 		setCustomer((prev) => ({ name: '', ...prev, [field]: text }));
@@ -23,31 +25,31 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 	return (
 		<View>
 			<ThemedText variant="h3" style={{ marginBottom: s.md }}>
-				Customer Details
+				{t('invoice.customerDetails')}
 			</ThemedText>
 
 			<FormField
-				label="Name"
+				label={t('customer.name')}
 				accessibilityLabel="customer-name-input"
 				required
-				placeholder="e.g. Rahul Sharma"
+				placeholder={t('customer.form.placeholders.fullName')}
 				value={customer?.name || ''}
 				onChangeText={update('name')}
 			/>
 
 			<FormField
-				label="Phone"
+				label={t('common.phone')}
 				accessibilityLabel="customer-phone-input"
-				placeholder="10-digit mobile number"
+				placeholder={t('customer.form.placeholders.phone')}
 				keyboardType="phone-pad"
 				value={customer?.phone || ''}
 				onChangeText={update('phone')}
 			/>
 
 			<FormField
-				label="GSTIN (Optional)"
+				label={t('customer.gstin') + ` (${t('common.optional')})`}
 				accessibilityLabel="customer-gstin-input"
-				placeholder="22AAAAA0000A1Z5"
+				placeholder={t('customer.form.placeholders.gstin')}
 				autoCapitalize="characters"
 				value={customer?.gstin || ''}
 				onChangeText={update('gstin')}
@@ -58,7 +60,7 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 				accessibilityRole="togglebutton"
 				accessibilityLabel="inter-state-igst-toggle"
 				accessibilityState={{ checked: isInterState }}
-				accessibilityHint="Enable if customer is in a different state — applies IGST instead of CGST and SGST"
+				accessibilityHint={t('invoice.interStateAccessibilityHint')}
 				style={{
 					marginTop: s.lg,
 					padding: s.md,
@@ -69,7 +71,7 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 				}}
 			>
 				<ThemedText weight={isInterState ? 'bold' : 'regular'}>
-					Inter-State (IGST): {isInterState ? 'Yes' : 'No'}
+					{t('invoice.interState')}: {isInterState ? t('common.yes') : t('common.no')}
 				</ThemedText>
 				<ThemedText
 					variant="caption"
@@ -77,7 +79,7 @@ export function CustomerStep({ customer, setCustomer, isInterState, setIsInterSt
 					importantForAccessibility="no"
 					style={{ marginTop: 4 }}
 				>
-					Toggle this if the customer is located in a different state.
+					{t('invoice.interStateHint')}
 				</ThemedText>
 			</TouchableOpacity>
 		</View>

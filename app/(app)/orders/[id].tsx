@@ -15,7 +15,7 @@ import logger from '@/src/utils/logger';
 export default function OrderDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { c, s, r } = useThemeTokens();
-	const { formatDateShort } = useLocale();
+	const { formatDateShort, t } = useLocale();
 
 	const [order, setOrder] = useState<Order | null>(null);
 	const [items, setItems] = useState<InventoryItem[]>([]);
@@ -60,19 +60,19 @@ export default function OrderDetailScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title={order.party_name || 'Order Details'} />
+			<ScreenHeader title={order.party_name || t('order.orderDetail')} />
 			<ScrollView>
 				<View style={styles.headerArea}>
 					<Package size={48} color={c.primary} style={{ marginBottom: s.md }} />
 					<ThemedText variant="h1" align="center">
-						{order.party_name || 'Import Name Unknown'}
+						{order.party_name || t('inventory.itemNotFound')}
 					</ThemedText>
 					<ThemedText
 						color={c.onSurfaceVariant}
 						align="center"
 						style={{ marginTop: s.xs }}
 					>
-						Imported on {formatDateShort(order.created_at)}
+						{t('invoice.invoiceDate')}: {formatDateShort(order.created_at)}
 					</ThemedText>
 				</View>
 
@@ -88,30 +88,32 @@ export default function OrderDetailScreen() {
 						]}
 					>
 						<ThemedText variant="h3" style={{ marginBottom: s.md }}>
-							Summary
+							{t('invoice.stepReview')}
 						</ThemedText>
-
+						pre
 						<View style={styles.row}>
 							<ThemedText color={c.placeholder} style={{ flex: 1 }}>
-								Total Box Quantity
+								{t('order.totalBoxes')}
 							</ThemedText>
-							<ThemedText weight="semibold">{order.total_quantity} boxes</ThemedText>
+							<ThemedText weight="semibold">
+								{t('inventory.stockStatus', { count: order.total_quantity })}
+							</ThemedText>
 						</View>
 						<View style={styles.row}>
 							<ThemedText color={c.placeholder} style={{ flex: 1 }}>
-								Status
+								{t('order.status')}
 							</ThemedText>
 							<View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
 								<CheckCircle2 size={16} color={c.success} />
 								<ThemedText color={c.success} weight="semibold">
-									Successfully Restocked
+									{t('order.importSuccess')}
 								</ThemedText>
 							</View>
 						</View>
 					</View>
 
 					<ThemedText variant="h3" style={{ marginTop: s.lg, marginBottom: s.md }}>
-						Items Processed ({items.length})
+						{t('order.extractedItems')} ({items.length})
 					</ThemedText>
 
 					{items.map((item: InventoryItem, index: number) => (
@@ -143,7 +145,7 @@ export default function OrderDetailScreen() {
 									+{item.box_count}
 								</ThemedText>
 								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									Stocked
+									{t('common.done')}
 								</ThemedText>
 							</View>
 						</View>
@@ -152,7 +154,7 @@ export default function OrderDetailScreen() {
 					{items.length === 0 && (
 						<View style={{ padding: s.lg, alignItems: 'center' }}>
 							<ThemedText color={c.placeholder}>
-								No individual items were created.
+								{t('order.noItemsMessage')}
 							</ThemedText>
 						</View>
 					)}

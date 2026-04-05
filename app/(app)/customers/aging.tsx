@@ -14,7 +14,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function AgingReportScreen() {
 	const { theme } = useThemeTokens();
-	const { formatCurrency } = useLocale();
+	const { formatCurrency, t } = useLocale();
 	const { customers, fetchCustomers } = useCustomerStore(
 		useShallow((s) => ({
 			customers: s.customers,
@@ -37,7 +37,7 @@ export default function AgingReportScreen() {
 			contentContainerStyle={styles.scrollContent}
 			safeAreaEdges={['bottom']}
 		>
-			<ScreenHeader title="Aging Report" />
+			<ScreenHeader title={t('customer.agingReport')} />
 			<View style={styles.summaryCard}>
 				<Card padding="lg" variant="elevated">
 					<ThemedText
@@ -45,7 +45,7 @@ export default function AgingReportScreen() {
 						color={theme.colors.onSurfaceVariant}
 						style={{ marginBottom: 4 }}
 					>
-						Total Outstanding
+						{t('customer.outstanding')}
 					</ThemedText>
 					<ThemedText variant="h1" color={theme.colors.error} style={{ fontSize: 32 }}>
 						{formatCurrency(
@@ -56,11 +56,11 @@ export default function AgingReportScreen() {
 			</View>
 
 			<ThemedText variant="h3" style={{ marginBottom: 16 }}>
-				Customer Breakup
+				{t('customer.ledger')}
 			</ThemedText>
 
 			{agingData.length === 0 ? (
-				<EmptyState title="No outstanding balances" />
+				<EmptyState title={t('common.noResults')} />
 			) : (
 				agingData.map((c) => (
 					<Card key={c.id} style={styles.customerCard} padding="md">
@@ -85,7 +85,11 @@ export default function AgingReportScreen() {
 								>
 									{formatCurrency(c.current_balance || 0)}
 								</ThemedText>
-								<Badge label="Overdue" variant="error" style={{ marginTop: 4 }} />
+								<Badge
+									label={t('invoice.balance')}
+									variant="error"
+									style={{ marginTop: 4 }}
+								/>
 							</View>
 						</View>
 					</Card>

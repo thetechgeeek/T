@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TextInput, StyleSheet, ViewStyle, Pressable } from 'react-native';
 import { Search, X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { useLocale } from '@/src/hooks/useLocale';
 
 interface SearchBarProps {
 	value: string;
@@ -20,6 +21,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
+	const { t } = useLocale();
 
 	return (
 		<View
@@ -41,8 +43,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 			/>
 			<TextInput
 				accessible={true}
-				accessibilityLabel={accessibilityLabel ?? placeholder ?? 'Search'}
-				accessibilityHint="Type to filter results"
+				accessibilityLabel={accessibilityLabel ?? placeholder ?? t('common.search')}
+				accessibilityHint={t('inventory.emptyFilterHint')}
 				style={[
 					styles.input,
 					{
@@ -53,7 +55,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 				]}
 				value={value}
 				onChangeText={onChangeText}
-				placeholder={placeholder}
+				placeholder={placeholder ?? t('common.search')}
 				placeholderTextColor={theme.colors.placeholder}
 				autoCorrect={false}
 			/>
@@ -62,7 +64,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 					onPress={() => onChangeText('')}
 					hitSlop={10}
 					accessibilityRole="button"
-					accessibilityLabel="Clear search"
+					accessibilityLabel={t('common.clear')}
 				>
 					<X
 						size={20}

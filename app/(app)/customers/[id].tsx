@@ -3,6 +3,7 @@ import { useFocusEffect } from 'expo-router';
 import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Phone, MapPin, Wallet, Plus } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -22,6 +23,7 @@ export default function CustomerDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { theme } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
+	const { t } = useTranslation();
 	const router = useRouter();
 
 	const [paymentModalVisible, setPaymentModalVisible] = React.useState(false);
@@ -73,7 +75,7 @@ export default function CustomerDetailScreen() {
 						color={theme.colors.onSurfaceVariant}
 						style={{ textTransform: 'uppercase' }}
 					>
-						Amount
+						{t('common.amount')}
 					</ThemedText>
 					<ThemedText
 						weight="bold"
@@ -93,7 +95,7 @@ export default function CustomerDetailScreen() {
 						color={theme.colors.onSurfaceVariant}
 						style={{ textTransform: 'uppercase' }}
 					>
-						Balance
+						{t('common.balance')}
 					</ThemedText>
 					<ThemedText weight="bold">{formatCurrency(item.balance)}</ThemedText>
 				</View>
@@ -129,7 +131,7 @@ export default function CustomerDetailScreen() {
 								color={theme.colors.onSurfaceVariant}
 								style={{ marginBottom: 4 }}
 							>
-								Outstanding Balance
+								{t('common.outstandingBalance')}
 							</ThemedText>
 							<ThemedText
 								variant="display"
@@ -150,7 +152,7 @@ export default function CustomerDetailScreen() {
 										variant="caption"
 										color={theme.colors.onSurfaceVariant}
 									>
-										Total Invoiced
+										{t('common.totalInvoiced')}
 									</ThemedText>
 									<ThemedText weight="bold">
 										{formatCurrency(summary?.total_invoiced || 0)}
@@ -161,7 +163,7 @@ export default function CustomerDetailScreen() {
 										variant="caption"
 										color={theme.colors.onSurfaceVariant}
 									>
-										Total Paid
+										{t('common.totalPaid')}
 									</ThemedText>
 									<ThemedText weight="bold" color={theme.colors.success}>
 										{formatCurrency(summary?.total_paid || 0)}
@@ -172,14 +174,14 @@ export default function CustomerDetailScreen() {
 
 						<View style={styles.actions}>
 							<Button
-								title="Record Payment"
+								title={t('dashboard.recordPayment')}
 								variant="primary"
 								leftIcon={<Wallet size={18} color="white" />}
 								style={{ flex: 1, marginRight: 8 }}
 								onPress={() => setPaymentModalVisible(true)}
 							/>
 							<Button
-								title="New Invoice"
+								title={t('invoice.createInvoice')}
 								variant="outline"
 								leftIcon={<Plus size={18} color={theme.colors.primary} />}
 								style={{ flex: 1, marginLeft: 8 }}
@@ -196,7 +198,7 @@ export default function CustomerDetailScreen() {
 							variant="h3"
 							style={{ marginTop: 16, marginBottom: 8, paddingHorizontal: 4 }}
 						>
-							Customer Info
+							{t('common.customerInfo')}
 						</ThemedText>
 						<Card style={styles.infoCard}>
 							{customer.phone && (
@@ -218,7 +220,7 @@ export default function CustomerDetailScreen() {
 								/>
 							)}
 							<ListItem
-								title="Customer Type"
+								title={t('customer.type')}
 								subtitle={customer.type.toUpperCase()}
 								showChevron={false}
 							/>
@@ -228,7 +230,7 @@ export default function CustomerDetailScreen() {
 							variant="h3"
 							style={{ marginTop: 16, marginBottom: 8, paddingHorizontal: 4 }}
 						>
-							Ledger History
+							{t('common.ledgerHistory')}
 						</ThemedText>
 					</View>
 				}

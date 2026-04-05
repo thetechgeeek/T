@@ -40,6 +40,7 @@ interface EditableItemCardProps {
 	onRemove: (index: number) => void;
 	colors: ReturnType<typeof useThemeTokens>['c'];
 	spacing: ReturnType<typeof useThemeTokens>['s'];
+	t: (key: string, options?: any) => string;
 }
 
 function EditableItemCard({
@@ -49,6 +50,7 @@ function EditableItemCard({
 	onRemove,
 	colors: c,
 	spacing: s,
+	t,
 }: EditableItemCardProps) {
 	const [expanded, setExpanded] = useState(false);
 
@@ -58,28 +60,30 @@ function EditableItemCard({
 			<TouchableOpacity
 				style={styles.cardHeader}
 				onPress={() => setExpanded((v) => !v)}
-				accessibilityLabel={`Item ${index + 1}: ${item.design_name || 'Unknown'}, tap to edit`}
+				accessibilityLabel={`${t('invoice.addItem')} ${index + 1}: ${item.design_name || t('inventory.itemNotFound')}, ${t('order.reviewExtracted')}`}
 				accessibilityRole="button"
 			>
 				<View style={{ flex: 1 }}>
 					<ThemedText weight="bold" style={{ fontSize: 15 }}>
-						{item.design_name || 'Unknown Design'}
+						{item.design_name || t('inventory.itemNotFound')}
 					</ThemedText>
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
 						style={{ marginTop: 2 }}
 					>
-						{item.category || 'N/A'} • {item.size || 'Size N/A'}
+						{item.category || t('common.na')} • {item.size || t('common.na')}
 					</ThemedText>
 				</View>
 				<View style={{ alignItems: 'flex-end', marginLeft: 8 }}>
 					<ThemedText color={c.primary} weight="bold" style={{ fontSize: 16 }}>
-						{item.box_count ?? '—'} Boxes
+						{item.box_count ?? '—'} {t('order.boxesSuffix')}
 					</ThemedText>
 					{item.price_per_box ? (
 						<ThemedText variant="caption" color={c.onSurfaceVariant}>
-							₹{item.price_per_box}/box
+							{t('finance.currencySymbol')}
+							{item.price_per_box}
+							{t('inventory.perBox')}
 						</ThemedText>
 					) : null}
 				</View>
@@ -96,20 +100,20 @@ function EditableItemCard({
 			{expanded && (
 				<View style={[styles.editFields, { borderTopColor: c.border }]}>
 					<TextInput
-						label="Design Name"
+						label={t('inventory.designName')}
 						value={item.design_name ?? ''}
 						onChangeText={(v) => onUpdate(index, 'design_name', v)}
 						containerStyle={{ marginBottom: s.sm }}
 					/>
 					<View style={{ flexDirection: 'row', gap: s.sm }}>
 						<TextInput
-							label="Category"
+							label={t('inventory.category')}
 							value={item.category ?? ''}
 							onChangeText={(v) => onUpdate(index, 'category', v)}
 							containerStyle={{ flex: 1, marginBottom: s.sm }}
 						/>
 						<TextInput
-							label="Size"
+							label={t('inventory.size')}
 							value={item.size ?? ''}
 							onChangeText={(v) => onUpdate(index, 'size', v)}
 							containerStyle={{ flex: 1, marginBottom: s.sm }}
@@ -117,7 +121,7 @@ function EditableItemCard({
 					</View>
 					<View style={{ flexDirection: 'row', gap: s.sm }}>
 						<TextInput
-							label="Box Count *"
+							label={t('inventory.boxCount') + ' *'}
 							value={item.box_count !== undefined ? String(item.box_count) : ''}
 							onChangeText={(v) => {
 								const n = parseFloat(v);
@@ -127,7 +131,7 @@ function EditableItemCard({
 							containerStyle={{ flex: 1, marginBottom: s.sm }}
 						/>
 						<TextInput
-							label="Price / Box"
+							label={t('inventory.sellingPrice')}
 							value={
 								item.price_per_box !== undefined ? String(item.price_per_box) : ''
 							}
@@ -143,12 +147,12 @@ function EditableItemCard({
 					<TouchableOpacity
 						onPress={() => onRemove(index)}
 						style={[styles.removeBtn, { borderColor: c.error }]}
-						accessibilityLabel={`Remove item ${index + 1}`}
+						accessibilityLabel={`${t('common.delete')} ${index + 1}`}
 						accessibilityRole="button"
 					>
 						<Trash2 size={14} color={c.error} />
 						<ThemedText color={c.error} style={{ marginLeft: 4, fontSize: 13 }}>
-							Remove Item
+							{t('common.delete')}
 						</ThemedText>
 					</TouchableOpacity>
 				</View>
@@ -201,7 +205,7 @@ export default function ImportOrderScreen() {
 	const handleParseText = async () => {
 		const trimmed = pastedText.trim();
 		if (!trimmed) {
-			Alert.alert('No Text', 'Please paste or type some order text first.');
+			Alert.alert(t('order.detailsMissing'), t('order.detailsMissing'));
 			return;
 		}
 		try {
@@ -284,19 +288,19 @@ export default function ImportOrderScreen() {
 				safeAreaEdges={['bottom']}
 				style={{ alignItems: 'center', justifyContent: 'center' }}
 			>
-				<ScreenHeader title="Import Order" />
+				<ScreenHeader title={t('order.importBtn')} />
 				<FileText
 					size={64}
 					color={c.primary}
 					style={{ opacity: 0.5, marginBottom: s.xl }}
 				/>
-				<ThemedText variant="h3">Analyzing Document...</ThemedText>
+				<ThemedText variant="h3">{t('order.analyzing')}</ThemedText>
 				<ThemedText
 					color={c.placeholder}
 					align="center"
 					style={{ marginTop: s.sm, paddingHorizontal: s.xl }}
 				>
-					Our AI is reading your input to automatically extract exactly what was ordered.
+					{t('order.aiDescription')}
 				</ThemedText>
 			</AtomicScreen>
 		);
@@ -307,10 +311,10 @@ export default function ImportOrderScreen() {
 		return (
 			<AtomicScreen safeAreaEdges={['bottom']}>
 				<ScreenHeader
-					title="Review Import"
+					title={t('order.reviewTitle')}
 					rightElement={
 						<TouchableOpacity onPress={handleDiscard}>
-							<ThemedText color={c.error}>Discard</ThemedText>
+							<ThemedText color={c.error}>{t('order.discard')}</ThemedText>
 						</TouchableOpacity>
 					}
 				/>
@@ -323,8 +327,8 @@ export default function ImportOrderScreen() {
 					<ScrollView style={{ flex: 1, padding: s.lg }}>
 						<View style={{ marginBottom: s.xl }}>
 							<TextInput
-								label="Party/Supplier Name *"
-								placeholder="e.g. Kajaria Ceramics Ltd."
+								label={t('order.partyName') + ' *'}
+								placeholder={t('order.exampleText')}
 								value={partyName}
 								onChangeText={setPartyName}
 							/>
@@ -332,14 +336,14 @@ export default function ImportOrderScreen() {
 
 						<View style={styles.sectionHeader}>
 							<ThemedText variant="h3">
-								Extracted Items ({resolvedItems.length})
+								{t('order.extractedItems')} ({resolvedItems.length})
 							</ThemedText>
 							<ThemedText
 								variant="caption"
 								color={c.onSurfaceVariant}
 								style={{ marginTop: 2 }}
 							>
-								Tap any card to edit
+								{t('order.reviewExtracted')}
 							</ThemedText>
 						</View>
 
@@ -352,6 +356,7 @@ export default function ImportOrderScreen() {
 								onRemove={handleRemoveItem}
 								colors={c}
 								spacing={s}
+								t={t}
 							/>
 						))}
 
@@ -360,11 +365,11 @@ export default function ImportOrderScreen() {
 							style={[styles.addItemBtn, { borderColor: c.primary }]}
 							onPress={handleAddItem}
 							accessibilityRole="button"
-							accessibilityLabel="Add a new item"
+							accessibilityLabel={t('order.addManually')}
 						>
 							<PlusCircle size={16} color={c.primary} />
 							<ThemedText color={c.primary} style={{ marginLeft: 6, fontSize: 14 }}>
-								Add Item Manually
+								{t('order.addManually')}
 							</ThemedText>
 						</TouchableOpacity>
 
@@ -375,7 +380,7 @@ export default function ImportOrderScreen() {
 
 				<View style={[styles.footer, { borderTopColor: c.border }]}>
 					<Button
-						title="Confirm Import & Add Stock"
+						title={t('order.confirmImport')}
 						variant="primary"
 						onPress={handleSave}
 						loading={saving}
@@ -388,7 +393,7 @@ export default function ImportOrderScreen() {
 	// ── Upload / paste page ─────────────────────────────────────────────────────
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Import Order (AI)" />
+			<ScreenHeader title={t('order.importBtn') + ' (AI)'} />
 
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}
@@ -397,8 +402,7 @@ export default function ImportOrderScreen() {
 			>
 				<ScrollView contentContainerStyle={{ padding: s.lg }}>
 					<ThemedText style={{ lineHeight: 22, marginBottom: s.xl }}>
-						Upload a PDF, image, or paste order text. The AI will extract all items and
-						automatically restock your inventory.
+						{t('order.howItWorks')}
 					</ThemedText>
 
 					{/* Tab switcher */}
@@ -415,7 +419,7 @@ export default function ImportOrderScreen() {
 							]}
 							onPress={() => setInputMode('file')}
 							accessibilityRole="tab"
-							accessibilityLabel="File upload tab"
+							accessibilityLabel={t('order.fileUploadTab')}
 							accessibilityState={{ selected: inputMode === 'file' }}
 						>
 							<FileUp
@@ -427,7 +431,7 @@ export default function ImportOrderScreen() {
 								color={inputMode === 'file' ? '#fff' : c.onSurfaceVariant}
 								weight={inputMode === 'file' ? 'bold' : 'regular'}
 							>
-								File / Image
+								{t('inventory.listView')} {t('common.and')} {t('scanner.title')}
 							</ThemedText>
 						</TouchableOpacity>
 						<TouchableOpacity
@@ -437,7 +441,7 @@ export default function ImportOrderScreen() {
 							]}
 							onPress={() => setInputMode('text')}
 							accessibilityRole="tab"
-							accessibilityLabel="Paste text tab"
+							accessibilityLabel={t('order.pasteTextTab')}
 							accessibilityState={{ selected: inputMode === 'text' }}
 						>
 							<ClipboardList
@@ -449,7 +453,7 @@ export default function ImportOrderScreen() {
 								color={inputMode === 'text' ? '#fff' : c.onSurfaceVariant}
 								weight={inputMode === 'text' ? 'bold' : 'regular'}
 							>
-								Paste Text
+								{t('order.actions.analyzeAi')}
 							</ThemedText>
 						</TouchableOpacity>
 					</View>
@@ -464,7 +468,7 @@ export default function ImportOrderScreen() {
 						>
 							<FileUp size={48} color={c.primary} style={{ marginBottom: s.md }} />
 							<ThemedText weight="bold" style={{ fontSize: 16, marginBottom: 4 }}>
-								Select Document or Image
+								{t('order.uploadTitle')}
 							</ThemedText>
 							<ThemedText
 								variant="caption"
@@ -472,10 +476,10 @@ export default function ImportOrderScreen() {
 								align="center"
 								style={{ marginBottom: s.lg }}
 							>
-								Supported: .pdf, .jpg, .png
+								{t('order.supportedFiles')}
 							</ThemedText>
 							<Button
-								title="Browse Files"
+								title={t('order.browseFiles')}
 								onPress={handleUploadFile}
 								variant="outline"
 							/>
@@ -493,7 +497,7 @@ export default function ImportOrderScreen() {
 							<View style={styles.textBoxHeader}>
 								<ClipboardList size={20} color={c.primary} />
 								<ThemedText weight="bold" style={{ marginLeft: 8, fontSize: 15 }}>
-									Paste Order Text
+									{t('order.actions.analyzeAi')}
 								</ThemedText>
 							</View>
 							<ThemedText
@@ -501,9 +505,7 @@ export default function ImportOrderScreen() {
 								color={c.placeholder}
 								style={{ marginBottom: s.md }}
 							>
-								Copy text from a WhatsApp message, SMS, email, or any source and
-								paste it below. The AI will pick out item names, sizes, and
-								quantities.
+								{t('order.howItWorks')}
 							</ThemedText>
 
 							<View
@@ -516,19 +518,17 @@ export default function ImportOrderScreen() {
 									multiline
 									numberOfLines={10}
 									textAlignVertical="top"
-									placeholder={
-										'Paste order text here…\n\nExample:\nKajaria GLPM 60x60 – 20 boxes\nOriental WF-8800 GVT 80x80 – 12 boxes @ ₹450'
-									}
+									placeholder={`${t('order.placeholderText')}\n\n${t('common.selectAll')}\n${t('order.exampleText')}`}
 									placeholderTextColor={c.placeholder}
 									value={pastedText}
 									onChangeText={setPastedText}
 									style={[styles.textArea, { color: c.onSurface }]}
-									accessibilityLabel="Order text input"
+									accessibilityLabel={t('order.textInputLabel')}
 								/>
 							</View>
 
 							<Button
-								title="Analyze Text with AI"
+								title={t('order.actions.analyzeAi')}
 								onPress={handleParseText}
 								variant="primary"
 								style={{ marginTop: s.lg }}

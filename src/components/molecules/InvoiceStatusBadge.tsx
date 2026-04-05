@@ -1,6 +1,7 @@
 import React from 'react';
 import { Badge } from '@/src/components/atoms/Badge';
 import type { BadgeVariant } from '@/src/components/atoms/Badge';
+import { useLocale } from '@/src/hooks/useLocale';
 
 export type InvoiceStatus = 'paid' | 'partial' | 'unpaid';
 
@@ -9,13 +10,16 @@ interface InvoiceStatusBadgeProps {
 	size?: 'sm' | 'md';
 }
 
-const STATUS_CONFIG: Record<InvoiceStatus, { variant: BadgeVariant; label: string }> = {
-	paid: { variant: 'paid', label: 'Paid' },
-	partial: { variant: 'partial', label: 'Partial' },
-	unpaid: { variant: 'unpaid', label: 'Unpaid' },
+const STATUS_VARIANTS: Record<InvoiceStatus, BadgeVariant> = {
+	paid: 'paid',
+	partial: 'partial',
+	unpaid: 'unpaid',
 };
 
 export function InvoiceStatusBadge({ status, size = 'sm' }: InvoiceStatusBadgeProps) {
-	const { variant, label } = STATUS_CONFIG[status];
+	const { t } = useLocale();
+	const variant = STATUS_VARIANTS[status];
+	const label = t(`invoice.${status}`);
+
 	return <Badge label={label} variant={variant} size={size} />;
 }

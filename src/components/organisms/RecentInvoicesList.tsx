@@ -38,8 +38,8 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 				<TouchableOpacity
 					onPress={() => router.push('/(app)/(tabs)/invoices')}
 					accessibilityRole="button"
-					accessibilityLabel="see-all-invoices"
-					accessibilityHint="View all invoices"
+					accessibilityLabel={t('invoice.viewAllInvoices')}
+					accessibilityHint={t('invoice.viewAllInvoices')}
 				>
 					<ThemedText variant="body2" color={c.primary}>
 						{t('common.seeAll')}
@@ -79,7 +79,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 							onPress={() => router.push(`/(app)/invoices/${inv.id}` as Href)}
 							accessibilityRole="button"
 							accessibilityLabel={`invoice-${inv.invoice_number}`}
-							accessibilityHint={`${inv.payment_status}, ${formatCurrency(inv.grand_total)}. Double tap to open`}
+							accessibilityHint={`${inv.payment_status}, ${formatCurrency(inv.grand_total)}. ${t('invoice.tapToOpen')}`}
 							style={[
 								styles.invoiceItem,
 								{

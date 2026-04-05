@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { TextInput as AppTextInput } from '@/src/components/atoms/TextInput';
@@ -48,13 +49,14 @@ export function LineItemsStep({
 	addLineItem,
 }: Props) {
 	const { c, s, r } = useThemeTokens();
+	const { t, formatCurrency } = useLocale();
 
 	return (
 		<View>
 			<View style={[layout.rowBetween, { marginBottom: s.md }]}>
-				<ThemedText variant="h3">Line Items</ThemedText>
+				<ThemedText variant="h3">{t('invoice.lineItems')}</ThemedText>
 				<Button
-					title="+ Add Item"
+					title={t('invoice.add')}
 					accessibilityLabel="add-item-button"
 					onPress={() => setIsAddingItem(true)}
 					size="sm"
@@ -71,7 +73,7 @@ export function LineItemsStep({
 					}}
 				>
 					<ThemedText variant="caption" color={c.placeholder} align="center">
-						No items added yet.
+						{t('invoice.noItems')}
 					</ThemedText>
 				</View>
 			) : (
@@ -90,15 +92,18 @@ export function LineItemsStep({
 						<ThemedText weight="semibold">{item.design_name}</ThemedText>
 						<View style={layout.rowBetween}>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{item.quantity} units @ ₹{item.rate_per_unit.toFixed(2)}
+								{item.quantity}{' '}
+								{t('invoice.unitsAt', {
+									price: formatCurrency(item.rate_per_unit),
+								})}
 							</ThemedText>
 							<ThemedText weight="bold" color={c.primary}>
-								₹{(item.quantity * item.rate_per_unit).toFixed(2)}
+								{formatCurrency(item.quantity * item.rate_per_unit)}
 							</ThemedText>
 						</View>
 						{!!item.discount && item.discount > 0 && (
 							<ThemedText variant="caption" color={c.error}>
-								Discount: ₹{item.discount.toFixed(2)}
+								{t('invoice.discountAmount')}: {formatCurrency(item.discount)}
 							</ThemedText>
 						)}
 						<TouchableOpacity
@@ -106,10 +111,10 @@ export function LineItemsStep({
 							style={{ alignSelf: 'flex-end', marginTop: 8 }}
 							accessibilityRole="button"
 							accessibilityLabel={`remove-line-item-${index}`}
-							accessibilityHint={`Remove ${item.design_name} from invoice`}
+							accessibilityHint={t('invoice.removeHint', { name: item.design_name })}
 						>
 							<ThemedText variant="caption" color={c.error}>
-								Remove
+								{t('invoice.remove')}
 							</ThemedText>
 						</TouchableOpacity>
 					</View>
@@ -128,7 +133,7 @@ export function LineItemsStep({
 					}}
 				>
 					<View style={[layout.rowBetween, { marginBottom: s.xs }]}>
-						<ThemedText weight="bold">Select from Inventory</ThemedText>
+						<ThemedText weight="bold">{t('invoice.selectFromInventory')}</ThemedText>
 						{inventoryLoading && (
 							<SkeletonBlock width={20} height={20} borderRadius={10} />
 						)}
@@ -138,8 +143,8 @@ export function LineItemsStep({
 						<>
 							<AppTextInput
 								accessibilityLabel="inventory-search-input"
-								accessibilityHint="Type a design name to search inventory"
-								placeholder="Search design name..."
+								accessibilityHint={t('scanner.searchHint')}
+								placeholder={t('invoice.searchDesign')}
 								value={searchQuery}
 								onChangeText={setSearchQuery}
 							/>
@@ -151,7 +156,7 @@ export function LineItemsStep({
 										align="center"
 										style={{ padding: s.md }}
 									>
-										No items found.
+										{t('invoice.noResults')}
 									</ThemedText>
 								) : (
 									inventoryItems.map((item) => (
@@ -171,15 +176,18 @@ export function LineItemsStep({
 												variant="caption"
 												color={c.onSurfaceVariant}
 											>
-												Stock: {item.box_count} • Price: ₹
-												{item.selling_price}
+												{t('inventory.stockStatus', {
+													count: item.box_count,
+												})}{' '}
+												• {t('common.price')}:{' '}
+												{formatCurrency(item.selling_price)}
 											</ThemedText>
 										</TouchableOpacity>
 									))
 								)}
 							</ScrollView>
 							<Button
-								title="Close"
+								title={t('common.done')}
 								onPress={() => setIsAddingItem(false)}
 								variant="outline"
 								style={{ marginTop: s.md }}
@@ -193,39 +201,41 @@ export function LineItemsStep({
 								color={c.onSurfaceVariant}
 								style={{ marginBottom: s.md }}
 							>
-								Available: {selectedItem.box_count} units
+								{t('invoice.availableStock', { count: selectedItem.box_count })}
 							</ThemedText>
 							<FormField
-								label="Quantity"
+								label={t('inventory.quantity')}
 								accessibilityLabel="item-quantity-input"
 								value={inputQuantity}
-								placeholder="Enter quantity"
+								placeholder={t('invoice.placeholders.enterQuantity')}
 								keyboardType="numeric"
 								onChangeText={setInputQuantity}
 								error={
 									parseInt(inputQuantity) > selectedItem.box_count
-										? `Exceeds available stock (${selectedItem.box_count})`
+										? t('invoice.exceedsStock', {
+												count: selectedItem.box_count,
+											})
 										: undefined
 								}
 							/>
 							<FormField
-								label="Discount (₹ total)"
+								label={t('invoice.discountTotal')}
 								accessibilityLabel="item-discount-input"
 								value={inputDiscount}
-								placeholder="Enter discount amount"
+								placeholder={t('invoice.placeholders.enterDiscount')}
 								keyboardType="numeric"
 								onChangeText={setInputDiscount}
 							/>
 							<View style={{ flexDirection: 'row', gap: s.sm, marginTop: s.md }}>
 								<Button
-									title="Cancel"
+									title={t('common.cancel')}
 									accessibilityLabel="cancel-add-item"
 									onPress={cancelItemSelection}
 									variant="outline"
 									style={{ flex: 1 }}
 								/>
 								<Button
-									title="Confirm"
+									title={t('common.confirm')}
 									accessibilityLabel="confirm-add-item"
 									onPress={addLineItem}
 									style={{ flex: 1 }}
