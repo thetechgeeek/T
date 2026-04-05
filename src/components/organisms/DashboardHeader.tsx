@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -16,16 +17,20 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName }
 
 	const c = theme.colors;
 	const s = theme.spacing;
-	const today = new Date().toLocaleDateString(`${currentLanguage}-IN`, {
-		weekday: 'long',
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-	});
+	const today = useMemo(
+		() =>
+			new Date().toLocaleDateString(`${currentLanguage}-IN`, {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+			}),
+		[currentLanguage],
+	);
 
 	return (
 		<View
-			accessibilityLabel="dashboard-screen"
+			accessibilityLabel={`Dashboard header for ${businessName}`}
 			accessibilityRole="header"
 			style={[
 				styles.header,

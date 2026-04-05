@@ -3,6 +3,8 @@ import { useRouter, type Href } from 'expo-router';
 import { FileText, ChevronRight } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { InvoiceStatusBadge } from '@/src/components/molecules/InvoiceStatusBadge';
+import type { InvoiceStatus } from '@/src/components/molecules/InvoiceStatusBadge';
 import { useLocale } from '@/src/hooks/useLocale';
 import { formatDate } from '@/src/utils/dateUtils';
 import { layout } from '@/src/theme/layout';
@@ -99,42 +101,11 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 									<ThemedText weight="bold" color={c.primary}>
 										{formatCurrency(inv.grand_total)}
 									</ThemedText>
-									{/* Status badge — color + text, not color-only */}
-									<View
-										accessible={true}
-										accessibilityLabel={inv.payment_status}
-										style={[
-											styles.statusBadge,
-											{
-												backgroundColor:
-													inv.payment_status === 'paid'
-														? c.success + '20'
-														: inv.payment_status === 'partial'
-															? c.warning + '20'
-															: c.error + '20',
-												paddingHorizontal: 6,
-												paddingVertical: 2,
-												borderRadius: 4,
-												marginTop: 4,
-											},
-										]}
-									>
-										<ThemedText
-											importantForAccessibility="no"
-											variant="caption"
-											style={{
-												fontSize: 10,
-												color:
-													inv.payment_status === 'paid'
-														? c.success
-														: inv.payment_status === 'partial'
-															? c.warning
-															: c.error,
-												textTransform: 'capitalize',
-											}}
-										>
-											{inv.payment_status}
-										</ThemedText>
+									<View style={{ marginTop: 4 }}>
+										<InvoiceStatusBadge
+											status={inv.payment_status as InvoiceStatus}
+											size="sm"
+										/>
 									</View>
 								</View>
 								<ChevronRight
@@ -155,6 +126,6 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 const styles = StyleSheet.create({
 	section: {},
 	emptyCard: { alignItems: 'center' },
-	invoiceItem: { marginBottom: 8 },
+	invoiceItem: {},
 	statusBadge: { alignSelf: 'flex-start' },
 });

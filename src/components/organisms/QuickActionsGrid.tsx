@@ -35,14 +35,14 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions }) =
 				{t('dashboard.quickActions')}
 			</ThemedText>
 			<View style={styles.actionsGrid}>
-				{actions.map((action, i) => (
+				{actions.map((action) => (
 					<TouchableOpacity
-						key={i}
+						key={action.route}
 						style={[
 							{
 								backgroundColor: c.card,
 								borderRadius: r.lg,
-								width: (width - s.lg * 2 - 8 * 3) / 2,
+								width: (width - s.lg * 2 - s.sm * 3) / 2,
 								padding: s.md,
 								...theme.shadows.sm,
 							},

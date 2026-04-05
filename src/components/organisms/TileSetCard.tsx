@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { Package, AlertCircle } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
+import { withOpacity } from '@/src/utils/color';
 import type { ViewStyle } from 'react-native';
 import type { TileSetGroup, InventoryItem } from '@/src/types/inventory';
 import { getThumbUrl } from '@/src/utils/imageTransform';
@@ -131,7 +132,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 							>
 								{item.tile_image_url ? (
 									<Image
-										source={{ uri: getThumbUrl(item.tile_image_url, 88) }}
+										source={{ uri: getThumbUrl(item.tile_image_url, 112) }}
 										style={styles.image}
 										contentFit="cover"
 										accessible={true}
@@ -178,7 +179,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 											style={[
 												styles.catBadge,
 												{
-													backgroundColor: c.primary + '15',
+													backgroundColor: withOpacity(c.primary, 0.08),
 													borderRadius: r.sm,
 												},
 											]}
@@ -234,7 +235,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 }
 
 const styles = StyleSheet.create({
-	card: { overflow: 'hidden' },
+	card: {},
 	header: {},
 	headerTitleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
 	lowStockBadge: {
@@ -245,8 +246,8 @@ const styles = StyleSheet.create({
 	},
 	variantRow: { flexDirection: 'row', alignItems: 'center' },
 	thumbnail: {
-		width: 44,
-		height: 44,
+		width: 56,
+		height: 56,
 		alignItems: 'center',
 		justifyContent: 'center',
 		overflow: 'hidden',

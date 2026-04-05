@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert, Modal, View, StyleSheet, ScrollView, Platform } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -39,14 +39,28 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 	const [notes, setNotes] = useState('');
 	const [loading, setLoading] = useState(false);
 
+	// Reset form state each time the modal opens
+	useEffect(() => {
+		if (visible) {
+			setAmount(totalAmount > 0 ? totalAmount.toString() : '');
+			setPaymentMode(PAYMENT_MODES[0].value);
+			setNotes('');
+			setLoading(false);
+		}
+	}, [visible, totalAmount]);
+
 	const handleSave = async () => {
-		if (!amount || parseFloat(amount) <= 0) return;
+		const parsed = parseFloat(amount);
+		if (!amount || isNaN(parsed) || parsed <= 0) {
+			Alert.alert('Invalid Amount', 'Please enter a valid amount greater than zero.');
+			return;
+		}
 
 		setLoading(true);
 		try {
 			await paymentService.recordPayment({
 				payment_date: new Date().toISOString().split('T')[0],
-				amount: parseFloat(amount),
+				amount: parsed,
 				payment_mode: paymentMode,
 				direction: 'received',
 				customer_id: customerId,
@@ -92,7 +106,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 							variant="ghost"
 							size="sm"
 							onPress={onClose}
-							accessibilityLabel="close-payment-modal"
+							accessibilityLabel="Close payment dialog"
 							testID="close-modal-button"
 							accessibilityHint="Dismiss the payment dialog"
 							leftIcon={<X size={24} color={theme.colors.onSurface} />}
