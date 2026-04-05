@@ -258,7 +258,7 @@ export default function InventoryTab() {
 
 const styles = StyleSheet.create({
 	filterBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-	chipScrollWrap: { marginTop: 8, marginHorizontal: -20, paddingHorizontal: 20 },
+	chipScrollWrap: { marginTop: 8 },
 	centerFlex: {
 		flex: 1,
 		alignItems: 'center',

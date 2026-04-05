@@ -208,14 +208,8 @@ export default function CustomerDetailScreen() {
 								/>
 							)}
 							<ListItem
-								title={`Type: ${customer.type.toUpperCase()}`}
-								leftIcon={
-									<Badge
-										label={customer.type.charAt(0)}
-										variant="neutral"
-										size="sm"
-									/>
-								}
+								title="Customer Type"
+								subtitle={customer.type.toUpperCase()}
 								showChevron={false}
 							/>
 						</Card>
@@ -260,7 +254,7 @@ export default function CustomerDetailScreen() {
 
 const styles = StyleSheet.create({
 	summaryContainer: { padding: 16, paddingTop: 0 },
-	summaryCard: { padding: 20, alignItems: 'center' },
+	summaryCard: { alignItems: 'center' },
 	statsRow: { flexDirection: 'row', width: '100%' },
 	stat: { flex: 1, alignItems: 'center' },
 	actions: { flexDirection: 'row', marginTop: 16 },
@@ -270,7 +264,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 16,
 		marginBottom: 12,
 		padding: 12,
-		borderRadius: 8,
+		borderRadius: 12,
 		borderLeftWidth: 4,
 	},
 	ledgerHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },

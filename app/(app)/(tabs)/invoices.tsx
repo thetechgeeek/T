@@ -9,6 +9,8 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { FileText, Plus } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { InvoiceStatusBadge } from '@/src/components/molecules/InvoiceStatusBadge';
+import type { InvoiceStatus } from '@/src/components/molecules/InvoiceStatusBadge';
 
 export default function InvoicesListScreen() {
 	const router = useRouter();
@@ -57,6 +59,9 @@ export default function InvoicesListScreen() {
 				keyExtractor={(item) => item.id}
 				refreshing={refreshing}
 				onRefresh={handleRefresh}
+				initialNumToRender={10}
+				windowSize={5}
+				maxToRenderPerBatch={10}
 				contentContainerStyle={{ padding: s.md }}
 				ListEmptyComponent={() => (
 					<View style={{ alignItems: 'center', marginTop: s['2xl'] }}>
@@ -78,7 +83,6 @@ export default function InvoicesListScreen() {
 							styles.invoiceCard,
 							{
 								backgroundColor: theme.colors.card,
-								borderColor: c.border,
 								...(theme.shadows.sm as object),
 							},
 						]}
@@ -88,36 +92,21 @@ export default function InvoicesListScreen() {
 						onPress={() => router.push(`/(app)/invoices/${item.id}`)}
 					>
 						<View style={styles.cardHeader}>
-							<ThemedText weight="bold" style={{ fontSize: 16 }}>
+							<ThemedText weight="bold" variant="body1">
 								{item.invoice_number}
 							</ThemedText>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{new Date(item.invoice_date).toLocaleDateString()}
+								{new Date(item.invoice_date).toLocaleDateString('en-IN')}
 							</ThemedText>
 						</View>
 						<ThemedText color={c.onSurfaceVariant} style={{ marginBottom: s.sm }}>
 							{item.customer_name}
 						</ThemedText>
 						<View style={styles.cardFooter}>
-							<View
-								style={[
-									styles.badge,
-									{
-										backgroundColor:
-											item.payment_status === 'paid'
-												? c.success + '20'
-												: c.warning + '20',
-									},
-								]}
-							>
-								<ThemedText
-									color={item.payment_status === 'paid' ? c.success : c.warning}
-									weight="semibold"
-									style={{ fontSize: 12, textTransform: 'capitalize' }}
-								>
-									{item.payment_status}
-								</ThemedText>
-							</View>
+							<InvoiceStatusBadge
+								status={item.payment_status as InvoiceStatus}
+								size="sm"
+							/>
 							<ThemedText variant="h3" color={c.primary}>
 								{formatCurrency(item.grand_total)}
 							</ThemedText>
@@ -140,7 +129,6 @@ const styles = StyleSheet.create({
 	invoiceCard: {
 		padding: 16,
 		borderRadius: 12,
-		borderWidth: 1,
 		marginBottom: 12,
 	},
 	cardHeader: {

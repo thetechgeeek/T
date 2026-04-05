@@ -126,9 +126,9 @@ export default function DashboardScreen() {
 
 			{/* Stats Cards */}
 			<View style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
-				{dashboardStats.map((stat, i) => (
+				{dashboardStats.map((stat) => (
 					<StatCard
-						key={i}
+						key={stat.accessibilityLabel}
 						label={stat.label}
 						accessibilityLabel={stat.accessibilityLabel}
 						value={stat.value}

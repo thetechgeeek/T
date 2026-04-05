@@ -10,6 +10,7 @@ import { inventoryService } from '@/src/services/inventoryService';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { withOpacity } from '@/src/utils/color';
 import type { InventoryItem, StockOperation } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { layout } from '@/src/theme/layout';
@@ -60,18 +61,11 @@ export default function ItemDetailScreen() {
 
 	if (loading) {
 		return (
-			<View
-				style={[
-					styles.container,
-					{
-						backgroundColor: c.background,
-						justifyContent: 'center',
-						alignItems: 'center',
-					},
-				]}
-			>
-				<ActivityIndicator size="large" color={c.primary} />
-			</View>
+			<AtomicScreen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
+				<View style={[styles.center, { flex: 1 }]}>
+					<ActivityIndicator size="large" color={c.primary} />
+				</View>
+			</AtomicScreen>
 		);
 	}
 
@@ -162,7 +156,9 @@ export default function ItemDetailScreen() {
 					style={[
 						styles.stockBox,
 						{
-							backgroundColor: isLowStock ? c.errorLight : c.success + '15',
+							backgroundColor: isLowStock
+								? c.errorLight
+								: withOpacity(c.success, 0.08),
 							borderRadius: r.md,
 							marginTop: s.xl,
 							borderColor: isLowStock ? c.error : c.success,
@@ -271,44 +267,6 @@ export default function ItemDetailScreen() {
 			</ScrollView>
 		</AtomicScreen>
 	);
-
-	function SpecBox({
-		label,
-		value,
-		highlight = false,
-	}: {
-		label: string;
-		value: string;
-		highlight?: boolean;
-	}) {
-		return (
-			<View style={{ width: '50%', padding: 6 }}>
-				<View
-					style={{
-						backgroundColor: highlight ? c.primary + '10' : c.surfaceVariant,
-						padding: 12,
-						borderRadius: r.md,
-					}}
-				>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={{ marginBottom: 4 }}
-					>
-						{label}
-					</ThemedText>
-					<ThemedText
-						variant="body1"
-						weight="semibold"
-						color={highlight ? c.primary : c.onSurface}
-						numberOfLines={1}
-					>
-						{value}
-					</ThemedText>
-				</View>
-			</View>
-		);
-	}
 }
 
 const styles = StyleSheet.create({
@@ -319,3 +277,42 @@ const styles = StyleSheet.create({
 	actionBtn: { paddingVertical: 14 },
 	historyRow: { paddingVertical: 12 },
 });
+
+function SpecBox({
+	label,
+	value,
+	highlight = false,
+}: {
+	label: string;
+	value: string;
+	highlight?: boolean;
+}) {
+	const { c, r } = useThemeTokens();
+	return (
+		<View style={{ width: '50%', padding: 6 }}>
+			<View
+				style={{
+					backgroundColor: highlight ? withOpacity(c.primary, 0.06) : c.surfaceVariant,
+					padding: 12,
+					borderRadius: r.md,
+				}}
+			>
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					style={{ marginBottom: 4 }}
+				>
+					{label}
+				</ThemedText>
+				<ThemedText
+					variant="body1"
+					weight="semibold"
+					color={highlight ? c.primary : c.onSurface}
+					numberOfLines={1}
+				>
+					{value}
+				</ThemedText>
+			</View>
+		</View>
+	);
+}

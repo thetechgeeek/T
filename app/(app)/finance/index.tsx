@@ -2,10 +2,10 @@ import { View, StyleSheet, RefreshControl } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 import { useRouter } from 'expo-router';
 import { TrendingUp, TrendingDown, Wallet, Receipt, ShoppingCart } from 'lucide-react-native';
+import type { LucideIcon } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/components/atoms/Card';
 import { StatCard } from '@/src/components/molecules/StatCard';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { Divider } from '@/src/components/atoms/Divider';
@@ -42,23 +42,23 @@ export default function FinanceOverviewScreen() {
 	const metrics = [
 		{
 			title: 'Gross Profit',
-			value: formatCurrency(summary?.gross_profit || 0),
-			icon: <TrendingUp size={24} color={theme.colors.success} />,
+			icon: TrendingUp,
 			color: theme.colors.success,
+			value: formatCurrency(summary?.gross_profit || 0),
 			accessibilityLabel: 'stat-gross-profit',
 		},
 		{
 			title: 'Net Profit',
-			value: formatCurrency(summary?.net_profit || 0),
-			icon: <Wallet size={24} color={theme.colors.primary} />,
+			icon: Wallet,
 			color: theme.colors.primary,
+			value: formatCurrency(summary?.net_profit || 0),
 			accessibilityLabel: 'stat-net-profit',
 		},
 		{
 			title: 'Total Expenses',
-			value: formatCurrency(summary?.total_expenses || 0),
-			icon: <TrendingDown size={24} color={theme.colors.error} />,
+			icon: TrendingDown,
 			color: theme.colors.error,
+			value: formatCurrency(summary?.total_expenses || 0),
 			accessibilityLabel: 'stat-total-expenses',
 		},
 	];
@@ -80,17 +80,15 @@ export default function FinanceOverviewScreen() {
 		>
 			<ScreenHeader title="Finance Overview" />
 			<View style={styles.metricsGrid}>
-				{metrics.map((m, i) => (
-					<Card key={i} style={styles.metricCard} padding="md" variant="elevated">
-						<View style={styles.metricHeader} importantForAccessibility="no">
-							{m.icon}
-						</View>
-						<StatCard
-							label={m.title}
-							value={m.value}
-							accessibilityLabel={m.accessibilityLabel}
-						/>
-					</Card>
+				{metrics.map((m) => (
+					<StatCard
+						key={m.title}
+						label={m.title}
+						value={m.value}
+						icon={m.icon}
+						color={m.color}
+						accessibilityLabel={m.accessibilityLabel}
+					/>
 				))}
 			</View>
 
@@ -108,7 +106,11 @@ export default function FinanceOverviewScreen() {
 					accessibilityHint="Double tap to view expenses"
 					onPress={() => router.push('/(app)/finance/expenses')}
 					leftIcon={
-						<Receipt color={theme.colors.primary} importantForAccessibility="no" />
+						<Receipt
+							size={24}
+							color={theme.colors.primary}
+							importantForAccessibility="no"
+						/>
 					}
 				/>
 				<ListItem
@@ -116,7 +118,7 @@ export default function FinanceOverviewScreen() {
 					subtitle="Supplier bills and inventory procurement"
 					accessibilityLabel="menu-purchases"
 					accessibilityHint="Double tap to view purchases"
-					onPress={() => router.push('/finance/purchases')}
+					onPress={() => router.push('/(app)/finance/purchases')}
 					leftIcon={
 						<ShoppingCart
 							color={theme.colors.primary}
@@ -130,9 +132,13 @@ export default function FinanceOverviewScreen() {
 					subtitle="Outstanding balances from customers"
 					accessibilityLabel="menu-aging-report"
 					accessibilityHint="Double tap to view aging report"
-					onPress={() => router.push('/customers/aging')}
+					onPress={() => router.push('/(app)/customers/aging')}
 					leftIcon={
-						<TrendingDown color={theme.colors.error} importantForAccessibility="no" />
+						<TrendingDown
+							size={24}
+							color={theme.colors.error}
+							importantForAccessibility="no"
+						/>
 					}
 				/>
 				<ListItem

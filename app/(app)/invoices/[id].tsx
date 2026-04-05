@@ -41,7 +41,7 @@ export default function InvoiceDetailScreen() {
 
 	if (loading) {
 		return (
-			<Screen safeAreaEdges={['top']} withKeyboard={false}>
+			<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
 				<View style={styles.center}>
 					<ActivityIndicator size="large" color={c.primary} />
 				</View>
@@ -51,7 +51,7 @@ export default function InvoiceDetailScreen() {
 
 	if (error || !currentInvoice) {
 		return (
-			<Screen safeAreaEdges={['top']} withKeyboard={false}>
+			<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
 				<View style={styles.center}>
 					<ThemedText color={c.error}>Failed to load invoice.</ThemedText>
 					<Button
@@ -136,7 +136,6 @@ export default function InvoiceDetailScreen() {
 						borderRadius: r.md,
 						borderWidth: 1,
 						borderColor: c.border,
-						bottom: 0,
 					}}
 				>
 					<View style={layout.rowBetween}>

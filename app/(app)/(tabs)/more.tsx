@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 import {
 	Users,
@@ -10,7 +10,9 @@ import {
 	Languages,
 	Moon,
 	Sun,
+	LogOut,
 } from 'lucide-react-native';
+import { withOpacity } from '@/src/utils/color';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -23,6 +25,17 @@ export default function MoreTab() {
 	const { t, currentLanguage, toggleLanguage } = useLocale();
 	const { isDark, toggleTheme } = useTheme();
 	const { logout } = useAuthStore();
+
+	const handleLogout = () => {
+		Alert.alert(
+			t('auth.signOut'),
+			t('auth.signOutConfirm') || 'Are you sure you want to sign out?',
+			[
+				{ text: t('common.cancel') || 'Cancel', style: 'cancel' },
+				{ text: t('auth.signOut'), style: 'destructive', onPress: logout },
+			],
+		);
+	};
 	const router = useRouter();
 
 	const menuItems = [
@@ -81,9 +94,9 @@ export default function MoreTab() {
 				</ThemedText>
 			</View>
 			<View style={{ padding: s.lg }}>
-				{menuItems.map((item, i) => (
+				{menuItems.map((item) => (
 					<TouchableOpacity
-						key={i}
+						key={item.route}
 						style={[
 							styles.menuItem,
 							{
@@ -102,7 +115,10 @@ export default function MoreTab() {
 						<View
 							style={[
 								styles.iconWrap,
-								{ backgroundColor: item.color + '20', borderRadius: 10 },
+								{
+									backgroundColor: withOpacity(item.color, 0.12),
+									borderRadius: 10,
+								},
 							]}
 						>
 							<item.icon size={22} color={item.color} strokeWidth={2} />
@@ -141,7 +157,7 @@ export default function MoreTab() {
 					<View
 						style={[
 							styles.iconWrap,
-							{ backgroundColor: c.primary + '20', borderRadius: 10 },
+							{ backgroundColor: withOpacity(c.primary, 0.12), borderRadius: 10 },
 						]}
 					>
 						<Languages size={22} color={c.primary} strokeWidth={2} />
@@ -152,7 +168,6 @@ export default function MoreTab() {
 					>
 						{currentLanguage === 'en' ? 'Switch to Hindi (हिंदी)' : 'Switch to English'}
 					</ThemedText>
-					<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
 				</TouchableOpacity>
 
 				<TouchableOpacity
@@ -175,7 +190,10 @@ export default function MoreTab() {
 					<View
 						style={[
 							styles.iconWrap,
-							{ backgroundColor: c.onSurfaceVariant + '20', borderRadius: 10 },
+							{
+								backgroundColor: withOpacity(c.onSurfaceVariant, 0.12),
+								borderRadius: 10,
+							},
 						]}
 					>
 						{isDark ? (
@@ -190,7 +208,6 @@ export default function MoreTab() {
 					>
 						{isDark ? 'Light Mode' : 'Dark Mode'}
 					</ThemedText>
-					<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
 				</TouchableOpacity>
 
 				<TouchableOpacity
@@ -202,11 +219,17 @@ export default function MoreTab() {
 							marginTop: s.lg,
 						},
 					]}
-					onPress={logout}
+					onPress={handleLogout}
 					accessibilityRole="button"
-					accessibilityLabel="sign-out-button"
-					accessibilityHint="Logs you out of TileMaster"
+					accessibilityLabel="Sign out of TileMaster"
+					accessibilityHint="Double tap to log out"
 				>
+					<LogOut
+						size={20}
+						color={c.error}
+						strokeWidth={2}
+						style={{ marginRight: s.sm }}
+					/>
 					<ThemedText
 						color={c.error}
 						weight="medium"

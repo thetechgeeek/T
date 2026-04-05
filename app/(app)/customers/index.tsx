@@ -63,7 +63,7 @@ export default function CustomersScreen() {
 		<ListItem
 			title={item.name}
 			subtitle={item.phone || item.city || 'No contact info'}
-			onPress={() => router.push(`/customers/${item.id}`)}
+			onPress={() => router.push(`/(app)/customers/${item.id}`)}
 			leftIcon={
 				<View style={[styles.avatar, { backgroundColor: theme.colors.surfaceVariant }]}>
 					<ThemedText weight="bold" color={theme.colors.primary} style={{ fontSize: 18 }}>
@@ -112,7 +112,7 @@ export default function CustomersScreen() {
 							description="Start by adding your first customer to manage their credit and invoices."
 							icon={<UserPlus size={48} color={theme.colors.placeholder} />}
 							actionLabel="Add Customer"
-							onAction={() => router.push('/customers/add')}
+							onAction={() => router.push('/(app)/customers/add')}
 						/>
 					) : null
 				}
@@ -124,7 +124,7 @@ export default function CustomersScreen() {
 					styles.fab,
 					{ backgroundColor: theme.colors.primary, ...(theme.shadows?.lg || {}) },
 				]}
-				onPress={() => router.push('/customers/add')}
+				onPress={() => router.push('/(app)/customers/add')}
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-customer-button"

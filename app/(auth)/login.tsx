@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Eye, EyeOff } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@/src/components/atoms/Screen';
+import { Button } from '@/src/components/atoms/Button';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput } from '@/src/components/atoms/TextInput';
 
@@ -45,7 +47,22 @@ export default function LoginScreen() {
 		<Screen scrollable safeAreaEdges={['top']}>
 			{/* Header */}
 			<View style={[styles.header, { backgroundColor: c.primary, paddingTop: s.xl }]}>
-				<ThemedText style={[styles.logo, { fontSize: typo.sizes['3xl'] }]}>🏺</ThemedText>
+				<View
+					style={[
+						styles.logoMark,
+						{ backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: r.md },
+					]}
+				>
+					<ThemedText
+						style={{
+							fontSize: typo.sizes['2xl'],
+							color: c.onPrimary,
+							fontWeight: '700',
+						}}
+					>
+						TM
+					</ThemedText>
+				</View>
 				<ThemedText variant="h1" style={[styles.appName, { color: c.onPrimary }]}>
 					TileMaster
 				</ThemedText>
@@ -96,41 +113,39 @@ export default function LoginScreen() {
 						<TouchableOpacity
 							onPress={() => setShowPassword(!showPassword)}
 							accessibilityRole="button"
-							accessibilityLabel={
-								showPassword ? 'hide-password-toggle' : 'show-password-toggle'
+							accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
+							accessibilityHint={
+								showPassword ? 'Password will be hidden' : 'Password will be shown'
 							}
-							accessibilityHint={showPassword ? 'Hide password' : 'Show password'}
 						>
-							<ThemedText color={c.primary} importantForAccessibility="no">
-								{showPassword ? '🙈' : '👁️'}
-							</ThemedText>
+							{showPassword ? (
+								<EyeOff
+									size={20}
+									color={c.placeholder}
+									importantForAccessibility="no"
+								/>
+							) : (
+								<Eye
+									size={20}
+									color={c.placeholder}
+									importantForAccessibility="no"
+								/>
+							)}
 						</TouchableOpacity>
 					}
 					containerStyle={{ marginTop: s.md }}
 				/>
 
 				{/* Sign In Button */}
-				<TouchableOpacity
-					style={[
-						styles.button,
-						{ backgroundColor: c.primary, borderRadius: r.md, marginTop: s.lg },
-					]}
-					onPress={handleLogin}
-					disabled={loading}
-					activeOpacity={0.85}
-					accessibilityRole="button"
+				<Button
+					title={t('auth.signIn')}
 					accessibilityLabel="sign-in-button"
 					testID="sign-in-button"
-					accessibilityState={{ busy: loading }}
-				>
-					{loading ? (
-						<ActivityIndicator color={c.onPrimary} />
-					) : (
-						<ThemedText weight="semibold" style={{ color: c.onPrimary }}>
-							{t('auth.signIn')}
-						</ThemedText>
-					)}
-				</TouchableOpacity>
+					onPress={handleLogin}
+					loading={loading}
+					size="lg"
+					style={{ marginTop: s.lg }}
+				/>
 
 				{/* Setup link */}
 				<TouchableOpacity
@@ -150,14 +165,15 @@ const styles = StyleSheet.create({
 		paddingBottom: 40,
 		paddingHorizontal: 24,
 	},
-	logo: { marginBottom: 8 },
+	logoMark: {
+		width: 64,
+		height: 64,
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginBottom: 12,
+	},
 	appName: { marginBottom: 4 },
 	subtitle: { textAlign: 'center' },
 	form: { flex: 1 },
-	button: {
-		height: 52,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
 	linkBtn: { alignItems: 'center', height: 44, justifyContent: 'center' },
 });
