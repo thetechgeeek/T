@@ -28,7 +28,7 @@ export const Screen: React.FC<ScreenProps> = ({
 	withKeyboard = true,
 	style,
 	contentContainerStyle,
-	safeAreaEdges = ['top', 'bottom'],
+	safeAreaEdges = ['top'],
 	scrollViewProps,
 	backgroundColor,
 }) => {

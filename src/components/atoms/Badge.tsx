@@ -3,7 +3,16 @@ import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { withOpacity } from '@/src/utils/color';
 
-export type BadgeVariant = 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral';
+export type BadgeVariant =
+	| 'primary'
+	| 'success'
+	| 'warning'
+	| 'error'
+	| 'info'
+	| 'neutral'
+	| 'paid'
+	| 'partial'
+	| 'unpaid';
 
 interface BadgeProps {
 	label: string;
@@ -28,10 +37,13 @@ export const Badge: React.FC<BadgeProps> = ({
 	const getVariantStyles = () => {
 		switch (variant) {
 			case 'success':
+			case 'paid':
 				return { bg: theme.colors.successLight, text: theme.colors.success };
 			case 'warning':
+			case 'partial':
 				return { bg: theme.colors.warningLight, text: theme.colors.warning };
 			case 'error':
+			case 'unpaid':
 				return { bg: theme.colors.errorLight, text: theme.colors.error };
 			case 'info':
 				return { bg: theme.colors.infoLight, text: theme.colors.info };
@@ -47,7 +59,6 @@ export const Badge: React.FC<BadgeProps> = ({
 	return (
 		<View
 			accessible={true}
-			accessibilityRole="text"
 			accessibilityLabel={accessibilityLabel ?? label}
 			style={[
 				styles.container,

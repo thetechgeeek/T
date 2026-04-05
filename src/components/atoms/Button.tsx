@@ -100,7 +100,7 @@ export function Button({
 				/>
 			) : (
 				<>
-					{leftIcon && <React.Fragment>{leftIcon}</React.Fragment>}
+					{leftIcon}
 					<Text
 						style={[
 							styles.label,
@@ -115,7 +115,7 @@ export function Button({
 					>
 						{title}
 					</Text>
-					{rightIcon && <React.Fragment>{rightIcon}</React.Fragment>}
+					{rightIcon}
 				</>
 			)}
 		</TouchableOpacity>

@@ -134,7 +134,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 TextInput.displayName = 'TextInput';
 
 const styles = StyleSheet.create({
-	container: { marginBottom: 16 },
+	container: {},
 	label: { marginBottom: 6 },
 	inputContainer: {
 		flexDirection: 'row',

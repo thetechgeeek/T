@@ -1,5 +1,12 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import {
+	TouchableOpacity,
+	Text,
+	View,
+	StyleSheet,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
 export interface ChipProps {
@@ -7,6 +14,8 @@ export interface ChipProps {
 	selected?: boolean;
 	onPress?: () => void;
 	style?: StyleProp<ViewStyle>;
+	size?: 'sm' | 'md';
+	leftIcon?: React.ReactNode;
 	/** Stable English identifier for screen readers and Maestro. Defaults to label. */
 	accessibilityLabel?: string;
 	/** Test ID for unit tests. */
@@ -18,6 +27,8 @@ export function Chip({
 	selected = false,
 	onPress,
 	style,
+	size = 'md',
+	leftIcon,
 	accessibilityLabel,
 	testID,
 }: ChipProps) {
@@ -29,6 +40,8 @@ export function Chip({
 	const textColor = selected ? c.onPrimary : c.onSurfaceVariant;
 	const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
 
+	const isSm = size === 'sm';
+
 	return (
 		<TouchableOpacity
 			activeOpacity={0.7}
@@ -39,13 +52,24 @@ export function Chip({
 			accessibilityLabel={accessibilityLabel ?? label}
 			accessibilityState={{ selected }}
 			accessibilityHint={selected ? 'Double tap to deselect' : 'Double tap to select'}
-			style={[styles.chip, { backgroundColor: bgColor, borderRadius: r.full }, style]}
+			style={[
+				styles.chip,
+				{
+					backgroundColor: bgColor,
+					borderRadius: r.full,
+					paddingHorizontal: isSm ? 10 : 16,
+					paddingVertical: isSm ? 4 : 8,
+					gap: leftIcon ? 4 : 0,
+				},
+				style,
+			]}
 		>
+			{leftIcon && <View importantForAccessibility="no">{leftIcon}</View>}
 			<Text
 				style={[
 					{
 						color: textColor,
-						fontSize: theme.typography.sizes.sm,
+						fontSize: isSm ? theme.typography.sizes.xs : theme.typography.sizes.sm,
 						fontWeight: theme.typography.weights.medium,
 					},
 				]}
@@ -58,8 +82,7 @@ export function Chip({
 
 const styles = StyleSheet.create({
 	chip: {
-		paddingHorizontal: 16,
-		paddingVertical: 8,
+		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

@@ -14,11 +14,7 @@ export function OfflineBanner() {
 	return (
 		<View style={[styles.banner, { backgroundColor: theme.colors.error, paddingTop: 0 }]}>
 			<WifiOff size={14} color={theme.colors.onError} strokeWidth={2} />
-			<ThemedText
-				variant="caption"
-				weight="semibold"
-				style={[styles.text, { color: theme.colors.onError }]}
-			>
+			<ThemedText variant="caption" weight="semibold" style={{ color: theme.colors.onError }}>
 				No internet connection
 			</ThemedText>
 		</View>
@@ -33,8 +29,5 @@ const styles = StyleSheet.create({
 		paddingVertical: 6,
 		paddingHorizontal: 16,
 		gap: 6,
-	},
-	text: {
-		marginLeft: 6,
 	},
 });
