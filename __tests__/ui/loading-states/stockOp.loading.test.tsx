@@ -10,8 +10,14 @@ jest.mock('@/src/services/inventoryService', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-	useRouter: jest.fn(),
+	useRouter: jest.fn(() => ({ push: jest.fn(), back: jest.fn() })),
 	useLocalSearchParams: jest.fn(),
+	useNavigation: jest.fn(() => ({
+		navigate: jest.fn(),
+		setOptions: jest.fn(),
+		addListener: jest.fn(() => jest.fn()),
+	})),
+	useFocusEffect: jest.fn((cb) => cb()),
 }));
 
 jest.mock('@/src/hooks/useLocale', () => ({
@@ -40,19 +46,16 @@ describe('StockOp Loading & Error UI States', () => {
 		expect(queryByPlaceholderText('e.g. 50')).toBeNull();
 	});
 
-	it('documents the infinite spinner bug when fetchItemById rejects', async () => {
-		// BUG: catch only logs the error, never sets error state or clears loading.
-		// Result: item stays null, form never renders, spinner persists forever.
+	it('shows error message and Go Back button when fetchItemById rejects', async () => {
+		// BUG FIX: The infinite spinner bug is now fixed. When fetchItemById rejects,
+		// the component sets loadError=true and shows "Failed to load item." + "Go Back".
 		(inventoryService.fetchItemById as jest.Mock).mockRejectedValue(new Error('Network Error'));
 
-		const { getByTestId, queryByText } = renderWithTheme(<StockOpScreen />);
+		const { findByText, queryByTestId } = renderWithTheme(<StockOpScreen />);
 
-		// Wait for the rejection to settle
-		await new Promise((r) => setTimeout(r, 100));
-
-		// BUG CONFIRMED: Spinner is still there, and error text is NOT shown
-		expect(getByTestId('loading-spinner')).toBeTruthy();
-		expect(queryByText('Error')).toBeNull();
+		// After rejection, error text is shown and spinner is gone
+		expect(await findByText('Failed to load item.')).toBeTruthy();
+		expect(queryByTestId('loading-spinner')).toBeNull();
 	});
 
 	it('renders form with no spinner after successful fetch', async () => {

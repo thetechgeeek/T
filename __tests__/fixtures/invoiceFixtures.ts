@@ -29,6 +29,7 @@ export function makeInvoiceLineItemInput(
 export function makeInvoiceInput(overrides?: Partial<InvoiceInput>): InvoiceInput {
 	return {
 		customer_name: 'Test Customer',
+		customer_phone: '9876543210',
 		customer_gstin: '',
 		invoice_date: '2026-01-15',
 		place_of_supply: '27',

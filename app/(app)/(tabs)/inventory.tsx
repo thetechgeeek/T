@@ -40,7 +40,7 @@ export default function InventoryTab() {
 	const { t } = useLocale();
 	const router = useExpoRouter();
 
-	const { items, loading, hasMore, filters, page, fetchItems, setFilters } = useInventoryStore(
+	const { items, loading, hasMore, filters, fetchItems, setFilters } = useInventoryStore(
 		useShallow((s) => ({
 			items: s.items,
 			loading: s.loading,
@@ -59,7 +59,7 @@ export default function InventoryTab() {
 		// Only auto-fetch on first mount; after that, setFilters drives fetches
 		if (!initialized.current) {
 			initialized.current = true;
-			fetchItems(true).catch((_e) => {
+			Promise.resolve(fetchItems(true)).catch((_e) => {
 				Alert.alert(t('common.errorTitle'), t('inventory.loadError'), [
 					{ text: t('common.ok') },
 				]);

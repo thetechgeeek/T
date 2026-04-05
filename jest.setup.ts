@@ -331,9 +331,16 @@ jest.mock('expo-router', () => {
 	const push = jest.fn();
 	const replace = jest.fn();
 	const back = jest.fn();
+	const setParams = jest.fn();
 	return {
-		useRouter: jest.fn(() => ({ push, replace, back })),
+		useRouter: jest.fn(() => ({ push, replace, back, setParams })),
 		useLocalSearchParams: jest.fn(() => ({})),
+		useFocusEffect: jest.fn((cb) => cb()),
+		useNavigation: jest.fn(() => ({
+			navigate: jest.fn(),
+			goBack: back,
+			setOptions: jest.fn(),
+		})),
 		Tabs: Object.assign(() => null, { Screen: () => null }),
 		Stack: Object.assign(() => null, { Screen: () => null }),
 	};

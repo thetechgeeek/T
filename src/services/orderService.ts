@@ -59,6 +59,20 @@ export const orderService = {
 		if (orderError) throw orderError;
 		const orderId = orderData.id;
 
+		const normalizeCategory = (cat?: string): TileCategory => {
+			const upper = (cat || '').toUpperCase();
+			const valid: TileCategory[] = [
+				'GLOSSY',
+				'FLOOR',
+				'MATT',
+				'SATIN',
+				'WOODEN',
+				'ELEVATION',
+				'OTHER',
+			];
+			return valid.includes(upper as TileCategory) ? (upper as TileCategory) : 'OTHER';
+		};
+
 		// 2. Process each item (Find/Create + Stock In)
 		for (const item of items) {
 			if (!item.design_name || !item.box_count) continue;
@@ -84,7 +98,7 @@ export const orderService = {
 				// Item does not exist, use inventoryService to create it
 				const newItem = await inventoryService.createItem({
 					design_name: item.design_name,
-					category: (item.category as TileCategory) || 'OTHER',
+					category: normalizeCategory(item.category as string),
 					size_name: item.size || undefined,
 					brand_name: item.brand || undefined,
 					box_count: 0, // Set to 0, let performStockOperation handle it

@@ -53,12 +53,10 @@ describe('FinanceIndex Navigation Wiring', () => {
 		expect(mockPush).toHaveBeenCalledWith('/customers/aging');
 	});
 
-	it('Press "Profit & Loss" ListItem -> documents the () => {} bug (failing case)', async () => {
+	it('Press "Profit & Loss" ListItem -> router.push("/(app)/finance/profit-loss") called', async () => {
 		const { getByText } = renderWithTheme(<FinanceOverviewScreen />);
 		await waitFor(() => expect(getByText('Profit & Loss')).toBeTruthy());
 		fireEvent.press(getByText('Profit & Loss'));
-		// BUG: Currently calls () => {} so mockPush is NOT called.
-		// A full fix would change the expectation to .toHaveBeenCalledWith(...)
-		expect(mockPush).not.toHaveBeenCalled();
+		expect(mockPush).toHaveBeenCalledWith('/(app)/finance/profit-loss');
 	});
 });

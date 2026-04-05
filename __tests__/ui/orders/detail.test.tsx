@@ -65,9 +65,9 @@ describe('OrderDetailScreen', () => {
 	});
 
 	it('renders party name after loading', async () => {
-		const { getByText } = renderWithTheme(<OrderDetailScreen />);
+		const { getAllByText } = renderWithTheme(<OrderDetailScreen />);
 		await waitFor(() => {
-			expect(getByText('Kajaria Wholesale')).toBeTruthy();
+			expect(getAllByText('Kajaria Wholesale').length).toBeGreaterThan(0);
 		});
 	});
 

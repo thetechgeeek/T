@@ -128,7 +128,7 @@ export function useInvoiceCreateFlow() {
 			const newInvoice = await useInvoiceStore.getState().createInvoice({
 				customer_id: customer.id,
 				customer_name: customer.name,
-				customer_phone: customer.phone,
+				customer_phone: customer.phone || '',
 				customer_address: customer.address,
 				customer_gstin: customer.gstin,
 				is_inter_state: isInterState,

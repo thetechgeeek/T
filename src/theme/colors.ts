@@ -65,7 +65,7 @@ const DARK_COLORS: ThemeColors = {
 	primary: '#E8622A', // brighter in dark mode for visibility
 	primaryLight: '#FF8A60',
 	primaryDark: '#C1440E',
-	onPrimary: '#FFFFFF',
+	onPrimary: '#1A0A00', // dark text on orange for WCAG AA (≥4.5:1)
 	// Semantic
 	success: '#4CAF70',
 	onSuccess: '#000000',

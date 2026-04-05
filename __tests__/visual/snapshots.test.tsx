@@ -7,8 +7,14 @@ import { useInventoryStore } from '@/src/stores/inventoryStore';
 
 // We'll mock the screens or parts of them since they are complex
 jest.mock('expo-router', () => ({
-	useLocalSearchParams: () => ({ id: '123' }),
-	useRouter: () => ({ push: jest.fn() }),
+	useLocalSearchParams: jest.fn(() => ({ id: '123' })),
+	useRouter: jest.fn(() => ({ push: jest.fn(), back: jest.fn() })),
+	useNavigation: jest.fn(() => ({
+		navigate: jest.fn(),
+		setOptions: jest.fn(),
+		addListener: jest.fn(() => jest.fn()),
+	})),
+	useFocusEffect: jest.fn((cb) => cb()),
 }));
 
 // Mock the components we want to snapshot

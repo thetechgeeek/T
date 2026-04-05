@@ -19,10 +19,9 @@ export default function FinanceOverviewScreen() {
 	const { formatCurrency } = useLocale();
 	const router = useRouter();
 	const [refreshing, setRefreshing] = useState(false);
-	const { summary, loading, fetchSummary } = useFinanceStore(
+	const { summary, fetchSummary } = useFinanceStore(
 		useShallow((s) => ({
 			summary: s.summary,
-			loading: s.loading,
 			fetchSummary: s.fetchSummary,
 		})),
 	);

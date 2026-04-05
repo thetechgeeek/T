@@ -12,6 +12,7 @@ const validLineItem = {
 const validInvoiceInput = {
 	invoice_date: '2026-01-15',
 	customer_name: 'Test Customer',
+	customer_phone: '9876543210',
 	customer_gstin: '',
 	is_inter_state: false,
 	line_items: [validLineItem],

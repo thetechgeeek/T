@@ -52,11 +52,12 @@ Deno.serve(async (req: Request) => {
 			error: userError,
 		} = await supabaseClient.auth.getUser();
 		if (userError || !user) {
+			console.error('Auth check failed:', userError?.message || 'No user session');
 			return errorResponse('Unauthorized', 401, requestId);
 		}
 
 		const body = await req.json();
-		const { mimeType, aiKey } = body;
+		const { mimeType } = body;
 		let base64Data: string | undefined = body.base64Data;
 
 		if (!mimeType) {
@@ -83,7 +84,15 @@ Deno.serve(async (req: Request) => {
 
 			const arrayBuffer = await fileData.arrayBuffer();
 			const uint8Array = new Uint8Array(arrayBuffer);
-			base64Data = btoa(String.fromCharCode(...uint8Array));
+			
+			// Safe base64 encoding for large arrays (avoids "max call stack size exceeded")
+			let binary = '';
+			const len = uint8Array.byteLength;
+			for (let i = 0; i < len; i += 8192) {
+				const chunk = uint8Array.subarray(i, i + 8192);
+				binary += String.fromCharCode.apply(null, chunk as unknown as number[]);
+			}
+			base64Data = btoa(binary);
 
 			// Clean up the temporary upload after we've read it
 			serviceClient.storage.from('order-pdfs').remove([body.storagePath]).catch(() => {});
@@ -102,7 +111,7 @@ Deno.serve(async (req: Request) => {
 			return errorResponse('AI service not configured', 503, requestId);
 		}
 
-		const apiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+		const apiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
 
 		const requestPayload = {
 			system_instruction: {
@@ -141,8 +150,8 @@ Deno.serve(async (req: Request) => {
 
 		if (!response.ok) {
 			const errText = await response.text();
-			console.error('Gemini Error:', errText);
-			return errorResponse(`Vision API Error: ${errText}`, 502, requestId);
+			console.error(`Gemini API Error [${response.status}]:`, errText);
+			return errorResponse(`Vision API Error (${response.status}): ${errText}`, 502, requestId);
 		}
 
 		const resultData = await response.json();

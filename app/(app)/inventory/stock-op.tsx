@@ -4,7 +4,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { X, Save, ArrowDownRight, ArrowUpRight } from 'lucide-react-native';
+import { Save } from 'lucide-react-native';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
@@ -16,7 +16,7 @@ import { Button } from '@/src/components/atoms/Button';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import type { UUID } from '@/src/types/common';
 import type { StockOpType, InventoryItem } from '@/src/types/inventory';
-import { layout } from '@/src/theme/layout';
+
 import logger from '@/src/utils/logger';
 
 const schema = z.object({
@@ -59,8 +59,6 @@ export default function StockOpScreen() {
 	});
 
 	const isStockIn = type === 'stock_in';
-	const Icon = isStockIn ? ArrowDownRight : ArrowUpRight;
-	const color = isStockIn ? c.success : c.error;
 	const title = isStockIn ? 'Stock In (Add)' : 'Stock Out (Remove)';
 
 	const onSubmit = async (data: FormData) => {
@@ -118,18 +116,7 @@ export default function StockOpScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard>
-			<ScreenHeader
-				title={
-					<View style={layout.row}>
-						<View style={[styles.iconWrap, { backgroundColor: color + '20' }]}>
-							<Icon size={22} color={color} strokeWidth={2.5} />
-						</View>
-						<ThemedText variant="h3" style={{ marginLeft: 12 }}>
-							{title}
-						</ThemedText>
-					</View>
-				}
-			/>
+			<ScreenHeader title={title} />
 
 			<View style={{ padding: s.lg }}>
 				<View
@@ -197,12 +184,5 @@ export default function StockOpScreen() {
 
 const styles = StyleSheet.create({
 	container: { flex: 1 },
-	iconWrap: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
 	infoBox: { padding: 16 },
 });

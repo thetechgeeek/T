@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
-import { View, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Phone, MapPin, Wallet, Plus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
@@ -15,25 +15,19 @@ import { PaymentModal } from '@/src/components/organisms/PaymentModal';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { layout } from '@/src/theme/layout';
+
 import type { CustomerLedgerEntry } from '@/src/types/customer';
 
 export default function CustomerDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { theme, c, s } = useThemeTokens();
+	const { theme } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 
 	const [paymentModalVisible, setPaymentModalVisible] = React.useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 
-	const {
-		selectedCustomer: customer,
-		ledger,
-		summary,
-		loading,
-		fetchCustomerDetail,
-	} = useCustomerStore();
+	const { selectedCustomer: customer, ledger, summary, fetchCustomerDetail } = useCustomerStore();
 
 	// Refresh the customer detail (customer info + ledger + summary) every time
 	// this screen comes into focus. This ensures the ledger stays up-to-date

@@ -303,26 +303,34 @@ export const pdfService = {
 	async parseDocumentWithLLM(
 		uriOrBase64: string,
 		mimeType: string,
-		aiKey?: string,
 		/** Pre-uploaded storage path — preferred over base64 to avoid large payloads */
 		storagePath?: string,
 	): Promise<ParsedOrderItem[]> {
 		let body: Record<string, unknown>;
 
 		if (storagePath) {
-			body = { storagePath, mimeType, aiKey };
+			body = { storagePath, mimeType };
 		} else {
 			// Legacy path: read file as base64 and send inline
 			const base64 = await FileSystem.readAsStringAsync(uriOrBase64, {
 				encoding: FileSystem.EncodingType.Base64,
 			});
-			body = { base64Data: base64, mimeType, aiKey };
+			body = { base64Data: base64, mimeType };
 		}
 
-		const { data, error } = await supabase.functions.invoke('parse-order-pdf', { body });
+		const {
+			data: { session },
+		} = await supabase.auth.getSession();
+		const { data, error } = await supabase.functions.invoke('parse-order-pdf', {
+			body,
+			headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
+		});
 
 		if (error) {
-			throw new Error(error.message || 'Failed to call edge function');
+			logger.error('Edge Function Error:', error);
+			throw new Error(
+				error.message || `Edge function returned ${error.status || 'unknown'} error`,
+			);
 		}
 
 		if (!data || !data.success || !data.data || !data.data.items) {

@@ -10,7 +10,13 @@ jest.mock('@/src/stores/orderStore', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-	useRouter: () => ({ back: jest.fn() }),
+	useRouter: jest.fn(() => ({ push: jest.fn(), back: jest.fn() })),
+	useNavigation: jest.fn(() => ({
+		navigate: jest.fn(),
+		setOptions: jest.fn(),
+		addListener: jest.fn(() => jest.fn()),
+	})),
+	useFocusEffect: jest.fn((cb) => cb()),
 }));
 
 describe('ImportOrderScreen', () => {

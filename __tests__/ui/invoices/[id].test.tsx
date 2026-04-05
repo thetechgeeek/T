@@ -11,8 +11,14 @@ jest.mock('@/src/stores/invoiceStore', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-	useLocalSearchParams: jest.fn(),
-	useRouter: () => ({ back: jest.fn() }),
+	useLocalSearchParams: jest.fn(() => ({ id: 'inv-123' })),
+	useRouter: jest.fn(() => ({ back: jest.fn(), push: jest.fn() })),
+	useNavigation: jest.fn(() => ({
+		navigate: jest.fn(),
+		setOptions: jest.fn(),
+		addListener: jest.fn(() => jest.fn()),
+	})),
+	useFocusEffect: jest.fn((cb) => cb()),
 }));
 
 const mockInvoice = {

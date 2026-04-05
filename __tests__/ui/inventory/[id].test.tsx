@@ -13,10 +13,25 @@ jest.mock('@/src/services/inventoryService', () => ({
 	},
 }));
 
-jest.mock('expo-router', () => ({
-	useRouter: jest.fn(),
-	useLocalSearchParams: jest.fn(),
-}));
+jest.mock('expo-router', () => {
+	const React = require('react');
+	return {
+		useRouter: jest.fn(() => ({ push: jest.fn(), back: jest.fn() })),
+		useLocalSearchParams: jest.fn(() => ({ id: 'item-123' })),
+		useNavigation: jest.fn(() => ({
+			navigate: jest.fn(),
+			setOptions: jest.fn(),
+			addListener: jest.fn(() => jest.fn()),
+		})),
+		useFocusEffect: jest.fn((cb: () => void) => {
+			React.useEffect(() => {
+				const cleanup = cb();
+				return cleanup;
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			}, []);
+		}),
+	};
+});
 
 const mockItem = {
 	id: 'item-123',

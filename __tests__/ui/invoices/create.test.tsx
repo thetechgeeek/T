@@ -17,7 +17,13 @@ jest.mock('@/src/stores/invoiceStore', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-	useRouter: jest.fn(),
+	useRouter: jest.fn(() => ({ push: jest.fn(), back: jest.fn(), replace: jest.fn() })),
+	useNavigation: jest.fn(() => ({
+		navigate: jest.fn(),
+		setOptions: jest.fn(),
+		addListener: jest.fn(() => jest.fn()),
+	})),
+	useFocusEffect: jest.fn((cb) => cb()),
 }));
 
 const mockInventoryItems = [

@@ -18,11 +18,6 @@ jest.mock('@/src/stores/inventoryStore', () => ({
 	useInventoryStore: jest.fn(),
 }));
 
-jest.mock('expo-router', () => ({
-	useRouter: jest.fn(),
-	useLocalSearchParams: jest.fn(),
-}));
-
 const mockItem = {
 	id: 'item-123',
 	design_name: 'Marble Premium Gold',

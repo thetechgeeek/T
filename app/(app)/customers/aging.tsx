@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet } from 'react-native';
-import { Stack } from 'expo-router';
+
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';

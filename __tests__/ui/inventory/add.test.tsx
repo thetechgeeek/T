@@ -14,8 +14,14 @@ jest.mock('@/src/stores/inventoryStore', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-	useRouter: () => ({ back: jest.fn(), push: jest.fn() }),
+	useRouter: jest.fn(() => ({ push: jest.fn(), back: jest.fn() })),
 	useLocalSearchParams: () => ({}),
+	useNavigation: jest.fn(() => ({
+		navigate: jest.fn(),
+		setOptions: jest.fn(),
+		addListener: jest.fn(() => jest.fn()),
+	})),
+	useFocusEffect: jest.fn((cb) => cb()),
 }));
 
 describe('AddItemScreen', () => {

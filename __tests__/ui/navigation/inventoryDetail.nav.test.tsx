@@ -1,9 +1,35 @@
 import React from 'react';
-import { waitFor, fireEvent } from '@testing-library/react-native';
+import { waitFor, fireEvent, act } from '@testing-library/react-native';
 import ItemDetailScreen from '@/app/(app)/inventory/[id]';
 import { inventoryService } from '@/src/services/inventoryService';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+
+// Override useFocusEffect to call the callback in a deferred manner to avoid
+// "Too many re-renders" errors from synchronous state updates during initial render.
+jest.mock('expo-router', () => {
+	const React = require('react');
+	const push = jest.fn();
+	const back = jest.fn();
+	return {
+		useRouter: jest.fn(() => ({ push, back })),
+		useLocalSearchParams: jest.fn(),
+		useNavigation: jest.fn(() => ({
+			navigate: jest.fn(),
+			goBack: back,
+			setOptions: jest.fn(),
+		})),
+		useFocusEffect: jest.fn((cb: () => void) => {
+			React.useEffect(() => {
+				const cleanup = cb();
+				return cleanup;
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			}, []);
+		}),
+		Tabs: Object.assign(() => null, { Screen: () => null }),
+		Stack: Object.assign(() => null, { Screen: () => null }),
+	};
+});
 
 // Only mock what's NOT in jest.setup.ts or what needs specific override
 jest.mock('@/src/services/inventoryService', () => ({

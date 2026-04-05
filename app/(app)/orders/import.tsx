@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { FileUp, FileText, KeyRound } from 'lucide-react-native';
+import { FileUp, FileText } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { pdfService } from '@/src/services/pdfService';
@@ -13,13 +13,12 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 
 export default function ImportOrderScreen() {
-	const { c, s, theme } = useThemeTokens();
+	const { c, s } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 
 	const { parseDocument, isParsing, parsedData, importParsedData, clearParsedData } =
 		useOrderStore();
-	const [aiKey, setAiKey] = useState('');
 	const [partyName, setPartyName] = useState('');
 	const [saving, setSaving] = useState(false);
 
@@ -34,12 +33,7 @@ export default function ImportOrderScreen() {
 				doc.mimeType,
 			);
 
-			await parseDocument(
-				doc.uri,
-				doc.mimeType,
-				aiKey || undefined,
-				storagePath ?? undefined,
-			);
+			await parseDocument(doc.uri, doc.mimeType, storagePath ?? undefined);
 		} catch (err: unknown) {
 			Alert.alert(
 				t('order.processFailed'),
@@ -203,39 +197,6 @@ export default function ImportOrderScreen() {
 						Supported: .pdf, .jpg, .png
 					</ThemedText>
 					<Button title="Browse Files" onPress={handleUpload} variant="outline" />
-				</View>
-
-				<View
-					style={{
-						marginTop: s.xl,
-						padding: s.lg,
-						backgroundColor: c.surfaceVariant + '40',
-						borderRadius: theme.borderRadius.md,
-					}}
-				>
-					<View
-						style={{ flexDirection: 'row', alignItems: 'center', marginBottom: s.md }}
-					>
-						<KeyRound size={20} color={c.onSurfaceVariant} />
-						<ThemedText variant="label" weight="bold" style={{ marginLeft: s.sm }}>
-							Developer Override (Optional)
-						</ThemedText>
-					</View>
-					<ThemedText
-						variant="caption"
-						color={c.placeholder}
-						style={{ marginBottom: s.md }}
-					>
-						If your Edge Function does not have the GEMINI_API_KEY secret set, paste
-						your Gemini API key here to process the document.
-					</ThemedText>
-					<TextInput
-						label="Gemini API Key"
-						placeholder="AIzaSy..."
-						value={aiKey}
-						onChangeText={setAiKey}
-						secureTextEntry
-					/>
 				</View>
 			</ScrollView>
 		</AtomicScreen>

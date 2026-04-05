@@ -6,8 +6,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Mock useLocalSearchParams
 jest.mock('expo-router', () => ({
-	useLocalSearchParams: () => ({ id: 'cust-1' }),
-	useRouter: () => ({ back: jest.fn(), push: jest.fn() }),
+	useLocalSearchParams: jest.fn(() => ({ id: 'cust-1' })),
+	useRouter: jest.fn(() => ({ back: jest.fn(), push: jest.fn() })),
+	useNavigation: jest.fn(() => ({
+		navigate: jest.fn(),
+		setOptions: jest.fn(),
+		addListener: jest.fn(() => jest.fn()),
+	})),
+	useFocusEffect: jest.fn((cb) => cb()),
 	Stack: { Screen: () => null },
 }));
 

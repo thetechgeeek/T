@@ -43,6 +43,7 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 		const result = await useInvoiceStore.getState().createInvoice({
 			customer_id: '11111111-1111-1111-1111-111111111111',
 			customer_name: 'Test Customer',
+			customer_phone: '9876543210',
 			invoice_date: '2026-04-03',
 			is_inter_state: false,
 			payment_status: 'unpaid' as const,
@@ -84,6 +85,7 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 			useInvoiceStore.getState().createInvoice({
 				customer_id: '11111111-1111-1111-1111-111111111111',
 				customer_name: 'Test Customer',
+				customer_phone: '9876543210',
 				invoice_date: '2026-04-03',
 				is_inter_state: false,
 				payment_status: 'unpaid' as const,
