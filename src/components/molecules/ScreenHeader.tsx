@@ -53,7 +53,8 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 					<TouchableOpacity
 						onPress={handleBack}
 						style={styles.back}
-						accessibilityLabel="back-button"
+						accessibilityRole="button"
+						accessibilityLabel="Go back"
 					>
 						<ArrowLeft size={22} color={c.primary} strokeWidth={2} />
 					</TouchableOpacity>
@@ -76,8 +77,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	back: {
-		padding: 4,
-		marginLeft: -4, // Adjust for touch target padding
+		padding: 11,
+		marginLeft: -11,
 	},
 	right: {
 		marginLeft: 12,

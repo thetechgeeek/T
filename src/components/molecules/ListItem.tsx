@@ -34,7 +34,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 	return (
 		<Pressable
 			onPress={onPress}
-			accessibilityRole="button"
+			accessibilityRole={onPress ? 'button' : 'none'}
 			accessibilityLabel={composedLabel}
 			accessibilityHint={accessibilityHint ?? (onPress ? 'Double tap to open' : undefined)}
 			style={({ pressed }) => [

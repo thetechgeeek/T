@@ -8,6 +8,8 @@ interface SearchBarProps {
 	onChangeText: (text: string) => void;
 	placeholder?: string;
 	style?: ViewStyle;
+	/** Stable English identifier for screen readers. Defaults to placeholder or 'Search'. */
+	accessibilityLabel?: string;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -15,6 +17,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 	onChangeText,
 	placeholder,
 	style,
+	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
 
@@ -38,7 +41,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 			/>
 			<TextInput
 				accessible={true}
-				accessibilityLabel="Search"
+				accessibilityLabel={accessibilityLabel ?? placeholder ?? 'Search'}
 				accessibilityHint="Type to filter results"
 				style={[
 					styles.input,

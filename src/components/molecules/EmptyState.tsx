@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
 	},
 	icon: {
 		marginBottom: 16,
-		opacity: 0.5,
 	},
 	title: {
 		textAlign: 'center',

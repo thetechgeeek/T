@@ -32,7 +32,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 
 	return (
 		<View
-			accessibilityRole="summary"
+			accessible={true}
 			accessibilityLabel={accessibilityLabel ?? `${label}: ${value}`}
 			style={[
 				styles.container,
@@ -57,8 +57,8 @@ export const StatCard: React.FC<StatCardProps> = ({
 					styles.value,
 					{
 						color: c.onSurface,
-						fontSize: 18,
-						fontWeight: '700',
+						fontSize: theme.typography.sizes['2xl'],
+						fontWeight: theme.typography.weights.bold,
 						marginTop: Icon ? 6 : 0,
 					},
 				]}
@@ -68,7 +68,11 @@ export const StatCard: React.FC<StatCardProps> = ({
 			<Text
 				style={[
 					styles.label,
-					{ color: c.onSurfaceVariant, fontSize: 10, fontWeight: '600' },
+					{
+						color: c.onSurfaceVariant,
+						fontSize: theme.typography.sizes.xs,
+						fontWeight: theme.typography.weights.semibold,
+					},
 				]}
 			>
 				{label}
@@ -84,7 +88,12 @@ export const StatCard: React.FC<StatCardProps> = ({
 					>
 						{trend}
 					</Text>
-					<Text style={[styles.trendLabel, { color: c.onSurfaceVariant, fontSize: 10 }]}>
+					<Text
+						style={[
+							styles.trendLabel,
+							{ color: c.onSurfaceVariant, fontSize: theme.typography.sizes.xs },
+						]}
+					>
 						{trendLabel}
 					</Text>
 				</View>
