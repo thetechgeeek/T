@@ -117,25 +117,19 @@ export default function CustomerDetailScreen() {
 					<View style={styles.summaryContainer}>
 						<Card style={styles.summaryCard}>
 							<ThemedText
-								variant="caption"
+								variant="overline"
 								color={theme.colors.onSurfaceVariant}
-								style={{
-									textTransform: 'uppercase',
-									letterSpacing: 1,
-									marginBottom: 4,
-								}}
+								style={{ marginBottom: 4 }}
 							>
 								Outstanding Balance
 							</ThemedText>
 							<ThemedText
-								variant="h1"
-								style={{
-									color:
-										(summary?.outstanding_balance || 0) > 0
-											? theme.colors.error
-											: theme.colors.onSurface,
-									fontSize: 32,
-								}}
+								variant="display"
+								color={
+									(summary?.outstanding_balance || 0) > 0
+										? theme.colors.error
+										: theme.colors.onSurface
+								}
 							>
 								{formatCurrency(summary?.outstanding_balance || 0)}
 							</ThemedText>
