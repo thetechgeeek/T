@@ -32,6 +32,7 @@ export default function ExpensesScreen() {
 		})),
 	);
 	const [modalVisible, setModalVisible] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	// Form state
 	const [amount, setAmount] = useState('');
@@ -84,7 +85,17 @@ export default function ExpensesScreen() {
 				keyExtractor={(item: Expense) => item.id}
 				contentContainerStyle={styles.scrollContent}
 				refreshControl={
-					<RefreshControl refreshing={loading} onRefresh={() => fetchExpenses()} />
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={async () => {
+							setRefreshing(true);
+							try {
+								await fetchExpenses();
+							} finally {
+								setRefreshing(false);
+							}
+						}}
+					/>
 				}
 				ListEmptyComponent={
 					!loading ? (

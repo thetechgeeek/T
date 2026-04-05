@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, RefreshControl, Alert } from 'react-native';
 import { Stack } from 'expo-router';
@@ -25,6 +25,8 @@ export default function PurchasesScreen() {
 		})),
 	);
 
+	const [refreshing, setRefreshing] = useState(false);
+
 	useEffect(() => {
 		fetchPurchases().catch((_e) => {
 			Alert.alert(t('common.errorTitle'), t('finance.loadPurchasesError'), [
@@ -32,6 +34,15 @@ export default function PurchasesScreen() {
 			]);
 		});
 	}, [fetchPurchases, t]);
+
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			await fetchPurchases();
+		} finally {
+			setRefreshing(false);
+		}
+	};
 
 	return (
 		<AtomicScreen safeAreaEdges={['top', 'bottom']}>
@@ -42,7 +53,9 @@ export default function PurchasesScreen() {
 				estimatedItemSize={130}
 				keyExtractor={(item: Purchase) => item.id}
 				contentContainerStyle={styles.scrollContent}
-				refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchPurchases} />}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+				}
 				ListEmptyComponent={
 					!loading ? (
 						<EmptyState

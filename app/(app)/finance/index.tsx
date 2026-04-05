@@ -11,12 +11,13 @@ import { ListItem } from '@/src/components/molecules/ListItem';
 import { Divider } from '@/src/components/atoms/Divider';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function FinanceOverviewScreen() {
 	const { theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 	const router = useRouter();
+	const [refreshing, setRefreshing] = useState(false);
 	const { summary, loading, fetchSummary } = useFinanceStore(
 		useShallow((s) => ({
 			summary: s.summary,
@@ -28,6 +29,15 @@ export default function FinanceOverviewScreen() {
 	useEffect(() => {
 		fetchSummary();
 	}, [fetchSummary]);
+
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			await fetchSummary();
+		} finally {
+			setRefreshing(false);
+		}
+	};
 
 	const metrics = [
 		{
@@ -59,8 +69,8 @@ export default function FinanceOverviewScreen() {
 			scrollViewProps={{
 				refreshControl: (
 					<RefreshControl
-						refreshing={loading}
-						onRefresh={fetchSummary}
+						refreshing={refreshing}
+						onRefresh={handleRefresh}
 						tintColor={theme.colors.primary}
 					/>
 				),

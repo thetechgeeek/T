@@ -113,11 +113,18 @@ export const useCustomerStore = create<CustomerState>()(
 			},
 
 			fetchCustomerDetail: async (id: UUID) => {
+				const isSameCustomer = get().selectedCustomer?.id === id;
 				set((s) => {
 					s.loading = true;
 					s.error = null;
-					s.ledger = [];
-					s.summary = null;
+					// Only blank the data when switching to a different customer.
+					// Re-visiting the same customer keeps stale data visible while the
+					// background refresh completes — avoids a blank loading flash.
+					if (!isSameCustomer) {
+						s.selectedCustomer = null;
+						s.ledger = [];
+						s.summary = null;
+					}
 				});
 				try {
 					const [customer, ledger, summary] = await withRetry(() =>

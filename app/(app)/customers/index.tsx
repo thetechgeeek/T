@@ -30,6 +30,7 @@ export default function CustomersScreen() {
 	);
 
 	const [search, setSearch] = useState(filters.search || '');
+	const [refreshing, setRefreshing] = useState(false);
 
 	useFocusEffect(
 		useCallback(() => {
@@ -42,6 +43,15 @@ export default function CustomersScreen() {
 			});
 		}, [fetchCustomers, t]),
 	);
+
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			await fetchCustomers(true);
+		} finally {
+			setRefreshing(false);
+		}
+	};
 
 	const handleSearch = (text: string) => {
 		setSearch(text);
@@ -93,8 +103,8 @@ export default function CustomersScreen() {
 				contentContainerStyle={styles.list}
 				refreshControl={
 					<RefreshControl
-						refreshing={loading}
-						onRefresh={() => fetchCustomers(true)}
+						refreshing={refreshing}
+						onRefresh={handleRefresh}
 						tintColor={theme.colors.primary}
 					/>
 				}

@@ -101,6 +101,12 @@ export const useInvoiceStore = create<InvoiceState>()(
 						customerId: input.customer_id,
 					});
 
+					// Invoice creation deducts stock in the DB (via RPC) but the
+					// inventoryStore Zustand state is NOT automatically updated.
+					// Emitting STOCK_CHANGED triggers inventoryStore.fetchItems(true)
+					// so the inventory list immediately shows accurate stock counts.
+					eventBus.emit({ type: 'STOCK_CHANGED', itemId: '*' });
+
 					return result;
 				} catch (error: unknown) {
 					set({ error: (error as Error).message, loading: false });
@@ -144,5 +150,11 @@ eventBus.subscribe((event) => {
 		if (current && current.id === event.invoiceId) {
 			useInvoiceStore.getState().fetchInvoiceById(event.invoiceId);
 		}
+	}
+
+	// When a customer's name/phone/address is updated, refresh the invoice
+	// list so invoice rows show the latest customer display name.
+	if (event.type === 'CUSTOMER_UPDATED') {
+		useInvoiceStore.getState().fetchInvoices(1);
 	}
 });

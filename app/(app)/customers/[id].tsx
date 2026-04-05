@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { View, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Phone, MapPin, Wallet, Plus, ArrowLeft } from 'lucide-react-native';
@@ -23,6 +24,7 @@ export default function CustomerDetailScreen() {
 	const router = useRouter();
 
 	const [paymentModalVisible, setPaymentModalVisible] = React.useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	const {
 		selectedCustomer: customer,
@@ -32,9 +34,16 @@ export default function CustomerDetailScreen() {
 		fetchCustomerDetail,
 	} = useCustomerStore();
 
-	useEffect(() => {
-		if (id) fetchCustomerDetail(id);
-	}, [id, fetchCustomerDetail]);
+	// Refresh the customer detail (customer info + ledger + summary) every time
+	// this screen comes into focus. This ensures the ledger stays up-to-date
+	// if e.g. the user records a payment from the customer list and navigates back.
+	// fetchCustomerDetail's isSameCustomer guard keeps stale data visible during
+	// background refresh (no blank-screen flash for the same customer).
+	useFocusEffect(
+		useCallback(() => {
+			if (id) fetchCustomerDetail(id);
+		}, [id, fetchCustomerDetail]),
+	);
 
 	const renderLedgerItem = ({ item }: { item: CustomerLedgerEntry }) => (
 		<View
@@ -250,8 +259,15 @@ export default function CustomerDetailScreen() {
 				contentContainerStyle={styles.list}
 				refreshControl={
 					<RefreshControl
-						refreshing={loading}
-						onRefresh={() => fetchCustomerDetail(customer.id)}
+						refreshing={refreshing}
+						onRefresh={async () => {
+							setRefreshing(true);
+							try {
+								await fetchCustomerDetail(customer.id);
+							} finally {
+								setRefreshing(false);
+							}
+						}}
 						tintColor={theme.colors.primary}
 					/>
 				}
