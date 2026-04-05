@@ -346,7 +346,7 @@ export default function ImportOrderScreen() {
 
 						{resolvedItems.map((item, index) => (
 							<EditableItemCard
-								key={index}
+								key={`${item.design_name ?? item.base_item_number ?? ''}-${index}`}
 								item={item}
 								index={index}
 								onUpdate={handleUpdateItem}

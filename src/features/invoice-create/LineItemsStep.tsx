@@ -76,7 +76,7 @@ export function LineItemsStep({
 			) : (
 				lineItems.map((item, index) => (
 					<View
-						key={index}
+						key={item.item_id ?? `${item.design_name}-${index}`}
 						style={{
 							padding: s.md,
 							marginBottom: s.sm,
