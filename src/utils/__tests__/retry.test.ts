@@ -44,6 +44,30 @@ describe('withRetry', () => {
 		expect(_delayFn).not.toHaveBeenCalled();
 	});
 
+	it('retries on default error messages (fetch, timeout)', async () => {
+		const _delayFn = jest.fn().mockResolvedValue(undefined);
+
+		// test fetch
+		let fn = jest
+			.fn()
+			.mockRejectedValueOnce(new Error('fetch failed'))
+			.mockResolvedValueOnce('ok');
+		await withRetry(fn, { retries: 1, delay: 10, _delayFn });
+		expect(fn).toHaveBeenCalledTimes(2);
+
+		// test timeout
+		fn = jest
+			.fn()
+			.mockRejectedValueOnce(new Error('operation timeout'))
+			.mockResolvedValueOnce('ok');
+		await withRetry(fn, { retries: 1, delay: 10, _delayFn });
+		expect(fn).toHaveBeenCalledTimes(2);
+
+		// test no message (should not retry)
+		fn = jest.fn().mockRejectedValueOnce(new Error('')).mockResolvedValueOnce('ok');
+		await expect(withRetry(fn, { retries: 1, delay: 10, _delayFn })).rejects.toThrow('');
+	});
+
 	it('respects exponential backoff delay (factor 2)', async () => {
 		const fn = jest
 			.fn()
@@ -70,5 +94,23 @@ describe('withRetry', () => {
 
 		expect(_delayFn).toHaveBeenCalledWith(100);
 		expect(_delayFn).toHaveBeenCalledWith(300);
+	});
+
+	it('uses default delay function when not provided', async () => {
+		jest.useFakeTimers();
+		const fn = jest
+			.fn()
+			.mockRejectedValueOnce(new Error('network error'))
+			.mockResolvedValueOnce('ok');
+
+		const promise = withRetry(fn, { retries: 1, delay: 100 });
+
+		// Fast-forward till all timers have been executed
+		await jest.runAllTimersAsync();
+
+		const result = await promise;
+		expect(result).toBe('ok');
+		expect(fn).toHaveBeenCalledTimes(2);
+		jest.useRealTimers();
 	});
 });

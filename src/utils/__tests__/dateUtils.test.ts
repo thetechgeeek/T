@@ -4,6 +4,7 @@ import {
 	formatDate,
 	formatRelativeDate,
 	formatShortDate,
+	todayISO,
 } from '../dateUtils';
 
 // No local i18n mock needed — using global mock from jest.setup.ts
@@ -71,6 +72,11 @@ describe('formatShortDate', () => {
 		const result = formatShortDate('2025-03-22');
 		expect(result).toBe('22 Mar');
 	});
+
+	it('accepts Date objects', () => {
+		const result = formatShortDate(new Date(Date.UTC(2025, 0, 1)));
+		expect(result).toBe('1 Jan');
+	});
 });
 
 describe('formatRelativeDate', () => {
@@ -98,6 +104,13 @@ describe('formatRelativeDate', () => {
 		expect(result).not.toBe('Yesterday');
 		expect(result.length).toBeGreaterThan(0);
 	});
+
+	it('accepts Date objects', () => {
+		jest.useFakeTimers();
+		jest.setSystemTime(new Date('2026-03-29T12:00:00.000Z'));
+		expect(formatRelativeDate(new Date('2026-03-29'))).toBe('Today');
+		jest.useRealTimers();
+	});
 });
 
 describe('getFinancialYearStart — boundary', () => {
@@ -108,8 +121,16 @@ describe('getFinancialYearStart — boundary', () => {
 	it('April 1 is included in the new FY (same-day inclusion)', () => {
 		jest.useFakeTimers();
 		jest.setSystemTime(new Date(Date.UTC(2026, 3, 1))); // April 1 2026 UTC
-		// getFinancialYearStart uses new Date() internally — with fake timers this is April 1 2026
 		const result = getFinancialYearStart();
 		expect(result).toBe('2026-04-01');
+	});
+});
+
+describe('todayISO', () => {
+	it('returns current date in YYYY-MM-DD format', () => {
+		jest.useFakeTimers();
+		jest.setSystemTime(new Date('2025-05-20T10:00:00Z'));
+		expect(todayISO()).toBe('2025-05-20');
+		jest.useRealTimers();
 	});
 });

@@ -26,7 +26,8 @@ export async function withRetry<T>(
 	let lastError: unknown;
 	let currentDelay = delay;
 
-	for (let i = 0; i <= retries; i++) {
+	let i = 0;
+	while (true) {
 		try {
 			return await operation();
 		} catch (error) {
@@ -35,12 +36,10 @@ export async function withRetry<T>(
 			if (i < retries && shouldRetry(error)) {
 				await _delayFn(currentDelay);
 				currentDelay *= factor;
-				continue;
+				i++;
+			} else {
+				throw lastError;
 			}
-
-			throw lastError;
 		}
 	}
-
-	throw lastError;
 }
