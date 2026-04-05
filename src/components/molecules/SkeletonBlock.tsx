@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { type StyleProp, type ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, interpolate } from 'react-native-reanimated';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
+import { useSkeletonShimmer } from '@/src/hooks/useSkeletonShimmer';
 
 interface SkeletonBlockProps {
 	width?: number | `${number}%`;
@@ -17,9 +19,14 @@ export function SkeletonBlock({
 	style,
 }: SkeletonBlockProps) {
 	const { c, r } = useThemeTokens();
+	const progress = useSkeletonShimmer();
+
+	const shimmerStyle = useAnimatedStyle(() => ({
+		opacity: interpolate(progress.value, [0, 1], [0.5, 1]),
+	}));
 
 	return (
-		<View
+		<Animated.View
 			accessibilityElementsHidden={true}
 			importantForAccessibility="no-hide-descendants"
 			style={[
@@ -29,6 +36,7 @@ export function SkeletonBlock({
 					borderRadius: borderRadius ?? r.sm,
 					backgroundColor: withOpacity(c.onSurface, 0.08),
 				},
+				shimmerStyle,
 				style,
 			]}
 		/>

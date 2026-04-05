@@ -1,14 +1,17 @@
 import React from 'react';
 import {
-	TouchableOpacity,
+	Pressable,
 	Text,
 	StyleSheet,
 	ActivityIndicator,
-	type TouchableOpacityProps,
+	type PressableProps,
+	type ViewStyle,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SPRING_PRESS, PRESS_SCALE } from '@/src/theme/animations';
 
-export interface ButtonProps extends TouchableOpacityProps {
+export interface ButtonProps extends Omit<PressableProps, 'style'> {
 	title?: string;
 	/** Stable English identifier used by screen readers and Maestro. Overrides the default title-derived label. */
 	accessibilityLabel?: string;
@@ -17,6 +20,7 @@ export interface ButtonProps extends TouchableOpacityProps {
 	loading?: boolean;
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
+	style?: ViewStyle;
 }
 
 export function Button({
@@ -29,11 +33,18 @@ export function Button({
 	rightIcon,
 	style,
 	disabled,
+	onPressIn,
+	onPressOut,
 	...props
 }: ButtonProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
 	const r = theme.borderRadius;
+
+	const scale = useSharedValue(1);
+	const animStyle = useAnimatedStyle(() => ({
+		transform: [{ scale: scale.value }],
+	}));
 
 	const getVariantStyles = () => {
 		switch (variant) {
@@ -71,54 +82,64 @@ export function Button({
 	const isDisabled = disabled || loading;
 
 	return (
-		<TouchableOpacity
-			activeOpacity={0.7}
-			disabled={isDisabled}
-			accessibilityRole="button"
-			accessibilityLabel={accessibilityLabel ?? title}
-			accessibilityState={{ disabled: isDisabled, busy: loading }}
-			accessibilityHint={loading ? 'Loading, please wait' : undefined}
-			style={[
-				styles.button,
-				{
-					backgroundColor:
-						isDisabled && !isOutline && variant !== 'ghost' ? c.surfaceVariant : v.bg,
-					borderColor: isDisabled && isOutline ? c.border : v.border,
-					borderWidth: isOutline ? 1 : 0,
-					borderRadius: r.md,
-					height: s.height,
-					paddingHorizontal: s.px,
-				},
-				style,
-			]}
-			{...props}
-		>
-			{loading ? (
-				<ActivityIndicator
-					testID="loading-indicator"
-					color={isOutline || variant === 'ghost' ? c.primary : v.text}
-				/>
-			) : (
-				<>
-					{leftIcon}
-					<Text
-						style={[
-							styles.label,
-							{
-								color: isDisabled ? c.placeholder : v.text,
-								fontSize: s.fontSize,
-								fontWeight: theme.typography.weights.semibold,
-								marginLeft: leftIcon ? 8 : 0,
-								marginRight: rightIcon ? 8 : 0,
-							},
-						]}
-					>
-						{title}
-					</Text>
-					{rightIcon}
-				</>
-			)}
-		</TouchableOpacity>
+		<Animated.View style={[animStyle, style]}>
+			<Pressable
+				disabled={isDisabled}
+				accessibilityRole="button"
+				accessibilityLabel={accessibilityLabel ?? title}
+				accessibilityState={{ disabled: isDisabled, busy: loading }}
+				accessibilityHint={loading ? 'Loading, please wait' : undefined}
+				onPressIn={(e) => {
+					scale.value = withSpring(PRESS_SCALE.pressed, SPRING_PRESS);
+					onPressIn?.(e);
+				}}
+				onPressOut={(e) => {
+					scale.value = withSpring(PRESS_SCALE.released, SPRING_PRESS);
+					onPressOut?.(e);
+				}}
+				style={[
+					styles.button,
+					{
+						backgroundColor:
+							isDisabled && !isOutline && variant !== 'ghost'
+								? c.surfaceVariant
+								: v.bg,
+						borderColor: isDisabled && isOutline ? c.border : v.border,
+						borderWidth: isOutline ? 1 : 0,
+						borderRadius: r.md,
+						height: s.height,
+						paddingHorizontal: s.px,
+					},
+				]}
+				{...props}
+			>
+				{loading ? (
+					<ActivityIndicator
+						testID="loading-indicator"
+						color={isOutline || variant === 'ghost' ? c.primary : v.text}
+					/>
+				) : (
+					<>
+						{leftIcon}
+						<Text
+							style={[
+								styles.label,
+								{
+									color: isDisabled ? c.placeholder : v.text,
+									fontSize: s.fontSize,
+									fontWeight: theme.typography.weights.semibold,
+									marginLeft: leftIcon ? 8 : 0,
+									marginRight: rightIcon ? 8 : 0,
+								},
+							]}
+						>
+							{title}
+						</Text>
+						{rightIcon}
+					</>
+				)}
+			</Pressable>
+		</Animated.View>
 	);
 }
 
