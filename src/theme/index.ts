@@ -16,6 +16,8 @@ export interface ThemeColors {
 	primaryLight: string;
 	primaryDark: string;
 	onPrimary: string;
+	primaryGradientStart: string;
+	primaryGradientEnd: string;
 	// Semantic
 	success: string;
 	onSuccess: string;
@@ -71,12 +73,15 @@ export interface ThemeTypography {
 		relaxed: number;
 	};
 	variants: {
+		display: TextStyle;
 		h1: TextStyle;
 		h2: TextStyle;
 		h3: TextStyle;
 		body1: TextStyle;
 		body2: TextStyle;
 		caption: TextStyle;
+		overline: TextStyle;
+		sectionLabel: TextStyle;
 		label: TextStyle;
 		button: TextStyle;
 	};
@@ -99,12 +104,21 @@ export interface Theme {
 		sm: number; // 6
 		md: number; // 12
 		lg: number; // 20
+		xl: number; // 28
 		full: number; // 9999
 	};
 	shadows: {
+		xs: ViewStyle;
 		sm: ViewStyle;
 		md: ViewStyle;
 		lg: ViewStyle;
+	};
+	animation: {
+		durationFast: number; // 150ms
+		durationNormal: number; // 250ms
+		durationSlow: number; // 400ms
+		springDamping: number;
+		springStiffness: number;
 	};
 	touchTarget: number; // minimum 48
 }

@@ -19,6 +19,8 @@ const LIGHT_COLORS: ThemeColors = {
 	primaryLight: '#E8622A',
 	primaryDark: '#8B2F07',
 	onPrimary: '#FFFFFF',
+	primaryGradientStart: '#E8622A',
+	primaryGradientEnd: '#8B2F07',
 	// Semantic
 	success: '#2D7A3E',
 	onSuccess: '#FFFFFF',
@@ -66,6 +68,8 @@ const DARK_COLORS: ThemeColors = {
 	primaryLight: '#FF8A60',
 	primaryDark: '#C1440E',
 	onPrimary: '#1A0A00', // dark text on orange for WCAG AA (≥4.5:1)
+	primaryGradientStart: '#FF8A60',
+	primaryGradientEnd: '#C1440E',
 	// Semantic
 	success: '#4CAF70',
 	onSuccess: '#000000',
@@ -124,12 +128,26 @@ const TYPOGRAPHY: Theme['typography'] = {
 		relaxed: 1.75,
 	},
 	variants: {
+		display: { fontSize: 40, fontWeight: '700', lineHeight: 48 },
 		h1: { fontSize: 30, fontWeight: '700', lineHeight: 36 },
 		h2: { fontSize: 24, fontWeight: '700', lineHeight: 30 },
 		h3: { fontSize: 20, fontWeight: '700', lineHeight: 26 },
 		body1: { fontSize: 17, fontWeight: '400', lineHeight: 24 },
 		body2: { fontSize: 15, fontWeight: '400', lineHeight: 22 },
 		caption: { fontSize: 13, fontWeight: '400', lineHeight: 18 },
+		overline: {
+			fontSize: 11,
+			fontWeight: '600',
+			lineHeight: 16,
+			textTransform: 'uppercase',
+			letterSpacing: 1.0,
+		},
+		sectionLabel: {
+			fontSize: 13,
+			fontWeight: '600',
+			lineHeight: 18,
+			letterSpacing: 0.3,
+		},
 		label: {
 			fontSize: 13,
 			fontWeight: '600',
@@ -155,10 +173,22 @@ const BORDER_RADIUS: Theme['borderRadius'] = {
 	sm: 6,
 	md: 12,
 	lg: 20,
+	xl: 28,
 	full: 9999,
 };
 
 const makeShadows = (isDark: boolean): Theme['shadows'] => ({
+	xs:
+		Platform?.select({
+			ios: {
+				shadowColor: isDark ? '#000' : '#4A3828',
+				shadowOffset: { width: 0, height: 1 },
+				shadowOpacity: isDark ? 0.2 : 0.05,
+				shadowRadius: 1,
+			},
+			android: { elevation: 1 },
+			default: {},
+		}) ?? {},
 	sm:
 		Platform?.select({
 			ios: {
@@ -202,6 +232,13 @@ export function buildTheme(isDark: boolean): Theme {
 		spacing: SPACING,
 		borderRadius: BORDER_RADIUS,
 		shadows: makeShadows(isDark),
+		animation: {
+			durationFast: 150,
+			durationNormal: 250,
+			durationSlow: 400,
+			springDamping: 15,
+			springStiffness: 180,
+		},
 		touchTarget: 48,
 	};
 }
