@@ -15,6 +15,7 @@ import { PaymentModal } from '@/src/components/organisms/PaymentModal';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { CustomerDetailSkeleton } from '@/src/components/molecules/skeletons/CustomerDetailSkeleton';
 
 import type { CustomerLedgerEntry } from '@/src/types/customer';
 
@@ -95,7 +96,14 @@ export default function CustomerDetailScreen() {
 		</View>
 	);
 
-	if (!customer) return null;
+	if (!customer) {
+		return (
+			<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+				<ScreenHeader title="" />
+				<CustomerDetailSkeleton />
+			</AtomicScreen>
+		);
+	}
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>

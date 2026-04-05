@@ -16,6 +16,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { TileSetCard } from '@/src/components/organisms/TileSetCard';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { InventoryListSkeleton } from '@/src/components/molecules/skeletons/InventoryListSkeleton';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Chip } from '@/src/components/atoms/Chip';
@@ -93,11 +94,7 @@ export default function InventoryTab() {
 
 	const renderEmpty = () => {
 		if (loading && items.length === 0) {
-			return (
-				<View style={styles.centerFlex}>
-					<ActivityIndicator testID="loading-spinner" size="large" color={c.primary} />
-				</View>
-			);
+			return <InventoryListSkeleton />;
 		}
 		return (
 			<View style={styles.centerFlex}>

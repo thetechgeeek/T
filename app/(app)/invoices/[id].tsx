@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Share2 } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -10,6 +10,7 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { InvoiceDetailSkeleton } from '@/src/components/molecules/skeletons/InvoiceDetailSkeleton';
 import { layout } from '@/src/theme/layout';
 import { PaymentModal } from '@/src/components/organisms/PaymentModal';
 import type { UUID } from '@/src/types/common';
@@ -41,10 +42,9 @@ export default function InvoiceDetailScreen() {
 
 	if (loading) {
 		return (
-			<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
-				<View style={styles.center}>
-					<ActivityIndicator size="large" color={c.primary} />
-				</View>
+			<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
+				<ScreenHeader title="" />
+				<InvoiceDetailSkeleton />
 			</Screen>
 		);
 	}

@@ -13,6 +13,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { Badge } from '@/src/components/atoms/Badge';
+import { CustomerListSkeleton } from '@/src/components/molecules/skeletons/CustomerListSkeleton';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { Customer } from '@/src/types/customer';
 
@@ -93,30 +94,34 @@ export default function CustomersScreen() {
 				/>
 			</View>
 
-			<FlatList
-				data={customers}
-				renderItem={renderCustomer}
-				keyExtractor={(item) => item.id}
-				contentContainerStyle={styles.list}
-				refreshControl={
-					<RefreshControl
-						refreshing={refreshing}
-						onRefresh={handleRefresh}
-						tintColor={theme.colors.primary}
-					/>
-				}
-				ListEmptyComponent={
-					!loading ? (
-						<EmptyState
-							title={t('customer.noCustomers')}
-							description="Start by adding your first customer to manage their credit and invoices."
-							icon={<UserPlus size={48} color={theme.colors.placeholder} />}
-							actionLabel="Add Customer"
-							onAction={() => router.push('/(app)/customers/add')}
+			{loading && customers.length === 0 ? (
+				<CustomerListSkeleton />
+			) : (
+				<FlatList
+					data={customers}
+					renderItem={renderCustomer}
+					keyExtractor={(item) => item.id}
+					contentContainerStyle={styles.list}
+					refreshControl={
+						<RefreshControl
+							refreshing={refreshing}
+							onRefresh={handleRefresh}
+							tintColor={theme.colors.primary}
 						/>
-					) : null
-				}
-			/>
+					}
+					ListEmptyComponent={
+						!loading ? (
+							<EmptyState
+								title={t('customer.noCustomers')}
+								description="Start by adding your first customer to manage their credit and invoices."
+								icon={<UserPlus size={48} color={theme.colors.placeholder} />}
+								actionLabel="Add Customer"
+								onAction={() => router.push('/(app)/customers/add')}
+							/>
+						) : null
+					}
+				/>
+			)}
 
 			{/* FAB */}
 			<TouchableOpacity

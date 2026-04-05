@@ -11,15 +11,17 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { InvoiceStatusBadge } from '@/src/components/molecules/InvoiceStatusBadge';
 import type { InvoiceStatus } from '@/src/components/molecules/InvoiceStatusBadge';
+import { InvoiceListSkeleton } from '@/src/components/molecules/skeletons/InvoiceListSkeleton';
 
 export default function InvoicesListScreen() {
 	const router = useRouter();
 	const { theme, c, s } = useThemeTokens();
 	const { t, formatCurrency } = useLocale();
 
-	const { invoices, fetchInvoices } = useInvoiceStore(
+	const { invoices, loading, fetchInvoices } = useInvoiceStore(
 		useShallow((s) => ({
 			invoices: s.invoices,
+			loading: s.loading,
 			fetchInvoices: s.fetchInvoices,
 		})),
 	);
@@ -54,8 +56,9 @@ export default function InvoicesListScreen() {
 				/>
 			</View>
 
+			{loading && invoices.length === 0 ? <InvoiceListSkeleton /> : null}
 			<FlatList
-				data={invoices}
+				data={loading && invoices.length === 0 ? [] : invoices}
 				keyExtractor={(item) => item.id}
 				refreshing={refreshing}
 				onRefresh={handleRefresh}

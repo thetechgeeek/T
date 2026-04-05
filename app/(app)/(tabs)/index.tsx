@@ -10,6 +10,7 @@ import { layout } from '@/src/theme/layout';
 
 // Atomic Design Components
 import { StatCard } from '@/src/components/molecules/StatCard';
+import { DashboardSkeleton } from '@/src/components/molecules/skeletons/DashboardSkeleton';
 import { DashboardHeader } from '@/src/components/organisms/DashboardHeader';
 import { QuickActionsGrid } from '@/src/components/organisms/QuickActionsGrid';
 import { RecentInvoicesList } from '@/src/components/organisms/RecentInvoicesList';
@@ -124,28 +125,36 @@ export default function DashboardScreen() {
 		>
 			<DashboardHeader businessName="TileMaster" />
 
-			{/* Stats Cards */}
-			<View style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
-				{dashboardStats.map((stat) => (
-					<StatCard
-						key={stat.accessibilityLabel}
-						label={stat.label}
-						accessibilityLabel={stat.accessibilityLabel}
-						value={stat.value}
-						icon={stat.icon}
-						color={stat.color}
-						style={{ flex: 1, marginHorizontal: s.xs }}
+			{stats === null ? (
+				<DashboardSkeleton />
+			) : (
+				<>
+					{/* Stats Cards */}
+					<View style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
+						{dashboardStats.map((stat) => (
+							<StatCard
+								key={stat.accessibilityLabel}
+								label={stat.label}
+								accessibilityLabel={stat.accessibilityLabel}
+								value={stat.value}
+								icon={stat.icon}
+								color={stat.color}
+								style={{ flex: 1, marginHorizontal: s.xs }}
+							/>
+						))}
+					</View>
+
+					<QuickActionsGrid
+						actions={quickActions as Parameters<typeof QuickActionsGrid>[0]['actions']}
 					/>
-				))}
-			</View>
 
-			<QuickActionsGrid
-				actions={quickActions as Parameters<typeof QuickActionsGrid>[0]['actions']}
-			/>
-
-			<RecentInvoicesList
-				invoices={recentInvoices as Parameters<typeof RecentInvoicesList>[0]['invoices']}
-			/>
+					<RecentInvoicesList
+						invoices={
+							recentInvoices as Parameters<typeof RecentInvoicesList>[0]['invoices']
+						}
+					/>
+				</>
+			)}
 		</AtomicScreen>
 	);
 }
