@@ -47,6 +47,7 @@ export interface ThemeColors {
 	partial: string;
 	unpaid: string;
 	lowStock: string;
+	overdue: string;
 }
 
 export interface ThemeTypography {
@@ -77,13 +78,14 @@ export interface ThemeTypography {
 		h1: TextStyle;
 		h2: TextStyle;
 		h3: TextStyle;
-		body1: TextStyle;
-		body2: TextStyle;
+		body: TextStyle;
+		bodyBold: TextStyle;
 		caption: TextStyle;
-		overline: TextStyle;
-		sectionLabel: TextStyle;
+		captionBold: TextStyle;
+		amount: TextStyle;
+		amountLarge: TextStyle;
+		amountNegative: TextStyle;
 		label: TextStyle;
-		button: TextStyle;
 	};
 }
 
@@ -94,17 +96,19 @@ export interface Theme {
 	spacing: {
 		xs: number; // 4
 		sm: number; // 8
-		md: number; // 16
-		lg: number; // 24
-		xl: number; // 32
-		'2xl': number; // 48
-		'3xl': number; // 64
+		md: number; // 12
+		lg: number; // 16
+		xl: number; // 24
+		'2xl': number; // 32
+		'3xl': number; // 48
+		'4xl': number; // 64
 	};
 	borderRadius: {
-		sm: number; // 6
-		md: number; // 12
-		lg: number; // 20
-		xl: number; // 28
+		none: number; // 0
+		sm: number; // 4
+		md: number; // 8
+		lg: number; // 12
+		xl: number; // 16
 		full: number; // 9999
 	};
 	shadows: {
@@ -114,9 +118,9 @@ export interface Theme {
 		lg: ViewStyle;
 	};
 	animation: {
-		durationFast: number; // 150ms
-		durationNormal: number; // 250ms
-		durationSlow: number; // 400ms
+		durationFast: number;
+		durationNormal: number;
+		durationSlow: number;
 		springDamping: number;
 		springStiffness: number;
 	};

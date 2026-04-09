@@ -95,7 +95,7 @@ export default function InvoicesListScreen() {
 						onPress={() => router.push(`/(app)/invoices/${item.id}`)}
 					>
 						<View style={styles.cardHeader}>
-							<ThemedText weight="bold" variant="body1">
+							<ThemedText weight="bold" variant="body">
 								{item.invoice_number}
 							</ThemedText>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>

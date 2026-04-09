@@ -72,7 +72,7 @@ export default function SetupScreen() {
 					🏺 {t('branding.appName')}
 				</ThemedText>
 				<ThemedText
-					variant="body1"
+					variant="body"
 					color={c.onSurfaceVariant}
 					style={{ marginBottom: s.xl }}
 				>
@@ -110,7 +110,7 @@ export default function SetupScreen() {
 							style={styles.linkBtn}
 							onPress={() => router.push('/(auth)/login')}
 						>
-							<ThemedText color={c.primary} variant="body2">
+							<ThemedText color={c.primary} variant="body">
 								{t('auth.alreadyHaveAccount')} {t('auth.signIn')}
 							</ThemedText>
 						</TouchableOpacity>

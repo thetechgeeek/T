@@ -101,7 +101,11 @@ export default function InvoiceDetailScreen() {
 							},
 						]}
 					>
-						<ThemedText variant="overline" color={c.error} style={{ marginBottom: 4 }}>
+						<ThemedText
+							variant="captionBold"
+							color={c.error}
+							style={{ marginBottom: 4 }}
+						>
 							{t('invoice.balance')}
 						</ThemedText>
 						<ThemedText variant="display" color={c.error}>
@@ -136,14 +140,14 @@ export default function InvoiceDetailScreen() {
 							},
 						]}
 					>
-						<ThemedText variant="sectionLabel" color={c.onSurfaceVariant}>
+						<ThemedText variant="label" color={c.onSurfaceVariant}>
 							{t('invoice.billedTo')}
 						</ThemedText>
 					</View>
 					<View style={{ padding: s.md, gap: 2 }}>
 						<ThemedText variant="h3">{currentInvoice.customer_name}</ThemedText>
 						{!!currentInvoice.customer_phone && (
-							<ThemedText variant="body2" color={c.onSurfaceVariant}>
+							<ThemedText variant="body" color={c.onSurfaceVariant}>
 								{currentInvoice.customer_phone}
 							</ThemedText>
 						)}
@@ -177,14 +181,10 @@ export default function InvoiceDetailScreen() {
 							},
 						]}
 					>
-						<ThemedText
-							variant="sectionLabel"
-							color={c.onSurfaceVariant}
-							style={{ flex: 1 }}
-						>
+						<ThemedText variant="label" color={c.onSurfaceVariant} style={{ flex: 1 }}>
 							{t('invoice.item')}
 						</ThemedText>
-						<ThemedText variant="sectionLabel" color={c.onSurfaceVariant}>
+						<ThemedText variant="label" color={c.onSurfaceVariant}>
 							{t('invoice.total').toUpperCase()}
 						</ThemedText>
 					</View>
@@ -247,7 +247,7 @@ export default function InvoiceDetailScreen() {
 							},
 						]}
 					>
-						<ThemedText variant="sectionLabel" color={c.onSurfaceVariant}>
+						<ThemedText variant="label" color={c.onSurfaceVariant}>
 							{t('invoice.summary')}
 						</ThemedText>
 					</View>

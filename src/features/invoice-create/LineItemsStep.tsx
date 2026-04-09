@@ -197,7 +197,7 @@ export function LineItemsStep({
 						<View>
 							<ThemedText variant="h3">{selectedItem.design_name}</ThemedText>
 							<ThemedText
-								variant="body2"
+								variant="body"
 								color={c.onSurfaceVariant}
 								style={{ marginBottom: s.md }}
 							>

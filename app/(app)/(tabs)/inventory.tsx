@@ -109,7 +109,7 @@ export default function InventoryTab() {
 					{t('inventory.noItems')}
 				</ThemedText>
 				<ThemedText
-					variant="body2"
+					variant="body"
 					color={c.onSurfaceVariant}
 					style={{ marginTop: s.sm, textAlign: 'center' }}
 				>

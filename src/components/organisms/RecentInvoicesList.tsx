@@ -41,7 +41,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 					accessibilityLabel={t('invoice.viewAllInvoices')}
 					accessibilityHint={t('invoice.viewAllInvoices')}
 				>
-					<ThemedText variant="body2" color={c.primary}>
+					<ThemedText variant="body" color={c.primary}>
 						{t('common.seeAll')}
 					</ThemedText>
 				</TouchableOpacity>

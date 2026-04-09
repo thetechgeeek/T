@@ -145,7 +145,7 @@ export default function StockOpScreen() {
 					<ThemedText weight="bold" style={{ marginTop: 4 }}>
 						{item.design_name}
 					</ThemedText>
-					<ThemedText variant="body2" style={{ marginTop: 4 }}>
+					<ThemedText variant="body" style={{ marginTop: 4 }}>
 						{t('inventory.currentStock')}:{' '}
 						<ThemedText weight="bold">
 							{item.box_count} {t('common.boxes')}

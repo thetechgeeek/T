@@ -318,7 +318,7 @@ function SpecBox({
 					{label}
 				</ThemedText>
 				<ThemedText
-					variant="body1"
+					variant="body"
 					weight="semibold"
 					color={highlight ? c.primary : c.onSurface}
 					numberOfLines={1}

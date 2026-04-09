@@ -122,7 +122,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 						keyboardShouldPersistTaps="handled"
 					>
 						<ThemedText
-							variant="body2"
+							variant="body"
 							color={theme.colors.onSurfaceVariant}
 							style={{ marginBottom: 20 }}
 						>

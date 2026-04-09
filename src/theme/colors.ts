@@ -5,37 +5,37 @@ import { Platform } from 'react-native';
 
 const LIGHT_COLORS: ThemeColors = {
 	// Backgrounds
-	background: '#FAFAF8', // warm off-white
+	background: '#F5F0EB', // roadmap light background
 	surface: '#FFFFFF',
-	surfaceVariant: '#F5F0EC', // warm gray tint
+	surfaceVariant: '#E5DDD5', // using border color for variant
 	card: '#FFFFFF',
 	// Text
-	onBackground: '#1A1412', // near-black with warm tint
-	onSurface: '#2C2420',
-	onSurfaceVariant: '#6B5E57',
+	onBackground: '#1A1412',
+	onSurface: '#1A1412',
+	onSurfaceVariant: '#6B5E52', // roadmap secondary text
 	placeholder: '#A89B94',
 	// Brand: terracotta / rust
-	primary: '#C1440E', // terracotta
+	primary: '#C1440E', // roadmap light primary
 	primaryLight: '#E8622A',
 	primaryDark: '#8B2F07',
 	onPrimary: '#FFFFFF',
-	primaryGradientStart: '#E8622A',
+	primaryGradientStart: '#C1440E',
 	primaryGradientEnd: '#8B2F07',
 	// Semantic
-	success: '#2D7A3E',
+	success: '#1A8754', // roadmap success green
 	onSuccess: '#FFFFFF',
-	successLight: '#E8F5EB',
-	warning: '#A85F00',
+	successLight: '#D1FAE5', // roadmap paid tint
+	warning: '#B45309', // roadmap warning amber
 	onWarning: '#FFFFFF',
-	warningLight: '#FFF3E0',
-	error: '#C62828',
+	warningLight: '#FEF3C7', // roadmap partial tint
+	error: '#B91C1C', // roadmap error red
 	onError: '#FFFFFF',
-	errorLight: '#FFEBEE',
-	info: '#1565C0',
+	errorLight: '#FEE2E2', // roadmap unpaid/overdue tint
+	info: '#1D4ED8', // roadmap info blue
 	onInfo: '#FFFFFF',
-	infoLight: '#E3F2FD',
+	infoLight: '#DBEAFE',
 	// UI
-	border: '#E0D8D2',
+	border: '#E5DDD5', // roadmap border
 	borderStrong: '#B0A49C',
 	separator: '#EDE8E4',
 	overlay: 'rgba(0,0,0,0.4)',
@@ -43,62 +43,64 @@ const LIGHT_COLORS: ThemeColors = {
 	// Tabs
 	tabBar: '#FFFFFF',
 	tabActive: '#C1440E',
-	tabInactive: '#9E8F88',
-	// Specific
+	tabInactive: '#6B5E52',
+	// Specific (P0.3 roadmap)
 	badge: '#C1440E',
-	paid: '#2D7A3E',
-	partial: '#A85F00',
-	unpaid: '#C62828',
-	lowStock: '#C62828',
+	paid: '#065F46',
+	partial: '#92400E',
+	unpaid: '#991B1B',
+	lowStock: '#B91C1C',
+	overdue: '#7F1D1D',
 };
 
 const DARK_COLORS: ThemeColors = {
 	// Backgrounds
-	background: '#1A1210', // deep warm charcoal
-	surface: '#252018',
-	surfaceVariant: '#302820',
-	card: '#2C2218',
+	background: '#000000', // roadmap dark background
+	surface: '#1C1C1E', // roadmap surface/card
+	surfaceVariant: '#38383A', // roadmap border
+	card: '#1C1C1E',
 	// Text
 	onBackground: '#F2EDE8',
-	onSurface: '#EAE4DE',
-	onSurfaceVariant: '#B0A49C',
+	onSurface: '#F2EDE8',
+	onSurfaceVariant: '#98989E', // roadmap secondary text
 	placeholder: '#7A6E68',
 	// Brand: darkened terracotta
-	primary: '#E8622A', // brighter in dark mode for visibility
+	primary: '#E8622A', // roadmap dark primary
 	primaryLight: '#FF8A60',
 	primaryDark: '#C1440E',
-	onPrimary: '#1A0A00', // dark text on orange for WCAG AA (≥4.5:1)
-	primaryGradientStart: '#FF8A60',
+	onPrimary: '#1A0A00',
+	primaryGradientStart: '#E8622A',
 	primaryGradientEnd: '#C1440E',
 	// Semantic
-	success: '#4CAF70',
+	success: '#2DB87A', // roadmap dark success
 	onSuccess: '#000000',
-	successLight: '#1A3A24',
-	warning: '#FFB74D',
+	successLight: '#064E3B',
+	warning: '#F59E0B', // roadmap dark warning
 	onWarning: '#000000',
-	warningLight: '#3A2A10',
-	error: '#EF5350',
+	warningLight: '#451A03',
+	error: '#EF4444', // roadmap dark error
 	onError: '#000000',
-	errorLight: '#3A1818',
-	info: '#42A5F5',
+	errorLight: '#450A0A',
+	info: '#60A5FA', // roadmap dark info
 	onInfo: '#000000',
-	infoLight: '#1A2A3A',
+	infoLight: '#1E3A8A',
 	// UI
-	border: '#3D3028',
+	border: '#38383A', // roadmap dark border
 	borderStrong: '#5D4838',
 	separator: '#302820',
 	overlay: 'rgba(0,0,0,0.6)',
 	scrim: 'rgba(0,0,0,0.8)',
 	// Tabs
-	tabBar: '#1E1810',
+	tabBar: '#1C1C1E',
 	tabActive: '#E8622A',
-	tabInactive: '#7A6E68',
+	tabInactive: '#98989E',
 	// Specific
 	badge: '#E8622A',
-	paid: '#4CAF70',
-	partial: '#FFB74D',
-	unpaid: '#EF5350',
-	lowStock: '#EF5350',
+	paid: '#A7F3D0',
+	partial: '#FDE68A',
+	unpaid: '#FECACA',
+	lowStock: '#EF4444',
+	overdue: '#FECACA',
 };
 
 const TYPOGRAPHY: Theme['typography'] = {
@@ -110,11 +112,11 @@ const TYPOGRAPHY: Theme['typography'] = {
 	sizes: {
 		xs: 11,
 		sm: 13,
-		md: 15,
-		lg: 17,
-		xl: 20,
-		'2xl': 24,
-		'3xl': 30,
+		md: 14,
+		lg: 16,
+		xl: 18,
+		'2xl': 20,
+		'3xl': 24,
 	},
 	weights: {
 		regular: '400',
@@ -128,52 +130,38 @@ const TYPOGRAPHY: Theme['typography'] = {
 		relaxed: 1.75,
 	},
 	variants: {
-		display: { fontSize: 40, fontWeight: '700', lineHeight: 48 },
-		h1: { fontSize: 30, fontWeight: '700', lineHeight: 36 },
-		h2: { fontSize: 24, fontWeight: '700', lineHeight: 30 },
-		h3: { fontSize: 20, fontWeight: '700', lineHeight: 26 },
-		body1: { fontSize: 17, fontWeight: '400', lineHeight: 24 },
-		body2: { fontSize: 15, fontWeight: '400', lineHeight: 22 },
-		caption: { fontSize: 13, fontWeight: '400', lineHeight: 18 },
-		overline: {
-			fontSize: 11,
-			fontWeight: '600',
-			lineHeight: 16,
-			textTransform: 'uppercase',
-			letterSpacing: 1.0,
-		},
-		sectionLabel: {
-			fontSize: 13,
-			fontWeight: '600',
-			lineHeight: 18,
-			letterSpacing: 0.3,
-		},
-		label: {
-			fontSize: 13,
-			fontWeight: '600',
-			lineHeight: 18,
-			textTransform: 'uppercase',
-			letterSpacing: 0.5,
-		},
-		button: { fontSize: 15, fontWeight: '600', lineHeight: 20 },
+		display: { fontSize: 30, fontWeight: '700', lineHeight: 45 },
+		h1: { fontSize: 24, fontWeight: '700', lineHeight: 36 },
+		h2: { fontSize: 20, fontWeight: '600', lineHeight: 30 },
+		h3: { fontSize: 18, fontWeight: '600', lineHeight: 28 },
+		body: { fontSize: 16, fontWeight: '400', lineHeight: 24 },
+		bodyBold: { fontSize: 16, fontWeight: '700', lineHeight: 24 },
+		caption: { fontSize: 14, fontWeight: '400', lineHeight: 21 },
+		captionBold: { fontSize: 14, fontWeight: '700', lineHeight: 21 },
+		amount: { fontSize: 20, fontWeight: '700', lineHeight: 30, color: '#C1440E' },
+		amountLarge: { fontSize: 28, fontWeight: '700', lineHeight: 42, color: '#C1440E' },
+		amountNegative: { fontSize: 20, fontWeight: '700', lineHeight: 30, color: '#B91C1C' },
+		label: { fontSize: 13, fontWeight: '500', lineHeight: 18 },
 	},
 };
 
 const SPACING: Theme['spacing'] = {
 	xs: 4,
 	sm: 8,
-	md: 16,
-	lg: 24,
-	xl: 32,
-	'2xl': 48,
-	'3xl': 64,
+	md: 12,
+	lg: 16,
+	xl: 24,
+	'2xl': 32,
+	'3xl': 48,
+	'4xl': 64,
 };
 
 const BORDER_RADIUS: Theme['borderRadius'] = {
-	sm: 6,
-	md: 12,
-	lg: 20,
-	xl: 28,
+	none: 0,
+	sm: 4,
+	md: 8,
+	lg: 12,
+	xl: 16,
 	full: 9999,
 };
 
@@ -234,10 +222,10 @@ export function buildTheme(isDark: boolean): Theme {
 		shadows: makeShadows(isDark),
 		animation: {
 			durationFast: 150,
-			durationNormal: 250,
+			durationNormal: 200, // roadmap timing preset
 			durationSlow: 400,
-			springDamping: 15,
-			springStiffness: 180,
+			springDamping: 20, // roadmap spring preset
+			springStiffness: 200, // roadmap spring preset
 		},
 		touchTarget: 48,
 	};

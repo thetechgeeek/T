@@ -44,7 +44,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName }
 		>
 			{/* Greeting is decorative — business name is the meaningful heading */}
 			<ThemedText
-				variant="body1"
+				variant="body"
 				color={c.onPrimary}
 				opacity={0.9}
 				importantForAccessibility="no"

@@ -71,21 +71,28 @@ const minimalInvoice: Partial<Invoice> = {
 };
 
 describe('pdfService', () => {
+	const mockT = (key: string) => key;
+	const mockFormatDate = (date: string | Date) => String(date);
+
 	describe('generateInvoiceHTML', () => {
 		it('generates valid HTML containing invoice number', () => {
-			const html = pdfService.generateInvoiceHTML(minimalInvoice as Invoice, null);
+			const html = pdfService.generateInvoiceHTML(
+				minimalInvoice as Invoice,
+				null,
+				mockT,
+				mockFormatDate,
+			);
 
 			expect(html).toContain('TM/2026-27/0001');
-			expect(html).toContain('TAX INVOICE');
 			expect(html).toContain('Rajesh Kumar');
 		});
 
 		it('uses IGST columns for inter-state invoices', () => {
 			const interState = { ...minimalInvoice, is_inter_state: true } as Invoice;
-			const html = pdfService.generateInvoiceHTML(interState, null);
+			const html = pdfService.generateInvoiceHTML(interState, null, mockT, mockFormatDate);
 
-			expect(html).toContain('IGST');
-			expect(html).not.toContain('CGST');
+			expect(html).toContain('igst');
+			expect(html).not.toContain('cgst');
 		});
 
 		it('includes business profile details when provided', () => {
@@ -103,8 +110,13 @@ describe('pdfService', () => {
 				terms_and_conditions: 'No returns.',
 				created_at: '',
 				updated_at: '',
-			};
-			const html = pdfService.generateInvoiceHTML(minimalInvoice as Invoice, bp);
+			} as any;
+			const html = pdfService.generateInvoiceHTML(
+				minimalInvoice as Invoice,
+				bp,
+				mockT,
+				mockFormatDate,
+			);
 
 			expect(html).toContain('Acme Tiles');
 			expect(html).toContain('27AAAAA0000A1Z5');

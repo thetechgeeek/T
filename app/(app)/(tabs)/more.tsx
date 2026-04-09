@@ -95,7 +95,7 @@ export default function MoreTab() {
 			</View>
 			<View style={{ padding: s.lg }}>
 				{/* REPORTS section */}
-				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
+				<ThemedText variant="label" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
 					{t('settings.sections.reports')}
 				</ThemedText>
 				{reportsItems.map((item) => (
@@ -140,7 +140,7 @@ export default function MoreTab() {
 				<Divider style={{ marginVertical: s.md }} />
 
 				{/* SETTINGS section */}
-				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
+				<ThemedText variant="label" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
 					{t('settings.sections.settings')}
 				</ThemedText>
 				{settingsItems.map((item) => (
@@ -185,7 +185,7 @@ export default function MoreTab() {
 				<Divider style={{ marginVertical: s.md }} />
 
 				{/* PREFERENCES section */}
-				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
+				<ThemedText variant="label" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
 					{t('settings.sections.preferences')}
 				</ThemedText>
 
@@ -270,7 +270,7 @@ export default function MoreTab() {
 				<Divider style={{ marginVertical: s.md }} />
 
 				{/* ACCOUNT section */}
-				<ThemedText variant="sectionLabel" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
+				<ThemedText variant="label" style={{ marginBottom: s.sm, marginLeft: s.xs }}>
 					{t('settings.sections.account')}
 				</ThemedText>
 

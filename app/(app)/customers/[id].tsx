@@ -127,7 +127,7 @@ export default function CustomerDetailScreen() {
 					<View style={styles.summaryContainer}>
 						<Card style={styles.summaryCard}>
 							<ThemedText
-								variant="overline"
+								variant="captionBold"
 								color={theme.colors.onSurfaceVariant}
 								style={{ marginBottom: 4 }}
 							>

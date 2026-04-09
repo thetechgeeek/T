@@ -64,7 +64,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions }) =
 						>
 							<action.icon size={24} color={action.color} strokeWidth={2} />
 						</View>
-						<ThemedText variant="body2" weight="medium" style={{ marginTop: s.sm }}>
+						<ThemedText variant="body" weight="medium" style={{ marginTop: s.sm }}>
 							{action.label}
 						</ThemedText>
 					</TouchableOpacity>

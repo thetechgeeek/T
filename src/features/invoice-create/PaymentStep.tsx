@@ -64,10 +64,10 @@ export function PaymentStep({
 				<View style={{ marginTop: s.md }}>
 					{lineItems.map((item, idx) => (
 						<View key={idx} style={[layout.rowBetween, { marginTop: 4 }]}>
-							<ThemedText variant="body2">
+							<ThemedText variant="body">
 								{item.quantity}x {item.design_name}
 							</ThemedText>
-							<ThemedText variant="body2">
+							<ThemedText variant="body">
 								{formatCurrency(item.quantity * item.rate_per_unit)}
 							</ThemedText>
 						</View>

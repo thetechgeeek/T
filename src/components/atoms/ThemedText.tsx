@@ -15,7 +15,7 @@ export interface ThemedTextProps extends TextProps {
 const HEADING_VARIANTS = new Set(['h1', 'h2', 'h3']);
 
 export const ThemedText: React.FC<ThemedTextProps> = ({
-	variant = 'body2',
+	variant = 'body',
 	color,
 	align,
 	weight,
@@ -29,7 +29,7 @@ export const ThemedText: React.FC<ThemedTextProps> = ({
 
 	const textStyle: TextStyle = {
 		...theme.typography.variants[variant],
-		color: color || theme.colors.onSurface,
+		color: color || theme.typography.variants[variant].color || theme.colors.onSurface,
 		textAlign: align,
 		opacity,
 	};
@@ -42,7 +42,12 @@ export const ThemedText: React.FC<ThemedTextProps> = ({
 		accessibilityRole ?? (HEADING_VARIANTS.has(variant) ? 'header' : undefined);
 
 	return (
-		<Text style={[textStyle, style]} accessibilityRole={resolvedRole} {...rest}>
+		<Text
+			style={[textStyle, style]}
+			accessibilityRole={resolvedRole}
+			maxFontSizeMultiplier={1.3}
+			{...rest}
+		>
 			{children}
 		</Text>
 	);
