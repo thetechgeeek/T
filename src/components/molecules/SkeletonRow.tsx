@@ -8,13 +8,15 @@ interface SkeletonRowProps {
 	withAvatar?: boolean;
 	/** Number of text lines to show */
 	lines?: 1 | 2;
+	testID?: string;
 }
 
-export function SkeletonRow({ withAvatar = false, lines = 2 }: SkeletonRowProps) {
+export function SkeletonRow({ withAvatar = false, lines = 2, testID }: SkeletonRowProps) {
 	const { s, r } = useThemeTokens();
 
 	return (
 		<View
+			testID={testID}
 			accessibilityElementsHidden={true}
 			importantForAccessibility="no-hide-descendants"
 			style={{ flexDirection: 'row', alignItems: 'center', gap: s.md, paddingVertical: s.sm }}
