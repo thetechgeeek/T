@@ -1019,78 +1019,78 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
 
 #### Charges & Discounts section:
 
-- [ ] **Additional Charges** (shown when "Additional Charges" setting ON in P17.1):
+- [x] **Additional Charges** (shown when "Additional Charges" setting ON in P17.1):
     - [ ] List of charge rows: each has Name text field + Amount `AmountInput`
     - [ ] Default rows: "Freight", "Packaging" (configurable)
     - [ ] "+ Add Charge" link adds a new empty row
     - [ ] Remove charge: × button right of row
     - [ ] Charges are taxable or non-taxable toggle per row (affects GST computation)
-- [ ] **Transaction-level Discount** (shown when "Transaction-wise Discount" setting ON in P17.1):
+- [x] **Transaction-level Discount** (shown when "Transaction-wise Discount" setting ON in P17.1):
     - [ ] Toggleable: % or ₹ amount
     - [ ] Applied after line-item discounts
     - [ ] "After discounts on individual items" helper text
-- [ ] **Round Off** (shown when "Round Off" setting ON in P17.1):
+- [x] **Round Off** (shown when "Round Off" setting ON in P17.1):
     - [ ] Shows auto-calculated round-off: "+ ₹ 0.50" or "− ₹ 0.32"
     - [ ] Override toggle: user can manually enter round-off amount
     - [ ] Cannot exceed ₹ 1.00 (validation)
 
 #### Totals Summary card (large, prominent):
 
-- [ ] Item Subtotal: ₹ X
-- [ ] (−) Total Discount: ₹ X (shown only if discount applied)
-- [ ] (+) Additional Charges: ₹ X (shown only if charges added)
-- [ ] (+) Total GST: ₹ X
+- [x] Item Subtotal: ₹ X
+- [x] (−) Total Discount: ₹ X (shown only if discount applied)
+- [x] (+) Additional Charges: ₹ X (shown only if charges added)
+- [x] (+) Total GST: ₹ X
     - [ ] Breakdown: CGST ₹ X + SGST ₹ X (for intra-state) OR IGST ₹ X (for inter-state)
-- [ ] (+) Round Off: ±₹ X (shown only if non-zero)
-- [ ] Divider line
-- [ ] **Grand Total: ₹ X** — `amountLarge` variant, bold, terracotta
-- [ ] **Profit Indicator** (shown when "Show Profit" setting ON in P17.1): small green card "Profit on this sale: ₹ X (Y%)"
+- [x] (+) Round Off: ±₹ X (shown only if non-zero)
+- [x] Divider line
+- [x] **Grand Total: ₹ X** — `amountLarge` variant, bold, terracotta
+- [x] **Profit Indicator** (shown when "Show Profit" setting ON in P17.1): small green card "Profit on this sale: ₹ X (Y%)"
 
 #### HSN/GST Breakdown table (collapsible, shown when GST enabled):
 
-- [ ] Table columns: HSN Code, Description (truncated), Taxable Value, Rate, CGST, SGST, IGST
-- [ ] One row per unique HSN × GST rate combination
-- [ ] Collapse/expand toggle: "GST Details ▼"
+- [x] Table columns: HSN Code, Description (truncated), Taxable Value, Rate, CGST, SGST, IGST
+- [x] One row per unique HSN × GST rate combination
+- [x] Collapse/expand toggle: "GST Details ▼"
 
 #### E-way Bill section (shown when E-way Bill setting ON):
 
-- [ ] E-way Bill No.: text field (12 digits)
-- [ ] E-way Bill Date: `DatePickerField`
+- [x] E-way Bill No.: text field (12 digits)
+- [x] E-way Bill Date: `DatePickerField`
 
 #### Transportation Details section (shown when Transportation setting ON):
 
-- [ ] Transporter Name: text field
-- [ ] LR / GR Number: text field
-- [ ] Vehicle Number: text field (format hint "MH 01 AB 1234")
-- [ ] Date of Dispatch: `DatePickerField`
-- [ ] Mode of Transport: Road / Rail / Air / Ship picker
+- [x] Transporter Name: text field
+- [x] LR / GR Number: text field
+- [x] Vehicle Number: text field (format hint "MH 01 AB 1234")
+- [x] Date of Dispatch: `DatePickerField`
+- [x] Mode of Transport: Road / Rail / Air / Ship picker
 
 #### Invoice Notes section:
 
-- [ ] "Invoice Notes" text area (optional, shown on invoice print): "जैसे: Goods sold are not returnable"
-- [ ] "Terms & Conditions" text area: pre-filled from settings default; editable per invoice
+- [x] "Invoice Notes" text area (optional, shown on invoice print): "जैसे: Goods sold are not returnable"
+- [x] "Terms & Conditions" text area: pre-filled from settings default; editable per invoice
 
 #### Payment section:
 
-- [ ] **Payment Amount** (`AmountInput`, large):
+- [x] **Payment Amount** (`AmountInput`, large):
     - [ ] Pre-filled with Grand Total (full payment assumption)
     - [ ] "Paid in Full ₹ X" chip: sets amount to grand total
     - [ ] "Credit / No Payment ₹ 0" chip: sets to 0; shows "₹ [grandTotal] will be added to [customer]'s balance"
-- [ ] **Balance Due banner** (visible when payment < grand total):
+- [x] **Balance Due banner** (visible when payment < grand total):
     - [ ] "Balance ₹ X will be added to [Customer Name]'s ledger"
     - [ ] If customer has existing balance: "Existing balance: ₹ Y. After this invoice: ₹ Z"
-- [ ] **Payment Mode chips** (horizontal scroll, only shown when payment amount > 0):
+- [x] **Payment Mode chips** (horizontal scroll, only shown when payment amount > 0):
     - [ ] Cash (₹ icon) · UPI (phone icon) · Bank Transfer (bank icon) · Cheque (cheque icon) · Card (card icon)
     - [ ] Exactly one selectable at a time; selected chip: filled terracotta
     - [ ] Default: Cash
-- [ ] **Split Payment** (shown when "Multiple payment modes" feature ON):
+- [x] **Split Payment** (shown when "Multiple payment modes" feature ON):
     - [ ] "Split into multiple modes" toggle
     - [ ] When ON: replaces single amount with multiple rows; each row: mode selector + amount; must total to payment amount
-- [ ] **Bank Account selector** (appears when Bank Transfer or Cheque selected):
+- [x] **Bank Account selector** (appears when Bank Transfer or Cheque selected):
     - [ ] Picker showing bank accounts from `bank_accounts` table; "+ Add Bank Account" if empty
-- [ ] **UPI Reference** (appears when UPI selected):
+- [x] **UPI Reference** (appears when UPI selected):
     - [ ] Text field: "UTR / Reference Number (optional)"
-- [ ] **Cheque details** (appears when Cheque selected):
+- [x] **Cheque details** (appears when Cheque selected):
     - [ ] Cheque Number: numeric field
     - [ ] Cheque Date: `DatePickerField` (can be post-dated)
     - [ ] Bank Name: text field (e.g. "SBI", "HDFC")
@@ -1098,9 +1098,9 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
 
 #### Link Previous Outstanding section (shown when customer has Dr balance):
 
-- [ ] "Adjust against existing balance" toggle
-- [ ] When ON: outstanding amount applied against oldest invoice(s) automatically
-- [ ] Shows: "Applying ₹ X against INV-001 (₹ Y pending)"
+- [x] "Adjust against existing balance" toggle
+- [x] When ON: outstanding amount applied against oldest invoice(s) automatically
+- [x] Shows: "Applying ₹ X against INV-001 (₹ Y pending)"
 
 ### P4.5 Invoice Create — Preview & Save
 
@@ -1214,33 +1214,33 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
 
 **Route:** `/(app)/finance/payments/receive` and accessible as quick action from Dashboard, Customer Detail, Invoice Detail
 
-- [ ] **Party Selection**:
+- [x] **Party Selection**:
     - [ ] `SearchBar` with label "किस customer से payment मिली?"
     - [ ] Results show: avatar, name, outstanding balance (large red Dr amount) per customer
     - [ ] Pre-filled when navigating from customer detail or invoice detail
     - [ ] Once selected: compact card shown (name, outstanding, phone tap-to-call)
-- [ ] **Date**: `DatePickerField`, default today; cannot be future date
-- [ ] **Amount** (`AmountInput`, large, required):
+- [x] **Date**: `DatePickerField`, default today; cannot be future date
+- [x] **Amount** (`AmountInput`, large, required):
     - [ ] "Full Amount (₹ [outstanding])" quick-fill button — fills entire outstanding balance
     - [ ] When amount > outstanding: inline amber notice "₹ X will be recorded as advance payment"
     - [ ] When amount = 0: disabled Save button
-- [ ] **Payment Mode chips** (same 5 as invoice): Cash / UPI / Bank Transfer / Cheque / Card
-- [ ] **Bank Account selector** (for Bank Transfer / Cheque): picker from `bank_accounts`; shows account name + masked number
-- [ ] **UPI Reference** (for UPI): optional text field
-- [ ] **Cheque Details** (for Cheque):
+- [x] **Payment Mode chips** (same 5 as invoice): Cash / UPI / Bank Transfer / Cheque / Card
+- [x] **Bank Account selector** (for Bank Transfer / Cheque): picker from `bank_accounts`; shows account name + masked number
+- [x] **UPI Reference** (for UPI): optional text field
+- [x] **Cheque Details** (for Cheque):
     - [ ] Cheque Number
     - [ ] Bank Name
     - [ ] Cheque Date: `DatePickerField`
     - [ ] Saves to `cheques` table with status "Open"
-- [ ] **Notes** (optional): `TextAreaField`, e.g. "Received by Ramesh ji personally"
-- [ ] **Apply to Invoices section** (shown when setting "Link Payment to Invoices" is ON in P17.1):
+- [x] **Notes** (optional): `TextAreaField`, e.g. "Received by Ramesh ji personally"
+- [x] **Apply to Invoices section** (shown when setting "Link Payment to Invoices" is ON in P17.1):
     - [ ] Expandable section header: "Allocate to specific invoices ▼" with badge showing count of open invoices
     - [ ] Default: auto-allocate to oldest open invoices (FIFO) — shown as read-only allocations
     - [ ] "Manual allocation" toggle: when ON, shows checkboxes + editable amounts
     - [ ] Each open invoice row: Invoice No., Date, Total, Outstanding, Allocation Input (AmountInput, max = outstanding)
     - [ ] Total allocated must equal payment amount (real-time validation): "Unallocated: ₹ X"
     - [ ] Over-allocation error: red border on allocation inputs that sum > payment amount
-- [ ] **Save button** (primary, full-width):
+- [x] **Save button** (primary, full-width):
     - [ ] Calls `paymentService.receivePayment(...)` → RPC `record_payment_v1` (atomic: payment row + links + invoice status update + customer ledger)
     - [ ] On success: navigate to Payment Receipt screen → then back to wherever we came from
     - [ ] On error: toast with reason
@@ -1282,15 +1282,15 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
 
 **Route:** `/(app)/finance/payments` (tab within Finance module)
 
-- [ ] `FilterBar`: date range / customer / payment mode / linked-to-invoice status
-- [ ] Summary card: "Received this month: ₹ X (Cash: ₹ Y · UPI: ₹ Z · Cheque: ₹ W)"
-- [ ] Each row (72dp):
+- [x] `FilterBar`: date range / customer / payment mode / linked-to-invoice status
+- [x] Summary card: "Received this month: ₹ X (Cash: ₹ Y · UPI: ₹ Z · Cheque: ₹ W)"
+- [x] Each row (72dp):
     - [ ] Payment mode icon (left, coloured: green=cash, blue=UPI, orange=cheque)
     - [ ] Customer name (bodyBold), date (caption)
     - [ ] Amount (amountStyle, green)
     - [ ] Linked invoices count badge
-- [ ] Swipe-left: Delete (with confirmation)
-- [ ] Tap → Payment Detail screen
+- [x] Swipe-left: Delete (with confirmation)
+- [x] Tap → Payment Detail screen
 
 ---
 
@@ -1307,39 +1307,39 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
 
 **Route:** `/(app)/finance/purchases/create`
 
-- [ ] **Screen Header**: "New Purchase Bill" / "नई खरीद" with × close (draft save same as invoice)
-- [ ] Single scroll view (no steps — purchase entry is simpler than sale; most Indian shopkeepers prefer one-page entry)
-- [ ] **Supplier section**:
+- [x] **Screen Header**: "New Purchase Bill" / "नई खरीद" with × close (draft save same as invoice)
+- [x] Single scroll view (no steps — purchase entry is simpler than sale; most Indian shopkeepers prefer one-page entry)
+- [x] **Supplier section**:
     - [ ] Supplier search (same pattern as customer in invoice)
     - [ ] "Add new supplier" inline
     - [ ] When selected: compact card (name, phone, outstanding payable)
-- [ ] **Bill Reference section**:
+- [x] **Bill Reference section**:
     - [ ] Bill Number: text field labelled "Supplier's Bill No." / "आपूर्तिकर्ता का bill नंबर" (required — this is the physical bill you received)
     - [ ] Bill Date: `DatePickerField` (date on the physical bill — may differ from today)
     - [ ] Our Reference Number (optional): auto-generated "PUR-0012" sequence for internal tracking
     - [ ] Due Date (optional): `DatePickerField`
-- [ ] **Line Items section**: identical to invoice step 2 (P4.3) with differences:
+- [x] **Line Items section**: identical to invoice step 2 (P4.3) with differences:
     - [ ] Default price used: `purchase_price` not `sale_price`
     - [ ] Column label: "Purchase Rate" not "Sale Rate"
     - [ ] GST here = input tax credit (ITC eligible)
     - [ ] Stock increases on save (not decreases)
     - [ ] For batch-tracked items: batch creation form shown inline (new batch number, mfg date, expiry date)
     - [ ] For serial-tracked items: serial numbers entry (multi-scan)
-- [ ] **Additional Charges section** (same as invoice)
-- [ ] **Totals Summary**: Subtotal + Input GST (ITC) + Charges = **Total Payable** (amountLarge)
-- [ ] **"Attach Bill Photo" section**:
+- [x] **Additional Charges section** (same as invoice)
+- [x] **Totals Summary**: Subtotal + Input GST (ITC) + Charges = **Total Payable** (amountLarge)
+- [x] **"Attach Bill Photo" section**:
     - [ ] Camera / Gallery button
     - [ ] Up to 3 photos
     - [ ] Photos uploaded to Supabase Storage `purchase-bills/[id]/[n].jpg`
     - [ ] Thumbnail previews shown with × to remove
     - [ ] Helper: "Original bill की photo रखें — GST audit में काम आएगी"
-- [ ] **Payment section** (same structure as invoice):
+- [x] **Payment section** (same structure as invoice):
     - [ ] Amount, mode, bank account, reference
     - [ ] "Full Payment" / "Credit / No Payment" chips
     - [ ] Split payment option
-- [ ] **Notes**: `TextAreaField`
-- [ ] **Save button**: calls `purchaseService.createBill()` RPC; on success: navigate to Purchase Bill Detail; toast "Purchase bill save हो गया ✓"
-- [ ] Draft save on × / back press
+- [x] **Notes**: `TextAreaField`
+- [x] **Save button**: calls `purchaseService.createBill()` RPC; on success: navigate to Purchase Bill Detail; toast "Purchase bill save हो गया ✓"
+- [x] Draft save on × / back press
 
 ### P6.2 Purchase Bill Detail Screen
 
@@ -1359,11 +1359,11 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
 
 **Route:** `/(app)/finance/purchases`
 
-- [ ] Summary card: "This month: ₹ X purchased · ₹ Y paid · ₹ Z to pay · ITC ₹ W"
-- [ ] `FilterBar`: date range / supplier / status (Paid/Partial/Unpaid) / ITC eligible
-- [ ] Each row: Bill No. (supplier's) + Our Ref, Supplier, Date, Total, Outstanding, Status badge
-- [ ] Swipe-left: Edit · Delete
-- [ ] FAB "+ New Purchase"
+- [x] Summary card: "This month: ₹ X purchased · ₹ Y paid · ₹ Z to pay · ITC ₹ W"
+- [x] `FilterBar`: date range / supplier / status (Paid/Partial/Unpaid) / ITC eligible
+- [x] Each row: Bill No. (supplier's) + Our Ref, Supplier, Date, Total, Outstanding, Status badge
+- [x] Swipe-left: Edit · Delete
+- [x] FAB "+ New Purchase"
 
 ---
 
@@ -1378,12 +1378,12 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
 **Route:** `/(app)/finance/payments/make`
 Identical structure to P5.1 (Receive Payment) with these differences:
 
-- [ ] Label: "किस supplier को payment की?" / "Who did you pay?"
-- [ ] Shows payable (To Pay) balance of supplier in red
-- [ ] "Pay Full Outstanding" quick-fill button
-- [ ] Allocate to purchase bills (not invoices) — same FIFO logic
-- [ ] Cash account debited (or bank account debited) instead of credited
-- [ ] Cheque created in "issued" direction (to supplier)
+- [x] Label: "किस supplier को payment की?" / "Who did you pay?"
+- [x] Shows payable (To Pay) balance of supplier in red
+- [x] "Pay Full Outstanding" quick-fill button
+- [x] Allocate to purchase bills (not invoices) — same FIFO logic
+- [x] Cash account debited (or bank account debited) instead of credited
+- [x] Cheque created in "issued" direction (to supplier)
 
 ### P7.2 Payment-Out List Screen
 
@@ -1442,26 +1442,26 @@ Four stat cards in a row (each card: 120×90dp minimum):
 
 ### P8.5 Alerts Section
 
-- [ ] Section header: "Alerts" / "सूचनाएं" with count badge
-- [ ] Shown only when at least one alert exists (otherwise section hidden):
+- [x] Section header: "Alerts" / "सूचनाएं" with count badge
+- [x] Shown only when at least one alert exists (otherwise section hidden):
     - [ ] **Low Stock**: "X items कम stock में हैं" (red icon) — tap → Low Stock Report (P14.4)
     - [ ] **Expiring Items**: "X items अगले 30 दिन में expire होंगे" (orange icon) — tap → Expiring Batches list (P14.9)
     - [ ] **Overdue Invoices**: "X invoices overdue — ₹ Y" (red icon) — tap → Invoice list filtered to Overdue
     - [ ] **Cheques Due**: "X cheques इस हफ्ते जमा करने हैं" (blue icon) — tap → Cheques list (P10.6)
     - [ ] **Loan EMI Due**: "EMI of ₹ X due on DD MMM" (yellow icon) — tap → Loan Detail (P19)
-- [ ] Each alert row: icon (left), description, amount/count (right), chevron arrow
+- [x] Each alert row: icon (left), description, amount/count (right), chevron arrow
 
 ### P8.6 Quick Actions Grid
 
-- [ ] 3-column grid of action buttons (each: icon 32dp + label below, card style, 80×80dp)
-- [ ] Actions (always visible, no overflow):
+- [x] 3-column grid of action buttons (each: icon 32dp + label below, card style, 80×80dp)
+- [x] Actions (always visible, no overflow):
     - [ ] **New Sale** (invoice icon, terracotta background — primary emphasis)
     - [ ] **Receive Payment** (cash icon)
     - [ ] **New Purchase** (cart icon)
     - [ ] **Add Expense** (receipt icon)
     - [ ] **New Item** (box icon)
     - [ ] **New Party** (person icon)
-- [ ] "More →" link at bottom right → navigates to "More" tab
+- [x] "More →" link at bottom right → navigates to "More" tab
 
 ### P8.7 Recent Transactions Feed
 
