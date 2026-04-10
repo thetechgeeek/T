@@ -37,17 +37,64 @@ export default function InvoiceCreateScreen() {
 					label: steps[flow.step - 1],
 				})}
 			>
-				{steps.map((label, i) => (
-					<ThemedText
-						key={label}
-						variant="label"
-						accessibilityLabel={`invoice-step-${i + 1}`}
-						importantForAccessibility={flow.step === i + 1 ? 'yes' : 'no'}
-						color={flow.step === i + 1 ? c.primary : c.onSurfaceVariant}
-					>
-						{i + 1}. {label}
-					</ThemedText>
-				))}
+				{steps.map((label, i) => {
+					const stepNum = i + 1;
+					const isActive = flow.step === stepNum;
+					const isCompleted = flow.step > stepNum;
+					const isPending = flow.step < stepNum;
+
+					const dotSize = isActive ? 12 : 10;
+					const dotStyle = isActive
+						? { backgroundColor: c.primary, borderWidth: 0 }
+						: isCompleted
+							? {
+									backgroundColor: 'transparent',
+									borderWidth: 1.5,
+									borderColor: c.primary,
+								}
+							: {
+									backgroundColor: '#E0E0E0',
+									borderWidth: 1.5,
+									borderColor: '#B0B0B0',
+								};
+
+					return (
+						<React.Fragment key={label}>
+							{i > 0 && (
+								<View
+									style={{
+										flex: 1,
+										height: 1,
+										backgroundColor: '#B0B0B0',
+										alignSelf: 'center',
+										marginBottom: 18,
+									}}
+								/>
+							)}
+							<View style={{ alignItems: 'center' }}>
+								<View
+									accessibilityLabel={`invoice-step-${stepNum}`}
+									importantForAccessibility={isActive ? 'yes' : 'no'}
+									style={[
+										{
+											width: dotSize,
+											height: dotSize,
+											borderRadius: dotSize / 2,
+										},
+										dotStyle,
+									]}
+								/>
+								<ThemedText
+									variant="caption"
+									style={{ fontSize: 11, marginTop: 4 }}
+									color={isActive ? c.primary : c.onSurfaceVariant}
+								>
+									{label}
+								</ThemedText>
+							</View>
+						</React.Fragment>
+					);
+				})}
 			</View>
 
 			<ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: s.lg }}>
@@ -57,6 +104,12 @@ export default function InvoiceCreateScreen() {
 						setCustomer={flow.setCustomer}
 						isInterState={flow.isInterState}
 						setIsInterState={flow.setIsInterState}
+						invoiceDate={flow.invoiceDate}
+						setInvoiceDate={flow.setInvoiceDate}
+						invoiceNumber={flow.invoiceNumber}
+						setInvoiceNumber={flow.setInvoiceNumber}
+						isCashSale={flow.isCashSale}
+						setIsCashSale={flow.setIsCashSale}
 					/>
 				)}
 				{flow.step === 2 && (
@@ -133,8 +186,10 @@ export default function InvoiceCreateScreen() {
 const styles = StyleSheet.create({
 	stepper: {
 		flexDirection: 'row',
-		justifyContent: 'space-around',
-		padding: 16,
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		paddingHorizontal: 32,
+		paddingVertical: 12,
 		borderBottomWidth: 1,
 	},
 	footer: {

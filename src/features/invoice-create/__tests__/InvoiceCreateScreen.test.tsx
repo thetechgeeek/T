@@ -17,6 +17,12 @@ const mockDefaultFlow = {
 	setCustomer: jest.fn(),
 	isInterState: false,
 	setIsInterState: jest.fn(),
+	invoiceDate: '2026-04-10',
+	setInvoiceDate: jest.fn(),
+	invoiceNumber: 'INV-001',
+	setInvoiceNumber: jest.fn(),
+	isCashSale: false,
+	setIsCashSale: jest.fn(),
 	lineItems: [],
 	removeLineItem: jest.fn(),
 	isAddingItem: false,
@@ -62,9 +68,9 @@ beforeEach(() => {
 describe('InvoiceCreateScreen', () => {
 	it('renders step labels in stepper', () => {
 		const { getByText } = renderWithTheme(<InvoiceCreateScreen />);
-		expect(getByText('1. Customer')).toBeTruthy();
-		expect(getByText('2. Items')).toBeTruthy();
-		expect(getByText('3. Review')).toBeTruthy();
+		expect(getByText('Customer')).toBeTruthy();
+		expect(getByText('Items')).toBeTruthy();
+		expect(getByText('Review')).toBeTruthy();
 	});
 
 	it('renders CustomerStep on step 1', () => {

@@ -495,29 +495,29 @@ P22  Standalone & Integration Features
 
 **Route:** `/(app)/(tabs)/inventory`
 
-- [ ] `SearchBar` at top: searches on `item_name`, `item_code`, `hsn_code`
-- [ ] `FilterBar` below search with chips:
+- [x] `SearchBar` at top: searches on `item_name`, `item_code`, `hsn_code`
+- [x] `FilterBar` below search with chips:
     - [ ] "All" / "सभी" (default)
     - [ ] Category chips (dynamic from `item_categories` table) — horizontal scroll
     - [ ] "Low Stock" / "कम स्टॉक" chip — filters to items where `current_stock ≤ low_stock_threshold`
     - [ ] "No Stock" / "स्टॉक नहीं" chip — filters to `current_stock = 0`
-- [ ] Sort button (top-right, funnel icon): bottom sheet with options
+- [x] Sort button (top-right, funnel icon): bottom sheet with options
     - [ ] A–Z (item name)
     - [ ] Z–A
     - [ ] Price: Low to High
     - [ ] Price: High to Low
     - [ ] Stock: Low to High (default for inventory audit)
     - [ ] Recently Added
-- [ ] Each list row (72dp height):
+- [x] Each list row (72dp height):
     - [ ] Left: item image thumbnail (40×40dp, rounded 8dp; fallback = coloured initial letter avatar using item name)
     - [ ] Middle: item name (bodyBold), category chip (small coloured pill), item code below (caption secondary)
     - [ ] Right: sale price (amount style, right-aligned), stock quantity below (caption; red text + warning icon if at/below threshold)
-- [ ] Summary bar above list: "X items · Stock value: ₹ Y" — tapping stock value navigates to Stock Summary Report
-- [ ] Swipe-left: Edit (blue) + Delete (red; disabled with "Used in invoices" tooltip if item has transactions)
-- [ ] FAB "+ Item" bottom-right; tapping navigates to `/inventory/add`
-- [ ] Empty state: box illustration, "अभी तक कोई item नहीं जोड़ा" / "No items added yet", "Add First Item" button
-- [ ] Pull-to-refresh: refetches from Supabase
-- [ ] On screen focus (`useRefreshOnFocus`): background refresh without skeleton flash
+- [x] Summary bar above list: "X items · Stock value: ₹ Y" — tapping stock value navigates to Stock Summary Report
+- [x] Swipe-left: Edit (blue) + Delete (red; disabled with "Used in invoices" tooltip if item has transactions)
+- [x] FAB "+ Item" bottom-right; tapping navigates to `/inventory/add`
+- [x] Empty state: box illustration, "अभी तक कोई item नहीं जोड़ा" / "No items added yet", "Add First Item" button
+- [x] Pull-to-refresh: refetches from Supabase
+- [x] On screen focus (`useRefreshOnFocus`): background refresh without skeleton flash
 
 ### P2.2 Add / Edit Item — Core Fields
 
@@ -652,21 +652,21 @@ P22  Standalone & Integration Features
 
 **Route:** `/(app)/inventory/[id]`
 
-- [ ] **Header card**:
+- [x] **Header card**:
     - [ ] Item image (120×120dp, rounded 12dp) left; if no image: category-colour avatar
     - [ ] Item name (h1) right of image
     - [ ] Category chip below name
     - [ ] Item code below category (caption)
     - [ ] Current stock as large number (amountLarge) — colour: green if above threshold, red if at/below, grey if stock not tracked
     - [ ] Unit beside stock number
-- [ ] **Pricing card**:
+- [x] **Pricing card**:
     - [ ] Sale Price (amountLarge, terracotta)
     - [ ] Purchase Price (body, secondary) — shown only if setting enabled
     - [ ] MRP (caption) if set
     - [ ] GST Rate badge chip ("GST 18%")
     - [ ] HSN Code (caption)
     - [ ] Margin: "Margin: ₹ X (Y%)" — green if positive
-- [ ] **Stock Summary card** (only when stock tracking ON):
+- [x] **Stock Summary card** (only when stock tracking ON):
     - [ ] Opening Stock: X [unit]
     - [ ] Total Purchased: + X [unit]
     - [ ] Total Sold: − X [unit]
@@ -674,16 +674,16 @@ P22  Standalone & Integration Features
     - [ ] **Current Stock: X [unit]** (bold, large)
     - [ ] Stock Value: ₹ X (current stock × purchase price)
     - [ ] "Adjust Stock" button: navigates to stock adjustment screen
-- [ ] **Stock Movement ledger** (mini-list, last 10 entries):
+- [x] **Stock Movement ledger** (mini-list, last 10 entries):
     - [ ] Each row: date (caption), transaction type icon, reference number, qty in/out (green/red), running balance
     - [ ] "View All" link → Item Detail Report (P14.5)
-- [ ] **Last Transaction cards** (two side-by-side):
+- [x] **Last Transaction cards** (two side-by-side):
     - [ ] "Last Purchased: ₹ X on DD MMM (from [Supplier])"
     - [ ] "Last Sold: ₹ X on DD MMM (to [Customer])"
-- [ ] **Party Rates section** (only if party-wise pricing setting ON):
+- [x] **Party Rates section** (only if party-wise pricing setting ON):
     - [ ] List of special rates set for specific parties
     - [ ] "+ Add Rate" button → party picker + rate input mini-form
-- [ ] **Action bar** (bottom sticky):
+- [x] **Action bar** (bottom sticky):
     - [ ] "Edit" button (secondary)
     - [ ] "Share on WhatsApp" button — shares item name, price, stock as text
     - [ ] Kebab menu (⋮): Duplicate Item, View in Batches, View Serials, Delete
@@ -692,19 +692,19 @@ P22  Standalone & Integration Features
 
 **Route:** `/(app)/inventory/stock-op` (enhance existing)
 
-- [ ] **Adjustment Type** (required): large card selection
+- [x] **Adjustment Type** (required): large card selection
     - [ ] "Add Stock" / "स्टॉक बढ़ाएं" — for physical additions not from purchase
     - [ ] "Remove Stock" / "स्टॉक घटाएं" — for wastage, theft, damage
     - [ ] "Set Stock" / "स्टॉक set करें" — override current stock (for physical count reconciliation)
-- [ ] Item search (if not pre-filled from item detail)
-- [ ] Quantity: `AmountInput` with unit
-- [ ] For "Set Stock": shows "Current stock: X [unit]; New stock: Y [unit]; Difference: ±Z"
-- [ ] Reason (required): `BottomSheetPicker`: Damage / Theft / Expiry / Opening Stock / Physical Count / Other; "Other" shows text field
-- [ ] Date: `DatePickerField`, default today
-- [ ] Notes: optional text
-- [ ] For Batch-tracked items: Batch picker showing all open batches with quantities
-- [ ] For Serial-tracked items: serial number scanner/input
-- [ ] Save: creates `stock_operations` row; updates `current_stock` on item; shows success toast "Stock update हो गया"
+- [x] Item search (if not pre-filled from item detail)
+- [x] Quantity: `AmountInput` with unit
+- [x] For "Set Stock": shows "Current stock: X [unit]; New stock: Y [unit]; Difference: ±Z"
+- [x] Reason (required): `BottomSheetPicker`: Damage / Theft / Expiry / Opening Stock / Physical Count / Other; "Other" shows text field
+- [x] Date: `DatePickerField`, default today
+- [x] Notes: optional text
+- [x] For Batch-tracked items: Batch picker showing all open batches with quantities
+- [x] For Serial-tracked items: serial number scanner/input
+- [x] Save: creates `stock_operations` row; updates `current_stock` on item; shows success toast "Stock update हो गया"
 
 ### P2.9 Item Categories Management
 
@@ -783,23 +783,23 @@ P22  Standalone & Integration Features
 
 **Route:** `/(app)/customers`
 
-- [ ] `SearchBar`: searches on `name`, `phone`, `gstin`
-- [ ] `FilterBar` chips: All / With Balance / No Balance / By Group (shows group sub-picker) / Overdue
-- [ ] Sort: A–Z / Z–A / Highest Balance / Recently Transacted / Date Added
-- [ ] Each list row (80dp):
+- [x] `SearchBar`: searches on `name`, `phone`, `gstin`
+- [x] `FilterBar` chips: All / With Balance / No Balance / By Group (shows group sub-picker) / Overdue
+- [x] Sort: A–Z / Z–A / Highest Balance / Recently Transacted / Date Added
+- [x] Each list row (80dp):
     - [ ] Left: avatar circle (48dp) with initials — colour based on name hash (10 preset colours)
     - [ ] Middle: customer name (bodyBold), phone (caption secondary)
     - [ ] Right: outstanding amount (amountStyle); "Dr" or "Cr" badge; green if Cr (advance), red if Dr (owes)
-- [ ] Summary bar: "X customers · ₹ Y to receive (total Dr balance)"
-- [ ] Swipe-left actions: Call (tel: link, green), Edit (blue), Delete (red, disabled if has transactions)
-- [ ] FAB "+ Customer"
-- [ ] Section headers: A, B, C... with side index scrubber on right edge (A-Z tap to scroll)
+- [x] Summary bar: "X customers · ₹ Y to receive (total Dr balance)"
+- [x] Swipe-left actions: Call (tel: link, green), Edit (blue), Delete (red, disabled if has transactions)
+- [x] FAB "+ Customer"
+- [x] Section headers: A, B, C... with side index scrubber on right edge (A-Z tap to scroll)
 
 ### P3.2 Add / Edit Customer Screen
 
 **Route:** `/(app)/customers/add` and `/(app)/customers/[id]?edit=true`
 
-- [ ] **Basic Details section**:
+- [x] **Basic Details section**:
     - [ ] Name (required, min 1 char, max 100): large `FormField`
     - [ ] Phone: `PhoneInput` component
         - [ ] On blur: API call to check existing customers with same number; if found: inline chip "Already exists: [Name] — View" with link
@@ -807,11 +807,11 @@ P22  Standalone & Integration Features
     - [ ] Email (optional): email keyboard, format validation
     - [ ] Customer Type: "Individual" / "Business" toggle — Business shows Company Name field
     - [ ] Company Name (optional, shown when Business): text field
-- [ ] **GST Details section** (shown when GSTIN party setting ON in P18.6):
+- [x] **GST Details section** (shown when GSTIN party setting ON in P18.6):
     - [ ] GSTIN: 15-char field, uppercase, format validation, checksum validation
     - [ ] When GSTIN valid: auto-fills State from first 2 digits: "State: Maharashtra (27)"
     - [ ] GST Type: Regular / Composition / Unregistered / Consumer — picker
-- [ ] **Address section**:
+- [x] **Address section**:
     - [ ] Billing Address: multi-line text area
     - [ ] State: `BottomSheetPicker` (36 states/UTs) — determines CGST/SGST vs IGST on invoices
     - [ ] City: text field
@@ -820,25 +820,25 @@ P22  Standalone & Integration Features
         - [ ] "Same as billing" checkbox: copies billing address
         - [ ] Separate shipping address fields: line, city, state, pincode, contact name, contact phone
     - [ ] Shipping address shown on invoice when "Print Shipping Address" enabled in P18.6
-- [ ] **Group section** (shown when party grouping ON in P18.6):
+- [x] **Group section** (shown when party grouping ON in P18.6):
     - [ ] Customer Group: `BottomSheetPicker` of groups; "+ Add group" inline
     - [ ] Multiple groups allowed (many-to-many)
-- [ ] **Credit & Balance section**:
+- [x] **Credit & Balance section**:
     - [ ] Credit Limit: `AmountInput` (0 = no limit); helper "Invoice बनाते समय warning मिलेगी अगर इससे ज़्यादा outstanding हो"
     - [ ] Opening Balance: `AmountInput`
     - [ ] Balance Type: "To Receive (Dr)" / "To Pay / Advance (Cr)" — large toggle buttons
     - [ ] Opening Balance Date: `DatePickerField`
     - [ ] Helper: "यह balance पिछले records को migrate करने के लिए है"
-- [ ] **Additional Fields section** (shown when Party Additional Fields setting ON and fields configured in P18.6):
+- [x] **Additional Fields section** (shown when Party Additional Fields setting ON and fields configured in P18.6):
     - [ ] Up to 3 custom fields with configured labels (e.g., "Vehicle No.", "District", "Agent Name")
     - [ ] Each is a simple text input
-- [ ] Save button: validates all required fields; on success: navigate to customer detail; show "Customer save हो गई ✓" toast
+- [x] Save button: validates all required fields; on success: navigate to customer detail; show "Customer save हो गई ✓" toast
 
 ### P3.3 Customer Detail Screen
 
 **Route:** `/(app)/customers/[id]`
 
-- [ ] **Header**:
+- [x] **Header**:
     - [ ] Avatar circle (64dp, large initials)
     - [ ] Name (h1)
     - [ ] Phone: tap to call (`Linking.openURL('tel:...')`); shows all phones if multiple
@@ -846,11 +846,11 @@ P22  Standalone & Integration Features
     - [ ] "Dr" / "Cr" label beside balance in smaller text (13sp)
     - [ ] GSTIN (caption) if set; "Regular" / "Composition" badge
     - [ ] Group chips if any
-- [ ] **Quick Action row** (3 equal-width buttons, 52dp height each):
+- [x] **Quick Action row** (3 equal-width buttons, 52dp height each):
     - [ ] "New Sale" — navigates to invoice create with this customer pre-filled
     - [ ] "Receive Payment" — navigates to payment-in with this customer pre-filled
     - [ ] "WhatsApp" — opens WhatsApp deep link: `https://wa.me/91XXXXXXXXXX?text=नमस्ते [Name] जी...`
-- [ ] **Tab bar** (3 tabs: Ledger / Invoices / Payments):
+- [x] **Tab bar** (3 tabs: Ledger / Invoices / Payments):
     - [ ] **Ledger tab**:
         - [ ] `DatePickerField` "from" and "to" (default: current FY)
         - [ ] Opening balance row (grey background): "Opening Balance — Dr/Cr ₹ X"
@@ -865,9 +865,9 @@ P22  Standalone & Integration Features
     - [ ] **Payments tab**:
         - [ ] All payments received from this customer
         - [ ] Each row: date, amount, payment mode icon, reference, linked invoice count
-- [ ] **Credit Limit warning** (shown when outstanding > credit limit): amber banner "Credit limit ₹ X exceeded by ₹ Y"
-- [ ] Edit button: navigates to edit screen (pre-filled)
-- [ ] Delete: in kebab menu; disabled if has transactions
+- [x] **Credit Limit warning** (shown when outstanding > credit limit): amber banner "Credit limit ₹ X exceeded by ₹ Y"
+- [x] Edit button: navigates to edit screen (pre-filled)
+- [x] Delete: in kebab menu; disabled if has transactions
 
 ### P3.4 Customer Groups
 
@@ -893,13 +893,13 @@ P22  Standalone & Integration Features
 **Route:** `/(app)/suppliers`
 **Structure:** Identical to customers (P3.1–P3.2) with these differences:
 
-- [ ] Labels: "Supplier" / "आपूर्तिकर्ता"; "To Pay" instead of "To Receive"; payable amounts in red
-- [ ] Quick action row: "New Purchase" / "Make Payment" / "WhatsApp"
-- [ ] Extra field: GST Type: Regular / Composition / Unregistered (affects ITC eligibility on purchase bills)
-- [ ] Extra field: "Supplies to us" checkbox (marks as vendor vs customer who buys from us)
-- [ ] Ledger tab shows: Purchase bills, Debit notes, Payments made
-- [ ] Purchases tab: purchase bills from this supplier
-- [ ] No credit limit field (suppliers don't get credit limits from us)
+- [x] Labels: "Supplier" / "आपूर्तिकर्ता"; "To Pay" instead of "To Receive"; payable amounts in red
+- [x] Quick action row: "New Purchase" / "Make Payment" / "WhatsApp"
+- [x] Extra field: GST Type: Regular / Composition / Unregistered (affects ITC eligibility on purchase bills)
+- [x] Extra field: "Supplies to us" checkbox (marks as vendor vs customer who buys from us)
+- [x] Ledger tab shows: Purchase bills, Debit notes, Payments made
+- [x] Purchases tab: purchase bills from this supplier
+- [x] No credit limit field (suppliers don't get credit limits from us)
 
 ### P3.6 Supplier Detail Screen
 

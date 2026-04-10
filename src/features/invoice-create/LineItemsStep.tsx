@@ -121,6 +121,43 @@ export function LineItemsStep({
 				))
 			)}
 
+			{lineItems.length > 0 &&
+				(() => {
+					const subtotal = lineItems.reduce((acc, item) => {
+						const lineSubtotal =
+							item.quantity * item.rate_per_unit - (item.discount || 0);
+						return acc + lineSubtotal;
+					}, 0);
+					const gst = lineItems.reduce((acc, item) => {
+						const lineSubtotal =
+							item.quantity * item.rate_per_unit - (item.discount || 0);
+						return acc + lineSubtotal * (item.gst_rate / 100);
+					}, 0);
+					return (
+						<View
+							style={{
+								marginTop: s.md,
+								paddingVertical: s.sm,
+								paddingHorizontal: s.md,
+								backgroundColor: c.surface,
+								borderTopWidth: 1,
+								borderTopColor: c.border,
+								borderRadius: r.sm,
+							}}
+						>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{lineItems.length}{' '}
+								{lineItems.length === 1
+									? t('invoice.itemSingular')
+									: t('invoice.itemPlural')}
+								{'  ·  '}
+								{t('invoice.subtotal')}: {formatCurrency(subtotal)}
+								{'  ·  '}GST: {formatCurrency(gst)}
+							</ThemedText>
+						</View>
+					);
+				})()}
+
 			{isAddingItem && (
 				<View
 					style={{

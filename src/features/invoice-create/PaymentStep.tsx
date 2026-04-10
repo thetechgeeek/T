@@ -76,6 +76,38 @@ export function PaymentStep({
 
 				<View style={{ height: 1, backgroundColor: c.border, marginVertical: s.md }} />
 
+				{/* GST breakdown */}
+				{(() => {
+					const taxableAmount = lineItems.reduce((acc, item) => {
+						return acc + item.quantity * item.rate_per_unit - (item.discount || 0);
+					}, 0);
+					const gstAmount = lineItems.reduce((acc, item) => {
+						const lineSubtotal =
+							item.quantity * item.rate_per_unit - (item.discount || 0);
+						return acc + lineSubtotal * (item.gst_rate / 100);
+					}, 0);
+					return (
+						<View style={{ marginBottom: s.sm }}>
+							<View style={layout.rowBetween}>
+								<ThemedText variant="caption" color={c.onSurfaceVariant}>
+									{t('invoice.taxableAmount')}
+								</ThemedText>
+								<ThemedText variant="caption" color={c.onSurfaceVariant}>
+									{formatCurrency(taxableAmount)}
+								</ThemedText>
+							</View>
+							<View style={layout.rowBetween}>
+								<ThemedText variant="caption" color={c.onSurfaceVariant}>
+									{t('invoice.gstAmount', { rate: 18 })}
+								</ThemedText>
+								<ThemedText variant="caption" color={c.onSurfaceVariant}>
+									{formatCurrency(gstAmount)}
+								</ThemedText>
+							</View>
+						</View>
+					);
+				})()}
+
 				<View style={layout.rowBetween}>
 					<ThemedText weight="bold">{t('invoice.grandTotalIncGst')}</ThemedText>
 					<ThemedText variant="h3" color={c.primary}>
@@ -88,6 +120,56 @@ export function PaymentStep({
 			<ThemedText weight="bold" style={{ marginBottom: s.sm }}>
 				{t('invoice.paymentCollection')}
 			</ThemedText>
+
+			{/* Quick-fill chips */}
+			<View style={[layout.row, { gap: s.sm, marginBottom: s.md }]}>
+				<TouchableOpacity
+					onPress={() => setAmountPaid(String(grandTotal))}
+					accessibilityRole="button"
+					accessibilityLabel="paid-in-full-chip"
+					style={{
+						paddingHorizontal: s.md,
+						paddingVertical: s.sm,
+						backgroundColor:
+							amountPaidNum >= grandTotal && amountPaidNum > 0
+								? c.primary
+								: c.surface,
+						borderRadius: r.sm,
+						borderWidth: 1,
+						borderColor: c.primary,
+					}}
+				>
+					<ThemedText
+						variant="caption"
+						color={
+							amountPaidNum >= grandTotal && amountPaidNum > 0 ? '#FFF' : c.primary
+						}
+					>
+						{t('invoice.paidInFull')} {formatCurrency(grandTotal)}
+					</ThemedText>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => setAmountPaid('0')}
+					accessibilityRole="button"
+					accessibilityLabel="credit-no-payment-chip"
+					style={{
+						paddingHorizontal: s.md,
+						paddingVertical: s.sm,
+						backgroundColor:
+							amountPaid === '0' || (amountPaid === '' && amountPaidNum === 0)
+								? c.surface
+								: c.surface,
+						borderRadius: r.sm,
+						borderWidth: 1,
+						borderColor: c.border,
+					}}
+				>
+					<ThemedText variant="caption" color={c.onSurfaceVariant}>
+						{t('invoice.creditNoPayment')}
+					</ThemedText>
+				</TouchableOpacity>
+			</View>
 
 			<FormField
 				label={`${t('invoice.paymentCollection')} (${t('finance.currencySymbol')})`}

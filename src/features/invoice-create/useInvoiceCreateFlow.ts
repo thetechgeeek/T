@@ -28,6 +28,9 @@ export function useInvoiceCreateFlow() {
 	// Step 1 — customer
 	const [customer, setCustomer] = useState<CustomerDraft | null>(null);
 	const [isInterState, setIsInterState] = useState(false);
+	const [invoiceDate, setInvoiceDate] = useState<string>(new Date().toISOString().split('T')[0]);
+	const [invoiceNumber, setInvoiceNumber] = useState<string>('INV-001');
+	const [isCashSale, setIsCashSale] = useState(false);
 
 	// Step 2 — line items + inventory search
 	const { items: inventoryItems, loading: inventoryLoading, setFilters } = useInventoryStore();
@@ -70,11 +73,13 @@ export function useInvoiceCreateFlow() {
 
 	// Navigation
 	const handleNext = useCallback(() => {
-		const canNext = (step === 1 && !!customer?.name) || (step === 2 && lineItems.length > 0);
+		const canNext =
+			(step === 1 && (isCashSale || !!customer?.name)) ||
+			(step === 2 && lineItems.length > 0);
 		if (canNext) {
 			setStep((s) => Math.min(s + 1, 3));
 		}
-	}, [step, customer, lineItems]);
+	}, [step, customer, lineItems, isCashSale]);
 	const handleBack = useCallback(() => setStep((s) => Math.max(s - 1, 1)), []);
 
 	// Line item management
@@ -127,18 +132,20 @@ export function useInvoiceCreateFlow() {
 
 	// Submit
 	const submitInvoice = useCallback(async () => {
-		if (!customer || lineItems.length === 0) return;
+		if (!isCashSale && !customer) return;
+		if (lineItems.length === 0) return;
 		setSubmitting(true);
 		try {
 			const newInvoice = await useInvoiceStore.getState().createInvoice({
-				customer_id: customer.id,
-				customer_name: customer.name,
-				customer_phone: customer.phone || '',
-				customer_address: customer.address,
-				customer_gstin: customer.gstin,
+				customer_id: customer?.id,
+				customer_name: customer?.name ?? 'Cash / Walk-in Customer',
+				customer_phone: customer?.phone || '',
+				customer_address: customer?.address,
+				customer_gstin: customer?.gstin,
 				is_inter_state: isInterState,
 				line_items: lineItems,
-				invoice_date: new Date().toISOString().split('T')[0],
+				invoice_date: invoiceDate,
+				invoice_number: invoiceNumber,
 				payment_status:
 					amountPaidNum >= grandTotal ? 'paid' : amountPaidNum > 0 ? 'partial' : 'unpaid',
 				payment_mode: amountPaidNum > 0 ? paymentMode : undefined,
@@ -155,20 +162,40 @@ export function useInvoiceCreateFlow() {
 		} finally {
 			setSubmitting(false);
 		}
-	}, [customer, lineItems, isInterState, amountPaidNum, grandTotal, paymentMode, router, t]);
+	}, [
+		customer,
+		isCashSale,
+		lineItems,
+		isInterState,
+		invoiceDate,
+		invoiceNumber,
+		amountPaidNum,
+		grandTotal,
+		paymentMode,
+		router,
+		t,
+	]);
 
 	return {
 		// Step navigation
 		step,
 		handleNext,
 		handleBack,
-		canGoNext: (step === 1 && !!customer?.name) || (step === 2 && lineItems.length > 0),
+		canGoNext:
+			(step === 1 && (isCashSale || !!customer?.name)) ||
+			(step === 2 && lineItems.length > 0),
 
 		// Customer step
 		customer,
 		setCustomer,
 		isInterState,
 		setIsInterState,
+		invoiceDate,
+		setInvoiceDate,
+		invoiceNumber,
+		setInvoiceNumber,
+		isCashSale,
+		setIsCashSale,
 
 		// Line items step
 		lineItems,

@@ -66,7 +66,7 @@ describe('CreateInvoiceScreen', () => {
 		fireEvent.press(getByText('Next'));
 
 		// Step 2: Line Items
-		await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+		await waitFor(() => expect(getByText('Items')).toBeTruthy());
 
 		fireEvent.press(getByText('+ Add Item'));
 
@@ -87,7 +87,7 @@ describe('CreateInvoiceScreen', () => {
 		fireEvent.press(getByText('Next'));
 
 		// Step 3: Review & Payment
-		await waitFor(() => expect(getByText('3. Review')).toBeTruthy());
+		await waitFor(() => expect(getByText('Review')).toBeTruthy());
 
 		expect(getByText('Customer: Test Customer')).toBeTruthy();
 		// Grand Total: (10 * 1000) - 100 = 9900. Plus 18% GST (1782) = 11682
@@ -141,7 +141,7 @@ describe('CreateInvoiceScreen', () => {
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
 		fireEvent.press(getByText('Next'));
 
-		await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+		await waitFor(() => expect(getByText('Items')).toBeTruthy());
 
 		// Press Next without adding any line items
 		fireEvent.press(getByText('Next'));
@@ -159,7 +159,7 @@ describe('CreateInvoiceScreen', () => {
 		fireEvent.press(getByText('Next'));
 
 		// Step 2
-		await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+		await waitFor(() => expect(getByText('Items')).toBeTruthy());
 		fireEvent.press(getByText('+ Add Item'));
 		fireEvent.changeText(getByPlaceholderText(/search/i), 'Marble');
 		fireEvent.press(getByText('Marble gold'));
@@ -168,7 +168,7 @@ describe('CreateInvoiceScreen', () => {
 		fireEvent.press(getByText('Next'));
 
 		// Step 3
-		await waitFor(() => expect(getByText('3. Review')).toBeTruthy());
+		await waitFor(() => expect(getByText('Review')).toBeTruthy());
 
 		// Leave amount_paid at 0 (default)
 		fireEvent.press(getByText('Generate Invoice'));
@@ -188,7 +188,7 @@ describe('CreateInvoiceScreen', () => {
 		// Go to Step 2
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
 		fireEvent.press(getByText('Next'));
-		await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+		await waitFor(() => expect(getByText('Items')).toBeTruthy());
 
 		fireEvent.press(getByText('+ Add Item'));
 		fireEvent.press(getByText('Marble gold'));
@@ -220,14 +220,14 @@ describe('CreateInvoiceScreen', () => {
 		fireEvent.press(getByText('Next'));
 
 		// Step 2
-		await waitFor(() => expect(getByText('2. Items')).toBeTruthy());
+		await waitFor(() => expect(getByText('Items')).toBeTruthy());
 		fireEvent.press(getByText('+ Add Item'));
 		fireEvent.press(getByText('Marble gold'));
 		fireEvent.press(getByText('Confirm'));
 		fireEvent.press(getByText('Next'));
 
 		// Step 3
-		await waitFor(() => expect(getByText('3. Review')).toBeTruthy());
+		await waitFor(() => expect(getByText('Review')).toBeTruthy());
 		fireEvent.press(getByText('Generate Invoice'));
 
 		await waitFor(() => {
