@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, ScrollView, StyleSheet, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useForm, Controller, type Resolver } from 'react-hook-form';
@@ -12,6 +12,8 @@ import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { FormField } from '@/src/components/molecules/FormField';
+import { AmountInput } from '@/src/components/molecules/AmountInput';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { layout } from '@/src/theme/layout';
 import { useLocale } from '@/src/hooks/useLocale';
 import logger from '@/src/utils/logger';
@@ -19,12 +21,17 @@ import logger from '@/src/utils/logger';
 interface CustomerFormData {
 	name: string;
 	phone?: string;
+	email?: string;
 	gstin?: string;
 	address?: string;
 	city?: string;
 	state?: string;
 	type: 'retail' | 'contractor' | 'builder' | 'dealer';
+	customer_type: 'individual' | 'business';
+	company_name?: string;
 	credit_limit: number;
+	opening_balance: number;
+	balance_type: 'dr' | 'cr';
 	notes?: string;
 }
 
@@ -32,6 +39,7 @@ const getCustomerSchema = (t: (key: string) => string) =>
 	z.object({
 		name: z.string().min(2, t('common.required')),
 		phone: z.string().optional(),
+		email: z.string().email('Invalid email').optional().or(z.literal('')),
 		gstin: z
 			.string()
 			.length(15, t('customer.gstin') + ' ' + t('order.detailsMissing'))
@@ -41,12 +49,16 @@ const getCustomerSchema = (t: (key: string) => string) =>
 		city: z.string().optional(),
 		state: z.string().optional(),
 		type: z.enum(['retail', 'contractor', 'builder', 'dealer']),
+		customer_type: z.enum(['individual', 'business']),
+		company_name: z.string().optional(),
 		credit_limit: z.coerce.number().min(0),
+		opening_balance: z.coerce.number().min(0),
+		balance_type: z.enum(['dr', 'cr']),
 		notes: z.string().optional(),
 	});
 
 export default function AddCustomerScreen() {
-	const { theme } = useThemeTokens();
+	const { theme, c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 	const customerSchema = getCustomerSchema(t);
@@ -54,21 +66,36 @@ export default function AddCustomerScreen() {
 		useShallow((s) => ({ createCustomer: s.createCustomer, loading: s.loading })),
 	);
 
+	const [creditLimit, setCreditLimit] = useState(0);
+	const [openingBalance, setOpeningBalance] = useState(0);
+
 	const {
 		control,
 		handleSubmit,
+		watch,
+		setValue,
 		formState: { errors },
 	} = useForm<CustomerFormData>({
 		resolver: zodResolver(customerSchema) as Resolver<CustomerFormData>,
 		defaultValues: {
 			type: 'retail',
+			customer_type: 'individual',
 			credit_limit: 0,
+			opening_balance: 0,
+			balance_type: 'dr',
 		},
 	});
 
+	const customerType = watch('customer_type');
+	const balanceType = watch('balance_type');
+
 	const onSubmit = async (data: CustomerFormData) => {
 		try {
-			await createCustomer(data);
+			await createCustomer({
+				...data,
+				credit_limit: creditLimit,
+				opening_balance: openingBalance,
+			} as Parameters<typeof createCustomer>[0]);
 			router.back();
 		} catch (e: unknown) {
 			logger.error('Failed to save customer', e instanceof Error ? e : new Error(String(e)));
@@ -88,6 +115,7 @@ export default function AddCustomerScreen() {
 				style={[styles.container, { backgroundColor: theme.colors.background }]}
 			>
 				<View style={styles.content}>
+					{/* Basic Info */}
 					<Card padding="md">
 						<Controller
 							control={control}
@@ -105,6 +133,75 @@ export default function AddCustomerScreen() {
 							)}
 						/>
 
+						{/* Customer Type Toggle */}
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginBottom: 6 }}
+						>
+							Customer Type
+						</ThemedText>
+						<View style={[layout.row, styles.toggleRow]}>
+							<Pressable
+								style={[
+									styles.toggleBtn,
+									{
+										borderRadius: r.md,
+										borderColor: c.primary,
+										backgroundColor:
+											customerType === 'individual' ? c.primary : c.surface,
+									},
+								]}
+								onPress={() => setValue('customer_type', 'individual')}
+								accessibilityRole="button"
+								accessibilityState={{ selected: customerType === 'individual' }}
+							>
+								<ThemedText
+									variant="caption"
+									color={customerType === 'individual' ? c.onPrimary : c.primary}
+								>
+									Individual
+								</ThemedText>
+							</Pressable>
+							<Pressable
+								style={[
+									styles.toggleBtn,
+									{
+										borderRadius: r.md,
+										borderColor: c.primary,
+										backgroundColor:
+											customerType === 'business' ? c.primary : c.surface,
+									},
+								]}
+								onPress={() => setValue('customer_type', 'business')}
+								accessibilityRole="button"
+								accessibilityState={{ selected: customerType === 'business' }}
+							>
+								<ThemedText
+									variant="caption"
+									color={customerType === 'business' ? c.onPrimary : c.primary}
+								>
+									Business
+								</ThemedText>
+							</Pressable>
+						</View>
+
+						{customerType === 'business' && (
+							<Controller
+								control={control}
+								name="company_name"
+								render={({ field: { onChange, value } }) => (
+									<FormField
+										label="Company Name"
+										accessibilityLabel="customer-company-name-input"
+										placeholder="Enter company name"
+										value={value}
+										onChangeText={onChange}
+									/>
+								)}
+							/>
+						)}
+
 						<Controller
 							control={control}
 							name="phone"
@@ -117,6 +214,23 @@ export default function AddCustomerScreen() {
 									value={value}
 									onChangeText={onChange}
 									error={errors.phone?.message}
+								/>
+							)}
+						/>
+
+						<Controller
+							control={control}
+							name="email"
+							render={({ field: { onChange, value } }) => (
+								<FormField
+									label="Email"
+									accessibilityLabel="customer-email-input"
+									placeholder="customer@example.com"
+									keyboardType="email-address"
+									autoCapitalize="none"
+									value={value}
+									onChangeText={onChange}
+									error={errors.email?.message}
 								/>
 							)}
 						/>
@@ -185,31 +299,110 @@ export default function AddCustomerScreen() {
 								/>
 							)}
 						/>
-
-						<Controller
-							control={control}
-							name="credit_limit"
-							render={({ field: { onChange, value } }) => (
-								<FormField
-									label={t('customer.creditLimit')}
-									accessibilityLabel="customer-credit-limit-input"
-									placeholder={t('customer.form.placeholders.creditLimit')}
-									keyboardType="numeric"
-									value={value.toString()}
-									onChangeText={onChange}
-								/>
-							)}
-						/>
-
-						<Button
-							title={loading ? t('common.loading') : t('customer.saveCustomer')}
-							accessibilityLabel="save-customer-button"
-							accessibilityState={{ busy: loading }}
-							onPress={handleSubmit(onSubmit)}
-							loading={loading}
-							style={styles.saveButton}
-						/>
 					</Card>
+
+					{/* Credit & Balance Section */}
+					<ThemedText variant="h3" style={{ marginTop: s.lg, marginBottom: s.sm }}>
+						Credit &amp; Balance
+					</ThemedText>
+					<Card padding="md">
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginBottom: 4 }}
+						>
+							{t('customer.creditLimit')}
+						</ThemedText>
+						<AmountInput
+							label={t('customer.creditLimit')}
+							value={creditLimit}
+							onChange={(val) => {
+								setCreditLimit(val);
+								setValue('credit_limit', val);
+							}}
+							testID="customer-credit-limit-input"
+						/>
+
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: s.md, marginBottom: 4 }}
+						>
+							Opening Balance
+						</ThemedText>
+						<AmountInput
+							label="Opening Balance"
+							value={openingBalance}
+							onChange={(val) => {
+								setOpeningBalance(val);
+								setValue('opening_balance', val);
+							}}
+							testID="customer-opening-balance-input"
+						/>
+
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: s.md, marginBottom: 6 }}
+						>
+							Balance Type
+						</ThemedText>
+						<View style={[layout.row, styles.toggleRow]}>
+							<Pressable
+								style={[
+									styles.toggleBtn,
+									{
+										flex: 1,
+										borderRadius: r.md,
+										borderColor: c.primary,
+										backgroundColor:
+											balanceType === 'dr' ? c.primary : c.surface,
+									},
+								]}
+								onPress={() => setValue('balance_type', 'dr')}
+								accessibilityRole="button"
+								accessibilityState={{ selected: balanceType === 'dr' }}
+							>
+								<ThemedText
+									variant="caption"
+									color={balanceType === 'dr' ? c.onPrimary : c.primary}
+								>
+									To Receive (Dr)
+								</ThemedText>
+							</Pressable>
+							<Pressable
+								style={[
+									styles.toggleBtn,
+									{
+										flex: 1,
+										borderRadius: r.md,
+										borderColor: c.primary,
+										backgroundColor:
+											balanceType === 'cr' ? c.primary : c.surface,
+									},
+								]}
+								onPress={() => setValue('balance_type', 'cr')}
+								accessibilityRole="button"
+								accessibilityState={{ selected: balanceType === 'cr' }}
+							>
+								<ThemedText
+									variant="caption"
+									color={balanceType === 'cr' ? c.onPrimary : c.primary}
+								>
+									Advance (Cr)
+								</ThemedText>
+							</Pressable>
+						</View>
+					</Card>
+
+					<Button
+						title={loading ? t('common.loading') : t('customer.saveCustomer')}
+						accessibilityLabel="save-customer-button"
+						accessibilityState={{ busy: loading }}
+						onPress={handleSubmit(onSubmit)}
+						loading={loading}
+						style={styles.saveButton}
+					/>
 				</View>
 			</ScrollView>
 		</AtomicScreen>
@@ -225,5 +418,18 @@ const styles = StyleSheet.create({
 	},
 	saveButton: {
 		marginTop: 16,
+		marginBottom: 24,
+	},
+	toggleRow: {
+		gap: 8,
+		marginBottom: 12,
+	},
+	toggleBtn: {
+		paddingVertical: 10,
+		paddingHorizontal: 16,
+		borderWidth: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		minHeight: 40,
 	},
 });

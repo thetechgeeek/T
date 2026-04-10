@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -8,6 +8,7 @@ import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SearchBar } from '@/src/components/molecules/SearchBar';
+import { FilterBar } from '@/src/components/molecules/FilterBar';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -17,10 +18,40 @@ import { CustomerListSkeleton } from '@/src/components/molecules/skeletons/Custo
 import { useLocale } from '@/src/hooks/useLocale';
 import type { Customer } from '@/src/types/customer';
 
+const AVATAR_COLORS = [
+	'#E57373',
+	'#F06292',
+	'#BA68C8',
+	'#7986CB',
+	'#4FC3F7',
+	'#4DB6AC',
+	'#81C784',
+	'#FFB74D',
+];
+
+function getInitials(name: string): string {
+	return name
+		.split(' ')
+		.slice(0, 2)
+		.map((w) => w.charAt(0).toUpperCase())
+		.join('');
+}
+
+function getAvatarColor(name: string): string {
+	return AVATAR_COLORS[name.charCodeAt(0) % 8] ?? AVATAR_COLORS[0];
+}
+
+const CUSTOMER_FILTERS = [
+	{ label: 'All', value: 'all' },
+	{ label: 'With Balance', value: 'with_balance' },
+	{ label: 'No Balance', value: 'no_balance' },
+	{ label: 'Overdue', value: 'overdue' },
+];
+
 export default function CustomersScreen() {
 	const { theme } = useThemeTokens();
 	const router = useRouter();
-	const { t } = useLocale();
+	const { t, formatCurrency } = useLocale();
 	const { customers, loading, fetchCustomers, setFilters, filters } = useCustomerStore(
 		useShallow((s) => ({
 			customers: s.customers,
@@ -33,6 +64,29 @@ export default function CustomersScreen() {
 
 	const [search, setSearch] = useState(filters.search || '');
 	const [refreshing, setRefreshing] = useState(false);
+	const [activeFilter, setActiveFilter] = useState('all');
+
+	const totalOutstanding = useMemo(
+		() =>
+			customers.reduce((acc, c) => {
+				const bal = (c as Customer & { current_balance?: number }).current_balance || 0;
+				return acc + (bal > 0 ? bal : 0);
+			}, 0),
+		[customers],
+	);
+
+	const handleFilterSelect = (value: string) => {
+		setActiveFilter(value);
+		if (value === 'all') {
+			setFilters({ hasOutstanding: undefined });
+		} else if (value === 'with_balance') {
+			setFilters({ hasOutstanding: true });
+		} else if (value === 'no_balance') {
+			setFilters({ hasOutstanding: false });
+		} else if (value === 'overdue') {
+			setFilters({ hasOutstanding: true });
+		}
+	};
 
 	useFocusEffect(
 		useCallback(() => {
@@ -66,9 +120,9 @@ export default function CustomersScreen() {
 			subtitle={item.phone || item.city || t('customer.noContactInfo')}
 			onPress={() => router.push(`/(app)/customers/${item.id}`)}
 			leftIcon={
-				<View style={[styles.avatar, { backgroundColor: theme.colors.surfaceVariant }]}>
-					<ThemedText weight="bold" color={theme.colors.primary} style={{ fontSize: 18 }}>
-						{item.name.charAt(0).toUpperCase()}
+				<View style={[styles.avatar, { backgroundColor: getAvatarColor(item.name) }]}>
+					<ThemedText weight="bold" color="#FFFFFF" style={{ fontSize: 15 }}>
+						{getInitials(item.name)}
 					</ThemedText>
 				</View>
 			}
@@ -98,6 +152,19 @@ export default function CustomersScreen() {
 					placeholder="Search customers..."
 					style={styles.searchBar}
 				/>
+				<FilterBar
+					filters={CUSTOMER_FILTERS}
+					activeValue={activeFilter}
+					onSelect={handleFilterSelect}
+					defaultValue="all"
+					onClear={() => handleFilterSelect('all')}
+				/>
+				{/* Summary Bar */}
+				<View style={[styles.summaryBar, { backgroundColor: theme.colors.surfaceVariant }]}>
+					<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
+						{`${customers.length} customers · ₹ ${formatCurrency(totalOutstanding)} to receive`}
+					</ThemedText>
+				</View>
 			</View>
 
 			{loading && customers.length === 0 ? (
@@ -164,6 +231,12 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	summaryBar: {
+		paddingHorizontal: 4,
+		paddingVertical: 6,
+		borderRadius: 6,
+		marginTop: 4,
 	},
 	fab: {
 		position: 'absolute',

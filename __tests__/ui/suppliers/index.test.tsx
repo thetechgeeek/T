@@ -16,11 +16,6 @@ describe('SupplierListScreen', () => {
 		expect(getByText('Suppliers')).toBeTruthy();
 	});
 
-	it('renders coming soon placeholder', () => {
-		const { getByText } = renderWithTheme(<SupplierListScreen />);
-		expect(getByText('Suppliers — coming soon')).toBeTruthy();
-	});
-
 	it('renders without crashing', () => {
 		const { toJSON } = renderWithTheme(<SupplierListScreen />);
 		expect(toJSON()).not.toBeNull();

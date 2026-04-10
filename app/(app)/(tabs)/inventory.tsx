@@ -8,6 +8,9 @@ import {
 	RefreshControl,
 	Alert,
 	ActivityIndicator,
+	Modal,
+	Pressable,
+	ScrollView,
 } from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
 import { Plus, Package, Search, SlidersHorizontal } from 'lucide-react-native';
@@ -21,8 +24,22 @@ import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Chip } from '@/src/components/atoms/Chip';
-import type { TileSetGroup, TileCategory } from '@/src/types/inventory';
+import type { TileSetGroup, TileCategory, InventoryFilters } from '@/src/types/inventory';
 import { layout } from '@/src/theme/layout';
+
+interface SortOption {
+	label: string;
+	sortBy: string;
+	sortDir: 'asc' | 'desc';
+}
+
+const SORT_OPTIONS: SortOption[] = [
+	{ label: 'A–Z', sortBy: 'design_name', sortDir: 'asc' },
+	{ label: 'Z–A', sortBy: 'design_name', sortDir: 'desc' },
+	{ label: 'Stock: Low→High', sortBy: 'box_count', sortDir: 'asc' },
+	{ label: 'Stock: High→Low', sortBy: 'box_count', sortDir: 'desc' },
+	{ label: 'Recently Added', sortBy: 'created_at', sortDir: 'desc' },
+];
 
 const CATEGORIES: ('ALL' | TileCategory)[] = [
 	'ALL',
@@ -39,7 +56,7 @@ const FiltersIcon = SlidersHorizontal;
 
 export default function InventoryTab() {
 	const { theme, c, s, r } = useThemeTokens();
-	const { t } = useLocale();
+	const { t, formatCurrency } = useLocale();
 	const router = useExpoRouter();
 
 	const { items, loading, hasMore, filters, fetchItems, setFilters } = useInventoryStore(
@@ -55,7 +72,13 @@ export default function InventoryTab() {
 	);
 	const [refreshing, setRefreshing] = useState(false);
 	const [searchInput, setSearchInput] = useState(filters.search || '');
+	const [sortSheetOpen, setSortSheetOpen] = useState(false);
 	const initialized = useRef(false);
+
+	const totalValue = useMemo(
+		() => items.reduce((acc, item) => acc + (item.box_count || 0) * (item.cost_price || 0), 0),
+		[items],
+	);
 
 	useEffect(() => {
 		// Only auto-fetch on first mount; after that, setFilters drives fetches
@@ -160,6 +183,7 @@ export default function InventoryTab() {
 							styles.filterBtn,
 							{ backgroundColor: c.surfaceVariant, borderRadius: r.md },
 						]}
+						onPress={() => setSortSheetOpen(true)}
 						accessibilityRole="button"
 						accessibilityLabel="inventory-filter-button"
 						accessibilityHint={t('inventory.filterHint')}
@@ -172,7 +196,7 @@ export default function InventoryTab() {
 					</TouchableOpacity>
 				</View>
 
-				{/* Categories (Horizontal Scroll) */}
+				{/* Categories (Horizontal Scroll) + Low Stock */}
 				<View style={styles.chipScrollWrap}>
 					<FlatList
 						horizontal
@@ -193,9 +217,98 @@ export default function InventoryTab() {
 								/>
 							);
 						}}
+						ListFooterComponent={
+							<Chip
+								label="Low Stock"
+								accessibilityLabel="category-chip-lowstock"
+								selected={!!filters.lowStockOnly}
+								onPress={() => setFilters({ lowStockOnly: !filters.lowStockOnly })}
+								style={{ marginRight: s.sm }}
+							/>
+						}
 					/>
 				</View>
 			</View>
+
+			{/* Summary Bar */}
+			<View
+				style={[
+					styles.summaryBar,
+					{ backgroundColor: c.surfaceVariant, borderBottomColor: c.border },
+				]}
+			>
+				<ThemedText variant="caption" color={c.onSurfaceVariant}>
+					{`${items.length} items · Stock value: ${formatCurrency(totalValue)}`}
+				</ThemedText>
+			</View>
+
+			{/* Sort Bottom Sheet */}
+			<Modal
+				visible={sortSheetOpen}
+				transparent
+				animationType="slide"
+				onRequestClose={() => setSortSheetOpen(false)}
+			>
+				<Pressable
+					style={[styles.sortBackdrop, { backgroundColor: 'rgba(0,0,0,0.4)' }]}
+					onPress={() => setSortSheetOpen(false)}
+				/>
+				<View
+					style={[
+						styles.sortSheet,
+						{
+							backgroundColor: c.surface,
+							borderTopLeftRadius: r.xl,
+							borderTopRightRadius: r.xl,
+						},
+					]}
+				>
+					<ThemedText
+						variant="h3"
+						style={{ paddingHorizontal: 20, paddingTop: 20, paddingBottom: 12 }}
+					>
+						Sort By
+					</ThemedText>
+					<ScrollView keyboardShouldPersistTaps="handled">
+						{SORT_OPTIONS.map((opt) => {
+							const isActive =
+								filters.sortBy === opt.sortBy && filters.sortDir === opt.sortDir;
+							return (
+								<Pressable
+									key={opt.label}
+									onPress={() => {
+										setFilters({
+											sortBy: opt.sortBy as InventoryFilters['sortBy'],
+											sortDir: opt.sortDir,
+										});
+										setSortSheetOpen(false);
+									}}
+									style={[
+										styles.sortOption,
+										{ borderBottomColor: c.border },
+										isActive
+											? { backgroundColor: c.surfaceVariant }
+											: undefined,
+									]}
+								>
+									<ThemedText
+										variant="body"
+										color={isActive ? c.primary : c.onSurface}
+										style={isActive ? { fontWeight: '600' } : undefined}
+									>
+										{opt.label}
+									</ThemedText>
+									{isActive ? (
+										<ThemedText color={c.primary} style={{ fontSize: 18 }}>
+											✓
+										</ThemedText>
+									) : null}
+								</Pressable>
+							);
+						})}
+					</ScrollView>
+				</View>
+			</Modal>
 
 			{/* List */}
 			<FlatList
@@ -277,5 +390,34 @@ const styles = StyleSheet.create({
 		borderRadius: 30,
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	summaryBar: {
+		paddingHorizontal: 16,
+		paddingVertical: 6,
+		borderBottomWidth: StyleSheet.hairlineWidth,
+	},
+	sortBackdrop: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+	},
+	sortSheet: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		maxHeight: '60%',
+		paddingBottom: 24,
+	},
+	sortOption: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		paddingHorizontal: 20,
+		paddingVertical: 14,
+		borderBottomWidth: StyleSheet.hairlineWidth,
+		minHeight: 48,
 	},
 });
