@@ -437,50 +437,43 @@ jest.mock('expo-camera', () => ({
 	useCameraPermissions: jest.fn().mockReturnValue([{ granted: true }, jest.fn()]),
 }));
 
-// Mock i18next globally to prevent import issues in non-React files
+// Mock i18next globally — loads real en.json so tests see actual English strings
 jest.mock('i18next', () => {
-	const t = (key: string, opts?: { defaultValue?: string }) => {
-		const SHARED_TRANSLATIONS: Record<string, string> = {
-			'common.add': 'Add',
-			'common.save': 'Save',
-			'common.ok': 'ok',
-			'common.today': 'Today',
-			'common.yesterday': 'Yesterday',
-			'common.error': 'Error',
-			'common.errorTitle': 'Error',
-			'common.successTitle': 'Success',
-			'customers.addErrorTitle': 'Error Saving Customer',
-			'finance.saveExpenseErrorTitle': 'Error Saving Expense',
-			'invoices.createErrorTitle': 'Error Creating Invoice',
-			'inventory.errorTitle': 'Error',
-			'inventory.stockOpValidationError': 'Please enter a valid quantity',
-			'finance.loadPurchasesError': 'Network error',
-			'finance.loadExpensesError': 'Network error',
-			'invoices.loadError': 'Public table missing',
-			'invoice.loadError': 'Public table missing',
-			'inventory.loadError': 'Schema error',
-			'inventory.addErrorTitle': 'Error',
-			errorTitle: 'Error',
-			stockOpValidationError: 'Please enter a valid quantity',
-			loadError: 'Public table missing',
-			saveError: 'saveError',
-			addErrorTitle: 'Error',
-			'auth.signIn': 'Sign In',
-			'auth.signUp': 'Sign Up',
-			'auth.welcome': 'Welcome to TileMaster',
-			'auth.subtitle': 'Manage your tiles & ceramics business',
-			'auth.setupBusiness': 'Set Up Your Business',
-			'auth.email': 'Email',
-			'auth.password': 'Password',
-			'inventory.noItems': 'No items in inventory',
-			'inventory.title': 'Inventory',
-			'invoice.noInvoices': 'No invoices found.',
-			'customer.noCustomers': 'No customers found',
-		};
-		if (SHARED_TRANSLATIONS[key]) return SHARED_TRANSLATIONS[key];
-		const shortKey = key.split('.').pop() || key;
-		return SHARED_TRANSLATIONS[shortKey] || opts?.defaultValue || shortKey;
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
+	const enJson = require('./src/i18n/locales/en.json') as Record<string, unknown>;
+
+	// Flatten nested JSON into dot-separated keys
+	function flatten(obj: Record<string, unknown>, prefix = ''): Record<string, string> {
+		const result: Record<string, string> = {};
+		for (const [k, v] of Object.entries(obj)) {
+			const fullKey = prefix ? `${prefix}.${k}` : k;
+			if (v && typeof v === 'object' && !Array.isArray(v)) {
+				Object.assign(result, flatten(v as Record<string, unknown>, fullKey));
+			} else {
+				result[fullKey] = String(v ?? '');
+			}
+		}
+		return result;
+	}
+
+	const TRANSLATIONS = flatten(enJson);
+
+	const t = (key: string, opts?: Record<string, unknown>): string => {
+		let val = TRANSLATIONS[key];
+		if (!val) {
+			// Fallback: last segment of key
+			const shortKey = key.split('.').pop() || key;
+			val = TRANSLATIONS[shortKey] || (opts?.defaultValue as string) || shortKey;
+		}
+		// Handle interpolation e.g. {{lang}}, {{theme}}
+		if (val && opts) {
+			return val.replace(/\{\{(\w+)\}\}/g, (_: string, k: string) =>
+				k in opts ? String(opts[k]) : `{{${k}}}`,
+			);
+		}
+		return val;
 	};
+
 	return {
 		__esModule: true,
 		default: {

@@ -16,10 +16,17 @@ jest.mock('@/src/hooks/useLocale', () => ({
 				'common.errorTitle': 'Error',
 				'common.ok': 'OK',
 				'invoice.loadError': 'Failed to load invoices',
+				'invoice.title': 'Invoices',
+				'invoice.newInvoice': 'New Invoice',
+				'invoice.noInvoices': 'No invoices found.',
+				'invoice.paid': 'Paid',
+				'invoice.unpaid': 'Unpaid',
+				'invoice.partial': 'Partial',
 			};
 			return map[key] ?? key.split('.').pop() ?? key;
 		},
 		formatCurrency: (amount: number) => `₹${amount.toFixed(2)}`,
+		formatDate: (d: string) => d,
 	}),
 }));
 

@@ -115,7 +115,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 							key={item.id}
 							activeOpacity={0.7}
 							accessibilityRole="button"
-							accessibilityLabel={`${item.design_name}, ${t('inventory.stockStatus', { count: item.box_count })}`}
+							accessibilityLabel={`${item.design_name}, ${item.box_count} boxes in stock`}
 							accessibilityHint={
 								isLow
 									? `${t('inventory.lowStockWarning')}. ${t('common.doubleTapToView')}`
@@ -214,7 +214,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 										},
 									]}
 								>
-									{t('inventory.stockStatus', { count: item.box_count })}
+									{t('inventory.boxCount', { count: item.box_count })}
 								</Text>
 								<Text
 									style={[

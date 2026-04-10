@@ -96,7 +96,7 @@ describe('LineItemsStep', () => {
 		const { getByText } = renderWithTheme(
 			<LineItemsStep {...makeProps({ lineItems: [sampleLineItem] })} />,
 		);
-		expect(getByText('10 units @ ₹1500.00')).toBeTruthy();
+		expect(getByText('10 units @ ₹1500')).toBeTruthy();
 	});
 
 	it('calls removeLineItem with correct index on Remove press', () => {

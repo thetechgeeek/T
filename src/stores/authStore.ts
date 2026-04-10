@@ -11,6 +11,10 @@ interface AuthState {
 	initialize: () => Promise<void>;
 	login: (email: string, password: string) => Promise<void>;
 	register: (email: string, password: string) => Promise<void>;
+	/** Send SMS OTP to phone (E.164 format: +91XXXXXXXXXX) */
+	sendOtp: (phone: string) => Promise<void>;
+	/** Verify 6-digit OTP. Returns true and sets session on success. */
+	verifyOtp: (phone: string, token: string) => Promise<void>;
 	logout: () => Promise<void>;
 	reset: () => void;
 }
@@ -68,6 +72,27 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 		try {
 			const data = await authService.signUp(email, password);
 			set({ session: data.session, user: data.user, isAuthenticated: !!data.session });
+		} finally {
+			set({ loading: false });
+		}
+	},
+
+	sendOtp: async (phone: string) => {
+		set({ loading: true });
+		try {
+			await authService.sendOtp(phone);
+		} finally {
+			set({ loading: false });
+		}
+	},
+
+	verifyOtp: async (phone: string, token: string) => {
+		set({ loading: true });
+		try {
+			const data = await authService.verifyOtp(phone, token);
+			if (data?.session) {
+				set({ session: data.session, user: data.session.user, isAuthenticated: true });
+			}
 		} finally {
 			set({ loading: false });
 		}

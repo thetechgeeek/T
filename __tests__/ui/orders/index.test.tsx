@@ -49,7 +49,7 @@ describe('OrdersListScreen', () => {
 
 		const { getByText } = renderWithTheme(<OrdersListScreen />);
 
-		fireEvent.press(getByText('Import PDF'));
+		fireEvent.press(getByText('Import Order (AI)'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/orders/import');
 	});
 

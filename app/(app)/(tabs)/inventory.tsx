@@ -135,7 +135,7 @@ export default function InventoryTab() {
 				]}
 			>
 				<View style={[layout.rowBetween, { marginBottom: 16 }]}>
-					<ThemedText variant="h1" accessibilityLabel="inventory-screen-title">
+					<ThemedText variant="h1" accessibilityLabel="inventory-screen">
 						{t('inventory.title')}
 					</ThemedText>
 				</View>
@@ -145,7 +145,7 @@ export default function InventoryTab() {
 					<View style={{ flex: 1 }}>
 						<TextInput
 							accessibilityLabel="inventory-search-input"
-							accessibilityHint={t('inventory.searchHint')}
+							accessibilityHint="Search by design name or item number"
 							placeholder={t('inventory.placeholders.designName')}
 							value={searchInput}
 							onChangeText={setSearchInput}
@@ -243,7 +243,7 @@ export default function InventoryTab() {
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-inventory-button"
-				accessibilityHint={t('inventory.addHint')}
+				accessibilityHint="Add a new inventory item"
 			>
 				<Plus
 					size={28}

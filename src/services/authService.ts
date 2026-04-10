@@ -54,6 +54,23 @@ export const authService = {
 		);
 	},
 
+	/** Send OTP to a phone number (E.164 format, e.g. +919876543210) */
+	async sendOtp(phone: string) {
+		const { error } = await supabase.auth.signInWithOtp({ phone });
+		if (error) throw wrapAuthError(error, 'OTP भेजने में समस्या हुई। फिर से try करें।');
+	},
+
+	/** Verify OTP entered by user */
+	async verifyOtp(phone: string, token: string) {
+		const { data, error } = await supabase.auth.verifyOtp({
+			phone,
+			token,
+			type: 'sms',
+		});
+		if (error) throw wrapAuthError(error, 'गलत OTP — फिर से try करें।');
+		return data;
+	},
+
 	onAuthStateChange(callback: Parameters<typeof supabase.auth.onAuthStateChange>[0]) {
 		return supabase.auth.onAuthStateChange(callback);
 	},

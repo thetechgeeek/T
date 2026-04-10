@@ -66,12 +66,12 @@ describe('PaymentStep', () => {
 
 	it('renders Grand Total', () => {
 		const { getByText } = renderWithTheme(<PaymentStep {...makeProps()} />);
-		expect(getByText('₹11800.00')).toBeTruthy();
+		expect(getByText('₹11800')).toBeTruthy();
 	});
 
 	it('renders Balance Due = grand total when nothing paid', () => {
 		const { getByText } = renderWithTheme(<PaymentStep {...makeProps()} />);
-		expect(getByText('Balance Due: ₹11800.00')).toBeTruthy();
+		expect(getByText('Balance Due: ₹11800')).toBeTruthy();
 	});
 
 	it('renders "Fully Paid" when fully paid', () => {
@@ -85,7 +85,7 @@ describe('PaymentStep', () => {
 		const { getByText } = renderWithTheme(
 			<PaymentStep {...makeProps({ amountPaidNum: 5000 })} />,
 		);
-		expect(getByText('Balance Due: ₹6800.00')).toBeTruthy();
+		expect(getByText('Balance Due: ₹6800')).toBeTruthy();
 	});
 
 	it('renders Amount Paid field placeholder', () => {

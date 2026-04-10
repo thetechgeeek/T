@@ -202,7 +202,7 @@ export default function AddCustomerScreen() {
 						/>
 
 						<Button
-							title={loading ? t('common.loading') : t('common.save')}
+							title={loading ? t('common.loading') : t('customer.saveCustomer')}
 							accessibilityLabel="save-customer-button"
 							accessibilityState={{ busy: loading }}
 							onPress={handleSubmit(onSubmit)}

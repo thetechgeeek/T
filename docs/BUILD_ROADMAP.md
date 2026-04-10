@@ -63,196 +63,196 @@ P22  Standalone & Integration Features
 
 ### P0.1 Design Tokens & Theme
 
-- [ ] Define all spacing tokens: `xs=4`, `sm=8`, `md=12`, `lg=16`, `xl=24`, `2xl=32`, `3xl=48`, `4xl=64` — used consistently via `useThemeTokens().s`
-- [ ] Define all border radius tokens: `none=0`, `sm=4`, `md=8`, `lg=12`, `xl=16`, `full=9999`
-- [ ] Define touch target token: `touchTarget=48` — enforced on every interactive wrapper
-- [ ] Define shadow tokens: `sm`, `md`, `lg` — three elevation levels, platform-aware (iOS shadow props, Android elevation)
-- [ ] Define animation tokens: spring preset (damping 20, stiffness 200), timing preset (duration 200ms, easing ease-out) — used consistently via Reanimated
-- [ ] Build `buildTheme(isDark: boolean)` function that returns typed `ThemeColors` object for light and dark — no hardcoded hex values anywhere outside this function
+- [x] Define all spacing tokens: `xs=4`, `sm=8`, `md=12`, `lg=16`, `xl=24`, `2xl=32`, `3xl=48`, `4xl=64` — used consistently via `useThemeTokens().s`
+- [x] Define all border radius tokens: `none=0`, `sm=4`, `md=8`, `lg=12`, `xl=16`, `full=9999`
+- [x] Define touch target token: `touchTarget=48` — enforced on every interactive wrapper
+- [x] Define shadow tokens: `sm`, `md`, `lg` — three elevation levels, platform-aware (iOS shadow props, Android elevation)
+- [x] Define animation tokens: spring preset (damping 20, stiffness 200), timing preset (duration 200ms, easing ease-out) — used consistently via Reanimated
+- [x] Build `buildTheme(isDark: boolean)` function that returns typed `ThemeColors` object for light and dark — no hardcoded hex values anywhere outside this function
 
 ### P0.2 Typography System
 
-- [ ] Define `ThemedText` component variants: `display` (30sp, bold), `h1` (24sp, bold), `h2` (20sp, semibold), `h3` (18sp, semibold), `body` (16sp, regular), `bodyBold` (16sp, bold), `caption` (14sp, regular), `captionBold` (14sp, bold), `amount` (20sp, bold, terracotta), `amountLarge` (28sp, bold, terracotta), `amountNegative` (20sp, bold, red), `label` (13sp, medium, secondary colour)
-- [ ] All `ThemedText` instances set `maxFontSizeMultiplier={1.3}` — prevents layout breaks when user has system large text enabled
-- [ ] Verify WCAG AA contrast ratio (≥ 4.5:1) for every colour pair: body-text on `surface`, body-text on `background`, caption on `surface`, amount on `surface`, white on `primary`, white on `success`, white on `error`
-- [ ] Dark theme: all colour pairs also pass WCAG AA
-- [ ] `allowFontScaling` is `true` on all `Text` components (respects user setting up to 1.3×)
-- [ ] Line height = 1.5× font size on all body/caption text for readability
+- [x] Define `ThemedText` component variants: `display` (30sp, bold), `h1` (24sp, bold), `h2` (20sp, semibold), `h3` (18sp, semibold), `body` (16sp, regular), `bodyBold` (16sp, bold), `caption` (14sp, regular), `captionBold` (14sp, bold), `amount` (20sp, bold, terracotta), `amountLarge` (28sp, bold, terracotta), `amountNegative` (20sp, bold, red), `label` (13sp, medium, secondary colour)
+- [x] All `ThemedText` instances set `maxFontSizeMultiplier={1.3}` — prevents layout breaks when user has system large text enabled
+- [x] Verify WCAG AA contrast ratio (≥ 4.5:1) for every colour pair: body-text on `surface`, body-text on `background`, caption on `surface`, amount on `surface`, white on `primary`, white on `success`, white on `error`
+- [x] Dark theme: all colour pairs also pass WCAG AA
+- [x] `allowFontScaling` is `true` on all `Text` components (respects user setting up to 1.3×)
+- [x] Line height = 1.5× font size on all body/caption text for readability
 
 ### P0.3 Colour Palette
 
-- [ ] Primary / brand: `#C1440E` (light), `#E8622A` (dark)
-- [ ] Success green: `#1A8754` (light), `#2DB87A` (dark)
-- [ ] Warning amber: `#B45309` (light), `#F59E0B` (dark)
-- [ ] Error red: `#B91C1C` (light), `#EF4444` (dark)
-- [ ] Info blue: `#1D4ED8` (light), `#60A5FA` (dark)
-- [ ] Surface / card: `#FFFFFF` (light), `#1C1C1E` (dark)
-- [ ] Background: `#F5F0EB` (light), `#000000` (dark)
-- [ ] Border: `#E5DDD5` (light), `#38383A` (dark)
-- [ ] Secondary text: `#6B5E52` (light), `#98989E` (dark)
-- [ ] Paid status: success green background tint `#D1FAE5`, text `#065F46`
-- [ ] Unpaid status: error red tint `#FEE2E2`, text `#991B1B`
-- [ ] Partial status: warning amber tint `#FEF3C7`, text `#92400E`
-- [ ] Overdue status: dark red `#7F1D1D` tint `#FEE2E2`
+- [x] Primary / brand: `#C1440E` (light), `#E8622A` (dark)
+- [x] Success green: `#1A8754` (light), `#2DB87A` (dark)
+- [x] Warning amber: `#B45309` (light), `#F59E0B` (dark)
+- [x] Error red: `#B91C1C` (light), `#EF4444` (dark)
+- [x] Info blue: `#1D4ED8` (light), `#60A5FA` (dark)
+- [x] Surface / card: `#FFFFFF` (light), `#1C1C1E` (dark)
+- [x] Background: `#F5F0EB` (light), `#000000` (dark)
+- [x] Border: `#E5DDD5` (light), `#38383A` (dark)
+- [x] Secondary text: `#6B5E52` (light), `#98989E` (dark)
+- [x] Paid status: success green background tint `#D1FAE5`, text `#065F46`
+- [x] Unpaid status: error red tint `#FEE2E2`, text `#991B1B`
+- [x] Partial status: warning amber tint `#FEF3C7`, text `#92400E`
+- [x] Overdue status: dark red `#7F1D1D` tint `#FEE2E2`
 
 ### P0.4 Touch Targets & Interaction
 
-- [ ] Create `TouchableCard` component: wraps children in `Pressable` with Reanimated `useAnimatedStyle` for scale 0.97 + opacity 0.85 on press — used for all tappable cards
-- [ ] Create `PrimaryButton` component: full-width, terracotta background, white text 16sp bold, min-height 52dp, `Haptics.impactAsync(ImpactFeedbackStyle.Medium)` on press
-- [ ] Create `SecondaryButton` component: outlined, terracotta border and text, same sizing as `PrimaryButton`
-- [ ] Create `DestructiveButton` component: red background, same sizing, `Haptics.notificationAsync(NotificationFeedbackType.Error)` on press
-- [ ] Create `IconButton` component: icon + optional label below, min 48×48dp, `Haptics.impactAsync(Light)` on press
-- [ ] Create `FAB` (Floating Action Button) component: 56×56dp circle, terracotta, shadow-lg, `+` icon with optional label beside on tablet
-- [ ] All disabled buttons: opacity 0.4, no haptic, no press animation
-- [ ] Every `Pressable` and `TouchableOpacity` in the codebase audited — minimum `hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}` where needed to reach 48dp target
-- [ ] `Haptics.notificationAsync(Success)` fires on every successful form save
-- [ ] `Haptics.notificationAsync(Error)` fires on every form validation failure or API error
+- [x] Create `TouchableCard` component: wraps children in `Pressable` with Reanimated `useAnimatedStyle` for scale 0.97 + opacity 0.85 on press — used for all tappable cards
+- [x] Create `PrimaryButton` component: full-width, terracotta background, white text 16sp bold, min-height 52dp, `Haptics.impactAsync(ImpactFeedbackStyle.Medium)` on press
+- [x] Create `SecondaryButton` component: outlined, terracotta border and text, same sizing as `PrimaryButton`
+- [x] Create `DestructiveButton` component: red background, same sizing, `Haptics.notificationAsync(NotificationFeedbackType.Error)` on press
+- [x] Create `IconButton` component: icon + optional label below, min 48×48dp, `Haptics.impactAsync(Light)` on press
+- [x] Create `FAB` (Floating Action Button) component: 56×56dp circle, terracotta, shadow-lg, `+` icon with optional label beside on tablet
+- [x] All disabled buttons: opacity 0.4, no haptic, no press animation
+- [x] Every `Pressable` and `TouchableOpacity` in the codebase audited — minimum `hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}` where needed to reach 48dp target
+- [x] `Haptics.notificationAsync(Success)` fires on every successful form save
+- [x] `Haptics.notificationAsync(Error)` fires on every form validation failure or API error
 
 ### P0.5 Navigation Shell
 
-- [ ] Bottom tab bar rebuilt: **5 tabs** — Home (house icon + "Home"/"होम"), Sale (receipt icon + "Sale"/"बिक्री"), Purchase (cart icon + "Purchase"/"खरीद"), Reports (chart icon + "Reports"/"रिपोर्ट"), More (grid icon + "More"/"और")
-- [ ] Tab bar background: `surface` colour with 1dp top border; safe-area inset applied below icons
-- [ ] Active tab: filled icon + terracotta label; inactive: outline icon + secondary label
-- [ ] Tab icon size: 24×24dp; label size: 11sp (min readable for 50YO)
-- [ ] Tab bar height: 64dp + safe area bottom (≥ 80dp total on most phones)
-- [ ] `More` tab shows a 3×N grid of module cards: Parties, Inventory, Expenses, Other Income, Loans, Cheques, Backup, Settings — each card: icon (48dp), Hindi/English label below, arrow icon
-- [ ] `ScreenHeader` component: safe-area aware top inset, terracotta background, back arrow (←, 28sp, `Haptics.impactAsync(Light)` on press), title in white `h2`, optional right-side icon button
-- [ ] Back press on any screen where data is entered: if form is dirty → `ConfirmationModal` asking "Changes not saved. Go back?" (Hindi: "बदलाव save नहीं हुए। वापस जाएं?") — only if `showWarningForUnsavedChanges` setting is ON
-- [ ] Global `ConfirmationModal`: dark overlay, white card, title `h3`, message `body`, two buttons side-by-side — Cancel (secondary) + Confirm (primary or destructive)
-- [ ] `ConfirmationModal` accessible: `role="dialog"`, `aria-modal="true"`, first focusable element is Cancel button
-- [ ] Global `Toast` component: appears at bottom above tab bar, auto-dismisses in 3 seconds, swipe-up to dismiss early; `success` (green left border), `error` (red left border), `info` (blue left border); message text 15sp
+- [x] Bottom tab bar rebuilt: **5 tabs** — Home (house icon + "Home"/"होम"), Sale (receipt icon + "Sale"/"बिक्री"), Purchase (cart icon + "Purchase"/"खरीद"), Reports (chart icon + "Reports"/"रिपोर्ट"), More (grid icon + "More"/"और")
+- [x] Tab bar background: `surface` colour with 1dp top border; safe-area inset applied below icons
+- [x] Active tab: filled icon + terracotta label; inactive: outline icon + secondary label
+- [x] Tab icon size: 24×24dp; label size: 11sp (min readable for 50YO)
+- [x] Tab bar height: 64dp + safe area bottom (≥ 80dp total on most phones)
+- [x] `More` tab shows a 3×N grid of module cards: Parties, Inventory, Expenses, Other Income, Loans, Cheques, Backup, Settings — each card: icon (48dp), Hindi/English label below, arrow icon
+- [x] `ScreenHeader` component: safe-area aware top inset, terracotta background, back arrow (←, 28sp, `Haptics.impactAsync(Light)` on press), title in white `h2`, optional right-side icon button
+- [x] Back press on any screen where data is entered: if form is dirty → `ConfirmationModal` asking "Changes not saved. Go back?" (Hindi: "बदलाव save नहीं हुए। वापस जाएं?") — only if `showWarningForUnsavedChanges` setting is ON
+- [x] Global `ConfirmationModal`: dark overlay, white card, title `h3`, message `body`, two buttons side-by-side — Cancel (secondary) + Confirm (primary or destructive)
+- [x] `ConfirmationModal` accessible: `role="dialog"`, `aria-modal="true"`, first focusable element is Cancel button
+- [x] Global `Toast` component: appears at bottom above tab bar, auto-dismisses in 3 seconds, swipe-up to dismiss early; `success` (green left border), `error` (red left border), `info` (blue left border); message text 15sp
 
 ### P0.6 Form Components Library
 
 #### FormField
 
-- [ ] `FormField` wrapper: renders visible `label` text (14sp, captionBold, secondary colour) always above the input — never floating placeholder
-- [ ] Shows `helperText` below input in 13sp caption style when provided
-- [ ] Shows `errorText` below input in 13sp red text when `error` prop is set — replaces helper text
-- [ ] Red left border on input container when in error state
-- [ ] `required` prop adds red asterisk beside label: "नाम \*"
-- [ ] `accessibilityLabel` automatically set to label text if not explicitly provided
+- [x] `FormField` wrapper: renders visible `label` text (14sp, captionBold, secondary colour) always above the input — never floating placeholder
+- [x] Shows `helperText` below input in 13sp caption style when provided
+- [x] Shows `errorText` below input in 13sp red text when `error` prop is set — replaces helper text
+- [x] Red left border on input container when in error state
+- [x] `required` prop adds red asterisk beside label: "नाम \*"
+- [x] `accessibilityLabel` automatically set to label text if not explicitly provided
 
 #### AmountInput
 
-- [ ] Numeric-only input: `keyboardType="number-pad"`, no decimal key unless `allowDecimals` prop true
-- [ ] `₹` prefix rendered as non-editable text left of input (not a placeholder)
-- [ ] Formats display value with Indian grouping as user types: `12345` → `12,345`, `100000` → `1,00,000`
-- [ ] Internal value stored as raw number (not string) — `onChange(value: number)`
-- [ ] `maxValue` prop: shows inline error "₹ [maxValue] से अधिक नहीं हो सकता" if exceeded
-- [ ] When value is 0 and `showZero` is false: shows placeholder text instead of "₹ 0"
-- [ ] Font size: 20sp bold, terracotta colour
-- [ ] Height: 52dp minimum
+- [x] Numeric-only input: `keyboardType="number-pad"`, no decimal key unless `allowDecimals` prop true
+- [x] `₹` prefix rendered as non-editable text left of input (not a placeholder)
+- [x] Formats display value with Indian grouping as user types: `12345` → `12,345`, `100000` → `1,00,000`
+- [x] Internal value stored as raw number (not string) — `onChange(value: number)`
+- [x] `maxValue` prop: shows inline error "₹ [maxValue] से अधिक नहीं हो सकता" if exceeded
+- [x] When value is 0 and `showZero` is false: shows placeholder text instead of "₹ 0"
+- [x] Font size: 20sp bold, terracotta colour
+- [x] Height: 52dp minimum
 
 #### DatePickerField
 
-- [ ] Displays date as "DD MMM YYYY" (e.g. "05 Apr 2025") — readable, not numbers-only
-- [ ] Calendar icon (20dp) on the right side of field
-- [ ] On tap: opens native `DateTimePicker` (iOS) or `DatePickerAndroid` (Android); falls back to modal picker if native unavailable
-- [ ] `minDate` and `maxDate` props for range constraints
-- [ ] `defaultValue` defaults to today
-- [ ] `shortcuts` prop: renders quick-tap chips "Today" / "Yesterday" / "This Month Start" above picker
+- [x] Displays date as "DD MMM YYYY" (e.g. "05 Apr 2025") — readable, not numbers-only
+- [x] Calendar icon (20dp) on the right side of field
+- [x] On tap: opens native `DateTimePicker` (iOS) or `DatePickerAndroid` (Android); falls back to modal picker if native unavailable
+- [x] `minDate` and `maxDate` props for range constraints
+- [x] `defaultValue` defaults to today
+- [x] `shortcuts` prop: renders quick-tap chips "Today" / "Yesterday" / "This Month Start" above picker
 
 #### SearchBar
 
-- [ ] Magnifier icon left, clear ×-button right (only when text present), clear button ≥ 48dp target
-- [ ] `debounceMs` prop (default 300) — `onSearch` fires after debounce
-- [ ] On first tap: keyboard opens, no full-screen overlay needed
-- [ ] Placeholder text in Hindi when locale is `hi`: "खोजें..."
-- [ ] Height: 48dp; border radius: 24dp (pill shape)
+- [x] Magnifier icon left, clear ×-button right (only when text present), clear button ≥ 48dp target
+- [x] `debounceMs` prop (default 300) — `onSearch` fires after debounce
+- [x] On first tap: keyboard opens, no full-screen overlay needed
+- [x] Placeholder text in Hindi when locale is `hi`: "खोजें..."
+- [x] Height: 48dp; border radius: 24dp (pill shape)
 
 #### BottomSheetPicker
 
-- [ ] Opens a modal bottom sheet occupying 80% of screen height
-- [ ] Search bar at top of sheet for filtering options
-- [ ] Options list rendered in `FlashList` for performance
-- [ ] Selected option shows green checkmark on right
-- [ ] "+ नया जोड़ें" / "+ Add new" button at bottom of list when `allowAdd` prop is true — tapping it opens an inline mini-form
-- [ ] Sheet header: title text + close button (×)
-- [ ] Backdrop tap dismisses sheet (same as pressing close)
-- [ ] Keyboard-aware: sheet moves up when keyboard opens for search
+- [x] Opens a modal bottom sheet occupying 80% of screen height
+- [x] Search bar at top of sheet for filtering options
+- [x] Options list rendered in `FlashList` for performance
+- [x] Selected option shows green checkmark on right
+- [x] "+ नया जोड़ें" / "+ Add new" button at bottom of list when `allowAdd` prop is true — tapping it opens an inline mini-form
+- [x] Sheet header: title text + close button (×)
+- [x] Backdrop tap dismisses sheet (same as pressing close)
+- [x] Keyboard-aware: sheet moves up when keyboard opens for search
 
 #### PhoneInput
 
-- [ ] "+91" prefix rendered as static non-editable text
-- [ ] Input: exactly 10 digits; `keyboardType="phone-pad"`
-- [ ] Auto-formats as user types: after 5 digits inserts a space: "98765 43210"
-- [ ] On blur: validates length; shows "10 अंक चाहिए" error if incomplete
-- [ ] Paste handling: strips `+91`, spaces, dashes from pasted number, takes last 10 digits
+- [x] "+91" prefix rendered as static non-editable text
+- [x] Input: exactly 10 digits; `keyboardType="phone-pad"`
+- [x] Auto-formats as user types: after 5 digits inserts a space: "98765 43210"
+- [x] On blur: validates length; shows "10 अंक चाहिए" error if incomplete
+- [x] Paste handling: strips `+91`, spaces, dashes from pasted number, takes last 10 digits
 
 #### TextAreaField
 
-- [ ] Multi-line `TextInput` with `multiline` and `numberOfLines={3}`
-- [ ] Character counter in bottom-right corner when `maxLength` is set: "45/200"
-- [ ] Minimum height 80dp; auto-grows up to `maxLines` prop
+- [x] Multi-line `TextInput` with `multiline` and `numberOfLines={3}`
+- [x] Character counter in bottom-right corner when `maxLength` is set: "45/200"
+- [x] Minimum height 80dp; auto-grows up to `maxLines` prop
 
 ### P0.7 List Infrastructure
 
 #### PaginatedList
 
-- [ ] Built on `FlashList` (not `FlatList`) for 60fps perf on long lists
-- [ ] `onEndReachedThreshold={0.3}`: fires `onLoadMore` when 30% from bottom
-- [ ] Shows `SkeletonRow` components (3 rows) while `isLoading && data.length === 0`
-- [ ] Shows `EmptyState` component when `!isLoading && data.length === 0`
-- [ ] `refreshControl` with `RefreshControl` — calls `onRefresh` on pull-to-refresh
-- [ ] Shows `ErrorRetry` component when `hasError === true`: error icon + message + "Retry" button
-- [ ] `ListHeaderComponent` slot for summary cards / filter bar
-- [ ] `estimatedItemSize` prop required for FlashList performance
+- [x] Built on `FlashList` (not `FlatList`) for 60fps perf on long lists
+- [x] `onEndReachedThreshold={0.3}`: fires `onLoadMore` when 30% from bottom
+- [x] Shows `SkeletonRow` components (3 rows) while `isLoading && data.length === 0`
+- [x] Shows `EmptyState` component when `!isLoading && data.length === 0`
+- [x] `refreshControl` with `RefreshControl` — calls `onRefresh` on pull-to-refresh
+- [x] Shows `ErrorRetry` component when `hasError === true`: error icon + message + "Retry" button
+- [x] `ListHeaderComponent` slot for summary cards / filter bar
+- [x] `estimatedItemSize` prop required for FlashList performance
 
 #### SkeletonRow
 
-- [ ] Animated shimmer effect via Reanimated: gradient sweeps left-to-right repeatedly
-- [ ] Row height matches the list item it's replacing (configurable via `height` prop)
-- [ ] Two variants: `compact` (48dp) and `card` (80dp)
+- [x] Animated shimmer effect via Reanimated: gradient sweeps left-to-right repeatedly
+- [x] Row height matches the list item it's replacing (configurable via `height` prop)
+- [x] Two variants: `compact` (48dp) and `card` (80dp)
 
 #### EmptyState
 
-- [ ] Illustration image (SVG or PNG, max 160×160dp)
-- [ ] Title text (h3, centred)
-- [ ] Description text (body, centred, secondary colour)
-- [ ] Optional primary action button below description
-- [ ] Unique illustration per context: no invoices (receipt illustration), no items (box), no parties (person), no reports data (chart)
+- [x] Illustration image (SVG or PNG, max 160×160dp)
+- [x] Title text (h3, centred)
+- [x] Description text (body, centred, secondary colour)
+- [x] Optional primary action button below description
+- [x] Unique illustration per context: no invoices (receipt illustration), no items (box), no parties (person), no reports data (chart)
 
 #### FilterBar
 
-- [ ] Horizontal `ScrollView` (no scroll indicators visible) with chips
-- [ ] Chip: pill shape, 36dp height, 12dp horizontal padding, 13sp label
-- [ ] Active chip: filled terracotta background, white text
-- [ ] Inactive chip: white background, terracotta border and text
-- [ ] "Clear all" chip appears at end of bar when any non-default filter is active; tapping resets all filters
-- [ ] Date range chip: shows selected range as "01 Apr – 30 Apr" when active
+- [x] Horizontal `ScrollView` (no scroll indicators visible) with chips
+- [x] Chip: pill shape, 36dp height, 12dp horizontal padding, 13sp label
+- [x] Active chip: filled terracotta background, white text
+- [x] Inactive chip: white background, terracotta border and text
+- [x] "Clear all" chip appears at end of bar when any non-default filter is active; tapping resets all filters
+- [x] Date range chip: shows selected range as "01 Apr – 30 Apr" when active
 
 #### SwipeableRow
 
-- [ ] Built with Reanimated `useAnimatedGestureHandler` + `GestureHandlerRootView`
-- [ ] Swipe left by ≥ 80dp: reveals action buttons
-- [ ] Swipe left by ≥ 60% of row width: auto-snaps to reveal (no need to hold)
-- [ ] Swipe right (or tap elsewhere): snaps back to closed
-- [ ] Behind row: right-aligned action buttons of equal width (max 3 actions)
-- [ ] Edit action: blue (`#1D4ED8`) background, pencil icon + "Edit"/"संपादन" label
-- [ ] Delete action: red background, trash icon + "Delete"/"हटाएं" label — tap triggers `ConfirmationModal` before firing `onDelete`
-- [ ] Additional action slot (e.g. "Share WhatsApp") with green background
+- [x] Built with Reanimated `useAnimatedGestureHandler` + `GestureHandlerRootView`
+- [x] Swipe left by ≥ 80dp: reveals action buttons
+- [x] Swipe left by ≥ 60% of row width: auto-snaps to reveal (no need to hold)
+- [x] Swipe right (or tap elsewhere): snaps back to closed
+- [x] Behind row: right-aligned action buttons of equal width (max 3 actions)
+- [x] Edit action: blue (`#1D4ED8`) background, pencil icon + "Edit"/"संपादन" label
+- [x] Delete action: red background, trash icon + "Delete"/"हटाएं" label — tap triggers `ConfirmationModal` before firing `onDelete`
+- [x] Additional action slot (e.g. "Share WhatsApp") with green background
 
 ### P0.8 Offline & Sync Infrastructure
 
-- [ ] `WriteQueueService`: singleton class initialized at app start
+- [x] `WriteQueueService`: singleton class initialized at app start
     - [ ] `enqueue(mutation: QueuedMutation)`: adds to AsyncStorage-persisted queue; if online, executes immediately; if offline, stores with `pendingAt` timestamp
     - [ ] `QueuedMutation` shape: `{ id: string, type: 'insert'|'update'|'delete', table: string, payload: object, idempotencyKey: string, retryCount: number }`
     - [ ] `replay()`: called on network reconnect; executes mutations FIFO; skips if `idempotencyKey` already processed (deduplication)
     - [ ] Failed mutations: retried up to 3 times with exponential backoff (1s, 3s, 9s); after 3 failures: moved to `deadLetterQueue` and user notified
     - [ ] `getPendingCount()`: returns number of queued mutations — shown in `SyncIndicator`
-- [ ] `OfflineBanner` (enhance existing):
+- [x] `OfflineBanner` (enhance existing):
     - [ ] Shows when `useNetworkStatus()` returns `isConnected: false`
     - [ ] Hindi text: "इंटरनेट नहीं है — काम सेव हो रहा है, जल्द sync होगा"
     - [ ] English text: "No internet — your work is saved, will sync when connected"
     - [ ] Shows pending mutation count: "(3 changes pending)"
     - [ ] Tap banner → opens sync log modal
-- [ ] `SyncIndicator` in `ScreenHeader`:
+- [x] `SyncIndicator` in `ScreenHeader`:
     - [ ] Online + synced: green cloud-check icon (20dp)
     - [ ] Syncing: animated spinning cloud icon
     - [ ] Offline: grey cloud-off icon
     - [ ] Tap → bottom sheet with pending mutations list (table, action, timestamp)
-- [ ] Conflict resolution: when `updated_at` on server > local version at time of offline edit:
+- [x] Conflict resolution: when `updated_at` on server > local version at time of offline edit:
     - [ ] Show `ConflictModal`: side-by-side comparison "Your version" vs "Server version" for key fields
     - [ ] "Keep mine" button: force-overwrites server version with user's edits
     - [ ] "Use server" button: discards local edit, loads server version
@@ -260,27 +260,27 @@ P22  Standalone & Integration Features
 
 ### P0.9 Indian Number & Date Formatting
 
-- [ ] `formatCurrency(amount: number, opts?: {decimals?: 0|2, compact?: boolean}): string`
+- [x] `formatCurrency(amount: number, opts?: {decimals?: 0|2, compact?: boolean}): string`
     - [ ] Default: `₹ 1,00,000` (no decimals, Indian grouping)
     - [ ] `decimals: 2`: `₹ 1,00,000.50`
     - [ ] `compact: true` with `currentLanguage === 'hi'`: `₹ 1 लाख`, `₹ 10 लाख`, `₹ 1 करोड़`, `₹ 10 करोड़`
     - [ ] `compact: true` with `currentLanguage === 'en'`: `₹ 1 Lakh`, `₹ 1 Crore`
     - [ ] Negative amounts: `- ₹ 5,000` (space after minus, not parentheses)
     - [ ] Zero: `₹ 0` (never blank)
-- [ ] `formatDate(isoString: string, format: 'DD/MM/YYYY'|'DD MMM YYYY'|'DD MMM YY'|'MMM YYYY'): string`
+- [x] `formatDate(isoString: string, format: 'DD/MM/YYYY'|'DD MMM YYYY'|'DD MMM YY'|'MMM YYYY'): string`
     - [ ] Hindi month names when `currentLanguage === 'hi'`: जनवरी, फरवरी, मार्च, अप्रैल, मई, जून, जुलाई, अगस्त, सितंबर, अक्टूबर, नवंबर, दिसंबर
     - [ ] Time format (when needed): 12-hour with AM/PM in Hindi: "दोपहर 2:30 बजे" style — or simpler "2:30 PM"
-- [ ] `formatQuantity(qty: number, unit: string, decimalPlaces: 0|2|3): string`
+- [x] `formatQuantity(qty: number, unit: string, decimalPlaces: 0|2|3): string`
     - [ ] `100 Pcs`, `2.5 Kg`, `10.500 Ltr`
-- [ ] `amountInWords(amount: number, language: 'hi'|'en'): string`
+- [x] `amountInWords(amount: number, language: 'hi'|'en'): string`
     - [ ] Hindi: "दो हजार पाँच सौ रुपये मात्र"
     - [ ] English: "Rupees Two Thousand Five Hundred Only"
     - [ ] Used on invoice print footer
 
 ### P0.10 Error Mapping
 
-- [ ] `AppError` class with `code`, `message (hi)`, `message (en)`, `originalError` fields
-- [ ] Error code map:
+- [x] `AppError` class with `code`, `message (hi)`, `message (en)`, `originalError` fields
+- [x] Error code map:
     - [ ] Supabase `PGRST116` (no rows): "कोई data नहीं मिला" / "No data found"
     - [ ] Supabase `23505` (unique constraint): "यह पहले से exist करता है" / "This already exists" + field hint
     - [ ] Supabase `23503` (foreign key violation): "यह delete नहीं हो सकता, इससे जुड़ा data है" / "Cannot delete — linked records exist"
@@ -293,19 +293,19 @@ P22  Standalone & Integration Features
 
 ### P0.11 i18n Infrastructure
 
-- [ ] All user-visible strings in `en.json` and `hi.json` — zero hardcoded strings in components
-- [ ] Automated parity check: CI step that errors if any key in `en.json` is missing from `hi.json` or vice versa
-- [ ] All `{{variable}}` interpolations present in both locales
-- [ ] Namespaces: `common`, `auth`, `dashboard`, `invoice`, `purchase`, `payment`, `customer`, `supplier`, `inventory`, `finance`, `expense`, `reports`, `gst`, `settings`, `backup`, `utilities`, `errors`, `pdf`, `scanner`
-- [ ] Language switch persists to `AsyncStorage` under key `@app/language`
-- [ ] RTL support not needed (Hindi is LTR) but `I18nManager.isRTL` check in place for future
+- [x] All user-visible strings in `en.json` and `hi.json` — zero hardcoded strings in components
+- [x] Automated parity check: CI step that errors if any key in `en.json` is missing from `hi.json` or vice versa
+- [x] All `{{variable}}` interpolations present in both locales
+- [x] Namespaces: `common`, `auth`, `dashboard`, `invoice`, `purchase`, `payment`, `customer`, `supplier`, `inventory`, `finance`, `expense`, `reports`, `gst`, `settings`, `backup`, `utilities`, `errors`, `pdf`, `scanner`
+- [x] Language switch persists to `AsyncStorage` under key `@app/language`
+- [x] RTL support not needed (Hindi is LTR) but `I18nManager.isRTL` check in place for future
 
 ### P0.12 Loading & Skeleton States
 
-- [ ] Every data-fetching screen shows skeleton immediately (no blank white flash)
-- [ ] Skeleton shimmer animation: `withRepeat(withTiming(...))` via Reanimated — 1.5s loop
-- [ ] `SkeletonBlock` atom: rectangular placeholder, configurable width/height/border-radius
-- [ ] Screen-specific skeleton layouts:
+- [x] Every data-fetching screen shows skeleton immediately (no blank white flash)
+- [x] Skeleton shimmer animation: `withRepeat(withTiming(...))` via Reanimated — 1.5s loop
+- [x] `SkeletonBlock` atom: rectangular placeholder, configurable width/height/border-radius
+- [x] Screen-specific skeleton layouts:
     - [ ] Invoice list skeleton: 5 rows, each with 3-line layout (invoice no, customer, amount)
     - [ ] Dashboard skeleton: 4 stat card boxes + 2 summary tiles + 3 quick action buttons
     - [ ] Item list skeleton: 6 rows, each with image thumb + 2 text lines + price
@@ -325,41 +325,41 @@ P22  Standalone & Integration Features
 **Route:** `/(auth)/language-select`
 **Shown:** Once on first install; flag `@app/languageSelected` in AsyncStorage; skips to login on subsequent launches
 
-- [ ] Full-screen layout: brand logo at top (48dp), tagline "आपका डिजिटल बही-खाता" below logo
-- [ ] Two language cards displayed side-by-side, each occupying 45% screen width, height 120dp
-- [ ] Hindi card: large "हिंदी" text (28sp bold), subtext "हिंदी में चलाएं" below
-- [ ] English card: large "English" text (28sp bold), subtext "Use in English" below
-- [ ] Selected card: terracotta border (3dp), light terracotta fill — visual confirmation
-- [ ] "Continue" / "आगे बढ़ें" primary button below cards — disabled until selection made
-- [ ] Small text at bottom: "आप बाद में Settings से भाषा बदल सकते हैं" / "You can change language in Settings later"
-- [ ] Tapping a card: sets `i18next.changeLanguage()`, persists to AsyncStorage, enables Continue button
-- [ ] Continue: sets `@app/languageSelected = true`, navigates to login
+- [x] Full-screen layout: brand logo at top (48dp), tagline "आपका डिजिटल बही-खाता" below logo
+- [x] Two language cards displayed side-by-side, each occupying 45% screen width, height 120dp
+- [x] Hindi card: large "हिंदी" text (28sp bold), subtext "हिंदी में चलाएं" below
+- [x] English card: large "English" text (28sp bold), subtext "Use in English" below
+- [x] Selected card: terracotta border (3dp), light terracotta fill — visual confirmation
+- [x] "Continue" / "आगे बढ़ें" primary button below cards — disabled until selection made
+- [x] Small text at bottom: "आप बाद में Settings से भाषा बदल सकते हैं" / "You can change language in Settings later"
+- [x] Tapping a card: sets `i18next.changeLanguage()`, persists to AsyncStorage, enables Continue button
+- [x] Continue: sets `@app/languageSelected = true`, navigates to login
 
 ### P1.2 Auth — Phone Login Screen
 
 **Route:** `/(auth)/login`
 
-- [ ] Brand logo centred at top (64dp)
-- [ ] "Vyapar में आपका स्वागत है" / "Welcome to Vyapar" heading (h2)
-- [ ] `PhoneInput` component with +91 prefix
-- [ ] "Send OTP" / "OTP भेजें" primary button — disabled until 10 digits entered
-- [ ] On "Send OTP": Supabase `signInWithOtp({ phone: '+91XXXXXXXXXX' })` called; show loading spinner in button
-- [ ] On OTP sent: navigate to OTP verification screen; show "OTP sent to +91 XXXXX XXXXX" toast
-- [ ] Error: "This phone number is not registered" → show inline error under phone field
-- [ ] "Having trouble? Contact support" link at bottom
+- [x] Brand logo centred at top (64dp)
+- [x] "Vyapar में आपका स्वागत है" / "Welcome to Vyapar" heading (h2)
+- [x] `PhoneInput` component with +91 prefix
+- [x] "Send OTP" / "OTP भेजें" primary button — disabled until 10 digits entered
+- [x] On "Send OTP": Supabase `signInWithOtp({ phone: '+91XXXXXXXXXX' })` called; show loading spinner in button
+- [x] On OTP sent: navigate to OTP verification screen; show "OTP sent to +91 XXXXX XXXXX" toast
+- [x] Error: "This phone number is not registered" → show inline error under phone field
+- [x] "Having trouble? Contact support" link at bottom
 
 ### P1.3 Auth — OTP Verification Screen
 
 **Route:** `/(auth)/verify`
 
-- [ ] 6-cell OTP input: each cell is an individual `TextInput`, auto-advances on digit entry, auto-backspaces on delete
-- [ ] OTP cells: 48×56dp each, 8dp gap, large text (24sp centred)
-- [ ] "Verify" / "Verify करें" primary button — enabled when all 6 cells filled
-- [ ] "Resend OTP" link: disabled for 30s countdown "30s में resend करें"; re-enables after countdown
-- [ ] On verify: `supabase.auth.verifyOtp(...)` called; on success: check if business profile exists
+- [x] 6-cell OTP input: each cell is an individual `TextInput`, auto-advances on digit entry, auto-backspaces on delete
+- [x] OTP cells: 48×56dp each, 8dp gap, large text (24sp centred)
+- [x] "Verify" / "Verify करें" primary button — enabled when all 6 cells filled
+- [x] "Resend OTP" link: disabled for 30s countdown "30s में resend करें"; re-enables after countdown
+- [x] On verify: `supabase.auth.verifyOtp(...)` called; on success: check if business profile exists
     - [ ] If profile exists: navigate to `/(app)/(tabs)/` (home dashboard)
     - [ ] If no profile: navigate to `/(auth)/setup` (business setup wizard)
-- [ ] Wrong OTP: shake animation on cells, red border, "गलत OTP — फिर से try करें" error
+- [x] Wrong OTP: shake animation on cells, red border, "गलत OTP — फिर से try करें" error
 
 ### P1.4 Business Setup Wizard
 
@@ -368,115 +368,115 @@ P22  Standalone & Integration Features
 
 **Wizard Shell:**
 
-- [ ] Progress bar at top (thin, terracotta) — 4 segments, fills as steps complete
-- [ ] Step indicator below progress bar: "Step 1 of 4" / "चरण 1 / 4"
-- [ ] Step title as h2 below indicator
-- [ ] Content area (ScrollView) fills remaining space
-- [ ] Bottom action bar: "Back" secondary button (left) + "Next" / "Next →" primary button (right)
-- [ ] Step 1 is not skippable (Business Name required); steps 2–4 show "Skip" link beside Next on non-required steps
-- [ ] Wizard state persisted to AsyncStorage on each step — if user exits and returns, wizard resumes at last incomplete step
+- [x] Progress bar at top (thin, terracotta) — 4 segments, fills as steps complete
+- [x] Step indicator below progress bar: "Step 1 of 4" / "चरण 1 / 4"
+- [x] Step title as h2 below indicator
+- [x] Content area (ScrollView) fills remaining space
+- [x] Bottom action bar: "Back" secondary button (left) + "Next" / "Next →" primary button (right)
+- [x] Step 1 is not skippable (Business Name required); steps 2–4 show "Skip" link beside Next on non-required steps
+- [x] Wizard state persisted to AsyncStorage on each step — if user exits and returns, wizard resumes at last incomplete step
 
 **Step 1 — Business Identity:**
 
-- [ ] Title: "आपके व्यापार का नाम" / "Your Business Name"
-- [ ] Business Name field (required, min 2 chars, max 100): large `FormField`, placeholder "जैसे: शर्मा टाइल्स एंड हार्डवेयर"
-- [ ] Owner Name field (required): placeholder "जैसे: रमेश शर्मा"
-- [ ] Mobile Number: `PhoneInput`, pre-filled from auth session phone, editable
-- [ ] Next: validates both required fields; shows inline errors if empty; saves step-1 data to wizard state
+- [x] Title: "आपके व्यापार का नाम" / "Your Business Name"
+- [x] Business Name field (required, min 2 chars, max 100): large `FormField`, placeholder "जैसे: शर्मा टाइल्स एंड हार्डवेयर"
+- [x] Owner Name field (required): placeholder "जैसे: रमेश शर्मा"
+- [x] Mobile Number: `PhoneInput`, pre-filled from auth session phone, editable
+- [x] Next: validates both required fields; shows inline errors if empty; saves step-1 data to wizard state
 
 **Step 2 — Business Type & Location:**
 
-- [ ] Title: "व्यापार का प्रकार और पता" / "Business Type & Address"
-- [ ] Business Type: 5 large cards in 2-column grid (last card full-width)
+- [x] Title: "व्यापार का प्रकार और पता" / "Business Type & Address"
+- [x] Business Type: 5 large cards in 2-column grid (last card full-width)
     - [ ] Retail Shop (दुकान) — shop icon
     - [ ] Wholesale (थोक) — warehouse icon
     - [ ] Manufacturing (उत्पादन) — factory icon
     - [ ] Service (सेवा) — tools icon
     - [ ] Other (अन्य) — more icon
     - [ ] Selected card: terracotta border, light fill, checkmark overlay
-- [ ] Business Address field: multi-line `TextAreaField`, placeholder "दुकान/मकान नं., गली, मोहल्ला"
-- [ ] State picker: `BottomSheetPicker` with all 36 Indian states + UTs listed (Hindi names when locale is hi); pre-filled from device region if determinable
-- [ ] City field: text input; auto-filled via pincode lookup
-- [ ] Pincode field: 6-digit numeric field; on 6 digits entered: API call to `api.postalpincode.in/{pincode}` (or bundled JSON); auto-fills City and District fields; shows loading indicator while fetching
-- [ ] Next: saves step-2 data
+- [x] Business Address field: multi-line `TextAreaField`, placeholder "दुकान/मकान नं., गली, मोहल्ला"
+- [x] State picker: `BottomSheetPicker` with all 36 Indian states + UTs listed (Hindi names when locale is hi); pre-filled from device region if determinable
+- [x] City field: text input; auto-filled via pincode lookup
+- [x] Pincode field: 6-digit numeric field; on 6 digits entered: API call to `api.postalpincode.in/{pincode}` (or bundled JSON); auto-fills City and District fields; shows loading indicator while fetching
+- [x] Next: saves step-2 data
 
 **Step 3 — GST & Tax:**
 
-- [ ] Title: "GST जानकारी" / "GST Information"
-- [ ] "क्या आप GST में रजिस्टर हैं?" / "Are you registered for GST?" — YES / NO large button pair (YES pre-selected if user came from GST-eligible business type)
-- [ ] When YES: show GSTIN field
+- [x] Title: "GST जानकारी" / "GST Information"
+- [x] "क्या आप GST में रजिस्टर हैं?" / "Are you registered for GST?" — YES / NO large button pair (YES pre-selected if user came from GST-eligible business type)
+- [x] When YES: show GSTIN field
     - [ ] GSTIN field: 15-character text input, all-caps, format hint below: "22AAAAA0000A1Z5 (15 अंक)"
     - [ ] Validate on blur: regex `^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$` + Luhn checksum
     - [ ] Green checkmark when valid; red error when invalid: "GSTIN का format गलत है"
-- [ ] PAN field: 10-character, format AAAAA9999A, optional
-- [ ] Financial Year Start: two large cards "April (Apr–Mar)" and "January (Jan–Dec)" — April pre-selected
-- [ ] When NO: show informational card "आप बिना GST के भी invoices बना सकते हैं। Settings में बाद में जोड़ सकते हैं।"
-- [ ] Next: saves step-3 data
+- [x] PAN field: 10-character, format AAAAA9999A, optional
+- [x] Financial Year Start: two large cards "April (Apr–Mar)" and "January (Jan–Dec)" — April pre-selected
+- [x] When NO: show informational card "आप बिना GST के भी invoices बना सकते हैं। Settings में बाद में जोड़ सकते हैं।"
+- [x] Next: saves step-3 data
 
 **Step 4 — Branding:**
 
-- [ ] Title: "Invoice की जानकारी" / "Invoice Setup"
-- [ ] Logo upload card: dashed-border box 100×100dp, camera icon centre
+- [x] Title: "Invoice की जानकारी" / "Invoice Setup"
+- [x] Logo upload card: dashed-border box 100×100dp, camera icon centre
     - [ ] On tap: action sheet — "Camera से लें" / "Gallery से चुनें" / "Cancel"
     - [ ] Image picked → crop UI to 1:1 ratio → compressed to ≤ 300 KB → shown as preview in the box
     - [ ] Remove logo: × button overlay on preview
-- [ ] Invoice Number Prefix: text field, default "INV-", max 10 chars; live preview below: "Preview: **INV-001**"
-- [ ] Invoice Starting Number: numeric, default 1; live preview updates: "Preview: **INV-042**" when 42 entered
-- [ ] "Finish Setup" / "Setup पूरी करें" primary button (replaces "Next" on last step)
-- [ ] On Finish: `businessProfileService.create(wizardData)` called; on success: navigate to Home with `replace` (no back stack); show confetti animation (`lottie-react-native` or CSS keyframe) + toast "सब तैयार है! आपका व्यापार शुरू करें 🎉"
-- [ ] On API error: show error toast; keep user on step 4 to retry
+- [x] Invoice Number Prefix: text field, default "INV-", max 10 chars; live preview below: "Preview: **INV-001**"
+- [x] Invoice Starting Number: numeric, default 1; live preview updates: "Preview: **INV-042**" when 42 entered
+- [x] "Finish Setup" / "Setup पूरी करें" primary button (replaces "Next" on last step)
+- [x] On Finish: `businessProfileService.create(wizardData)` called; on success: navigate to Home with `replace` (no back stack); show confetti animation (`lottie-react-native` or CSS keyframe) + toast "सब तैयार है! आपका व्यापार शुरू करें 🎉"
+- [x] On API error: show error toast; keep user on step 4 to retry
 
 ### P1.5 Business Profile — Edit Screen
 
 **Route:** `/(app)/settings/business-profile`
 
-- [ ] All fields from wizard available for editing
-- [ ] Additional fields not in wizard:
+- [x] All fields from wizard available for editing
+- [x] Additional fields not in wizard:
     - [ ] Business Email (optional)
     - [ ] Business Website (optional)
     - [ ] Alternate Phone (optional)
     - [ ] Business Description (for online store — max 200 chars)
     - [ ] Signature Image: upload (camera/gallery), shown on invoice print footer; "Remove" button
-- [ ] **Bank Details for Print section** (collapsible card):
+- [x] **Bank Details for Print section** (collapsible card):
     - [ ] Bank Name (text field)
     - [ ] Account Number (numeric, masked display: XXXXXX1234)
     - [ ] IFSC Code (text, 11 chars, uppercase)
     - [ ] Account Holder Name
     - [ ] Branch Name
     - [ ] "Shown on invoice so customer can do bank transfer" — helper text
-- [ ] **UPI for Invoice section**:
+- [x] **UPI for Invoice section**:
     - [ ] UPI ID field (e.g. `9876543210@upi`)
     - [ ] After valid UPI ID entered: live QR code preview (using `react-native-qrcode-svg`) — "यह QR invoice पर छपेगा"
-- [ ] **Invoice Sequence section**:
+- [x] **Invoice Sequence section**:
     - [ ] Current prefix: editable
     - [ ] Current sequence number: editable (with warning: "इसे बदलने से invoice numbers में gap आएगा")
     - [ ] Reset sequence each financial year: toggle
-- [ ] "Preview Invoice Header" button: opens modal showing invoice header exactly as it will appear on print
-- [ ] Save button: calls `businessProfileService.update()`; success toast "Profile save हो गई"
+- [x] "Preview Invoice Header" button: opens modal showing invoice header exactly as it will appear on print
+- [x] Save button: calls `businessProfileService.update()`; success toast "Profile save हो गई"
 
 ### P1.6 App Preferences Screen
 
 **Route:** `/(app)/settings/preferences`
 
-- [ ] **Language section:**
+- [x] **Language section:**
     - [ ] Toggle between Hindi and English — large cards (same design as language select screen)
     - [ ] Language switch is immediate — all visible text updates in place, no reload
     - [ ] Persists to `AsyncStorage` and `i18next`
-- [ ] **Currency & Numbers section:**
+- [x] **Currency & Numbers section:**
     - [ ] Currency: INR (₹) — shown as read-only; "Only INR supported currently"
     - [ ] Decimal Places: `0` or `2` toggle — affects all amount display and input
     - [ ] Number format preview: "Example: ₹ 1,00,000" or "₹ 1,00,000.00"
-- [ ] **Date Format section:**
+- [x] **Date Format section:**
     - [ ] Three options shown as radio buttons with preview example:
         - [ ] DD/MM/YYYY → "05/04/2025" (default)
         - [ ] DD-MMM-YYYY → "05-Apr-2025"
         - [ ] YYYY-MM-DD → "2025-04-05" (ISO, for advanced users)
-- [ ] **Theme section:**
+- [x] **Theme section:**
     - [ ] Three options: Light / Dark / Follow System Device
     - [ ] Thumbnail preview of each (mini screenshot-style illustration)
     - [ ] Selection immediately changes app theme
     - [ ] Persists to `AsyncStorage`
-- [ ] **UX Behaviour section:**
+- [x] **UX Behaviour section:**
     - [ ] "Show warning for unsaved changes" toggle (default ON): shows `ConfirmationModal` on back-press when form is dirty
     - [ ] "Show profit on dashboard": toggle (default OFF for privacy — a relative or employee might see screen)
 

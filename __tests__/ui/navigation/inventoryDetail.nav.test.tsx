@@ -3,7 +3,7 @@ import { waitFor, fireEvent, act } from '@testing-library/react-native';
 import ItemDetailScreen from '@/app/(app)/inventory/[id]';
 import { inventoryService } from '@/src/services/inventoryService';
 import { renderWithTheme } from '../../utils/renderWithTheme';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 
 // Override useFocusEffect to call the callback in a deferred manner to avoid
 // "Too many re-renders" errors from synchronous state updates during initial render.
@@ -13,11 +13,12 @@ jest.mock('expo-router', () => {
 	const back = jest.fn();
 	return {
 		useRouter: jest.fn(() => ({ push, back })),
-		useLocalSearchParams: jest.fn(),
+		useLocalSearchParams: jest.fn(() => ({ id: 'item-123' })),
 		useNavigation: jest.fn(() => ({
 			navigate: jest.fn(),
 			goBack: back,
 			setOptions: jest.fn(),
+			addListener: jest.fn(() => jest.fn()),
 		})),
 		useFocusEffect: jest.fn((cb: () => void) => {
 			const React = require('react');
@@ -31,6 +32,22 @@ jest.mock('expo-router', () => {
 		Stack: Object.assign(() => null, { Screen: () => null }),
 	};
 });
+
+jest.mock('@/src/hooks/useLocale', () => ({
+	useLocale: () => ({
+		t: (key: string) => {
+			const map: Record<string, string> = {
+				'inventory.stockIn': 'Stock In',
+				'inventory.stockOut': 'Stock Out',
+				'common.back': 'Go back',
+			};
+			return map[key] ?? key.split('.').pop() ?? key;
+		},
+		formatCurrency: (a: number) => `₹${a}`,
+		formatDate: (d: string) => d,
+		formatDateShort: (d: string) => d,
+	}),
+}));
 
 // Only mock what's NOT in jest.setup.ts or what needs specific override
 jest.mock('@/src/services/inventoryService', () => ({
@@ -46,11 +63,17 @@ const mockItem = {
 	id: 'item-123',
 	design_name: 'Marble Premium Gold',
 	base_item_number: 'MPG-001',
+	category: 'GLOSSY',
 	box_count: 50,
+	low_stock_threshold: 10,
+	selling_price: 1200,
+	size_name: '600x600',
+	pcs_per_box: 4,
 };
 
 beforeEach(() => {
-	jest.clearAllMocks();
+	mockPush.mockClear();
+	mockBack.mockClear();
 
 	// Rely on global expo-router mock but set specific return values
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: mockBack });
@@ -62,9 +85,9 @@ beforeEach(() => {
 
 describe('InventoryDetail Navigation Wiring', () => {
 	it('Press back -> router.back() called', async () => {
-		const { getByLabelText } = renderWithTheme(<ItemDetailScreen />);
-		// Assuming there's a back button with this label (standard in our AppHeader/Screen)
-		await waitFor(() => expect(getByLabelText('Go back')).toBeTruthy());
+		const { getByLabelText, getByText } = renderWithTheme(<ItemDetailScreen />);
+		// Wait for the item to load (not just the loading skeleton)
+		await waitFor(() => expect(getByText('Marble Premium Gold')).toBeTruthy());
 		fireEvent.press(getByLabelText('Go back'));
 		expect(mockBack).toHaveBeenCalled();
 	});

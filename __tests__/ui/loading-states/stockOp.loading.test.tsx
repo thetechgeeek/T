@@ -22,8 +22,20 @@ jest.mock('expo-router', () => ({
 
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => key.split('.').pop() ?? key,
+		t: (key: string) => {
+			const map: Record<string, string> = {
+				'inventory.loadError': 'Failed to load item.',
+				'inventory.stockOpValidationError': 'Please enter a valid quantity',
+				'inventory.placeholders.quantity': 'e.g. 50',
+				'inventory.placeholders.reason': 'e.g. Broken tiles, Return, Missing piece',
+				'common.errorTitle': 'Error',
+				'common.ok': 'OK',
+				'common.back': 'Back',
+			};
+			return map[key] ?? key.split('.').pop() ?? key;
+		},
 		formatCurrency: (amount: number) => `₹${amount}`,
+		formatDate: (d: string) => d,
 	}),
 }));
 

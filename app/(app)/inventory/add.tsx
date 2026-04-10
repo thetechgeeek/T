@@ -276,7 +276,7 @@ export default function AddItemScreen() {
 								<FormField
 									label={t('inventory.sellingPrice')}
 									required
-									placeholder={t('inventory.placeholders.price')}
+									placeholder={t('inventory.placeholders.sellingPrice')}
 									keyboardType="numeric"
 									onBlur={onBlur}
 									onChangeText={onChange}
@@ -315,7 +315,7 @@ export default function AddItemScreen() {
 									label={
 										isEditing
 											? t('inventory.currentStock')
-											: t('dashboard.addStock')
+											: t('inventory.initialStock')
 									}
 									required
 									placeholder={t('inventory.placeholders.stock')}
@@ -440,7 +440,7 @@ export default function AddItemScreen() {
 				]}
 			>
 				<Button
-					title={t('common.save')}
+					title={isEditing ? t('inventory.editItem') : t('inventory.saveItem')}
 					onPress={handleSubmit(onSubmit)}
 					loading={submitting}
 					leftIcon={!submitting && <Save size={20} color="white" />}

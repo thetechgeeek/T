@@ -51,7 +51,19 @@ describe('Inventory Loading & Error UI States', () => {
 	it('renders items list and NO loading spinner when loading=false and items present', async () => {
 		(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: any) =>
 			selector({
-				items: [{ id: '1', design_name: 'Marble', box_count: 50 }],
+				items: [
+					{
+						id: '1',
+						design_name: 'Marble',
+						base_item_number: 'M-001',
+						category: 'GLOSSY',
+						box_count: 50,
+						low_stock_threshold: 10,
+						selling_price: 1000,
+						created_at: '',
+						updated_at: '',
+					},
+				],
 				loading: false,
 				totalCount: 1,
 				filters: { category: 'ALL' },

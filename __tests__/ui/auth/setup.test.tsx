@@ -1,89 +1,166 @@
 import React from 'react';
-import { fireEvent, waitFor } from '@testing-library/react-native';
-
-import SetupScreen from '@/app/(auth)/setup';
-import { useAuthStore } from '@/src/stores/authStore';
-import { businessProfileService } from '@/src/services/businessProfileService';
+import { fireEvent, waitFor, act } from '@testing-library/react-native';
 import { renderWithTheme } from '../../utils/renderWithTheme';
+import SetupScreen from '@/app/(auth)/setup';
 
-jest.mock('@/src/stores/authStore', () => ({
-	useAuthStore: jest.fn(),
+const mockReplace = jest.fn();
+const mockBack = jest.fn();
+
+jest.mock('expo-router', () => ({
+	useRouter: () => ({ replace: mockReplace, back: mockBack }),
+	useLocalSearchParams: () => ({}),
 }));
 
-// Resolves QA issue 2.16 — mock businessProfileService.upsert instead of supabase directly
+jest.mock('@react-native-async-storage/async-storage', () =>
+	require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
+);
+
+const mockUpsert = jest.fn();
+
 jest.mock('@/src/services/businessProfileService', () => ({
 	businessProfileService: {
-		upsert: jest.fn().mockResolvedValue({}),
+		upsert: jest.fn().mockImplementation(() => mockUpsert()),
+		get: jest.fn().mockResolvedValue(null),
 	},
 }));
 
-describe('SetupScreen', () => {
-	const mockRegister = jest.fn();
+jest.mock('@/src/stores/authStore', () => ({
+	useAuthStore: jest.fn(() => ({
+		user: { phone: '+919876543210' },
+		loading: false,
+	})),
+}));
 
+describe('SetupScreen — 4-step wizard', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
-		(useAuthStore as unknown as jest.Mock).mockReturnValue({
-			register: mockRegister,
+		mockUpsert.mockResolvedValue({});
+	});
+
+	it('renders Step 1 initially with progress indicator', () => {
+		const { getByTestId, getByText } = renderWithTheme(<SetupScreen />);
+		expect(getByTestId('step-indicator')).toBeTruthy();
+		expect(getByText(/1.*4|चरण 1/)).toBeTruthy();
+		expect(getByTestId('business-name-input')).toBeTruthy();
+		expect(getByTestId('owner-name-input')).toBeTruthy();
+	});
+
+	it('Next button is disabled on Step 1 when required fields empty', () => {
+		const { getByTestId } = renderWithTheme(<SetupScreen />);
+		expect(getByTestId('next-button')).toHaveProp('accessibilityState', { disabled: true });
+	});
+
+	it('Next button enabled on Step 1 when required fields filled', () => {
+		const { getByTestId } = renderWithTheme(<SetupScreen />);
+		fireEvent.changeText(getByTestId('business-name-input'), 'Sharma Tiles');
+		fireEvent.changeText(getByTestId('owner-name-input'), 'Ramesh Sharma');
+		expect(getByTestId('next-button')).toHaveProp('accessibilityState', { disabled: false });
+	});
+
+	it('advances to Step 2 after filling Step 1 and pressing Next', async () => {
+		const { getByTestId, getByText } = renderWithTheme(<SetupScreen />);
+		fireEvent.changeText(getByTestId('business-name-input'), 'Sharma Tiles');
+		fireEvent.changeText(getByTestId('owner-name-input'), 'Ramesh Sharma');
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
 		});
+		expect(getByText(/2.*4|चरण 2/)).toBeTruthy();
+		expect(getByTestId('business-type-grid')).toBeTruthy();
 	});
 
-	it('renders account step initially', () => {
-		const { getByText } = renderWithTheme(<SetupScreen />);
-
-		expect(getByText('Email', { exact: false })).toBeTruthy();
-		expect(getByText('Password', { exact: false })).toBeTruthy();
-		expect(getByText('Add Account', { exact: false })).toBeTruthy();
+	it('advances to Step 3 from Step 2', async () => {
+		const { getByTestId, getByText } = renderWithTheme(<SetupScreen />);
+		// Step 1
+		fireEvent.changeText(getByTestId('business-name-input'), 'Sharma Tiles');
+		fireEvent.changeText(getByTestId('owner-name-input'), 'Ramesh Sharma');
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		// Step 2 — can be skipped
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		expect(getByText(/3.*4|चरण 3/)).toBeTruthy();
+		expect(getByTestId('gst-toggle-yes')).toBeTruthy();
+		expect(getByTestId('gst-toggle-no')).toBeTruthy();
 	});
 
-	it('transitions to business step after successful registration', async () => {
-		mockRegister.mockResolvedValueOnce({});
-		const { getByText, findByText, getByPlaceholderText } = renderWithTheme(<SetupScreen />);
-
-		fireEvent.changeText(getByPlaceholderText('you@example.com'), 'test@example.com');
-		fireEvent.changeText(getByPlaceholderText('••••••••'), 'password123');
-
-		fireEvent.press(getByText('Add Account', { exact: false }));
-
-		expect(await findByText('Business Name', { exact: false })).toBeTruthy();
-		expect(mockRegister).toHaveBeenCalled();
+	it('advances to Step 4 from Step 3', async () => {
+		const { getByTestId, getByText } = renderWithTheme(<SetupScreen />);
+		// Step 1
+		fireEvent.changeText(getByTestId('business-name-input'), 'Sharma Tiles');
+		fireEvent.changeText(getByTestId('owner-name-input'), 'Ramesh Sharma');
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		// Step 2
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		// Step 3
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		expect(getByText(/4.*4|चरण 4/)).toBeTruthy();
+		expect(getByTestId('invoice-prefix-input')).toBeTruthy();
+		expect(getByTestId('finish-button')).toBeTruthy();
 	});
 
-	it('calls businessProfileService.upsert on final step', async () => {
-		mockRegister.mockResolvedValueOnce({});
-		const { getByText, findByText, getByPlaceholderText } = renderWithTheme(<SetupScreen />);
+	it('Back button goes to previous step', async () => {
+		const { getByTestId, getByText } = renderWithTheme(<SetupScreen />);
+		// Step 1 → 2
+		fireEvent.changeText(getByTestId('business-name-input'), 'Sharma Tiles');
+		fireEvent.changeText(getByTestId('owner-name-input'), 'Ramesh Sharma');
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		expect(getByText(/2.*4|चरण 2/)).toBeTruthy();
+		// Back to 1
+		await act(async () => {
+			fireEvent.press(getByTestId('back-button'));
+		});
+		expect(getByText(/1.*4|चरण 1/)).toBeTruthy();
+	});
 
-		// Move to step 2
-		fireEvent.changeText(getByPlaceholderText('you@example.com'), 'test@example.com');
-		fireEvent.changeText(getByPlaceholderText('••••••••'), 'password123');
-		fireEvent.press(getByText('Add Account', { exact: false }));
-
-		expect(await findByText('Business Name', { exact: false })).toBeTruthy();
-
-		// Fill business name
-		fireEvent.changeText(getByPlaceholderText('Enter business name'), 'Test Business');
-
-		// In step 2, click save
-		fireEvent.press(getByText('Save', { exact: false }));
-
+	it('calls businessProfileService.upsert and navigates home on Finish', async () => {
+		const { getByTestId } = renderWithTheme(<SetupScreen />);
+		// Step 1
+		fireEvent.changeText(getByTestId('business-name-input'), 'Sharma Tiles');
+		fireEvent.changeText(getByTestId('owner-name-input'), 'Ramesh Sharma');
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		// Step 2
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		// Step 3
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		// Step 4 — Finish
+		await act(async () => {
+			fireEvent.press(getByTestId('finish-button'));
+		});
 		await waitFor(() => {
-			expect(businessProfileService.upsert).toHaveBeenCalled();
+			expect(mockUpsert).toHaveBeenCalled();
+			expect(mockReplace).toHaveBeenCalledWith('/(app)/(tabs)');
 		});
 	});
 
-	it('shows error and stays on step 1 when register fails', async () => {
-		mockRegister.mockRejectedValueOnce(new Error('Registration failed'));
-		const { getByText, getByPlaceholderText, queryByText } = renderWithTheme(<SetupScreen />);
-
-		fireEvent.changeText(getByPlaceholderText('you@example.com'), 'fail@example.com');
-		fireEvent.changeText(getByPlaceholderText('••••••••'), 'wrongpass');
-
-		fireEvent.press(getByText('Add Account', { exact: false }));
-
-		await waitFor(() => {
-			// Step 1 should still be visible (not advanced to step 2)
-			expect(queryByText('Business Name', { exact: false })).toBeNull();
-			// The submit button should still be on screen
-			expect(getByText('Add Account', { exact: false })).toBeTruthy();
+	it('shows GST input when YES selected on Step 3', async () => {
+		const { getByTestId } = renderWithTheme(<SetupScreen />);
+		// Step 1 → Step 2 → Step 3
+		fireEvent.changeText(getByTestId('business-name-input'), 'Sharma Tiles');
+		fireEvent.changeText(getByTestId('owner-name-input'), 'Ramesh Sharma');
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
 		});
+		await act(async () => {
+			fireEvent.press(getByTestId('next-button'));
+		});
+		// Step 3: tap YES
+		fireEvent.press(getByTestId('gst-toggle-yes'));
+		expect(getByTestId('gstin-input')).toBeTruthy();
 	});
 });

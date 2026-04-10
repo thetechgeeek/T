@@ -44,14 +44,14 @@ export default function ScanTab() {
 				}
 			} else {
 				Alert.alert(t('scanner.itemNotFound'), t('scanner.noMatchFound', { query }), [
-					{ t: t('common.cancel'), style: 'cancel' },
+					{ text: t('common.cancel'), style: 'cancel' },
 					{
 						text: t('inventory.add'),
 						onPress: () => {
 							router.push('/(app)/inventory/add');
 						},
 					},
-				] as any);
+				]);
 			}
 		} catch (err: unknown) {
 			logger.error(
@@ -202,7 +202,7 @@ export default function ScanTab() {
 								<TextInput
 									accessibilityLabel="manual-entry-input"
 									accessibilityHint={t('scanner.searchHint')}
-									placeholder={t('scanner.manualEntry')}
+									placeholder={t('scanner.manualEntryPlaceholder')}
 									value={manualInput}
 									onChangeText={setManualInput}
 									containerStyle={{ marginBottom: 0 }}

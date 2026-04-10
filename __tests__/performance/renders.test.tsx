@@ -53,7 +53,7 @@ describe('Performance: Render Cycle Verification', () => {
 		const { findByText } = renderWithTheme(<DashboardScreen />);
 
 		// Wait for data to load
-		await findByText('lowStock');
+		await findByText('Low Stock Items');
 
 		// 3 StatCards are rendered.
 		// Initial render: 3 calls

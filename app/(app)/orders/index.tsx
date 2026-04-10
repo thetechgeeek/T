@@ -63,13 +63,13 @@ export default function OrdersListScreen() {
 				>
 					<FileText size={64} color={c.placeholder} style={{ marginBottom: s.lg }} />
 					<ThemedText variant="h3" style={{ marginBottom: 8 }}>
-						{t('common.noResults')}
+						{t('order.noOrders')}
 					</ThemedText>
 					<ThemedText color={c.placeholder} align="center" style={{ marginBottom: s.xl }}>
 						{t('order.importFirst')}
 					</ThemedText>
 					<Button
-						title={t('order.importBtn')}
+						title={t('order.importFirstBtn')}
 						accessibilityLabel="import-first-order-button"
 						onPress={() => router.push('/(app)/orders/import')}
 					/>
@@ -112,7 +112,7 @@ export default function OrdersListScreen() {
 									style={{ marginTop: 4 }}
 								>
 									{formatDateShort(item.created_at)} •{' '}
-									{t('inventory.stockStatus', { count: item.total_quantity })}
+									{t('order.itemsImportedCount', { count: item.total_quantity })}
 								</ThemedText>
 							</View>
 							<View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>

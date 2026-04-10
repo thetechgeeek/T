@@ -30,7 +30,7 @@ export const pdfService = {
 	generateInvoiceHTML(
 		invoice: Invoice,
 		businessProfile: BusinessProfile | null,
-		t: (key: string, options?: any) => string,
+		t: (key: string, options?: Record<string, unknown>) => string,
 		formatDate: (date: string | Date) => string,
 	) {
 		const bp =
@@ -216,7 +216,7 @@ export const pdfService = {
 
 	async printAndShareInvoice(
 		invoice: Invoice,
-		t: (key: string, options?: any) => string,
+		t: (key: string, options?: Record<string, unknown>) => string,
 		formatDate: (date: string | Date) => string,
 	) {
 		try {

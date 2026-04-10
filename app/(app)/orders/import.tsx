@@ -40,7 +40,7 @@ interface EditableItemCardProps {
 	onRemove: (index: number) => void;
 	colors: ReturnType<typeof useThemeTokens>['c'];
 	spacing: ReturnType<typeof useThemeTokens>['s'];
-	t: (key: string, options?: any) => string;
+	t: (key: string, options?: Record<string, unknown>) => string;
 }
 
 function EditableItemCard({
@@ -393,7 +393,7 @@ export default function ImportOrderScreen() {
 	// ── Upload / paste page ─────────────────────────────────────────────────────
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title={t('order.importBtn') + ' (AI)'} />
+			<ScreenHeader title={t('order.importBtn')} />
 
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}

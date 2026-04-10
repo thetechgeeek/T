@@ -32,4 +32,9 @@ export const businessProfileService = {
 		if (error && error.code !== 'PGRST116') throw new Error(error.message);
 		return data;
 	},
+
+	/** Alias for fetch — used in auth flow to check if profile exists */
+	async get() {
+		return this.fetch();
+	},
 };

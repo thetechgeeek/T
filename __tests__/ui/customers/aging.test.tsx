@@ -10,7 +10,16 @@ jest.mock('@/src/stores/customerStore', () => ({
 
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => key.split('.').pop() ?? key,
+		t: (key: string) => {
+			const map: Record<string, string> = {
+				'customer.agingReport': 'Aging Report',
+				'customer.totalOutstanding': 'Total Outstanding',
+				'customer.customerBreakup': 'Customer Breakup',
+				'customer.noOutstandingBalances': 'No outstanding balances',
+				'invoice.balance': 'Balance Due',
+			};
+			return map[key] ?? key.split('.').pop() ?? key;
+		},
 		formatCurrency: (amount: number) => `₹${amount.toFixed(2)}`,
 	}),
 }));

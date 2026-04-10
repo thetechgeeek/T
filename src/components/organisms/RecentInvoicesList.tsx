@@ -38,8 +38,8 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 				<TouchableOpacity
 					onPress={() => router.push('/(app)/(tabs)/invoices')}
 					accessibilityRole="button"
-					accessibilityLabel={t('invoice.viewAllInvoices')}
-					accessibilityHint={t('invoice.viewAllInvoices')}
+					accessibilityLabel="see-all-invoices"
+					accessibilityHint="View all invoices"
 				>
 					<ThemedText variant="body" color={c.primary}>
 						{t('common.seeAll')}

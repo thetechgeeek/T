@@ -49,7 +49,7 @@ export default function InvoicesListScreen() {
 					{t('invoice.title')}
 				</ThemedText>
 				<Button
-					title={t('common.add')}
+					title={t('invoice.newInvoice')}
 					accessibilityLabel="new-invoice-button"
 					leftIcon={<Plus color="#FFF" size={20} />}
 					onPress={() => router.push('/(app)/invoices/create')}

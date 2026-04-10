@@ -162,7 +162,7 @@ export default function ExpensesScreen() {
 						<View style={styles.modalHandle} />
 
 						<View style={[layout.rowBetween, styles.modalHeader]}>
-							<ThemedText variant="h2">{t('finance.addExpense')}</ThemedText>
+							<ThemedText variant="h2">{t('finance.newExpense')}</ThemedText>
 							<Button
 								variant="ghost"
 								size="sm"
@@ -203,7 +203,7 @@ export default function ExpensesScreen() {
 							/>
 
 							<Button
-								title={saving ? t('common.loading') : t('common.save')}
+								title={saving ? t('common.loading') : t('finance.saveExpense')}
 								onPress={handleSave}
 								loading={saving}
 								style={{ marginTop: 16 }}

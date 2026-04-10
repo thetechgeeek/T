@@ -20,13 +20,27 @@ jest.mock('@/src/services/inventoryService', () => ({
 
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => {
+		t: (key: string, opts?: Record<string, unknown>) => {
 			const map: Record<string, string> = {
 				'common.errorTitle': 'Error',
 				'common.ok': 'OK',
 				'common.unexpectedError': 'Unexpected error',
+				'common.cancel': 'Cancel',
+				'scanner.grantPermission': 'Grant Permission',
+				'scanner.manualEntry': 'Manual Entry',
+				'scanner.manualEntryPlaceholder': 'Enter item or design #',
+				'scanner.searchHint': 'Type an item name or design number to search',
+				'scanner.itemNotFound': 'Not Found',
+				'scanner.noMatchFound': 'No item found matching "{{query}}".',
+				'inventory.add': 'Add Item',
 			};
-			return map[key] ?? key.split('.').pop() ?? key;
+			let val = map[key] ?? key.split('.').pop() ?? key;
+			if (opts) {
+				val = val.replace(/\{\{(\w+)\}\}/g, (_: string, k: string) =>
+					k in opts ? String(opts[k]) : `{{${k}}}`,
+				);
+			}
+			return val;
 		},
 	}),
 }));

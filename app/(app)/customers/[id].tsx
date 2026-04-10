@@ -181,7 +181,7 @@ export default function CustomerDetailScreen() {
 								onPress={() => setPaymentModalVisible(true)}
 							/>
 							<Button
-								title={t('invoice.createInvoice')}
+								title={t('invoice.newInvoice')}
 								variant="outline"
 								leftIcon={<Plus size={18} color={theme.colors.primary} />}
 								style={{ flex: 1, marginLeft: 8 }}

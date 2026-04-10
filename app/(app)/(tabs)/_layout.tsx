@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { Home, Package, QrCode, FileText, MoreHorizontal } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -153,13 +153,4 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	errorContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-	errorTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
-	errorMessage: { fontSize: 14, color: '#666', textAlign: 'center', marginBottom: 24 },
-	retryButton: {
-		backgroundColor: '#2563EB',
-		paddingHorizontal: 24,
-		paddingVertical: 12,
-		borderRadius: 8,
-	},
-	retryText: { color: '#fff', fontWeight: '600' },
 });

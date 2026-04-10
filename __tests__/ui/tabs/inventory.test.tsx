@@ -21,6 +21,15 @@ jest.mock('@/src/hooks/useLocale', () => ({
 				'inventory.loadError': 'Failed to load',
 				'common.errorTitle': 'Error',
 				'common.ok': 'OK',
+				'inventory.categories.all': 'ALL',
+				'inventory.categories.glossy': 'GLOSSY',
+				'inventory.categories.matt': 'MATT',
+				'inventory.categories.pgvt': 'PGVT',
+				'inventory.categories.dgvt': 'DGVT',
+				'inventory.categories.stone': 'STONE',
+				'inventory.categories.highlighter': 'HIGHLIGHTER',
+				'inventory.categories.designer': 'DESIGNER',
+				'inventory.categories.outdoor': 'OUTDOOR',
 			};
 			return map[key] ?? key.split('.').pop() ?? key;
 		},

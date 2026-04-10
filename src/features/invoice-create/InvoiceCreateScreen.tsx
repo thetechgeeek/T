@@ -119,9 +119,7 @@ export default function InvoiceCreateScreen() {
 					/>
 				) : (
 					<Button
-						title={
-							flow.submitting ? t('invoice.generating') : t('invoice.createInvoice')
-						}
+						title={flow.submitting ? t('invoice.generating') : t('invoice.generatePDF')}
 						onPress={flow.submitInvoice}
 						loading={flow.submitting}
 						style={{ flex: 1, marginLeft: s.xs }}

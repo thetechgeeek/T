@@ -24,7 +24,7 @@ describe('AddCustomerScreen', () => {
 	it('renders correctly', () => {
 		const { getByPlaceholderText, getByText } = renderWithTheme(<AddCustomerScreen />);
 
-		expect(getByPlaceholderText('Enter full name')).toBeTruthy();
+		expect(getByPlaceholderText('e.g. Rahul Sharma')).toBeTruthy();
 		expect(getByText('Save Customer')).toBeTruthy();
 	});
 
@@ -35,7 +35,7 @@ describe('AddCustomerScreen', () => {
 		const { getByPlaceholderText, getByText } = renderWithTheme(<AddCustomerScreen />);
 
 		// Fill in required name
-		fireEvent.changeText(getByPlaceholderText('Enter full name'), 'Test Customer');
+		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
 
 		// Submit form
 		fireEvent.press(getByText('Save Customer'));
@@ -55,7 +55,7 @@ describe('AddCustomerScreen', () => {
 
 		const { getByPlaceholderText, getByText } = renderWithTheme(<AddCustomerScreen />);
 
-		fireEvent.changeText(getByPlaceholderText('Enter full name'), 'Test Customer');
+		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
 		fireEvent.press(getByText('Save Customer'));
 
 		await waitFor(() => {

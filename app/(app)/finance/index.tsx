@@ -54,7 +54,7 @@ export default function FinanceOverviewScreen() {
 			accessibilityLabel: 'stat-net-profit',
 		},
 		{
-			title: t('finance.expenses'),
+			title: t('finance.totalExpenses'),
 			icon: TrendingDown,
 			color: theme.colors.error,
 			value: formatCurrency(summary?.total_expenses || 0),
@@ -94,13 +94,13 @@ export default function FinanceOverviewScreen() {
 			<Divider style={{ marginVertical: 24 }} />
 
 			<ThemedText variant="h3" style={{ marginBottom: 16, paddingLeft: 4 }}>
-				{t('finance.profitLoss')}
+				{t('finance.reportsAndManagement')}
 			</ThemedText>
 
 			<View style={styles.section}>
 				<ListItem
 					title={t('finance.expenses')}
-					subtitle={t('finance.noExpenses')}
+					subtitle={t('finance.viewExpenses')}
 					accessibilityLabel="menu-expenses"
 					accessibilityHint={t('finance.viewExpenses')}
 					onPress={() => router.push('/(app)/finance/expenses')}
@@ -114,7 +114,7 @@ export default function FinanceOverviewScreen() {
 				/>
 				<ListItem
 					title={t('finance.purchases')}
-					subtitle={t('finance.loadPurchasesError')}
+					subtitle={t('finance.viewPurchases')}
 					accessibilityLabel="menu-purchases"
 					accessibilityHint={t('finance.viewPurchases')}
 					onPress={() => router.push('/(app)/finance/purchases')}
@@ -142,7 +142,7 @@ export default function FinanceOverviewScreen() {
 				/>
 				<ListItem
 					title={t('finance.profitLoss')}
-					subtitle={t('finance.profitLoss')}
+					subtitle={t('finance.viewProfitLoss')}
 					accessibilityLabel="menu-profit-loss"
 					accessibilityHint={t('finance.viewProfitLoss')}
 					onPress={() => router.push('/(app)/finance/profit-loss')}

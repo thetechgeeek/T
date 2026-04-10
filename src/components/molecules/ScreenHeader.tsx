@@ -4,7 +4,6 @@ import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '../atoms/ThemedText';
 import { layout } from '@/src/theme/layout';
 
@@ -29,7 +28,6 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 	showBackButton = true,
 }) => {
 	const { c, s } = useThemeTokens();
-	const { t } = useLocale();
 	const insets = useSafeAreaInsets();
 	const router = useRouter();
 
@@ -56,7 +54,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 						onPress={handleBack}
 						style={styles.back}
 						accessibilityRole="button"
-						accessibilityLabel={t('common.back')}
+						accessibilityLabel="Go back"
 					>
 						<ArrowLeft size={22} color={c.primary} strokeWidth={2} />
 					</TouchableOpacity>

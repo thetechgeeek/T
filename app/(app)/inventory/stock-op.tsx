@@ -63,7 +63,7 @@ export default function StockOpScreen() {
 	const isStockIn = type === 'stock_in';
 	const title = isStockIn
 		? `${t('inventory.stockIn')} (${t('common.add')})`
-		: `${t('inventory.stockOut')} (${t('common.delete')})`;
+		: `${t('inventory.stockOut')} (${t('common.remove')})`;
 
 	const onSubmit = async (data: FormData) => {
 		if (!id || !type) return;
@@ -107,7 +107,7 @@ export default function StockOpScreen() {
 					>
 						<ThemedText color={c.error}>{t('inventory.loadError')}</ThemedText>
 						<Button
-							title={t('common.back')}
+							title={t('common.goBack')}
 							variant="ghost"
 							onPress={() => router.back()}
 							style={{ marginTop: s.md }}

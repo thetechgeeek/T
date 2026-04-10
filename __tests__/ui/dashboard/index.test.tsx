@@ -18,7 +18,18 @@ jest.mock('@/src/stores/invoiceStore', () => ({
 // useLocale needs i18n + AsyncStorage mocks
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => key.split('.').pop() ?? key,
+		t: (key: string, opts?: Record<string, unknown>) => {
+			const map: Record<string, string> = {
+				'inventory.stockStatus': '{{count}} items',
+			};
+			let val = map[key] ?? key.split('.').pop() ?? key;
+			if (opts) {
+				val = val.replace(/\{\{(\w+)\}\}/g, (_: string, k: string) =>
+					k in opts ? String(opts[k]) : `{{${k}}}`,
+				);
+			}
+			return val;
+		},
 		formatCurrency: (amount: number) => `₹${amount.toFixed(2)}`,
 		currentLanguage: 'en',
 	}),

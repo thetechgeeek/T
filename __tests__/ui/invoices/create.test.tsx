@@ -43,6 +43,7 @@ describe('CreateInvoiceScreen', () => {
 		(useInventoryStore as unknown as jest.Mock).mockReturnValue({
 			items: mockInventoryItems,
 			fetchItems: mockFetchItems,
+			setFilters: jest.fn(),
 		});
 		jest.mocked(useInventoryStore).getState = jest.fn().mockReturnValue({
 			fetchItems: mockFetchItems,
@@ -81,7 +82,7 @@ describe('CreateInvoiceScreen', () => {
 
 		// Check if item added back in Step 2 list
 		expect(getByText('Marble gold')).toBeTruthy();
-		expect(getByText('10 units @ ₹1000.00')).toBeTruthy();
+		expect(getByText('10 units @ ₹1000')).toBeTruthy();
 
 		fireEvent.press(getByText('Next'));
 
@@ -90,7 +91,7 @@ describe('CreateInvoiceScreen', () => {
 
 		expect(getByText('Customer: Test Customer')).toBeTruthy();
 		// Grand Total: (10 * 1000) - 100 = 9900. Plus 18% GST (1782) = 11682
-		expect(getByText('₹11682.00')).toBeTruthy();
+		expect(getByText('₹11682')).toBeTruthy();
 
 		fireEvent.changeText(getByPlaceholderText('Enter amount paid'), '11682');
 
@@ -205,7 +206,7 @@ describe('CreateInvoiceScreen', () => {
 		});
 
 		// Verify item was NOT added to the list
-		expect(queryByText('60 units @ ₹1000.00')).toBeNull();
+		expect(queryByText('60 units @ ₹1000')).toBeNull();
 	});
 
 	it('shows an alert when invoice creation fails', async () => {

@@ -7,7 +7,10 @@ import { RecentInvoicesList, type Invoice } from '../RecentInvoicesList';
 // RecentInvoicesList uses useLocale for currency formatting and t() for translations
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => key.split('.').pop() ?? key,
+		t: (key: string) => {
+			const seg = key.split('.').pop() ?? key;
+			return seg.charAt(0).toUpperCase() + seg.slice(1);
+		},
 		formatCurrency: (amount: number) => `₹${amount.toFixed(2)}`,
 		currentLanguage: 'en',
 	}),

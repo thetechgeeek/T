@@ -11,7 +11,25 @@ jest.mock('@/src/stores/financeStore', () => ({
 
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => key.split('.').pop() ?? key,
+		t: (key: string) => {
+			const map: Record<string, string> = {
+				'finance.title': 'Finance',
+				'finance.grossProfit': 'Gross Profit',
+				'finance.netProfit': 'Net Profit',
+				'finance.expenses': 'Expenses',
+				'finance.totalExpenses': 'Total Expenses',
+				'finance.purchases': 'Purchases',
+				'finance.profitLoss': 'Profit & Loss',
+				'finance.reportsAndManagement': 'Reports & Management',
+				'finance.viewExpenses': 'View all business expenses',
+				'finance.viewPurchases': 'View all inventory purchases',
+				'finance.viewAging': 'View customer outstanding aging report',
+				'finance.viewProfitLoss': 'View detailed profit and loss statement',
+				'customer.agingReport': 'Aging Report',
+				'customer.outstanding': 'Outstanding',
+			};
+			return map[key] ?? key.split('.').pop() ?? key;
+		},
 		formatCurrency: (amount: number) => `₹${amount.toFixed(2)}`,
 	}),
 }));

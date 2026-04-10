@@ -14,7 +14,23 @@ jest.mock('@/src/services/orderService', () => ({
 
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => key.split('.').pop() ?? key,
+		t: (key: string, opts?: Record<string, unknown>) => {
+			const map: Record<string, string> = {
+				'inventory.stockStatus': '{{count}} boxes',
+				'order.importSuccess': 'Successfully Restocked',
+				'order.extractedItems': 'Items Processed',
+				'order.noItemsMessage': 'No individual items were created.',
+				'order.orderDetail': 'Import Name Unknown',
+				'inventory.itemNotFound': 'Import Name Unknown',
+			};
+			let val = map[key] ?? key.split('.').pop() ?? key;
+			if (opts) {
+				val = val.replace(/\{\{(\w+)\}\}/g, (_: string, k: string) =>
+					k in opts ? String(opts[k]) : `{{${k}}}`,
+				);
+			}
+			return val;
+		},
 		formatDateShort: (d: string) => d,
 	}),
 }));
@@ -122,9 +138,9 @@ describe('OrderDetailScreen', () => {
 			party_name: null,
 		});
 
-		const { getByText } = renderWithTheme(<OrderDetailScreen />);
+		const { getAllByText } = renderWithTheme(<OrderDetailScreen />);
 		await waitFor(() => {
-			expect(getByText('Import Name Unknown')).toBeTruthy();
+			expect(getAllByText('Import Name Unknown').length).toBeGreaterThan(0);
 		});
 	});
 

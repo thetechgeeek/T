@@ -28,10 +28,12 @@ export default function PurchasesScreen() {
 	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
-		fetchPurchases().catch((_e) => {
-			Alert.alert(t('common.errorTitle'), t('finance.loadPurchasesError'), [
-				{ text: t('common.ok') },
-			]);
+		fetchPurchases().catch((e: unknown) => {
+			Alert.alert(
+				t('common.errorTitle'),
+				e instanceof Error ? e.message : t('finance.loadPurchasesError'),
+				[{ text: t('common.ok') }],
+			);
 		});
 	}, [fetchPurchases, t]);
 
@@ -57,12 +59,7 @@ export default function PurchasesScreen() {
 					<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
 				}
 				ListEmptyComponent={
-					!loading ? (
-						<EmptyState
-							title={t('finance.loadPurchasesError')}
-							description={t('finance.purchases')}
-						/>
-					) : null
+					!loading ? <EmptyState title={t('finance.noPurchases')} /> : null
 				}
 				renderItem={({ item: p }: { item: Purchase }) => (
 					<Card key={p.id} style={styles.purchaseCard} padding="md">

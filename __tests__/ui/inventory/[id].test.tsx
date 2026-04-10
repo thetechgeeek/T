@@ -87,10 +87,10 @@ describe('ItemDetailScreen', () => {
 	});
 
 	it('navigates to stock-op for Stock In', async () => {
-		const { getByText } = renderWithTheme(<ItemDetailScreen />);
+		const { getAllByText } = renderWithTheme(<ItemDetailScreen />);
 
-		await waitFor(() => getByText('Stock In'));
-		fireEvent.press(getByText('Stock In'));
+		await waitFor(() => getAllByText('Stock In'));
+		fireEvent.press(getAllByText('Stock In')[0]);
 
 		expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('stock_in'));
 	});

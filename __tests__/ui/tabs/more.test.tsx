@@ -19,7 +19,7 @@ jest.mock('@/src/stores/authStore', () => ({
 
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => {
+		t: (key: string, opts?: Record<string, unknown>) => {
 			const map: Record<string, string> = {
 				'customer.title': 'Customers',
 				'supplier.title': 'Suppliers',
@@ -27,8 +27,22 @@ jest.mock('@/src/hooks/useLocale', () => ({
 				'finance.title': 'Finance',
 				'settings.title': 'Settings',
 				'auth.signOut': 'Sign Out',
+				'common.more': 'More',
+				'settings.lightMode': 'Light Mode',
+				'settings.darkMode': 'Dark Mode',
+				'settings.switchLanguage': 'Switch to {{lang}}',
+				'settings.switchLanguageHint': 'Switch to {{lang}}',
+				'settings.switchThemeHint': 'Switch to {{theme}} mode',
+				'settings.light': 'Light',
+				'settings.dark': 'Dark',
 			};
-			return map[key] ?? key.split('.').pop() ?? key;
+			let val = map[key] ?? key.split('.').pop() ?? key;
+			if (opts) {
+				val = val.replace(/\{\{(\w+)\}\}/g, (_: string, k: string) =>
+					k in opts ? String(opts[k]) : `{{${k}}}`,
+				);
+			}
+			return val;
 		},
 		currentLanguage: 'en',
 		toggleLanguage: jest.fn(),

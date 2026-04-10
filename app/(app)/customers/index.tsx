@@ -95,7 +95,7 @@ export default function CustomersScreen() {
 				<SearchBar
 					value={search}
 					onChangeText={handleSearch}
-					placeholder={t('customer.placeholders.search')}
+					placeholder="Search customers..."
 					style={styles.searchBar}
 				/>
 			</View>
@@ -121,7 +121,7 @@ export default function CustomersScreen() {
 								title={t('customer.noCustomers')}
 								description={t('customer.addFirstHint')}
 								icon={<UserPlus size={48} color={theme.colors.placeholder} />}
-								actionLabel={t('customer.add')}
+								actionLabel={t('customer.addCustomer')}
 								onAction={() => router.push('/(app)/customers/add')}
 							/>
 						) : null

@@ -45,7 +45,7 @@ export default function AgingReportScreen() {
 						color={theme.colors.onSurfaceVariant}
 						style={{ marginBottom: 4 }}
 					>
-						{t('customer.outstanding')}
+						{t('customer.totalOutstanding')}
 					</ThemedText>
 					<ThemedText variant="h1" color={theme.colors.error} style={{ fontSize: 32 }}>
 						{formatCurrency(
@@ -56,11 +56,11 @@ export default function AgingReportScreen() {
 			</View>
 
 			<ThemedText variant="h3" style={{ marginBottom: 16 }}>
-				{t('customer.ledger')}
+				{t('customer.customerBreakup')}
 			</ThemedText>
 
 			{agingData.length === 0 ? (
-				<EmptyState title={t('common.noResults')} />
+				<EmptyState title={t('customer.noOutstandingBalances')} />
 			) : (
 				agingData.map((c) => (
 					<Card key={c.id} style={styles.customerCard} padding="md">
