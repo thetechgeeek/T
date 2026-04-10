@@ -39,7 +39,11 @@ describe('PurchasesScreen', () => {
 		await waitFor(() => {
 			expect(getByText('Tile Corp')).toBeTruthy();
 			expect(getByText('PAID')).toBeTruthy();
-			expect(getByText('₹5000', { exact: false })).toBeTruthy();
+			// ₹5000 now appears in both summary card and list row — verify at least one exists
+			const matches = renderWithTheme(<PurchasesScreen />).getAllByText('₹5000', {
+				exact: false,
+			});
+			expect(matches.length).toBeGreaterThan(0);
 		});
 
 		expect(mockFetchPurchases).toHaveBeenCalled();

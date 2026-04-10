@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, RefreshControl, Alert } from 'react-native';
+import { View, StyleSheet, RefreshControl, Alert, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { Calendar, User } from 'lucide-react-native';
+import { Calendar, User, Plus } from 'lucide-react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -15,8 +16,9 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { Purchase } from '@/src/types/finance';
 
 export default function PurchasesScreen() {
-	const { theme } = useThemeTokens();
+	const { theme, c, r } = useThemeTokens();
 	const { t, formatCurrency, formatDate } = useLocale();
+	const router = useRouter();
 	const { purchases, loading, fetchPurchases } = useFinanceStore(
 		useShallow((s) => ({
 			purchases: s.purchases,
@@ -46,9 +48,44 @@ export default function PurchasesScreen() {
 		}
 	};
 
+	const totalPurchases = purchases.reduce(
+		(sum: number, p: Purchase) => sum + (p.grand_total ?? 0),
+		0,
+	);
+	const totalPaid = purchases.reduce((sum: number, p: Purchase) => sum + (p.amount_paid ?? 0), 0);
+	const totalToPay = totalPurchases - totalPaid;
+
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
 			<ScreenHeader title={t('finance.purchases')} />
+
+			{/* Summary Card */}
+			<Card padding="sm" style={styles.summaryCard}>
+				<View style={styles.summaryRow}>
+					<View style={styles.summaryItem}>
+						<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
+							Total
+						</ThemedText>
+						<ThemedText variant="bodyBold">{formatCurrency(totalPurchases)}</ThemedText>
+					</View>
+					<View style={styles.summaryItem}>
+						<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
+							Paid
+						</ThemedText>
+						<ThemedText variant="bodyBold" color={theme.colors.success}>
+							{formatCurrency(totalPaid)}
+						</ThemedText>
+					</View>
+					<View style={styles.summaryItem}>
+						<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
+							To Pay
+						</ThemedText>
+						<ThemedText variant="bodyBold" color={theme.colors.error}>
+							{formatCurrency(totalToPay)}
+						</ThemedText>
+					</View>
+				</View>
+			</Card>
 
 			<FlashList
 				data={purchases}
@@ -96,6 +133,18 @@ export default function PurchasesScreen() {
 					</Card>
 				)}
 			/>
+
+			{/* FAB */}
+			<Pressable
+				style={[
+					styles.fab,
+					{ backgroundColor: theme.colors.primary, borderRadius: r.full },
+				]}
+				onPress={() => router.push('/(app)/finance/purchases/create')}
+				accessibilityLabel="New purchase bill"
+			>
+				<Plus size={28} color={theme.colors.onPrimary ?? '#fff'} />
+			</Pressable>
 		</AtomicScreen>
 	);
 }
@@ -103,6 +152,23 @@ export default function PurchasesScreen() {
 const styles = StyleSheet.create({
 	scrollContent: { padding: 16 },
 	purchaseCard: { marginBottom: 16 },
+	summaryCard: { marginHorizontal: 16, marginTop: 12 },
+	summaryRow: { flexDirection: 'row', justifyContent: 'space-between' },
+	summaryItem: { alignItems: 'center', flex: 1 },
+	fab: {
+		position: 'absolute',
+		bottom: 32,
+		right: 24,
+		width: 56,
+		height: 56,
+		alignItems: 'center',
+		justifyContent: 'center',
+		elevation: 6,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 3 },
+		shadowOpacity: 0.2,
+		shadowRadius: 4,
+	},
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',

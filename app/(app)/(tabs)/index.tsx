@@ -1,12 +1,14 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, RefreshControl } from 'react-native';
+import { View, RefreshControl, Pressable, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
 import { layout } from '@/src/theme/layout';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 // Atomic Design Components
 import { StatCard } from '@/src/components/molecules/StatCard';
@@ -22,11 +24,14 @@ import {
 	QrCode,
 	Package,
 	CreditCard,
+	ShoppingCart,
+	ArrowDownCircle,
 } from 'lucide-react-native';
 
 export default function DashboardScreen() {
-	const { c, s } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const { t, formatCurrency } = useLocale();
+	const router = useRouter();
 	const [refreshing, setRefreshing] = React.useState(false);
 
 	const { invoices, fetchInvoices } = useInvoiceStore(
@@ -50,10 +55,17 @@ export default function DashboardScreen() {
 			color: c.primary,
 		},
 		{
-			label: t('dashboard.scanItem'),
+			label: 'Receive Payment',
+			accessibilityLabel: 'quick-action-record-payment',
+			icon: ArrowDownCircle,
+			route: '/(app)/finance/payments/receive',
+			color: c.success,
+		},
+		{
+			label: 'New Purchase',
 			accessibilityLabel: 'quick-action-scan-item',
-			icon: QrCode,
-			route: '/(app)/(tabs)/scan',
+			icon: ShoppingCart,
+			route: '/(app)/finance/purchases/create',
 			color: c.info,
 		},
 		{
@@ -61,13 +73,6 @@ export default function DashboardScreen() {
 			accessibilityLabel: 'quick-action-add-stock',
 			icon: Package,
 			route: '/(app)/(tabs)/inventory',
-			color: c.success,
-		},
-		{
-			label: t('dashboard.recordPayment'),
-			accessibilityLabel: 'quick-action-record-payment',
-			icon: CreditCard,
-			route: '/(app)/finance/payments',
 			color: c.warning,
 		},
 	];
@@ -81,20 +86,22 @@ export default function DashboardScreen() {
 			color: c.success,
 		},
 		{
-			label: t('dashboard.outstandingCredit'),
+			label: 'To Receive',
 			accessibilityLabel: 'stat-outstanding',
 			value: formatCurrency(stats?.total_outstanding_credit ?? 0),
 			icon: Users,
-			color: c.warning,
+			color: c.error,
 		},
 		{
 			label: t('dashboard.lowStock'),
 			accessibilityLabel: 'stat-low-stock',
 			value: t('inventory.stockStatus', { count: stats?.low_stock_count ?? 0 }),
 			icon: AlertTriangle,
-			color: c.error,
+			color: c.warning,
 		},
 	];
+
+	const hasAlerts = (stats?.low_stock_count ?? 0) > 0;
 
 	const recentInvoices = invoices.slice(0, 5);
 
@@ -148,6 +155,47 @@ export default function DashboardScreen() {
 					<QuickActionsGrid
 						actions={quickActions as Parameters<typeof QuickActionsGrid>[0]['actions']}
 					/>
+
+					{/* Alerts section — shown only when alerts exist */}
+					{hasAlerts && (
+						<View
+							style={{
+								marginHorizontal: s.md,
+								marginBottom: s.md,
+								padding: s.md,
+								backgroundColor: '#FEF3C7',
+								borderRadius: r.md,
+								borderLeftWidth: 4,
+								borderLeftColor: c.warning,
+							}}
+						>
+							<ThemedText variant="bodyBold" style={{ marginBottom: s.xs }}>
+								Alerts
+							</ThemedText>
+							{(stats?.low_stock_count ?? 0) > 0 && (
+								<Pressable
+									onPress={() => router.push('/(app)/(tabs)/inventory')}
+									accessibilityRole="button"
+									accessibilityLabel="alert-low-stock"
+									style={[layout.rowBetween, { paddingVertical: s.xs }]}
+								>
+									<View style={layout.row}>
+										<AlertTriangle
+											size={16}
+											color={c.error}
+											style={{ marginRight: s.sm }}
+										/>
+										<ThemedText variant="body">
+											{stats?.low_stock_count} items low on stock
+										</ThemedText>
+									</View>
+									<ThemedText variant="caption" color={c.primary}>
+										View →
+									</ThemedText>
+								</Pressable>
+							)}
+						</View>
+					)}
 
 					<RecentInvoicesList
 						invoices={

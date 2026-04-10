@@ -944,59 +944,59 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
 
 **Route:** `/(app)/invoices/create`
 
-- [ ] Stepper header: 3 dots at top; active dot filled terracotta, completed dot terracotta outline, pending dot grey
-- [ ] Step labels below dots: "Customer" / "Items" / "Review"
-- [ ] `ScreenHeader` with "New Sale Invoice" / "नई बिक्री" title and × close button (right side)
-- [ ] × close: if form dirty → `ConfirmationModal` "Draft save करें?" with "Save Draft" / "Discard" / "Cancel" options
+- [x] Stepper header: 3 dots at top; active dot filled terracotta, completed dot terracotta outline, pending dot grey
+- [x] Step labels below dots: "Customer" / "Items" / "Review"
+- [x] `ScreenHeader` with "New Sale Invoice" / "नई बिक्री" title and × close button (right side)
+- [x] × close: if form dirty → `ConfirmationModal` "Draft save करें?" with "Save Draft" / "Discard" / "Cancel" options
     - [ ] "Save Draft": stores all entered data to AsyncStorage under key `@invoice_draft/[tempId]`; navigates to invoice list; shows "Draft saved" toast; draft entry appears at top of invoice list with "DRAFT" badge
-- [ ] Each step has a `ScrollView` content area (keyboard-aware via `KeyboardAvoidingView`)
-- [ ] Step navigation: "Back" button (left) and "Next" / "Create Invoice" button (right) in fixed bottom bar
+- [x] Each step has a `ScrollView` content area (keyboard-aware via `KeyboardAvoidingView`)
+- [x] Step navigation: "Back" button (left) and "Next" / "Create Invoice" button (right) in fixed bottom bar
 
 ### P4.2 Invoice Create — Step 1: Customer & Header
 
-- [ ] **Date field** (`DatePickerField`):
+- [x] **Date field** (`DatePickerField`):
     - [ ] Default: today
     - [ ] Cannot set to future date (show warning, not hard block — backdated invoices are legal in India)
     - [ ] When date is older than 60 days: amber warning "This invoice date is more than 60 days old — are you sure?"
-- [ ] **Invoice Number field**:
+- [x] **Invoice Number field**:
     - [ ] Auto-populated with next sequence: `[prefix][paddedSequence]` → "INV-0042"
     - [ ] Editable: user can override; if they enter an already-used number → red error "यह number already use हो चुका है (INV-0038)"
     - [ ] Sequence auto-increments on successful save (not on open — to avoid gaps when user discards)
-- [ ] **"Cash Sale" toggle** (large, prominent):
+- [x] **"Cash Sale" toggle** (large, prominent):
     - [ ] Default: OFF unless "Cash Sale as default" setting is ON (P17.1)
     - [ ] When ON: hides customer search field entirely; shows "Cash / Walk-in Customer" label; invoice type = `cash_sale`
     - [ ] When OFF: shows customer selection
-- [ ] **Customer selection** (shown when not Cash Sale):
+- [x] **Customer selection** (shown when not Cash Sale):
     - [ ] `SearchBar` placeholder "Customer का नाम या phone खोजें"
     - [ ] Search shows results as list below (not in sheet): each result shows avatar, name, phone, outstanding balance in red/green
     - [ ] "Add new customer" row at top of results (with + icon): navigates to customer add screen, returns with new customer pre-selected
     - [ ] When customer selected: compact customer card shown (name, phone, outstanding badge); × to deselect
     - [ ] Credit limit check: if `outstanding > creditLimit` → amber banner "Credit limit of ₹ X exceeded. Current outstanding: ₹ Y"
-- [ ] **Inter-state toggle** (shown when customer has state set):
+- [x] **Inter-state toggle** (shown when customer has state set):
     - [ ] Auto-set: ON if customer state ≠ business state; OFF if same state
     - [ ] User can override manually
     - [ ] Determines CGST+SGST (intra-state) or IGST (inter-state) calculation
     - [ ] Place of Supply picker (shown when "State of supply" setting ON in P17.1): defaults to customer state; user can override
-- [ ] **Reverse Charge toggle** (shown when "Reverse Charge" setting ON in P17.1):
+- [x] **Reverse Charge toggle** (shown when "Reverse Charge" setting ON in P17.1):
     - [ ] When ON: GST not charged to customer; recipient pays GST directly to govt
-- [ ] **PO Number + Date** (shown when "PO Detail" setting ON in P17.1):
+- [x] **PO Number + Date** (shown when "PO Detail" setting ON in P17.1):
     - [ ] PO Number: text field
     - [ ] PO Date: `DatePickerField`
-- [ ] **Due Date** (shown when "Due date" setting ON in P17.1):
+- [x] **Due Date** (shown when "Due date" setting ON in P17.1):
     - [ ] `DatePickerField`
     - [ ] Quick-set chips: Net 7 / Net 15 / Net 30 / Net 45 / On Delivery — tap sets date to today + N days
-- [ ] Next button: validates date is set and (if not cash sale) customer is selected; advances to Step 2
+- [x] Next button: validates date is set and (if not cash sale) customer is selected; advances to Step 2
 
 ### P4.3 Invoice Create — Step 2: Line Items
 
-- [ ] **Item search bar** at top:
+- [x] **Item search bar** at top:
     - [ ] Placeholder "Item का नाम search करें या barcode scan करें"
     - [ ] Barcode scan icon on right (shown when barcode setting ON in P17.1): opens camera scanner
     - [ ] As user types (300ms debounce): shows items from inventory matching name/code
     - [ ] Each result row: item name, stock qty (red if low), sale price, GST rate badge
     - [ ] Tap result: adds item to line items with default qty=1; keyboard closes
     - [ ] "Item नहीं मिला?" text at bottom of search results → "+ New Item" link (navigates to add item, returns)
-- [ ] **Line Items List** (below search bar):
+- [x] **Line Items List** (below search bar):
     - [ ] Each line item row (compact card, 88dp):
         - [ ] Item name (bodyBold) + category chip
         - [ ] Row 2: Qty input (numeric, +/− spinner buttons, 40dp each) + unit label
@@ -1008,10 +1008,10 @@ Identical structure to Customer Detail (P3.3) with supplier-specific data.
         - [ ] Swipe-left to remove line item (with haptic, no confirmation needed for line items)
     - [ ] Stock overage warning: if qty > current_stock → yellow inline banner on that row: "⚠ Only [stock] available (you're adding [qty])"
     - [ ] Free item qty row (shown when free-item setting ON): "+ Free qty: \_\_\_" below regular qty
-- [ ] **Running Totals bar** (sticky bottom, above keyboard):
+- [x] **Running Totals bar** (sticky bottom, above keyboard):
     - [ ] "X items · Subtotal: ₹ Y · GST: ₹ Z"
     - [ ] Updated live as items added/qty changed/prices changed
-- [ ] Next button: validates at least one line item added; advances to Step 3
+- [x] Next button: validates at least one line item added; advances to Step 3
 
 ### P4.4 Invoice Create — Step 3: Review, Charges & Payment
 

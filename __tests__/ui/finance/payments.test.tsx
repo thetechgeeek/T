@@ -16,16 +16,15 @@ describe('PaymentsScreen', () => {
 		expect(getByText('Payments')).toBeTruthy();
 	});
 
-	it('renders coming soon placeholder', () => {
+	it('renders summary bar', () => {
 		const { getByText } = renderWithTheme(<PaymentsScreen />);
-		expect(getByText('Payments — coming soon')).toBeTruthy();
+		expect(getByText(/payments this month/i)).toBeTruthy();
 	});
 
-	it('calls router.back() when back button pressed', () => {
+	it('renders FAB and screen without crash', () => {
 		const { toJSON } = renderWithTheme(<PaymentsScreen />);
 		const json = JSON.stringify(toJSON());
-		// Back button is a TouchableOpacity with ArrowLeft icon — verify screen renders without crash
 		expect(json).toContain('Payments');
-		expect(json).toContain('coming soon');
+		expect(json).toContain('Record payment');
 	});
 });

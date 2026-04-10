@@ -1,7 +1,15 @@
-import { View, StyleSheet, RefreshControl } from 'react-native';
+import { View, StyleSheet, RefreshControl, Pressable } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 import { useRouter } from 'expo-router';
-import { TrendingUp, TrendingDown, Wallet, Receipt, ShoppingCart } from 'lucide-react-native';
+import {
+	TrendingUp,
+	TrendingDown,
+	Wallet,
+	Receipt,
+	ShoppingCart,
+	ArrowDownLeft,
+	ArrowUpRight,
+} from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -14,7 +22,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import React, { useEffect, useState } from 'react';
 
 export default function FinanceOverviewScreen() {
-	const { theme } = useThemeTokens();
+	const { theme, c, s, r } = useThemeTokens();
 	const { formatCurrency, t } = useLocale();
 	const router = useRouter();
 	const [refreshing, setRefreshing] = useState(false);
@@ -91,6 +99,33 @@ export default function FinanceOverviewScreen() {
 				))}
 			</View>
 
+			{/* Quick Actions */}
+			<View style={styles.quickActions}>
+				<Pressable
+					style={[styles.quickBtn, { backgroundColor: c.primary, borderRadius: r.md }]}
+					onPress={() => router.push('/(app)/finance/payments/receive')}
+					accessibilityLabel="receive-payment"
+				>
+					<ArrowDownLeft size={20} color={c.onPrimary} />
+					<ThemedText variant="caption" color={c.onPrimary} style={{ marginTop: 4 }}>
+						Receive Payment
+					</ThemedText>
+				</Pressable>
+				<Pressable
+					style={[
+						styles.quickBtn,
+						{ backgroundColor: theme.colors.onSurfaceVariant, borderRadius: r.md },
+					]}
+					onPress={() => router.push('/(app)/finance/payments/make')}
+					accessibilityLabel="make-payment"
+				>
+					<ArrowUpRight size={20} color={c.onPrimary} />
+					<ThemedText variant="caption" color={c.onPrimary} style={{ marginTop: 4 }}>
+						Make Payment
+					</ThemedText>
+				</Pressable>
+			</View>
+
 			<Divider style={{ marginVertical: 24 }} />
 
 			<ThemedText variant="h3" style={{ marginBottom: 16, paddingLeft: 4 }}>
@@ -161,6 +196,17 @@ const styles = StyleSheet.create({
 	},
 	metricsGrid: {
 		gap: 16,
+	},
+	quickActions: {
+		flexDirection: 'row',
+		gap: 12,
+		marginTop: 20,
+	},
+	quickBtn: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingVertical: 14,
 	},
 	section: {
 		gap: 8,
