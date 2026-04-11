@@ -1,87 +1,184 @@
 import { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
+import { Cloud } from 'lucide-react-native';
 
 export interface DashboardHeaderProps {
 	businessName: string;
+	onSyncPress?: () => void;
 }
 
-export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName }) => {
+function getGreeting(): { en: string; hi: string } {
+	const hour = new Date().getHours();
+	if (hour < 12) return { en: 'Good Morning', hi: 'नमस्ते' };
+	if (hour < 17) return { en: 'Good Afternoon', hi: 'नमस्ते' };
+	return { en: 'Good Evening', hi: 'नमस्ते' };
+}
+
+function getFinancialYearLabel(): string {
+	const now = new Date();
+	const month = now.getMonth() + 1; // 1-based
+	const year = now.getFullYear();
+	const fyStart = month >= 4 ? year : year - 1;
+	const fyEnd = fyStart + 1;
+	// e.g. "FY 2024-25 · Apr – Mar"
+	return `FY ${fyStart}-${String(fyEnd).slice(2)} · Apr – Mar`;
+}
+
+function getFormattedDate(): string {
+	const now = new Date();
+	return now.toLocaleDateString('en-IN', {
+		weekday: 'long',
+		day: 'numeric',
+		month: 'long',
+		year: 'numeric',
+	});
+}
+
+function getBusinessInitial(name: string): string {
+	return (name || '?').trim().charAt(0).toUpperCase();
+}
+
+export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, onSyncPress }) => {
 	const { theme } = useTheme();
-	const { t, currentLanguage } = useLocale();
+	const { t } = useLocale();
 	const insets = useSafeAreaInsets();
 
 	const c = theme.colors;
 	const s = theme.spacing;
-	const today = useMemo(
-		() =>
-			new Date().toLocaleDateString(`${currentLanguage}-IN`, {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-			}),
-		[currentLanguage],
-	);
+
+	const greeting = useMemo(() => getGreeting(), []);
+	const fyLabel = useMemo(() => getFinancialYearLabel(), []);
+	const formattedDate = useMemo(() => getFormattedDate(), []);
+	const initial = useMemo(() => getBusinessInitial(businessName), [businessName]);
 
 	return (
 		<View
-			accessibilityLabel={t('dashboard.greeting') + ' ' + businessName}
 			accessibilityRole="header"
+			accessibilityLabel={`${greeting.en}, ${businessName}`}
 			style={[
-				styles.header,
+				styles.headerWrap,
 				{
 					backgroundColor: c.primary,
-					paddingTop: insets.top + s.md,
-					paddingHorizontal: s.lg,
-					paddingBottom: s.xl,
+					paddingTop: insets.top + s.sm,
 				},
 			]}
 		>
-			{/* Greeting is decorative — business name is the meaningful heading */}
-			<ThemedText
-				variant="body"
-				color={c.onPrimary}
-				opacity={0.9}
-				importantForAccessibility="no"
+			{/* Main header row */}
+			<View
+				style={[
+					layout.rowBetween,
+					{
+						paddingHorizontal: s.lg,
+						paddingBottom: s.lg,
+						alignItems: 'center',
+					},
+				]}
 			>
-				{t('dashboard.greeting')}
-			</ThemedText>
-
-			<View style={[layout.rowBetween, { marginTop: s.xs }]}>
-				<ThemedText variant="h2" color={c.onPrimary} style={{ flex: 1 }}>
-					{businessName}
-				</ThemedText>
+				{/* Left: avatar */}
 				<View
-					accessible={true}
-					accessibilityLabel={t('common.today') + ': ' + today}
-					style={[styles.dateBadge, { backgroundColor: 'rgba(255,255,255,0.15)' }]}
+					style={[styles.avatar, { backgroundColor: 'rgba(255,255,255,0.95)' }]}
+					accessible
+					accessibilityLabel={`Business initial: ${initial}`}
 				>
+					<ThemedText variant="h3" color={c.primary} style={styles.avatarText}>
+						{initial}
+					</ThemedText>
+				</View>
+
+				{/* Centre: greeting + date */}
+				<View style={styles.centreBlock} importantForAccessibility="no">
+					<View style={[layout.row, { alignItems: 'center', gap: 6 }]}>
+						<ThemedText
+							variant="bodyBold"
+							color={c.onPrimary}
+							importantForAccessibility="no"
+						>
+							{greeting.en}
+						</ThemedText>
+						<ThemedText
+							variant="body"
+							color={c.onPrimary}
+							style={{ opacity: 0.85 }}
+							importantForAccessibility="no"
+						>
+							{greeting.hi}
+						</ThemedText>
+					</View>
 					<ThemedText
 						variant="caption"
 						color={c.onPrimary}
+						style={{ opacity: 0.75, marginTop: 2 }}
 						importantForAccessibility="no"
 					>
-						{today}
+						{formattedDate}
 					</ThemedText>
 				</View>
+
+				{/* Right: sync icon */}
+				<Pressable
+					onPress={onSyncPress}
+					accessibilityRole="button"
+					accessibilityLabel={t('common.sync') ?? 'Sync'}
+					style={styles.syncBtn}
+					hitSlop={8}
+				>
+					<Cloud size={22} color={c.onPrimary} opacity={0.9} />
+				</Pressable>
+			</View>
+
+			{/* Financial year bar */}
+			<View
+				style={[styles.fyBar, { backgroundColor: 'rgba(0,0,0,0.18)' }]}
+				accessible
+				accessibilityLabel={`Financial year: ${fyLabel}`}
+			>
+				<ThemedText
+					variant="caption"
+					color={c.onPrimary}
+					style={{ opacity: 0.85, letterSpacing: 0.3 }}
+				>
+					{fyLabel}
+				</ThemedText>
 			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	header: {
+	headerWrap: {
 		borderBottomLeftRadius: 24,
 		borderBottomRightRadius: 24,
+		overflow: 'hidden',
 	},
-	dateBadge: {
-		paddingHorizontal: 10,
-		paddingVertical: 4,
-		borderRadius: 12,
+	avatar: {
+		width: 44,
+		height: 44,
+		borderRadius: 22,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	avatarText: {
+		lineHeight: 44,
+		textAlign: 'center',
+	},
+	centreBlock: {
+		flex: 1,
+		alignItems: 'center',
+		paddingHorizontal: 8,
+	},
+	syncBtn: {
+		width: 44,
+		height: 44,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	fyBar: {
+		alignItems: 'center',
+		paddingVertical: 5,
 	},
 });

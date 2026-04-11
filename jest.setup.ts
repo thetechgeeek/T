@@ -250,6 +250,8 @@ jest.mock('react-native', () => {
 		SectionList,
 		AppState,
 		NativeModules,
+		Switch: ({ value, onValueChange, ...props }: any) =>
+			React.createElement('Switch', { ...props, value, onChange: onValueChange }),
 		useWindowDimensions: jest.fn(() => ({ width: 390, height: 844, fontScale: 1, scale: 3 })),
 	};
 });

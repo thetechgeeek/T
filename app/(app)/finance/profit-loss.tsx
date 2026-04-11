@@ -1,25 +1,427 @@
-import { View, StyleSheet } from 'react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import React, { useState, useMemo, useEffect } from 'react';
+import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
+import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Card } from '@/src/components/atoms/Card';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { useFinanceStore } from '@/src/stores/financeStore';
+import { useInvoiceStore } from '@/src/stores/invoiceStore';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { withOpacity } from '@/src/utils/color';
+
+type PeriodMode = 'monthly' | 'quarterly' | 'fy';
+
+const PERIOD_TABS: { label: string; value: PeriodMode }[] = [
+	{ label: 'Monthly', value: 'monthly' },
+	{ label: 'Quarterly', value: 'quarterly' },
+	{ label: 'Full FY', value: 'fy' },
+];
+
+function toISO(d: Date) {
+	return d.toISOString().slice(0, 10);
+}
+
+function fyStartYear(): number {
+	const now = new Date();
+	const m = now.getMonth() + 1;
+	return m >= 4 ? now.getFullYear() : now.getFullYear() - 1;
+}
+
+function getPeriodRange(
+	mode: PeriodMode,
+	monthOffset: number,
+): { label: string; from: string; to: string } {
+	const now = new Date();
+	const fyStart = fyStartYear();
+
+	if (mode === 'fy') {
+		return {
+			label: `FY ${fyStart}–${(fyStart + 1).toString().slice(2)}`,
+			from: `${fyStart}-04-01`,
+			to: `${fyStart + 1}-03-31`,
+		};
+	}
+
+	if (mode === 'quarterly') {
+		// Quarter index 0–3 within FY (Apr=Q1, Jul=Q2, Oct=Q3, Jan=Q4)
+		const qIdx = ((monthOffset % 4) + 4) % 4;
+		const startMonth = [4, 7, 10, 1][qIdx];
+		const qYear = startMonth === 1 ? fyStart + 1 : fyStart;
+		const fromDate = new Date(qYear, startMonth - 1, 1);
+		const toDate = new Date(qYear, startMonth + 2, 0); // last day of 3rd month
+		const quarterNames = ['Q1 (Apr–Jun)', 'Q2 (Jul–Sep)', 'Q3 (Oct–Dec)', 'Q4 (Jan–Mar)'];
+		return {
+			label: `${quarterNames[qIdx]} FY${fyStart}`,
+			from: toISO(fromDate),
+			to: toISO(toDate),
+		};
+	}
+
+	// Monthly
+	const base = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+	const lastDay = new Date(base.getFullYear(), base.getMonth() + 1, 0);
+	return {
+		label: base.toLocaleString('default', { month: 'long', year: 'numeric' }),
+		from: toISO(base),
+		to: toISO(lastDay),
+	};
+}
+
+interface ExpenseCategory {
+	category: string;
+	total: number;
+}
+
+function SectionRow({
+	label,
+	value,
+	accent,
+	bold,
+	indent,
+	c,
+	formatCurrency,
+}: {
+	label: string;
+	value: number;
+	accent?: string;
+	bold?: boolean;
+	indent?: boolean;
+	c: any;
+	formatCurrency: (v: number) => string;
+}) {
+	return (
+		<View style={[styles.sectionRow, indent && { paddingLeft: 12 }]}>
+			<ThemedText
+				color={accent ?? c.onSurface}
+				weight={bold ? 'bold' : 'regular'}
+				style={{ flex: 1 }}
+			>
+				{label}
+			</ThemedText>
+			<ThemedText color={accent ?? c.onSurface} weight={bold ? 'bold' : 'regular'}>
+				{formatCurrency(value)}
+			</ThemedText>
+		</View>
+	);
+}
 
 export default function ProfitLossScreen() {
-	const { c } = useThemeTokens();
-	const { t } = useLocale();
+	const { c, s, r, theme } = useThemeTokens();
+	const { formatCurrency } = useLocale();
+
+	const [mode, setMode] = useState<PeriodMode>('monthly');
+	const [offset, setOffset] = useState(0);
+
+	const { expenses, purchases, initialize } = useFinanceStore(
+		useShallow((state) => ({
+			expenses: state.expenses,
+			purchases: state.purchases,
+			initialize: state.initialize,
+		})),
+	);
+
+	const { invoices, fetchInvoices } = useInvoiceStore(
+		useShallow((state) => ({
+			invoices: state.invoices,
+			fetchInvoices: state.fetchInvoices,
+		})),
+	);
+
+	useEffect(() => {
+		initialize();
+		fetchInvoices(1);
+	}, [initialize, fetchInvoices]);
+
+	const { label, from, to } = useMemo(() => getPeriodRange(mode, offset), [mode, offset]);
+
+	// Revenue
+	const saleRevenue = useMemo(
+		() =>
+			invoices
+				.filter((inv) => inv.invoice_date >= from && inv.invoice_date <= to)
+				.reduce((sum, inv) => sum + inv.grand_total, 0),
+		[invoices, from, to],
+	);
+
+	// TODO: wire Other Income from a dedicated income store when available
+	const otherIncome = 0;
+	const grossRevenue = saleRevenue + otherIncome;
+
+	// COGS
+	// TODO: opening/closing stock from inventoryStore when stockValuation is implemented
+	const openingStock = 0;
+	const closingStock = 0;
+	const purchasesTotal = useMemo(
+		() =>
+			purchases
+				.filter((p) => p.purchase_date >= from && p.purchase_date <= to)
+				.reduce((sum, p) => sum + p.grand_total, 0),
+		[purchases, from, to],
+	);
+	const cogs = openingStock + purchasesTotal - closingStock;
+	const grossProfit = grossRevenue - cogs;
+
+	// Expenses by category
+	const expenseCategories = useMemo<ExpenseCategory[]>(() => {
+		const map: Record<string, number> = {};
+		expenses
+			.filter((e) => e.expense_date >= from && e.expense_date <= to)
+			.forEach((e) => {
+				map[e.category] = (map[e.category] ?? 0) + e.amount;
+			});
+		return Object.entries(map)
+			.map(([category, total]) => ({ category, total }))
+			.sort((a, b) => b.total - a.total);
+	}, [expenses, from, to]);
+
+	const totalExpenses = expenseCategories.reduce((s, e) => s + e.total, 0);
+	const netProfit = grossProfit - totalExpenses;
+	const isProfit = netProfit >= 0;
+
+	const tabStyle = (active: boolean) => [
+		styles.tab,
+		{
+			backgroundColor: active ? c.primary : 'transparent',
+			borderRadius: r.sm,
+		},
+	];
+
+	const canGoBack = mode !== 'fy';
+	const canGoForward = mode !== 'fy' && offset < 0;
+
 	return (
 		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title={t('finance.profitLoss')} />
-			<View style={styles.center}>
-				<ThemedText color={c.placeholder}>
-					{t('finance.profitLoss')} — {t('common.comingSoon')}
-				</ThemedText>
+			<ScreenHeader title="Profit & Loss" showBack />
+
+			{/* Period mode tabs */}
+			<View
+				style={[
+					styles.tabBar,
+					{ backgroundColor: c.surface, borderRadius: r.md, marginHorizontal: s.md },
+				]}
+			>
+				{PERIOD_TABS.map((tab) => (
+					<Pressable
+						key={tab.value}
+						onPress={() => {
+							setMode(tab.value);
+							setOffset(0);
+						}}
+						style={tabStyle(mode === tab.value)}
+						accessibilityRole="tab"
+						accessibilityState={{ selected: mode === tab.value }}
+					>
+						<ThemedText
+							variant="caption"
+							weight={mode === tab.value ? 'bold' : 'regular'}
+							color={mode === tab.value ? c.onPrimary : c.onSurfaceVariant}
+						>
+							{tab.label}
+						</ThemedText>
+					</Pressable>
+				))}
 			</View>
+
+			{/* Period navigation */}
+			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginTop: 8 }]}>
+				<Pressable
+					onPress={() => canGoBack && setOffset((o) => o - 1)}
+					disabled={!canGoBack}
+					style={[styles.navBtn, { opacity: canGoBack ? 1 : 0.3 }]}
+					accessibilityLabel="Previous period"
+				>
+					<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
+				</Pressable>
+				<ThemedText weight="bold" style={{ flex: 1, textAlign: 'center' }}>
+					{label}
+				</ThemedText>
+				<Pressable
+					onPress={() => canGoForward && setOffset((o) => o + 1)}
+					disabled={!canGoForward}
+					style={[styles.navBtn, { opacity: canGoForward ? 1 : 0.3 }]}
+					accessibilityLabel="Next period"
+				>
+					<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
+				</Pressable>
+			</View>
+
+			<ScrollView contentContainerStyle={{ padding: s.md, paddingBottom: 40, gap: 12 }}>
+				{/* Revenue Section */}
+				<Card padding="md">
+					<ThemedText
+						weight="bold"
+						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
+					>
+						Revenue
+					</ThemedText>
+					<SectionRow
+						label="Sale Revenue"
+						value={saleRevenue}
+						indent
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+					<SectionRow
+						label="Other Income"
+						value={otherIncome}
+						indent
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+					<View style={[styles.divider, { backgroundColor: c.border }]} />
+					<SectionRow
+						label="Gross Revenue"
+						value={grossRevenue}
+						bold
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+				</Card>
+
+				{/* COGS Section */}
+				<Card padding="md">
+					<ThemedText
+						weight="bold"
+						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
+					>
+						Cost of Goods Sold
+					</ThemedText>
+					<SectionRow
+						label="Opening Stock"
+						value={openingStock}
+						indent
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+					<SectionRow
+						label="+ Purchases"
+						value={purchasesTotal}
+						indent
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+					<SectionRow
+						label="– Closing Stock"
+						value={closingStock}
+						indent
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+					<View style={[styles.divider, { backgroundColor: c.border }]} />
+					<SectionRow
+						label="COGS"
+						value={cogs}
+						bold
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+					<View style={[styles.divider, { backgroundColor: c.border }]} />
+					<SectionRow
+						label="Gross Profit"
+						value={grossProfit}
+						bold
+						accent={grossProfit >= 0 ? c.success : c.error}
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+				</Card>
+
+				{/* Expenses Section */}
+				<Card padding="md">
+					<ThemedText
+						weight="bold"
+						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
+					>
+						Expenses
+					</ThemedText>
+					{expenseCategories.length === 0 ? (
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							No expenses in this period
+						</ThemedText>
+					) : (
+						expenseCategories.map((cat) => (
+							<SectionRow
+								key={cat.category}
+								label={cat.category}
+								value={cat.total}
+								indent
+								c={c}
+								formatCurrency={formatCurrency}
+							/>
+						))
+					)}
+					<View style={[styles.divider, { backgroundColor: c.border }]} />
+					<SectionRow
+						label="Total Expenses"
+						value={totalExpenses}
+						bold
+						c={c}
+						formatCurrency={formatCurrency}
+					/>
+				</Card>
+
+				{/* Net Profit / Loss */}
+				<Card
+					padding="lg"
+					style={{
+						borderRadius: r.md,
+						backgroundColor: withOpacity(isProfit ? c.success : c.error, 0.08),
+						borderWidth: 1.5,
+						borderColor: isProfit ? c.success : c.error,
+					}}
+				>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={{ textAlign: 'center', marginBottom: 4 }}
+					>
+						Net {isProfit ? 'Profit' : 'Loss'}
+					</ThemedText>
+					<ThemedText
+						weight="bold"
+						color={isProfit ? c.success : c.error}
+						style={{ fontSize: 32, textAlign: 'center' }}
+					>
+						{isProfit ? '' : '– '}
+						{formatCurrency(Math.abs(netProfit))}
+					</ThemedText>
+				</Card>
+			</ScrollView>
 		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+	tabBar: {
+		flexDirection: 'row',
+		padding: 3,
+		marginTop: 8,
+	},
+	tab: {
+		flex: 1,
+		alignItems: 'center',
+		paddingVertical: 7,
+	},
+	periodNav: {
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	navBtn: {
+		width: 36,
+		height: 36,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	sectionRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingVertical: 5,
+	},
+	divider: {
+		height: StyleSheet.hairlineWidth,
+		marginVertical: 6,
+	},
 });

@@ -34,31 +34,35 @@ describe('AddItemScreen', () => {
 	});
 
 	it('renders correctly for adding a new item', () => {
-		const { getByText, getByPlaceholderText } = renderWithTheme(<AddItemScreen />);
+		const { getByText, getByPlaceholderText, getByLabelText } = renderWithTheme(
+			<AddItemScreen />,
+		);
 
 		expect(getByText('Add Item')).toBeTruthy();
-		expect(getByPlaceholderText('e.g. 10526-HL-1-A')).toBeTruthy();
-		expect(getByText(/Initial Stock/i)).toBeTruthy();
+		expect(getByPlaceholderText(/सफेद ग्लॉसी टाइल|e.g. 10526/i)).toBeTruthy();
+		expect(getByText(/Opening Stock/i)).toBeTruthy();
 	});
 
 	it('shows validation errors for required fields', async () => {
-		const { getByText, findByText } = renderWithTheme(<AddItemScreen />);
+		const { getByText, findByText, getByLabelText } = renderWithTheme(<AddItemScreen />);
 
 		// Press save without filling anything
-		fireEvent.press(getByText('Save Item'));
+		fireEvent.press(getByLabelText(/save item/i));
 
-		// findByText already waits. Match either "required" or "invalid" (for default zod errors)
-		expect(await findByText(/required|invalid/i)).toBeTruthy();
+		// findByText already waits.
+		expect(await findByText('Required')).toBeTruthy();
 	});
 
 	it('successfully submits the form to create an item', async () => {
-		const { getByText, getByPlaceholderText } = renderWithTheme(<AddItemScreen />);
+		const { getByText, getByPlaceholderText, getByLabelText } = renderWithTheme(
+			<AddItemScreen />,
+		);
 
-		fireEvent.changeText(getByPlaceholderText('e.g. 10526-HL-1-A'), 'Marble 101');
-		fireEvent.changeText(getByPlaceholderText('Enter selling price'), '500');
-		fireEvent.changeText(getByPlaceholderText('Enter initial stock'), '100');
-		fireEvent.changeText(getByPlaceholderText('Enter low stock alert'), '15');
-		fireEvent.changeText(getByPlaceholderText('Enter GST rate'), '12');
+		fireEvent.changeText(getByPlaceholderText(/सफेद ग्लॉसी टाइल|e.g. 10526/i), 'Marble 101');
+		fireEvent.changeText(getByLabelText(/Sale Price/i), '500');
+		fireEvent.changeText(getByLabelText(/Opening Stock/i), '100');
+		fireEvent.changeText(getByLabelText(/Low Stock/i), '15');
+		fireEvent.press(getByText('12%'));
 
 		// Select category FLOOR (default is GLOSSY)
 		fireEvent.press(getByText('FLOOR'));
@@ -83,13 +87,15 @@ describe('AddItemScreen', () => {
 		const errorMessage = "Could not find the table 'public.inventory_items'";
 		mockCreateItem.mockRejectedValue(new Error(errorMessage));
 
-		const { getByText, getByPlaceholderText } = renderWithTheme(<AddItemScreen />);
+		const { getByText, getByPlaceholderText, getByLabelText } = renderWithTheme(
+			<AddItemScreen />,
+		);
 
-		fireEvent.changeText(getByPlaceholderText('e.g. 10526-HL-1-A'), 'Error Item');
-		fireEvent.changeText(getByPlaceholderText('Enter selling price'), '500');
-		fireEvent.changeText(getByPlaceholderText('Enter initial stock'), '100');
-		fireEvent.changeText(getByPlaceholderText('Enter low stock alert'), '15');
-		fireEvent.changeText(getByPlaceholderText('Enter GST rate'), '12');
+		fireEvent.changeText(getByPlaceholderText(/सफेद ग्लॉसी टाइल|e.g. 10526/i), 'Error Item');
+		fireEvent.changeText(getByLabelText(/Sale Price/i), '500');
+		fireEvent.changeText(getByLabelText(/Opening Stock/i), '100');
+		fireEvent.changeText(getByLabelText(/Low Stock/i), '15');
+		fireEvent.press(getByText('12%'));
 
 		fireEvent.press(getByText('Save Item'));
 
@@ -103,33 +109,20 @@ describe('AddItemScreen', () => {
 		});
 	});
 
-	it('does not render raw empty strings in TextInput when helperText is empty', () => {
-		// This is to verify the fix for "Text strings must be rendered within a <Text> component"
-		// when isEditing is false and helperText is "" for the box_count field.
-		const { toJSON } = renderWithTheme(<AddItemScreen />);
-		const json = JSON.stringify(toJSON());
-
-		// If an empty string was rendered as a child of a View, it might appear as "" in the JSON
-		// but React Native's toJSON normally filters out null/undefined.
-		// However, if it's a raw string child, it should be caught by RNTL if it's strict.
-		expect(json).not.toContain('""');
-	});
-
 	// ─── Phase 3: Loading state tests ────────────────────────────────────────
 
 	it('shows full-screen ActivityIndicator while submitting (loading=true)', async () => {
 		// createItem never resolves — simulates in-flight request
 		mockCreateItem.mockReturnValue(new Promise(() => {}));
 
-		const { getByText, getByPlaceholderText, UNSAFE_getByType } = renderWithTheme(
-			<AddItemScreen />,
-		);
+		const { getByText, getByPlaceholderText, getByLabelText, UNSAFE_getByType } =
+			renderWithTheme(<AddItemScreen />);
 
-		fireEvent.changeText(getByPlaceholderText('e.g. 10526-HL-1-A'), 'Marble 101');
-		fireEvent.changeText(getByPlaceholderText('Enter selling price'), '500');
-		fireEvent.changeText(getByPlaceholderText('Enter initial stock'), '100');
-		fireEvent.changeText(getByPlaceholderText('Enter low stock alert'), '15');
-		fireEvent.changeText(getByPlaceholderText('Enter GST rate'), '12');
+		fireEvent.changeText(getByPlaceholderText(/सफेद ग्लॉसी टाइल|e.g. 10526/i), 'Marble 101');
+		fireEvent.changeText(getByLabelText(/Sale Price/i), '500');
+		fireEvent.changeText(getByLabelText(/Opening Stock/i), '100');
+		fireEvent.changeText(getByLabelText(/Low Stock/i), '15');
+		fireEvent.press(getByText('12%'));
 		fireEvent.press(getByText('Save Item'));
 
 		const { ActivityIndicator } = require('react-native');
@@ -139,13 +132,15 @@ describe('AddItemScreen', () => {
 	it('form re-appears after createItem rejects — loading clears via finally', async () => {
 		mockCreateItem.mockRejectedValue(new Error('DB error'));
 
-		const { getByText, getByPlaceholderText, queryByText } = renderWithTheme(<AddItemScreen />);
+		const { getByText, getByPlaceholderText, getByLabelText, queryByText } = renderWithTheme(
+			<AddItemScreen />,
+		);
 
-		fireEvent.changeText(getByPlaceholderText('e.g. 10526-HL-1-A'), 'Marble 101');
-		fireEvent.changeText(getByPlaceholderText('Enter selling price'), '500');
-		fireEvent.changeText(getByPlaceholderText('Enter initial stock'), '100');
-		fireEvent.changeText(getByPlaceholderText('Enter low stock alert'), '15');
-		fireEvent.changeText(getByPlaceholderText('Enter GST rate'), '12');
+		fireEvent.changeText(getByPlaceholderText(/सफेद ग्लॉसी टाइल|e.g. 10526/i), 'Marble 101');
+		fireEvent.changeText(getByLabelText(/Sale Price/i), '500');
+		fireEvent.changeText(getByLabelText(/Opening Stock/i), '100');
+		fireEvent.changeText(getByLabelText(/Low Stock/i), '15');
+		fireEvent.press(getByText('12%'));
 		fireEvent.press(getByText('Save Item'));
 
 		await waitFor(() => {

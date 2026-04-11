@@ -16,9 +16,9 @@ describe('ProfitLossScreen', () => {
 		expect(getByText('Profit & Loss')).toBeTruthy();
 	});
 
-	it('renders coming soon placeholder', () => {
+	it('renders Revenue section', () => {
 		const { getByText } = renderWithTheme(<ProfitLossScreen />);
-		expect(getByText('Profit & Loss — coming soon')).toBeTruthy();
+		expect(getByText('Revenue')).toBeTruthy();
 	});
 
 	it('renders without crashing', () => {

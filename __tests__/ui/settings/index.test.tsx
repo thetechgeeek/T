@@ -16,9 +16,9 @@ describe('SettingsScreen', () => {
 		expect(getByText('Settings')).toBeTruthy();
 	});
 
-	it('renders coming soon placeholder', () => {
+	it('renders General section', () => {
 		const { getByText } = renderWithTheme(<SettingsScreen />);
-		expect(getByText('Settings — coming soon')).toBeTruthy();
+		expect(getByText('General')).toBeTruthy();
 	});
 
 	it('renders without crashing', () => {

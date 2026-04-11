@@ -64,9 +64,9 @@ describe('InvoiceDetailScreen', () => {
 		const { getByText, getAllByText } = renderWithTheme(<InvoiceDetailScreen />);
 
 		await waitFor(() => {
-			expect(getByText('TM/2026-27/0001')).toBeTruthy();
-			expect(getByText('Test Customer')).toBeTruthy();
-			expect(getByText('Amount Paid')).toBeTruthy();
+			expect(getAllByText('TM/2026-27/0001')[0]).toBeTruthy();
+			expect(getAllByText('Test Customer')[0]).toBeTruthy();
+			expect(getAllByText(/Amount Paid/i).length).toBeGreaterThan(0);
 			expect(getAllByText('₹11682').length).toBeGreaterThan(0);
 		});
 	});

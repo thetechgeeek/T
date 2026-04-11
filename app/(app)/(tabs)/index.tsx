@@ -1,6 +1,6 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, RefreshControl, Pressable, ScrollView } from 'react-native';
+import { View, RefreshControl, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -9,6 +9,7 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
 import { layout } from '@/src/theme/layout';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Card } from '@/src/components/atoms/Card';
 
 // Atomic Design Components
 import { StatCard } from '@/src/components/molecules/StatCard';
@@ -21,12 +22,56 @@ import {
 	AlertTriangle,
 	Users,
 	FileText,
-	QrCode,
 	Package,
-	CreditCard,
 	ShoppingCart,
 	ArrowDownCircle,
+	ArrowUpCircle,
+	Wallet,
 } from 'lucide-react-native';
+import type { DashboardStats } from '@/src/types/finance';
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+type RecentTransaction = {
+	id: string;
+	type: 'sale' | 'purchase' | 'payment_in' | 'payment_out' | 'expense';
+	party_name?: string;
+	description?: string;
+	amount: number;
+	date: string;
+};
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function getTransactionIcon(type: RecentTransaction['type'], color: string) {
+	const size = 18;
+	switch (type) {
+		case 'sale':
+			return <TrendingUp size={size} color={color} />;
+		case 'purchase':
+			return <ShoppingCart size={size} color={color} />;
+		case 'payment_in':
+			return <ArrowDownCircle size={size} color={color} />;
+		case 'payment_out':
+			return <ArrowUpCircle size={size} color={color} />;
+		case 'expense':
+			return <Wallet size={size} color={color} />;
+		default:
+			return <TrendingUp size={size} color={color} />;
+	}
+}
+
+function isIncoming(type: RecentTransaction['type']): boolean {
+	return type === 'sale' || type === 'payment_in';
+}
+
+// ---------------------------------------------------------------------------
+// Screen
+// ---------------------------------------------------------------------------
 
 export default function DashboardScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -35,10 +80,14 @@ export default function DashboardScreen() {
 	const [refreshing, setRefreshing] = React.useState(false);
 
 	const { invoices, fetchInvoices } = useInvoiceStore(
-		useShallow((s) => ({ invoices: s.invoices, fetchInvoices: s.fetchInvoices })),
+		useShallow((st) => ({ invoices: st.invoices, fetchInvoices: st.fetchInvoices })),
 	);
 	const { stats, loading, fetchStats } = useDashboardStore(
-		useShallow((s) => ({ stats: s.stats, loading: s.loading, fetchStats: s.fetchStats })),
+		useShallow((st) => ({
+			stats: st.stats,
+			loading: st.loading,
+			fetchStats: st.fetchStats,
+		})),
 	);
 
 	React.useEffect(() => {
@@ -102,8 +151,12 @@ export default function DashboardScreen() {
 	];
 
 	const hasAlerts = (stats?.low_stock_count ?? 0) > 0;
-
 	const recentInvoices = invoices.slice(0, 5);
+
+	// recent transactions — only if the field exists on stats (it may be added later)
+	const recentTransactions: RecentTransaction[] =
+		(stats as (DashboardStats & { recentTransactions?: RecentTransaction[] }) | null)
+			?.recentTransactions ?? [];
 
 	const onRefresh = React.useCallback(async () => {
 		setRefreshing(true);
@@ -131,13 +184,13 @@ export default function DashboardScreen() {
 			}}
 			contentContainerStyle={{ paddingBottom: s.xl }}
 		>
-			<DashboardHeader businessName={t('branding.appName')} />
+			<DashboardHeader businessName={t('branding.appName')} onSyncPress={fetchStats} />
 
 			{loading && stats === null ? (
 				<DashboardSkeleton />
 			) : (
 				<>
-					{/* Stats Cards */}
+					{/* ── Main Stats Cards ── */}
 					<View style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
 						{dashboardStats.map((stat) => (
 							<StatCard
@@ -152,11 +205,85 @@ export default function DashboardScreen() {
 						))}
 					</View>
 
+					{/* ── Today's Business ── */}
+					<View
+						style={[styles.sectionHeader, { marginTop: s.lg, paddingHorizontal: s.md }]}
+					>
+						<ThemedText variant="bodyBold">Today's Business</ThemedText>
+					</View>
+					<View style={[layout.row, { paddingHorizontal: s.md, gap: s.sm }]}>
+						{/* Today's Sale */}
+						<Card
+							style={[styles.businessTile, { flex: 1 }]}
+							padding="md"
+							accessible
+							accessibilityLabel="stat-today-sale-tile"
+						>
+							<View
+								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
+							>
+								<View
+									style={[styles.tileIcon, { backgroundColor: `${c.success}18` }]}
+								>
+									<TrendingUp size={16} color={c.success} />
+								</View>
+								<ThemedText
+									variant="caption"
+									color={c.onSurfaceVariant}
+									style={{ marginLeft: s.xs }}
+								>
+									Today's Sale
+								</ThemedText>
+							</View>
+							<ThemedText variant="h3" color={c.success}>
+								{formatCurrency(stats?.today_sales ?? 0)}
+							</ThemedText>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{stats?.today_invoice_count ?? 0} invoices
+							</ThemedText>
+						</Card>
+
+						{/* Today's Collection */}
+						<Card
+							style={[styles.businessTile, { flex: 1 }]}
+							padding="md"
+							accessible
+							accessibilityLabel="stat-today-collection-tile"
+						>
+							<View
+								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
+							>
+								<View style={[styles.tileIcon, { backgroundColor: `${c.info}18` }]}>
+									<ArrowDownCircle size={16} color={c.info} />
+								</View>
+								<ThemedText
+									variant="caption"
+									color={c.onSurfaceVariant}
+									style={{ marginLeft: s.xs }}
+								>
+									Today's Collection
+								</ThemedText>
+							</View>
+							<ThemedText variant="h3" color={c.info}>
+								{formatCurrency(
+									(
+										stats as
+											| (DashboardStats & { today_collection?: number })
+											| null
+									)?.today_collection ?? 0,
+								)}
+							</ThemedText>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								Payments received
+							</ThemedText>
+						</Card>
+					</View>
+
 					<QuickActionsGrid
 						actions={quickActions as Parameters<typeof QuickActionsGrid>[0]['actions']}
 					/>
 
-					{/* Alerts section — shown only when alerts exist */}
+					{/* ── Alerts ── */}
 					{hasAlerts && (
 						<View
 							style={{
@@ -197,6 +324,98 @@ export default function DashboardScreen() {
 						</View>
 					)}
 
+					{/* ── Recent Activity ── */}
+					{recentTransactions.length > 0 && (
+						<View style={{ marginBottom: s.md }}>
+							<View
+								style={[
+									layout.rowBetween,
+									{ paddingHorizontal: s.md, marginBottom: s.sm },
+								]}
+							>
+								<ThemedText variant="bodyBold">Recent Activity</ThemedText>
+								<Pressable
+									onPress={() =>
+										router.push('/(app)/reports/all-transactions' as never)
+									}
+									accessibilityRole="link"
+									accessibilityLabel="view-all-transactions"
+								>
+									<ThemedText variant="caption" color={c.primary}>
+										View All
+									</ThemedText>
+								</Pressable>
+							</View>
+
+							<Card style={{ marginHorizontal: s.md }} padding="none">
+								{recentTransactions.slice(0, 5).map((tx, idx) => {
+									const incoming = isIncoming(tx.type);
+									const iconColor = incoming ? c.success : c.error;
+									const amountColor = incoming ? c.success : c.error;
+									const amountPrefix = incoming ? '+' : '-';
+									return (
+										<View
+											key={tx.id}
+											style={[
+												layout.rowBetween,
+												styles.txRow,
+												{
+													paddingHorizontal: s.md,
+													paddingVertical: s.sm,
+													borderBottomWidth:
+														idx < recentTransactions.length - 1 &&
+														idx < 4
+															? StyleSheet.hairlineWidth
+															: 0,
+													borderBottomColor: c.border,
+												},
+											]}
+											accessible
+											accessibilityLabel={`transaction-${tx.id}`}
+										>
+											<View style={layout.row}>
+												<View
+													style={[
+														styles.txIconWrap,
+														{
+															backgroundColor: `${iconColor}18`,
+															borderRadius: r.full,
+														},
+													]}
+												>
+													{getTransactionIcon(tx.type, iconColor)}
+												</View>
+												<View style={{ marginLeft: s.sm, flex: 1 }}>
+													<ThemedText
+														variant="body"
+														weight="bold"
+														numberOfLines={1}
+													>
+														{tx.party_name ?? tx.description ?? tx.type}
+													</ThemedText>
+													{tx.description && tx.party_name ? (
+														<ThemedText
+															variant="caption"
+															color={c.onSurfaceVariant}
+															numberOfLines={1}
+														>
+															{tx.description}
+														</ThemedText>
+													) : null}
+												</View>
+											</View>
+											<ThemedText variant="bodyBold" color={amountColor}>
+												{amountPrefix}
+												{formatCurrency(tx.amount)}
+											</ThemedText>
+										</View>
+									);
+								})}
+							</Card>
+						</View>
+					)}
+
+					{/* ── Recent Invoices ── */}
 					<RecentInvoicesList
 						invoices={
 							recentInvoices as Parameters<typeof RecentInvoicesList>[0]['invoices']
@@ -207,3 +426,28 @@ export default function DashboardScreen() {
 		</AtomicScreen>
 	);
 }
+
+const styles = StyleSheet.create({
+	sectionHeader: {
+		marginBottom: 8,
+	},
+	businessTile: {
+		minHeight: 90,
+	},
+	tileIcon: {
+		width: 28,
+		height: 28,
+		borderRadius: 14,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	txRow: {
+		alignItems: 'center',
+	},
+	txIconWrap: {
+		width: 36,
+		height: 36,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+});

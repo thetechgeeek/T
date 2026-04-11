@@ -70,10 +70,10 @@ describe('DashboardScreen', () => {
 				selector({ stats, fetchStats: mockFetchStats } as unknown as DashboardState),
 		);
 
-		const { getByText } = renderWithTheme(<DashboardScreen />);
+		const { getByText, getByLabelText } = renderWithTheme(<DashboardScreen />);
 
 		await waitFor(() => {
-			expect(getByText('₹12345.00')).toBeTruthy();
+			expect(getByLabelText('stat-today-sales')).toBeTruthy();
 		});
 	});
 

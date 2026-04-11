@@ -6,9 +6,15 @@ import { DashboardHeader } from '../DashboardHeader';
 const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);
 
 describe('DashboardHeader', () => {
-	it('renders the business name', () => {
-		const { getByText } = renderWithTheme(<DashboardHeader businessName="Rupesh Tiles" />);
-		expect(getByText('Rupesh Tiles')).toBeTruthy();
+	it('renders the business initial and accessibility label', () => {
+		const { getByText, getByRole } = renderWithTheme(
+			<DashboardHeader businessName="Rupesh Tiles" />,
+		);
+		// Initial should be visible
+		expect(getByText('R')).toBeTruthy();
+		// Full name should be in the header's accessibility label
+		const header = getByRole('header');
+		expect(header.props.accessibilityLabel).toContain('Rupesh Tiles');
 	});
 
 	it('renders greeting text', () => {
@@ -24,20 +30,20 @@ describe('DashboardHeader', () => {
 		expect(toJSON()).toBeTruthy();
 	});
 
-	it('renders different business names correctly', () => {
+	it('renders different business initials correctly', () => {
 		const { getByText, rerender } = renderWithTheme(
 			<ThemeProvider>
 				<DashboardHeader businessName="Alpha Tiles" />
 			</ThemeProvider>,
 		);
-		expect(getByText('Alpha Tiles')).toBeTruthy();
+		expect(getByText('A')).toBeTruthy();
 
 		rerender(
 			<ThemeProvider>
 				<DashboardHeader businessName="Beta Ceramics" />
 			</ThemeProvider>,
 		);
-		expect(getByText('Beta Ceramics')).toBeTruthy();
+		expect(getByText('B')).toBeTruthy();
 	});
 
 	it('does not crash with a very long business name', () => {

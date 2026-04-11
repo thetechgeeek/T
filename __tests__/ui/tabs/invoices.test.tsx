@@ -110,10 +110,10 @@ describe('InvoicesListScreen', () => {
 	});
 
 	it('renders payment status badges', async () => {
-		const { getByText } = renderWithTheme(<InvoicesListScreen />);
+		const { getAllByText } = renderWithTheme(<InvoicesListScreen />);
 		await waitFor(() => {
-			expect(getByText('Paid')).toBeTruthy();
-			expect(getByText('Unpaid')).toBeTruthy();
+			expect(getAllByText('Paid').length).toBeGreaterThan(0);
+			expect(getAllByText('Unpaid').length).toBeGreaterThan(0);
 		});
 	});
 
