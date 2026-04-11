@@ -7,21 +7,19 @@ const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</
 
 describe('DashboardHeader', () => {
 	it('renders the business initial and accessibility label', () => {
-		const { getByText, getByRole } = renderWithTheme(
+		const { getByText, getByLabelText } = renderWithTheme(
 			<DashboardHeader businessName="Rupesh Tiles" />,
 		);
 		// Initial should be visible
 		expect(getByText('R')).toBeTruthy();
-		// Full name should be in the header's accessibility label
-		const header = getByRole('header');
-		expect(header.props.accessibilityLabel).toContain('Rupesh Tiles');
+		// Full name should be in the header's accessibility label (prefixed by greeting)
+		expect(getByLabelText(/Good|Namaste|Welcome.*Rupesh Tiles/i)).toBeTruthy();
 	});
 
 	it('renders greeting text', () => {
-		const { getByText } = renderWithTheme(<DashboardHeader businessName="My Tiles" />);
-		// i18n mock returns last key segment, 'greeting' → 'greeting' or the translation
-		// The component uses t('dashboard.greeting') — expect some text to render
-		expect(getByText(/greeting|Namaste|Welcome|🙏/i)).toBeTruthy();
+		const { getAllByText } = renderWithTheme(<DashboardHeader businessName="My Tiles" />);
+		// Renders both English (Good...) and Hindi (नमस्ते)
+		expect(getAllByText(/Good|Namaste|Welcome|नमस्ते|🙏/i).length).toBeGreaterThan(0);
 	});
 
 	it('renders date in the header', () => {

@@ -44,13 +44,13 @@ describe('AddItemScreen', () => {
 	});
 
 	it('shows validation errors for required fields', async () => {
-		const { getByText, findByText, getByLabelText } = renderWithTheme(<AddItemScreen />);
+		const { getAllByText, getByLabelText } = renderWithTheme(<AddItemScreen />);
 
 		// Press save without filling anything
 		fireEvent.press(getByLabelText(/save item/i));
 
-		// findByText already waits.
-		expect(await findByText('Required')).toBeTruthy();
+		// If multiple fields are empty on submit, 'Required' appears multiple times.
+		await waitFor(() => expect(getAllByText('Required').length).toBeGreaterThan(0));
 	});
 
 	it('successfully submits the form to create an item', async () => {

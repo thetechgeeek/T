@@ -1574,97 +1574,97 @@ Identical to Expense Categories (P9.3), separate `income_categories` table.
 
 **Route:** `/(app)/finance/cash`
 
-- [ ] Large balance display at top: "Cash in Hand" (h2), ₹ X (display variant, large)
-- [ ] Trend: "↑ ₹ X more than last week" or "↓ less"
-- [ ] Opening balance entry card (shown if not yet set): "Set opening cash balance to start tracking" — `AmountInput` + date + Save button
-- [ ] Date range filter (default: current month)
-- [ ] Transaction list — all cash transactions in period:
-    - [ ] Cash in rows (green): date, type icon, description/party, +₹ amount, running balance
-    - [ ] Cash out rows (red): date, type icon, description, −₹ amount, running balance
-    - [ ] Running balance column (rightmost, always current)
-- [ ] Summary footer: "Cash received: ₹ X · Cash paid: ₹ Y · Net: ₹ Z"
-- [ ] "Adjust Opening Balance" link: allows editing opening balance (with warning about impact on all calculations)
+- [x] Large balance display at top: "Cash in Hand" (h2), ₹ X (display variant, large)
+- [x] Trend: "↑ ₹ X more than last week" or "↓ less"
+- [x] Opening balance entry card (shown if not yet set): "Set opening cash balance to start tracking" — `AmountInput` + date + Save button
+- [x] Date range filter (default: current month)
+- [x] Transaction list — all cash transactions in period:
+    - [x] Cash in rows (green): date, type icon, description/party, +₹ amount, running balance
+    - [x] Cash out rows (red): date, type icon, description, −₹ amount, running balance
+    - [x] Running balance column (rightmost, always current)
+- [x] Summary footer: "Cash received: ₹ X · Cash paid: ₹ Y · Net: ₹ Z"
+- [x] "Adjust Opening Balance" link: allows editing opening balance (with warning about impact on all calculations)
 
 ### P10.2 Bank Accounts List Screen
 
 **Route:** `/(app)/finance/bank-accounts`
 
-- [ ] Summary card: "Total in banks: ₹ X" (sum of all account balances)
-- [ ] Each account card (80dp):
-    - [ ] Bank name + account type (Savings/Current)
-    - [ ] Account number masked: "XXXXXXXXXX1234"
-    - [ ] Current balance (amountStyle) — green if positive
-    - [ ] "Primary" badge if set as primary account
-- [ ] "Add Bank Account" button (prominent)
-- [ ] Tap account card → Bank Account Ledger (P10.3)
-- [ ] Long press account card → "Set as Primary" / "Edit" / "Deactivate" menu
+- [x] Summary card: "Total in banks: ₹ X" (sum of all account balances)
+- [x] Each account card (80dp):
+    - [x] Bank name + account type (Savings/Current)
+    - [x] Account number masked: "XXXXXXXXXX1234"
+    - [x] Current balance (amountStyle) — green if positive
+    - [x] "Primary" badge if set as primary account
+- [x] "Add Bank Account" button (prominent)
+- [x] Tap account card → Bank Account Ledger (P10.3)
+- [x] Long press account card → "Set as Primary" / "Edit" / "Deactivate" menu
 
 ### P10.3 Add / Edit Bank Account
 
-- [ ] Bank Name: `BottomSheetPicker` with major Indian banks:
-    - [ ] SBI, HDFC, ICICI, Axis, Kotak, PNB, BOB, Canara, Union, Indian, UCO, BOI, Syndicate, Allahabad, Central, Dena, Vijaya, Corporation, IDBI, Yes Bank, IndusInd, RBL, IDFC, Federal, South Indian, Karur Vysya, City Union, Lakshmi Vilas, DCB, Other
-- [ ] Account Number: numeric, 9–18 digits
-- [ ] IFSC Code: 11-char uppercase (bank + branch); "Verify IFSC" button — calls public API to verify and show bank/branch details
-- [ ] Account Type: Savings / Current / Overdraft / Cash Credit
-- [ ] Account Holder Name: text field
-- [ ] Branch Name: text field (optional)
-- [ ] Opening Balance: `AmountInput` + date
-- [ ] "Set as Primary Account": toggle (only one primary allowed; toggling ON deactivates previous primary)
-- [ ] Save button
+- [x] Bank Name: `BottomSheetPicker` with major Indian banks:
+    - [x] SBI, HDFC, ICICI, Axis, Kotak, PNB, BOB, Canara, Union, Indian, UCO, BOI, Syndicate, Allahabad, Central, Dena, Vijaya, Corporation, IDBI, Yes Bank, IndusInd, RBL, IDFC, Federal, South Indian, Karur Vysya, City Union, Lakshmi Vilas, DCB, Other
+- [x] Account Number: numeric, 9–18 digits
+- [x] IFSC Code: 11-char uppercase (bank + branch); "Verify IFSC" button — calls public API to verify and show bank/branch details
+- [x] Account Type: Savings / Current / Overdraft / Cash Credit
+- [x] Account Holder Name: text field
+- [x] Branch Name: text field (optional)
+- [x] Opening Balance: `AmountInput` + date
+- [x] "Set as Primary Account": toggle (only one primary allowed; toggling ON deactivates previous primary)
+- [x] Save button
 
 ### P10.4 Bank Account Ledger Screen
 
 **Route:** `/(app)/finance/bank-accounts/[id]`
 
-- [ ] Account header: bank name, masked account number, current balance (amountLarge)
-- [ ] Date range filter: default current month; navigates months with ← →
-- [ ] Opening balance row (of period)
-- [ ] Transaction list: date, description/party, Debit (out), Credit (in), Balance
-- [ ] Totals bar: "Total In: ₹ X · Total Out: ₹ Y"
-- [ ] "Bank Statement" export button: PDF/Excel — navigates to Bank Statement Report (P15.1)
-- [ ] "Reconcile" button (advanced): mark transactions as reconciled with physical bank statement
+- [x] Account header: bank name, masked account number, current balance (amountLarge)
+- [x] Date range filter: default current month; navigates months with ← →
+- [x] Opening balance row (of period)
+- [x] Transaction list: date, description/party, Debit (out), Credit (in), Balance
+- [x] Totals bar: "Total In: ₹ X · Total Out: ₹ Y"
+- [x] "Bank Statement" export button: PDF/Excel — navigates to Bank Statement Report (P15.1)
+- [x] "Reconcile" button (advanced): mark transactions as reconciled with physical bank statement
 
 ### P10.5 E-wallet Accounts
 
 **Route:** `/(app)/finance/ewallets`
 
-- [ ] List: PhonePe / GPay / Paytm / Razorpay / custom
-- [ ] Each wallet: name, type icon (colour-coded), current balance
-- [ ] Add e-wallet: type picker, wallet name (or mobile number linked), opening balance
-- [ ] Ledger same as bank account (P10.4)
-- [ ] All UPI transactions can be linked to a specific e-wallet account
+- [x] List: PhonePe / GPay / Paytm / Razorpay / custom
+- [x] Each wallet: name, type icon (colour-coded), current balance
+- [x] Add e-wallet: type picker, wallet name (or mobile number linked), opening balance
+- [x] Ledger same as bank account (P10.4)
+- [x] All UPI transactions can be linked to a specific e-wallet account
 
 ### P10.6 Fund Transfer Between Accounts
 
 **Route:** `/(app)/finance/transfer`
 
-- [ ] "From Account" picker: shows all accounts (Cash + Banks + Wallets) with balances
-- [ ] "To Account" picker: same list; cannot select same account as From
-- [ ] Transfer Amount: `AmountInput`
-- [ ] Date: `DatePickerField`
-- [ ] Notes (optional): e.g., "Cash deposited to HDFC"
-- [ ] "Transfer ₹ X from [From] to [To]" confirmation preview before save
-- [ ] Save: creates debit on "from" account + credit on "to" account; both appear in respective ledgers
-- [ ] Transfers list: date, from, to, amount — accessible from each account's ledger
+- [x] "From Account" picker: shows all accounts (Cash + Banks + Wallets) with balances
+- [x] "To Account" picker: same list; cannot select same account as From
+- [x] Transfer Amount: `AmountInput`
+- [x] Date: `DatePickerField`
+- [x] Notes (optional): e.g., "Cash deposited to HDFC"
+- [x] "Transfer ₹ X from [From] to [To]" confirmation preview before save
+- [x] Save: creates debit on "from" account + credit on "to" account; both appear in respective ledgers
+- [x] Transfers list: date, from, to, amount — accessible from each account's ledger
 
 ### P10.7 Cheques Received (from Customers)
 
 **Route:** `/(app)/finance/cheques` (tab: Received)
 
-- [ ] List with status filter: All / Open / Deposited / Bounced
-- [ ] Each row (72dp): party name, cheque no. (caption), bank name, cheque date, amount, status badge
-- [ ] Colour coding: Open (amber), Deposited (green), Bounced (red)
-- [ ] **Alerts**: cheques with date within 3 days → prominent amber banner "⚠ 2 cheques due to deposit soon" at list top
-- [ ] Swipe-left: "Mark Deposited" (green) · "Mark Bounced" (red) · Delete
-- [ ] **Mark Deposited action**:
-    - [ ] Modal: "Deposit date", "Credited to bank account" (bank picker)
-    - [ ] Confirm: updates cheque status; creates credit in bank account ledger; creates debit from "cheques receivable" account
-- [ ] **Mark Bounced action**:
-    - [ ] Modal: "Reason" (Insufficient Funds / Signature Mismatch / Account Closed / Other), "Bank charges incurred" (optional amount)
-    - [ ] Confirm: updates cheque status; reverses the original payment from customer (outstanding restored); creates expense for bank charges if entered; creates notification
-- [ ] **Add Cheque manually** (when cheque received not during invoice payment):
-    - [ ] Party picker, amount, cheque no., bank, cheque date
-    - [ ] Option to link to specific invoices
+- [x] List with status filter: All / Open / Deposited / Bounced
+- [x] Each row (72dp): party name, cheque no. (caption), bank name, cheque date, amount, status badge
+- [x] Colour coding: Open (amber), Deposited (green), Bounced (red)
+- [x] **Alerts**: cheques with date within 3 days → prominent amber banner "⚠ 2 cheques due to deposit soon" at list top
+- [x] Swipe-left: "Mark Deposited" (green) · "Mark Bounced" (red) · Delete
+- [x] **Mark Deposited action**:
+    - [x] Modal: "Deposit date", "Credited to bank account" (bank picker)
+    - [x] Confirm: updates cheque status; creates credit in bank account ledger; creates debit from "cheques receivable" account
+- [x] **Mark Bounced action**:
+    - [x] Modal: "Reason" (Insufficient Funds / Signature Mismatch / Account Closed / Other), "Bank charges incurred" (optional amount)
+    - [x] Confirm: updates cheque status; reverses the original payment from customer (outstanding restored); creates expense for bank charges if entered; creates notification
+- [x] **Add Cheque manually** (when cheque received not during invoice payment):
+    - [x] Party picker, amount, cheque no., bank, cheque date
+    - [x] Option to link to specific invoices
 
 ### P10.8 Cheques Issued (to Suppliers)
 
@@ -1672,9 +1672,9 @@ Identical to Expense Categories (P9.3), separate `income_categories` table.
 
 Same structure as received cheques but:
 
-- [ ] Directions reversed: Deposited = supplier deposited our cheque (bank account debited)
-- [ ] Bounced: our cheque bounced (adds back to our payable; notify supplier)
-- [ ] List shows cheques we've given to suppliers
+- [x] Directions reversed: Deposited = supplier deposited our cheque (bank account debited)
+- [x] Bounced: our cheque bounced (adds back to our payable; notify supplier)
+- [x] List shows cheques we've given to suppliers
 
 ---
 
@@ -1747,44 +1747,44 @@ Identical structure to Sale Report (P11.1) with these differences:
 
 **Route:** `/(app)/reports/day-book`
 
-- [ ] **Date picker** at top: single day, default today; ← → navigation arrows for previous/next day
-- [ ] "Jump to date" icon: opens calendar modal
-- [ ] **Two-column layout** (side-by-side on tablet; stacked on phone):
-    - [ ] **Left column: "Received" / "आय"** (inflows):
-        - [ ] Sale invoices (cash paid portion)
-        - [ ] Payment-In receipts
-        - [ ] Other Income entries
-        - [ ] Each row: time (if available), description, reference no., ₹ amount (green)
-        - [ ] "Total Received: ₹ X" at bottom of column
-    - [ ] **Right column: "Paid" / "व्यय"** (outflows):
-        - [ ] Purchase bills (cash paid portion)
-        - [ ] Payment-Out entries
-        - [ ] Expense entries
-        - [ ] Each row: time, description, reference no., ₹ amount (red)
-        - [ ] "Total Paid: ₹ X" at bottom
-- [ ] **Balance section** (below both columns):
-    - [ ] Opening Cash Balance: ₹ X (balance at start of day)
-    - [ ]   - Total Received: ₹ X
-    - [ ] − Total Paid: ₹ X
-    - [ ] = **Closing Cash Balance: ₹ X** (bold, large)
-- [ ] Tap any transaction row → detail screen
-- [ ] Export: "Print Day Book" → generates a traditional-style daily register PDF (landscape, two-column)
+- [x] **Date picker** at top: single day, default today; ← → navigation arrows for previous/next day
+- [x] "Jump to date" icon: opens calendar modal
+- [x] **Two-column layout** (side-by-side on tablet; stacked on phone):
+    - [x] **Left column: "Received" / "आय"** (inflows):
+        - [x] Sale invoices (cash paid portion)
+        - [x] Payment-In receipts
+        - [x] Other Income entries
+        - [x] Each row: time (if available), description, reference no., ₹ amount (green)
+        - [x] "Total Received: ₹ X" at bottom of column
+    - [x] **Right column: "Paid" / "व्यय"** (outflows):
+        - [x] Purchase bills (cash paid portion)
+        - [x] Payment-Out entries
+        - [x] Expense entries
+        - [x] Each row: time, description, reference no., ₹ amount (red)
+        - [x] "Total Paid: ₹ X" at bottom
+- [x] **Balance section** (below both columns):
+    - [x] Opening Cash Balance: ₹ X (balance at start of day)
+    - [x]   - Total Received: ₹ X
+    - [x] − Total Paid: ₹ X
+    - [x] = **Closing Cash Balance: ₹ X** (bold, large)
+- [x] Tap any transaction row → detail screen
+- [x] Export: "Print Day Book" → generates a traditional-style daily register PDF (landscape, two-column)
 
 ### P11.4 All Transactions Report
 
 **Route:** `/(app)/reports/all-transactions`
 
-- [ ] **Type filter chips** (horizontal scroll): All / Sale / Purchase / Payment In / Payment Out / Expense / Other Income / Credit Note / Debit Note / Journal (fund transfers)
-- [ ] **Date range filter**
-- [ ] **Search**: by party name or reference number
-- [ ] Each row (64dp):
-    - [ ] Left: type icon in coloured circle (sale=green, purchase=red, expense=purple, payment-in=teal, payment-out=orange)
-    - [ ] Middle: reference no. (bodyBold), party/description (body), date (caption)
-    - [ ] Right: amount; green prefix (+) for in, red prefix (−) for out
-    - [ ] "Running Balance" column (optional toggle in header): shows cumulative balance
-- [ ] **Summary bar**: total in ₹ X vs total out ₹ X → net ₹ X
-- [ ] Tap row → respective detail screen
-- [ ] Export PDF/Excel
+- [x] **Type filter chips** (horizontal scroll): All / Sale / Purchase / Payment In / Payment Out / Expense / Other Income / Credit Note / Debit Note / Journal (fund transfers)
+- [x] **Date range filter**
+- [x] **Search**: by party name or reference number
+- [x] Each row (64dp):
+    - [x] Left: type icon in coloured circle (sale=green, purchase=red, expense=purple, payment-in=teal, payment-out=orange)
+    - [x] Middle: reference no. (bodyBold), party/description (body), date (caption)
+    - [x] Right: amount; green prefix (+) for in, red prefix (−) for out
+    - [x] "Running Balance" column (optional toggle in header): shows cumulative balance
+- [x] **Summary bar**: total in ₹ X vs total out ₹ X → net ₹ X
+- [x] Tap row → respective detail screen
+- [x] Export PDF/Excel
 
 ### P11.5 Bill-wise Profit Report
 
@@ -1792,18 +1792,18 @@ Identical structure to Sale Report (P11.1) with these differences:
 
 > Shows profit (or loss) per sale invoice by comparing sale amount against cost of items sold.
 
-- [ ] **Filters**: date range, customer, item category; sort by Profit % (descending by default — most profitable first)
-- [ ] **Summary section**:
-    - [ ] Total Sale Amount: ₹ X
-    - [ ] Total Cost of Goods Sold (COGS): ₹ X (based on purchase prices of items sold)
-    - [ ] **Gross Profit: ₹ X (Y%)** — amountLarge, green or red
-    - [ ] Average Margin: Z%
-- [ ] **Table columns**: Date, Invoice No., Customer Name, Sale Amount (excl. GST), COGS, Gross Profit, Profit %
-- [ ] Profit % column: green if positive, red if negative (loss)
-- [ ] COGS calculation: uses the purchase price recorded on the item at time of sale (or weighted average if purchase prices varied)
-- [ ] "Items with no purchase price set": warning card at top if any items are missing purchase price — "These items are excluded from profit calculation"
-- [ ] Tap invoice row → Invoice Detail
-- [ ] Export PDF/Excel
+- [x] **Filters**: date range, customer, item category; sort by Profit % (descending by default — most profitable first)
+- [x] **Summary section**:
+    - [x] Total Sale Amount: ₹ X
+    - [x] Total Cost of Goods Sold (COGS): ₹ X (based on purchase prices of items sold)
+    - [x] **Gross Profit: ₹ X (Y%)** — amountLarge, green or red
+    - [x] Average Margin: Z%
+- [x] **Table columns**: Date, Invoice No., Customer Name, Sale Amount (excl. GST), COGS, Gross Profit, Profit %
+- [x] Profit % column: green if positive, red if negative (loss)
+- [x] COGS calculation: uses the purchase price recorded on the item at time of sale (or weighted average if purchase prices varied)
+- [x] "Items with no purchase price set": warning card at top if any items are missing purchase price — "These items are excluded from profit calculation"
+- [x] Tap invoice row → Invoice Detail
+- [x] Export PDF/Excel
 
 ### P11.6 Profit & Loss Report
 
@@ -1811,30 +1811,30 @@ Identical structure to Sale Report (P11.1) with these differences:
 
 > The Indian shopkeeper's P&L — simple income-minus-expenses, not accrual accounting.
 
-- [ ] **Period selector** (prominent at top): Monthly (← → month navigation) / Quarterly / Half-Yearly / Full FY / Custom date range
-- [ ] **Revenue Section**:
-    - [ ] Sale Revenue (net of returns): ₹ X
-    - [ ] Other Income: ₹ X (from income entries)
-    - [ ] **Gross Revenue: ₹ X** (bold, amountLarge)
-- [ ] **Cost of Goods Sold Section**:
-    - [ ] Opening Stock Value: ₹ X
-    - [ ]   - Purchases (net of returns): ₹ X
-    - [ ] − Closing Stock Value: ₹ X
-    - [ ] = **COGS: ₹ X** (bold)
-    - [ ] **Gross Profit: ₹ X (Y%)** — highlighted card, green/red
-- [ ] **Expenses Section**:
-    - [ ] Each expense category on its own line: "Rent: ₹ X", "Transport: ₹ X", etc.
-    - [ ] **Total Expenses: ₹ X** (bold)
-- [ ] **Net Profit / Loss Section**:
-    - [ ] Gross Profit: ₹ X
-    - [ ] − Total Expenses: ₹ X
-    - [ ] = **Net Profit / Net Loss: ₹ X** — giant number, green if profit, red if loss
-    - [ ] Net Margin: Y% (small caption below)
-- [ ] **Month-over-Month Chart** (when Monthly view selected): simple bar chart, 6 bars (last 6 months), each bar split into revenue (full height) vs profit (hatched top portion)
-    - [ ] Tap bar → drill to that month's P&L
-- [ ] Export PDF (formatted as a financial statement, suitable for bank/CA submission)
-- [ ] Export Excel (with all line items for CA review)
-- [ ] "Share on WhatsApp" — generates summary image card
+- [x] **Period selector** (prominent at top): Monthly (← → month navigation) / Quarterly / Half-Yearly / Full FY / Custom date range
+- [x] **Revenue Section**:
+    - [x] Sale Revenue (net of returns): ₹ X
+    - [x] Other Income: ₹ X (from income entries)
+    - [x] **Gross Revenue: ₹ X** (bold, amountLarge)
+- [x] **Cost of Goods Sold Section**:
+    - [x] Opening Stock Value: ₹ X
+    - [x]   - Purchases (net of returns): ₹ X
+    - [x] − Closing Stock Value: ₹ X
+    - [x] = **COGS: ₹ X** (bold)
+    - [x] **Gross Profit: ₹ X (Y%)** — highlighted card, green/red
+- [x] **Expenses Section**:
+    - [x] Each expense category on its own line: "Rent: ₹ X", "Transport: ₹ X", etc.
+    - [x] **Total Expenses: ₹ X** (bold)
+- [x] **Net Profit / Loss Section**:
+    - [x] Gross Profit: ₹ X
+    - [x] − Total Expenses: ₹ X
+    - [x] = **Net Profit / Net Loss: ₹ X** — giant number, green if profit, red if loss
+    - [x] Net Margin: Y% (small caption below)
+- [x] **Month-over-Month Chart** (when Monthly view selected): simple bar chart, 6 bars (last 6 months), each bar split into revenue (full height) vs profit (hatched top portion)
+    - [x] Tap bar → drill to that month's P&L
+- [x] Export PDF (formatted as a financial statement, suitable for bank/CA submission)
+- [x] Export Excel (with all line items for CA review)
+- [x] "Share on WhatsApp" — generates summary image card
 
 ### P11.7 Cashflow Report
 
@@ -1842,25 +1842,25 @@ Identical structure to Sale Report (P11.1) with these differences:
 
 > Shows actual cash movement — money that physically came in and went out (not accrual).
 
-- [ ] **Period**: Monthly (← → navigation); This Month default
-- [ ] **Opening Balance** (cash + bank combined at start of period): ₹ X
-- [ ] **Inflows section**:
-    - [ ] Sale Collections (payments received from customers): ₹ X
-    - [ ] Other Income: ₹ X
-    - [ ] Loans Received: ₹ X
-    - [ ] Fund Transfers In: ₹ X
-    - [ ] **Total Inflows: ₹ X** (green bold)
-- [ ] **Outflows section**:
-    - [ ] Payments Made to Suppliers: ₹ X
-    - [ ] Expenses: ₹ X (broken by category)
-    - [ ] Loan Repayments (EMI principal): ₹ X
-    - [ ] Fund Transfers Out: ₹ X
-    - [ ] **Total Outflows: ₹ X** (red bold)
-- [ ] **Net Cashflow: ₹ X** (positive=green, negative=red)
-- [ ] **Closing Balance: ₹ X** = Opening + Net Cashflow
-- [ ] **Weekly Bar Chart**: 4–5 bars (one per week in the month), each split: inflow (green) vs outflow (red)
-    - [ ] Tap bar → day-level drill for that week
-- [ ] Export PDF/Excel
+- [x] **Period**: Monthly (← → navigation); This Month default
+- [x] **Opening Balance** (cash + bank combined at start of period): ₹ X
+- [x] **Inflows section**:
+    - [x] Sale Collections (payments received from customers): ₹ X
+    - [x] Other Income: ₹ X
+    - [x] Loans Received: ₹ X
+    - [x] Fund Transfers In: ₹ X
+    - [x] **Total Inflows: ₹ X** (green bold)
+- [x] **Outflows section**:
+    - [x] Payments Made to Suppliers: ₹ X
+    - [x] Expenses: ₹ X (broken by category)
+    - [x] Loan Repayments (EMI principal): ₹ X
+    - [x] Fund Transfers Out: ₹ X
+    - [x] **Total Outflows: ₹ X** (red bold)
+- [x] **Net Cashflow: ₹ X** (positive=green, negative=red)
+- [x] **Closing Balance: ₹ X** = Opening + Net Cashflow
+- [x] **Weekly Bar Chart**: 4–5 bars (one per week in the month), each split: inflow (green) vs outflow (red)
+    - [x] Tap bar → day-level drill for that week
+- [x] Export PDF/Excel
 
 ### P11.8 Balance Sheet
 
@@ -1868,32 +1868,32 @@ Identical structure to Sale Report (P11.1) with these differences:
 
 > Simplified balance sheet suitable for Indian SME / bank loan application.
 
-- [ ] **As-on-date picker**: default last day of current month; navigates by month
-- [ ] **ASSETS section**:
-    - [ ] **Current Assets**:
-        - [ ] Cash in Hand: ₹ X (tap → cash ledger)
-        - [ ] Bank Balances: ₹ X (tap → bank accounts list with individual balances)
-        - [ ] Trade Receivables (Debtors): ₹ X (tap → All Parties report filtered to customers with balance)
-        - [ ] Stock Value: ₹ X (tap → Stock Summary Report)
-        - [ ] Loans Given (if any): ₹ X
-    - [ ] **Fixed Assets** (manual entry section):
-        - [ ] Each row: asset name, purchase value, current book value
-        - [ ] "+ Add Fixed Asset" button (simple form: name, purchase date, purchase price)
-    - [ ] **Total Assets: ₹ X** (bold, amountLarge)
-- [ ] **LIABILITIES section**:
-    - [ ] **Current Liabilities**:
-        - [ ] Trade Payables (Creditors): ₹ X (tap → All Parties report filtered to suppliers with balance)
-        - [ ] GST Payable: ₹ X (output GST − input GST; tap → Tax Report)
-        - [ ] Loans Outstanding: ₹ X (tap → Loans list)
-        - [ ] Outstanding Expenses (accrued): ₹ X
-    - [ ] **Total Liabilities: ₹ X** (bold)
-- [ ] **CAPITAL section**:
-    - [ ] Opening Capital: ₹ X (carried from last FY or entered manually)
-    - [ ]   - Net Profit (Current FY): ₹ X
-    - [ ] − Drawings: ₹ X (manual entry)
-    - [ ] **Total Capital: ₹ X** (bold)
-- [ ] **Balance Check**: Assets = Liabilities + Capital — shows ✓ (green) if balanced, ✕ (red with difference amount) if not
-- [ ] Export PDF (formal balance sheet format, suitable for bank submission)
+- [x] **As-on-date picker**: default last day of current month; navigates by month
+- [x] **ASSETS section**:
+    - [x] **Current Assets**:
+        - [x] Cash in Hand: ₹ X (tap → cash ledger)
+        - [x] Bank Balances: ₹ X (tap → bank accounts list with individual balances)
+        - [x] Trade Receivables (Debtors): ₹ X (tap → All Parties report filtered to customers with balance)
+        - [x] Stock Value: ₹ X (tap → Stock Summary Report)
+        - [x] Loans Given (if any): ₹ X
+    - [x] **Fixed Assets** (manual entry section):
+        - [x] Each row: asset name, purchase value, current book value
+        - [x] "+ Add Fixed Asset" button (simple form: name, purchase date, purchase price)
+    - [x] **Total Assets: ₹ X** (bold, amountLarge)
+- [x] **LIABILITIES section**:
+    - [x] **Current Liabilities**:
+        - [x] Trade Payables (Creditors): ₹ X (tap → All Parties report filtered to suppliers with balance)
+        - [x] GST Payable: ₹ X (output GST − input GST; tap → Tax Report)
+        - [x] Loans Outstanding: ₹ X (tap → Loans list)
+        - [x] Outstanding Expenses (accrued): ₹ X
+    - [x] **Total Liabilities: ₹ X** (bold)
+- [x] **CAPITAL section**:
+    - [x] Opening Capital: ₹ X (carried from last FY or entered manually)
+    - [x]   - Net Profit (Current FY): ₹ X
+    - [x] − Drawings: ₹ X (manual entry)
+    - [x] **Total Capital: ₹ X** (bold)
+- [x] **Balance Check**: Assets = Liabilities + Capital — shows ✓ (green) if balanced, ✕ (red with difference amount) if not
+- [x] Export PDF (formal balance sheet format, suitable for bank submission)
 
 ---
 
@@ -1942,150 +1942,67 @@ Identical structure to Sale Report (P11.1) with these differences:
 - [ ] **Date range** filter
 - [ ] **Sort**: by Profit Amount (desc default) / by Profit % / by Sale Amount / A-Z
 - [ ] **Table (Customers mode)**:
-    - [ ] Party Name, Total Sale (excl. GST), Total COGS (purchase price of items sold to them), Gross Profit, Profit %, Transaction Count, Last Transaction Date
-    - [ ] Rows sorted by Profit % descending
-    - [ ] Rows with negative profit (selling at a loss) highlighted in light red
-- [ ] **Summary cards**: Top 3 most profitable customers (podium-style display), overall profit, average margin
-- [ ] Tap row → Party Statement for that party (pre-filled + filtered)
-- [ ] Export PDF/Excel
-
-### P12.3 All Parties Report
-
-**Route:** `/(app)/reports/all-parties`
-
-- [x] **Tabs**: Customers (Receivables) / Suppliers (Payables)
-- [x] **Filters**: With Balance / Zero Balance / Overdue (past due date) / By Group
-- [x] **Summary card**: Total Receivable from Customers: ₹ X · Total Payable to Suppliers: ₹ X · Net Position: ₹ X
-- [x] **Table columns (Customers tab)**:
-    - [ ] Party Name, Phone, GSTIN, Group, Total Sale (current FY), Total Received, **Outstanding Dr Balance (To Receive)**, Last Transaction Date, Oldest Unpaid Invoice
-    - [ ] Overdue customers: red background tint on row
-    - [ ] "Days Overdue" column: if oldest invoice is past due date, shows count in red "32 days overdue"
-- [x] **Table columns (Suppliers tab)**: Party Name, Phone, GSTIN, Total Purchased, Total Paid, **Outstanding Cr Balance (To Pay)**, Last Transaction Date
-- [x] Tap row → Party Statement (P12.1) for that party
-- [x] "Send Bulk Reminders" button (when customer tab active): select all overdue customers → sends WhatsApp/SMS reminders to all
-- [x] Export PDF (formatted as Debtor/Creditor list — commonly required for CA and GST audit)
-- [x] Export Excel
-
-### P12.4 Party Report by Items
-
-**Route:** `/(app)/reports/party-by-items`
-
-- [ ] **Two-mode toggle**:
-    - [ ] Mode 1: "Select Party → See Items" — which items has this party bought/sold
-    - [ ] Mode 2: "Select Item → See Parties" — which parties bought this item (same as P14.2)
-- [ ] **Mode 1 (Party → Items)**:
-    - [ ] Party picker at top
-    - [ ] Date range filter
-    - [ ] Table: Item Name, Category, Total Qty Bought, Total Amount, Last Purchase Date, Avg. Unit Price
-    - [ ] Sorted by Total Amount descending
-    - [ ] Tap item row → Item Detail Report for that item (P14.5) filtered to this party
-- [ ] **Mode 2 (Item → Parties)**:
-    - [ ] Item picker at top
-    - [ ] Date range filter
-    - [ ] Table: Party Name, Total Qty Purchased from/sold to, Total Amount, Last Transaction Date
-    - [ ] Tap party row → Party Statement
-
-### P12.5 Sale / Purchase by Party
-
-**Route:** `/(app)/reports/sale-purchase-by-party`
-
-- [ ] **Date range** filter; **Group** filter
-- [ ] **Table**: Party Name, Sale Total (what they bought from us), Purchase Total (what we bought from them), Net (Sale − Purchase)
-    - [ ] Note: many parties are either customer OR supplier — not both; Net column useful for parties who are both
-- [ ] Sorted by Sale Total descending by default
-- [ ] Total row at bottom
-- [ ] Tap row → that party's statement
-- [ ] Export PDF/Excel
-
-### P12.6 Sale / Purchase by Party Group
-
-**Route:** `/(app)/reports/party-group-report`
-
-- [ ] **Summary level**: each group as a row — Group Name, Customer Count, Total Sale, Total Outstanding
-- [ ] Tap group row → drill into Party Report for that group (shows individual members)
-- [ ] Filter: date range
-- [ ] Export PDF/Excel
-
----
-
-## P13 — GST & Tax Reports
-
-> **Prerequisite:** P4 (invoices with GSTIN + HSN), P6 (purchases with input tax), P1 (GSTIN in business profile), GST enabled in settings.
->
-> **Critical:** GSTIN must be validated and HSN codes must be filled on items for GSTR-1 to be accurate. Show data quality warnings.
-
----
-
-### P13.1 GST Data Quality Check (prerequisite validation)
-
-Shown as a dismissible amber banner on all GST report screens when issues exist:
-
-- [ ] "X invoices missing HSN code — GSTR-1 will be incomplete" → link to list of affected invoices
-- [ ] "X items have no GST rate set" → link to items list
-- [ ] "Your GSTIN is not set" → link to business profile
-- [ ] "X supplier invoices missing supplier GSTIN — input credit may not be claimable" → link to purchases list
-
-### P13.2 GSTR-1 (Outward Supplies Statement)
+    - [ ] Party Name, Total Sale (excl. GST), Total COGS (purchase price of items sold to them), Gr### P13.2 GSTR-1 (Outward Supplies Statement)
 
 **Route:** `/(app)/reports/gstr1`
 
 **Header:**
 
-- [ ] **Period selector**: Month + Year picker (combo); shows filing deadline: "Due: 11 May 2025"
-- [ ] GSTIN display: "Filing for: [businessGSTIN]"
-- [ ] Status indicator: "Not Filed" / "Pending" / "Filed" badge (manual toggle — app doesn't auto-file)
-- [ ] "Data Quality: X issues found" (amber chip when issues exist from P13.1 check)
+- [x] **Period selector**: Month + Year picker (combo); shows filing deadline: "Due: 11 May 2025"
+- [x] GSTIN display: "Filing for: [businessGSTIN]"
+- [x] Status indicator: "Not Filed" / "Pending" / "Filed" badge (manual toggle — app doesn't auto-file)
+- [x] "Data Quality: X issues found" (amber chip when issues exist from P13.1 check)
 
 **Section: B2B Invoices (Business to Business)**
 
-- [ ] Definition helper: "GST-registered customers only (have GSTIN)"
-- [ ] Summary: X invoices, ₹ Y taxable, ₹ Z IGST, ₹ W CGST, ₹ V SGST
-- [ ] Expandable list grouped by Receiver GSTIN:
-    - [ ] GSTIN + Receiver Name header row
-    - [ ] Under each GSTIN: each invoice as a row
-    - [ ] Columns per row: Invoice No., Invoice Date, Invoice Value (total incl. GST), Taxable Value, Tax Rate, IGST, CGST, SGST, Place of Supply (2-digit state code), Reverse Charge (Y/N), Invoice Type (Regular/Debit Note/Credit Note)
-- [ ] Amendments: if invoice was amended after filing the return it was first in, shows in B2B Amendments section
+- [x] Definition helper: "GST-registered customers only (have GSTIN)"
+- [x] Summary: X invoices, ₹ Y taxable, ₹ Z IGST, ₹ W CGST, ₹ V SGST
+- [x] Expandable list grouped by Receiver GSTIN:
+    - [x] GSTIN + Receiver Name header row
+    - [x] Under each GSTIN: each invoice as a row
+    - [x] Columns per row: Invoice No., Invoice Date, Invoice Value (total incl. GST), Taxable Value, Tax Rate, IGST, CGST, SGST, Place of Supply (2-digit state code), Reverse Charge (Y/N), Invoice Type (Regular/Debit Note/Credit Note)
+- [x] Amendments: if invoice was amended after filing the return it was first in, shows in B2B Amendments section
 
 **Section: B2CL (Business to Consumer Large)**
 
-- [ ] Definition helper: "Unregistered customers, invoice value > ₹ 2,50,000"
-- [ ] Grouped by: State of customer (Place of Supply) → Interstate supply
-- [ ] Columns: Place of Supply, Invoice No., Date, Total Invoice Value, Taxable Value, Tax Rate, IGST Amount
-- [ ] Threshold logic: correctly identifies invoices crossing ₹ 2.5L threshold
+- [x] Definition helper: "Unregistered customers, invoice value > ₹ 2,50,000"
+- [x] Grouped by: State of customer (Place of Supply) → Interstate supply
+- [x] Columns: Place of Supply, Invoice No., Date, Total Invoice Value, Taxable Value, Tax Rate, IGST Amount
+- [x] Threshold logic: correctly identifies invoices crossing ₹ 2.5L threshold
 
 **Section: B2CS (Business to Consumer Small)**
 
-- [ ] Consolidated (not invoice-wise): unregistered customers, value ≤ ₹ 2,50,000 OR intra-state
-- [ ] Grouped by: State, Tax Rate
-- [ ] Row per State+Rate combination: Taxable Value, CGST, SGST, IGST
+- [x] Consolidated (not invoice-wise): unregistered customers, value ≤ ₹ 2,50,000 OR intra-state
+- [x] Grouped by: State, Tax Rate
+- [x] Row per State+Rate combination: Taxable Value, CGST, SGST, IGST
 
 **Section: CDNR (Credit/Debit Notes for Registered Parties)**
 
-- [ ] Credit notes (from Sale Returns P16.1) issued to GST-registered customers
-- [ ] Debit notes issued to GST-registered customers
-- [ ] Columns: GSTIN, Note No., Date, Invoice No. (original), Note Value, Taxable Value, Tax Rate, IGST, CGST, SGST
+- [x] Credit notes (from Sale Returns P16.1) issued to GST-registered customers
+- [x] Debit notes issued to GST-registered customers
+- [x] Columns: GSTIN, Note No., Date, Invoice No. (original), Note Value, Taxable Value, Tax Rate, IGST, CGST, SGST
 
 **Section: CDNUR (Credit/Debit Notes for Unregistered)**
 
-- [ ] Same as CDNR but for unregistered customers
+- [x] Same as CDNR but for unregistered customers
 
 **Section: HSN Summary**
 
-- [ ] Mandatory when annual turnover > ₹ 5 crore (4-digit HSN), or > ₹ 1.5 crore (mandatory if GSTIN registered)
-- [ ] Grouped by: HSN Code, Description, UoM (Unit of Measure)
-- [ ] Columns: HSN, Description, UoM, Total Qty, Total Taxable Value, Integrated Tax, Central Tax, State/UT Tax, Cess
-- [ ] One row per HSN code (regardless of rate — aggregated)
+- [x] Mandatory when annual turnover > ₹ 5 crore (4-digit HSN), or > ₹ 1.5 crore (mandatory if GSTIN registered)
+- [x] Grouped by: HSN Code, Description, UoM (Unit of Measure)
+- [x] Columns: HSN, Description, UoM, Total Qty, Total Taxable Value, Integrated Tax, Central Tax, State/UT Tax, Cess
+- [x] One row per HSN code (regardless of rate — aggregated)
 
 **Section: Nil/Exempt/Non-GST Supplies**
 
-- [ ] Consolidated totals of items sold with 0% GST rate (nil rated, exempt, non-GST)
+- [x] Consolidated totals of items sold with 0% GST rate (nil rated, exempt, non-GST)
 
 **Export:**
 
-- [ ] "Export JSON" — GST portal upload format (validates JSON structure before export)
-- [ ] "Export Excel" — all sections in separate sheets
-- [ ] "Export PDF" — formatted summary for record keeping / CA sharing
-- [ ] "Share PDF via WhatsApp" — for sharing with CA/accountant
+- [x] "Export JSON" — GST portal upload format (validates JSON structure before export)
+- [x] "Export Excel" — all sections in separate sheets
+- [x] "Export PDF" — formatted summary for record keeping / CA sharing
+- [x] "Share PDF via WhatsApp" — for sharing with CA/accountant
 
 ### P13.3 GSTR-2 (Inward Supplies)
 
@@ -2093,22 +2010,22 @@ Shown as a dismissible amber banner on all GST report screens when issues exist:
 
 Note: GSTR-2 filing was suspended by GST Council; this report serves as a reconciliation tool.
 
-- [ ] Period selector: month + year
-- [ ] **B2B Purchases section** (invoices from GST-registered suppliers):
-    - [ ] Grouped by Supplier GSTIN
-    - [ ] Per invoice: Supplier GSTIN, Supplier Name, Bill No., Bill Date, Invoice Value, Taxable Value, Rate, IGST, CGST, SGST, ITC Status (eligible/ineligible/blocked)
-    - [ ] "ITC Eligible Total: ₹ X" highlighted green
-    - [ ] "ITC Ineligible: ₹ X" (e.g. purchases for personal use, blocked credits under Section 17(5))
-- [ ] **CDNR (Debit/Credit Notes Received from Suppliers)**:
-    - [ ] Debit notes from suppliers (they billed us more)
-    - [ ] Credit notes received (purchase returns P16.2)
-- [ ] **ITC Summary card** (important for 3B):
-    - [ ] Total IGST ITC available: ₹ X
-    - [ ] Total CGST ITC available: ₹ X
-    - [ ] Total SGST ITC available: ₹ X
-    - [ ] ITC Reversed (for returns/corrections): ₹ X
-    - [ ] **Net ITC Available: ₹ X** (amountLarge, green)
-- [ ] Export JSON / Excel / PDF
+- [x] Period selector: month + year
+- [x] **B2B Purchases section** (invoices from GST-registered suppliers):
+    - [x] Grouped by Supplier GSTIN
+    - [x] Per invoice: Supplier GSTIN, Supplier Name, Bill No., Bill Date, Invoice Value, Taxable Value, Rate, IGST, CGST, SGST, ITC Status (eligible/ineligible/blocked)
+    - [x] "ITC Eligible Total: ₹ X" highlighted green
+    - [x] "ITC Ineligible: ₹ X" (e.g. purchases for personal use, blocked credits under Section 17(5))
+- [x] **CDNR (Debit/Credit Notes Received from Suppliers)**:
+    - [x] Debit notes from suppliers (they billed us more)
+    - [x] Credit notes received (purchase returns P16.2)
+- [x] **ITC Summary card** (important for 3B):
+    - [x] Total IGST ITC available: ₹ X
+    - [x] Total CGST ITC available: ₹ X
+    - [x] Total SGST ITC available: ₹ X
+    - [x] ITC Reversed (for returns/corrections): ₹ X
+    - [x] **Net ITC Available: ₹ X** (amountLarge, green)
+- [x] Export JSON / Excel / PDF
 
 ### P13.4 GSTR-3B (Monthly Summary Return)
 
@@ -2116,10 +2033,80 @@ Note: GSTR-2 filing was suspended by GST Council; this report serves as a reconc
 
 > The monthly return — most important GST filing. Shows tax liability and payment.
 
-- [ ] Period: month + year; filing deadline shown: "Due: 20th [next month]"
-- [ ] **Table 3.1 — Details of Outward Supplies and Inward Supplies on Reverse Charge**:
-    - [ ] 3.1(a): Outward taxable supplies (other than zero rated / nil rated / exempted): Taxable Value, Integrated Tax, Central Tax, State/UT Tax, Cess
-    - [ ] 3.1(b): Outward taxable supplies (zero rated): Taxable Value, Integrated Tax
+- [x] Period: month + year; filing deadline shown: "Due: 20th [next month]"
+- [x] **Table 3.1 — Details of Outward Supplies and Inward Supplies on Reverse Charge**:
+    - [x] 3.1(a): Outward taxable supplies (other than zero rated / nil rated / exempted): Taxable Value, Integrated Tax, Central Tax, State/UT Tax, Cess
+    - [x] 3.1(b): Outward taxable supplies (zero rated): Taxable Value, Integrated Tax
+    - [x] 3.1(c): Other outward supplies (Nil rated, exempted): Taxable Value
+    - [x] 3.1(d): Inward supplies (liable to reverse charge): Taxable Value, Integrated Tax, Central Tax, State/UT Tax, Cess
+    - [x] 3.1(e): Non-GST outward supplies: Taxable Value
+    - [x] All rows auto-populated from invoice data; editable fields for manual adjustment
+- [x] **Table 3.2 — Supplies made to Unregistered Persons, Composition Taxable Persons and UIN Holders**:
+    - [x] Interstate supplies to unregistered persons: state-wise breakdown
+    - [x] Auto-populated from B2CL data in GSTR-1
+- [x] **Table 4 — Eligible ITC**:
+    - [x] 4(A): ITC Available: IGST + CGST + SGST per sub-head (imports, reverse charge, inputs from ISD, all other)
+    - [x] 4(B): ITC Reversed: Rule 42/43, others
+    - [x] 4(C): Net ITC available (4A − 4B): auto-computed
+    - [x] 4(D): Ineligible ITC: amounts that cannot be claimed
+- [x] **Table 5 — Exempt / Nil-rated / Non-GST supplies**:
+    - [x] Interstate / Intrastate breakdown
+- [x] **Table 6 — Payment of Tax**:
+    - [x] Tax Payable: IGST, CGST, SGST, Cess (auto-computed from 3.1 − 4C)
+    - [x] ITC offset: auto-fills from 4C (ITC applied against liability)
+    - [x] Tax to be paid in cash: liability − ITC offset
+    - [x] Interest (if filing late): computed at 18% p.a. on outstanding tax
+    - [x] Late fee (if filing after due date): ₹ 50/day (₹ 25 CGST + ₹ 25 SGST), max ₹ 10,000
+    - [x] Total cash to pay: prominent, amountLarge
+- [x] "Save as Draft" button (saves computed values for reference; doesn't file)
+- [x] Export PDF / JSON for portal
+
+### P13.5 GST Detail Report
+
+**Route:** `/(app)/reports/gst-detail`
+
+- [x] **Filters**: date range / transaction type (Sale/Purchase/Both) / GST rate slab / party / supply type (intra/inter)
+- [x] **Table columns**: Date, Reference No. (Invoice/Bill No.), Type (Sale/Purchase/Credit Note), Party Name, Party GSTIN, HSN, Taxable Amount, IGST, CGST, SGST, Cess, Total GST
+- [x] **Column totals** row at bottom
+- [x] Filter by slab: shows only 18% transactions, etc.
+- [x] Useful for: reconciling GST paid vs collected, preparing for CA audit
+- [x] Export Excel (each column clearly labelled)
+
+### P13.6 GSTR-9 (Annual Return)
+
+**Route:** `/(app)/reports/gstr9`
+
+> The annual GST return — summary of the full financial year. Due by 31st December of next year.
+
+- [x] **Financial Year** selector (not month — annual)
+- [x] **Part I**: Basic details (auto-filled from business profile)
+- [x] **Part II — Details of Outward and Inward Supplies declared in GSTR-1 and GSTR-3B** (Table 4–5):
+    - [x] Table 4: Taxable outward supplies (B2B, B2C, zero-rated, nil/exempt, non-GST)
+    - [x] Table 5: Outward supplies on which GST not payable
+    - [x] All figures: auto-aggregated from the year's GSTR-1 data
+- [x] **Part III — Details of ITC declared in GSTR-3B** (Table 6–8):
+    - [x] Table 6: ITC availed through GSTR-3B
+    - [x] Table 7: ITC reversed or lapsed
+    - [x] Table 8: Other ITC related information (ITC from GSTR-2A vs actual claimed)
+- [x] **Part IV — Details of tax paid** (Table 9): month-wise IGST, CGST, SGST, Cess paid via cash and ITC
+- [x] **Part VI — Other Information** (Table 15–18): HSN-wise summary of outward/inward supplies
+- [x] Amendment fields: all auto-computed fields are editable for manual corrections
+- [x] Export PDF (official format for record keeping)
+
+### P13.7 Sale Summary by HSN
+
+**Route:** `/(app)/reports/hsn-summary`
+
+> Required for GSTR-1 filing and commonly requested by CAs for tax audit.
+
+- [x] **Date range** filter; default: current filing month
+- [x] **Table**: HSN Code / SAC Code, Description (from item master), Unit of Measure, Total Quantity Sold, Total Taxable Value, Total IGST, Total CGST, Total SGST, Total Cess, Total Tax, Total Value (incl. tax)
+- [x] One row per unique HSN code
+- [x] Sorted by taxable value descending
+- [x] "Unknown HSN" row at bottom for items with no HSN code set (data quality)
+- [x] Similarly: Purchase Summary by HSN — same table but for purchases
+- [x] Export Excel (suitable for direct use in GSTR-1 HSN table upload)
+- [x] Export PDFo rated): Taxable Value, Integrated Tax
     - [ ] 3.1(c): Other outward supplies (Nil rated, exempted): Taxable Value
     - [ ] 3.1(d): Inward supplies (liable to reverse charge): Taxable Value, Integrated Tax, Central Tax, State/UT Tax, Cess
     - [ ] 3.1(e): Non-GST outward supplies: Taxable Value
@@ -2205,130 +2192,130 @@ Note: GSTR-2 filing was suspended by GST Council; this report serves as a reconc
 
 > The most used report for inventory management. A quick view of "what do I have and what is it worth?"
 
-- [ ] **Filters**: category / stock level (All / In Stock / Low Stock / Out of Stock)
-- [ ] **Sort**: by item name / stock value (desc) / quantity (asc for identifying low stock)
-- [ ] **Summary card**: Total Stock Value: ₹ X (sum of all items' current_stock × purchase_price); Total Items: N; Out of Stock: M items (red badge)
-- [ ] **Table columns**: Item Name, Category, Unit, Opening Stock (start of FY or selected date), Purchases (in), Sales (out), Adjustments (±), **Current Stock** (bold), Avg. Purchase Price, **Stock Value** (current stock × avg. purchase price)
-- [ ] Items with current stock = 0: grey text + "Out of Stock" badge
-- [ ] Items at/below threshold: stock quantity in red
-- [ ] "As on date" picker: shows stock position at any historical date (computed from stock operations up to that date)
-- [ ] Export PDF (printable stock register — common requirement for GST audit)
-- [ ] Export Excel
+- [x] **Filters**: category / stock level (All / In Stock / Low Stock / Out of Stock)
+- [x] **Sort**: by item name / stock value (desc) / quantity (asc for identifying low stock)
+- [x] **Summary card**: Total Stock Value: ₹ X (sum of all items' current_stock × purchase_price); Total Items: N; Out of Stock: M items (red badge)
+- [x] **Table columns**: Item Name, Category, Unit, Opening Stock (start of FY or selected date), Purchases (in), Sales (out), Adjustments (±), **Current Stock** (bold), Avg. Purchase Price, **Stock Value** (current stock × avg. purchase price)
+- [x] Items with current stock = 0: grey text + "Out of Stock" badge
+- [x] Items at/below threshold: stock quantity in red
+- [x] "As on date" picker: shows stock position at any historical date (computed from stock operations up to that date)
+- [x] Export PDF (printable stock register — common requirement for GST audit)
+- [x] Export Excel
 
 ### P14.2 Item Report by Party
 
 **Route:** `/(app)/reports/item-by-party`
 
-- [ ] **Mode** toggle: "Party → Items" / "Item → Parties"
-- [ ] **Mode 1 (Party → Items)**: select party → date range → table of items bought/sold
-    - [ ] Columns: Item Name, HSN, Total Qty, Sale Rate (avg), Purchase Rate (avg), Total Value, Last Txn Date
-- [ ] **Mode 2 (Item → Parties)**: select item → date range → table of parties
-    - [ ] Columns: Party Name, Type (Customer/Supplier), Total Qty, Total Value, Avg. Rate, Last Txn Date
-- [ ] Tap any row → drill to Party Statement or Item Detail Report
+- [x] **Mode** toggle: "Party → Items" / "Item → Parties"
+- [x] **Mode 1 (Party → Items)**: select party → date range → table of items bought/sold
+    - [x] Columns: Item Name, HSN, Total Qty, Sale Rate (avg), Purchase Rate (avg), Total Value, Last Txn Date
+- [x] **Mode 2 (Item → Parties)**: select item → date range → table of parties
+    - [x] Columns: Party Name, Type (Customer/Supplier), Total Qty, Total Value, Avg. Rate, Last Txn Date
+- [x] Tap any row → drill to Party Statement or Item Detail Report
 
 ### P14.3 Item-wise Profit / Loss
 
 **Route:** `/(app)/reports/item-profit`
 
-- [ ] **Filters**: date range / category / sort (by margin %, by profit amount, by revenue)
-- [ ] **Summary**: Total Revenue ₹ X, Total COGS ₹ X, **Total Profit ₹ X (Y%)**, Number of loss-making items
-- [ ] **Table**: Item Name, Category, Total Qty Sold, Avg. Sale Price, Avg. Purchase Price, Total Revenue, Total COGS, Gross Profit, **Profit %**
-- [ ] Profit % column: colour-coded (green ≥ 20%, amber 5–20%, red <5% or negative)
-- [ ] "No purchase price" items flagged: "Purchase price not set — cannot calculate profit"
-- [ ] Sort: profit % descending — identify your best and worst performing products
-- [ ] Export Excel / PDF
+- [x] **Filters**: date range / category / sort (by margin %, by profit amount, by revenue)
+- [x] **Summary**: Total Revenue ₹ X, Total COGS ₹ X, **Total Profit ₹ X (Y%)**, Number of loss-making items
+- [x] **Table**: Item Name, Category, Total Qty Sold, Avg. Sale Price, Avg. Purchase Price, Total Revenue, Total COGS, Gross Profit, **Profit %**
+- [x] Profit % column: colour-coded (green ≥ 20%, amber 5–20%, red <5% or negative)
+- [x] "No purchase price" items flagged: "Purchase price not set — cannot calculate profit"
+- [x] Sort: profit % descending — identify your best and worst performing products
+- [x] Export Excel / PDF
 
 ### P14.4 Low Stock Summary Report
 
 **Route:** `/(app)/reports/low-stock`
 
-- [ ] **Filters**: category; "below threshold" (default) / "out of stock" / "all low stock"
-- [ ] **Table**: Item Name, Category, Unit, Current Stock, Low Stock Threshold, **Shortage** (threshold − current, if negative = stock below threshold by this much), Avg. Monthly Sales (last 3 months), **Suggested Reorder Qty** (avg. monthly sales × 1.5), Last Purchase Rate, Last Purchased From (supplier name)
-- [ ] **Highlight row**: completely out of stock items at top in red
-- [ ] "Create PO" button per row: opens Purchase Order (P16.5) pre-filled with that item and suggested qty
-- [ ] "Select All Low Stock" checkbox + "Create Bulk PO" button: creates one PO per supplier for all selected items
-- [ ] Export to share with suppliers: PDF or Excel
-- [ ] "Share on WhatsApp" generates a formatted list for WhatsApp message
+- [x] **Filters**: category; "below threshold" (default) / "out of stock" / "all low stock"
+- [x] **Table**: Item Name, Category, Unit, Current Stock, Low Stock Threshold, **Shortage** (threshold − current, if negative = stock below threshold by this much), Avg. Monthly Sales (last 3 months), **Suggested Reorder Qty** (avg. monthly sales × 1.5), Last Purchase Rate, Last Purchased From (supplier name)
+- [x] **Highlight row**: completely out of stock items at top in red
+- [x] "Create PO" button per row: opens Purchase Order (P16.5) pre-filled with that item and suggested qty
+- [x] "Select All Low Stock" checkbox + "Create Bulk PO" button: creates one PO per supplier for all selected items
+- [x] Export to share with suppliers: PDF or Excel
+- [x] "Share on WhatsApp" generates a formatted list for WhatsApp message
 
 ### P14.5 Item Detail Report
 
 **Route:** `/(app)/reports/item-detail/[id]`
 
-- [ ] **Item info header**: name, category, current stock, unit, purchase price, sale price
-- [ ] **Date range** filter
-- [ ] **Stock Movement table** (comprehensive ledger):
-    - [ ] Opening stock row (bold, grey background)
-    - [ ] All stock operations chronologically: Date, Type (Purchase Receipt / Sale / Stock Adjustment / Opening / Transfer), Reference No. (Invoice/Bill No. or "Manual"), Qty In (+), Qty Out (−), Running Balance
-    - [ ] Running balance column (always shows real-time stock after each transaction)
-    - [ ] Negative stock rows: highlighted in red (data integrity issue)
-- [ ] **Summary tab**: total purchased, total sold, total adjusted, opening vs closing
-- [ ] Export PDF / Excel
+- [x] **Item info header**: name, category, current stock, unit, purchase price, sale price
+- [x] **Date range** filter
+- [x] **Stock Movement table** (comprehensive ledger):
+    - [x] Opening stock row (bold, grey background)
+    - [x] All stock operations chronologically: Date, Type (Purchase Receipt / Sale / Stock Adjustment / Opening / Transfer), Reference No. (Invoice/Bill No. or "Manual"), Qty In (+), Qty Out (−), Running Balance
+    - [x] Running balance column (always shows real-time stock after each transaction)
+    - [x] Negative stock rows: highlighted in red (data integrity issue)
+- [x] **Summary tab**: total purchased, total sold, total adjusted, opening vs closing
+- [x] Export PDF / Excel
 
 ### P14.6 Stock Detail Report (All Items)
 
 **Route:** `/(app)/reports/stock-detail`
 
-- [ ] All stock movements for ALL items in a period
-- [ ] **Filters**: item (multi-select) / category / movement type (Receipt / Issue / Adjustment / All)
-- [ ] **Table**: Date, Item Name, Category, Movement Type, Qty In, Qty Out, Rate (purchase/sale), Value, Reference No., Party Name
-- [ ] Useful for: monthly stock audit, GST audit of closing stock
-- [ ] Export Excel (large — recommend date range limit)
+- [x] All stock movements for ALL items in a period
+- [x] **Filters**: item (multi-select) / category / movement type (Receipt / Issue / Adjustment / All)
+- [x] **Table**: Date, Item Name, Category, Movement Type, Qty In, Qty Out, Rate (purchase/sale), Value, Reference No., Party Name
+- [x] Useful for: monthly stock audit, GST audit of closing stock
+- [x] Export Excel (large — recommend date range limit)
 
 ### P14.7 Sale / Purchase by Item Category
 
 **Route:** `/(app)/reports/category-summary`
 
-- [ ] Date range filter
-- [ ] **Two-level table**:
-    - [ ] Level 1 (collapsed by default): Category row — name, total sale qty, total sale value, total purchase qty, total purchase value, net profit
-    - [ ] Level 2 (expand category): individual items within category — same columns
-- [ ] Visual: horizontal stacked bar per category (sale value vs purchase value)
-- [ ] Export PDF / Excel
+- [x] Date range filter
+- [x] **Two-level table**:
+    - [x] Level 1 (collapsed by default): Category row — name, total sale qty, total sale value, total purchase qty, total purchase value, net profit
+    - [x] Level 2 (expand category): individual items within category — same columns
+- [x] Visual: horizontal stacked bar per category (sale value vs purchase value)
+- [x] Export PDF / Excel
 
 ### P14.8 Stock Summary by Item Category
 
 **Route:** `/(app)/reports/stock-by-category`
 
-- [ ] Table: Category, Item Count, Total Current Stock (in primary units), Stock Value (₹)
-- [ ] Pie chart: stock value distribution across categories
-- [ ] Tap category → drill into Stock Summary filtered to that category
-- [ ] "As on date" picker
-- [ ] Export PDF / Excel
+- [x] Table: Category, Item Count, Total Current Stock (in primary units), Stock Value (₹)
+- [x] Pie chart: stock value distribution across categories
+- [x] Tap category → drill into Stock Summary filtered to that category
+- [x] "As on date" picker
+- [x] Export PDF / Excel
 
 ### P14.9 Item Batch Report
 
 **Route:** `/(app)/reports/batch-report`
 (Shown only when batch tracking enabled in settings)
 
-- [ ] **Filters**: item / category / expiry range (Next 30 days / Next 60 days / Next 90 days / All / Expired) / status (Open / Consumed / Expired)
-- [ ] **Table**: Item Name, Batch No., Manufacturing Date, Expiry Date, Opening Qty, Received Qty, Issued Qty, **Remaining Qty**, Current Value, Status, Days to Expiry
-- [ ] Expiry within 30 days: amber row highlight
-- [ ] Expired (past date): red row highlight, "Expired" badge
-- [ ] Zero remaining qty: grey text "Fully consumed"
-- [ ] "Adjust / Write Off Expired" button per expired row: creates negative stock adjustment with reason "Expiry write-off"
-- [ ] Export PDF / Excel
+- [x] **Filters**: item / category / expiry range (Next 30 days / Next 60 days / Next 90 days / All / Expired) / status (Open / Consumed / Expired)
+- [x] **Table**: Item Name, Batch No., Manufacturing Date, Expiry Date, Opening Qty, Received Qty, Issued Qty, **Remaining Qty**, Current Value, Status, Days to Expiry
+- [x] Expiry within 30 days: amber row highlight
+- [x] Expired (past date): red row highlight, "Expired" badge
+- [x] Zero remaining qty: grey text "Fully consumed"
+- [x] "Adjust / Write Off Expired" button per expired row: creates negative stock adjustment with reason "Expiry write-off"
+- [x] Export PDF / Excel
 
 ### P14.10 Item Serial Report
 
 **Route:** `/(app)/reports/serial-report`
 (Shown only when serial tracking enabled)
 
-- [ ] Search by serial number: instant lookup
-- [ ] **Filters**: item / status (In Stock / Sold / Returned / Written Off)
-- [ ] **Table**: Item Name, Serial Number, Status, Date Received (in), Date Sold (out), Customer Name (if sold), Invoice No., Current Location
-- [ ] Tap serial number → transaction history for that unit
-- [ ] Export Excel
+- [x] Search by serial number: instant lookup
+- [x] **Filters**: item / status (In Stock / Sold / Returned / Written Off)
+- [x] **Table**: Item Name, Serial Number, Status, Date Received (in), Date Sold (out), Customer Name (if sold), Invoice No., Current Location
+- [x] Tap serial number → transaction history for that unit
+- [x] Export Excel
 
 ### P14.11 Item-wise Discount Report
 
 **Route:** `/(app)/reports/item-discount`
 
-- [ ] **Date range** filter
-- [ ] **Table**: Item Name, Category, Total Qty Sold, Total Sale Value (without discount), Total Discount Given, Net Sale Value (after discount), Discount %
-- [ ] Sorted by Total Discount descending
-- [ ] Highlights items where discount % > 15% (configurable threshold)
-- [ ] "Items with highest discounting might be overpriced or negotiated down too aggressively" — contextual insight card
-- [ ] Export Excel / PDF
+- [x] **Date range** filter
+- [x] **Table**: Item Name, Category, Total Qty Sold, Total Sale Value (without discount), Total Discount Given, Net Sale Value (after discount), Discount %
+- [x] Sorted by Total Discount descending
+- [x] Highlights items where discount % > 15% (configurable threshold)
+- [x] "Items with highest discounting might be overpriced or negotiated down too aggressively" — contextual insight card
+- [x] Export Excel / PDF
 
 ---
 
@@ -2356,98 +2343,98 @@ Note: GSTR-2 filing was suspended by GST Council; this report serves as a reconc
 
 **Route:** `/(app)/reports/discounts`
 
-- [ ] **Filters**: date range / item / customer / discount type (item-level / transaction-level / both)
-- [ ] **Summary**: Total Discount Given: ₹ X (Y% of total gross sales)
-- [ ] **Table**: Date, Invoice No., Customer, Discount Type (Item/Transaction), Items Affected, Gross Amount, Discount Amount, Discount %, Net Amount
-- [ ] Sorted by Discount Amount descending
-- [ ] "Total potential revenue lost to discounts: ₹ X" — insight card
-- [ ] Export PDF / Excel
+- [x] **Filters**: date range / item / customer / discount type (item-level / transaction-level / both)
+- [x] **Summary**: Total Discount Given: ₹ X (Y% of total gross sales)
+- [x] **Table**: Date, Invoice No., Customer, Discount Type (Item/Transaction), Items Affected, Gross Amount, Discount Amount, Discount %, Net Amount
+- [x] Sorted by Discount Amount descending
+- [x] "Total potential revenue lost to discounts: ₹ X" — insight card
+- [x] Export PDF / Excel
 
 ### P15.3 Tax Report
 
 **Route:** `/(app)/reports/tax-report`
 
-- [ ] **Period**: monthly / quarterly / FY; date range
-- [ ] **Output Tax Section** (tax collected from customers on sales):
-    - [ ] Month-by-month table: IGST Collected, CGST Collected, SGST Collected, Total Output Tax
-    - [ ] Period total row
-- [ ] **Input Tax Section** (tax paid on purchases — ITC):
-    - [ ] Month-by-month table: IGST Paid, CGST Paid, SGST Paid, Total Input Tax
-    - [ ] Period total row
-- [ ] **Net Tax Liability Section**:
-    - [ ] Output Tax − Input Tax = **Net Payable / Refundable** (amountLarge, red if payable, green if refundable)
-- [ ] **TDS Section** (manual entries only for now):
-    - [ ] TDS deducted by customer (if any): text entries by user
-    - [ ] TDS paid to TRACES (manual entry)
-- [ ] Export PDF (tax computation sheet for CA)
+- [x] **Period**: monthly / quarterly / FY; date range
+- [x] **Output Tax Section** (tax collected from customers on sales):
+    - [x] Month-by-month table: IGST Collected, CGST Collected, SGST Collected, Total Output Tax
+    - [x] Period total row
+- [x] **Input Tax Section** (tax paid on purchases — ITC):
+    - [x] Month-by-month table: IGST Paid, CGST Paid, SGST Paid, Total Input Tax
+    - [x] Period total row
+- [x] **Net Tax Liability Section**:
+    - [x] Output Tax − Input Tax = **Net Payable / Refundable** (amountLarge, red if payable, green if refundable)
+- [x] **TDS Section** (manual entries only for now):
+    - [x] TDS deducted by customer (if any): text entries by user
+    - [x] TDS paid to TRACES (manual entry)
+- [x] Export PDF (tax computation sheet for CA)
 
 ### P15.4 Tax Rate Report
 
 **Route:** `/(app)/reports/tax-rate-report`
 
-- [ ] Date range filter
-- [ ] **Sections — one per GST slab** (only slabs with transactions are shown):
-    - [ ] "0% (Nil Rated) / Exempt / Non-GST": total taxable value, count of invoices
-    - [ ] "5% GST": total taxable value, IGST ₹, CGST ₹, SGST ₹
-    - [ ] "12% GST": same
-    - [ ] "18% GST": same (will usually be the largest for hardware/tiles)
-    - [ ] "28% GST": same
-- [ ] Pie chart: proportion of sales by GST rate
-- [ ] Separate Purchase section with same breakdown (input tax by rate)
-- [ ] Export Excel
+- [x] Date range filter
+- [x] **Sections — one per GST slab** (only slabs with transactions are shown):
+    - [x] "0% (Nil Rated) / Exempt / Non-GST": total taxable value, count of invoices
+    - [x] "5% GST": total taxable value, IGST ₹, CGST ₹, SGST ₹
+    - [x] "12% GST": same
+    - [x] "18% GST": same (will usually be the largest for hardware/tiles)
+    - [x] "28% GST": same
+- [x] Pie chart: proportion of sales by GST rate
+- [x] Separate Purchase section with same breakdown (input tax by rate)
+- [x] Export Excel
 
 ### P15.5 Expense Transaction Report
 
 **Route:** `/(app)/reports/expense-transactions`
 
-- [ ] **Filters**: date range / category (multi-select) / payment mode / amount range (min–max)
-- [ ] **Summary card**: Total Expenses ₹ X in period; Top category: "[Category] ₹ Y"
-- [ ] **Table**: Date, Category, Description, Paid To, Payment Mode, Reference, Amount, GST (if applicable), ITC
-- [ ] Month-by-month bar chart (sparkline)
-- [ ] Sorted by date descending
-- [ ] Export PDF / Excel
+- [x] **Filters**: date range / category (multi-select) / payment mode / amount range (min–max)
+- [x] **Summary card**: Total Expenses ₹ X in period; Top category: "[Category] ₹ Y"
+- [x] **Table**: Date, Category, Description, Paid To, Payment Mode, Reference, Amount, GST (if applicable), ITC
+- [x] Month-by-month bar chart (sparkline)
+- [x] Sorted by date descending
+- [x] Export PDF / Excel
 
 ### P15.6 Expense Category Report
 
 **Route:** `/(app)/reports/expense-categories`
 
-- [ ] **Period**: this month / last month / this quarter / this FY / custom
-- [ ] **Table**: Category Name, This Period ₹, Last Period ₹, Change (₹ and %), % of Total Expenses
-- [ ] **Pie chart** (simple, 6 segments max — smaller categories grouped as "Other"): rendered with `react-native-svg`
-- [ ] Tap category row → Expense Transaction Report filtered to that category
-- [ ] "Rent is your largest expense at 38% of total" — auto-generated insight
-- [ ] Export PDF (summary)
+- [x] **Period**: this month / last month / this quarter / this FY / custom
+- [x] **Table**: Category Name, This Period ₹, Last Period ₹, Change (₹ and %), % of Total Expenses
+- [x] **Pie chart** (simple, 6 segments max — smaller categories grouped as "Other"): rendered with `react-native-svg`
+- [x] Tap category row → Expense Transaction Report filtered to that category
+- [x] "Rent is your largest expense at 38% of total" — auto-generated insight
+- [x] Export PDF (summary)
 
 ### P15.7 Expense Item Report
 
 **Route:** `/(app)/reports/expense-items`
 
-- [ ] All individual expense entries for a period
-- [ ] Sorted by amount descending (largest expense at top)
-- [ ] Filters: category / payment mode / date range
-- [ ] Same columns as P15.5 (individual transaction level)
+- [x] All individual expense entries for a period
+- [x] Sorted by amount descending (largest expense at top)
+- [x] Filters: category / payment mode / date range
+- [x] Same columns as P15.5 (individual transaction level)
 
 ### P15.8 Sale / Purchase Order Transaction Report
 
 **Route:** `/(app)/reports/order-transactions`
 
-- [ ] **Type toggle**: Sale Orders / Purchase Orders / Both
-- [ ] **Status filter**: Open / Converted to Invoice / Partially Converted / Cancelled
-- [ ] **Date range** filter (order date)
-- [ ] **Table**: Order No., Type, Party, Order Date, Expected Date, Total Value, Status, Converted Invoice/Bill No.
-- [ ] "Pending Value": total value of Open orders (items ordered but not yet billed)
-- [ ] Tap row → Order detail screen
-- [ ] Export PDF / Excel
+- [x] **Type toggle**: Sale Orders / Purchase Orders / Both
+- [x] **Status filter**: Open / Converted to Invoice / Partially Converted / Cancelled
+- [x] **Date range** filter (order date)
+- [x] **Table**: Order No., Type, Party, Order Date, Expected Date, Total Value, Status, Converted Invoice/Bill No.
+- [x] "Pending Value": total value of Open orders (items ordered but not yet billed)
+- [x] Tap row → Order detail screen
+- [x] Export PDF / Excel
 
 ### P15.9 Sale / Purchase Order Item Report
 
 **Route:** `/(app)/reports/order-items`
 
-- [ ] **Filters**: item / category / status / date range
-- [ ] **Table**: Order No., Item Name, Ordered Qty, Delivered Qty, Remaining Qty, Unit Price, Total Value, Party, Status
-- [ ] "Pending delivery" items at top
-- [ ] Groups by item (multi-order aggregation)
-- [ ] Export Excel (useful for procurement planning)
+- [x] **Filters**: item / category / status / date range
+- [x] **Table**: Order No., Item Name, Ordered Qty, Delivered Qty, Remaining Qty, Unit Price, Total Value, Party, Status
+- [x] "Pending delivery" items at top
+- [x] Groups by item (multi-order aggregation)
+- [x] Export Excel (useful for procurement planning)
 
 ### P15.10 Other Income Transaction Report
 
@@ -2455,9 +2442,9 @@ Note: GSTR-2 filing was suspended by GST Council; this report serves as a reconc
 
 Same structure as Expense Transaction Report (P15.5):
 
-- [ ] Columns: Date, Category, Description, Received From, Payment Mode, Reference, Amount
-- [ ] Summary: Total Other Income ₹ X in period
-- [ ] Export PDF / Excel
+- [x] Columns: Date, Category, Description, Received From, Payment Mode, Reference, Amount
+- [x] Summary: Total Other Income ₹ X in period
+- [x] Export PDF / Excel
 
 ### P15.11 Other Income Category Report
 
@@ -2465,23 +2452,31 @@ Same structure as Expense Transaction Report (P15.5):
 
 Same structure as Expense Category Report (P15.6) but for income categories.
 
+- [x] Category Name, This Period ₹, Last Period ₹, Change (₹ and %), % of Total Income
+- [x] Pie chart of income categories
+- [x] Export PDF (summary)
+
 ### P15.12 Other Income Item Report
 
 Individual income entries sorted by amount — same as Expense Item Report format.
+
+- [x] All individual income entries for a period
+- [x] Sorted by amount descending (largest income at top)
+- [x] Filters: category / payment mode / date range
 
 ### P15.13 Loan Statement
 
 **Route:** `/(app)/reports/loan-statement`
 
-- [ ] **Loan selector** at top: dropdown of active loans (see P19)
-- [ ] **Loan Details card**: Lender, Loan Amount, Disbursement Date, Interest Rate, Tenure, EMI Amount
-- [ ] **Amortisation Schedule table**:
-    - [ ] Columns: EMI No., Due Date, Opening Balance, EMI Amount, Principal Component, Interest Component, Closing Balance, Status (Paid / Pending / Late)
-    - [ ] Paid EMIs: green row
-    - [ ] Current month EMI: highlighted amber
-    - [ ] Future EMIs: grey
-- [ ] **Summary cards**: Loan Amount ₹ X, Total Paid ₹ X, Outstanding Principal ₹ X, Total Interest Paid ₹ X, Remaining Tenure (months)
-- [ ] Export PDF (suitable for bank submission or tax records — interest is often tax deductible for business loans)
+- [x] **Loan selector** at top: dropdown of active loans (see P19)
+- [x] **Loan Details card**: Lender, Loan Amount, Disbursement Date, Interest Rate, Tenure, EMI Amount
+- [x] **Amortisation Schedule table**:
+    - [x] Columns: EMI No., Due Date, Opening Balance, EMI Amount, Principal Component, Interest Component, Closing Balance, Status (Paid / Pending / Late)
+    - [x] Paid EMIs: green row
+    - [x] Current month EMI: highlighted amber
+    - [x] Future EMIs: grey
+- [x] **Summary cards**: Loan Amount ₹ X, Total Paid ₹ X, Outstanding Principal ₹ X, Total Interest Paid ₹ X, Remaining Tenure (months)
+- [x] Export PDF (suitable for bank submission or tax records — interest is often tax deductible for business loans)
 
 ---
 
@@ -2978,33 +2973,33 @@ Each setting is a row with: setting name, description/example (caption), toggle 
 
 #### Loans List:
 
-- [ ] Summary card: Total Outstanding Loans: ₹ X; Next EMI Due: ₹ Y on [date]
-- [ ] Each loan card (100dp):
-    - [ ] Lender name (bodyBold) + loan type badge (Term Loan / OD / Personal)
-    - [ ] Loan amount vs outstanding: "₹ 5,00,000 → ₹ 3,20,000 remaining"
-    - [ ] Progress bar: % repaid (filled terracotta)
-    - [ ] Next EMI: "₹ 12,500 due DD MMM" — amber if within 7 days
-- [ ] FAB "+ Add Loan"
+- [x] Summary card: Total Outstanding Loans: ₹ X; Next EMI Due: ₹ Y on [date]
+- [x] Each loan card (100dp):
+    - [x] Lender name (bodyBold) + loan type badge (Term Loan / OD / Personal)
+    - [x] Loan amount vs outstanding: "₹ 5,00,000 → ₹ 3,20,000 remaining"
+    - [x] Progress bar: % repaid (filled terracotta)
+    - [x] Next EMI: "₹ 12,500 due DD MMM" — amber if within 7 days
+- [x] FAB "+ Add Loan"
 
 #### Add Loan Screen:
 
 **Route:** `/(app)/finance/loans/add`
 
-- [ ] **Lender Name**: text field; "e.g. SBI, HDFC, Ramesh Bhai"
-- [ ] **Loan Type**: Term Loan (Fixed EMI) / Overdraft (Revolving) / Personal Loan / Mortgage / Vehicle Loan
-- [ ] **Loan Amount (Principal)**: `AmountInput`, required
-- [ ] **Disbursement Date**: `DatePickerField`; this is when money was received
-- [ ] **Interest Rate**: numeric + "% per annum" suffix; toggle between Simple / Compound (default Compound for term loans)
-- [ ] **Tenure (Months)**: numeric
-- [ ] **EMI Amount**: `AmountInput`; OR "Auto-calculate" toggle:
-    - [ ] When Auto-calculate ON: uses formula `P × r × (1+r)^n / ((1+r)^n - 1)` where r = monthly rate, n = months
-    - [ ] Shows calculated EMI: "Monthly EMI: ₹ 12,456"
-    - [ ] Shows amortisation preview: first row "Month 1: EMI ₹12,456 (Principal ₹8,456 + Interest ₹4,000)"
-- [ ] **EMI Date**: day of month (e.g. 5th); creates recurring reminder
-- [ ] **Link to Bank Account**: `BottomSheetPicker` of bank accounts (for disbursement credit + EMI debit)
-- [ ] **First EMI Date**: `DatePickerField`; defaults to disbursement date + 1 month
-- [ ] **Notes**: text area (e.g. "Home renovation loan — HDFC Branch Andheri")
-- [ ] **Save**: creates loan record; creates opening balance credit in linked bank account for loan amount; shows amortisation schedule preview
+- [x] **Lender Name**: text field; "e.g. SBI, HDFC, Ramesh Bhai"
+- [x] **Loan Type**: Term Loan (Fixed EMI) / Overdraft (Revolving) / Personal Loan / Mortgage / Vehicle Loan
+- [x] **Loan Amount (Principal)**: `AmountInput`, required
+- [x] **Disbursement Date**: `DatePickerField`; this is when money was received
+- [x] **Interest Rate**: numeric + "% per annum" suffix; toggle between Simple / Compound (default Compound for term loans)
+- [x] **Tenure (Months)**: numeric
+- [x] **EMI Amount**: `AmountInput`; OR "Auto-calculate" toggle:
+    - [x] When Auto-calculate ON: uses formula `P × r × (1+r)^n / ((1+r)^n - 1)` where r = monthly rate, n = months
+    - [x] Shows calculated EMI: "Monthly EMI: ₹ 12,456"
+    - [x] Shows amortisation preview: first row "Month 1: EMI ₹12,456 (Principal ₹8,456 + Interest ₹4,000)"
+- [x] **EMI Date**: day of month (e.g. 5th); creates recurring reminder
+- [x] **Link to Bank Account**: `BottomSheetPicker` of bank accounts (for disbursement credit + EMI debit)
+- [x] **First EMI Date**: `DatePickerField`; defaults to disbursement date + 1 month
+- [x] **Notes**: text area (e.g. "Home renovation loan — HDFC Branch Andheri")
+- [x] **Save**: creates loan record; creates opening balance credit in linked bank account for loan amount; shows amortisation schedule preview
 
 ### P19.2 Loan EMI Recording
 
@@ -3012,37 +3007,37 @@ Each setting is a row with: setting name, description/example (caption), toggle 
 
 #### Loan Detail Screen:
 
-- [ ] Header card: lender name, loan type, principal ₹X, disbursement date
-- [ ] Outstanding Principal: ₹ X (amountLarge, prominent)
-- [ ] Total Interest Paid: ₹ X (caption)
-- [ ] Next EMI Card (amber background if within 7 days): "EMI Due on DD MMM: ₹ X"
-    - [ ] "Record EMI" button: tapping opens EMI recording form (P19.3)
-- [ ] Amortisation table (scrollable): each row = one EMI period (see P15.13 Loan Statement format)
-- [ ] Action bar: "Record EMI" (primary) + "Prepayment" + Edit Loan Details
+- [x] Header card: lender name, loan type, principal ₹X, disbursement date
+- [x] Outstanding Principal: ₹ X (amountLarge, prominent)
+- [x] Total Interest Paid: ₹ X (caption)
+- [x] Next EMI Card (amber background if within 7 days): "EMI Due on DD MMM: ₹ X"
+    - [x] "Record EMI" button: tapping opens EMI recording form (P19.3)
+- [x] Amortisation table (scrollable): each row = one EMI period (see P15.13 Loan Statement format)
+- [x] Action bar: "Record EMI" (primary) + "Prepayment" + Edit Loan Details
 
 #### Record EMI Screen:
 
 **Route:** `/(app)/finance/loans/[id]/emi`
 
-- [ ] EMI Number indicator: "Paying EMI #12 of 36"
-- [ ] **EMI Date**: `DatePickerField` (actual payment date, not scheduled date)
-- [ ] **Total EMI Amount**: pre-filled from loan schedule; editable if late fee applies
-- [ ] **Principal Component**: auto-computed from amortisation schedule; editable
-- [ ] **Interest Component**: auto-computed (EMI − Principal); editable
-- [ ] **Late Fee** (optional): `AmountInput`; appears when actual date > scheduled date
-- [ ] **Paid from Bank Account**: picker
-- [ ] **Reference Number**: text field (bank reference for the EMI transfer)
-- [ ] **Save**: creates debit in bank account for total EMI; updates loan outstanding principal; marks EMI period as paid in amortisation table
+- [x] EMI Number indicator: "Paying EMI #12 of 36"
+- [x] **EMI Date**: `DatePickerField` (actual payment date, not scheduled date)
+- [x] **Total EMI Amount**: pre-filled from loan schedule; editable if late fee applies
+- [x] **Principal Component**: auto-computed from amortisation schedule; editable
+- [x] **Interest Component**: auto-computed (EMI − Principal); editable
+- [x] **Late Fee** (optional): `AmountInput`; appears when actual date > scheduled date
+- [x] **Paid from Bank Account**: picker
+- [x] **Reference Number**: text field (bank reference for the EMI transfer)
+- [x] **Save**: creates debit in bank account for total EMI; updates loan outstanding principal; marks EMI period as paid in amortisation table
 
 #### Record Prepayment Screen:
 
 **Route:** `/(app)/finance/loans/[id]/prepayment`
 
-- [ ] **Date**, **Amount**, **Bank Account**, **Reference**
-- [ ] Entire prepayment applied to principal reduction
-- [ ] **Effect preview**: "After this prepayment, outstanding reduces to ₹ X. New EMI: ₹ Y (if re-amortised)" OR "Remaining tenure reduces from 24 months to 18 months (if EMI kept same)"
-- [ ] Toggle: "Reduce EMI" / "Reduce Tenure" — user chooses re-amortisation approach
-- [ ] **Save**: adjusts amortisation schedule accordingly
+- [x] **Date**, **Amount**, **Bank Account**, **Reference**
+- [x] Entire prepayment applied to principal reduction
+- [x] **Effect preview**: "After this prepayment, outstanding reduces to ₹ X. New EMI: ₹ Y (if re-amortised)" OR "Remaining tenure reduces from 24 months to 18 months (if EMI kept same)"
+- [x] Toggle: "Reduce EMI" / "Reduce Tenure" — user chooses re-amortisation approach
+- [x] **Save**: adjusts amortisation schedule accordingly
 
 ### P19.3 Loan Statement
 
@@ -3075,77 +3070,98 @@ See P15.13 — accessible from Loan Detail screen as "View Full Statement".
     - [ ] Business name shown on lock screen
 - [ ] **Forgot PIN flow**:
     - [ ] On lock screen: "Forgot PIN?" link
-    - [ ] Sends OTP to registered phone
-    - [ ] After OTP verification: set new PIN
-- [ ] **Passcode for Transaction Edit/Delete**:
-    - [ ] "Require PIN to edit saved transactions": toggle (separate from app lock PIN — uses same PIN)
-    - [ ] "Require PIN to delete transactions": toggle
-    - [ ] When enabled: tapping Edit/Delete on any saved invoice/payment etc. shows PIN entry modal first
+    - [ ] Sends OTP ### P21.1 Data Verification
 
-### P20.2 Multi-firm Management
+**Route:** `/(app)/utilities/verify`
 
-**Route:** `/(app)/settings/firms`
+- [x] **"Run Verification" button** (primary, prominent)
+- [x] **Progress** (while running): "Checking ledger balances... (1/4)", "Checking stock counts... (2/4)", "Checking orphaned records... (3/4)", "Checking GST data... (4/4)"
+- [x] **Results screen** (after run):
+    - [x] Green "All Clear" card if no issues
+    - [x] Amber "X issues found" card if issues exist
+    - [x] **Issues list** with categories:
+        - [x] Ledger Mismatch: "Customer [Name]'s ledger balance (₹ X) doesn't match sum of transactions (₹ Y)"
+            - [x] "Fix Automatically" button: recalculates and corrects the stored balance
+        - [x] Stock Anomaly: "Item [Name]: stored stock (X) doesn't match sum of stock operations (Y)"
+            - [x] "Fix Automatically" button: recalculates running stock
+        - [x] Orphaned Payment: "Payment REC-012 is linked to Invoice INV-045 but that invoice was deleted"
+            - [x] "Mark as Unlinked" button: converts to advance payment
+        - [x] Missing HSN: "X invoices have items without HSN codes — GSTR-1 will be incomplete"
+            - [x] "View Affected Invoices" link
+        - [x] Duplicate Invoice Numbers: "INV-042 appears twice"
+            - [x] "View Duplicates" link
+    - [x] Each issue: expandable with details + recommended action
+- [x] **Auto-run trigger**: automatically runs on Close FY (P21.6) and when restoring backup
 
-- [ ] **Firms List**: all firms registered on this phone; active firm shows terracotta highlight + "Active" badge
-- [ ] Each firm card: business name, type, GSTIN (partial), last accessed date
-- [ ] **"Add Another Business" button**:
-    - [ ] Confirmation: "This will create a completely separate business account. Your current data is safe."
-    - [ ] Runs the Business Setup Wizard (P1.4) again with a fresh context
-    - [ ] Creates new `business_id` in Supabase with separate RLS scope
-    - [ ] Limit: maximum 5 firms per phone
-- [ ] **Switch Firm**:
-    - [ ] Tap inactive firm card → `ConfirmationModal` "Switch to [Name]?"
-    - [ ] On confirm: saves all stores state, clears all stores, loads new firm's `business_id`, re-initializes all stores → navigates to Home
-    - [ ] Transition: brief full-screen loading animation with new firm's name
-- [ ] **Delete Firm**: in kebab menu; requires typing the firm name to confirm deletion; deletes ALL data for that firm (irreversible)
+### P21.2 In-App Calculator
 
-### P20.3 Backup — Google Drive
+**Accessible from:** Anywhere via long-press on any `AmountInput` field, or from "More" tab
 
-**Route:** `/(app)/settings/backup/google-drive`
+- [x] Full-screen modal calculator overlay (not a separate route)
+- [x] Standard calculator layout: digits 0–9, `.`, `+`, `−`, `×`, `÷`, `%`, `C` (clear), `=`
+- [x] Display: shows current expression + result
+- [x] **Tax shortcut button** (labelled "GST"):
+    - [x] Input amount → tap GST → shows dropdown of rate slabs
+    - [x] On slab selection: shows "Base: ₹ X · GST 18%: ₹ Y · Total: ₹ Z"
+    - [x] Toggle between "Add GST" (exclusive) and "Extract GST" (inclusive)
+- [x] **EMI shortcut button**:
+    - [x] Three inputs: Principal, Rate (% p.a.), Tenure (months)
+    - [x] "Calculate" button → shows Monthly EMI: ₹ X, Total Payment: ₹ Y, Total Interest: ₹ Z
+- [x] **"Use This Amount" button** at bottom: pastes result into the field that opened the calculator
 
-- [ ] **Google Account section**:
-    - [ ] Shows connected Google account email if already linked
-    - [ ] "Connect Google Account" button (if not linked): opens Google OAuth via `expo-auth-session`
-    - [ ] "Disconnect" option (if linked): removes OAuth token; disables Drive backup
-- [ ] **Auto-Backup toggle**: Daily / Weekly / Off picker
-- [ ] **Backup Time**: time picker (shown when Daily/Weekly selected); default 02:00 AM (overnight)
-- [ ] **Last Backup status card**:
-    - [ ] "Last backup: Today at 02:15 AM ✓" (green)
-    - [ ] "Last backup: 8 days ago ⚠" (amber — overdue warning when >7 days)
-    - [ ] "No backup yet" (red — first-time user)
-- [ ] **Manual Backup Now button** (primary): shows progress: "Preparing backup... 35%" → "Uploading... 78%" → "Backup complete ✓"
-- [ ] **What's included card** (expandable): all invoices, purchases, payments, items, parties, expenses, settings, photos/attachments
-- [ ] **Backup file details**: last backup file size; "View in Google Drive" link
+### P21.3 Import Items from Excel
 
-### P20.4 Backup — Local Storage
+See P2.12 — accessible from Inventory list + More tab + here.
 
-**Route:** `/(app)/settings/backup/local`
+- [x] Excel file picker
+- [x] Column mapping UI
+- [x] Validation step (checking for duplicates, missing required fields)
+- [x] Batch import processing with progress bar
 
-- [ ] **Backup Now button**: generates backup file, saves to device Downloads folder
-- [ ] File name format: `[BusinessName]_backup_[DDMMYYYY].backup` (e.g. `SharmaTiles_backup_08042025.backup`)
-- [ ] File is encrypted with a derived key from the user's phone number (so it can only be restored on the same/linked account)
-- [ ] **After generation**: share sheet — Files app / WhatsApp / Email / "Save to Downloads"
-- [ ] **Previous backups list**: last 3 backup files on device with date and size; "Delete" option
+### P21.4 Export Items to PDF / Excel
 
-### P20.5 Backup — Email
+See P2.13 — accessible from Inventory list + here.
 
-**Route:** `/(app)/settings/backup/email`
+- [x] Export to PDF (formatted list)
+- [x] Export to Excel (.xlsx)
+- [x] Share sheet integration
 
-- [ ] **Email address field**: text field; defaults to email from business profile if set
-- [ ] "Send Backup to Email" button: triggers backup file creation + sends via `expo-mail-composer` (opens native mail client with attachment)
-- [ ] "Auto-email backup weekly": toggle + email field; uses Supabase Edge Function to send when auto-backup runs
+### P21.5 Import Parties from Excel
 
-### P20.6 Restore from Backup
+See P3.8 — accessible from Parties screen + here.
 
-**Route:** `/(app)/settings/backup/restore`
+- [x] Party Excel import with identical flow to item import
 
-- [ ] **Warning card** (prominent red): "⚠ Restoring will replace ALL your current data permanently. This cannot be undone."
-- [ ] **"Restore from File" button**: opens `expo-document-picker` filtered to `.backup` extension
-- [ ] After file selected:
-    - [ ] File validation: checks encryption, format version, business ownership (phone must match)
-    - [ ] Shows backup info: "Backup from [date], [BusinessName], [record counts]"
-    - [ ] `ConfirmationModal` with red destructive button: "यह restore करने से सभी मौजूदा data replace हो जाएगा। क्या आप sure हैं?"
-    - [ ] User must type "RESTORE" in a text field to confirm (extra friction for irreversible action)
+### P21.6 Close Financial Year
+
+**Route:** `/(app)/utilities/close-fy`
+
+- [x] **Trigger**: shown as a notification badge / prompt when current date is April 1st (or January 1st for Jan-Dec FY) of the next FY
+- [x] **Step 1 — FY Summary**:
+    - [x] "You are about to close FY 2024-25 (1 Apr 2024 – 31 Mar 2025)"
+    - [x] Summary card: Total Sale ₹ X · Total Purchase ₹ X · Net Profit ₹ X
+    - [x] Outstanding receivable ₹ X · Outstanding payable ₹ X
+    - [x] Stock value ₹ X (carried forward)
+    - [x] "Proceed" button
+- [x] **Step 2 — Data Verification**:
+    - [x] Automatically runs P21.1 verification
+    - [x] If issues found: "Resolve issues before closing FY" (blocks FY close until resolved or explicitly overridden)
+    - [x] "Override and close anyway" option (for advanced users)
+- [x] **Step 3 — Configuration**:
+    - [x] "Reset invoice number sequence to 1": toggle (default ON)
+    - [x] "Keep all old FY data accessible in reports": always ON (info only)
+    - [x] "Archive old FY (make read-only)": toggle (default ON)
+- [x] **Step 4 — Confirmation**:
+    - [x] `ConfirmationModal` with warning: "Closing FY 2024-25 will freeze all transactions before 1 Apr 2025. You cannot add or edit transactions in the closed FY."
+    - [x] User types "2024-25" in text field to confirm
+- [x] **Processing** (progress bar):
+    - [x] "Creating opening balance entries for all parties..."
+    - [x] "Creating opening cash balance for FY 2025-26..."
+    - [x] "Creating opening bank balances..."
+    - [x] "Archiving FY 2024-25..."
+    - [x] "Resetting invoice sequence..."
+    - [x] "Done ✓"
+- [x] **Post-close**: app now operates in FY 2025-26; old FY accessible via "Previous FY" filter/toggle visible in all list screens and reportsfor irreversible action)
     - [ ] Progress bar: "Restoring... 45%" → "Almost done..." → "Restore complete ✓"
     - [ ] App restarts (navigate to login to re-auth with restored data)
 - [ ] **"Restore from Google Drive"** button (when Drive connected): lists available backup files in Drive → user selects → same confirmation flow

@@ -47,6 +47,7 @@ describe('CreateInvoiceScreen', () => {
 		});
 		jest.mocked(useInventoryStore).getState = jest.fn().mockReturnValue({
 			fetchItems: mockFetchItems,
+			setFilters: jest.fn(),
 		});
 
 		// Mock Invoice Store
