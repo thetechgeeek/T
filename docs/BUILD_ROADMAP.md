@@ -1953,18 +1953,18 @@ Identical structure to Sale Report (P11.1) with these differences:
 
 **Route:** `/(app)/reports/all-parties`
 
-- [ ] **Tabs**: Customers (Receivables) / Suppliers (Payables)
-- [ ] **Filters**: With Balance / Zero Balance / Overdue (past due date) / By Group
-- [ ] **Summary card**: Total Receivable from Customers: ₹ X · Total Payable to Suppliers: ₹ X · Net Position: ₹ X
-- [ ] **Table columns (Customers tab)**:
+- [x] **Tabs**: Customers (Receivables) / Suppliers (Payables)
+- [x] **Filters**: With Balance / Zero Balance / Overdue (past due date) / By Group
+- [x] **Summary card**: Total Receivable from Customers: ₹ X · Total Payable to Suppliers: ₹ X · Net Position: ₹ X
+- [x] **Table columns (Customers tab)**:
     - [ ] Party Name, Phone, GSTIN, Group, Total Sale (current FY), Total Received, **Outstanding Dr Balance (To Receive)**, Last Transaction Date, Oldest Unpaid Invoice
     - [ ] Overdue customers: red background tint on row
     - [ ] "Days Overdue" column: if oldest invoice is past due date, shows count in red "32 days overdue"
-- [ ] **Table columns (Suppliers tab)**: Party Name, Phone, GSTIN, Total Purchased, Total Paid, **Outstanding Cr Balance (To Pay)**, Last Transaction Date
-- [ ] Tap row → Party Statement (P12.1) for that party
-- [ ] "Send Bulk Reminders" button (when customer tab active): select all overdue customers → sends WhatsApp/SMS reminders to all
-- [ ] Export PDF (formatted as Debtor/Creditor list — commonly required for CA and GST audit)
-- [ ] Export Excel
+- [x] **Table columns (Suppliers tab)**: Party Name, Phone, GSTIN, Total Purchased, Total Paid, **Outstanding Cr Balance (To Pay)**, Last Transaction Date
+- [x] Tap row → Party Statement (P12.1) for that party
+- [x] "Send Bulk Reminders" button (when customer tab active): select all overdue customers → sends WhatsApp/SMS reminders to all
+- [x] Export PDF (formatted as Debtor/Creditor list — commonly required for CA and GST audit)
+- [x] Export Excel
 
 ### P12.4 Party Report by Items
 

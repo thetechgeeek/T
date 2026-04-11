@@ -45,9 +45,10 @@ export default function ReportsHubScreen() {
 		},
 		{
 			title: 'Party Outstanding',
-			description: 'Customer-wise outstanding balances',
+			description: 'Customer & supplier balances at a glance',
 			icon: Users,
 			color: c.warning,
+			route: './all-parties' as Href,
 		},
 		{
 			title: 'Stock Report',
