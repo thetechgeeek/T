@@ -1495,37 +1495,37 @@ Four stat cards in a row (each card: 120×90dp minimum):
 
 **Route:** `/(app)/finance/expenses`
 
-- [ ] Summary card: "Total spent [period]: ₹ X" with breakdown: "Rent ₹ A · Transport ₹ B · Other ₹ C"
-- [ ] `FilterBar`: date range / category / payment mode
-- [ ] Each row (72dp): date (caption left), category icon + colour dot, description (body), amount (red amountStyle right), mode icon
-- [ ] Sort: by date (default) / by amount
-- [ ] Swipe-left: Edit · Delete (with confirmation "यह expense delete होगी")
-- [ ] FAB "+ Expense"
-- [ ] Empty state: "अभी तक कोई expense नहीं जोड़ी" / "No expenses added yet"
-- [ ] Monthly total visible in summary card even when filtered to specific category
+- [x] Summary card: "Total spent [period]: ₹ X" with breakdown: "Rent ₹ A · Transport ₹ B · Other ₹ C"
+- [x] `FilterBar`: date range / category / payment mode
+- [x] Each row (72dp): date (caption left), category icon + colour dot, description (body), amount (red amountStyle right), mode icon
+- [x] Sort: by date (default) / by amount
+- [x] Swipe-left: Edit · Delete (with confirmation "यह expense delete होगी")
+- [x] FAB "+ Expense"
+- [x] Empty state: "अभी तक कोई expense नहीं जोड़ी" / "No expenses added yet"
+- [x] Monthly total visible in summary card even when filtered to specific category
 
 ### P9.2 Add / Edit Expense Screen
 
 **Route:** `/(app)/finance/expenses/add` and `/edit/[id]`
 
-- [ ] **Date**: `DatePickerField`, default today
-- [ ] **Amount** (`AmountInput`, required, > 0)
-- [ ] **Category** (`BottomSheetPicker`, required):
+- [x] **Date**: `DatePickerField`, default today
+- [x] **Amount** (`AmountInput`, required, > 0)
+- [x] **Category** (`BottomSheetPicker`, required):
     - [ ] Default categories pre-seeded: Rent/किराया, Transport/परिवहन, Labour/मजदूरी, Utilities/बिजली-पानी, Packaging/पैकेजिंग, Maintenance/मरम्मत, Advertisement/विज्ञापन, Miscellaneous/विविध
     - [ ] "+ Add category" inline
-- [ ] **Payment Mode**: Cash / UPI / Bank Transfer / Cheque / Card chips
-- [ ] **Bank Account** (for non-cash modes): account picker
-- [ ] **Reference Number** (optional): UPI UTR, bank reference, cheque number
-- [ ] **Description / Notes** (`TextAreaField`, optional): up to 200 chars
-- [ ] **Paid To** (optional): party name (not linked to party master — free text) e.g. "Electricity Board", "Driver Ramesh"
-- [ ] **GST on Expense** toggle (shown when GST enabled):
+- [x] **Payment Mode**: Cash / UPI / Bank Transfer / Cheque / Card chips
+- [x] **Bank Account** (for non-cash modes): account picker
+- [x] **Reference Number** (optional): UPI UTR, bank reference, cheque number
+- [x] **Description / Notes** (`TextAreaField`, optional): up to 200 chars
+- [x] **Paid To** (optional): party name (not linked to party master — free text) e.g. "Electricity Board", "Driver Ramesh"
+- [x] **GST on Expense** toggle (shown when GST enabled):
     - [ ] When ON: shows GST rate picker + "Vendor GSTIN" field
     - [ ] Vendor GSTIN validated if entered
     - [ ] ITC eligible toggle: "क्या यह ITC के योग्य है?" (not all expenses qualify for ITC)
     - [ ] Computed: "Input Tax Credit: ₹ X (if ITC eligible)"
-- [ ] **Attach Receipt** button: camera/gallery, up to 2 photos, uploaded to Supabase Storage
-- [ ] **Save**: deducts from cash/bank balance; shows in expense list; fires `expense:created` event
-- [ ] **Error**: if bank account selected but no accounts configured: "Please add a bank account first" with "Add Bank" link
+- [x] **Attach Receipt** button: camera/gallery, up to 2 photos, uploaded to Supabase Storage
+- [x] **Save**: deducts from cash/bank balance; shows in expense list; fires `expense:created` event
+- [x] **Error**: if bank account selected but no accounts configured: "Please add a bank account first" with "Add Bank" link
 
 ### P9.3 Expense Categories Management
 
@@ -1693,36 +1693,36 @@ Same structure as received cheques but:
 
 **Filters (shown in `FilterBar` + expandable "More Filters" sheet):**
 
-- [ ] Date range: Today / This Week / This Month / This Quarter / This FY / Custom (with `DatePickerField` from–to)
-- [ ] Customer: "All Customers" (default) → customer picker (multi-select)
-- [ ] Item: "All Items" → item picker
-- [ ] Payment Mode: All / Cash / UPI / Bank Transfer / Cheque / Credit
-- [ ] Status: All / Paid / Partial / Unpaid / Overdue
-- [ ] Invoice type: All / Tax Invoice / Cash Sale
-- [ ] Created by user (when multi-user enabled): All / picker of users
+- [x] Date range: Today / This Week / This Month / This Quarter / This FY / Custom (with `DatePickerField` from–to)
+- [x] Customer: "All Customers" (default) → customer picker (multi-select)
+- [x] Item: "All Items" → item picker
+- [x] Payment Mode: All / Cash / UPI / Bank Transfer / Cheque / Credit
+- [x] Status: All / Paid / Partial / Unpaid / Overdue
+- [x] Invoice type: All / Tax Invoice / Cash Sale
+- [x] Created by user (when multi-user enabled): All / picker of users
 
 **Summary Section (cards at top, always visible):**
 
-- [ ] Total Invoices: count (tappable → invoice list with same filters)
-- [ ] Total Sale Amount: ₹ X
-- [ ] Total GST: ₹ X (breakdown: CGST ₹ A + SGST ₹ B or IGST ₹ C)
-- [ ] Total Discount: ₹ X
-- [ ] Amount Collected: ₹ X (payments received against these invoices)
-- [ ] Outstanding Balance: ₹ X (red)
-- [ ] Net (after GST): taxable value ₹ X
+- [x] Total Invoices: count (tappable → invoice list with same filters)
+- [x] Total Sale Amount: ₹ X
+- [x] Total GST: ₹ X (breakdown: CGST ₹ A + SGST ₹ B or IGST ₹ C)
+- [x] Total Discount: ₹ X
+- [x] Amount Collected: ₹ X (payments received against these invoices)
+- [x] Outstanding Balance: ₹ X (red)
+- [x] Net (after GST): taxable value ₹ X
 
 **Table (scrollable horizontally on mobile, full-width on tablet/desktop):**
 
-- [ ] Columns: Date, Invoice No., Customer Name, Items (count), Taxable Amount, GST Amount, Discount, Total Amount, Paid, Balance, Status
-- [ ] Column headers: sortable by tap (Date ASC/DESC, Amount ASC/DESC)
-- [ ] Each row tap → Invoice Detail screen
-- [ ] "Total" row at bottom (sum of all numeric columns)
+- [x] Columns: Date, Invoice No., Customer Name, Items (count), Taxable Amount, GST Amount, Discount, Total Amount, Paid, Balance, Status
+- [x] Column headers: sortable by tap (Date ASC/DESC, Amount ASC/DESC)
+- [x] Each row tap → Invoice Detail screen
+- [x] "Total" row at bottom (sum of all numeric columns)
 
 **Export:**
 
-- [ ] "Export PDF": generates paginated PDF with business header, filter description, summary, full table; all amounts formatted correctly
-- [ ] "Export Excel (.xlsx)": one row per invoice with all columns; summary in first row; filter description in header row
-- [ ] "Share on WhatsApp": generates a summary image (totals card + top 5 customers by value) shareable as WhatsApp Status or message
+- [x] "Export PDF": generates paginated PDF with business header, filter description, summary, full table; all amounts formatted correctly
+- [x] "Export Excel (.xlsx)": one row per invoice with all columns; summary in first row; filter description in header row
+- [x] "Share on WhatsApp": generates a summary image (totals card + top 5 customers by value) shareable as WhatsApp Status or message
 
 ### P11.2 Purchase Report
 
@@ -1732,14 +1732,14 @@ Identical structure to Sale Report (P11.1) with these differences:
 
 **Filters:**
 
-- [ ] Supplier instead of Customer
-- [ ] Bill Status: Paid / Partial / Unpaid
-- [ ] ITC Eligible filter: Yes / No
+- [x] Supplier instead of Customer
+- [x] Bill Status: Paid / Partial / Unpaid
+- [x] ITC Eligible filter: Yes / No
 
 **Summary Section:**
 
-- [ ] Total Bills, Total Purchase Amount, Total Input GST (ITC), Amount Paid, Outstanding Payable (red)
-- [ ] ITC Availed: ₹ X (the total input tax credit from all purchases in the period)
+- [x] Total Bills, Total Purchase Amount, Total Input GST (ITC), Amount Paid, Outstanding Payable (red)
+- [x] ITC Availed: ₹ X (the total input tax credit from all purchases in the period)
 
 **Table Columns:** Date, Bill No. (Supplier's), Our Ref No., Supplier, Items Count, Taxable Amount, Input GST, Total Amount, Paid, Balance, Status
 

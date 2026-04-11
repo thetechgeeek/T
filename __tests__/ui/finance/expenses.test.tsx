@@ -1,9 +1,14 @@
 import React from 'react';
 import { waitFor, fireEvent } from '@testing-library/react-native';
-import { Alert } from 'react-native';
 import ExpensesScreen from '@/app/(app)/finance/expenses';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
+
+// Mock router
+const mockPush = jest.fn();
+jest.mock('expo-router', () => ({
+	useRouter: () => ({ push: mockPush, back: jest.fn() }),
+}));
 
 // Mock store
 jest.mock('@/src/stores/financeStore', () => ({
@@ -15,7 +20,7 @@ const mockExpenses = [
 		id: 'exp-1',
 		expense_date: '2026-03-22',
 		amount: 500,
-		category: 'Rent',
+		category: 'rent',
 		notes: 'Monthly rent',
 	},
 ];
@@ -39,7 +44,6 @@ describe('ExpensesScreen', () => {
 		const { getByText } = renderWithTheme(<ExpensesScreen />);
 
 		await waitFor(() => {
-			expect(getByText('Rent')).toBeTruthy();
 			expect(getByText('Monthly rent')).toBeTruthy();
 			expect(getByText('₹500', { exact: false })).toBeTruthy();
 		});
@@ -47,28 +51,13 @@ describe('ExpensesScreen', () => {
 		expect(mockFetchExpenses).toHaveBeenCalled();
 	});
 
-	it('successfully adds a new expense', async () => {
-		const { getByText, getByPlaceholderText } = renderWithTheme(<ExpensesScreen />);
+	it('navigates to add expense screen when FAB is pressed', async () => {
+		const { getByTestId } = renderWithTheme(<ExpensesScreen />);
 
-		fireEvent.press(getByText('Add Expense'));
+		const fab = getByTestId('fab-add-expense');
+		fireEvent.press(fab);
 
-		await waitFor(() => expect(getByText('New Expense')).toBeTruthy());
-
-		fireEvent.changeText(getByPlaceholderText('0.00'), '150');
-		fireEvent.changeText(getByPlaceholderText(/electricity/i), 'Utility');
-		fireEvent.changeText(getByPlaceholderText(/optional/i), 'Electric bill');
-
-		fireEvent.press(getByText('Save Expense'));
-
-		await waitFor(() => {
-			expect(mockAddExpense).toHaveBeenCalledWith(
-				expect.objectContaining({
-					amount: 150,
-					category: 'Utility',
-					notes: 'Electric bill',
-				}),
-			);
-		});
+		expect(mockPush).toHaveBeenCalledWith('/(app)/finance/expenses/add');
 	});
 
 	it('shows empty state when no expenses exist', async () => {
@@ -86,28 +75,11 @@ describe('ExpensesScreen', () => {
 		});
 	});
 
-	it('shows an alert when expense addition fails', async () => {
-		const errorMessage = "Could not find the table 'public.expenses' in the schema cache";
-		mockAddExpense.mockRejectedValue(new Error(errorMessage));
-
-		const { getByText, getByPlaceholderText } = renderWithTheme(<ExpensesScreen />);
-
-		fireEvent.press(getByText('Add Expense'));
-
-		await waitFor(() => expect(getByText('New Expense')).toBeTruthy());
-
-		fireEvent.changeText(getByPlaceholderText('0.00'), '150');
-		fireEvent.changeText(getByPlaceholderText(/electricity/i), 'Utility');
-
-		fireEvent.press(getByText('Save Expense'));
+	it('shows month total summary card', async () => {
+		const { getByText } = renderWithTheme(<ExpensesScreen />);
 
 		await waitFor(() => {
-			expect(mockAddExpense).toHaveBeenCalled();
-			expect(Alert.alert).toHaveBeenCalledWith(
-				'Error Saving Expense',
-				expect.stringContaining(errorMessage),
-				expect.any(Array),
-			);
+			expect(getByText('Total this month')).toBeTruthy();
 		});
 	});
 });

@@ -3,6 +3,7 @@ import { useRouter, type Href } from 'expo-router';
 import {
 	Truck,
 	BarChart2,
+	TrendingUp,
 	Settings,
 	Package,
 	Users,
@@ -63,6 +64,13 @@ export default function MoreTab() {
 			icon: BarChart2,
 			route: '/(app)/finance/',
 			color: c.primary,
+		},
+		{
+			label: 'Reports',
+			accessibilityLabel: 'menu-reports',
+			icon: TrendingUp,
+			route: '/(app)/reports',
+			color: c.success,
 		},
 	];
 
