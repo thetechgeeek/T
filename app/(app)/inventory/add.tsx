@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { palette } from '@/src/theme/palette';
 import { useShallow } from 'zustand/react/shallow';
 import {
 	View,
@@ -151,14 +152,17 @@ function MarginBanner({ sellingPrice, costPrice }: { sellingPrice: string; costP
 		<View
 			style={{
 				backgroundColor: isPositive
-					? (c.successLight ?? '#e6f4ea')
-					: (c.errorLight ?? '#fce8e6'),
+					? (c.successLight ?? palette.inventoryGainTint)
+					: (c.errorLight ?? palette.inventoryLossTint),
 				borderRadius: r.sm,
 				padding: s.sm,
 				marginBottom: s.md,
 			}}
 		>
-			<ThemedText variant="caption" color={isPositive ? (c.success ?? '#1e8e3e') : c.error}>
+			<ThemedText
+				variant="caption"
+				color={isPositive ? (c.success ?? palette.inventoryGainText) : c.error}
+			>
 				{`Margin: ₹${margin.toFixed(2)} (${pct}%)`}
 			</ThemedText>
 		</View>

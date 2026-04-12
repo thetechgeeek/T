@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { expenseCategoryPickColors, palette } from '@/src/theme/palette';
 import { View, StyleSheet, FlatList, Pressable, Linking, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Phone, ChevronRight } from 'lucide-react-native';
@@ -18,16 +19,7 @@ import { layout } from '@/src/theme/layout';
 type Tab = 'customers' | 'suppliers';
 type Filter = 'all' | 'with-balance' | 'zero-balance';
 
-const AVATAR_COLORS = [
-	'#C1440E',
-	'#1A8754',
-	'#1D4ED8',
-	'#B45309',
-	'#7C3AED',
-	'#0E7490',
-	'#BE185D',
-	'#047857',
-];
+const AVATAR_COLORS = expenseCategoryPickColors.slice(0, 8);
 
 function initials(name: string): string {
 	return name
@@ -120,7 +112,7 @@ export default function AllPartiesScreen() {
 				accessibilityLabel={item.name}
 			>
 				<View style={[styles.avatar, { backgroundColor: color }]}>
-					<ThemedText variant="captionBold" color="#FFF">
+					<ThemedText variant="captionBold" color={palette.white}>
 						{initials(item.name)}
 					</ThemedText>
 				</View>
@@ -186,7 +178,7 @@ export default function AllPartiesScreen() {
 				accessibilityLabel={item.name}
 			>
 				<View style={[styles.avatar, { backgroundColor: color }]}>
-					<ThemedText variant="captionBold" color="#FFF">
+					<ThemedText variant="captionBold" color={palette.white}>
 						{initials(item.name)}
 					</ThemedText>
 				</View>
@@ -318,7 +310,7 @@ export default function AllPartiesScreen() {
 							>
 								<ThemedText
 									variant="caption"
-									color={filter === f.value ? '#FFF' : c.onSurface}
+									color={filter === f.value ? c.onPrimary : c.onSurface}
 								>
 									{f.label}
 								</ThemedText>

@@ -97,7 +97,7 @@ export default function CalculatorScreen() {
 						: c.surface;
 		const textColor =
 			variant === 'eq' || variant === 'clear'
-				? '#FFF'
+				? c.onPrimary
 				: variant === 'op'
 					? c.primary
 					: c.onSurface;

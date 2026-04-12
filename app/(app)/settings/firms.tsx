@@ -29,10 +29,10 @@ export default function FirmsScreen() {
 							<ThemedText variant="body" style={{ fontWeight: '700', flex: 1 }}>
 								My Business
 							</ThemedText>
-							<View style={[styles.badge, { backgroundColor: '#D1FAE5' }]}>
+							<View style={[styles.badge, { backgroundColor: c.successLight }]}>
 								<ThemedText
 									variant="caption"
-									style={{ color: '#065F46', fontWeight: '700' }}
+									style={{ color: c.paid, fontWeight: '700' }}
 								>
 									Active
 								</ThemedText>

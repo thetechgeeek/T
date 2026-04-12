@@ -137,7 +137,7 @@ export default function SecuritySettingsScreen() {
 						>
 							<ThemedText
 								style={{
-									color: autoLock === opt.key ? '#fff' : c.onSurface,
+									color: autoLock === opt.key ? c.onPrimary : c.onSurface,
 									fontWeight: '600',
 								}}
 							>

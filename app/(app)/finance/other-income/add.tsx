@@ -98,7 +98,7 @@ export default function AddOtherIncomeScreen() {
 						>
 							<ThemedText
 								variant="caption"
-								color={category === cat ? '#FFF' : c.onSurface}
+								color={category === cat ? c.onPrimary : c.onSurface}
 							>
 								{cat}
 							</ThemedText>
@@ -125,7 +125,7 @@ export default function AddOtherIncomeScreen() {
 						>
 							<ThemedText
 								variant="caption"
-								color={paymentMode === mode ? '#FFF' : c.onSurface}
+								color={paymentMode === mode ? c.onPrimary : c.onSurface}
 							>
 								{mode}
 							</ThemedText>

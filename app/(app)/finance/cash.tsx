@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { palette } from '@/src/theme/palette';
 import {
 	View,
 	StyleSheet,
@@ -148,7 +149,7 @@ export default function CashInHandScreen() {
 							</ThemedText>
 							<ThemedText
 								variant="h1"
-								color="#fff"
+								color={palette.white}
 								style={styles.balanceAmount}
 								accessibilityLabel={`Cash in hand ${formatCurrency(cashInHand)}`}
 							>

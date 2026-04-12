@@ -9,6 +9,7 @@ import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
@@ -144,7 +145,7 @@ export default function PurchasesScreen() {
 				onPress={() => router.push('/(app)/finance/purchases/create' as Href)}
 				accessibilityLabel="New purchase bill"
 			>
-				<Plus size={28} color={theme.colors.onPrimary ?? '#fff'} />
+				<Plus size={28} color={theme.colors.onPrimary} />
 			</Pressable>
 		</AtomicScreen>
 	);
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 6,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 3 },
 		shadowOpacity: 0.2,
 		shadowRadius: 4,
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		borderTopWidth: 1,
-		borderTopColor: '#f0f0f0',
+		borderTopColor: palette.grayF0,
 		paddingTop: 12,
 	},
 });

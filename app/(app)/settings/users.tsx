@@ -13,6 +13,7 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { palette } from '@/src/theme/palette';
 
 type Role = 'salesperson' | 'admin';
 
@@ -45,7 +46,9 @@ export default function UsersScreen() {
 					style={[styles.userCard, { backgroundColor: c.surface, borderColor: c.border }]}
 				>
 					<View style={[styles.avatar, { backgroundColor: c.primary }]}>
-						<ThemedText style={{ color: '#fff', fontWeight: '700', fontSize: 20 }}>
+						<ThemedText
+							style={{ color: palette.white, fontWeight: '700', fontSize: 20 }}
+						>
 							B
 						</ThemedText>
 					</View>
@@ -57,11 +60,8 @@ export default function UsersScreen() {
 							Current account
 						</ThemedText>
 					</View>
-					<View style={[styles.badge, { backgroundColor: '#D1FAE5' }]}>
-						<ThemedText
-							variant="caption"
-							style={{ color: '#065F46', fontWeight: '700' }}
-						>
+					<View style={[styles.badge, { backgroundColor: c.successLight }]}>
+						<ThemedText variant="caption" style={{ color: c.paid, fontWeight: '700' }}>
 							Owner
 						</ThemedText>
 					</View>
@@ -100,7 +100,7 @@ export default function UsersScreen() {
 					onPress={() => setModalVisible(true)}
 					style={[styles.inviteBtn, { backgroundColor: c.primary }]}
 				>
-					<ThemedText style={{ color: '#fff', fontWeight: '700', fontSize: 15 }}>
+					<ThemedText style={{ color: palette.white, fontWeight: '700', fontSize: 15 }}>
 						+ Invite User
 					</ThemedText>
 				</Pressable>
@@ -159,7 +159,7 @@ export default function UsersScreen() {
 								>
 									<ThemedText
 										style={{
-											color: inviteRole === r ? '#fff' : c.onSurface,
+											color: inviteRole === r ? c.onPrimary : c.onSurface,
 											fontWeight: '600',
 											textTransform: 'capitalize',
 										}}
@@ -219,7 +219,7 @@ export default function UsersScreen() {
 								onPress={handleSendInvite}
 								style={[styles.btn, { backgroundColor: c.primary, flex: 1.5 }]}
 							>
-								<ThemedText style={{ color: '#fff', fontWeight: '700' }}>
+								<ThemedText style={{ color: palette.white, fontWeight: '700' }}>
 									Send Invite
 								</ThemedText>
 							</Pressable>

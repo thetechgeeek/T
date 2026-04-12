@@ -1,0 +1,243 @@
+import type { ThemeColors } from './index';
+
+/**
+ * Single source for #hex literals. App code should use theme colors, `palette.*`,
+ * or named exports from this file — not inline hex strings.
+ */
+export const lightColors: ThemeColors = {
+	background: '#F5F0EB',
+	surface: '#FFFFFF',
+	surfaceVariant: '#E5DDD5',
+	card: '#FFFFFF',
+	onBackground: '#1A1412',
+	onSurface: '#1A1412',
+	onSurfaceVariant: '#6B5E52',
+	placeholder: '#A89B94',
+	primary: '#C1440E',
+	primaryLight: '#E8622A',
+	primaryDark: '#8B2F07',
+	onPrimary: '#FFFFFF',
+	primaryGradientStart: '#C1440E',
+	primaryGradientEnd: '#8B2F07',
+	primaryContainer: '#FCE7DF',
+	onPrimaryContainer: '#2D0D00',
+	secondary: '#6B5E52',
+	onSecondary: '#FFFFFF',
+	success: '#1A8754',
+	onSuccess: '#FFFFFF',
+	successLight: '#D1FAE5',
+	warning: '#B45309',
+	onWarning: '#FFFFFF',
+	warningLight: '#FEF3C7',
+	error: '#B91C1C',
+	onError: '#FFFFFF',
+	errorLight: '#FEE2E2',
+	info: '#1D4ED8',
+	onInfo: '#FFFFFF',
+	infoLight: '#DBEAFE',
+	border: '#E5DDD5',
+	borderStrong: '#B0A49C',
+	separator: '#EDE8E4',
+	overlay: 'rgba(0,0,0,0.4)',
+	scrim: 'rgba(0,0,0,0.6)',
+	tabBar: '#FFFFFF',
+	tabActive: '#C1440E',
+	tabInactive: '#6B5E52',
+	badge: '#C1440E',
+	paid: '#065F46',
+	partial: '#92400E',
+	unpaid: '#991B1B',
+	lowStock: '#B91C1C',
+	overdue: '#7F1D1D',
+};
+
+export const darkColors: ThemeColors = {
+	background: '#000000',
+	surface: '#1C1C1E',
+	surfaceVariant: '#38383A',
+	card: '#1C1C1E',
+	onBackground: '#F2EDE8',
+	onSurface: '#F2EDE8',
+	onSurfaceVariant: '#98989E',
+	placeholder: '#7A6E68',
+	primary: '#E8622A',
+	primaryLight: '#FF8A60',
+	primaryDark: '#C1440E',
+	onPrimary: '#1A0A00',
+	primaryGradientStart: '#E8622A',
+	primaryGradientEnd: '#C1440E',
+	primaryContainer: '#451A03',
+	onPrimaryContainer: '#FFDBCF',
+	secondary: '#98989E',
+	onSecondary: '#000000',
+	success: '#2DB87A',
+	onSuccess: '#000000',
+	successLight: '#064E3B',
+	warning: '#F59E0B',
+	onWarning: '#000000',
+	warningLight: '#451A03',
+	error: '#EF4444',
+	onError: '#000000',
+	errorLight: '#450A0A',
+	info: '#60A5FA',
+	onInfo: '#000000',
+	infoLight: '#1E3A8A',
+	border: '#38383A',
+	borderStrong: '#5D4838',
+	separator: '#302820',
+	overlay: 'rgba(0,0,0,0.6)',
+	scrim: 'rgba(0,0,0,0.8)',
+	tabBar: '#1C1C1E',
+	tabActive: '#E8622A',
+	tabInactive: '#98989E',
+	badge: '#E8622A',
+	paid: '#A7F3D0',
+	partial: '#FDE68A',
+	unpaid: '#FECACA',
+	lowStock: '#EF4444',
+	overdue: '#FECACA',
+};
+
+/** Shared tokens (shadows, brand chrome, integrations) — use from theme where possible. */
+export const palette = {
+	white: '#FFFFFF',
+	black: '#000000',
+	shadow: '#000000',
+	shadowWarm: '#4A3828',
+	whatsapp: '#25D366',
+	white50alpha: '#ffffff80',
+	grayCCC: '#CCCCCC',
+	gray888: '#888888',
+	grayF0: '#F0F0F0',
+	grayE0: '#E0E0E0',
+	grayB0: '#B0B0B0',
+	grayF5: '#F5F5F5',
+	gray666: '#666666',
+	gray555: '#555555',
+	gray777: '#777777',
+	gray333: '#333333',
+	grayDDD: '#DDDDDD',
+	grayEEE: '#EEEEEE',
+	borderCCC: '#CCCCCC',
+	/** PDF / print HTML */
+	pdfPrimary: '#C1440E',
+	pdfBodyText: '#333333',
+	pdfMutedUppercase: '#666666',
+	pdfBillToHeading: '#555555',
+	pdfTableHeaderBg: '#F5F5F5',
+	pdfGrandTotalBg: '#FFFCF8',
+	pdfFooterMuted: '#777777',
+	/** Error boundary (may render outside theme) */
+	errorBoundaryText: '#666666',
+	errorBoundaryButton: '#2563EB',
+	/** Invoice create segmented control (disabled look) */
+	segmentTrack: '#E0E0E0',
+	segmentBorder: '#B0B0B0',
+	segmentThumbOff: '#B0B0B0',
+	/** Verify / warning banner */
+	verifyBannerBg: '#FFF3CD',
+	verifyBannerBorder: '#FFC107',
+	verifyBannerText: '#856404',
+	/** Misc */
+	loanAccent: '#C0643A',
+	/** Material Design accents (loans, icons) */
+	materialPurple: '#9C27B0',
+	materialBlue: '#2196F3',
+	materialOrange: '#FF9800',
+	materialGreen: '#4CAF50',
+	materialBrown: '#795548',
+	/** E-wallet brand approximations */
+	ewalletPhonePe: '#5F259F',
+	ewalletGPay: '#4285F4',
+	ewalletPaytm: '#00BAF2',
+	ewalletOther: '#607D8B',
+	/** Report chart (demo / static) */
+	chartPurchase: '#4A90E2',
+	chartSalaries: '#E67E22',
+	chartTransport: '#2ECC71',
+	chartUtilities: '#9B59B6',
+	chartMisc: '#E74C3C',
+	/** Tailwind-like transaction chips (reports) */
+	txSale: '#22c55e',
+	txPurchase: '#ef4444',
+	txPaymentIn: '#14b8a6',
+	txPaymentOut: '#f97316',
+	txExpense: '#a855f7',
+	/** Status rows (estimates / credit notes) */
+	statusInfoFg: '#1E40AF',
+	/** Backup / destructive */
+	backupDangerBg: '#FEF2F2',
+	backupDangerBorder: '#FCA5A5',
+	backupDangerBorderStrong: '#EF4444',
+	/** Inventory fallback tints when theme optional */
+	inventoryGainTint: '#e6f4ea',
+	inventoryLossTint: '#fce8e6',
+	inventoryGainText: '#1e8e3e',
+	/** Purchase status fallbacks */
+	purchasePaidTint: '#e8f5e9',
+	purchasePartialTint: '#fff8e1',
+	purchaseUnpaidTint: '#fdecea',
+	purchasePartialText: '#f57f17',
+} as const;
+
+/** Avatar background options (customers / suppliers). */
+export const partyAvatarColors = [
+	'#E57373',
+	'#F06292',
+	'#BA68C8',
+	'#7986CB',
+	'#4FC3F7',
+	'#4DB6AC',
+	'#81C784',
+	'#FFB74D',
+] as const;
+
+/** Pickers: expense categories, item categories, party filters (same sequence). */
+export const expenseCategoryPickColors = [
+	'#C1440E',
+	'#1A8754',
+	'#1D4ED8',
+	'#B45309',
+	'#7C3AED',
+	'#0E7490',
+	'#BE185D',
+	'#047857',
+	'#92400E',
+	'#065F46',
+	'#1E40AF',
+	'#581C87',
+] as const;
+
+export const printThemeSwatches = [
+	{ key: 'classic', label: 'Classic', color: '#2D2D2D' },
+	{ key: 'professional', label: 'Professional', color: '#1D4ED8' },
+	{ key: 'modern', label: 'Modern', color: '#C1440E' },
+	{ key: 'minimal', label: 'Minimal', color: '#6B5E52' },
+	{ key: 'traditional', label: 'Traditional', color: '#047857' },
+	{ key: 'colourful', label: 'Colourful', color: '#7C3AED' },
+] as const;
+
+export const expenseReportDemoSlices = [
+	{ id: '1', name: 'Purchase', amount: 820000, color: '#4A90E2' },
+	{ id: '2', name: 'Salaries', amount: 185000, color: '#E67E22' },
+	{ id: '3', name: 'Transport', amount: 42000, color: '#2ECC71' },
+	{ id: '4', name: 'Utilities', amount: 18500, color: '#9B59B6' },
+	{ id: '5', name: 'Misc', amount: 11200, color: '#E74C3C' },
+] as const;
+
+export const allTransactionsTypeColors = {
+	all: '#888888',
+	sale: '#22c55e',
+	purchase: '#ef4444',
+	payment_in: '#14b8a6',
+	payment_out: '#f97316',
+	expense: '#a855f7',
+} as const;
+
+export const loanTypeColors: Record<string, string> = {
+	'Term Loan': '#4CAF50',
+	OD: '#2196F3',
+	Personal: '#9C27B0',
+	Vehicle: '#FF9800',
+	Mortgage: '#795548',
+};

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { palette } from '@/src/theme/palette';
 import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
@@ -193,8 +194,8 @@ export default function PaymentDetailScreen() {
 						styles.amountCard,
 						{
 							backgroundColor: isReceived
-								? (c.successLight ?? '#e8f5e9')
-								: (c.errorLight ?? '#fdecea'),
+								? (c.successLight ?? palette.inventoryGainTint)
+								: (c.errorLight ?? palette.inventoryLossTint),
 							borderRadius: r.lg,
 							marginBottom: s.md,
 						},

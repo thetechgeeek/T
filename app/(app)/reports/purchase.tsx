@@ -174,7 +174,7 @@ export default function PurchaseReportScreen() {
 								>
 									<ThemedText
 										variant="caption"
-										color={activeFilter === f.value ? '#FFF' : c.onSurface}
+										color={activeFilter === f.value ? c.onPrimary : c.onSurface}
 									>
 										{f.label}
 									</ThemedText>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { palette } from '@/src/theme/palette';
 import {
 	View,
 	StyleSheet,
@@ -784,13 +785,13 @@ export default function InvoiceDetailScreen() {
 						<TouchableOpacity
 							style={[
 								styles.iconActionBtn,
-								{ backgroundColor: '#25D366', borderRadius: r.md },
+								{ backgroundColor: palette.whatsapp, borderRadius: r.md },
 							]}
 							onPress={handleShare}
 							accessibilityRole="button"
 							accessibilityLabel="share-whatsapp"
 						>
-							<Share2 size={20} color="#FFF" />
+							<Share2 size={20} color={palette.white} />
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={[
@@ -812,8 +813,12 @@ export default function InvoiceDetailScreen() {
 					<View style={styles.actionRow}>
 						<Button
 							title={t('invoice.sharePdf')}
-							leftIcon={<Share2 size={18} color="#FFF" />}
-							style={{ flex: 1, marginRight: s.sm, backgroundColor: '#25D366' }}
+							leftIcon={<Share2 size={18} color={palette.white} />}
+							style={{
+								flex: 1,
+								marginRight: s.sm,
+								backgroundColor: palette.whatsapp,
+							}}
 							onPress={handleShare}
 							loading={sharing}
 							accessibilityLabel="share-pdf-button"

@@ -5,6 +5,7 @@ import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { palette } from '@/src/theme/palette';
 
 type AutoBackup = 'off' | 'daily' | 'weekly';
 
@@ -91,7 +92,7 @@ export default function BackupScreen() {
 									<ThemedText
 										variant="caption"
 										style={{
-											color: autoBackup === opt ? '#fff' : c.onSurface,
+											color: autoBackup === opt ? c.onPrimary : c.onSurface,
 											fontWeight: '600',
 											textTransform: 'capitalize',
 										}}
@@ -129,7 +130,7 @@ export default function BackupScreen() {
 							onPress={() => Alert.alert('Backup', 'Backup feature coming soon')}
 							style={[styles.primaryBtn, { backgroundColor: c.primary, flex: 1 }]}
 						>
-							<ThemedText style={{ color: '#fff', fontWeight: '700' }}>
+							<ThemedText style={{ color: palette.white, fontWeight: '700' }}>
 								Backup Now
 							</ThemedText>
 						</Pressable>
@@ -162,10 +163,13 @@ export default function BackupScreen() {
 				<View
 					style={[
 						styles.warningCard,
-						{ backgroundColor: '#FEF2F2', borderColor: '#FCA5A5' },
+						{
+							backgroundColor: palette.backupDangerBg,
+							borderColor: palette.backupDangerBorder,
+						},
 					]}
 				>
-					<ThemedText style={{ color: '#991B1B', fontSize: 14 }}>
+					<ThemedText style={{ color: c.unpaid, fontSize: 14 }}>
 						{'⚠  Restoring replaces ALL current data permanently'}
 					</ThemedText>
 				</View>
@@ -175,10 +179,14 @@ export default function BackupScreen() {
 							onPress={() => Alert.alert('Restore', 'Select a .backup file')}
 							style={[
 								styles.outlineBtn,
-								{ borderColor: '#EF4444', flex: 1, justifyContent: 'center' },
+								{
+									borderColor: palette.backupDangerBorderStrong,
+									flex: 1,
+									justifyContent: 'center',
+								},
 							]}
 						>
-							<ThemedText style={{ color: '#EF4444', fontWeight: '600' }}>
+							<ThemedText style={{ color: c.error, fontWeight: '600' }}>
 								Restore from File
 							</ThemedText>
 						</Pressable>

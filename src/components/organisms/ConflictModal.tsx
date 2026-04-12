@@ -6,6 +6,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
+import { palette } from '@/src/theme/palette';
 
 export interface ConflictField {
 	label: string;
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
 	content: {
 		padding: 24,
 		elevation: 5,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,

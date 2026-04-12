@@ -132,7 +132,7 @@ export default function RemindersScreen() {
 								>
 									<ThemedText
 										style={{
-											color: channel === ch.key ? '#fff' : c.onSurface,
+											color: channel === ch.key ? c.onPrimary : c.onSurface,
 											fontWeight: '600',
 										}}
 									>

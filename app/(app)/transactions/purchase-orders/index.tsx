@@ -7,6 +7,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -155,7 +156,7 @@ export default function PurchaseOrdersScreen() {
 					>
 						<ThemedText
 							variant="caption"
-							color={filter === f.value ? '#FFF' : c.onSurface}
+							color={filter === f.value ? c.onPrimary : c.onSurface}
 						>
 							{f.label}
 						</ThemedText>
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,

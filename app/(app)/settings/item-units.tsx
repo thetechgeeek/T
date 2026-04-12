@@ -23,6 +23,7 @@ import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
+import { palette } from '@/src/theme/palette';
 import { itemUnitService } from '@/src/services/itemCategoryService';
 import type { ItemUnit } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 4,
 		borderRadius: 2,
-		backgroundColor: '#ccc',
+		backgroundColor: palette.grayCCC,
 		alignSelf: 'center',
 		marginTop: 12,
 		marginBottom: 4,

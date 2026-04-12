@@ -25,21 +25,9 @@ import { layout } from '@/src/theme/layout';
 import { itemCategoryService } from '@/src/services/itemCategoryService';
 import type { ItemCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
+import { expenseCategoryPickColors, palette } from '@/src/theme/palette';
 
-const PRESET_COLORS = [
-	'#C1440E',
-	'#1A8754',
-	'#1D4ED8',
-	'#B45309',
-	'#7C3AED',
-	'#0E7490',
-	'#BE185D',
-	'#047857',
-	'#92400E',
-	'#065F46',
-	'#1E40AF',
-	'#581C87',
-];
+const PRESET_COLORS = [...expenseCategoryPickColors];
 
 interface CategoryFormState {
 	name_en: string;
@@ -389,7 +377,7 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 4,
 		borderRadius: 2,
-		backgroundColor: '#ccc',
+		backgroundColor: palette.grayCCC,
 		alignSelf: 'center',
 		marginTop: 12,
 		marginBottom: 4,

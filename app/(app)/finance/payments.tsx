@@ -5,6 +5,7 @@ import { Plus, Banknote, CreditCard, Smartphone, Building2, Coins } from 'lucide
 import { paymentService } from '@/src/services/paymentService';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 6,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 3 },
 		shadowOpacity: 0.2,
 		shadowRadius: 4,

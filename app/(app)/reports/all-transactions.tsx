@@ -19,6 +19,7 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { allTransactionsTypeColors } from '@/src/theme/palette';
 
 type TxType = 'all' | 'sale' | 'purchase' | 'payment_in' | 'payment_out' | 'expense';
 type DateRange = 'today' | 'week' | 'month' | 'fy';
@@ -74,12 +75,20 @@ interface TxRow {
 }
 
 const TYPE_META: Record<TxType, { icon: React.ElementType; color: string; label: string }> = {
-	all: { icon: Receipt, color: '#888', label: 'All' },
-	sale: { icon: TrendingUp, color: '#22c55e', label: 'Sale' },
-	purchase: { icon: ShoppingCart, color: '#ef4444', label: 'Purchase' },
-	payment_in: { icon: ArrowDownCircle, color: '#14b8a6', label: 'Payment In' },
-	payment_out: { icon: ArrowUpCircle, color: '#f97316', label: 'Payment Out' },
-	expense: { icon: Receipt, color: '#a855f7', label: 'Expense' },
+	all: { icon: Receipt, color: allTransactionsTypeColors.all, label: 'All' },
+	sale: { icon: TrendingUp, color: allTransactionsTypeColors.sale, label: 'Sale' },
+	purchase: { icon: ShoppingCart, color: allTransactionsTypeColors.purchase, label: 'Purchase' },
+	payment_in: {
+		icon: ArrowDownCircle,
+		color: allTransactionsTypeColors.payment_in,
+		label: 'Payment In',
+	},
+	payment_out: {
+		icon: ArrowUpCircle,
+		color: allTransactionsTypeColors.payment_out,
+		label: 'Payment Out',
+	},
+	expense: { icon: Receipt, color: allTransactionsTypeColors.expense, label: 'Expense' },
 };
 
 export default function AllTransactionsScreen() {

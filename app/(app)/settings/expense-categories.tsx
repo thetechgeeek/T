@@ -21,42 +21,44 @@ import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
+import { expenseCategoryPickColors, palette } from '@/src/theme/palette';
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const PRESET_COLORS = [
-	'#C1440E',
-	'#1A8754',
-	'#1D4ED8',
-	'#B45309',
-	'#7C3AED',
-	'#0E7490',
-	'#BE185D',
-	'#047857',
-	'#92400E',
-	'#065F46',
-	'#1E40AF',
-	'#581C87',
-];
+const PRESET_COLORS = [...expenseCategoryPickColors];
 
 const FALLBACK_CATEGORIES: ExpenseCategory[] = [
-	{ id: '1', nameEn: 'Rent', nameHi: 'किराया', color: '#C1440E', emoji: '🏠', monthTotal: 0 },
+	{
+		id: '1',
+		nameEn: 'Rent',
+		nameHi: 'किराया',
+		color: expenseCategoryPickColors[0],
+		emoji: '🏠',
+		monthTotal: 0,
+	},
 	{
 		id: '2',
 		nameEn: 'Transport',
 		nameHi: 'परिवहन',
-		color: '#1D4ED8',
+		color: expenseCategoryPickColors[2],
 		emoji: '🚛',
 		monthTotal: 0,
 	},
-	{ id: '3', nameEn: 'Labour', nameHi: 'मजदूरी', color: '#1A8754', emoji: '👷', monthTotal: 0 },
+	{
+		id: '3',
+		nameEn: 'Labour',
+		nameHi: 'मजदूरी',
+		color: expenseCategoryPickColors[1],
+		emoji: '👷',
+		monthTotal: 0,
+	},
 	{
 		id: '4',
 		nameEn: 'Utilities',
 		nameHi: 'उपयोगिता',
-		color: '#0E7490',
+		color: expenseCategoryPickColors[5],
 		emoji: '💡',
 		monthTotal: 0,
 	},
@@ -64,7 +66,7 @@ const FALLBACK_CATEGORIES: ExpenseCategory[] = [
 		id: '5',
 		nameEn: 'Packaging',
 		nameHi: 'पैकेजिंग',
-		color: '#B45309',
+		color: expenseCategoryPickColors[3],
 		emoji: '📦',
 		monthTotal: 0,
 	},
@@ -72,7 +74,7 @@ const FALLBACK_CATEGORIES: ExpenseCategory[] = [
 		id: '6',
 		nameEn: 'Maintenance',
 		nameHi: 'रखरखाव',
-		color: '#7C3AED',
+		color: expenseCategoryPickColors[4],
 		emoji: '🔧',
 		monthTotal: 0,
 	},
@@ -80,7 +82,7 @@ const FALLBACK_CATEGORIES: ExpenseCategory[] = [
 		id: '7',
 		nameEn: 'Advertisement',
 		nameHi: 'विज्ञापन',
-		color: '#BE185D',
+		color: expenseCategoryPickColors[6],
 		emoji: '📢',
 		monthTotal: 0,
 	},
@@ -88,7 +90,7 @@ const FALLBACK_CATEGORIES: ExpenseCategory[] = [
 		id: '8',
 		nameEn: 'Miscellaneous',
 		nameHi: 'विविध',
-		color: '#92400E',
+		color: expenseCategoryPickColors[8],
 		emoji: '🗂️',
 		monthTotal: 0,
 	},
@@ -486,7 +488,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
@@ -506,7 +508,7 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 4,
 		borderRadius: 2,
-		backgroundColor: '#ccc',
+		backgroundColor: palette.grayCCC,
 		alignSelf: 'center',
 		marginTop: 12,
 		marginBottom: 4,

@@ -18,6 +18,7 @@ import { Card } from '@/src/components/atoms/Card';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 
 // TODO: connect to store — e-wallets table
 interface EWallet {
@@ -31,10 +32,10 @@ interface EWallet {
 }
 
 const WALLET_TYPES = [
-	{ label: 'PhonePe', value: 'phonePe', emoji: '📱', color: '#5F259F' },
-	{ label: 'GPay', value: 'gpay', emoji: '📱', color: '#4285F4' },
-	{ label: 'Paytm', value: 'paytm', emoji: '📱', color: '#00BAF2' },
-	{ label: 'Other', value: 'other', emoji: '💼', color: '#607D8B' },
+	{ label: 'PhonePe', value: 'phonePe', emoji: '📱', color: palette.ewalletPhonePe },
+	{ label: 'GPay', value: 'gpay', emoji: '📱', color: palette.ewalletGPay },
+	{ label: 'Paytm', value: 'paytm', emoji: '📱', color: palette.ewalletPaytm },
+	{ label: 'Other', value: 'other', emoji: '💼', color: palette.ewalletOther },
 ];
 
 const mockWallets: EWallet[] = [
@@ -45,7 +46,7 @@ const mockWallets: EWallet[] = [
 		phone: '98765XXXXX',
 		balance: 12500,
 		emoji: '📱',
-		color: '#5F259F',
+		color: palette.ewalletPhonePe,
 	},
 	{
 		id: '2',
@@ -54,7 +55,7 @@ const mockWallets: EWallet[] = [
 		phone: '98765XXXXX',
 		balance: 4800,
 		emoji: '📱',
-		color: '#4285F4',
+		color: palette.ewalletGPay,
 	},
 ];
 
@@ -100,7 +101,7 @@ export default function EWalletsScreen() {
 				phone: phone || '',
 				balance: parseFloat(openingBalance) || 0,
 				emoji: typeInfo?.emoji || '📱',
-				color: typeInfo?.color || '#607D8B',
+				color: typeInfo?.color || palette.ewalletOther,
 			};
 			setWallets((prev) => [...prev, newWallet]);
 			resetForm();
@@ -134,7 +135,7 @@ export default function EWalletsScreen() {
 						<ThemedText variant="caption" color="rgba(255,255,255,0.8)">
 							Total in Wallets
 						</ThemedText>
-						<ThemedText variant="h2" color="#fff" style={{ marginTop: 6 }}>
+						<ThemedText variant="h2" color={palette.white} style={{ marginTop: 6 }}>
 							{formatCurrency(totalBalance)}
 						</ThemedText>
 					</Card>
@@ -195,7 +196,7 @@ export default function EWalletsScreen() {
 				accessibilityRole="button"
 				accessibilityLabel="Add E-wallet"
 			>
-				<Plus color="#fff" size={28} />
+				<Plus color={palette.white} size={28} />
 			</Pressable>
 
 			{/* Add Wallet Modal */}
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,

@@ -50,14 +50,6 @@ function getDateRange(chip: DateChip): { from?: string; to?: string } {
 	return {};
 }
 
-const STATUS_DOT_COLOR: Record<StatusChip, string> = {
-	ALL: 'transparent',
-	paid: '#1A8754',
-	partial: '#B45309',
-	unpaid: '#B91C1C',
-	overdue: '#7F1D1D',
-};
-
 const DATE_CHIP_LABELS: Record<DateChip, string> = {
 	all: 'All Time',
 	today: 'Today',
@@ -161,7 +153,7 @@ export default function InvoicesListScreen() {
 				<Button
 					title={t('invoice.newInvoice')}
 					accessibilityLabel="new-invoice-button"
-					leftIcon={<Plus color="#FFF" size={20} />}
+					leftIcon={<Plus color={c.onPrimary} size={20} />}
 					onPress={() => router.push('/(app)/invoices/create')}
 				/>
 			</View>
@@ -278,7 +270,7 @@ export default function InvoicesListScreen() {
 					>
 						<ThemedText
 							variant="captionBold"
-							color={dateChip === chip ? '#FFF' : c.onSurfaceVariant}
+							color={dateChip === chip ? c.onPrimary : c.onSurfaceVariant}
 						>
 							{DATE_CHIP_LABELS[chip]}
 						</ThemedText>
@@ -300,7 +292,14 @@ export default function InvoicesListScreen() {
 				}}
 				renderItem={({ item: chip }) => {
 					const isActive = statusChip === chip;
-					const dotColor = STATUS_DOT_COLOR[chip];
+					const dotColor =
+						chip === 'paid'
+							? c.success
+							: chip === 'partial'
+								? c.warning
+								: chip === 'unpaid'
+									? c.error
+									: 'transparent';
 					return (
 						<TouchableOpacity
 							style={[
@@ -323,13 +322,13 @@ export default function InvoicesListScreen() {
 								<View
 									style={[
 										styles.statusDot,
-										{ backgroundColor: isActive ? '#FFF' : dotColor },
+										{ backgroundColor: isActive ? c.onPrimary : dotColor },
 									]}
 								/>
 							)}
 							<ThemedText
 								variant="captionBold"
-								color={isActive ? '#FFF' : c.onSurfaceVariant}
+								color={isActive ? c.onPrimary : c.onSurfaceVariant}
 							>
 								{chip === 'ALL'
 									? 'All'
@@ -370,8 +369,18 @@ export default function InvoicesListScreen() {
 					</View>
 				)}
 				renderItem={({ item }) => {
-					const dotColor =
-						STATUS_DOT_COLOR[item.payment_status as StatusChip] || c.onSurfaceVariant;
+					const dueDateStr = item.due_date;
+					const isOverdue =
+						item.payment_status === 'unpaid' &&
+						!!dueDateStr &&
+						new Date(dueDateStr) < new Date();
+					const dotColor = isOverdue
+						? c.overdue
+						: item.payment_status === 'paid'
+							? c.success
+							: item.payment_status === 'partial'
+								? c.warning
+								: c.error;
 					return (
 						<TouchableOpacity
 							style={[

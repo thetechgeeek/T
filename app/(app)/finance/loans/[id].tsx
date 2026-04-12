@@ -10,6 +10,7 @@ import { Button } from '@/src/components/atoms/Button';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -316,28 +317,28 @@ export default function LoanDetailScreen() {
 						iconColor={c.primary}
 					/>
 					<InfoRow
-						icon={<Clock size={18} color="#9C27B0" />}
+						icon={<Clock size={18} color={palette.materialPurple} />}
 						label="Tenure"
 						value={`${loan.tenureMonths} months`}
-						iconColor="#9C27B0"
+						iconColor={palette.materialPurple}
 					/>
 					<InfoRow
-						icon={<CreditCard size={18} color="#2196F3" />}
+						icon={<CreditCard size={18} color={palette.materialBlue} />}
 						label="Monthly EMI"
 						value={formatCurrency(Math.round(emi))}
-						iconColor="#2196F3"
+						iconColor={palette.materialBlue}
 					/>
 					<InfoRow
-						icon={<CalendarDays size={18} color="#FF9800" />}
+						icon={<CalendarDays size={18} color={palette.materialOrange} />}
 						label="Disbursement Date"
 						value={formatDate(loan.disbursementDate)}
-						iconColor="#FF9800"
+						iconColor={palette.materialOrange}
 					/>
 					<InfoRow
-						icon={<TrendingDown size={18} color="#4CAF50" />}
+						icon={<TrendingDown size={18} color={palette.materialGreen} />}
 						label="Next EMI Date"
 						value={formatDate(loan.nextEmiDate)}
-						iconColor="#4CAF50"
+						iconColor={palette.materialGreen}
 					/>
 				</View>
 
@@ -376,7 +377,7 @@ export default function LoanDetailScreen() {
 								styles.progressFill,
 								{
 									width: `${Math.round(clampedPct * 100)}%` as `${number}%`,
-									backgroundColor: '#C0643A',
+									backgroundColor: palette.loanAccent,
 									borderRadius: r.xs,
 								},
 							]}

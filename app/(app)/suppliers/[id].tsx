@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { partyAvatarColors, palette } from '@/src/theme/palette';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MessageCircle, ShoppingCart, CreditCard } from 'lucide-react-native';
@@ -14,17 +15,6 @@ import { CustomerDetailSkeleton } from '@/src/components/molecules/skeletons/Cus
 import type { Supplier } from '@/src/types/supplier';
 import type { UUID } from '@/src/types/common';
 
-const AVATAR_COLORS = [
-	'#E57373',
-	'#F06292',
-	'#BA68C8',
-	'#7986CB',
-	'#4FC3F7',
-	'#4DB6AC',
-	'#81C784',
-	'#FFB74D',
-];
-
 function getInitials(name: string): string {
 	return name
 		.split(' ')
@@ -34,7 +24,7 @@ function getInitials(name: string): string {
 }
 
 function getAvatarColor(name: string): string {
-	return AVATAR_COLORS[name.charCodeAt(0) % 8] ?? AVATAR_COLORS[0];
+	return partyAvatarColors[name.charCodeAt(0) % 8] ?? partyAvatarColors[0];
 }
 
 type TabName = 'ledger' | 'purchases';
@@ -117,7 +107,11 @@ export default function SupplierDetailScreen() {
 								{ backgroundColor: getAvatarColor(supplier.name) },
 							]}
 						>
-							<ThemedText weight="bold" color="#FFFFFF" style={{ fontSize: 22 }}>
+							<ThemedText
+								weight="bold"
+								color={palette.white}
+								style={{ fontSize: 22 }}
+							>
 								{getInitials(supplier.name)}
 							</ThemedText>
 						</View>
@@ -171,14 +165,14 @@ export default function SupplierDetailScreen() {
 					<TouchableOpacity
 						style={[
 							styles.whatsappBtn,
-							{ backgroundColor: '#25D366', borderRadius: r.md },
+							{ backgroundColor: palette.whatsapp, borderRadius: r.md },
 						]}
 						onPress={handleWhatsApp}
 						accessibilityRole="button"
 						accessibilityLabel="whatsapp-supplier"
 					>
 						<MessageCircle size={18} color="white" />
-						<ThemedText variant="body" color="#FFFFFF" style={{ marginLeft: 8 }}>
+						<ThemedText variant="body" color={palette.white} style={{ marginLeft: 8 }}>
 							WhatsApp
 						</ThemedText>
 					</TouchableOpacity>

@@ -10,6 +10,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { loanTypeColors, palette } from '@/src/theme/palette';
 
 interface Loan {
 	id: string;
@@ -22,14 +23,6 @@ interface Loan {
 }
 
 const MOCK_LOANS: Loan[] = [];
-
-const LOAN_TYPE_COLORS: Record<string, string> = {
-	'Term Loan': '#4CAF50',
-	OD: '#2196F3',
-	Personal: '#9C27B0',
-	Vehicle: '#FF9800',
-	Mortgage: '#795548',
-};
 
 export default function LoansScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -45,7 +38,7 @@ export default function LoansScreen() {
 			item.principalAmount > 0
 				? (item.principalAmount - item.outstandingAmount) / item.principalAmount
 				: 0;
-		const badgeColor = LOAN_TYPE_COLORS[item.loanType] ?? c.primary;
+		const badgeColor = loanTypeColors[item.loanType] ?? c.primary;
 
 		return (
 			<Card style={[styles.loanCard, { marginBottom: s.sm }]} padding="md">
@@ -91,7 +84,7 @@ export default function LoansScreen() {
 							styles.progressFill,
 							{
 								width: `${Math.min(progress * 100, 100)}%` as `${number}%`,
-								backgroundColor: '#C0643A',
+								backgroundColor: palette.loanAccent,
 								borderRadius: r.xs,
 							},
 						]}
@@ -226,7 +219,7 @@ const styles = StyleSheet.create({
 		height: 52,
 		borderRadius: 26,
 		elevation: 4,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,

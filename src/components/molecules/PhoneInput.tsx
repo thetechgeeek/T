@@ -87,7 +87,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 				>
 					+91
 				</Text>
-				<View style={styles.separator} />
+				<View style={[styles.separator, { backgroundColor: c.border }]} />
 				<TextInput
 					testID={testID}
 					value={internalValue}
@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
 	separator: {
 		width: 1,
 		height: 24,
-		backgroundColor: '#E5DDD5',
 		marginHorizontal: 8,
 	},
 	input: {

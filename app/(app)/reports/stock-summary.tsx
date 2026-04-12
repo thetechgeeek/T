@@ -239,7 +239,7 @@ export default function StockSummaryScreen() {
 					>
 						<ThemedText
 							variant="caption"
-							color={stockLevelFilter === chip.value ? '#fff' : c.warning}
+							color={stockLevelFilter === chip.value ? c.onPrimary : c.warning}
 							style={{ fontWeight: stockLevelFilter === chip.value ? '600' : '400' }}
 						>
 							{chip.label}

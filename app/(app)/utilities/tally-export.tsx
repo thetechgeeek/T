@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { ChevronDown, ChevronUp, FileCode } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -45,7 +46,7 @@ const Chip = ({ label, active, onPress, colors, borderRadius }: ChipProps) => (
 			},
 		]}
 	>
-		<ThemedText variant="caption" color={active ? '#FFF' : colors.onSurface}>
+		<ThemedText variant="caption" color={active ? colors.onPrimary : colors.onSurface}>
 			{label}
 		</ThemedText>
 	</Pressable>
@@ -189,7 +190,7 @@ export default function TallyExportScreen() {
 								{selected[item.key] && (
 									<ThemedText
 										variant="caption"
-										color="#FFF"
+										color={palette.white}
 										style={styles.checkMark}
 									>
 										✓
@@ -282,7 +283,7 @@ export default function TallyExportScreen() {
 								]}
 							>
 								<View style={[styles.stepNum, { backgroundColor: c.primary }]}>
-									<ThemedText variant="caption" color="#FFF">
+									<ThemedText variant="caption" color={palette.white}>
 										{i + 1}
 									</ThemedText>
 								</View>

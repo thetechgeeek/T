@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { palette } from '@/src/theme/palette';
 import { View, ScrollView, StyleSheet, Share, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MessageCircle, FileText, CheckCircle2 } from 'lucide-react-native';
@@ -312,13 +313,17 @@ export default function PaymentReceiptScreen() {
 					<Pressable
 						style={[
 							styles.whatsappBtn,
-							{ backgroundColor: '#25D366', borderRadius: r.md },
+							{ backgroundColor: palette.whatsapp, borderRadius: r.md },
 						]}
 						onPress={handleShareWhatsApp}
 						accessibilityLabel="Share on WhatsApp"
 					>
-						<MessageCircle size={20} color="#fff" />
-						<ThemedText variant="bodyBold" color="#fff" style={{ marginLeft: 8 }}>
+						<MessageCircle size={20} color={palette.white} />
+						<ThemedText
+							variant="bodyBold"
+							color={palette.white}
+							style={{ marginLeft: 8 }}
+						>
 							Share on WhatsApp
 						</ThemedText>
 					</Pressable>

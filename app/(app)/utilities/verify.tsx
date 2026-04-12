@@ -6,6 +6,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { palette } from '@/src/theme/palette';
 
 type VerifyState = 'idle' | 'running' | 'complete';
 
@@ -190,19 +191,19 @@ export default function DataVerificationScreen() {
 											[
 												styles.resultCard,
 												{
-													backgroundColor: '#FFF3CD',
-													borderColor: '#FFC107',
+													backgroundColor: palette.verifyBannerBg,
+													borderColor: palette.verifyBannerBorder,
 													borderWidth: 1,
 												},
 											] as const
 										}
 									>
-										<ThemedText variant="h3" color="#856404">
+										<ThemedText variant="h3" color={palette.verifyBannerText}>
 											1 Issue Found
 										</ThemedText>
 										<ThemedText
 											variant="caption"
-											color="#856404"
+											color={palette.verifyBannerText}
 											style={{ marginTop: 4 }}
 										>
 											Some items have no HSN code

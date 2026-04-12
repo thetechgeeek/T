@@ -142,7 +142,9 @@ export function PaymentStep({
 					<ThemedText
 						variant="caption"
 						color={
-							amountPaidNum >= grandTotal && amountPaidNum > 0 ? '#FFF' : c.primary
+							amountPaidNum >= grandTotal && amountPaidNum > 0
+								? c.onPrimary
+								: c.primary
 						}
 					>
 						{t('invoice.paidInFull')} {formatCurrency(grandTotal)}
@@ -210,7 +212,7 @@ export function PaymentStep({
 					>
 						<ThemedText
 							variant="caption"
-							color={paymentMode === mode ? '#FFF' : c.onSurface}
+							color={paymentMode === mode ? c.onPrimary : c.onSurface}
 						>
 							{t(`invoice.paymentModes.${mode}`)}
 						</ThemedText>

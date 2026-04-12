@@ -8,6 +8,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 
 // TODO: connect to store — save to bank_accounts table via Supabase
 const BANKS = [
@@ -302,7 +303,7 @@ export default function AddBankAccountScreen() {
 							value={isPrimary}
 							onValueChange={setIsPrimary}
 							trackColor={{ false: theme.colors.surfaceVariant, true: c.primary }}
-							thumbColor="#fff"
+							thumbColor={palette.white}
 							accessibilityLabel="set-primary"
 						/>
 					</View>

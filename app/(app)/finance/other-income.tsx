@@ -20,6 +20,7 @@ import { Card } from '@/src/components/atoms/Card';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 import { layout } from '@/src/theme/layout';
 
 // ---------------------------------------------------------------------------
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,

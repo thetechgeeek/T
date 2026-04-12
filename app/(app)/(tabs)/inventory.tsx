@@ -27,6 +27,7 @@ import {
 } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { TileSetCard } from '@/src/components/organisms/TileSetCard';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -521,7 +522,7 @@ const styles = StyleSheet.create({
 		right: 0,
 		width: 200,
 		elevation: 5,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,

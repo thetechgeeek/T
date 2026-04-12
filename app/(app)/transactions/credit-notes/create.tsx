@@ -172,7 +172,7 @@ export default function CreateCreditNoteScreen() {
 									>
 										<ThemedText
 											variant="caption"
-											color={active ? '#FFF' : c.onSurface}
+											color={active ? c.onPrimary : c.onSurface}
 										>
 											{reason}
 										</ThemedText>
@@ -292,7 +292,7 @@ export default function CreateCreditNoteScreen() {
 						>
 							<ThemedText
 								variant="caption"
-								color={applyMode === 'adjust' ? '#FFF' : c.onSurface}
+								color={applyMode === 'adjust' ? c.onPrimary : c.onSurface}
 								align="center"
 							>
 								Adjust against party balance
@@ -314,7 +314,7 @@ export default function CreateCreditNoteScreen() {
 						>
 							<ThemedText
 								variant="caption"
-								color={applyMode === 'refund' ? '#FFF' : c.onSurface}
+								color={applyMode === 'refund' ? c.onPrimary : c.onSurface}
 								align="center"
 							>
 								Refund via payment

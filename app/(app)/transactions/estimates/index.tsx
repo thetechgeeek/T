@@ -8,6 +8,8 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import type { ThemeColors } from '@/src/theme';
+import { palette } from '@/src/theme/palette';
 
 type EstimateStatus = 'open' | 'accepted' | 'expired' | 'converted';
 
@@ -61,12 +63,16 @@ const FILTERS: { label: string; value: FilterType }[] = [
 	{ label: 'Converted', value: 'converted' },
 ];
 
-const STATUS_CONFIG: Record<EstimateStatus, { label: string; bg: string; color: string }> = {
-	open: { label: 'Open', bg: '#FEF3C7', color: '#92400E' },
-	accepted: { label: 'Accepted', bg: '#D1FAE5', color: '#065F46' },
-	expired: { label: 'Expired', bg: '#FEE2E2', color: '#991B1B' },
-	converted: { label: 'Converted', bg: '#DBEAFE', color: '#1E40AF' },
-};
+function estimateStatusConfig(
+	c: ThemeColors,
+): Record<EstimateStatus, { label: string; bg: string; color: string }> {
+	return {
+		open: { label: 'Open', bg: c.warningLight, color: c.partial },
+		accepted: { label: 'Accepted', bg: c.successLight, color: c.paid },
+		expired: { label: 'Expired', bg: c.errorLight, color: c.unpaid },
+		converted: { label: 'Converted', bg: c.infoLight, color: palette.statusInfoFg },
+	};
+}
 
 function isExpired(validUntil: string): boolean {
 	return new Date(validUntil) < new Date();
@@ -74,6 +80,7 @@ function isExpired(validUntil: string): boolean {
 
 export default function EstimatesScreen() {
 	const { c, r } = useThemeTokens();
+	const STATUS_CONFIG = estimateStatusConfig(c);
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 	const [activeFilter, setActiveFilter] = useState<FilterType>('all');
@@ -165,7 +172,10 @@ export default function EstimatesScreen() {
 								accessibilityRole="button"
 								accessibilityState={{ selected: active }}
 							>
-								<ThemedText variant="caption" color={active ? '#FFF' : c.onSurface}>
+								<ThemedText
+									variant="caption"
+									color={active ? c.onPrimary : c.onSurface}
+								>
 									{f.label}
 								</ThemedText>
 							</Pressable>
@@ -201,8 +211,8 @@ export default function EstimatesScreen() {
 				accessibilityLabel="new-estimate"
 				accessibilityRole="button"
 			>
-				<Plus size={20} color="#FFF" />
-				<ThemedText variant="caption" color="#FFF" style={{ marginLeft: 6 }}>
+				<Plus size={20} color={palette.white} />
+				<ThemedText variant="caption" color={palette.white} style={{ marginLeft: 6 }}>
 					New Estimate
 				</ThemedText>
 			</Pressable>
@@ -256,7 +266,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 18,
 		paddingVertical: 14,
 		elevation: 4,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.2,
 		shadowRadius: 4,

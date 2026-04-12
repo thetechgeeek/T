@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native';
 import { Download, Calendar } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -166,7 +167,7 @@ export default function GSTDetailScreen() {
 						>
 							<ThemedText
 								variant="caption"
-								color={preset === p.value ? '#FFF' : c.onSurface}
+								color={preset === p.value ? c.onPrimary : c.onSurface}
 							>
 								{p.label}
 							</ThemedText>
@@ -366,7 +367,7 @@ export default function GSTDetailScreen() {
 													},
 												]}
 											>
-												<ThemedText variant="caption" color="#FFF">
+												<ThemedText variant="caption" color={palette.white}>
 													{row.type}
 												</ThemedText>
 											</View>

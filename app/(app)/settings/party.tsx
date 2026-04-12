@@ -164,7 +164,7 @@ export default function PartySettingsScreen() {
 							>
 								<ThemedText
 									style={{
-										color: extraFields === n ? '#fff' : c.onSurface,
+										color: extraFields === n ? c.onPrimary : c.onSurface,
 										fontWeight: '700',
 									}}
 								>

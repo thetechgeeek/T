@@ -7,6 +7,7 @@ import { FormField } from '@/src/components/molecules/FormField';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { Card } from '@/src/components/atoms/Card';
 import { withOpacity } from '@/src/utils/color';
+import { palette } from '@/src/theme/palette';
 import type { CustomerDraft } from './useInvoiceCreateFlow';
 
 interface Props {
@@ -81,14 +82,14 @@ export function CustomerStep({
 						flex: 1,
 						paddingVertical: s.sm,
 						paddingHorizontal: s.md,
-						backgroundColor: isCashSale ? c.primary : '#FFFFFF',
+						backgroundColor: isCashSale ? c.primary : c.surface,
 						borderWidth: isCashSale ? 0 : 1.5,
 						borderColor: c.primary,
 						borderRadius: r.sm,
 						alignItems: 'center',
 					}}
 				>
-					<ThemedText variant="body" color={isCashSale ? '#FFFFFF' : c.primary}>
+					<ThemedText variant="body" color={isCashSale ? c.onPrimary : c.primary}>
 						{t('invoice.cashSale')}
 					</ThemedText>
 				</Pressable>
@@ -102,14 +103,14 @@ export function CustomerStep({
 						flex: 1,
 						paddingVertical: s.sm,
 						paddingHorizontal: s.md,
-						backgroundColor: !isCashSale ? c.primary : '#FFFFFF',
+						backgroundColor: !isCashSale ? c.primary : c.surface,
 						borderWidth: !isCashSale ? 0 : 1.5,
 						borderColor: c.primary,
 						borderRadius: r.sm,
 						alignItems: 'center',
 					}}
 				>
-					<ThemedText variant="body" color={!isCashSale ? '#FFFFFF' : c.primary}>
+					<ThemedText variant="body" color={!isCashSale ? c.onPrimary : c.primary}>
 						{t('invoice.regularCustomer')}
 					</ThemedText>
 				</Pressable>
@@ -181,7 +182,7 @@ export function CustomerStep({
 					style={{
 						padding: s.xl,
 						alignItems: 'center',
-						backgroundColor: '#F5F5F5',
+						backgroundColor: palette.grayF5,
 					}}
 				>
 					<ThemedText variant="body" color={c.onSurfaceVariant} align="center">

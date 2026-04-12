@@ -48,7 +48,9 @@ export function SwipeableRow({
 						accessibilityLabel={shareLabel}
 						style={[styles.action, { backgroundColor: c.success }]}
 					>
-						<Text style={styles.actionText}>{shareLabel}</Text>
+						<Text style={[styles.actionText, { color: c.onSuccess }]}>
+							{shareLabel}
+						</Text>
 					</Pressable>
 				) : null}
 
@@ -60,7 +62,7 @@ export function SwipeableRow({
 						accessibilityLabel={editLabel}
 						style={[styles.action, { backgroundColor: c.info }]}
 					>
-						<Text style={styles.actionText}>{editLabel}</Text>
+						<Text style={[styles.actionText, { color: c.onInfo }]}>{editLabel}</Text>
 					</Pressable>
 				) : null}
 
@@ -71,7 +73,7 @@ export function SwipeableRow({
 					accessibilityLabel={deleteLabel}
 					style={[styles.action, { backgroundColor: c.error }]}
 				>
-					<Text style={styles.actionText}>{deleteLabel}</Text>
+					<Text style={[styles.actionText, { color: c.onError }]}>{deleteLabel}</Text>
 				</Pressable>
 			</View>
 		</View>
@@ -96,7 +98,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	actionText: {
-		color: '#FFFFFF',
 		fontSize: 13,
 		fontWeight: '600',
 	},

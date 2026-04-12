@@ -8,6 +8,8 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import type { ThemeColors } from '@/src/theme';
+import { palette } from '@/src/theme/palette';
 
 type CreditNoteStatus = 'open' | 'adjusted' | 'refunded';
 
@@ -64,14 +66,19 @@ const FILTERS: { label: string; value: FilterType }[] = [
 	{ label: 'Refunded', value: 'refunded' },
 ];
 
-const STATUS_CONFIG: Record<CreditNoteStatus, { label: string; bg: string; color: string }> = {
-	open: { label: 'Open', bg: '#FEF3C7', color: '#92400E' },
-	adjusted: { label: 'Adjusted', bg: '#D1FAE5', color: '#065F46' },
-	refunded: { label: 'Refunded', bg: '#DBEAFE', color: '#1E40AF' },
-};
+function creditNoteStatusConfig(
+	c: ThemeColors,
+): Record<CreditNoteStatus, { label: string; bg: string; color: string }> {
+	return {
+		open: { label: 'Open', bg: c.warningLight, color: c.partial },
+		adjusted: { label: 'Adjusted', bg: c.successLight, color: c.paid },
+		refunded: { label: 'Refunded', bg: c.infoLight, color: palette.statusInfoFg },
+	};
+}
 
 export default function CreditNotesScreen() {
 	const { c, r } = useThemeTokens();
+	const STATUS_CONFIG = creditNoteStatusConfig(c);
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 	const [activeFilter, setActiveFilter] = useState<FilterType>('all');
@@ -146,7 +153,10 @@ export default function CreditNotesScreen() {
 							accessibilityRole="button"
 							accessibilityState={{ selected: active }}
 						>
-							<ThemedText variant="caption" color={active ? '#FFF' : c.onSurface}>
+							<ThemedText
+								variant="caption"
+								color={active ? c.onPrimary : c.onSurface}
+							>
 								{f.label}
 							</ThemedText>
 						</Pressable>
@@ -181,8 +191,8 @@ export default function CreditNotesScreen() {
 				accessibilityLabel="new-credit-note"
 				accessibilityRole="button"
 			>
-				<Plus size={20} color="#FFF" />
-				<ThemedText variant="caption" color="#FFF" style={{ marginLeft: 6 }}>
+				<Plus size={20} color={palette.white} />
+				<ThemedText variant="caption" color={palette.white} style={{ marginLeft: 6 }}>
 					New Return
 				</ThemedText>
 			</Pressable>
@@ -234,7 +244,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 18,
 		paddingVertical: 14,
 		elevation: 4,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.2,
 		shadowRadius: 4,

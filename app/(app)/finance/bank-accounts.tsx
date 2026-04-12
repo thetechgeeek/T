@@ -19,6 +19,7 @@ import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 
 // TODO: connect to store — fetch from bank_accounts table via Supabase
 interface BankAccount {
@@ -119,7 +120,7 @@ export default function BankAccountsScreen() {
 						</View>
 						<ThemedText
 							variant="h2"
-							color="#fff"
+							color={palette.white}
 							style={{ marginTop: 6 }}
 							accessibilityLabel={`Total bank balance ${formatCurrency(totalBalance)}`}
 						>
@@ -203,7 +204,7 @@ export default function BankAccountsScreen() {
 				accessibilityRole="button"
 				accessibilityLabel="Add Bank Account"
 			>
-				<Plus color="#fff" size={28} />
+				<Plus color={palette.white} size={28} />
 			</Pressable>
 		</AtomicScreen>
 	);
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,

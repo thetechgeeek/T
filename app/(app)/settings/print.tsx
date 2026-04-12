@@ -5,6 +5,7 @@ import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { printThemeSwatches, palette } from '@/src/theme/palette';
 
 type PaperType = 'thermal58' | 'thermal80' | 'a4' | 'a5';
 
@@ -15,14 +16,7 @@ const PAPER_TYPES: { key: PaperType; label: string }[] = [
 	{ key: 'a5', label: 'A5' },
 ];
 
-const THEMES = [
-	{ key: 'classic', label: 'Classic', color: '#2D2D2D' },
-	{ key: 'professional', label: 'Professional', color: '#1D4ED8' },
-	{ key: 'modern', label: 'Modern', color: '#C1440E' },
-	{ key: 'minimal', label: 'Minimal', color: '#6B5E52' },
-	{ key: 'traditional', label: 'Traditional', color: '#047857' },
-	{ key: 'colourful', label: 'Colourful', color: '#7C3AED' },
-];
+const THEMES = [...printThemeSwatches];
 
 function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
 	return (
@@ -123,7 +117,7 @@ export default function PrintSettingsScreen() {
 							<ThemedText
 								variant="caption"
 								style={{
-									color: paper === p.key ? '#fff' : c.onSurface,
+									color: paper === p.key ? c.onPrimary : c.onSurface,
 									fontWeight: '600',
 								}}
 							>
@@ -149,7 +143,7 @@ export default function PrintSettingsScreen() {
 								]}
 							>
 								{theme === t.key && (
-									<ThemedText style={{ color: '#fff', fontSize: 18 }}>
+									<ThemedText style={{ color: palette.white, fontSize: 18 }}>
 										✓
 									</ThemedText>
 								)}
@@ -293,7 +287,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	themeSelected: { borderWidth: 2, borderColor: '#fff', opacity: 0.9 },
+	themeSelected: { borderWidth: 2, borderColor: palette.white, opacity: 0.9 },
 	textInput: {
 		borderWidth: 1,
 		borderRadius: 8,

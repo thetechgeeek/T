@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -124,7 +125,7 @@ export default function ScanTab() {
 	}
 
 	return (
-		<AtomicScreen backgroundColor="#000" safeAreaEdges={[]}>
+		<AtomicScreen backgroundColor={palette.black} safeAreaEdges={[]}>
 			<CameraView ref={cameraRef} style={StyleSheet.absoluteFillObject} facing="back" />
 			<View style={styles.overlay}>
 				{/* Top dark area */}
@@ -136,7 +137,7 @@ export default function ScanTab() {
 					<View
 						style={[
 							styles.scanFrame,
-							{ borderColor: capturing ? c.primary : '#ffffff80' },
+							{ borderColor: capturing ? c.primary : palette.white50alpha },
 						]}
 					>
 						{capturing && (
@@ -156,7 +157,7 @@ export default function ScanTab() {
 					style={[styles.darkness, { flex: 1, paddingTop: s.xl, alignItems: 'center' }]}
 				>
 					<ThemedText
-						color="#fff"
+						color={palette.white}
 						style={{ fontSize: 14, opacity: 0.8, marginBottom: s.xl }}
 					>
 						{capturing ? t('scanner.analyzing') : t('scanner.alignFrame')}
@@ -253,6 +254,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderWidth: 4,
-		borderColor: '#ffffff80',
+		borderColor: palette.white50alpha,
 	},
 });

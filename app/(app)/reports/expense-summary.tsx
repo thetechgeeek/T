@@ -7,6 +7,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { expenseReportDemoSlices } from '@/src/theme/palette';
 
 // TODO: Replace with real data — SELECT category, SUM(amount) FROM expenses WHERE date BETWEEN ? AND ? GROUP BY category
 type Period = 'month' | 'quarter' | 'year' | 'fy';
@@ -26,13 +27,12 @@ interface ExpenseCategory {
 }
 
 // TODO: Pull from expense_categories + expenses tables; amounts are period-filtered mock values
-const MOCK_CATEGORIES: ExpenseCategory[] = [
-	{ id: '1', name: 'Purchase', amount: 820000, color: '#4A90E2' },
-	{ id: '2', name: 'Salaries', amount: 185000, color: '#E67E22' },
-	{ id: '3', name: 'Transport', amount: 42000, color: '#2ECC71' },
-	{ id: '4', name: 'Utilities', amount: 18500, color: '#9B59B6' },
-	{ id: '5', name: 'Misc', amount: 11200, color: '#E74C3C' },
-];
+const MOCK_CATEGORIES: ExpenseCategory[] = expenseReportDemoSlices.map((x) => ({
+	id: x.id,
+	name: x.name,
+	amount: x.amount,
+	color: x.color,
+}));
 
 export default function ExpenseSummaryScreen() {
 	const { c, r } = useThemeTokens();

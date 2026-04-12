@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 
 interface Props {
 	children: React.ReactNode;
@@ -56,12 +57,17 @@ export class ErrorBoundary extends React.Component<Props, State> {
 const styles = StyleSheet.create({
 	container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
 	title: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
-	message: { fontSize: 14, color: '#666', textAlign: 'center', marginBottom: 24 },
+	message: {
+		fontSize: 14,
+		color: palette.errorBoundaryText,
+		textAlign: 'center',
+		marginBottom: 24,
+	},
 	button: {
-		backgroundColor: '#2563EB',
+		backgroundColor: palette.errorBoundaryButton,
 		paddingHorizontal: 24,
 		paddingVertical: 12,
 		borderRadius: 8,
 	},
-	buttonText: { color: '#fff', fontWeight: '600' },
+	buttonText: { color: palette.white, fontWeight: '600' },
 });

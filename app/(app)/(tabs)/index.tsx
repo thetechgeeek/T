@@ -268,7 +268,7 @@ export default function DashboardScreen() {
 								marginHorizontal: s.md,
 								marginBottom: s.md,
 								padding: s.md,
-								backgroundColor: '#FEF3C7',
+								backgroundColor: c.warningLight,
 								borderRadius: r.md,
 								borderLeftWidth: 4,
 								borderLeftColor: c.warning,

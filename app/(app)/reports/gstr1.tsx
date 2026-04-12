@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native';
 import { FileJson, Upload } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -114,7 +115,7 @@ export default function GSTR1Screen() {
 						>
 							<ThemedText
 								variant="caption"
-								color={period === p.value ? '#FFF' : c.onSurface}
+								color={period === p.value ? c.onPrimary : c.onSurface}
 							>
 								{p.label}
 							</ThemedText>
@@ -384,7 +385,7 @@ export default function GSTR1Screen() {
 						title="File on GST Portal"
 						variant="primary"
 						style={{ flex: 1 }}
-						leftIcon={<Upload size={16} color="#FFF" />}
+						leftIcon={<Upload size={16} color={palette.white} />}
 						onPress={() =>
 							Alert.alert(
 								'Coming Soon',

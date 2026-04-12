@@ -9,6 +9,7 @@ import { escapeHtml } from '../utils/html';
 import type { Invoice } from '../types/invoice';
 import type { BusinessProfile } from '../types/businessProfile';
 import logger from '../utils/logger';
+import { palette } from '../theme/palette';
 
 export interface ParsedOrderItem {
 	design_name?: string;
@@ -101,27 +102,27 @@ export const pdfService = {
           <meta charset="utf-8">
           <title>${t('invoice.title')} ${invoice.invoice_number}</title>
           <style>
-            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; padding: 30px; }
-            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #C1440E; padding-bottom: 20px; margin-bottom: 20px; }
-            .business-info h1 { margin: 0; color: #C1440E; font-size: 28px; }
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: ${palette.pdfBodyText}; padding: 30px; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid ${palette.pdfPrimary}; padding-bottom: 20px; margin-bottom: 20px; }
+            .business-info h1 { margin: 0; color: ${palette.pdfPrimary}; font-size: 28px; }
             .business-info p { margin: 4px 0; font-size: 14px; }
             .doc-details { text-align: right; }
-            .doc-details h2 { margin: 0; font-size: 24px; color: #666; text-transform: uppercase; letter-spacing: 2px;}
+            .doc-details h2 { margin: 0; font-size: 24px; color: ${palette.pdfMutedUppercase}; text-transform: uppercase; letter-spacing: 2px;}
             .doc-details p { margin: 4px 0; font-size: 14px; }
             
             .bill-to { margin-bottom: 30px; }
-            .bill-to h3 { margin: 0 0 10px 0; color: #555; font-size: 16px; border-bottom: 1px solid #ccc; padding-bottom: 5px; display: inline-block; }
+            .bill-to h3 { margin: 0 0 10px 0; color: ${palette.pdfBillToHeading}; font-size: 16px; border-bottom: 1px solid ${palette.borderCCC}; padding-bottom: 5px; display: inline-block; }
             .bill-to p { margin: 4px 0; font-size: 14px; }
 
             table { width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 13px; }
-            th { background-color: #f5f5f5; border: 1px solid #ddd; padding: 10px; text-align: left; }
-            td { border: 1px solid #ddd; padding: 10px; }
+            th { background-color: ${palette.pdfTableHeaderBg}; border: 1px solid ${palette.grayDDD}; padding: 10px; text-align: left; }
+            td { border: 1px solid ${palette.grayDDD}; padding: 10px; }
             
             .totals { margin-top: 20px; width: 50%; float: right; border-collapse: collapse; }
-            .totals td { padding: 8px 12px; border: none; border-bottom: 1px solid #eee; }
-            .totals .grand-total { font-weight: bold; font-size: 18px; color: #C1440E; border-top: 2px solid #C1440E; background: #fffcf8;}
+            .totals td { padding: 8px 12px; border: none; border-bottom: 1px solid ${palette.grayEEE}; }
+            .totals .grand-total { font-weight: bold; font-size: 18px; color: ${palette.pdfPrimary}; border-top: 2px solid ${palette.pdfPrimary}; background: ${palette.pdfGrandTotalBg};}
             
-            .footer { clear: both; margin-top: 60px; font-size: 12px; color: #777; border-top: 1px solid #ccc; padding-top: 20px; }
+            .footer { clear: both; margin-top: 60px; font-size: 12px; color: ${palette.pdfFooterMuted}; border-top: 1px solid ${palette.borderCCC}; padding-top: 20px; }
             .amount-words { clear: both; margin-top: 30px; font-style: italic; font-weight: bold; }
           </style>
         </head>

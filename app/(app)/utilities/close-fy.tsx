@@ -150,7 +150,7 @@ export default function CloseFYScreen() {
 							>
 								<ThemedText
 									variant="caption"
-									color={step >= n ? '#FFF' : c.onSurfaceVariant}
+									color={step >= n ? c.onPrimary : c.onSurfaceVariant}
 								>
 									{n}
 								</ThemedText>
@@ -221,15 +221,15 @@ export default function CloseFYScreen() {
 						<View
 							style={[
 								styles.allClearCard,
-								{ backgroundColor: '#D1FAE5', borderRadius: r.lg },
+								{ backgroundColor: c.successLight, borderRadius: r.lg },
 							]}
 						>
-							<CheckCircle2 size={32} color="#065F46" />
+							<CheckCircle2 size={32} color={c.paid} />
 							<View style={{ marginLeft: s.md }}>
-								<ThemedText variant="h3" color="#065F46">
+								<ThemedText variant="h3" color={c.paid}>
 									All Clear ✓
 								</ThemedText>
-								<ThemedText variant="caption" color="#065F46">
+								<ThemedText variant="caption" color={c.paid}>
 									No issues found. Safe to close FY.
 								</ThemedText>
 							</View>
@@ -261,13 +261,17 @@ export default function CloseFYScreen() {
 						<View
 							style={[
 								styles.warningCard,
-								{ backgroundColor: '#FEE2E2', borderRadius: r.lg, marginTop: s.lg },
+								{
+									backgroundColor: c.errorLight,
+									borderRadius: r.lg,
+									marginTop: s.lg,
+								},
 							]}
 						>
-							<ThemedText variant="bodyBold" color="#991B1B">
+							<ThemedText variant="bodyBold" color={c.unpaid}>
 								⚠ This cannot be undone
 							</ThemedText>
-							<ThemedText variant="caption" color="#991B1B" style={{ marginTop: 4 }}>
+							<ThemedText variant="caption" color={c.unpaid} style={{ marginTop: 4 }}>
 								Closing FY {CURRENT_FY} will freeze all transactions before 1 Apr
 								2025. You cannot add or edit transactions in the closed FY.
 							</ThemedText>

@@ -426,11 +426,11 @@ export default function ImportOrderScreen() {
 						>
 							<FileUp
 								size={16}
-								color={inputMode === 'file' ? '#fff' : c.onSurfaceVariant}
+								color={inputMode === 'file' ? c.onPrimary : c.onSurfaceVariant}
 							/>
 							<ThemedText
 								style={{ marginLeft: 6, fontSize: 14 }}
-								color={inputMode === 'file' ? '#fff' : c.onSurfaceVariant}
+								color={inputMode === 'file' ? c.onPrimary : c.onSurfaceVariant}
 								weight={inputMode === 'file' ? 'bold' : 'regular'}
 							>
 								{t('inventory.listView')} {t('common.and')} {t('scanner.title')}
@@ -448,11 +448,11 @@ export default function ImportOrderScreen() {
 						>
 							<ClipboardList
 								size={16}
-								color={inputMode === 'text' ? '#fff' : c.onSurfaceVariant}
+								color={inputMode === 'text' ? c.onPrimary : c.onSurfaceVariant}
 							/>
 							<ThemedText
 								style={{ marginLeft: 6, fontSize: 14 }}
-								color={inputMode === 'text' ? '#fff' : c.onSurfaceVariant}
+								color={inputMode === 'text' ? c.onPrimary : c.onSurfaceVariant}
 								weight={inputMode === 'text' ? 'bold' : 'regular'}
 							>
 								{t('order.actions.analyzeAi')}

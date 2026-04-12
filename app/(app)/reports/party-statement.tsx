@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, Pressable, Alert, Share } from 'react-native';
 import {
 	Search,
@@ -271,7 +272,7 @@ export default function PartyStatementScreen() {
 					>
 						<ThemedText
 							variant="caption"
-							color={dateRange === dr ? '#FFF' : c.onSurface}
+							color={dateRange === dr ? c.onPrimary : c.onSurface}
 						>
 							{DATE_RANGE_LABELS[dr]}
 						</ThemedText>
@@ -295,7 +296,7 @@ export default function PartyStatementScreen() {
 						onPress={() => setShowPicker(!showPicker)}
 					>
 						<View style={[styles.partyAvatar, { backgroundColor: c.primary }]}>
-							<User size={18} color="#FFF" />
+							<User size={18} color={palette.white} />
 						</View>
 						<View style={{ flex: 1 }}>
 							<ThemedText variant="bodyBold">{partyName}</ThemedText>
@@ -479,21 +480,21 @@ export default function PartyStatementScreen() {
 						<View style={[styles.tableHeader, { backgroundColor: c.primary }]}>
 							<ThemedText
 								style={[styles.colDate, styles.headerText]}
-								color="#FFF"
+								color={palette.white}
 								variant="captionBold"
 							>
 								Date
 							</ThemedText>
 							<ThemedText
 								style={[styles.colDesc, styles.headerText]}
-								color="#FFF"
+								color={palette.white}
 								variant="captionBold"
 							>
 								Description
 							</ThemedText>
 							<ThemedText
 								style={[styles.colAmt, styles.headerText]}
-								color="#FFF"
+								color={palette.white}
 								variant="captionBold"
 								align="right"
 							>
@@ -501,7 +502,7 @@ export default function PartyStatementScreen() {
 							</ThemedText>
 							<ThemedText
 								style={[styles.colAmt, styles.headerText]}
-								color="#FFF"
+								color={palette.white}
 								variant="captionBold"
 								align="right"
 							>
@@ -509,7 +510,7 @@ export default function PartyStatementScreen() {
 							</ThemedText>
 							<ThemedText
 								style={[styles.colAmt, styles.headerText]}
-								color="#FFF"
+								color={palette.white}
 								variant="captionBold"
 								align="right"
 							>
@@ -663,16 +664,16 @@ export default function PartyStatementScreen() {
 						<Pressable
 							style={[
 								styles.actionBtn,
-								{ backgroundColor: '#25D366', borderRadius: r.md, flex: 1 },
+								{ backgroundColor: palette.whatsapp, borderRadius: r.md, flex: 1 },
 							]}
 							onPress={handleWhatsApp}
 							accessibilityRole="button"
 							accessibilityLabel="Share on WhatsApp"
 						>
-							<MessageCircle size={16} color="#FFF" />
+							<MessageCircle size={16} color={palette.white} />
 							<ThemedText
 								variant="captionBold"
-								color="#FFF"
+								color={palette.white}
 								style={{ marginLeft: 6 }}
 							>
 								WhatsApp

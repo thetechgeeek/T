@@ -159,7 +159,7 @@ export default function GstSettingsScreen() {
 									<ThemedText
 										variant="body"
 										style={{
-											color: filingPeriod === p ? '#fff' : c.onSurface,
+											color: filingPeriod === p ? c.onPrimary : c.onSurface,
 											fontWeight: '600',
 										}}
 									>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { palette } from '@/src/theme/palette';
 import {
 	View,
 	ScrollView,
@@ -141,14 +142,14 @@ export default function OnlineStoreScreen() {
 						<View style={styles.heroTitleRow}>
 							<Globe
 								size={20}
-								color={storeEnabled ? '#fff' : c.onSurfaceVariant}
+								color={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
 								strokeWidth={2}
 							/>
 							<ThemedText
 								variant="h2"
 								style={[
 									styles.heroTitle,
-									{ color: storeEnabled ? '#fff' : c.onSurface },
+									{ color: storeEnabled ? c.onPrimary : c.onSurface },
 								]}
 							>
 								{storeEnabled ? 'Your Store is Live' : 'Store is Offline'}
@@ -162,7 +163,7 @@ export default function OnlineStoreScreen() {
 						<Switch
 							value={storeEnabled}
 							onValueChange={setStoreEnabled}
-							thumbColor={storeEnabled ? '#fff' : c.onSurfaceVariant}
+							thumbColor={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
 							trackColor={{ false: c.border, true: 'rgba(255,255,255,0.4)' }}
 							accessibilityLabel="Toggle store online status"
 						/>
@@ -183,7 +184,7 @@ export default function OnlineStoreScreen() {
 							variant="caption"
 							style={[
 								styles.urlText,
-								{ color: storeEnabled ? '#fff' : c.onSurfaceVariant },
+								{ color: storeEnabled ? c.onPrimary : c.onSurfaceVariant },
 							]}
 							numberOfLines={1}
 						>
@@ -194,7 +195,10 @@ export default function OnlineStoreScreen() {
 							accessibilityLabel="Copy store URL"
 							hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
 						>
-							<Copy size={16} color={storeEnabled ? '#fff' : c.onSurfaceVariant} />
+							<Copy
+								size={16}
+								color={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
+							/>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -262,7 +266,7 @@ export default function OnlineStoreScreen() {
 				<Button
 					title="Share Store Link"
 					onPress={handleShareStore}
-					leftIcon={<Share2 size={16} color="#fff" />}
+					leftIcon={<Share2 size={16} color={palette.white} />}
 					style={styles.shareBtn}
 				/>
 

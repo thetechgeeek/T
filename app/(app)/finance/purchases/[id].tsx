@@ -15,6 +15,7 @@ import {
 import { supabase } from '@/src/config/supabase';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { palette } from '@/src/theme/palette';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
@@ -49,14 +50,14 @@ function statusLabel(status: string): string {
 }
 
 function statusBannerColor(status: string, c: ThemeColors): string {
-	if (status === 'paid') return c.successLight ?? '#e8f5e9';
-	if (status === 'partial') return c.warningLight ?? '#fff8e1';
-	return c.errorLight ?? '#fdecea';
+	if (status === 'paid') return c.successLight ?? palette.inventoryGainTint;
+	if (status === 'partial') return c.warningLight ?? palette.purchasePartialTint;
+	return c.errorLight ?? palette.inventoryLossTint;
 }
 
 function statusTextColor(status: string, c: ThemeColors): string {
 	if (status === 'paid') return c.success;
-	if (status === 'partial') return c.warning ?? '#f57f17';
+	if (status === 'partial') return c.warning ?? palette.purchasePartialText;
 	return c.error;
 }
 
@@ -691,7 +692,7 @@ const styles = StyleSheet.create({
 		minWidth: 140,
 		borderWidth: 1,
 		elevation: 8,
-		shadowColor: '#000',
+		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.15,
 		shadowRadius: 4,
