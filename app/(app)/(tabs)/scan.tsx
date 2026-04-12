@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { Search, Aperture } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -48,7 +49,7 @@ export default function ScanTab() {
 					{
 						text: t('inventory.add'),
 						onPress: () => {
-							router.push('/(app)/inventory/add' as any);
+							router.push('/(app)/inventory/add' as Href);
 						},
 					},
 				]);

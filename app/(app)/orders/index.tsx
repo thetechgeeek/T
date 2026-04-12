@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { Plus, ChevronRight, FileText } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -45,7 +46,7 @@ export default function OrdersListScreen() {
 						leftIcon={
 							<Plus size={16} color={c.onPrimary} importantForAccessibility="no" />
 						}
-						onPress={() => router.push('/(app)/orders/import' as any)}
+						onPress={() => router.push('/(app)/orders/import' as Href)}
 					/>
 				}
 			/>
@@ -71,7 +72,7 @@ export default function OrdersListScreen() {
 					<Button
 						title={t('order.importFirstBtn')}
 						accessibilityLabel="import-first-order-button"
-						onPress={() => router.push('/(app)/orders/import' as any)}
+						onPress={() => router.push('/(app)/orders/import' as Href)}
 					/>
 				</View>
 			) : (

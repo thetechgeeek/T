@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
-import { FileText, CheckCircle, XCircle, AlertTriangle, Plus } from 'lucide-react-native';
+import { View, StyleSheet, FlatList, Pressable, Alert, type AlertButton } from 'react-native';
+import { FileText, AlertTriangle, Plus } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -8,6 +8,7 @@ import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { BadgeVariant } from '@/src/components/atoms/Badge';
 
 type ChequeStatus = 'open' | 'deposited' | 'bounced';
 type ChequeTab = 'received' | 'issued';
@@ -64,10 +65,10 @@ const MOCK_ISSUED: Cheque[] = [
 	},
 ];
 
-function statusColor(status: ChequeStatus, c: { success: string; warning: string; error: string }) {
-	if (status === 'deposited') return c.success;
-	if (status === 'bounced') return c.error;
-	return c.warning;
+function statusBadgeVariant(status: ChequeStatus): BadgeVariant {
+	if (status === 'deposited') return 'success';
+	if (status === 'bounced') return 'error';
+	return 'warning';
 }
 
 function statusLabel(status: ChequeStatus) {
@@ -133,27 +134,29 @@ export default function ChequesScreen() {
 				Alert.alert(
 					item.party_name,
 					`Cheque No: ${item.cheque_number}\nBank: ${item.bank_name}\nDate: ${formatDate(item.cheque_date)}\nAmount: ${formatCurrency(item.amount)}`,
-					[
-						item.status === 'open' && tab === 'received'
-							? {
-									text: 'Mark Deposited',
-									onPress: () => handleAction(item, 'deposit'),
-								}
-							: null,
-						item.status === 'open' && tab === 'received'
-							? {
-									text: 'Mark Bounced',
-									style: 'destructive',
-									onPress: () => handleAction(item, 'bounce'),
-								}
-							: null,
-						{
-							text: 'Delete',
-							style: 'destructive',
-							onPress: () => handleAction(item, 'delete'),
-						},
-						{ text: 'Cancel', style: 'cancel' },
-					].filter(Boolean) as any,
+					(
+						[
+							item.status === 'open' && tab === 'received'
+								? {
+										text: 'Mark Deposited',
+										onPress: () => handleAction(item, 'deposit'),
+									}
+								: null,
+							item.status === 'open' && tab === 'received'
+								? {
+										text: 'Mark Bounced',
+										style: 'destructive',
+										onPress: () => handleAction(item, 'bounce'),
+									}
+								: null,
+							{
+								text: 'Delete',
+								style: 'destructive',
+								onPress: () => handleAction(item, 'delete'),
+							},
+							{ text: 'Cancel', style: 'cancel' },
+						] as (AlertButton | null)[]
+					).filter((b): b is AlertButton => b != null),
 				);
 			}}
 		>
@@ -170,10 +173,7 @@ export default function ChequesScreen() {
 			</View>
 			<View style={{ alignItems: 'flex-end', gap: 4 }}>
 				<ThemedText variant="amount">{formatCurrency(item.amount)}</ThemedText>
-				<Badge
-					label={statusLabel(item.status)}
-					variant={statusColor(item.status, c) as any}
-				/>
+				<Badge label={statusLabel(item.status)} variant={statusBadgeVariant(item.status)} />
 			</View>
 		</Pressable>
 	);

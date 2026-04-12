@@ -35,7 +35,7 @@ const MOCK_CATEGORIES: ExpenseCategory[] = [
 ];
 
 export default function ExpenseSummaryScreen() {
-	const { c, s, r, theme } = useThemeTokens();
+	const { c, r } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const [period, setPeriod] = useState<Period>('month');

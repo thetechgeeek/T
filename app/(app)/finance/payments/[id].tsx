@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import {
 	Banknote,
 	Smartphone,
@@ -8,7 +9,6 @@ import {
 	Coins,
 	CreditCard,
 	Trash2,
-	FileText,
 	ReceiptText,
 	ArrowDownLeft,
 	ArrowUpRight,
@@ -19,7 +19,6 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
-import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { Divider } from '@/src/components/atoms/Divider';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -65,7 +64,7 @@ export default function PaymentDetailScreen() {
 
 	const [payment, setPayment] = useState<PaymentWithParty | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [deleting, setDeleting] = useState(false);
+	const [, setDeleting] = useState(false);
 
 	const loadPayment = () => {
 		if (!id) return;
@@ -73,8 +72,8 @@ export default function PaymentDetailScreen() {
 		paymentService
 			.fetchPayments({})
 			.then((all) => {
-				const found = (all as any[]).find((p: any) => p.id === id);
-				setPayment(found ?? null);
+				const found = (all ?? []).find((p) => p.id === id);
+				setPayment(found ? (found as PaymentWithParty) : null);
 			})
 			.catch(() => setPayment(null))
 			.finally(() => setLoading(false));
@@ -112,7 +111,7 @@ export default function PaymentDetailScreen() {
 	};
 
 	const handleViewReceipt = () => {
-		router.push(`/(app)/finance/payments/${id}/receipt` as any);
+		router.push(`/(app)/finance/payments/${id}/receipt` as Href);
 	};
 
 	if (loading) {
@@ -318,7 +317,7 @@ export default function PaymentDetailScreen() {
 								<ThemedText color={c.onSurfaceVariant}>Invoice</ThemedText>
 								<Pressable
 									onPress={() =>
-										router.push(`/(app)/invoices/${payment.invoice_id}` as any)
+										router.push(`/(app)/invoices/${payment.invoice_id}` as Href)
 									}
 								>
 									<ThemedText color={c.primary} variant="bodyBold">
@@ -332,7 +331,7 @@ export default function PaymentDetailScreen() {
 								<Pressable
 									onPress={() =>
 										router.push(
-											`/(app)/finance/purchases/${payment.purchase_id}` as any,
+											`/(app)/finance/purchases/${payment.purchase_id}` as Href,
 										)
 									}
 								>

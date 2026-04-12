@@ -92,7 +92,7 @@ export default function ReportsHubScreen() {
 								backgroundColor: c.card,
 								borderRadius: r.md,
 								marginBottom: s.sm,
-								...(theme.shadows.sm as object),
+								...theme.shadows.sm,
 							},
 						]}
 						onPress={() => handlePress(card)}

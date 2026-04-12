@@ -8,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { WifiOff, ChevronRight } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
@@ -37,7 +38,7 @@ export function OfflineBanner() {
 
 	const handlePress = () => {
 		// P22.1 — Tap banner opens sync log
-		router.push('/settings/sync-log' as any);
+		router.push('/settings/sync-log' as Href);
 	};
 
 	if (isConnected) return null;

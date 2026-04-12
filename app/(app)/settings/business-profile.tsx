@@ -17,8 +17,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { Camera, X, ChevronDown, ChevronUp } from 'lucide-react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { useLocale } from '@/src/hooks/useLocale';
-
 interface ProfileForm {
 	business_name: string;
 	phone: string;
@@ -106,10 +104,10 @@ export default function BusinessProfileScreen() {
 						website: profile.website ?? '',
 						alternate_phone: profile.alternate_phone ?? '',
 						business_description: profile.business_description ?? '',
-						gstin: (profile as { gstin?: string }).gstin ?? '',
-						address: (profile as { address?: string }).address ?? '',
-						city: (profile as { city?: string }).city ?? '',
-						state: (profile as { state?: string }).state ?? '',
+						gstin: profile.gstin ?? '',
+						address: profile.address ?? '',
+						city: profile.city ?? '',
+						state: profile.state ?? '',
 						logo_url: profile.logo_url ?? '',
 						signature_url: profile.signature_url ?? '',
 						upi_id: profile.upi_id ?? '',
@@ -664,8 +662,8 @@ function ImagePickerBox({
 	value?: string;
 	onChange: (v: string) => void;
 	label: string;
-	c: any;
-	theme: any;
+	c: ReturnType<typeof useTheme>['theme']['colors'];
+	theme: ReturnType<typeof useTheme>['theme'];
 }) {
 	const [uploading, setUploading] = useState(false);
 

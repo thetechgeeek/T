@@ -15,14 +15,15 @@ beforeEach(() => {
 
 describe('Inventory Loading & Error UI States', () => {
 	it('shows loading indicator when store.loading=true', async () => {
-		(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({
-				items: [],
-				loading: true,
-				totalCount: 0,
-				filters: { category: 'ALL' },
-				fetchItems: jest.fn(),
-			}),
+		(useInventoryStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: any) => any) =>
+				selector({
+					items: [],
+					loading: true,
+					totalCount: 0,
+					filters: { category: 'ALL' },
+					fetchItems: jest.fn(),
+				}),
 		);
 
 		const { getByTestId } = renderWithTheme(<InventoryTab />);
@@ -32,14 +33,15 @@ describe('Inventory Loading & Error UI States', () => {
 	});
 
 	it('shows "No items found" only when loading=false', async () => {
-		(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({
-				items: [],
-				loading: false,
-				totalCount: 0,
-				filters: { category: 'ALL' },
-				fetchItems: jest.fn(),
-			}),
+		(useInventoryStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: any) => any) =>
+				selector({
+					items: [],
+					loading: false,
+					totalCount: 0,
+					filters: { category: 'ALL' },
+					fetchItems: jest.fn(),
+				}),
 		);
 
 		const { getByText, queryByTestId } = renderWithTheme(<InventoryTab />);
@@ -49,28 +51,29 @@ describe('Inventory Loading & Error UI States', () => {
 	});
 
 	it('renders items list and NO loading spinner when loading=false and items present', async () => {
-		(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: any) =>
-			selector({
-				items: [
-					{
-						id: '1',
-						design_name: 'Marble',
-						base_item_number: 'M-001',
-						category: 'GLOSSY',
-						box_count: 50,
-						has_batch_tracking: false,
-						has_serial_tracking: false,
-						low_stock_threshold: 10,
-						selling_price: 1000,
-						created_at: '',
-						updated_at: '',
-					},
-				],
-				loading: false,
-				totalCount: 1,
-				filters: { category: 'ALL' },
-				fetchItems: jest.fn(),
-			}),
+		(useInventoryStore as unknown as jest.Mock).mockImplementation(
+			(selector: (s: any) => any) =>
+				selector({
+					items: [
+						{
+							id: '1',
+							design_name: 'Marble',
+							base_item_number: 'M-001',
+							category: 'GLOSSY',
+							box_count: 50,
+							has_batch_tracking: false,
+							has_serial_tracking: false,
+							low_stock_threshold: 10,
+							selling_price: 1000,
+							created_at: '',
+							updated_at: '',
+						},
+					],
+					loading: false,
+					totalCount: 1,
+					filters: { category: 'ALL' },
+					fetchItems: jest.fn(),
+				}),
 		);
 
 		const { getByText, queryByTestId } = renderWithTheme(<InventoryTab />);

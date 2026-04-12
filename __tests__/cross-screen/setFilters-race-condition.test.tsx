@@ -21,7 +21,7 @@ describe('Cross-Screen Sync: Bug #4 Documentation', () => {
 	});
 
 	it('ignores subsequent filter updates if already loading (Race Condition)', async () => {
-		let resolveFirst: (val: any) => void;
+		let resolveFirst: (val: { data: any[]; count: number }) => void;
 		const firstPromise = new Promise((resolve) => {
 			resolveFirst = resolve;
 		});

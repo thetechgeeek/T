@@ -9,6 +9,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import type { ThemeColors } from '@/src/theme';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
 
@@ -89,7 +90,7 @@ function SectionRow({
 	accent?: string;
 	bold?: boolean;
 	indent?: boolean;
-	c: any;
+	c: ThemeColors;
 	formatCurrency: (v: number) => string;
 }) {
 	return (

@@ -2,6 +2,7 @@ import React, { useCallback, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
@@ -189,7 +190,7 @@ export default function CustomersScreen() {
 								description={t('customer.addFirstHint')}
 								icon={<UserPlus size={48} color={theme.colors.placeholder} />}
 								actionLabel={t('customer.addCustomer')}
-								onAction={() => router.push('/(app)/customers/add' as any)}
+								onAction={() => router.push('/(app)/customers/add' as Href)}
 							/>
 						) : null
 					}
@@ -202,7 +203,7 @@ export default function CustomersScreen() {
 					styles.fab,
 					{ backgroundColor: theme.colors.primary, ...(theme.shadows?.lg || {}) },
 				]}
-				onPress={() => router.push('/(app)/customers/add' as any)}
+				onPress={() => router.push('/(app)/customers/add' as Href)}
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-customer-button"

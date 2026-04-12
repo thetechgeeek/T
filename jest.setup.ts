@@ -610,5 +610,9 @@ jest.mock('react-native-svg', () => {
 
 jest.mock('react-native-qrcode-svg', () => {
 	const React = jest.requireActual('react');
-	return (props: any) => React.createElement('QRCode', props);
+	function QRCodeMock(props: Record<string, unknown>) {
+		return React.createElement('QRCode', props);
+	}
+	QRCodeMock.displayName = 'QRCodeMock';
+	return QRCodeMock;
 });

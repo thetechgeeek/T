@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Mock the inventory store
 jest.mock('@/src/stores/inventoryStore', () => ({
-	useInventoryStore: (selector: any) =>
+	useInventoryStore: (selector: (state: any) => any) =>
 		selector({
 			items: [
 				{
@@ -50,7 +50,7 @@ jest.mock('expo-router', () => ({
 		setOptions: jest.fn(),
 		addListener: jest.fn(() => jest.fn()),
 	})),
-	useFocusEffect: jest.fn((cb) => cb()),
+	useFocusEffect: jest.fn((cb: () => void) => cb()),
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {

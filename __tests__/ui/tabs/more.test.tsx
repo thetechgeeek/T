@@ -1,4 +1,5 @@
 import React from 'react';
+import { Alert } from 'react-native';
 import { fireEvent } from '@testing-library/react-native';
 import MoreTab from '@/app/(app)/(tabs)/more';
 import { useAuthStore } from '@/src/stores/authStore';
@@ -105,15 +106,11 @@ describe('MoreTab', () => {
 	});
 
 	it('calls logout when Sign Out pressed and confirmed', () => {
-		const alertSpy = jest.spyOn(require('react-native').Alert, 'alert').mockImplementation(((
-			_title: string,
-			_message?: string,
-			buttons?: any[],
-		) => {
-			// Simulate pressing the destructive "Sign Out" button (last button)
+		const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((...args: unknown[]) => {
+			const buttons = args[2] as import('react-native').AlertButton[] | undefined;
 			const confirmBtn = buttons?.find((b) => b.style === 'destructive');
 			confirmBtn?.onPress?.();
-		}) as any);
+		});
 		const { getByText } = renderWithTheme(<MoreTab />);
 		fireEvent.press(getByText('Sign Out'));
 		expect(mockLogout).toHaveBeenCalled();

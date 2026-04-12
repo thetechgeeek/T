@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Mock the customer store to provide data
 jest.mock('@/src/stores/customerStore', () => ({
-	useCustomerStore: (selector: any) =>
+	useCustomerStore: (selector: (state: any) => any) =>
 		selector({
 			customers: [
 				{

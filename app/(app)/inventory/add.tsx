@@ -92,7 +92,7 @@ function SectionHeader({ label }: { label: string }) {
 	return (
 		<ThemedText
 			variant="h3"
-			style={[{ marginTop: s.lg, marginBottom: s.sm, color: c.onSurface }] as any}
+			style={[{ marginTop: s.lg, marginBottom: s.sm, color: c.onSurface }]}
 		>
 			{label}
 		</ThemedText>
@@ -273,12 +273,14 @@ export default function AddItemScreen() {
 		if (isEditing && id) {
 			inventoryService
 				.fetchItemById(id)
-				.then((data: any) => {
+				.then((data) => {
 					reset({
 						design_name: data.design_name,
 						item_code: '',
-						category: data.category as any,
-						custom_category: data.custom_category as any,
+						category: (data.category === 'ALL' || !data.category
+							? 'OTHER'
+							: data.category) as Exclude<TileCategory, 'ALL'>,
+						custom_category: data.custom_category || '',
 						item_description: data.notes || '',
 						selling_price: data.selling_price.toString(),
 						cost_price: data.cost_price?.toString() || '',
@@ -903,10 +905,4 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		height: 44,
 	},
-	center: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingVertical: 20,
-		textAlign: 'center',
-	} as any,
 });

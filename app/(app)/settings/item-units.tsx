@@ -51,21 +51,21 @@ export default function ItemUnitsScreen() {
 	const [editingId, setEditingId] = useState<UUID | null>(null);
 	const [form, setForm] = useState<UnitFormState>(DEFAULT_FORM);
 
-	useEffect(() => {
-		loadUnits();
-	}, []);
-
-	async function loadUnits() {
+	const loadUnits = React.useCallback(async () => {
 		try {
 			setLoading(true);
 			const data = await itemUnitService.fetchAll();
 			setUnits(data);
-		} catch (err) {
+		} catch {
 			Alert.alert(t('common.error'), t('inventory.loadError'));
 		} finally {
 			setLoading(false);
 		}
-	}
+	}, [t]);
+
+	useEffect(() => {
+		loadUnits();
+	}, [loadUnits]);
 
 	function openAdd() {
 		setEditingId(null);
@@ -104,7 +104,7 @@ export default function ItemUnitsScreen() {
 			}
 			await loadUnits();
 			closeModal();
-		} catch (err) {
+		} catch {
 			Alert.alert(t('common.error'), t('inventory.saveError'));
 		} finally {
 			setSubmitting(false);
@@ -124,7 +124,7 @@ export default function ItemUnitsScreen() {
 						try {
 							await itemUnitService.delete(unit.id);
 							await loadUnits();
-						} catch (err) {
+						} catch {
 							Alert.alert(t('common.error'), t('inventory.deleteError'));
 						}
 					},

@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl, Pressable } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	FlatList,
+	RefreshControl,
+	Pressable,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { Building2, Plus } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -58,7 +67,7 @@ function maskAccountNumber(num: string): string {
 }
 
 export default function BankAccountsScreen() {
-	const { theme, c, r } = useThemeTokens();
+	const { theme, c } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 	const router = useRouter();
 	const insets = useSafeAreaInsets();
@@ -96,7 +105,10 @@ export default function BankAccountsScreen() {
 					<Card
 						padding="lg"
 						style={
-							[styles.summaryCard, { backgroundColor: theme.colors.primary }] as any
+							[
+								styles.summaryCard,
+								{ backgroundColor: theme.colors.primary },
+							] as StyleProp<ViewStyle>
 						}
 					>
 						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -185,9 +197,9 @@ export default function BankAccountsScreen() {
 							backgroundColor: c.primary,
 							bottom: 32 + insets.bottom,
 						},
-					] as any
+					] as StyleProp<ViewStyle>
 				}
-				onPress={() => router.push('/(app)/finance/bank-accounts/add' as any)}
+				onPress={() => router.push('/(app)/finance/bank-accounts/add' as Href)}
 				accessibilityRole="button"
 				accessibilityLabel="Add Bank Account"
 			>

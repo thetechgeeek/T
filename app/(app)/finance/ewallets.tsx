@@ -9,7 +9,6 @@ import {
 	Modal,
 	ScrollView,
 } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -62,7 +61,7 @@ const mockWallets: EWallet[] = [
 export default function EWalletsScreen() {
 	const { theme, c, r } = useThemeTokens();
 	const { formatCurrency } = useLocale();
-	const router = useRouter();
+
 	const insets = useSafeAreaInsets();
 
 	const [wallets, setWallets] = useState<EWallet[]>(mockWallets);
@@ -130,9 +129,7 @@ export default function EWalletsScreen() {
 				ListHeaderComponent={
 					<Card
 						padding="lg"
-						style={
-							[styles.summaryCard, { backgroundColor: theme.colors.primary }] as any
-						}
+						style={[styles.summaryCard, { backgroundColor: theme.colors.primary }]}
 					>
 						<ThemedText variant="caption" color="rgba(255,255,255,0.8)">
 							Total in Wallets
@@ -157,12 +154,10 @@ export default function EWalletsScreen() {
 					<Card padding="md" style={styles.walletCard}>
 						<View style={styles.walletRow}>
 							<View
-								style={
-									[
-										styles.walletIcon,
-										{ backgroundColor: item.color + '22', borderRadius: r.md },
-									] as any
-								}
+								style={[
+									styles.walletIcon,
+									{ backgroundColor: item.color + '22', borderRadius: r.md },
+								]}
 							>
 								<ThemedText style={{ fontSize: 26 }}>{item.emoji}</ThemedText>
 							</View>
@@ -195,9 +190,7 @@ export default function EWalletsScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={
-					[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }] as any
-				}
+				style={[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }]}
 				onPress={() => setShowAddModal(true)}
 				accessibilityRole="button"
 				accessibilityLabel="Add E-wallet"
@@ -212,7 +205,7 @@ export default function EWalletsScreen() {
 				presentationStyle="pageSheet"
 				onRequestClose={() => setShowAddModal(false)}
 			>
-				<View style={[styles.modal, { backgroundColor: theme.colors.background }] as any}>
+				<View style={[styles.modal, { backgroundColor: theme.colors.background }]}>
 					<View style={styles.modalHeader}>
 						<ThemedText variant="h3">Add E-Wallet</ThemedText>
 						<Pressable
@@ -286,17 +279,15 @@ export default function EWalletsScreen() {
 								onChangeText={setWalletName}
 								placeholder="e.g. PhonePe Business"
 								placeholderTextColor={c.placeholder}
-								style={
-									[
-										styles.textField,
-										{
-											color: c.onSurface,
-											borderColor: c.border,
-											borderRadius: r.md,
-											backgroundColor: theme.colors.surface,
-										},
-									] as any
-								}
+								style={[
+									styles.textField,
+									{
+										color: c.onSurface,
+										borderColor: c.border,
+										borderRadius: r.md,
+										backgroundColor: theme.colors.surface,
+									},
+								]}
 							/>
 						</View>
 
@@ -316,17 +307,15 @@ export default function EWalletsScreen() {
 								placeholderTextColor={c.placeholder}
 								keyboardType="phone-pad"
 								maxLength={10}
-								style={
-									[
-										styles.textField,
-										{
-											color: c.onSurface,
-											borderColor: c.border,
-											borderRadius: r.md,
-											backgroundColor: theme.colors.surface,
-										},
-									] as any
-								}
+								style={[
+									styles.textField,
+									{
+										color: c.onSurface,
+										borderColor: c.border,
+										borderRadius: r.md,
+										backgroundColor: theme.colors.surface,
+									},
+								]}
 							/>
 						</View>
 
@@ -340,20 +329,16 @@ export default function EWalletsScreen() {
 								Opening Balance
 							</ThemedText>
 							<View
-								style={
-									[
-										styles.amountRow,
-										{ borderColor: c.border, borderRadius: r.md },
-									] as any
-								}
+								style={[
+									styles.amountRow,
+									{ borderColor: c.border, borderRadius: r.md },
+								]}
 							>
 								<ThemedText
-									style={
-										[
-											styles.currencyPrefix,
-											{ color: c.onSurface, borderRightColor: c.border },
-										] as any
-									}
+									style={[
+										styles.currencyPrefix,
+										{ color: c.onSurface, borderRightColor: c.border },
+									]}
 								>
 									₹
 								</ThemedText>
@@ -365,7 +350,7 @@ export default function EWalletsScreen() {
 									placeholder="0"
 									placeholderTextColor={c.placeholder}
 									keyboardType="decimal-pad"
-									style={[styles.amountInput, { color: c.onSurface }] as any}
+									style={[styles.amountInput, { color: c.onSurface }]}
 								/>
 							</View>
 						</View>

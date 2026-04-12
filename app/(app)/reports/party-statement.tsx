@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, StyleSheet, FlatList, Pressable, ScrollView, Alert, Share } from 'react-native';
+import { View, StyleSheet, Pressable, Alert, Share } from 'react-native';
 import {
 	Search,
 	MessageCircle,
@@ -128,7 +128,7 @@ function currentMonthRange() {
 
 export default function PartyStatementScreen() {
 	const { c, s, r, theme } = useThemeTokens();
-	const { formatCurrency, formatDate } = useLocale();
+	const { formatCurrency } = useLocale();
 
 	const [tab, setTab] = useState<Tab>('customers');
 	const [search, setSearch] = useState('');
@@ -147,7 +147,6 @@ export default function PartyStatementScreen() {
 
 	useEffect(() => {
 		if (tab === 'suppliers' && suppliers.length === 0) {
-			setSuppliersLoading(true);
 			supplierRepository
 				.findMany({})
 				.then((r) => setSuppliers((r.data as Supplier[]) ?? []))
@@ -185,9 +184,7 @@ export default function PartyStatementScreen() {
 	const partyName = tab === 'customers' ? selectedCustomer?.name : selectedSupplier?.name;
 	const partyPhone = tab === 'customers' ? selectedCustomer?.phone : selectedSupplier?.phone;
 	const partyGstin =
-		tab === 'customers'
-			? ((selectedCustomer as any)?.gstin ?? '')
-			: ((selectedSupplier as any)?.gstin ?? '');
+		tab === 'customers' ? (selectedCustomer?.gstin ?? '') : (selectedSupplier?.gstin ?? '');
 
 	const txs = MOCK_TRANSACTIONS; // TODO: replace with real ledger from store
 	const openingBal = txs[0]?.balance ?? 0;
@@ -234,6 +231,9 @@ export default function PartyStatementScreen() {
 							setSelectedSupplier(null);
 							setShowPicker(true);
 							setSearch('');
+							if (t === 'suppliers' && suppliers.length === 0) {
+								setSuppliersLoading(true);
+							}
 						}}
 						style={[
 							styles.tabBtn,

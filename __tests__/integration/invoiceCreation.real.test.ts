@@ -80,7 +80,7 @@ describe('Invoice Creation Real DB', () => {
 			payment_status: 'unpaid' as const,
 			amount_paid: 0,
 			notes: prefix,
-		} as any;
+		};
 
 		const lineItems = [
 			{
@@ -96,10 +96,10 @@ describe('Invoice Creation Real DB', () => {
 				igst_amount: 0,
 				discount: 0,
 				sort_order: 1, // Required by not-null constraint
-			} as any,
+			},
 		];
 
-		const result = await invoiceRepository.createAtomic(invoiceInput, lineItems);
+		const result = await invoiceRepository.createAtomic(invoiceInput as any, lineItems as any);
 
 		expect(result.id).toBeTruthy();
 		expect(result.invoice_number).toMatch(/^T\d*\/202\d-\d{2}\/\d{4}$/);
@@ -128,10 +128,10 @@ describe('Invoice Creation Real DB', () => {
 			payment_status: 'unpaid' as const,
 			amount_paid: 0,
 			notes: prefix,
-		} as any;
+		};
 
-		const res1 = await invoiceRepository.createAtomic(invoiceInput, []);
-		const res2 = await invoiceRepository.createAtomic(invoiceInput, []);
+		const res1 = await invoiceRepository.createAtomic(invoiceInput as any, []);
+		const res2 = await invoiceRepository.createAtomic(invoiceInput as any, []);
 
 		const num1 = parseInt(res1.invoice_number.split('/').pop()!);
 		const num2 = parseInt(res2.invoice_number.split('/').pop()!);
@@ -149,7 +149,7 @@ describe('Invoice Creation Real DB', () => {
 			grand_total: 100,
 			payment_status: 'unpaid' as const,
 			notes: prefix,
-		} as any;
+		};
 
 		const invalidLineItems = [
 			{
@@ -161,11 +161,11 @@ describe('Invoice Creation Real DB', () => {
 				line_total: 100,
 				gst_rate: 0,
 				sort_order: 1,
-			} as any,
+			},
 		];
 
 		await expect(
-			invoiceRepository.createAtomic(invoiceInput, invalidLineItems),
+			invoiceRepository.createAtomic(invoiceInput as any, invalidLineItems as any),
 		).rejects.toThrow();
 
 		const afterItem = await inventoryRepository.findById(itemId);
@@ -179,10 +179,10 @@ describe('Invoice Creation Real DB', () => {
 			customer_phone: '1234567890',
 			invoice_date: new Date().toISOString().split('T')[0],
 			grand_total: 100,
-		} as any;
+		};
 
 		try {
-			await invoiceRepository.createAtomic(invoiceInput, []);
+			await invoiceRepository.createAtomic(invoiceInput as any, []);
 			throw new Error('Should have thrown');
 		} catch (e) {
 			expect(e).toBeInstanceOf(AppError);

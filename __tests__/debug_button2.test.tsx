@@ -12,17 +12,18 @@ test('debug disabled - print full RNTL instance tree', () => {
 	);
 
 	// Print RNTL instance tree to understand traversal
-	function printTree(el: any, depth = 0): void {
-		const onPress = el.props?.onPress;
+	function printTree(el: unknown, depth = 0): void {
+		const node = el as any;
+		const onPress = node.props?.onPress;
 		const type =
-			typeof el.type === 'string'
-				? el.type
-				: el.type?.name || el.type?.displayName || 'Unknown';
+			typeof node.type === 'string'
+				? node.type
+				: node.type?.name || node.type?.displayName || 'Unknown';
 		const hasOnPress = onPress !== undefined;
 		console.log(
 			`${'  '.repeat(depth)}${type}${hasOnPress ? ` [onPress=${typeof onPress}]` : ''}`,
 		);
-		el.children?.forEach((c: any) => printTree(c, depth + 1));
+		node.children?.forEach((c: unknown) => printTree(c, depth + 1));
 	}
 	printTree(UNSAFE_root);
 

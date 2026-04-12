@@ -25,6 +25,11 @@ import { layout } from '@/src/theme/layout';
 import { itemPartyRateService } from '@/src/services/itemPartyRateService';
 import type { UUID } from '@/src/types/common';
 import type { InventoryItem, StockOperation, ItemPartyRate } from '@/src/types/inventory';
+
+type ItemPartyRateRow = ItemPartyRate & {
+	customers?: { name: string };
+	suppliers?: { name: string };
+};
 import logger from '@/src/utils/logger';
 
 export default function ItemDetailScreen() {
@@ -35,7 +40,7 @@ export default function ItemDetailScreen() {
 
 	const [item, setItem] = useState<InventoryItem | null>(null);
 	const [history, setHistory] = useState<StockOperation[]>([]);
-	const [partyRates, setPartyRates] = useState<any[]>([]);
+	const [partyRates, setPartyRates] = useState<ItemPartyRateRow[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	// Add Rate Modal State
@@ -132,7 +137,7 @@ export default function ItemDetailScreen() {
 			const ratesData = await itemPartyRateService.fetchByItem(id as UUID);
 			setPartyRates(ratesData || []);
 			Alert.alert('Success', 'Special rate added');
-		} catch (err) {
+		} catch {
 			Alert.alert('Error', 'Failed to add rate');
 		}
 	};

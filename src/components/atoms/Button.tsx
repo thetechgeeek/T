@@ -5,6 +5,7 @@ import {
 	StyleSheet,
 	ActivityIndicator,
 	type PressableProps,
+	type StyleProp,
 	type ViewStyle,
 	type GestureResponderEvent,
 } from 'react-native';
@@ -21,7 +22,7 @@ export interface ButtonProps extends Omit<PressableProps, 'style'> {
 	loading?: boolean;
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
 }
 
 export function Button({

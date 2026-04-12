@@ -31,7 +31,7 @@ interface DayBookRow {
 
 export default function DayBookScreen() {
 	const { c, s, r, theme } = useThemeTokens();
-	const { formatCurrency, formatDate } = useLocale();
+	const { formatCurrency } = useLocale();
 
 	const [selectedDate, setSelectedDate] = useState(todayISO());
 
@@ -148,12 +148,10 @@ export default function DayBookScreen() {
 			<ScreenHeader title="Day Book" showBackButton />
 
 			{/* Date picker row with prev/next arrows */}
-			<View style={[styles.dateRow, { paddingHorizontal: s.md }] as any}>
+			<View style={[styles.dateRow, { paddingHorizontal: s.md }]}>
 				<Pressable
 					onPress={() => setSelectedDate((d) => shiftDate(d, -1))}
-					style={
-						[styles.arrowBtn, { backgroundColor: c.surface, borderRadius: r.md }] as any
-					}
+					style={[styles.arrowBtn, { backgroundColor: c.surface, borderRadius: r.md }]}
 					accessibilityLabel="Previous day"
 				>
 					<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
@@ -165,9 +163,7 @@ export default function DayBookScreen() {
 
 				<Pressable
 					onPress={() => setSelectedDate((d) => shiftDate(d, 1))}
-					style={
-						[styles.arrowBtn, { backgroundColor: c.surface, borderRadius: r.md }] as any
-					}
+					style={[styles.arrowBtn, { backgroundColor: c.surface, borderRadius: r.md }]}
 					accessibilityLabel="Next day"
 				>
 					<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
@@ -179,9 +175,7 @@ export default function DayBookScreen() {
 				<View style={styles.columnsRow}>
 					{/* Received column */}
 					<Card
-						style={
-							[styles.column, { borderTopColor: c.success, borderTopWidth: 3 }] as any
-						}
+						style={[styles.column, { borderTopColor: c.success, borderTopWidth: 3 }]}
 						padding="sm"
 					>
 						<ThemedText
@@ -193,15 +187,13 @@ export default function DayBookScreen() {
 						</ThemedText>
 						{divider}
 						<View
-							style={
-								[
-									styles.colHeader,
-									{
-										borderBottomColor: c.border,
-										borderBottomWidth: StyleSheet.hairlineWidth,
-									},
-								] as any
-							}
+							style={[
+								styles.colHeader,
+								{
+									borderBottomColor: c.border,
+									borderBottomWidth: StyleSheet.hairlineWidth,
+								},
+							]}
 						>
 							<ThemedText
 								variant="caption"
@@ -228,9 +220,7 @@ export default function DayBookScreen() {
 
 					{/* Paid column */}
 					<Card
-						style={
-							[styles.column, { borderTopColor: c.error, borderTopWidth: 3 }] as any
-						}
+						style={[styles.column, { borderTopColor: c.error, borderTopWidth: 3 }]}
 						padding="sm"
 					>
 						<ThemedText
@@ -242,15 +232,13 @@ export default function DayBookScreen() {
 						</ThemedText>
 						{divider}
 						<View
-							style={
-								[
-									styles.colHeader,
-									{
-										borderBottomColor: c.border,
-										borderBottomWidth: StyleSheet.hairlineWidth,
-									},
-								] as any
-							}
+							style={[
+								styles.colHeader,
+								{
+									borderBottomColor: c.border,
+									borderBottomWidth: StyleSheet.hairlineWidth,
+								},
+							]}
 						>
 							<ThemedText
 								variant="caption"
@@ -326,17 +314,15 @@ export default function DayBookScreen() {
 
 				{/* Export / Print placeholder */}
 				<Pressable
-					style={
-						[
-							styles.exportBtn,
-							{
-								backgroundColor: withOpacity(c.primary, 0.1),
-								borderRadius: r.md,
-								borderColor: c.primary,
-								marginTop: s.md,
-							},
-						] as any
-					}
+					style={[
+						styles.exportBtn,
+						{
+							backgroundColor: withOpacity(c.primary, 0.1),
+							borderRadius: r.md,
+							borderColor: c.primary,
+							marginTop: s.md,
+						},
+					]}
 					onPress={() => {}}
 					accessibilityLabel="Export / Print Day Book"
 				>

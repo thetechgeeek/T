@@ -5,7 +5,6 @@ import { Phone, ChevronRight } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Card } from '@/src/components/atoms/Card';
 import { SearchBar } from '@/src/components/molecules/SearchBar';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { useCustomerStore } from '@/src/stores/customerStore';
@@ -63,7 +62,6 @@ export default function AllPartiesScreen() {
 
 	useEffect(() => {
 		if (tab === 'suppliers' && suppliers.length === 0) {
-			setSupliersLoading(true);
 			supplierRepository
 				.findMany({})
 				.then((r) => setSuppliers((r.data as Supplier[]) ?? []))
@@ -103,7 +101,7 @@ export default function AllPartiesScreen() {
 	const totalPayable = useMemo(
 		() =>
 			suppliers.reduce(
-				(a, s) => a + Math.max(0, 0 /* balance not on supplier type yet */),
+				(a, _s) => a + Math.max(0, 0 /* balance not on supplier type yet */),
 				0,
 			),
 		[suppliers],
@@ -271,7 +269,12 @@ export default function AllPartiesScreen() {
 				{(['customers', 'suppliers'] as Tab[]).map((t) => (
 					<Pressable
 						key={t}
-						onPress={() => setTab(t)}
+						onPress={() => {
+							setTab(t);
+							if (t === 'suppliers' && suppliers.length === 0) {
+								setSupliersLoading(true);
+							}
+						}}
 						style={[
 							styles.tabBtn,
 							tab === t && { borderBottomColor: c.primary, borderBottomWidth: 2 },

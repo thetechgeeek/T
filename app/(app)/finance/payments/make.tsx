@@ -7,6 +7,8 @@ import {
 	Modal,
 	Pressable,
 	TouchableOpacity,
+	type StyleProp,
+	type ViewStyle,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { X } from 'lucide-react-native';
@@ -22,6 +24,7 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import type { Supplier } from '@/src/types/supplier';
+import type { PaymentFormInput } from '@/src/schemas/payment';
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Card'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
@@ -89,7 +92,7 @@ export default function MakePaymentScreen() {
 			await paymentService.recordPayment({
 				payment_date: paymentDate,
 				amount: amt,
-				payment_mode: modeToKey[paymentMode] as any,
+				payment_mode: modeToKey[paymentMode] as PaymentFormInput['payment_mode'],
 				direction: 'made',
 				supplier_id: selectedSupplier.id,
 				notes: notes.trim() || undefined,
@@ -158,7 +161,7 @@ export default function MakePaymentScreen() {
 												[
 													styles.dropdownRow,
 													{ borderBottomColor: c.border },
-												] as any
+												] as StyleProp<ViewStyle>
 											}
 											onPress={() => {
 												setSelectedSupplier(sup);
@@ -183,7 +186,7 @@ export default function MakePaymentScreen() {
 				)}
 
 				{/* Payment Date */}
-				<View style={[styles.dateRow, { marginTop: s.md }] as any}>
+				<View style={[styles.dateRow, { marginTop: s.md }] as StyleProp<ViewStyle>}>
 					<ThemedText variant="label" color={c.onSurfaceVariant}>
 						Payment Date
 					</ThemedText>
@@ -204,7 +207,7 @@ export default function MakePaymentScreen() {
 								[
 									styles.modalCard,
 									{ backgroundColor: c.surface, borderRadius: r.lg },
-								] as any
+								] as StyleProp<ViewStyle>
 							}
 						>
 							<DatePickerField
@@ -242,7 +245,7 @@ export default function MakePaymentScreen() {
 								[
 									styles.fullAmtChip,
 									{ borderColor: c.primary, borderRadius: r.full },
-								] as any
+								] as StyleProp<ViewStyle>
 							}
 							onPress={() => setAmount(String(outstandingBalance))}
 						>
@@ -277,7 +280,7 @@ export default function MakePaymentScreen() {
 													borderColor: active ? c.primary : c.border,
 													borderRadius: r.full,
 												},
-											] as any
+											] as StyleProp<ViewStyle>
 										}
 										onPress={() => setPaymentMode(m)}
 									>
@@ -338,7 +341,7 @@ export default function MakePaymentScreen() {
 					title={submitting ? 'Saving...' : 'Pay Supplier'}
 					onPress={handleSave}
 					disabled={submitting}
-					style={[styles.saveBtn, { marginTop: s.lg }] as any}
+					style={[styles.saveBtn, { marginTop: s.lg }]}
 					accessibilityLabel="save-payment"
 				/>
 			</ScrollView>

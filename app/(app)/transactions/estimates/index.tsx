@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, FlatList, StyleSheet, Alert, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { Plus, FileText } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -72,7 +73,7 @@ function isExpired(validUntil: string): boolean {
 }
 
 export default function EstimatesScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, r } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 	const [activeFilter, setActiveFilter] = useState<FilterType>('all');
@@ -196,7 +197,7 @@ export default function EstimatesScreen() {
 			{/* FAB */}
 			<Pressable
 				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
-				onPress={() => router.push('/(app)/transactions/estimates/create' as any)}
+				onPress={() => router.push('/(app)/transactions/estimates/create' as Href)}
 				accessibilityLabel="new-estimate"
 				accessibilityRole="button"
 			>

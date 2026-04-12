@@ -101,7 +101,7 @@ const MOCK_ITEMS: ItemProfitRow[] = [
 ];
 
 export default function ItemProfitScreen() {
-	const { c, s, r, theme } = useThemeTokens();
+	const { c, r, theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const [period, setPeriod] = useState<Period>('month');

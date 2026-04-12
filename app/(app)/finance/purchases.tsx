@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, RefreshControl, Alert, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Calendar, User, Plus } from 'lucide-react-native';
 import { FlashList } from '@shopify/flash-list';
@@ -16,7 +17,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { Purchase } from '@/src/types/finance';
 
 export default function PurchasesScreen() {
-	const { theme, c, r } = useThemeTokens();
+	const { theme, r } = useThemeTokens();
 	const { t, formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 	const { purchases, loading, fetchPurchases } = useFinanceStore(
@@ -140,7 +141,7 @@ export default function PurchasesScreen() {
 					styles.fab,
 					{ backgroundColor: theme.colors.primary, borderRadius: r.full },
 				]}
-				onPress={() => router.push('/(app)/finance/purchases/create' as any)}
+				onPress={() => router.push('/(app)/finance/purchases/create' as Href)}
 				accessibilityLabel="New purchase bill"
 			>
 				<Plus size={28} color={theme.colors.onPrimary ?? '#fff'} />

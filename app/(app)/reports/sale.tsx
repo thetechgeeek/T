@@ -53,8 +53,8 @@ function getDateRange(filter: DateFilter): { from: string; to: string } {
 }
 
 export default function SaleReportScreen() {
-	const { theme, c, s, r } = useThemeTokens();
-	const { t, formatCurrency, formatDate } = useLocale();
+	const { theme, c, r } = useThemeTokens();
+	const { formatCurrency, formatDate } = useLocale();
 
 	const { invoices, loading, fetchInvoices } = useInvoiceStore(
 		useShallow((state) => ({

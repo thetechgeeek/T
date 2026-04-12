@@ -34,7 +34,7 @@ describe('InvoiceList Navigation Wiring', () => {
 		expect(mockPush).toHaveBeenCalledWith('/(app)/invoices/create');
 	});
 
-	it('Press invoice row -> router.push("/(app)/invoices/${invoice.id}" as any) called', async () => {
+	it('Press invoice row -> router.push("/(app)/invoices/${invoice.id}") called', async () => {
 		const mockInvoice = {
 			id: 'inv-123',
 			invoice_number: 'INV-123',

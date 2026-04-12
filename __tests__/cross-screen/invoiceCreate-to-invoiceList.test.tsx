@@ -3,6 +3,7 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
 import { invoiceService } from '@/src/services/invoiceService';
 import { dashboardService } from '@/src/services/dashboardService';
+import type { InvoiceInput } from '@/src/types/invoice';
 
 jest.mock('@/src/services/invoiceService');
 jest.mock('@/src/services/dashboardService');
@@ -32,7 +33,7 @@ describe('Cross-Screen Sync: Invoice Creation Sync', () => {
 		await useInvoiceStore.getState().createInvoice({
 			customer_name: 'Test',
 			line_items: [],
-		} as any);
+		} as unknown as InvoiceInput);
 
 		// 2. Verify store list
 		const invoices = useInvoiceStore.getState().invoices;
@@ -47,7 +48,7 @@ describe('Cross-Screen Sync: Invoice Creation Sync', () => {
 		});
 
 		// 1. Create invoice
-		await useInvoiceStore.getState().createInvoice({} as any);
+		await useInvoiceStore.getState().createInvoice({} as unknown as InvoiceInput);
 
 		// 2. Verify dashboard refresh was triggered via EventBus
 		await waitFor(() => {

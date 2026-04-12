@@ -1,14 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import {
-	View,
-	ScrollView,
-	StyleSheet,
-	Alert,
-	Pressable,
-	Platform,
-	ActivityIndicator,
-} from 'react-native';
+import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import {
 	Trash2,
 	Share2,
@@ -25,13 +18,13 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
-import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { Divider } from '@/src/components/atoms/Divider';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { Purchase, PurchaseLineItem, Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
+import type { ThemeColors } from '@/src/theme';
 
 type PurchaseWithDetails = Purchase & {
 	suppliers?: { name: string; phone?: string } | null;
@@ -55,13 +48,13 @@ function statusLabel(status: string): string {
 	return 'UNPAID';
 }
 
-function statusBannerColor(status: string, c: any): string {
+function statusBannerColor(status: string, c: ThemeColors): string {
 	if (status === 'paid') return c.successLight ?? '#e8f5e9';
 	if (status === 'partial') return c.warningLight ?? '#fff8e1';
 	return c.errorLight ?? '#fdecea';
 }
 
-function statusTextColor(status: string, c: any): string {
+function statusTextColor(status: string, c: ThemeColors): string {
 	if (status === 'paid') return c.success;
 	if (status === 'partial') return c.warning ?? '#f57f17';
 	return c.error;
@@ -149,7 +142,7 @@ export default function PurchaseBillDetailScreen() {
 	};
 
 	const handleRecordPayment = () => {
-		router.push('/(app)/finance/payments/make' as any);
+		router.push('/(app)/finance/payments/make' as Href);
 	};
 
 	if (loading) {

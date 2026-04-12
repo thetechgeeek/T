@@ -1,6 +1,7 @@
 import { View, StyleSheet, RefreshControl, Pressable } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import {
 	TrendingUp,
 	TrendingDown,
@@ -22,7 +23,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import React, { useEffect, useState } from 'react';
 
 export default function FinanceOverviewScreen() {
-	const { theme, c, s, r } = useThemeTokens();
+	const { theme, c, r } = useThemeTokens();
 	const { formatCurrency, t } = useLocale();
 	const router = useRouter();
 	const [refreshing, setRefreshing] = useState(false);
@@ -103,7 +104,7 @@ export default function FinanceOverviewScreen() {
 			<View style={styles.quickActions}>
 				<Pressable
 					style={[styles.quickBtn, { backgroundColor: c.primary, borderRadius: r.md }]}
-					onPress={() => router.push('/(app)/finance/payments/receive' as any)}
+					onPress={() => router.push('/(app)/finance/payments/receive' as Href)}
 					accessibilityLabel="receive-payment"
 				>
 					<ArrowDownLeft size={20} color={c.onPrimary} />
@@ -116,7 +117,7 @@ export default function FinanceOverviewScreen() {
 						styles.quickBtn,
 						{ backgroundColor: theme.colors.onSurfaceVariant, borderRadius: r.md },
 					]}
-					onPress={() => router.push('/(app)/finance/payments/make' as any)}
+					onPress={() => router.push('/(app)/finance/payments/make' as Href)}
 					accessibilityLabel="make-payment"
 				>
 					<ArrowUpRight size={20} color={c.onPrimary} />
@@ -138,7 +139,7 @@ export default function FinanceOverviewScreen() {
 					subtitle={t('finance.viewExpenses')}
 					accessibilityLabel="menu-expenses"
 					accessibilityHint={t('finance.viewExpenses')}
-					onPress={() => router.push('/(app)/finance/expenses' as any)}
+					onPress={() => router.push('/(app)/finance/expenses' as Href)}
 					leftIcon={
 						<Receipt
 							size={24}
@@ -152,7 +153,7 @@ export default function FinanceOverviewScreen() {
 					subtitle={t('finance.viewPurchases')}
 					accessibilityLabel="menu-purchases"
 					accessibilityHint={t('finance.viewPurchases')}
-					onPress={() => router.push('/(app)/finance/purchases' as any)}
+					onPress={() => router.push('/(app)/finance/purchases' as Href)}
 					leftIcon={
 						<ShoppingCart
 							color={theme.colors.primary}
@@ -166,7 +167,7 @@ export default function FinanceOverviewScreen() {
 					subtitle={t('customer.outstanding')}
 					accessibilityLabel="menu-aging-report"
 					accessibilityHint={t('finance.viewAging')}
-					onPress={() => router.push('/(app)/customers/aging' as any)}
+					onPress={() => router.push('/(app)/customers/aging' as Href)}
 					leftIcon={
 						<TrendingDown
 							size={24}
@@ -180,7 +181,7 @@ export default function FinanceOverviewScreen() {
 					subtitle={t('finance.viewProfitLoss')}
 					accessibilityLabel="menu-profit-loss"
 					accessibilityHint={t('finance.viewProfitLoss')}
-					onPress={() => router.push('/(app)/finance/profit-loss' as any)}
+					onPress={() => router.push('/(app)/finance/profit-loss' as Href)}
 					leftIcon={
 						<TrendingUp color={theme.colors.success} importantForAccessibility="no" />
 					}

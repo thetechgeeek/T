@@ -50,18 +50,8 @@ function getDateRange(filter: DateFilter): { from: string; to: string } {
 	return { from: today, to: today };
 }
 
-function statusColor(
-	status: string,
-	c: { success: string; warning: string; error: string; onSurfaceVariant: string },
-) {
-	if (status === 'paid') return c.success;
-	if (status === 'partial') return c.warning;
-	if (status === 'unpaid') return c.error;
-	return c.onSurfaceVariant;
-}
-
 export default function PurchaseReportScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, r } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 
 	const { purchases, loading, fetchPurchases } = useFinanceStore(

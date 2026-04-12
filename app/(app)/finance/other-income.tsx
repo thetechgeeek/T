@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, RefreshControl, Pressable, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import {
 	Plus,
 	Landmark,
@@ -93,14 +94,14 @@ function getMonthTotal(entries: IncomeEntry[]): number {
 // ---------------------------------------------------------------------------
 
 export default function OtherIncomeScreen() {
-	const { c, s, r, theme } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const insets = useSafeAreaInsets();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 
 	// Local state — replace with store/supabase if available
-	const [entries, setEntries] = useState<IncomeEntry[]>([]);
-	const [loading, setLoading] = useState(false);
+	const [entries] = useState<IncomeEntry[]>([]);
+	const [loading] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 	const [activeCategory, setActiveCategory] = useState('all');
 
@@ -109,7 +110,6 @@ export default function OtherIncomeScreen() {
 
 	useEffect(() => {
 		// TODO: replace with financeStore.fetchOtherIncome() once added
-		setLoading(false);
 	}, []);
 
 	const monthTotal = getMonthTotal(entries);
@@ -222,7 +222,7 @@ export default function OtherIncomeScreen() {
 						<EmptyState
 							title="No income entries yet"
 							actionLabel="+ Add Income"
-							onAction={() => router.push('/(app)/finance/other-income/add' as any)}
+							onAction={() => router.push('/(app)/finance/other-income/add' as Href)}
 						/>
 					) : null
 				}
@@ -237,7 +237,7 @@ export default function OtherIncomeScreen() {
 						bottom: 32 + insets.bottom,
 					},
 				]}
-				onPress={() => router.push('/(app)/finance/other-income/add' as any)}
+				onPress={() => router.push('/(app)/finance/other-income/add' as Href)}
 				accessibilityRole="button"
 				accessibilityLabel="add-other-income"
 			>

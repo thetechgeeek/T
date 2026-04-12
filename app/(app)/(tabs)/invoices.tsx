@@ -124,9 +124,7 @@ export default function InvoicesListScreen() {
 				if (inv.payment_status !== statusChip) return false;
 			}
 			if (statusChip === 'overdue') {
-				const dueDateStr = (inv as unknown as Record<string, unknown>).due_date as
-					| string
-					| undefined;
+				const dueDateStr = inv.due_date;
 				const isOverdue =
 					inv.payment_status === 'unpaid' &&
 					!!dueDateStr &&
@@ -164,7 +162,7 @@ export default function InvoicesListScreen() {
 					title={t('invoice.newInvoice')}
 					accessibilityLabel="new-invoice-button"
 					leftIcon={<Plus color="#FFF" size={20} />}
-					onPress={() => router.push('/(app)/invoices/create' as any)}
+					onPress={() => router.push('/(app)/invoices/create')}
 				/>
 			</View>
 
@@ -178,7 +176,7 @@ export default function InvoicesListScreen() {
 							marginHorizontal: s.md,
 							marginTop: s.md,
 							borderRadius: r.md,
-							...(theme.shadows.sm as object),
+							...theme.shadows.sm,
 						},
 					]}
 				>
@@ -366,7 +364,7 @@ export default function InvoicesListScreen() {
 								title={t('invoice.createFirst')}
 								variant="outline"
 								style={{ marginTop: s.lg }}
-								onPress={() => router.push('/(app)/invoices/create' as any)}
+								onPress={() => router.push('/(app)/invoices/create')}
 							/>
 						)}
 					</View>
@@ -380,7 +378,7 @@ export default function InvoicesListScreen() {
 								styles.invoiceCard,
 								{
 									backgroundColor: theme.colors.card,
-									...(theme.shadows.sm as object),
+									...theme.shadows.sm,
 								},
 							]}
 							accessibilityRole="button"

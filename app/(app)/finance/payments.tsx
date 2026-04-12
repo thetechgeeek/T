@@ -48,6 +48,23 @@ export default function PaymentsScreen() {
 	const [loading, setLoading] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
 
+	useEffect(() => {
+		let cancelled = false;
+		void (async () => {
+			try {
+				const data = await paymentService.fetchPayments({});
+				if (!cancelled) setPayments(data ?? []);
+			} catch {
+				// silently ignore — empty state shown
+			} finally {
+				if (!cancelled) setLoading(false);
+			}
+		})();
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
 	const loadPayments = async () => {
 		try {
 			const data = await paymentService.fetchPayments({});
@@ -56,10 +73,6 @@ export default function PaymentsScreen() {
 			// silently ignore — empty state shown
 		}
 	};
-
-	useEffect(() => {
-		loadPayments().finally(() => setLoading(false));
-	}, []);
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
@@ -71,11 +84,11 @@ export default function PaymentsScreen() {
 
 	const renderItem = ({ item: p }: { item: Payment }) => {
 		const isReceived = p.direction === 'received';
-		const customerName = (p as any).customer?.name ?? (p as any).supplier?.name ?? 'Unknown';
+		const customerName = p.customer?.name ?? p.supplier?.name ?? 'Unknown';
 		const amountColor = isReceived ? c.success : c.error;
 
 		return (
-			<Card padding="sm" style={[styles.row, { borderRadius: r.md }] as any}>
+			<Card padding="sm" style={[styles.row, { borderRadius: r.md }]}>
 				<View style={styles.modeIcon}>
 					{getModeIcon(p.payment_mode, c.onSurfaceVariant)}
 				</View>
@@ -100,12 +113,10 @@ export default function PaymentsScreen() {
 
 			{/* Summary bar */}
 			<View
-				style={
-					[
-						styles.summaryBar,
-						{ backgroundColor: c.surface, borderBottomColor: c.border },
-					] as any
-				}
+				style={[
+					styles.summaryBar,
+					{ backgroundColor: c.surface, borderBottomColor: c.border },
+				]}
 			>
 				<ThemedText variant="caption" color={c.onSurfaceVariant}>
 					{monthCount} payment{monthCount !== 1 ? 's' : ''} this month
@@ -138,10 +149,9 @@ export default function PaymentsScreen() {
 				/>
 			)}
 
-			{/* FAB */}
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }] as any}
-				onPress={() => router.push('/(app)/finance/payments/receive' as any)}
+				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
+				onPress={() => router.push('/(app)/finance/payments/receive')}
 				accessibilityLabel="Record payment"
 			>
 				<Plus size={28} color={c.onPrimary} />

@@ -8,6 +8,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { useFinanceStore } from '@/src/stores/financeStore';
+import type { PaymentMode } from '@/src/types/invoice';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 
@@ -24,7 +25,7 @@ const CATEGORIES = [
 const PAYMENT_MODES = [
 	{ label: 'Cash', value: 'cash' },
 	{ label: 'UPI', value: 'upi' },
-	{ label: 'Bank', value: 'bank' },
+	{ label: 'Bank', value: 'bank_transfer' },
 	{ label: 'Cheque', value: 'cheque' },
 ];
 
@@ -33,7 +34,7 @@ function todayISO(): string {
 }
 
 export default function AddExpenseScreen() {
-	const { theme, c, s, r } = useThemeTokens();
+	const { c, r } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 	const insets = useSafeAreaInsets();
@@ -65,7 +66,7 @@ export default function AddExpenseScreen() {
 				amount: parsedAmount,
 				category,
 				notes: notes || undefined,
-				payment_mode: paymentMode as never,
+				payment_mode: paymentMode as PaymentMode,
 			});
 			router.back();
 		} catch (e: unknown) {

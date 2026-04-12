@@ -15,6 +15,60 @@ const ACCOUNTS = [
 	{ id: 'hdfc', name: 'HDFC Current', balance: 230000, type: 'Bank' },
 ];
 
+function AccountPicker({
+	label,
+	selectedId,
+	excludeId,
+	onSelect,
+}: {
+	label: string;
+	selectedId: string;
+	excludeId: string;
+	onSelect: (id: string) => void;
+}) {
+	const { c, s, r } = useThemeTokens();
+	const { formatCurrency } = useLocale();
+
+	return (
+		<View style={{ marginBottom: s.md }}>
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
+				{label}
+			</ThemedText>
+			<View style={[styles.pickerBox, { borderColor: c.border, borderRadius: r.md }]}>
+				{ACCOUNTS.filter((a) => a.id !== excludeId).map((account) => (
+					<Pressable
+						key={account.id}
+						onPress={() => onSelect(account.id)}
+						style={[
+							styles.accountRow,
+							{
+								backgroundColor:
+									selectedId === account.id ? c.primary + '15' : 'transparent',
+								borderBottomColor: c.border,
+							},
+						]}
+					>
+						<View style={{ flex: 1 }}>
+							<ThemedText
+								variant="body"
+								color={selectedId === account.id ? c.primary : c.onSurface}
+							>
+								{account.name}
+							</ThemedText>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{account.type} · Balance: {formatCurrency(account.balance)}
+							</ThemedText>
+						</View>
+						{selectedId === account.id && (
+							<View style={[styles.dot, { backgroundColor: c.primary }]} />
+						)}
+					</Pressable>
+				))}
+			</View>
+		</View>
+	);
+}
+
 export default function FundTransferScreen() {
 	const { c, s, r } = useThemeTokens();
 	const { formatCurrency } = useLocale();
@@ -51,60 +105,6 @@ export default function FundTransferScreen() {
 				`₹${formatCurrency(parsedAmount)} transferred from ${fromAccount?.name} to ${toAccount?.name}`,
 			);
 		}, 800);
-	};
-
-	const AccountPicker = ({
-		label,
-		selectedId,
-		excludeId,
-		onSelect,
-	}: {
-		label: string;
-		selectedId: string;
-		excludeId: string;
-		onSelect: (id: string) => void;
-	}) => {
-		const selected = ACCOUNTS.find((a) => a.id === selectedId);
-		return (
-			<View style={{ marginBottom: s.md }}>
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
-					{label}
-				</ThemedText>
-				<View style={[styles.pickerBox, { borderColor: c.border, borderRadius: r.md }]}>
-					{ACCOUNTS.filter((a) => a.id !== excludeId).map((account) => (
-						<Pressable
-							key={account.id}
-							onPress={() => onSelect(account.id)}
-							style={[
-								styles.accountRow,
-								{
-									backgroundColor:
-										selectedId === account.id
-											? c.primary + '15'
-											: 'transparent',
-									borderBottomColor: c.border,
-								},
-							]}
-						>
-							<View style={{ flex: 1 }}>
-								<ThemedText
-									variant="body"
-									color={selectedId === account.id ? c.primary : c.onSurface}
-								>
-									{account.name}
-								</ThemedText>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									{account.type} · Balance: {formatCurrency(account.balance)}
-								</ThemedText>
-							</View>
-							{selectedId === account.id && (
-								<View style={[styles.dot, { backgroundColor: c.primary }]} />
-							)}
-						</Pressable>
-					))}
-				</View>
-			</View>
-		);
 	};
 
 	return (

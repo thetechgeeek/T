@@ -1,6 +1,6 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, RefreshControl, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { View, RefreshControl, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -28,20 +28,11 @@ import {
 	ArrowUpCircle,
 	Wallet,
 } from 'lucide-react-native';
-import type { DashboardStats } from '@/src/types/finance';
+import type { RecentTransaction } from '@/src/types/finance';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
-
-type RecentTransaction = {
-	id: string;
-	type: 'sale' | 'purchase' | 'payment_in' | 'payment_out' | 'expense';
-	party_name?: string;
-	description?: string;
-	amount: number;
-	date: string;
-};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -153,10 +144,7 @@ export default function DashboardScreen() {
 	const hasAlerts = (stats?.low_stock_count ?? 0) > 0;
 	const recentInvoices = invoices.slice(0, 5);
 
-	// recent transactions — only if the field exists on stats (it may be added later)
-	const recentTransactions: RecentTransaction[] =
-		(stats as (DashboardStats & { recentTransactions?: RecentTransaction[] }) | null)
-			?.recentTransactions ?? [];
+	const recentTransactions = stats?.recentTransactions ?? [];
 
 	const onRefresh = React.useCallback(async () => {
 		setRefreshing(true);
@@ -191,9 +179,7 @@ export default function DashboardScreen() {
 			) : (
 				<>
 					{/* ── Main Stats Cards ── */}
-					<View
-						style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }] as any}
-					>
+					<View style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
 						{dashboardStats.map((stat) => (
 							<StatCard
 								key={stat.accessibilityLabel}
@@ -209,37 +195,22 @@ export default function DashboardScreen() {
 
 					{/* ── Today's Business ── */}
 					<View
-						style={
-							[
-								styles.sectionHeader,
-								{ marginTop: s.lg, paddingHorizontal: s.md },
-							] as any
-						}
+						style={[styles.sectionHeader, { marginTop: s.lg, paddingHorizontal: s.md }]}
 					>
-						<ThemedText variant="bodyBold">Today's Business</ThemedText>
+						<ThemedText variant="bodyBold">Today&apos;s Business</ThemedText>
 					</View>
-					<View style={[layout.row, { paddingHorizontal: s.md, gap: s.sm }] as any}>
+					<View style={[layout.row, { paddingHorizontal: s.md, gap: s.sm }]}>
 						{/* Today's Sale */}
 						<Card
-							style={[styles.businessTile, { flex: 1 }] as any}
+							style={[styles.businessTile, { flex: 1 }]}
 							padding="md"
 							accessibilityLabel="stat-today-sale-tile"
 						>
 							<View
-								style={
-									[
-										layout.row,
-										{ alignItems: 'center', marginBottom: s.xs },
-									] as any
-								}
+								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
 							>
 								<View
-									style={
-										[
-											styles.tileIcon,
-											{ backgroundColor: `${c.success}18` },
-										] as any
-									}
+									style={[styles.tileIcon, { backgroundColor: `${c.success}18` }]}
 								>
 									<TrendingUp size={16} color={c.success} />
 								</View>
@@ -248,7 +219,7 @@ export default function DashboardScreen() {
 									color={c.onSurfaceVariant}
 									style={{ marginLeft: s.xs }}
 								>
-									Today's Sale
+									Today&apos;s Sale
 								</ThemedText>
 							</View>
 							<ThemedText variant="h3" color={c.success}>
@@ -261,23 +232,14 @@ export default function DashboardScreen() {
 
 						{/* Today's Collection */}
 						<Card
-							style={[styles.businessTile, { flex: 1 }] as any}
+							style={[styles.businessTile, { flex: 1 }]}
 							padding="md"
 							accessibilityLabel="stat-today-collection-tile"
 						>
 							<View
-								style={
-									[
-										layout.row,
-										{ alignItems: 'center', marginBottom: s.xs },
-									] as any
-								}
+								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
 							>
-								<View
-									style={
-										[styles.tileIcon, { backgroundColor: `${c.info}18` }] as any
-									}
-								>
+								<View style={[styles.tileIcon, { backgroundColor: `${c.info}18` }]}>
 									<ArrowDownCircle size={16} color={c.info} />
 								</View>
 								<ThemedText
@@ -285,17 +247,11 @@ export default function DashboardScreen() {
 									color={c.onSurfaceVariant}
 									style={{ marginLeft: s.xs }}
 								>
-									Today's Collection
+									Today&apos;s Collection
 								</ThemedText>
 							</View>
 							<ThemedText variant="h3" color={c.info}>
-								{formatCurrency(
-									(
-										stats as
-											| (DashboardStats & { today_collection?: number })
-											| null
-									)?.today_collection ?? 0,
-								)}
+								{formatCurrency(stats?.today_collection ?? 0)}
 							</ThemedText>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
 								Payments received
@@ -303,9 +259,7 @@ export default function DashboardScreen() {
 						</Card>
 					</View>
 
-					<QuickActionsGrid
-						actions={quickActions as Parameters<typeof QuickActionsGrid>[0]['actions']}
-					/>
+					<QuickActionsGrid actions={quickActions} />
 
 					{/* ── Alerts ── */}
 					{hasAlerts && (
@@ -325,10 +279,10 @@ export default function DashboardScreen() {
 							</ThemedText>
 							{(stats?.low_stock_count ?? 0) > 0 && (
 								<Pressable
-									onPress={() => router.push('/(app)/(tabs)/inventory' as any)}
+									onPress={() => router.push('/(app)/(tabs)/inventory')}
 									accessibilityRole="button"
 									accessibilityLabel="alert-low-stock"
-									style={[layout.rowBetween, { paddingVertical: s.xs }] as any}
+									style={[layout.rowBetween, { paddingVertical: s.xs }]}
 								>
 									<View style={layout.row}>
 										<AlertTriangle
@@ -352,12 +306,10 @@ export default function DashboardScreen() {
 					{recentTransactions.length > 0 && (
 						<View style={{ marginBottom: s.md }}>
 							<View
-								style={
-									[
-										layout.rowBetween,
-										{ paddingHorizontal: s.md, marginBottom: s.sm },
-									] as any
-								}
+								style={[
+									layout.rowBetween,
+									{ paddingHorizontal: s.md, marginBottom: s.sm },
+								]}
 							>
 								<ThemedText variant="bodyBold">Recent Activity</ThemedText>
 								<Pressable
@@ -382,35 +334,31 @@ export default function DashboardScreen() {
 									return (
 										<View
 											key={tx.id}
-											style={
-												[
-													layout.rowBetween,
-													styles.txRow,
-													{
-														paddingHorizontal: s.md,
-														paddingVertical: s.sm,
-														borderBottomWidth:
-															idx < recentTransactions.length - 1 &&
-															idx < 4
-																? StyleSheet.hairlineWidth
-																: 0,
-														borderBottomColor: c.border,
-													},
-												] as any
-											}
+											style={[
+												layout.rowBetween,
+												styles.txRow,
+												{
+													paddingHorizontal: s.md,
+													paddingVertical: s.sm,
+													borderBottomWidth:
+														idx < recentTransactions.length - 1 &&
+														idx < 4
+															? StyleSheet.hairlineWidth
+															: 0,
+													borderBottomColor: c.border,
+												},
+											]}
 											accessibilityLabel={`transaction-${tx.id}`}
 										>
 											<View style={layout.row}>
 												<View
-													style={
-														[
-															styles.txIconWrap,
-															{
-																backgroundColor: `${iconColor}18`,
-																borderRadius: r.full,
-															},
-														] as any
-													}
+													style={[
+														styles.txIconWrap,
+														{
+															backgroundColor: `${iconColor}18`,
+															borderRadius: r.full,
+														},
+													]}
 												>
 													{getTransactionIcon(tx.type, iconColor)}
 												</View>
@@ -445,11 +393,7 @@ export default function DashboardScreen() {
 					)}
 
 					{/* ── Recent Invoices ── */}
-					<RecentInvoicesList
-						invoices={
-							recentInvoices as Parameters<typeof RecentInvoicesList>[0]['invoices']
-						}
-					/>
+					<RecentInvoicesList invoices={recentInvoices} />
 				</>
 			)}
 		</AtomicScreen>

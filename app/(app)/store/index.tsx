@@ -37,7 +37,7 @@ interface StatCardProps {
 }
 
 function StatCard({ label, value, icon }: StatCardProps) {
-	const { c, s, r } = useThemeTokens();
+	const { c, r } = useThemeTokens();
 	return (
 		<View style={[styles.statCard, { backgroundColor: c.surface, borderRadius: r.md }]}>
 			<View style={styles.statIcon}>{icon}</View>
@@ -63,7 +63,7 @@ interface RowItemProps {
 }
 
 function RowItem({ label, sub, icon, onPress, isLast }: RowItemProps) {
-	const { c, s } = useThemeTokens();
+	const { c } = useThemeTokens();
 	return (
 		<Pressable
 			onPress={onPress}

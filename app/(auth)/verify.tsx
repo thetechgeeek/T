@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity, TextInput } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	Alert,
+	TouchableOpacity,
+	TextInput,
+	type NativeSyntheticEvent,
+	type TextInputKeyPressEventData,
+} from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import type { Href } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
@@ -45,7 +54,7 @@ export default function VerifyOtpScreen() {
 		}
 	};
 
-	const handleKeyPress = (e: any, index: number) => {
+	const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
 		if (e.nativeEvent.key === 'Backspace' && !code[index] && index > 0) {
 			inputs.current[index - 1]?.focus();
 		}
@@ -63,7 +72,7 @@ export default function VerifyOtpScreen() {
 			// After successful login, check if business profile exists
 			const profile = await businessProfileService.fetch();
 			if (profile && profile.business_name) {
-				router.replace('/inventory' as any);
+				router.replace('/inventory' as Href);
 			} else {
 				router.replace('/(auth)/setup');
 			}

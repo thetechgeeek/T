@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -15,7 +16,7 @@ const AUTO_LOCK_OPTIONS: { key: AutoLock; label: string }[] = [
 	{ key: '15min', label: '15 min' },
 ];
 
-function SectionLabel({ label, c }: { label: string; c: any }) {
+function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
 	return (
 		<ThemedText
 			variant="caption"
@@ -46,7 +47,7 @@ function SwitchRow({
 	sub?: string;
 	value: boolean;
 	onChange: (v: boolean) => void;
-	c: any;
+	c: ThemeColors;
 	last?: boolean;
 }) {
 	return (
@@ -92,7 +93,7 @@ export default function SecuritySettingsScreen() {
 				<SectionLabel label="PIN" c={c} />
 				<View style={[styles.card, { backgroundColor: c.surface }]}>
 					<Pressable
-						onPress={() => router.push('/(app)/settings/lock' as any)}
+						onPress={() => router.push('/(app)/settings/lock')}
 						style={[
 							styles.row,
 							{

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Phone, MessageCircle, ShoppingCart, CreditCard } from 'lucide-react-native';
+import { useLocalSearchParams } from 'expo-router';
+import { MessageCircle, ShoppingCart, CreditCard } from 'lucide-react-native';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -41,9 +41,8 @@ type TabName = 'ledger' | 'purchases';
 
 export default function SupplierDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: UUID }>();
-	const { theme, c, s, r } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const { t } = useLocale();
-	const router = useRouter();
 
 	const [supplier, setSupplier] = useState<Supplier | null>(null);
 	const [loading, setLoading] = useState(false);

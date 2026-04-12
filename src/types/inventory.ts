@@ -65,6 +65,7 @@ export interface InventoryItem extends Timestamps {
 
 	// Legacy / Compatibility (can be phase out later)
 	category?: string;
+	custom_category?: string;
 
 	size_name?: string;
 	grade?: string;

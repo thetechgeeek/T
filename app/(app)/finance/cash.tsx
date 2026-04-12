@@ -8,7 +8,6 @@ import {
 	RefreshControl,
 	Pressable,
 } from 'react-native';
-import { useRouter } from 'expo-router';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -93,7 +92,6 @@ function filterByDate(
 export default function CashInHandScreen() {
 	const { theme, c, r } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
-	const router = useRouter();
 
 	const [activeFilter, setActiveFilter] = useState<DateFilter>('month');
 	const [openingBalance, setOpeningBalance] = useState(MOCK_OPENING_BALANCE);
@@ -140,12 +138,10 @@ export default function CashInHandScreen() {
 					<>
 						{/* Cash in hand balance */}
 						<View
-							style={
-								[
-									styles.balanceCard,
-									{ backgroundColor: theme.colors.primary, borderRadius: r.lg },
-								] as any
-							}
+							style={[
+								styles.balanceCard,
+								{ backgroundColor: theme.colors.primary, borderRadius: r.lg },
+							]}
 						>
 							<ThemedText variant="caption" color="rgba(255,255,255,0.8)">
 								Cash in Hand
@@ -173,16 +169,14 @@ export default function CashInHandScreen() {
 								</ThemedText>
 								<View style={styles.balanceInputRow}>
 									<View
-										style={
-											[
-												styles.inputWrapper,
-												{
-													borderColor: c.border,
-													borderRadius: r.md,
-													flex: 1,
-												},
-											] as any
-										}
+										style={[
+											styles.inputWrapper,
+											{
+												borderColor: c.border,
+												borderRadius: r.md,
+												flex: 1,
+											},
+										]}
 									>
 										<ThemedText
 											style={{ paddingHorizontal: 10, color: c.onSurface }}
@@ -195,9 +189,7 @@ export default function CashInHandScreen() {
 											placeholder="0"
 											placeholderTextColor={c.placeholder}
 											keyboardType="numeric"
-											style={
-												[styles.balanceInput, { color: c.onSurface }] as any
-											}
+											style={[styles.balanceInput, { color: c.onSurface }]}
 											accessibilityLabel="opening-balance-input"
 										/>
 									</View>
@@ -218,18 +210,16 @@ export default function CashInHandScreen() {
 								<Pressable
 									key={f.value}
 									onPress={() => setActiveFilter(f.value)}
-									style={
-										[
-											styles.filterChip,
-											{
-												backgroundColor:
-													activeFilter === f.value
-														? c.primary
-														: theme.colors.surfaceVariant,
-												borderRadius: r.full,
-											},
-										] as any
-									}
+									style={[
+										styles.filterChip,
+										{
+											backgroundColor:
+												activeFilter === f.value
+													? c.primary
+													: theme.colors.surfaceVariant,
+											borderRadius: r.full,
+										},
+									]}
 									accessibilityRole="button"
 									accessibilityState={{ selected: activeFilter === f.value }}
 									accessibilityLabel={`filter-${f.value}`}
@@ -270,17 +260,13 @@ export default function CashInHandScreen() {
 				renderItem={({ item }) => (
 					<Card
 						padding="md"
-						style={
-							[
-								styles.txRow,
-								{
-									borderLeftColor:
-										item.type === 'in'
-											? theme.colors.success
-											: theme.colors.error,
-								},
-							] as any
-						}
+						style={[
+							styles.txRow,
+							{
+								borderLeftColor:
+									item.type === 'in' ? theme.colors.success : theme.colors.error,
+							},
+						]}
 					>
 						<View style={styles.txLeft}>
 							<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
@@ -300,16 +286,14 @@ export default function CashInHandScreen() {
 				ListFooterComponent={
 					filtered.length > 0 ? (
 						<View
-							style={
-								[
-									styles.footer,
-									{
-										backgroundColor: theme.colors.surfaceVariant,
-										borderRadius: r.md,
-										marginTop: 8,
-									},
-								] as any
-							}
+							style={[
+								styles.footer,
+								{
+									backgroundColor: theme.colors.surfaceVariant,
+									borderRadius: r.md,
+									marginTop: 8,
+								},
+							]}
 						>
 							<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
 								Cash In:{' '}

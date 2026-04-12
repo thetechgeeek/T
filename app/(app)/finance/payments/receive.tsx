@@ -7,6 +7,8 @@ import {
 	Modal,
 	Pressable,
 	TouchableOpacity,
+	type StyleProp,
+	type ViewStyle,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
@@ -23,6 +25,7 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import type { Customer } from '@/src/types/customer';
+import type { PaymentFormInput } from '@/src/schemas/payment';
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Card'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
@@ -41,7 +44,7 @@ function todayString() {
 
 export default function ReceivePaymentScreen() {
 	const { c, s, r } = useThemeTokens();
-	const { t, formatCurrency, formatDate } = useLocale();
+	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 
 	const { customers, fetchCustomers } = useCustomerStore(
@@ -88,7 +91,7 @@ export default function ReceivePaymentScreen() {
 			await paymentService.recordPayment({
 				payment_date: paymentDate,
 				amount: amt,
-				payment_mode: modeToKey[paymentMode] as any,
+				payment_mode: modeToKey[paymentMode] as PaymentFormInput['payment_mode'],
 				direction: 'received',
 				customer_id: selectedCustomer.id,
 				notes: notes.trim() || undefined,
@@ -155,7 +158,7 @@ export default function ReceivePaymentScreen() {
 												[
 													styles.dropdownRow,
 													{ borderBottomColor: c.border },
-												] as any
+												] as StyleProp<ViewStyle>
 											}
 											onPress={() => {
 												setSelectedCustomer(cust);
@@ -178,7 +181,7 @@ export default function ReceivePaymentScreen() {
 				)}
 
 				{/* Payment Date */}
-				<View style={[styles.dateRow, { marginTop: s.md }] as any}>
+				<View style={[styles.dateRow, { marginTop: s.md }] as StyleProp<ViewStyle>}>
 					<ThemedText variant="label" color={c.onSurfaceVariant}>
 						Payment Date
 					</ThemedText>
@@ -199,7 +202,7 @@ export default function ReceivePaymentScreen() {
 								[
 									styles.modalCard,
 									{ backgroundColor: c.surface, borderRadius: r.lg },
-								] as any
+								] as StyleProp<ViewStyle>
 							}
 						>
 							<DatePickerField
@@ -237,7 +240,7 @@ export default function ReceivePaymentScreen() {
 								[
 									styles.fullAmtChip,
 									{ borderColor: c.primary, borderRadius: r.full },
-								] as any
+								] as StyleProp<ViewStyle>
 							}
 							onPress={() => setAmount(String(outstandingBalance))}
 						>
@@ -272,7 +275,7 @@ export default function ReceivePaymentScreen() {
 													borderColor: active ? c.primary : c.border,
 													borderRadius: r.full,
 												},
-											] as any
+											] as StyleProp<ViewStyle>
 										}
 										onPress={() => setPaymentMode(m)}
 									>
@@ -333,7 +336,7 @@ export default function ReceivePaymentScreen() {
 					title={submitting ? 'Saving...' : 'Save Payment'}
 					onPress={handleSave}
 					disabled={submitting}
-					style={[styles.saveBtn, { marginTop: s.lg }] as any}
+					style={[styles.saveBtn, { marginTop: s.lg }]}
 					accessibilityLabel="save-payment"
 				/>
 			</ScrollView>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -164,7 +165,7 @@ export default function SupplierListScreen() {
 								description="Add your first supplier to get started"
 								icon={<UserPlus size={48} color={theme.colors.placeholder} />}
 								actionLabel="Add Supplier"
-								onAction={() => router.push('/(app)/suppliers/add' as any)}
+								onAction={() => router.push('/(app)/suppliers/add' as Href)}
 							/>
 						) : null
 					}
@@ -177,7 +178,7 @@ export default function SupplierListScreen() {
 					styles.fab,
 					{ backgroundColor: theme.colors.primary, ...(theme.shadows?.lg || {}) },
 				]}
-				onPress={() => router.push('/(app)/suppliers/add' as any)}
+				onPress={() => router.push('/(app)/suppliers/add' as Href)}
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-supplier-button"

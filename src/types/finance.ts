@@ -49,6 +49,8 @@ export interface Payment extends Timestamps {
 	invoice_id?: UUID;
 	purchase_id?: UUID;
 	notes?: string;
+	customer?: { name: string };
+	supplier?: { name: string };
 }
 
 export interface ProfitLossReport {
@@ -70,6 +72,15 @@ export interface DailySales {
 	credit_amount: number;
 }
 
+export interface RecentTransaction {
+	id: string;
+	type: 'sale' | 'purchase' | 'payment_in' | 'payment_out' | 'expense';
+	party_name?: string;
+	description?: string;
+	amount: number;
+	date: string;
+}
+
 export interface DashboardStats {
 	today_sales: number;
 	today_invoice_count: number;
@@ -77,6 +88,8 @@ export interface DashboardStats {
 	total_outstanding_customers: number;
 	low_stock_count: number;
 	monthly_revenue: number;
+	today_collection?: number;
+	recentTransactions?: RecentTransaction[];
 }
 
 export interface BusinessProfile {

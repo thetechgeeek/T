@@ -1,25 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {
-	View,
-	StyleSheet,
-	ScrollView,
-	Alert,
-	TouchableOpacity,
-	ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as XLSX from 'xlsx';
-import {
-	Upload,
-	Download,
-	CheckCircle2,
-	ChevronRight,
-	AlertCircle,
-	RefreshCw,
-} from 'lucide-react-native';
+import { Upload, Download, CheckCircle2, RefreshCw } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -27,12 +13,9 @@ import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { layout } from '@/src/theme/layout';
 import { inventoryService } from '@/src/services/inventoryService';
 import { itemCategoryService, itemUnitService } from '@/src/services/itemCategoryService';
 import type { ItemCategory, ItemUnit, InventoryItemInsert } from '@/src/types/inventory';
-import type { UUID } from '@/src/types/common';
-
 const STEPS = [
 	{ id: 1, title: 'Template' },
 	{ id: 2, title: 'Upload' },
@@ -43,8 +26,19 @@ const STEPS = [
 
 const REQUIRED_FIELDS = ['design_name', 'selling_price', 'category_id', 'unit_id'];
 
+function mappedCell(
+	row: Record<string, unknown>,
+	mapping: Record<string, string>,
+	field: string,
+): string {
+	const header = Object.keys(mapping).find((k) => mapping[k] === field);
+	if (!header) return '';
+	const v = row[header];
+	return v == null ? '' : String(v);
+}
+
 export default function InventoryImportScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, s } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 
@@ -52,9 +46,8 @@ export default function InventoryImportScreen() {
 	const [loading, setLoading] = useState(false);
 	const [categories, setCategories] = useState<ItemCategory[]>([]);
 	const [units, setUnits] = useState<ItemUnit[]>([]);
-	const [rawFileData, setRawFileData] = useState<any[]>([]);
+	const [rawFileData, setRawFileData] = useState<Record<string, unknown>[]>([]);
 	const [columnMapping, setColumnMapping] = useState<Record<string, string>>({});
-	const [validationErrors, setValidationErrors] = useState<string[]>([]);
 	const [importResult, setImportResult] = useState<{ success: number; failed: number } | null>(
 		null,
 	);
@@ -71,7 +64,7 @@ export default function InventoryImportScreen() {
 			]);
 			setCategories(cats);
 			setUnits(uns);
-		} catch (err) {
+		} catch {
 			Alert.alert(t('common.error'), 'Failed to load master data');
 		}
 	};
@@ -97,12 +90,17 @@ export default function InventoryImportScreen() {
 			const wb = XLSX.utils.book_new();
 			XLSX.utils.book_append_sheet(wb, ws, 'Inventory');
 			const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-			const uri = (FileSystem as any).documentDirectory + 'Inventory_Template.xlsx';
+			const base = FileSystem.documentDirectory;
+			if (!base) {
+				Alert.alert(t('common.error'), 'Storage unavailable');
+				return;
+			}
+			const uri = base + 'Inventory_Template.xlsx';
 			await FileSystem.writeAsStringAsync(uri, wbout, {
-				encoding: (FileSystem as any).EncodingType.Base64,
+				encoding: FileSystem.EncodingType.Base64,
 			});
 			await Sharing.shareAsync(uri);
-		} catch (err) {
+		} catch {
 			Alert.alert(t('common.error'), 'Failed to generate template');
 		}
 	};
@@ -120,7 +118,7 @@ export default function InventoryImportScreen() {
 			if (!res.canceled && res.assets && res.assets[0]) {
 				const file = res.assets[0];
 				const content = await FileSystem.readAsStringAsync(file.uri, {
-					encoding: (FileSystem as any).EncodingType.Base64,
+					encoding: FileSystem.EncodingType.Base64,
 				});
 				const wb = XLSX.read(content, { type: 'base64' });
 				const wsname = wb.SheetNames[0];
@@ -132,9 +130,9 @@ export default function InventoryImportScreen() {
 					return;
 				}
 
-				setRawFileData(data);
+				setRawFileData(data as Record<string, unknown>[]);
 				// Initial auto-mapping
-				const headers = Object.keys(data[0] as object);
+				const headers = Object.keys(data[0] as Record<string, unknown>);
 				const initialMapping: Record<string, string> = {};
 				headers.forEach((h) => {
 					const match = REQUIRED_FIELDS.find((rf) =>
@@ -145,7 +143,7 @@ export default function InventoryImportScreen() {
 				setColumnMapping(initialMapping);
 				setCurrentStep(3);
 			}
-		} catch (err) {
+		} catch {
 			Alert.alert(t('common.error'), 'Failed to read file');
 		} finally {
 			setLoading(false);
@@ -156,21 +154,9 @@ export default function InventoryImportScreen() {
 		try {
 			setLoading(true);
 			const itemsToInsert: InventoryItemInsert[] = rawFileData.map((row) => {
-				const item: any = {
-					design_name:
-						row[
-							Object.keys(columnMapping).find(
-								(k) => columnMapping[k] === 'design_name',
-							)!
-						] || 'Unnamed Item',
-					selling_price:
-						parseFloat(
-							row[
-								Object.keys(columnMapping).find(
-									(k) => columnMapping[k] === 'selling_price',
-								)!
-							],
-						) || 0,
+				const item: InventoryItemInsert = {
+					design_name: mappedCell(row, columnMapping, 'design_name') || 'Unnamed Item',
+					selling_price: parseFloat(mappedCell(row, columnMapping, 'selling_price')) || 0,
 					gst_rate: 18,
 					hsn_code: '6908',
 					cost_price: 0,
@@ -178,13 +164,12 @@ export default function InventoryImportScreen() {
 					has_batch_tracking: false,
 					has_serial_tracking: false,
 					low_stock_threshold: 5,
+					category_id: categories[0]?.id,
+					unit_id: units[0]?.id,
 				};
 
 				// Map category/unit by name if possible
-				const catName =
-					row[
-						Object.keys(columnMapping).find((k) => columnMapping[k] === 'category_id')!
-					];
+				const catName = mappedCell(row, columnMapping, 'category_id');
 				if (catName) {
 					const cat = categories.find(
 						(c) => c.name_en === catName || c.name_hi === catName,
@@ -193,8 +178,7 @@ export default function InventoryImportScreen() {
 				}
 				if (!item.category_id && categories.length > 0) item.category_id = categories[0].id;
 
-				const unitAbbr =
-					row[Object.keys(columnMapping).find((k) => columnMapping[k] === 'unit_id')!];
+				const unitAbbr = mappedCell(row, columnMapping, 'unit_id');
 				if (unitAbbr) {
 					const unit = units.find(
 						(u) => u.abbreviation === unitAbbr || u.name === unitAbbr,
@@ -361,7 +345,7 @@ export default function InventoryImportScreen() {
 						</ThemedText>
 						<Button
 							title="Go to Inventory"
-							onPress={() => router.replace('/(app)/(tabs)/inventory' as any)}
+							onPress={() => router.replace('/(app)/(tabs)/inventory')}
 						/>
 					</Card>
 				);

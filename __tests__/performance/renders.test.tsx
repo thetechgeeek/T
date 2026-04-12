@@ -23,7 +23,7 @@ let mockStatCardRenderCount = 0;
 jest.mock('@/src/components/molecules/StatCard', () => {
 	const ActualStatCard = jest.requireActual('@/src/components/molecules/StatCard').StatCard;
 	return {
-		StatCard: (props: any) => {
+		StatCard: (props: Record<string, unknown>) => {
 			mockStatCardRenderCount++;
 			return <ActualStatCard {...props} />;
 		},

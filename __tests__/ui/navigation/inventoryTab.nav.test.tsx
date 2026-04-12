@@ -18,7 +18,7 @@ beforeEach(() => {
 	// Rely on global expo-router mock but set specific return values
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
 
-	(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: any) => {
+	(useInventoryStore as unknown as jest.Mock).mockImplementation((selector: (s: any) => any) => {
 		const state = {
 			items: [],
 			loading: false,
@@ -33,7 +33,7 @@ beforeEach(() => {
 });
 
 describe('InventoryTab Navigation Wiring', () => {
-	it('Press FAB (+) -> router.push("/(app)/inventory/add" as any) called', async () => {
+	it('Press FAB (+) -> router.push("/(app)/inventory/add") called', async () => {
 		const { getByLabelText } = renderWithTheme(<InventoryTab />);
 		await waitFor(() => expect(getByLabelText('add-inventory-button')).toBeTruthy());
 		fireEvent.press(getByLabelText('add-inventory-button'));
@@ -46,7 +46,7 @@ describe('InventoryTab Navigation Wiring', () => {
 		expect(mockPush).not.toHaveBeenCalled();
 	});
 
-	it('Press a TileSetCard item variant -> router.push("/(app)/inventory/i1" as any) called', async () => {
+	it('Press a TileSetCard item variant -> router.push("/(app)/inventory/i1") called', async () => {
 		const mockItem = {
 			id: 'i1',
 			base_item_number: 'B001',
@@ -58,7 +58,7 @@ describe('InventoryTab Navigation Wiring', () => {
 		};
 
 		(useInventoryStore as unknown as jest.Mock).mockImplementation(
-			(selector: (state: any) => unknown) =>
+			(selector: (state: any) => any) =>
 				selector({
 					items: [mockItem],
 					loading: false,

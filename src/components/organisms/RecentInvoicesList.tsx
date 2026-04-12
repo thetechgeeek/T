@@ -36,7 +36,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 			<View style={[layout.rowBetween, { marginBottom: s.sm }]}>
 				<ThemedText variant="h3">{t('dashboard.recentInvoices')}</ThemedText>
 				<TouchableOpacity
-					onPress={() => router.push('/(app)/(tabs)/invoices' as any)}
+					onPress={() => router.push('/(app)/(tabs)/invoices' as Href)}
 					accessibilityRole="button"
 					accessibilityLabel="see-all-invoices"
 					accessibilityHint="View all invoices"

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -135,7 +136,7 @@ export default function SettingsScreen() {
 							{section.rows.map((row, idx) => (
 								<Pressable
 									key={row.route}
-									onPress={() => router.push(row.route as any)}
+									onPress={() => router.push(row.route as Href)}
 									style={({ pressed }) => [
 										styles.row,
 										idx < section.rows.length - 1 && {

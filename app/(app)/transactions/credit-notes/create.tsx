@@ -260,9 +260,7 @@ export default function CreateCreditNoteScreen() {
 				{/* Return Total */}
 				<Card
 					padding="md"
-					style={
-						[styles.totalCard, { backgroundColor: c.surface, marginTop: s.md }] as any
-					}
+					style={[styles.totalCard, { backgroundColor: c.surface, marginTop: s.md }]}
 				>
 					<ThemedText variant="label" color={c.onSurfaceVariant}>
 						Return Total
@@ -328,7 +326,7 @@ export default function CreateCreditNoteScreen() {
 				<Button
 					title="Save"
 					onPress={handleSave}
-					style={[styles.saveBtn, { marginTop: s.lg }] as any}
+					style={[styles.saveBtn, { marginTop: s.lg }]}
 					accessibilityLabel="save-credit-note"
 				/>
 			</ScrollView>

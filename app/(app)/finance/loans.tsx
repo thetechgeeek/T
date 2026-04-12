@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { Plus } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -47,23 +48,21 @@ export default function LoansScreen() {
 		const badgeColor = LOAN_TYPE_COLORS[item.loanType] ?? c.primary;
 
 		return (
-			<Card style={[styles.loanCard, { marginBottom: s.sm }] as any} padding="md">
+			<Card style={[styles.loanCard, { marginBottom: s.sm }]} padding="md">
 				<View style={styles.loanHeader}>
 					<ThemedText weight="bold" style={{ flex: 1 }}>
 						{item.lenderName}
 					</ThemedText>
 					<View
-						style={
-							[
-								styles.badge,
-								{
-									backgroundColor: badgeColor + '22',
-									borderColor: badgeColor,
-									borderWidth: 1,
-									borderRadius: r.xs,
-								},
-							] as any
-						}
+						style={[
+							styles.badge,
+							{
+								backgroundColor: badgeColor + '22',
+								borderColor: badgeColor,
+								borderWidth: 1,
+								borderRadius: r.xs,
+							},
+						]}
 					>
 						<ThemedText
 							variant="caption"
@@ -82,24 +81,20 @@ export default function LoansScreen() {
 
 				{/* Progress bar */}
 				<View
-					style={
-						[
-							styles.progressTrack,
-							{ backgroundColor: c.surfaceVariant, borderRadius: r.xs, marginTop: 8 },
-						] as any
-					}
+					style={[
+						styles.progressTrack,
+						{ backgroundColor: c.surfaceVariant, borderRadius: r.xs, marginTop: 8 },
+					]}
 				>
 					<View
-						style={
-							[
-								styles.progressFill,
-								{
-									width: `${Math.min(progress * 100, 100)}%` as `${number}%`,
-									backgroundColor: '#C0643A',
-									borderRadius: r.xs,
-								},
-							] as any
-						}
+						style={[
+							styles.progressFill,
+							{
+								width: `${Math.min(progress * 100, 100)}%` as `${number}%`,
+								backgroundColor: '#C0643A',
+								borderRadius: r.xs,
+							},
+						]}
 					/>
 				</View>
 
@@ -117,17 +112,15 @@ export default function LoansScreen() {
 
 			{/* Summary card */}
 			<View
-				style={
-					[
-						styles.summaryCard,
-						{
-							backgroundColor: c.surface,
-							borderRadius: r.md,
-							marginHorizontal: s.lg,
-							marginTop: s.sm,
-						},
-					] as any
-				}
+				style={[
+					styles.summaryCard,
+					{
+						backgroundColor: c.surface,
+						borderRadius: r.md,
+						marginHorizontal: s.lg,
+						marginTop: s.sm,
+					},
+				]}
 			>
 				<ThemedText variant="caption" color={c.onSurfaceVariant}>
 					Total Outstanding
@@ -170,16 +163,14 @@ export default function LoansScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={
-					[
-						styles.fab,
-						{
-							backgroundColor: c.primary,
-							bottom: 32 + insets.bottom,
-						},
-					] as any
-				}
-				onPress={() => router.push('/(app)/finance/loans/add' as any)}
+				style={[
+					styles.fab,
+					{
+						backgroundColor: c.primary,
+						bottom: 32 + insets.bottom,
+					},
+				]}
+				onPress={() => router.push('/(app)/finance/loans/add' as Href)}
 				accessibilityRole="button"
 				accessibilityLabel="Add Loan"
 			>

@@ -33,7 +33,7 @@ const STOCK_LEVEL_CHIPS: { label: string; value: StockLevelFilter }[] = [
 ];
 
 export default function StockSummaryScreen() {
-	const { theme, c, s, r } = useThemeTokens();
+	const { theme, c, r } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const { items, loading, fetchItems } = useInventoryStore(

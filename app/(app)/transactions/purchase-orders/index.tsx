@@ -5,10 +5,10 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Badge } from '@/src/components/atoms/Badge';
-import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type POStatus = 'open' | 'partial' | 'received' | 'cancelled';
@@ -55,18 +55,8 @@ const STATUS_FILTERS: { label: string; value: POStatus | 'all' }[] = [
 	{ label: 'Cancelled', value: 'cancelled' },
 ];
 
-function statusColor(
-	s: POStatus,
-	c: { success: string; primary: string; border: string; onSurfaceVariant: string },
-) {
-	if (s === 'received') return c.success;
-	if (s === 'open') return c.primary;
-	if (s === 'partial') return '#B45309';
-	return c.onSurfaceVariant;
-}
-
 export default function PurchaseOrdersScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, r } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 	const insets = useSafeAreaInsets();
@@ -132,7 +122,7 @@ export default function PurchaseOrdersScreen() {
 							style={[
 								styles.progressFill,
 								{
-									width: `${item.received_pct}%` as any,
+									width: `${item.received_pct}%` as `${number}%`,
 									backgroundColor: c.primary,
 									borderRadius: 3,
 								},
@@ -194,7 +184,7 @@ export default function PurchaseOrdersScreen() {
 
 			<Pressable
 				style={[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }]}
-				onPress={() => router.push('/(app)/transactions/purchase-orders/create' as any)}
+				onPress={() => router.push('/(app)/transactions/purchase-orders/create' as Href)}
 			>
 				<Plus color="white" size={28} />
 			</Pressable>

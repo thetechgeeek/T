@@ -44,6 +44,8 @@ export interface Invoice extends Timestamps {
 	place_of_supply?: string;
 	reverse_charge: boolean;
 	payment_status: PaymentStatus;
+	/** Present on some list/detail rows from the API for overdue filtering */
+	due_date?: string;
 	payment_mode?: PaymentMode;
 	amount_paid: number;
 	notes?: string;

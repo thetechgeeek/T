@@ -83,7 +83,7 @@ const STATUS_CONFIG: Record<
 };
 
 export default function OrderSummaryScreen() {
-	const { c, s, r, theme } = useThemeTokens();
+	const { c, r, theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const [period, setPeriod] = useState<Period>('month');

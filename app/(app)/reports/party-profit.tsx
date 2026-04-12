@@ -44,7 +44,7 @@ interface PartyRow {
 }
 
 export default function PartyProfitScreen() {
-	const { c, s, r, theme } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const [mode, setMode] = useState<ModeType>('customers');

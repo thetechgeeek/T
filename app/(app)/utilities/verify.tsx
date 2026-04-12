@@ -113,7 +113,7 @@ export default function DataVerificationScreen() {
 													borderTopWidth:
 														idx > 0 ? StyleSheet.hairlineWidth : 0,
 												},
-											] as any
+											] as const
 										}
 									>
 										<View style={styles.stepIndicator}>
@@ -132,7 +132,7 @@ export default function DataVerificationScreen() {
 														[
 															styles.stepDot,
 															{ backgroundColor: c.border },
-														] as any
+														] as const
 													}
 												/>
 											)}
@@ -169,7 +169,7 @@ export default function DataVerificationScreen() {
 													borderColor: c.success,
 													borderWidth: 1,
 												},
-											] as any
+											] as const
 										}
 									>
 										<ThemedText variant="h3" color={c.success}>
@@ -194,7 +194,7 @@ export default function DataVerificationScreen() {
 													borderColor: '#FFC107',
 													borderWidth: 1,
 												},
-											] as any
+											] as const
 										}
 									>
 										<ThemedText variant="h3" color="#856404">

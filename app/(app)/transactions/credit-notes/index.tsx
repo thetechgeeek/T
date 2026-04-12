@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, FlatList, StyleSheet, Alert, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { Plus, FileX } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 
@@ -71,7 +71,7 @@ const STATUS_CONFIG: Record<CreditNoteStatus, { label: string; bg: string; color
 };
 
 export default function CreditNotesScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, r } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 	const [activeFilter, setActiveFilter] = useState<FilterType>('all');
@@ -177,7 +177,7 @@ export default function CreditNotesScreen() {
 			{/* FAB */}
 			<Pressable
 				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
-				onPress={() => router.push('/(app)/transactions/credit-notes/create' as any)}
+				onPress={() => router.push('/(app)/transactions/credit-notes/create' as Href)}
 				accessibilityLabel="new-credit-note"
 				accessibilityRole="button"
 			>

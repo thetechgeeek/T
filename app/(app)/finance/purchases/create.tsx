@@ -25,17 +25,10 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import type { Supplier } from '@/src/types/supplier';
 import type { InventoryItem } from '@/src/types/inventory';
+import type { PaymentStatus } from '@/src/types/invoice';
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Credit / No Payment'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
-
-const modeToKey: Record<PaymentModeLabel, string> = {
-	Cash: 'cash',
-	UPI: 'upi',
-	'Bank Transfer': 'bank_transfer',
-	Cheque: 'cheque',
-	'Credit / No Payment': 'credit',
-};
 
 function todayString() {
 	return new Date().toISOString().slice(0, 10);
@@ -167,7 +160,7 @@ export default function PurchaseCreateScreen() {
 				subtotal,
 				tax_total: gstTotal,
 				grand_total: grandTotal,
-				payment_status: payStatus as any,
+				payment_status: payStatus as PaymentStatus,
 				amount_paid: amtPaid,
 				notes:
 					[ourRef ? `Ref: ${ourRef}` : '', `Bill: ${billNumber}`, notes]
@@ -516,7 +509,7 @@ export default function PurchaseCreateScreen() {
 					title={submitting ? 'Saving...' : 'Save Purchase Bill'}
 					onPress={handleSave}
 					disabled={submitting}
-					style={[styles.saveBtn, { marginTop: s.lg }] as any}
+					style={[styles.saveBtn, { marginTop: s.lg }]}
 					accessibilityLabel="save-purchase"
 				/>
 			</ScrollView>

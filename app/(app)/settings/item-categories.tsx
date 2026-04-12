@@ -67,21 +67,21 @@ export default function ItemCategoriesScreen() {
 	const [editingId, setEditingId] = useState<UUID | null>(null);
 	const [form, setForm] = useState<CategoryFormState>(DEFAULT_FORM);
 
-	useEffect(() => {
-		loadCategories();
-	}, []);
-
-	async function loadCategories() {
+	const loadCategories = React.useCallback(async () => {
 		try {
 			setLoading(true);
 			const data = await itemCategoryService.fetchAll();
 			setCategories(data);
-		} catch (err) {
+		} catch {
 			Alert.alert(t('common.error'), t('inventory.loadError'));
 		} finally {
 			setLoading(false);
 		}
-	}
+	}, [t]);
+
+	useEffect(() => {
+		loadCategories();
+	}, [loadCategories]);
 
 	function openAdd() {
 		setEditingId(null);
@@ -121,7 +121,7 @@ export default function ItemCategoriesScreen() {
 			}
 			await loadCategories();
 			closeModal();
-		} catch (err) {
+		} catch {
 			Alert.alert(t('common.error'), t('inventory.saveError'));
 		} finally {
 			setSubmitting(false);
@@ -141,7 +141,7 @@ export default function ItemCategoriesScreen() {
 						try {
 							await itemCategoryService.delete(cat.id);
 							await loadCategories();
-						} catch (err) {
+						} catch {
 							Alert.alert(t('common.error'), t('inventory.deleteError'));
 						}
 					},

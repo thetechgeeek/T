@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Slot, useRouter, useSegments } from 'expo-router';
+import type { Href } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -34,7 +35,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 		if (!isAuthenticated && !inAuthGroup) {
 			router.replace('/(auth)/login');
 		} else if (isAuthenticated && inAuthGroup) {
-			router.replace('/(app)/(tabs)' as any);
+			router.replace('/(app)/(tabs)' as Href);
 		}
 	}, [isAuthenticated, loading, segments, router]);
 

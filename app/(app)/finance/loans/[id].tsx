@@ -1,14 +1,8 @@
 import React, { useMemo } from 'react';
 import { View, ScrollView, StyleSheet, Alert, FlatList } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import {
-	Building2,
-	CalendarDays,
-	TrendingDown,
-	Percent,
-	Clock,
-	CreditCard,
-} from 'lucide-react-native';
+import type { Href } from 'expo-router';
+import { CalendarDays, TrendingDown, Percent, Clock, CreditCard } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -110,7 +104,7 @@ function InfoRow({
 	value: string;
 	iconColor: string;
 }) {
-	const { c, s, r } = useThemeTokens();
+	const { c, r } = useThemeTokens();
 	return (
 		<View style={infoRowStyles.row}>
 			<View
@@ -151,6 +145,27 @@ const infoRowStyles = StyleSheet.create({
 	},
 });
 
+function TableHeader() {
+	const { c } = useThemeTokens();
+	return (
+		<View
+			style={[styles.tableRow, styles.tableHeaderRow, { backgroundColor: c.surfaceVariant }]}
+		>
+			{['Month', 'EMI', 'Principal', 'Interest', 'Balance'].map((col) => (
+				<ThemedText
+					key={col}
+					variant="caption"
+					weight="semibold"
+					color={c.onSurfaceVariant}
+					style={styles.tableCell}
+				>
+					{col}
+				</ThemedText>
+			))}
+		</View>
+	);
+}
+
 // ---------------------------------------------------------------------------
 // Main screen
 // ---------------------------------------------------------------------------
@@ -159,7 +174,7 @@ export default function LoanDetailScreen() {
 	const { c, s, r } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
-	const { id: loanId } = useLocalSearchParams<{ id: string }>();
+	const { id: _loanId } = useLocalSearchParams<{ id: string }>();
 
 	// TODO: look up loan from Zustand store by loanId when store is ready.
 	// For now always use mock data regardless of loanId.
@@ -184,7 +199,7 @@ export default function LoanDetailScreen() {
 	};
 
 	const handleEdit = () => {
-		router.push(`/(app)/finance/loans/add` as any);
+		router.push('/(app)/finance/loans/add' as Href);
 	};
 
 	const loanTypeVariant = (): 'primary' | 'info' | 'warning' | 'neutral' => {
@@ -200,25 +215,6 @@ export default function LoanDetailScreen() {
 				return 'primary';
 		}
 	};
-
-	// Amortisation table header
-	const TableHeader = () => (
-		<View
-			style={[styles.tableRow, styles.tableHeaderRow, { backgroundColor: c.surfaceVariant }]}
-		>
-			{['Month', 'EMI', 'Principal', 'Interest', 'Balance'].map((col) => (
-				<ThemedText
-					key={col}
-					variant="caption"
-					weight="semibold"
-					color={c.onSurfaceVariant}
-					style={styles.tableCell}
-				>
-					{col}
-				</ThemedText>
-			))}
-		</View>
-	);
 
 	const renderScheduleRow = ({ item, index }: { item: AmortisationRow; index: number }) => (
 		<View

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, Share, Platform, Pressable } from 'react-native';
+import { View, ScrollView, StyleSheet, Share, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MessageCircle, FileText, CheckCircle2 } from 'lucide-react-native';
 import { paymentService } from '@/src/services/paymentService';
@@ -97,7 +97,7 @@ export default function PaymentReceiptScreen() {
 		paymentService
 			.fetchPayments({})
 			.then((all) => {
-				const found = (all as any[]).find((p: any) => p.id === id);
+				const found = all?.find((p) => p.id === id);
 				setPayment(found ?? null);
 			})
 			.catch(() => setPayment(null))
@@ -107,8 +107,8 @@ export default function PaymentReceiptScreen() {
 	const isReceived = payment?.direction === 'received';
 	const partyLabel = isReceived ? 'Received from' : 'Paid to';
 	const partyName = isReceived
-		? ((payment as any)?.customer?.name ?? 'Customer')
-		: ((payment as any)?.supplier?.name ?? 'Supplier');
+		? (payment?.customer?.name ?? 'Customer')
+		: (payment?.supplier?.name ?? 'Supplier');
 
 	const receiptNumber = id ? `REC-${padId(id)}` : 'REC-000000';
 	const amountWords = payment ? numberToWords(payment.amount) : '';
@@ -119,8 +119,6 @@ export default function PaymentReceiptScreen() {
 
 	const handleShareWhatsApp = async () => {
 		if (!payment) return;
-		const msg = encodeURIComponent(receiptText);
-		const url = `whatsapp://send?text=${msg}`;
 		try {
 			await Share.share({ message: receiptText });
 		} catch {
@@ -155,7 +153,7 @@ export default function PaymentReceiptScreen() {
 		return (
 			<Screen safeAreaEdges={['bottom']}>
 				<ScreenHeader title="Payment Receipt" />
-				<View style={styles.center}>
+				<View style={styles.emptyState}>
 					<ThemedText color={c.error}>Payment not found.</ThemedText>
 					<Button
 						title="Go Back"
@@ -175,32 +173,29 @@ export default function PaymentReceiptScreen() {
 			<ScrollView
 				contentContainerStyle={[styles.scroll, { padding: s.md, paddingBottom: 120 }]}
 			>
-				{/* Receipt Card */}
 				<View
-					style={
-						[
-							styles.receiptCard,
-							{
-								backgroundColor: c.card ?? c.surface,
-								borderRadius: r.lg,
-								borderColor: c.border,
-							},
-						] as any
-					}
+					style={[
+						styles.receiptCard,
+						{
+							backgroundColor: c.card ?? c.surface,
+							borderRadius: r.lg,
+							borderColor: c.border,
+						},
+					]}
 				>
 					{/* Top dashed cut line */}
-					<View style={[styles.cutLine, { borderColor: c.border }] as any} />
+					<View style={[styles.cutLine, { borderColor: c.border }]} />
 
 					{/* Business Name */}
 					<View style={styles.header}>
 						<ThemedText
 							variant="caption"
 							color={c.onSurfaceVariant}
-							style={styles.center}
+							style={styles.textCenter}
 						>
 							Your Business
 						</ThemedText>
-						<ThemedText variant="h2" style={[styles.centered, { marginTop: 4 }] as any}>
+						<ThemedText variant="h2" style={[styles.centered, { marginTop: 4 }]}>
 							PAYMENT RECEIPT
 						</ThemedText>
 					</View>
@@ -239,18 +234,15 @@ export default function PaymentReceiptScreen() {
 
 					<Divider style={{ marginVertical: s.sm }} />
 
-					{/* Amount hero */}
 					<View
-						style={
-							[
-								styles.amountBlock,
-								{
-									backgroundColor: c.primaryContainer ?? c.surfaceVariant,
-									borderRadius: r.md,
-									margin: s.md,
-								},
-							] as any
-						}
+						style={[
+							styles.amountBlock,
+							{
+								backgroundColor: c.primaryContainer ?? c.surfaceVariant,
+								borderRadius: r.md,
+								margin: s.md,
+							},
+						]}
 					>
 						<ThemedText
 							variant="caption"
@@ -262,14 +254,14 @@ export default function PaymentReceiptScreen() {
 						<ThemedText
 							variant="display"
 							color={c.primary}
-							style={[styles.centered, { marginTop: 4 }] as any}
+							style={[styles.centered, { marginTop: 4 }]}
 						>
 							{formatCurrency(payment.amount)}
 						</ThemedText>
 						<ThemedText
 							variant="caption"
 							color={c.onSurfaceVariant}
-							style={[styles.centered, { marginTop: 6, fontStyle: 'italic' }] as any}
+							style={[styles.centered, { marginTop: 6, fontStyle: 'italic' }]}
 						>
 							{amountWords}
 						</ThemedText>
@@ -299,7 +291,7 @@ export default function PaymentReceiptScreen() {
 					<Divider style={{ marginVertical: s.sm }} />
 
 					{/* Footer */}
-					<View style={[styles.footer, { paddingBottom: s.lg }] as any}>
+					<View style={[styles.footer, { paddingBottom: s.lg }]}>
 						<CheckCircle2 size={24} color={c.success} />
 						<ThemedText
 							variant="bodyBold"
@@ -311,19 +303,17 @@ export default function PaymentReceiptScreen() {
 					</View>
 
 					{/* Bottom dashed cut line */}
-					<View style={[styles.cutLine, { borderColor: c.border }] as any} />
+					<View style={[styles.cutLine, { borderColor: c.border }]} />
 				</View>
 
 				{/* Action Buttons */}
 				<View style={{ gap: s.sm, marginTop: s.lg }}>
 					{/* WhatsApp - prominent green */}
 					<Pressable
-						style={
-							[
-								styles.whatsappBtn,
-								{ backgroundColor: '#25D366', borderRadius: r.md },
-							] as any
-						}
+						style={[
+							styles.whatsappBtn,
+							{ backgroundColor: '#25D366', borderRadius: r.md },
+						]}
 						onPress={handleShareWhatsApp}
 						accessibilityLabel="Share on WhatsApp"
 					>
@@ -355,7 +345,12 @@ export default function PaymentReceiptScreen() {
 
 const styles = StyleSheet.create({
 	scroll: {},
-	center: { textAlign: 'center' as const } as any,
+	emptyState: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingVertical: 20,
+	},
+	textCenter: { textAlign: 'center' },
 	centered: { textAlign: 'center' as const },
 	receiptCard: {
 		borderWidth: 1,

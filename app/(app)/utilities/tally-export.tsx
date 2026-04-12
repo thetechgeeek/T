@@ -6,6 +6,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import type { ThemeColors } from '@/src/theme';
 
 const EXPORT_ITEMS = [
 	{ key: 'sales', label: 'Sales Vouchers', defaultOn: true },
@@ -28,8 +29,8 @@ interface ChipProps {
 	label: string;
 	active: boolean;
 	onPress: () => void;
-	colors: any;
-	borderRadius: any;
+	colors: ThemeColors;
+	borderRadius: { full: number };
 }
 
 const Chip = ({ label, active, onPress, colors, borderRadius }: ChipProps) => (

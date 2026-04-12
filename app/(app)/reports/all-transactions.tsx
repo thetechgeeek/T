@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import {
 	TrendingUp,
@@ -198,7 +199,7 @@ export default function AllTransactionsScreen() {
 					styles.txRow,
 					{ borderBottomColor: c.border, borderBottomWidth: StyleSheet.hairlineWidth },
 				]}
-				onPress={() => item.route && router.push(item.route as any)}
+				onPress={() => item.route && router.push(item.route as Href)}
 				accessibilityRole="button"
 			>
 				<View

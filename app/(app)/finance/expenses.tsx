@@ -117,7 +117,7 @@ export default function ExpensesScreen() {
 						<EmptyState
 							title={t('finance.noExpenses')}
 							actionLabel={t('finance.addExpense')}
-							onAction={() => router.push('/(app)/finance/expenses/add' as any)}
+							onAction={() => router.push('/(app)/finance/expenses/add')}
 						/>
 					) : null
 				}
@@ -159,7 +159,7 @@ export default function ExpensesScreen() {
 						bottom: 32 + insets.bottom,
 					},
 				]}
-				onPress={() => router.push('/(app)/finance/expenses/add' as any)}
+				onPress={() => router.push('/(app)/finance/expenses/add')}
 				testID="fab-add-expense"
 				accessibilityRole="button"
 				accessibilityLabel={t('finance.addExpense')}

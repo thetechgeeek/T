@@ -309,9 +309,7 @@ export default function GSTR3BScreen() {
 						</ThemedText>
 					</View>
 
-					{MOCK_ITC.map((row, idx) =>
-						renderAmtRow(row.label, row.igst, row.cgst, row.sgst),
-					)}
+					{MOCK_ITC.map((row) => renderAmtRow(row.label, row.igst, row.cgst, row.sgst))}
 
 					{divider}
 					<View style={[styles.tableRow, { borderBottomWidth: 0 }]}>

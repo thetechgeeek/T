@@ -81,12 +81,12 @@ export default function CloseFYScreen() {
 						style={{ textAlign: 'center', marginTop: s.sm }}
 					>
 						App is now operating in FY {NEXT_FY}. Old FY data is accessible via
-						"Previous FY" filter in all screens.
+						&quot;Previous FY&quot; filter in all screens.
 					</ThemedText>
 					<View style={{ marginTop: s.xl, width: '100%' }}>
 						<Button
 							title="Go to Dashboard"
-							onPress={() => router.replace('/(app)/(tabs)' as any)}
+							onPress={() => router.replace('/(app)/(tabs)')}
 						/>
 					</View>
 				</View>
@@ -278,7 +278,7 @@ export default function CloseFYScreen() {
 							color={c.onSurfaceVariant}
 							style={{ marginTop: s.lg, marginBottom: 6 }}
 						>
-							Type "{CURRENT_FY}" to confirm
+							Type &quot;{CURRENT_FY}&quot; to confirm
 						</ThemedText>
 						<TextInput
 							value={confirmText}

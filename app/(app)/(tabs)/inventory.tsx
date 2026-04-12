@@ -13,7 +13,7 @@ import {
 	ScrollView,
 } from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as XLSX from 'xlsx';
 import {
@@ -131,14 +131,17 @@ export default function InventoryTab() {
 			XLSX.utils.book_append_sheet(wb, ws, 'Inventory');
 			const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
 
-			const uri =
-				(FileSystem as any).documentDirectory +
-				`Inventory_Export_${new Date().toISOString().split('T')[0]}.xlsx`;
+			const base = FileSystem.documentDirectory;
+			if (!base) {
+				Alert.alert(t('common.errorTitle'), 'Storage unavailable');
+				return;
+			}
+			const uri = base + `Inventory_Export_${new Date().toISOString().split('T')[0]}.xlsx`;
 			await FileSystem.writeAsStringAsync(uri, wbout, {
-				encoding: (FileSystem as any).EncodingType.Base64,
+				encoding: FileSystem.EncodingType.Base64,
 			});
 			await Sharing.shareAsync(uri);
-		} catch (err) {
+		} catch {
 			Alert.alert(t('common.errorTitle'), 'Export failed');
 		} finally {
 			setExporting(false);
@@ -332,7 +335,7 @@ export default function InventoryTab() {
 					<Pressable
 						onPress={() => {
 							setMenuOpen(false);
-							router.push('/(app)/inventory/import' as any);
+							router.push('/(app)/inventory/import');
 						}}
 						style={styles.menuRow}
 					>
@@ -452,11 +455,8 @@ export default function InventoryTab() {
 
 			{/* FAB */}
 			<TouchableOpacity
-				style={[
-					styles.fab,
-					{ backgroundColor: c.primary, ...(theme.shadows.lg as object) },
-				]}
-				onPress={() => router.push('/(app)/inventory/add' as any)}
+				style={[styles.fab, { backgroundColor: c.primary, ...theme.shadows.lg }]}
+				onPress={() => router.push('/(app)/inventory/add')}
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-inventory-button"

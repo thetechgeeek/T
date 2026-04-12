@@ -125,8 +125,8 @@ describe('INT-004: Inventory Flow', () => {
 		try {
 			await inventoryRepository.performStockOp(itemId, 'stock_out', -(current.box_count + 1));
 			throw new Error('Should have thrown');
-		} catch (e: any) {
-			expect(e.code).toBe('INSUFFICIENT_STOCK');
+		} catch (e: unknown) {
+			expect((e as any).code).toBe('INSUFFICIENT_STOCK');
 		}
 	});
 

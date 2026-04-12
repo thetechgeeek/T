@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { useAuthStore } from '@/src/stores/authStore';
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -114,7 +115,7 @@ export default function SetupScreen() {
 				invoice_sequence: parseInt(data.invoiceStartNumber, 10) || 1,
 				logo_url: data.logoUrl || undefined,
 			});
-			router.replace('/(app)/(tabs)' as any);
+			router.replace('/(app)/(tabs)' as Href);
 		} catch (e: unknown) {
 			setError(e instanceof Error ? e.message : 'Setup में समस्या हुई। फिर से try करें।');
 		} finally {

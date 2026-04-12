@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 
 type ExtraFields = 0 | 1 | 2 | 3;
 
-function SectionLabel({ label, c }: { label: string; c: any }) {
+function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
 	return (
 		<ThemedText
 			variant="caption"
@@ -38,7 +39,7 @@ function SwitchRow({
 	sub?: string;
 	value: boolean;
 	onChange: (v: boolean) => void;
-	c: any;
+	c: ThemeColors;
 	last?: boolean;
 }) {
 	return (
