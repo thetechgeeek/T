@@ -146,9 +146,10 @@ export default function AddLoanScreen() {
 					Disbursement Date
 				</ThemedText>
 				<DatePickerField
+					label="Disbursement Date"
 					value={disbursementDate}
 					onChange={setDisbursementDate}
-					placeholder="Select date"
+					showShortcuts
 				/>
 
 				{/* Interest Rate */}
@@ -274,7 +275,7 @@ export default function AddLoanScreen() {
 					textAlignVertical="top"
 				/>
 
-				<Button label="Save Loan" onPress={handleSave} style={{ marginTop: s.xl }} />
+				<Button title="Save Loan" onPress={handleSave} style={{ marginTop: s.xl }} />
 			</ScrollView>
 		</AtomicScreen>
 	);

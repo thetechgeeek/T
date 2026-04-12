@@ -175,7 +175,7 @@ export default function ItemProfitScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader
 				title="Item-wise P&L"
-				showBack
+				showBackButton
 				rightElement={
 					<Pressable
 						onPress={() => Alert.alert('Export', 'Export feature coming soon.')}

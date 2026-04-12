@@ -28,6 +28,7 @@ export function makeInvoiceLineItemInput(
 
 export function makeInvoiceInput(overrides?: Partial<InvoiceInput>): InvoiceInput {
 	return {
+		invoice_number: 'INV-TEST-001',
 		customer_name: 'Test Customer',
 		customer_phone: '9876543210',
 		customer_gstin: '',
@@ -60,7 +61,6 @@ export function makeInvoice(overrides?: Partial<Invoice>): Invoice {
 
 	return {
 		id: 'b5b5b5b5-b5b5-4b5b-8b5b-b5b5b5b5b5b4',
-		invoice_number: 'TM/2025-26/0001',
 		grand_total: 5900,
 		created_at: '2026-01-15T10:00:00.000Z',
 		updated_at: '2026-01-15T10:00:00.000Z',

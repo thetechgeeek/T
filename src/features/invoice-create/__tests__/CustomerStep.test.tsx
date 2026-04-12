@@ -6,12 +6,22 @@ import { renderWithTheme } from '@/__tests__/utils/renderWithTheme';
 const mockSetCustomer = jest.fn();
 const mockSetIsInterState = jest.fn();
 
+const mockSetInvoiceDate = jest.fn();
+const mockSetInvoiceNumber = jest.fn();
+const mockSetIsCashSale = jest.fn();
+
 function makeProps(overrides = {}) {
 	return {
 		customer: null,
 		setCustomer: mockSetCustomer,
 		isInterState: false,
 		setIsInterState: mockSetIsInterState,
+		invoiceDate: '2026-04-12',
+		setInvoiceDate: mockSetInvoiceDate,
+		invoiceNumber: 'INV-001',
+		setInvoiceNumber: mockSetInvoiceNumber,
+		isCashSale: false,
+		setIsCashSale: mockSetIsCashSale,
 		...overrides,
 	};
 }

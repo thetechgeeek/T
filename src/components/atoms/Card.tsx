@@ -4,9 +4,11 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 
 interface CardProps {
 	children: React.ReactNode;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
 	variant?: 'elevated' | 'outlined' | 'flat';
 	padding?: 'none' | 'sm' | 'md' | 'lg';
+	accessible?: boolean;
+	accessibilityLabel?: string;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -14,6 +16,8 @@ export const Card: React.FC<CardProps> = ({
 	style,
 	variant = 'elevated',
 	padding = 'md',
+	accessible,
+	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
 
@@ -35,7 +39,15 @@ export const Card: React.FC<CardProps> = ({
 		style,
 	];
 
-	return <View style={cardStyles as StyleProp<ViewStyle>}>{children}</View>;
+	return (
+		<View
+			style={cardStyles as StyleProp<ViewStyle>}
+			accessible={accessible}
+			accessibilityLabel={accessibilityLabel}
+		>
+			{children}
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({

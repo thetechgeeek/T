@@ -171,7 +171,7 @@ export default function BalanceSheetScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Balance Sheet" showBack />
+			<ScreenHeader title="Balance Sheet" showBackButton />
 
 			{/* Month navigation */}
 			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginVertical: 8 }]}>

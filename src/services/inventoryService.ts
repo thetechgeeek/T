@@ -92,17 +92,36 @@ export const inventoryService = {
 	},
 
 	/**
-	 * Update an existing inventory item
+	 * Create multiple inventory items in a single transaction
 	 */
-	async updateItem(id: UUID, updates: Partial<InventoryItemInsert>) {
-		const { data, error } = await supabase
-			.from('inventory_items')
-			.update(updates)
-			.eq('id', id)
-			.select()
-			.single();
+	async bulkCreateItems(items: InventoryItemInsert[]) {
+		const { data, error } = await supabase.from('inventory_items').insert(items).select();
 
 		if (error) throw toAppError(error);
+		return data as InventoryItem[];
+	},
+
+	/**
+	 * Update an existing inventory item.
+	 * Supports optimistic concurrency via expectedUpdatedAt.
+	 */
+	async updateItem(id: UUID, updates: Partial<InventoryItemInsert>, expectedUpdatedAt?: string) {
+		let query = supabase.from('inventory_items').update(updates).eq('id', id);
+
+		if (expectedUpdatedAt) {
+			query = query.eq('updated_at', expectedUpdatedAt);
+		}
+
+		const { data, error } = await query.select().single();
+
+		if (error) {
+			// If it's a 'single' failure but the error code indicates it found 0 rows despite ID match,
+			// it usually means the updated_at filter didn't match (conflict).
+			if (expectedUpdatedAt && error.code === 'PGRST116') {
+				throw new Error('VERSION_CONFLICT');
+			}
+			throw toAppError(error);
+		}
 		return data as InventoryItem;
 	},
 
@@ -155,5 +174,20 @@ export const inventoryService = {
 
 		if (error) throw toAppError(error);
 		return true;
+	},
+
+	/**
+	 * Export entire inventory to Excel format
+	 */
+	async exportToExcel() {
+		const { data, error } = await supabase
+			.from('inventory_items')
+			.select(
+				'design_name, item_code, selling_price, cost_price, mrp, default_discount_pct, box_count, low_stock_threshold, hsn_code, gst_rate, has_batch_tracking, has_serial_tracking, notes',
+			)
+			.order('design_name', { ascending: true });
+
+		if (error) throw toAppError(error);
+		return data;
 	},
 };

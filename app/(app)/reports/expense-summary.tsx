@@ -109,7 +109,7 @@ export default function ExpenseSummaryScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader
 				title="Expense Summary"
-				showBack
+				showBackButton
 				rightElement={
 					<Pressable
 						onPress={() => Alert.alert('Export', 'Export feature coming soon.')}

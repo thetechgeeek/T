@@ -54,7 +54,12 @@
 		"low": "कम",
 		"doubleTapToView": "विवरण देखने के लिए दो बार टैप करें",
 		"clear": "साफ़ करें",
-		"and": "और"
+		"and": "और",
+		"offlineStatus": "कोई इंटरनेट कनेक्शन नहीं",
+		"pendingChanges": "परिवर्तन लंबित हैं",
+		"syncedJustNow": "अभी-अभी",
+		"minsAgo": "मिनट पहले",
+		"syncedLongAgo": "कुछ समय पहले सिंक किया गया"
 	},
 	"auth": {
 		"signIn": "लॉग इन करें",
@@ -131,7 +136,7 @@
 		"stockOut": "स्टॉक गया",
 		"adjust": "समायोजन",
 		"currentStock": "वर्तमान स्टॉक",
-		"boxCount": "बॉक्स की संख्या",
+		"boxCountTitle": "बॉक्स की संख्या",
 		"perBox": "/बॉक्स",
 		"costPrice": "लागत मूल्य",
 		"sellingPrice": "बिक्री मूल्य",
@@ -162,6 +167,7 @@
 		"stockOpValidationError": "कृपया एक वैध धनात्मक संख्या दर्ज करें।",
 		"stockOpFailed": "स्टॉक अपडेट करने में विफल",
 		"stockStatus": "स्टॉक में {{count}} बॉक्स",
+		"boxCount": "{{count}} बॉक्स",
 		"thresholdStatus": "सीमा: {{count}} बॉक्स",
 		"loadError": "आइटम विवरण लोड नहीं हो सका।",
 		"updateSuccess": "आइटम सफलतापूर्वक अपडेट हुआ!",
@@ -464,7 +470,8 @@
 			"settings": "सेटिंग्स",
 			"preferences": "प्राथमिकताएं",
 			"account": "खाता"
-		}
+		},
+		"syncLog": "सिंक लॉग"
 	},
 	"scanner": {
 		"title": "स्कैन",
@@ -595,5 +602,20 @@
 		"phone": "फ़ोन",
 		"email": "ईमेल",
 		"sharingNotAvailable": "आपके डिवाइस पर शेयरिंग उपलब्ध नहीं है"
+	},
+	"sync": {
+		"conflictTitle": "डेटा संघर्ष पाया गया",
+		"conflictDesc": "जब आप ऑफ़लाइन थे तब किसी और ने इस रिकॉर्ड को अपडेट कर दिया है। हमें कौन सा संस्करण रखना चाहिए?",
+		"field": "फ़ील्ड",
+		"yourVersion": "आपका वर्शन",
+		"serverVersion": "सर्वर वर्शन",
+		"keepMine": "मेरा वर्शन रखें",
+		"useServer": "सर्वर वर्शन उपयोग करें",
+		"noPending": "कोई लंबित या विफल ऑपरेशन नहीं है",
+		"totalInQueue": "कतार में आइटम",
+		"clearFailed": "विफल साफ़ करें",
+		"retryStarted": "विफल ऑपरेशन का पुनः प्रयास किया जा रहा है...",
+		"retries": "पुनः प्रयास",
+		"confirmClearFailed": "क्या आप वाकई सभी विफल सिंक ऑपरेशनों को साफ़ करना चाहते हैं?"
 	}
 }

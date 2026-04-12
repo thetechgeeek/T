@@ -232,7 +232,7 @@ export default function AllTransactionsScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="All Transactions" showBack />
+			<ScreenHeader title="All Transactions" showBackButton />
 
 			{/* Type filter chips */}
 			<ScrollView

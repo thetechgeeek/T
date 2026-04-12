@@ -73,6 +73,8 @@ describe('INT-007: Order Import Flow', () => {
 			base_item_number: `${prefix}DCM-001`,
 			category: 'GLOSSY',
 			box_count: 0,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 			selling_price: 1000,
 		});
 

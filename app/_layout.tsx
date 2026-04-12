@@ -34,7 +34,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 		if (!isAuthenticated && !inAuthGroup) {
 			router.replace('/(auth)/login');
 		} else if (isAuthenticated && inAuthGroup) {
-			router.replace('/(app)/(tabs)');
+			router.replace('/(app)/(tabs)' as any);
 		}
 	}, [isAuthenticated, loading, segments, router]);
 

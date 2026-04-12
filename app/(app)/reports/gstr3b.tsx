@@ -108,7 +108,7 @@ export default function GSTR3BScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="GSTR-3B Return" showBack />
+			<ScreenHeader title="GSTR-3B Return" showBackButton />
 
 			<ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
 				{/* Period selector */}

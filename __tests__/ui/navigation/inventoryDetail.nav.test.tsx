@@ -65,6 +65,8 @@ const mockItem = {
 	base_item_number: 'MPG-001',
 	category: 'GLOSSY',
 	box_count: 50,
+	has_batch_tracking: false,
+	has_serial_tracking: false,
 	low_stock_threshold: 10,
 	selling_price: 1200,
 	size_name: '600x600',

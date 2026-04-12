@@ -196,7 +196,7 @@ export default function EstimatesScreen() {
 			{/* FAB */}
 			<Pressable
 				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
-				onPress={() => router.push('/(app)/transactions/estimates/create')}
+				onPress={() => router.push('/(app)/transactions/estimates/create' as any)}
 				accessibilityLabel="new-estimate"
 				accessibilityRole="button"
 			>

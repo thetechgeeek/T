@@ -6,6 +6,7 @@ import { Button } from '@/src/components/atoms/Button';
 interface EmptyStateProps {
 	title: string;
 	description?: string;
+	subtitle?: string;
 	icon?: React.ReactNode;
 	actionLabel?: string;
 	onAction?: () => void;
@@ -15,6 +16,7 @@ interface EmptyStateProps {
 export const EmptyState: React.FC<EmptyStateProps> = ({
 	title,
 	description,
+	subtitle,
 	icon,
 	actionLabel,
 	onAction,
@@ -42,7 +44,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 			>
 				{title}
 			</Text>
-			{!!description && (
+			{!!(description || subtitle) && (
 				<Text
 					style={[
 						styles.description,
@@ -53,7 +55,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 						},
 					]}
 				>
-					{description}
+					{description || subtitle}
 				</Text>
 			)}
 			{actionLabel && onAction && (

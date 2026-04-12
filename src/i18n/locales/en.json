@@ -54,7 +54,12 @@
 		"payments": "Payments",
 		"na": "N/A",
 		"optional": "(Optional)",
-		"and": "&"
+		"and": "&",
+		"offlineStatus": "No internet connection",
+		"pendingChanges": "changes pending",
+		"syncedJustNow": "Just now",
+		"minsAgo": "mins ago",
+		"syncedLongAgo": "Synced a while ago"
 	},
 	"auth": {
 		"signIn": "Sign In",
@@ -131,10 +136,10 @@
 		"stockOut": "Stock Out",
 		"adjust": "Adjust",
 		"currentStock": "Current Stock",
-		"boxCount": "Box Count",
+		"boxCountTitle": "Box Count",
+		"perBox": "/box",
 		"costPrice": "Cost Price",
 		"sellingPrice": "Selling Price",
-		"perBox": "/box",
 		"margin": "Margin",
 		"designName": "Design Name",
 		"brandName": "Brand Name",
@@ -467,7 +472,8 @@
 			"settings": "SETTINGS",
 			"preferences": "PREFERENCES",
 			"account": "ACCOUNT"
-		}
+		},
+		"syncLog": "Sync Log"
 	},
 	"scanner": {
 		"title": "Scan",
@@ -598,5 +604,20 @@
 		"phone": "Phone",
 		"email": "Email",
 		"sharingNotAvailable": "Sharing isn't available on your device"
+	},
+	"sync": {
+		"conflictTitle": "Data Conflict Detected",
+		"conflictDesc": "Someone else updated this record while you were offline. Which version should we keep?",
+		"field": "Field",
+		"yourVersion": "Your Version",
+		"serverVersion": "Server Version",
+		"keepMine": "Keep My Version",
+		"useServer": "Use Server Version",
+		"noPending": "No pending or failed operations",
+		"totalInQueue": "items in queue",
+		"clearFailed": "Clear Failed",
+		"retryStarted": "Retrying failed operations...",
+		"retries": "Retries",
+		"confirmClearFailed": "Are you sure you want to clear all failed sync operations?"
 	}
 }

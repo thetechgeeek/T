@@ -54,6 +54,8 @@ describe('Invoice Creation Real DB', () => {
 			base_item_number: `${prefix}TT-001`,
 			category: 'GLOSSY',
 			box_count: 100,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 			cost_price: 1000,
 			selling_price: 1000,
 			hsn_code: '6908',

@@ -195,7 +195,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 												]}
 											>
 												{t(
-													`inventory.categories.${item.category.toLowerCase()}`,
+													`inventory.categories.${(item.category || 'OTHER').toLowerCase()}`,
 												)}
 											</Text>
 										</View>

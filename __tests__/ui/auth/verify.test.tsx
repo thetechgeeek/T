@@ -53,6 +53,7 @@ describe('OtpVerifyScreen', () => {
 		const { getByTestId } = renderWithTheme(<OtpVerifyScreen />);
 		expect(getByTestId('verify-button')).toHaveProp('accessibilityState', {
 			disabled: true,
+			busy: false,
 		});
 	});
 

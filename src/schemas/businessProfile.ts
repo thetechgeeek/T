@@ -21,6 +21,33 @@ export const BusinessProfileSchema = z.object({
 		.optional()
 		.or(z.literal('')),
 	email: z.string().email('Invalid email address').optional().or(z.literal('')),
+	website: z.string().url('Invalid website URL').optional().or(z.literal('')),
+	alternate_phone: z
+		.string()
+		.regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit mobile number')
+		.optional()
+		.or(z.literal('')),
+	business_description: z.string().max(200).optional().or(z.literal('')),
+	logo_url: z.string().optional(),
+	signature_url: z.string().optional(),
+	upi_id: z
+		.string()
+		.regex(/^[\w.-]+@[\w.-]+$/, 'Invalid UPI ID format')
+		.optional()
+		.or(z.literal('')),
+	bank_details: z
+		.object({
+			bank_name: z.string().optional(),
+			account_number: z.string().optional(),
+			ifsc_code: z
+				.string()
+				.regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, 'Invalid IFSC format')
+				.optional()
+				.or(z.literal('')),
+			holder_name: z.string().optional(),
+			branch_name: z.string().optional(),
+		})
+		.optional(),
 	invoice_prefix: z
 		.string()
 		.min(1, 'Invoice prefix is required')

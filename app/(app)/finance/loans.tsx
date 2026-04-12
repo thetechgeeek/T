@@ -47,21 +47,23 @@ export default function LoansScreen() {
 		const badgeColor = LOAN_TYPE_COLORS[item.loanType] ?? c.primary;
 
 		return (
-			<Card style={[styles.loanCard, { marginBottom: s.sm }]} padding="md">
+			<Card style={[styles.loanCard, { marginBottom: s.sm }] as any} padding="md">
 				<View style={styles.loanHeader}>
 					<ThemedText weight="bold" style={{ flex: 1 }}>
 						{item.lenderName}
 					</ThemedText>
 					<View
-						style={[
-							styles.badge,
-							{
-								backgroundColor: badgeColor + '22',
-								borderColor: badgeColor,
-								borderWidth: 1,
-								borderRadius: r.xs,
-							},
-						]}
+						style={
+							[
+								styles.badge,
+								{
+									backgroundColor: badgeColor + '22',
+									borderColor: badgeColor,
+									borderWidth: 1,
+									borderRadius: r.xs,
+								},
+							] as any
+						}
 					>
 						<ThemedText
 							variant="caption"
@@ -80,20 +82,24 @@ export default function LoansScreen() {
 
 				{/* Progress bar */}
 				<View
-					style={[
-						styles.progressTrack,
-						{ backgroundColor: c.surfaceVariant, borderRadius: r.xs, marginTop: 8 },
-					]}
+					style={
+						[
+							styles.progressTrack,
+							{ backgroundColor: c.surfaceVariant, borderRadius: r.xs, marginTop: 8 },
+						] as any
+					}
 				>
 					<View
-						style={[
-							styles.progressFill,
-							{
-								width: `${Math.min(progress * 100, 100)}%` as `${number}%`,
-								backgroundColor: '#C0643A',
-								borderRadius: r.xs,
-							},
-						]}
+						style={
+							[
+								styles.progressFill,
+								{
+									width: `${Math.min(progress * 100, 100)}%` as `${number}%`,
+									backgroundColor: '#C0643A',
+									borderRadius: r.xs,
+								},
+							] as any
+						}
 					/>
 				</View>
 
@@ -111,15 +117,17 @@ export default function LoansScreen() {
 
 			{/* Summary card */}
 			<View
-				style={[
-					styles.summaryCard,
-					{
-						backgroundColor: c.surface,
-						borderRadius: r.md,
-						marginHorizontal: s.lg,
-						marginTop: s.sm,
-					},
-				]}
+				style={
+					[
+						styles.summaryCard,
+						{
+							backgroundColor: c.surface,
+							borderRadius: r.md,
+							marginHorizontal: s.lg,
+							marginTop: s.sm,
+						},
+					] as any
+				}
 			>
 				<ThemedText variant="caption" color={c.onSurfaceVariant}>
 					Total Outstanding
@@ -162,14 +170,16 @@ export default function LoansScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={[
-					styles.fab,
-					{
-						backgroundColor: c.primary,
-						bottom: 32 + insets.bottom,
-					},
-				]}
-				onPress={() => router.push('/(app)/finance/loans/add')}
+				style={
+					[
+						styles.fab,
+						{
+							backgroundColor: c.primary,
+							bottom: 32 + insets.bottom,
+						},
+					] as any
+				}
+				onPress={() => router.push('/(app)/finance/loans/add' as any)}
 				accessibilityRole="button"
 				accessibilityLabel="Add Loan"
 			>

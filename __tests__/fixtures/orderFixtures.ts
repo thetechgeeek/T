@@ -9,6 +9,8 @@ export function makeOrderItem(overrides?: Partial<OrderItem>): OrderItem {
 		design_name: 'GLOSSY WHITE 60x60',
 		base_item_number: '10526',
 		box_count: 5,
+		has_batch_tracking: false,
+		has_serial_tracking: false,
 		...overrides,
 	};
 }

@@ -48,7 +48,7 @@ export default function ScanTab() {
 					{
 						text: t('inventory.add'),
 						onPress: () => {
-							router.push('/(app)/inventory/add');
+							router.push('/(app)/inventory/add' as any);
 						},
 					},
 				]);

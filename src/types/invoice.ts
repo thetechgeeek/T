@@ -65,6 +65,7 @@ export interface InvoiceLineItemInput {
 }
 
 export interface InvoiceInput {
+	invoice_number: string;
 	idempotency_key?: UUID;
 	invoice_date: string;
 	customer_id?: UUID;

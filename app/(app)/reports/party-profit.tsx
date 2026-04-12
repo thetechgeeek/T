@@ -207,7 +207,7 @@ export default function PartyProfitScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Party-wise P&L" showBack />
+			<ScreenHeader title="Party-wise P&L" showBackButton />
 
 			{/* Mode toggle */}
 			<View

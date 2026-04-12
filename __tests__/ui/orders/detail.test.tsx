@@ -50,6 +50,8 @@ const mockItems = [
 		category: 'GLOSSY',
 		size_name: '60x60',
 		box_count: 50,
+		has_batch_tracking: false,
+		has_serial_tracking: false,
 	},
 	{
 		id: 'item-2',
@@ -57,6 +59,8 @@ const mockItems = [
 		category: 'WOODEN',
 		size_name: '120x60',
 		box_count: 50,
+		has_batch_tracking: false,
+		has_serial_tracking: false,
 	},
 ];
 

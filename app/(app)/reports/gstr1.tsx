@@ -92,7 +92,7 @@ export default function GSTR1Screen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="GSTR-1 Report" showBack />
+			<ScreenHeader title="GSTR-1 Report" showBackButton />
 
 			<ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
 				{/* Period selector */}

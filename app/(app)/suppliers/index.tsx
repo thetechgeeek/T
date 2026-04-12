@@ -164,7 +164,7 @@ export default function SupplierListScreen() {
 								description="Add your first supplier to get started"
 								icon={<UserPlus size={48} color={theme.colors.placeholder} />}
 								actionLabel="Add Supplier"
-								onAction={() => router.push('/(app)/suppliers/add')}
+								onAction={() => router.push('/(app)/suppliers/add' as any)}
 							/>
 						) : null
 					}
@@ -177,7 +177,7 @@ export default function SupplierListScreen() {
 					styles.fab,
 					{ backgroundColor: theme.colors.primary, ...(theme.shadows?.lg || {}) },
 				]}
-				onPress={() => router.push('/(app)/suppliers/add')}
+				onPress={() => router.push('/(app)/suppliers/add' as any)}
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-supplier-button"

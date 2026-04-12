@@ -41,7 +41,7 @@ beforeEach(() => {
 });
 
 describe('FinanceIndex Navigation Wiring', () => {
-	it('Press "Expenses" ListItem -> router.push("/(app)/finance/expenses") called', async () => {
+	it('Press "Expenses" ListItem -> router.push("/(app)/finance/expenses" as any) called', async () => {
 		const { getByText } = renderWithTheme(<FinanceOverviewScreen />);
 		await waitFor(() => expect(getByText('Expenses')).toBeTruthy());
 		fireEvent.press(getByText('Expenses'));
@@ -62,7 +62,7 @@ describe('FinanceIndex Navigation Wiring', () => {
 		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/aging');
 	});
 
-	it('Press "Profit & Loss" ListItem -> router.push("/(app)/finance/profit-loss") called', async () => {
+	it('Press "Profit & Loss" ListItem -> router.push("/(app)/finance/profit-loss" as any) called', async () => {
 		const { getByText } = renderWithTheme(<FinanceOverviewScreen />);
 		await waitFor(() => expect(getByText('Profit & Loss')).toBeTruthy());
 		fireEvent.press(getByText('Profit & Loss'));

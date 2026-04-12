@@ -14,7 +14,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { SearchBar } from '@/src/components/molecules/SearchBar';
-import { SkeletonBlock } from '@/src/components/atoms/SkeletonBlock';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -333,7 +333,7 @@ export default function PartyStatementScreen() {
 					<View style={{ marginTop: s.sm }}>
 						<SearchBar
 							value={search}
-							onSearch={setSearch}
+							onChangeText={setSearch}
 							placeholder={`Search ${tab}…`}
 						/>
 						{isLoading ? (

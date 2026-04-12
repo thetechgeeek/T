@@ -92,7 +92,7 @@ export default function AddExpenseScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard>
-			<ScreenHeader title={t('finance.newExpense')} showBack />
+			<ScreenHeader title={t('finance.newExpense')} showBackButton />
 
 			<ScrollView
 				contentContainerStyle={[

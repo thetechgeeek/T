@@ -33,7 +33,7 @@ beforeEach(() => {
 });
 
 describe('InventoryTab Navigation Wiring', () => {
-	it('Press FAB (+) -> router.push("/(app)/inventory/add") called', async () => {
+	it('Press FAB (+) -> router.push("/(app)/inventory/add" as any) called', async () => {
 		const { getByLabelText } = renderWithTheme(<InventoryTab />);
 		await waitFor(() => expect(getByLabelText('add-inventory-button')).toBeTruthy());
 		fireEvent.press(getByLabelText('add-inventory-button'));
@@ -46,13 +46,15 @@ describe('InventoryTab Navigation Wiring', () => {
 		expect(mockPush).not.toHaveBeenCalled();
 	});
 
-	it('Press a TileSetCard item variant -> router.push("/(app)/inventory/i1") called', async () => {
+	it('Press a TileSetCard item variant -> router.push("/(app)/inventory/i1" as any) called', async () => {
 		const mockItem = {
 			id: 'i1',
 			base_item_number: 'B001',
 			design_name: 'Classic-Design',
 			category: 'GLOSSY',
 			box_count: 10,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 		};
 
 		(useInventoryStore as unknown as jest.Mock).mockImplementation(

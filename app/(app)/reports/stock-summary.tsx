@@ -6,7 +6,7 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
-import { SkeletonBlock } from '@/src/components/atoms/SkeletonBlock';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -177,7 +177,7 @@ export default function StockSummaryScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader
 				title="Stock Summary"
-				showBack
+				showBackButton
 				rightElement={
 					<Pressable
 						onPress={() => Alert.alert('Export', 'Export feature coming soon.')}

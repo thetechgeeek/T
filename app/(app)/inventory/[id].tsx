@@ -1,5 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	ScrollView,
+	TouchableOpacity,
+	Alert,
+	Modal,
+	TextInput as RNTextInput,
+} from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import { Package, Edit, HelpCircle, ArrowUpRight, ArrowDownRight } from 'lucide-react-native';
@@ -12,9 +20,11 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { withOpacity } from '@/src/utils/color';
-import type { InventoryItem, StockOperation } from '@/src/types/inventory';
-import type { UUID } from '@/src/types/common';
+import { supabase } from '@/src/config/supabase';
 import { layout } from '@/src/theme/layout';
+import { itemPartyRateService } from '@/src/services/itemPartyRateService';
+import type { UUID } from '@/src/types/common';
+import type { InventoryItem, StockOperation, ItemPartyRate } from '@/src/types/inventory';
 import logger from '@/src/utils/logger';
 
 export default function ItemDetailScreen() {
@@ -25,7 +35,17 @@ export default function ItemDetailScreen() {
 
 	const [item, setItem] = useState<InventoryItem | null>(null);
 	const [history, setHistory] = useState<StockOperation[]>([]);
+	const [partyRates, setPartyRates] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
+
+	// Add Rate Modal State
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [parties, setParties] = useState<
+		{ id: string; name: string; type: 'customer' | 'supplier' }[]
+	>([]);
+	const [selectedParty, setSelectedParty] = useState<string | null>(null);
+	const [customRate, setCustomRate] = useState('');
+	const [partySearch, setPartySearch] = useState('');
 
 	// Re-fetch every time screen comes into focus so stock counts are fresh after stock ops.
 	// Only show full-screen loading on first load (item is null); subsequent focus re-fetches
@@ -38,13 +58,15 @@ export default function ItemDetailScreen() {
 			if (isFirstLoad) setLoading(true);
 			const fetchAll = async () => {
 				try {
-					const [itemData, historyData] = await Promise.all([
+					const [itemData, historyData, ratesData] = await Promise.all([
 						inventoryService.fetchItemById(id),
 						inventoryService.fetchStockHistory(id),
+						itemPartyRateService.fetchByItem(id),
 					]);
 					if (isMounted) {
 						setItem(itemData);
 						setHistory(historyData);
+						setPartyRates(ratesData || []);
 					}
 				} catch (err) {
 					logger.error('Failed to load item detail', err);
@@ -59,6 +81,61 @@ export default function ItemDetailScreen() {
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [id]),
 	);
+
+	const fetchParties = async () => {
+		try {
+			const [custRes, suppRes] = await Promise.all([
+				supabase.from('customers').select('id, name').order('name'),
+				supabase.from('suppliers').select('id, name').order('name'),
+			]);
+
+			const combined: { id: string; name: string; type: 'customer' | 'supplier' }[] = [
+				...(custRes.data?.map((c) => ({
+					id: c.id,
+					name: c.name,
+					type: 'customer' as const,
+				})) || []),
+				...(suppRes.data?.map((s) => ({
+					id: s.id,
+					name: s.name,
+					type: 'supplier' as const,
+				})) || []),
+			];
+			setParties(combined);
+		} catch (err) {
+			logger.error('Failed to fetch parties', err);
+		}
+	};
+
+	const handleAddRate = async () => {
+		if (!selectedParty || !customRate) {
+			Alert.alert('Error', 'Please select a party and enter a rate');
+			return;
+		}
+
+		const party = parties.find((p) => p.id === selectedParty);
+		if (!party) return;
+
+		try {
+			await itemPartyRateService.upsertRate({
+				item_id: id as UUID,
+				customer_id: party.type === 'customer' ? (party.id as UUID) : undefined,
+				supplier_id: party.type === 'supplier' ? (party.id as UUID) : undefined,
+				custom_rate: parseFloat(customRate),
+			});
+
+			setIsModalVisible(false);
+			setSelectedParty(null);
+			setCustomRate('');
+
+			// Refresh rates
+			const ratesData = await itemPartyRateService.fetchByItem(id as UUID);
+			setPartyRates(ratesData || []);
+			Alert.alert('Success', 'Special rate added');
+		} catch (err) {
+			Alert.alert('Error', 'Failed to add rate');
+		}
+	};
 
 	if (loading) {
 		return (
@@ -147,7 +224,9 @@ export default function ItemDetailScreen() {
 					<SpecBox label={t('inventory.addItem')} value={item.base_item_number} />
 					<SpecBox
 						label={t('inventory.category')}
-						value={t(`inventory.categories.${item.category.toLowerCase()}`)}
+						value={t(
+							`inventory.categories.${(item.category || 'OTHER').toLowerCase()}`,
+						)}
 					/>
 					<SpecBox label={t('inventory.size')} value={item.size_name || t('common.na')} />
 					<SpecBox label={t('inventory.grade')} value={item.grade || t('common.na')} />
@@ -227,6 +306,69 @@ export default function ItemDetailScreen() {
 					</TouchableOpacity>
 				</View>
 
+				{/* Party-wise Special Rates */}
+				<View style={{ marginTop: s.xl }}>
+					<View style={[layout.rowBetween, { marginBottom: s.md }]}>
+						<ThemedText variant="h3">Special Party Rates</ThemedText>
+						<TouchableOpacity
+							onPress={async () => {
+								await fetchParties();
+								setIsModalVisible(true);
+							}}
+							style={{ padding: 4 }}
+						>
+							<ThemedText color={c.primary} weight="semibold">
+								+ Add
+							</ThemedText>
+						</TouchableOpacity>
+					</View>
+
+					{partyRates.length === 0 ? (
+						<View
+							style={{
+								padding: s.md,
+								backgroundColor: c.surfaceVariant,
+								borderRadius: r.md,
+							}}
+						>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								No special rates configured for this item.
+							</ThemedText>
+						</View>
+					) : (
+						partyRates.map((rate) => (
+							<View
+								key={rate.id}
+								style={[
+									layout.rowBetween,
+									{
+										padding: s.md,
+										backgroundColor: c.surface,
+										borderRadius: r.md,
+										marginBottom: s.sm,
+										borderWidth: 1,
+										borderColor: c.border,
+									},
+								]}
+							>
+								<View>
+									<ThemedText weight="semibold">
+										{rate.customers?.name ||
+											rate.suppliers?.name ||
+											'Unknown Party'}
+									</ThemedText>
+									<ThemedText variant="caption" color={c.onSurfaceVariant}>
+										{rate.customer_id ? 'Customer' : 'Supplier'}
+									</ThemedText>
+								</View>
+								<ThemedText variant="bodyBold" color={c.primary}>
+									{formatCurrency(rate.custom_rate)}
+								</ThemedText>
+							</View>
+						))
+					)}
+				</View>
+
 				{/* Stock History */}
 				<View style={{ marginTop: s.xl }}>
 					<ThemedText variant="h3" style={{ marginBottom: s.md }}>
@@ -280,15 +422,140 @@ export default function ItemDetailScreen() {
 					)}
 				</View>
 			</ScrollView>
+
+			{/* Add Rate Modal */}
+			<Modal
+				visible={isModalVisible}
+				transparent
+				animationType="slide"
+				onRequestClose={() => setIsModalVisible(false)}
+			>
+				<View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+					<View
+						style={[
+							styles.modalContent,
+							{ backgroundColor: c.surface, borderRadius: r.lg },
+						]}
+					>
+						<ThemedText variant="h3" style={{ marginBottom: s.md }}>
+							Add Special Rate
+						</ThemedText>
+
+						<ThemedText
+							variant="label"
+							color={c.onSurfaceVariant}
+							style={{ marginBottom: 4 }}
+						>
+							Select Customer or Supplier
+						</ThemedText>
+						<RNTextInput
+							placeholder="Search party..."
+							value={partySearch}
+							onChangeText={setPartySearch}
+							style={[styles.input, { borderColor: c.border, color: c.onSurface }]}
+						/>
+
+						<ScrollView style={{ maxHeight: 200, marginBottom: s.md }}>
+							{parties
+								.filter((p) =>
+									p.name.toLowerCase().includes(partySearch.toLowerCase()),
+								)
+								.map((p) => (
+									<TouchableOpacity
+										key={p.id}
+										onPress={() => setSelectedParty(p.id)}
+										style={[
+											styles.partyItem,
+											{
+												backgroundColor:
+													selectedParty === p.id
+														? c.primary
+														: 'transparent',
+												borderRadius: r.sm,
+											},
+										]}
+									>
+										<ThemedText
+											color={
+												selectedParty === p.id ? c.onPrimary : c.onSurface
+											}
+										>
+											{p.name} (
+											{p.type === 'customer' ? 'Customer' : 'Supplier'})
+										</ThemedText>
+									</TouchableOpacity>
+								))}
+						</ScrollView>
+
+						<ThemedText
+							variant="label"
+							color={c.onSurfaceVariant}
+							style={{ marginBottom: 4 }}
+						>
+							Special Rate (₹)
+						</ThemedText>
+						<RNTextInput
+							placeholder="0.00"
+							keyboardType="numeric"
+							value={customRate}
+							onChangeText={setCustomRate}
+							style={[
+								styles.input,
+								{ borderColor: c.border, color: c.onSurface, marginBottom: s.lg },
+							]}
+						/>
+
+						<View style={[layout.row, { gap: s.md }]}>
+							<TouchableOpacity
+								onPress={() => setIsModalVisible(false)}
+								style={[
+									styles.modalBtn,
+									{
+										backgroundColor: c.surfaceVariant,
+										flex: 1,
+										borderRadius: r.md,
+									},
+								]}
+							>
+								<ThemedText color={c.onSurfaceVariant} weight="semibold">
+									Cancel
+								</ThemedText>
+							</TouchableOpacity>
+							<TouchableOpacity
+								onPress={handleAddRate}
+								style={[
+									styles.modalBtn,
+									{ backgroundColor: c.primary, flex: 1, borderRadius: r.md },
+								]}
+							>
+								<ThemedText color={c.onPrimary} weight="semibold">
+									Save Rate
+								</ThemedText>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</View>
+			</Modal>
 		</AtomicScreen>
 	);
 }
 
 const styles = StyleSheet.create({
 	imageCard: { padding: 4 },
-	stockBox: { padding: 16, alignItems: 'center' },
+	stockBox: { padding: 16 },
 	actionBtn: { paddingVertical: 14 },
 	historyRow: { paddingVertical: 12 },
+	modalOverlay: { flex: 1, justifyContent: 'center', padding: 20 },
+	modalContent: { padding: 24, elevation: 5 },
+	input: {
+		borderWidth: 1,
+		padding: 12,
+		borderRadius: 8,
+		fontSize: 16,
+		marginBottom: 12,
+	},
+	partyItem: { padding: 10, marginVertical: 2 },
+	modalBtn: { padding: 14, alignItems: 'center' },
 });
 
 function SpecBox({

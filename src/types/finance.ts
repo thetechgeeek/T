@@ -8,6 +8,7 @@ export interface Expense extends Timestamps {
 	amount: number;
 	description?: string;
 	receipt_image_url?: string;
+	payment_mode?: PaymentMode;
 	notes?: string;
 }
 

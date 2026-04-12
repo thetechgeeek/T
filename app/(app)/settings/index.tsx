@@ -67,8 +67,18 @@ const SECTIONS: Section[] = [
 				route: '/(app)/settings/party',
 			},
 			{
+				label: 'Item Categories',
+				sub: 'Manage product categories, colors',
+				route: '/(app)/settings/item-categories',
+			},
+			{
+				label: 'Item Units',
+				sub: 'Manage measurement units (Box, Kg, etc.)',
+				route: '/(app)/settings/item-units',
+			},
+			{
 				label: 'Item Settings',
-				sub: 'Stock, categories, tax, barcode',
+				sub: 'Tax, barcode, general defaults',
 				route: '/(app)/settings/items',
 			},
 		],

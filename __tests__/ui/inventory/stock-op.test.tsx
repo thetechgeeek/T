@@ -22,6 +22,8 @@ const mockItem = {
 	id: 'item-123',
 	design_name: 'Marble Premium Gold',
 	box_count: 50,
+	has_batch_tracking: false,
+	has_serial_tracking: false,
 };
 
 describe('StockOpScreen', () => {

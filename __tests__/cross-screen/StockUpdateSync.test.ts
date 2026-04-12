@@ -21,6 +21,8 @@ describe('Cross-Screen Sync: Inventory to Dashboard', () => {
 			id: itemId,
 			design_name: 'Test',
 			box_count: 50,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 		});
 		(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue({
 			today_sales: 100,
@@ -43,6 +45,8 @@ describe('Cross-Screen Sync: Inventory to Dashboard', () => {
 			id: 'new-item',
 			design_name: 'New',
 			box_count: 10,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 		});
 		(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue({
 			today_sales: 200,
@@ -52,6 +56,8 @@ describe('Cross-Screen Sync: Inventory to Dashboard', () => {
 			design_name: 'New',
 			category: 'GLOSSY',
 			box_count: 10,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 		} as any);
 
 		await waitFor(() => {

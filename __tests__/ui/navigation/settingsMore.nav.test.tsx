@@ -28,31 +28,31 @@ beforeEach(() => {
 });
 
 describe('MoreTab Navigation Wiring', () => {
-	it('Press "Customers" -> router.push("/(app)/customers/") called', async () => {
+	it('Press "Customers" -> router.push("/(app)/customers/" as any) called', async () => {
 		const { getByLabelText } = renderWithTheme(<MoreTab />);
 		fireEvent.press(getByLabelText('menu-customers'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/');
 	});
 
-	it('Press "Suppliers" -> router.push("/(app)/suppliers/") called', async () => {
+	it('Press "Suppliers" -> router.push("/(app)/suppliers/" as any) called', async () => {
 		const { getByLabelText } = renderWithTheme(<MoreTab />);
 		fireEvent.press(getByLabelText('menu-suppliers'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/suppliers/');
 	});
 
-	it('Press "Orders" -> router.push("/(app)/orders/") called', async () => {
+	it('Press "Orders" -> router.push("/(app)/orders/" as any) called', async () => {
 		const { getByLabelText } = renderWithTheme(<MoreTab />);
 		fireEvent.press(getByLabelText('menu-orders'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/orders/');
 	});
 
-	it('Press "Finance" -> router.push("/(app)/finance/") called', async () => {
+	it('Press "Finance" -> router.push("/(app)/finance/" as any) called', async () => {
 		const { getByLabelText } = renderWithTheme(<MoreTab />);
 		fireEvent.press(getByLabelText('menu-finance'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/finance/');
 	});
 
-	it('Press "Settings" -> router.push("/(app)/settings/") called', async () => {
+	it('Press "Settings" -> router.push("/(app)/settings/" as any) called', async () => {
 		const { getByLabelText } = renderWithTheme(<MoreTab />);
 		fireEvent.press(getByLabelText('menu-settings'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/settings/');

@@ -5,6 +5,10 @@ import { useAuthStore } from '@/src/stores/authStore';
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { storageService } from '@/src/services/storageService';
+import * as ImagePicker from 'expo-image-picker';
+import { Camera, X } from 'lucide-react-native';
+import { Image } from 'expo-image';
 
 const TOTAL_STEPS = 4;
 
@@ -28,6 +32,7 @@ interface WizardData {
 	// Step 4
 	invoicePrefix: string;
 	invoiceStartNumber: string;
+	logoUrl?: string;
 }
 
 const BUSINESS_TYPES: { key: BusinessType; label: string; subLabel: string }[] = [
@@ -66,6 +71,7 @@ export default function SetupScreen() {
 		pan: '',
 		invoicePrefix: 'INV-',
 		invoiceStartNumber: '1',
+		logoUrl: '',
 	});
 
 	const update = (key: keyof WizardData, value: string | boolean | null | BusinessType) =>
@@ -106,8 +112,9 @@ export default function SetupScreen() {
 				state: data.state || undefined,
 				invoice_prefix: data.invoicePrefix || 'INV-',
 				invoice_sequence: parseInt(data.invoiceStartNumber, 10) || 1,
+				logo_url: data.logoUrl || undefined,
 			});
-			router.replace('/(app)/(tabs)');
+			router.replace('/(app)/(tabs)' as any);
 		} catch (e: unknown) {
 			setError(e instanceof Error ? e.message : 'Setup में समस्या हुई। फिर से try करें।');
 		} finally {
@@ -636,11 +643,17 @@ function Step4({
 
 	return (
 		<View>
-			<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 14, marginBottom: 16 }}>
-				Invoice नंबर की जानकारी भरें
+			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+				व्यापार का Logo
 			</ThemedText>
+			<LogoPicker
+				value={data.logoUrl}
+				onChange={(v) => update('logoUrl', v)}
+				c={c}
+				theme={theme}
+			/>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant }]}>
+			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 24 }]}>
 				Invoice Prefix
 			</ThemedText>
 			<TextInput
@@ -704,6 +717,88 @@ function Step4({
 				</ThemedText>
 			</View>
 		</View>
+	);
+}
+
+function LogoPicker({
+	value,
+	onChange,
+	c,
+	theme,
+}: {
+	value?: string;
+	onChange: (v: string) => void;
+	c: ReturnType<typeof useTheme>['theme']['colors'];
+	theme: ReturnType<typeof useTheme>['theme'];
+}) {
+	const [uploading, setUploading] = useState(false);
+
+	const pickImage = async () => {
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ['images'],
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 0.7,
+		});
+
+		if (!result.canceled && result.assets[0].uri) {
+			setUploading(true);
+			try {
+				const uri = result.assets[0].uri;
+				const fileName = `logo-${Date.now()}.jpg`;
+				const path = await storageService.uploadFile('branding', uri, fileName, {
+					contentType: 'image/jpeg',
+				});
+				const publicUrl = storageService.getPublicUrl('branding', path);
+				onChange(publicUrl);
+			} catch (e) {
+				console.error('Logo upload failed', e);
+				alert('Logo upload failed. Please try again.');
+			} finally {
+				setUploading(false);
+			}
+		}
+	};
+
+	return (
+		<Pressable
+			onPress={pickImage}
+			disabled={uploading}
+			style={[
+				styles.logoBox,
+				{
+					borderColor: c.border,
+					backgroundColor: c.surface,
+					borderRadius: theme.borderRadius.md,
+				},
+			]}
+		>
+			{value ? (
+				<View style={{ width: '100%', height: '100%' }}>
+					<Image
+						source={{ uri: value }}
+						style={{ flex: 1, borderRadius: theme.borderRadius.md }}
+						contentFit="cover"
+					/>
+					<Pressable
+						onPress={(e) => {
+							e.stopPropagation();
+							onChange('');
+						}}
+						style={[styles.removeBtn, { backgroundColor: c.error }]}
+					>
+						<X size={16} color="white" />
+					</Pressable>
+				</View>
+			) : (
+				<View style={{ alignItems: 'center' }}>
+					<Camera size={32} color={c.placeholder} strokeWidth={1.5} />
+					<Text style={{ color: c.placeholder, fontSize: 12, marginTop: 4 }}>
+						{uploading ? 'Uploading...' : 'Upload Logo'}
+					</Text>
+				</View>
+			)}
+		</Pressable>
 	);
 }
 
@@ -781,5 +876,23 @@ const styles = StyleSheet.create({
 	},
 	backBtn: {
 		borderWidth: 1,
+	},
+	logoBox: {
+		width: 120,
+		height: 120,
+		borderWidth: 2,
+		borderStyle: 'dashed',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	removeBtn: {
+		position: 'absolute',
+		top: -8,
+		right: -8,
+		width: 24,
+		height: 24,
+		borderRadius: 12,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 });

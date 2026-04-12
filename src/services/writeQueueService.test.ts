@@ -122,4 +122,105 @@ describe('WriteQueueService', () => {
 	it('getDeadLetterCount returns 0 initially', async () => {
 		expect(await service.getDeadLetterCount()).toBe(0);
 	});
+
+	it('enforces MAX_QUEUE_SIZE', async () => {
+		// Fill queue to 500
+		for (let i = 0; i < 500; i++) {
+			await service.enqueue({
+				id: `mut-${i}`,
+				type: 'insert',
+				table: 't',
+				payload: {},
+				idempotencyKey: `k-${i}`,
+				retryCount: 0,
+			});
+		}
+
+		// 501st should throw
+		await expect(
+			service.enqueue({
+				id: 'mut-overflow',
+				type: 'insert',
+				table: 't',
+				payload: {},
+				idempotencyKey: 'k-overflow',
+				retryCount: 0,
+			}),
+		).rejects.toThrow(/queue is full/);
+	});
+
+	it('replay executes in priority order (high to low)', async () => {
+		// Lower priority added first
+		await service.enqueue({
+			id: 'low-prio',
+			type: 'update',
+			table: 'items',
+			payload: {},
+			idempotencyKey: 'k1',
+			retryCount: 0,
+			priority: 100,
+		});
+
+		// Higher priority added second
+		await service.enqueue({
+			id: 'high-prio',
+			type: 'insert',
+			table: 'invoices',
+			payload: {},
+			idempotencyKey: 'k2',
+			retryCount: 0,
+			priority: 200,
+		});
+
+		const executionOrder: string[] = [];
+		const executor = jest.fn((m: QueuedMutation) => {
+			executionOrder.push(m.id);
+			return Promise.resolve();
+		});
+
+		await service.replay(executor);
+
+		// Should have executed high-prio (200) before low-prio (100)
+		expect(executionOrder).toEqual(['high-prio', 'low-prio']);
+	});
+
+	it('maintains FIFO within the same priority level', async () => {
+		const now = new Date();
+		const earlier = new Date(now.getTime() - 1000).toISOString();
+		const later = now.toISOString();
+
+		// Add two with same priority 100
+		await service.enqueue({
+			id: 'second-added',
+			type: 'update',
+			table: 'items',
+			payload: {},
+			idempotencyKey: 'k2',
+			retryCount: 0,
+			priority: 100,
+			pendingAt: later,
+		});
+
+		await service.enqueue({
+			id: 'first-added',
+			type: 'update',
+			table: 'items',
+			payload: {},
+			idempotencyKey: 'k1',
+			retryCount: 0,
+			priority: 100,
+			pendingAt: earlier,
+		});
+
+		const executionOrder: string[] = [];
+		const executor = jest.fn((m: QueuedMutation) => {
+			executionOrder.push(m.id);
+			return Promise.resolve();
+		});
+
+		await service.replay(executor);
+
+		// Within same priority 100, earlier pendingAt should execute first
+		expect(executionOrder).toEqual(['first-added', 'second-added']);
+	});
 });

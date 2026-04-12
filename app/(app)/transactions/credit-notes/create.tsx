@@ -96,7 +96,7 @@ export default function CreateCreditNoteScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']}>
 			<ScreenHeader
 				title="New Sale Return / Credit Note"
-				rightAction={
+				rightElement={
 					<Pressable onPress={() => router.back()} accessibilityLabel="close">
 						<X size={22} color={c.onSurface} />
 					</Pressable>
@@ -260,7 +260,9 @@ export default function CreateCreditNoteScreen() {
 				{/* Return Total */}
 				<Card
 					padding="md"
-					style={[styles.totalCard, { backgroundColor: c.surface, marginTop: s.md }]}
+					style={
+						[styles.totalCard, { backgroundColor: c.surface, marginTop: s.md }] as any
+					}
 				>
 					<ThemedText variant="label" color={c.onSurfaceVariant}>
 						Return Total
@@ -326,7 +328,7 @@ export default function CreateCreditNoteScreen() {
 				<Button
 					title="Save"
 					onPress={handleSave}
-					style={[styles.saveBtn, { marginTop: s.lg }]}
+					style={[styles.saveBtn, { marginTop: s.lg }] as any}
 					accessibilityLabel="save-credit-note"
 				/>
 			</ScrollView>

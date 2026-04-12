@@ -178,7 +178,7 @@ export default function OtherIncomeScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="Other Income" showBack />
+			<ScreenHeader title="Other Income" showBackButton />
 
 			{/* Summary card */}
 			<View
@@ -222,7 +222,7 @@ export default function OtherIncomeScreen() {
 						<EmptyState
 							title="No income entries yet"
 							actionLabel="+ Add Income"
-							onAction={() => router.push('/(app)/finance/other-income/add')}
+							onAction={() => router.push('/(app)/finance/other-income/add' as any)}
 						/>
 					) : null
 				}
@@ -237,7 +237,7 @@ export default function OtherIncomeScreen() {
 						bottom: 32 + insets.bottom,
 					},
 				]}
-				onPress={() => router.push('/(app)/finance/other-income/add')}
+				onPress={() => router.push('/(app)/finance/other-income/add' as any)}
 				accessibilityRole="button"
 				accessibilityLabel="add-other-income"
 			>

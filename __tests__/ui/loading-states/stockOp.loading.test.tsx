@@ -75,6 +75,8 @@ describe('StockOp Loading & Error UI States', () => {
 			id: 'item-123',
 			design_name: 'Marble',
 			box_count: 50,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 		});
 
 		const { getByPlaceholderText, queryByTestId } = renderWithTheme(<StockOpScreen />);

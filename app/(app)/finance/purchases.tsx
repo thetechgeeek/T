@@ -140,7 +140,7 @@ export default function PurchasesScreen() {
 					styles.fab,
 					{ backgroundColor: theme.colors.primary, borderRadius: r.full },
 				]}
-				onPress={() => router.push('/(app)/finance/purchases/create')}
+				onPress={() => router.push('/(app)/finance/purchases/create' as any)}
 				accessibilityLabel="New purchase bill"
 			>
 				<Plus size={28} color={theme.colors.onPrimary ?? '#fff'} />

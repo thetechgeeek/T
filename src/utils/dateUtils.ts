@@ -1,6 +1,13 @@
 import { format, formatDistanceToNow, isToday, isYesterday, parseISO, type Locale } from 'date-fns';
-import { enIN } from 'date-fns/locale';
+import { enIN, hi } from 'date-fns/locale';
 import i18n from '../i18n';
+
+/**
+ * Get internal date-fns locale based on i18next state.
+ */
+function getDateLocale(): Locale {
+	return i18n.language === 'hi' ? hi : enIN;
+}
 
 /**
  * Format a date string to Indian display format.
@@ -8,7 +15,7 @@ import i18n from '../i18n';
  */
 export function formatDate(dateStr: string | Date, locale?: Locale): string {
 	const date = typeof dateStr === 'string' ? parseISO(dateStr) : dateStr;
-	return format(date, 'd MMM yyyy', { locale: locale ?? enIN });
+	return format(date, 'd MMM yyyy', { locale: locale ?? getDateLocale() });
 }
 
 /**
@@ -18,7 +25,7 @@ export function formatRelativeDate(dateStr: string | Date): string {
 	const date = typeof dateStr === 'string' ? parseISO(dateStr) : dateStr;
 	if (isToday(date)) return i18n.t('common.today');
 	if (isYesterday(date)) return i18n.t('common.yesterday');
-	return formatDistanceToNow(date, { addSuffix: true, locale: enIN });
+	return formatDistanceToNow(date, { addSuffix: true, locale: getDateLocale() });
 }
 
 /**
@@ -52,7 +59,7 @@ export function getFinancialYearStart(): string {
  */
 export function formatShortDate(dateStr: string | Date): string {
 	const date = typeof dateStr === 'string' ? parseISO(dateStr) : dateStr;
-	return format(date, 'd MMM', { locale: enIN });
+	return format(date, 'd MMM', { locale: getDateLocale() });
 }
 
 /**

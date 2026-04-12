@@ -34,6 +34,8 @@ const mockInventoryItems = [
 		id: 'i-1',
 		design_name: 'Marble gold',
 		box_count: 50,
+		has_batch_tracking: false,
+		has_serial_tracking: false,
 		category: 'GLOSSY',
 		base_item_number: 'B1',
 	},

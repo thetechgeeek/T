@@ -31,13 +31,18 @@ export function parseINR(value: string): number {
  * Format large numbers with lakhs/crores suffix for display.
  * E.g., 150000 -> "1.5L", 10000000 -> "1Cr"
  */
-export function formatINRShort(amount: number): string {
+export function formatINRShort(amount: number, lang: 'en' | 'hi' = 'en'): string {
+	const suffix = {
+		en: { lakh: 'L', crore: 'Cr', thousand: 'K' },
+		hi: { lakh: ' लाख', crore: ' करोड़', thousand: ' हजार' },
+	}[lang];
+
 	if (amount >= 10_000_000) {
-		return `₹${(amount / 10_000_000).toFixed(1)}Cr`;
+		return `₹${(amount / 10_000_000).toFixed(1)}${suffix.crore}`;
 	} else if (amount >= 100_000) {
-		return `₹${(amount / 100_000).toFixed(1)}L`;
+		return `₹${(amount / 100_000).toFixed(1)}${suffix.lakh}`;
 	} else if (amount >= 1_000) {
-		return `₹${(amount / 1_000).toFixed(1)}K`;
+		return `₹${(amount / 1_000).toFixed(1)}${suffix.thousand}`;
 	}
 	return `₹${amount.toFixed(0)}`;
 }
@@ -45,7 +50,11 @@ export function formatINRShort(amount: number): string {
 /**
  * Converts a number to Indian words (for invoice totals).
  */
-export function numberToIndianWords(amount: number): string {
+export function numberToIndianWords(amount: number, lang: 'en' | 'hi' = 'en'): string {
+	if (lang === 'hi') {
+		return numberToHindiWords(amount);
+	}
+
 	const ones = [
 		'',
 		'One',
@@ -99,5 +108,54 @@ export function numberToIndianWords(amount: number): string {
 	result += ' Rupees';
 	if (paise > 0) result += ' and ' + convert(paise).trim() + ' Paise';
 	result += ' Only';
+	return result;
+}
+
+/**
+ * Internal helper for Hindi currency words conversion.
+ */
+function numberToHindiWords(amount: number): string {
+	const ones = [
+		'',
+		'एक',
+		'दो',
+		'तीन',
+		'चार',
+		'पाँच',
+		'छह',
+		'सात',
+		'आठ',
+		'नौ',
+		'दस',
+		'ग्यारह',
+		'बारह',
+		'तेरह',
+		'चौदह',
+		'पन्द्रह',
+		'सोलह',
+		'सत्रह',
+		'अठारह',
+		'उन्नीस',
+	];
+	const tens = ['', '', 'बीस', 'तीस', 'चालीस', 'पचास', 'साठ', 'सत्तर', 'अस्सी', 'नब्बे'];
+
+	function convert(n: number): string {
+		if (n === 0) return '';
+		if (n < 20) return ones[n] + ' ';
+		if (n < 100) return tens[Math.floor(n / 10)] + ' ' + convert(n % 10);
+		if (n < 1000) return ones[Math.floor(n / 100)] + ' सौ ' + convert(n % 100);
+		if (n < 100000) return convert(Math.floor(n / 1000)) + ' हजार ' + convert(n % 1000);
+		if (n < 10000000) return convert(Math.floor(n / 100000)) + ' लाख ' + convert(n % 100000);
+		return convert(Math.floor(n / 10000000)) + ' करोड़ ' + convert(n % 10000000);
+	}
+
+	const rupees = Math.floor(amount);
+	const paise = Math.round((amount - rupees) * 100);
+
+	let result = convert(rupees).trim();
+	if (result === '') result = 'शून्य';
+	result += ' रुपये';
+	if (paise > 0) result += ' और ' + convert(paise).trim() + ' पैसे';
+	result += ' मात्र';
 	return result;
 }

@@ -153,7 +153,7 @@ export default function CashflowScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Cashflow Report" showBack />
+			<ScreenHeader title="Cashflow Report" showBackButton />
 
 			{/* Month navigation */}
 			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginVertical: 8 }]}>

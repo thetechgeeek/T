@@ -12,6 +12,8 @@ export const InventoryItemSchema = z.object({
 	size: z.string().optional(),
 	finish: z.string().optional(),
 	box_count: z.number().min(0, 'Stock cannot be negative'),
+	has_batch_tracking: z.boolean().default(false),
+	has_serial_tracking: z.boolean().default(false),
 	pieces_per_box: z.number().positive().optional(),
 	coverage_per_box: z.number().positive().optional(),
 	cost_price: z.number().positive('Cost price must be positive'),

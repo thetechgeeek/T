@@ -58,6 +58,8 @@ describe('Inventory Loading & Error UI States', () => {
 						base_item_number: 'M-001',
 						category: 'GLOSSY',
 						box_count: 50,
+						has_batch_tracking: false,
+						has_serial_tracking: false,
 						low_stock_threshold: 10,
 						selling_price: 1000,
 						created_at: '',

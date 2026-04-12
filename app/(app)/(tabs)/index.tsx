@@ -191,7 +191,9 @@ export default function DashboardScreen() {
 			) : (
 				<>
 					{/* ── Main Stats Cards ── */}
-					<View style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
+					<View
+						style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }] as any}
+					>
 						{dashboardStats.map((stat) => (
 							<StatCard
 								key={stat.accessibilityLabel}
@@ -207,23 +209,37 @@ export default function DashboardScreen() {
 
 					{/* ── Today's Business ── */}
 					<View
-						style={[styles.sectionHeader, { marginTop: s.lg, paddingHorizontal: s.md }]}
+						style={
+							[
+								styles.sectionHeader,
+								{ marginTop: s.lg, paddingHorizontal: s.md },
+							] as any
+						}
 					>
 						<ThemedText variant="bodyBold">Today's Business</ThemedText>
 					</View>
-					<View style={[layout.row, { paddingHorizontal: s.md, gap: s.sm }]}>
+					<View style={[layout.row, { paddingHorizontal: s.md, gap: s.sm }] as any}>
 						{/* Today's Sale */}
 						<Card
-							style={[styles.businessTile, { flex: 1 }]}
+							style={[styles.businessTile, { flex: 1 }] as any}
 							padding="md"
-							accessible
 							accessibilityLabel="stat-today-sale-tile"
 						>
 							<View
-								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
+								style={
+									[
+										layout.row,
+										{ alignItems: 'center', marginBottom: s.xs },
+									] as any
+								}
 							>
 								<View
-									style={[styles.tileIcon, { backgroundColor: `${c.success}18` }]}
+									style={
+										[
+											styles.tileIcon,
+											{ backgroundColor: `${c.success}18` },
+										] as any
+									}
 								>
 									<TrendingUp size={16} color={c.success} />
 								</View>
@@ -245,15 +261,23 @@ export default function DashboardScreen() {
 
 						{/* Today's Collection */}
 						<Card
-							style={[styles.businessTile, { flex: 1 }]}
+							style={[styles.businessTile, { flex: 1 }] as any}
 							padding="md"
-							accessible
 							accessibilityLabel="stat-today-collection-tile"
 						>
 							<View
-								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
+								style={
+									[
+										layout.row,
+										{ alignItems: 'center', marginBottom: s.xs },
+									] as any
+								}
 							>
-								<View style={[styles.tileIcon, { backgroundColor: `${c.info}18` }]}>
+								<View
+									style={
+										[styles.tileIcon, { backgroundColor: `${c.info}18` }] as any
+									}
+								>
 									<ArrowDownCircle size={16} color={c.info} />
 								</View>
 								<ThemedText
@@ -301,10 +325,10 @@ export default function DashboardScreen() {
 							</ThemedText>
 							{(stats?.low_stock_count ?? 0) > 0 && (
 								<Pressable
-									onPress={() => router.push('/(app)/(tabs)/inventory')}
+									onPress={() => router.push('/(app)/(tabs)/inventory' as any)}
 									accessibilityRole="button"
 									accessibilityLabel="alert-low-stock"
-									style={[layout.rowBetween, { paddingVertical: s.xs }]}
+									style={[layout.rowBetween, { paddingVertical: s.xs }] as any}
 								>
 									<View style={layout.row}>
 										<AlertTriangle
@@ -328,10 +352,12 @@ export default function DashboardScreen() {
 					{recentTransactions.length > 0 && (
 						<View style={{ marginBottom: s.md }}>
 							<View
-								style={[
-									layout.rowBetween,
-									{ paddingHorizontal: s.md, marginBottom: s.sm },
-								]}
+								style={
+									[
+										layout.rowBetween,
+										{ paddingHorizontal: s.md, marginBottom: s.sm },
+									] as any
+								}
 							>
 								<ThemedText variant="bodyBold">Recent Activity</ThemedText>
 								<Pressable
@@ -356,32 +382,35 @@ export default function DashboardScreen() {
 									return (
 										<View
 											key={tx.id}
-											style={[
-												layout.rowBetween,
-												styles.txRow,
-												{
-													paddingHorizontal: s.md,
-													paddingVertical: s.sm,
-													borderBottomWidth:
-														idx < recentTransactions.length - 1 &&
-														idx < 4
-															? StyleSheet.hairlineWidth
-															: 0,
-													borderBottomColor: c.border,
-												},
-											]}
-											accessible
+											style={
+												[
+													layout.rowBetween,
+													styles.txRow,
+													{
+														paddingHorizontal: s.md,
+														paddingVertical: s.sm,
+														borderBottomWidth:
+															idx < recentTransactions.length - 1 &&
+															idx < 4
+																? StyleSheet.hairlineWidth
+																: 0,
+														borderBottomColor: c.border,
+													},
+												] as any
+											}
 											accessibilityLabel={`transaction-${tx.id}`}
 										>
 											<View style={layout.row}>
 												<View
-													style={[
-														styles.txIconWrap,
-														{
-															backgroundColor: `${iconColor}18`,
-															borderRadius: r.full,
-														},
-													]}
+													style={
+														[
+															styles.txIconWrap,
+															{
+																backgroundColor: `${iconColor}18`,
+																borderRadius: r.full,
+															},
+														] as any
+													}
 												>
 													{getTransactionIcon(tx.type, iconColor)}
 												</View>

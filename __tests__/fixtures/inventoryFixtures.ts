@@ -12,6 +12,8 @@ export function makeInventoryItem(overrides?: Partial<InventoryItem>): Inventory
 		base_item_number: '10526',
 		category: 'GLOSSY',
 		box_count: 50,
+		has_batch_tracking: false,
+		has_serial_tracking: false,
 		cost_price: 400,
 		selling_price: 500,
 		gst_rate: 18,

@@ -516,7 +516,7 @@ export default function PurchaseCreateScreen() {
 					title={submitting ? 'Saving...' : 'Save Purchase Bill'}
 					onPress={handleSave}
 					disabled={submitting}
-					style={[styles.saveBtn, { marginTop: s.lg }]}
+					style={[styles.saveBtn, { marginTop: s.lg }] as any}
 					accessibilityLabel="save-purchase"
 				/>
 			</ScrollView>

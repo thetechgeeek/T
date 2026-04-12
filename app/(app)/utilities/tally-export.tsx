@@ -24,6 +24,32 @@ const INSTRUCTIONS = [
 	'Contact your CA if any entries need adjustment',
 ];
 
+interface ChipProps {
+	label: string;
+	active: boolean;
+	onPress: () => void;
+	colors: any;
+	borderRadius: any;
+}
+
+const Chip = ({ label, active, onPress, colors, borderRadius }: ChipProps) => (
+	<Pressable
+		onPress={onPress}
+		style={[
+			styles.chip,
+			{
+				borderColor: active ? colors.primary : colors.border,
+				backgroundColor: active ? colors.primary : colors.surface,
+				borderRadius: borderRadius.full,
+			},
+		]}
+	>
+		<ThemedText variant="caption" color={active ? '#FFF' : colors.onSurface}>
+			{label}
+		</ThemedText>
+	</Pressable>
+);
+
 export default function TallyExportScreen() {
 	const { c, s, r } = useThemeTokens();
 	const [period, setPeriod] = useState<'month' | 'fy' | 'custom'>('fy');
@@ -55,32 +81,6 @@ export default function TallyExportScreen() {
 			],
 		);
 	};
-
-	const Chip = ({
-		label,
-		active,
-		onPress,
-	}: {
-		label: string;
-		active: boolean;
-		onPress: () => void;
-	}) => (
-		<Pressable
-			onPress={onPress}
-			style={[
-				styles.chip,
-				{
-					borderColor: active ? c.primary : c.border,
-					backgroundColor: active ? c.primary : c.surface,
-					borderRadius: r.full,
-				},
-			]}
-		>
-			<ThemedText variant="caption" color={active ? '#FFF' : c.onSurface}>
-				{label}
-			</ThemedText>
-		</Pressable>
-	);
 
 	return (
 		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
@@ -117,16 +117,22 @@ export default function TallyExportScreen() {
 						label="Current Month"
 						active={period === 'month'}
 						onPress={() => setPeriod('month')}
+						colors={c}
+						borderRadius={r}
 					/>
 					<Chip
 						label="Current FY (2024-25)"
 						active={period === 'fy'}
 						onPress={() => setPeriod('fy')}
+						colors={c}
+						borderRadius={r}
 					/>
 					<Chip
 						label="Custom"
 						active={period === 'custom'}
 						onPress={() => setPeriod('custom')}
+						colors={c}
+						borderRadius={r}
 					/>
 				</View>
 
@@ -138,11 +144,15 @@ export default function TallyExportScreen() {
 						label="TallyPrime"
 						active={tallyVersion === 'prime'}
 						onPress={() => setTallyVersion('prime')}
+						colors={c}
+						borderRadius={r}
 					/>
 					<Chip
 						label="Tally ERP 9"
 						active={tallyVersion === 'erp9'}
 						onPress={() => setTallyVersion('erp9')}
+						colors={c}
+						borderRadius={r}
 					/>
 				</View>
 

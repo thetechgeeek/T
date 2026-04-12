@@ -75,7 +75,7 @@ export default function PaymentsScreen() {
 		const amountColor = isReceived ? c.success : c.error;
 
 		return (
-			<Card padding="sm" style={[styles.row, { borderRadius: r.md }]}>
+			<Card padding="sm" style={[styles.row, { borderRadius: r.md }] as any}>
 				<View style={styles.modeIcon}>
 					{getModeIcon(p.payment_mode, c.onSurfaceVariant)}
 				</View>
@@ -100,10 +100,12 @@ export default function PaymentsScreen() {
 
 			{/* Summary bar */}
 			<View
-				style={[
-					styles.summaryBar,
-					{ backgroundColor: c.surface, borderBottomColor: c.border },
-				]}
+				style={
+					[
+						styles.summaryBar,
+						{ backgroundColor: c.surface, borderBottomColor: c.border },
+					] as any
+				}
 			>
 				<ThemedText variant="caption" color={c.onSurfaceVariant}>
 					{monthCount} payment{monthCount !== 1 ? 's' : ''} this month
@@ -138,8 +140,8 @@ export default function PaymentsScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
-				onPress={() => router.push('/(app)/finance/payments/receive')}
+				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }] as any}
+				onPress={() => router.push('/(app)/finance/payments/receive' as any)}
 				accessibilityLabel="Record payment"
 			>
 				<Plus size={28} color={c.onPrimary} />

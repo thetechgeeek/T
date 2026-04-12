@@ -76,7 +76,7 @@ export default function BankAccountsScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="Bank Accounts" showBack />
+			<ScreenHeader title="Bank Accounts" showBackButton />
 
 			<FlatList
 				data={accounts}
@@ -95,7 +95,9 @@ export default function BankAccountsScreen() {
 				ListHeaderComponent={
 					<Card
 						padding="lg"
-						style={[styles.summaryCard, { backgroundColor: theme.colors.primary }]}
+						style={
+							[styles.summaryCard, { backgroundColor: theme.colors.primary }] as any
+						}
 					>
 						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
 							<Building2 size={20} color="rgba(255,255,255,0.8)" />
@@ -176,14 +178,16 @@ export default function BankAccountsScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={[
-					styles.fab,
-					{
-						backgroundColor: c.primary,
-						bottom: 32 + insets.bottom,
-					},
-				]}
-				onPress={() => router.push('/(app)/finance/bank-accounts/add')}
+				style={
+					[
+						styles.fab,
+						{
+							backgroundColor: c.primary,
+							bottom: 32 + insets.bottom,
+						},
+					] as any
+				}
+				onPress={() => router.push('/(app)/finance/bank-accounts/add' as any)}
 				accessibilityRole="button"
 				accessibilityLabel="Add Bank Account"
 			>

@@ -46,6 +46,8 @@ describe('Concurrency Real DB', () => {
 			design_name: `${prefix}Concurrent Tile`,
 			base_item_number: 'CONC-01',
 			box_count: 100,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 			cost_price: 100,
 			selling_price: 100,
 		});

@@ -42,6 +42,8 @@ const sampleInventoryItem = {
 	design_name: 'GLOSSY WHITE 60x60',
 	selling_price: 500,
 	box_count: 50,
+	has_batch_tracking: false,
+	has_serial_tracking: false,
 	category: 'GLOSSY',
 	tile_image_url: undefined,
 };

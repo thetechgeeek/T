@@ -53,6 +53,8 @@ const getSchema = (t: (key: string) => string) =>
 		track_stock: z.boolean(),
 		primary_unit: z.string().optional(),
 		box_count: z.string().optional(),
+		has_batch_tracking: z.boolean(),
+		has_serial_tracking: z.boolean(),
 		low_stock_threshold: z.string().optional(),
 		use_secondary_unit: z.boolean(),
 		secondary_unit_name: z.string().optional(),
@@ -90,7 +92,7 @@ function SectionHeader({ label }: { label: string }) {
 	return (
 		<ThemedText
 			variant="h3"
-			style={{ marginTop: s.lg, marginBottom: s.sm, color: c.onSurface }}
+			style={[{ marginTop: s.lg, marginBottom: s.sm, color: c.onSurface }] as any}
 		>
 			{label}
 		</ThemedText>
@@ -232,6 +234,8 @@ export default function AddItemScreen() {
 			track_stock: true,
 			primary_unit: 'Box',
 			box_count: '0',
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 			low_stock_threshold: '5',
 			use_secondary_unit: false,
 			secondary_unit_name: '',
@@ -269,12 +273,12 @@ export default function AddItemScreen() {
 		if (isEditing && id) {
 			inventoryService
 				.fetchItemById(id)
-				.then((data) => {
+				.then((data: any) => {
 					reset({
 						design_name: data.design_name,
 						item_code: '',
-						category: data.category,
-						custom_category: '',
+						category: data.category as any,
+						custom_category: data.custom_category as any,
 						item_description: data.notes || '',
 						selling_price: data.selling_price.toString(),
 						cost_price: data.cost_price?.toString() || '',
@@ -285,6 +289,8 @@ export default function AddItemScreen() {
 						track_stock: true,
 						primary_unit: 'Box',
 						box_count: data.box_count.toString(),
+						has_batch_tracking: false,
+						has_serial_tracking: false,
 						low_stock_threshold: data.low_stock_threshold.toString(),
 						use_secondary_unit: false,
 						secondary_unit_name: '',
@@ -317,6 +323,8 @@ export default function AddItemScreen() {
 				pcs_per_box: data.pcs_per_box ? parseInt(data.pcs_per_box) : undefined,
 				sqft_per_box: data.sqft_per_box ? parseFloat(data.sqft_per_box) : undefined,
 				box_count: data.track_stock ? parseInt(data.box_count || '0') || 0 : 0,
+				has_batch_tracking: false,
+				has_serial_tracking: false,
 				selling_price: parseFloat(data.selling_price) || 0,
 				cost_price: parseFloat(data.cost_price || '0') || 0,
 				low_stock_threshold: data.track_stock
@@ -895,4 +903,10 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		height: 44,
 	},
+	center: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingVertical: 20,
+		textAlign: 'center',
+	} as any,
 });

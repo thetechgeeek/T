@@ -170,7 +170,10 @@ export default function ChequesScreen() {
 			</View>
 			<View style={{ alignItems: 'flex-end', gap: 4 }}>
 				<ThemedText variant="amount">{formatCurrency(item.amount)}</ThemedText>
-				<Badge label={statusLabel(item.status)} color={statusColor(item.status, c)} />
+				<Badge
+					label={statusLabel(item.status)}
+					variant={statusColor(item.status, c) as any}
+				/>
 			</View>
 		</Pressable>
 	);

@@ -1,0 +1,68 @@
+
+> t@1.0.0 typecheck
+> tsc --noEmit
+
+__tests__/chain/invoiceCreationChain.test.ts(43,65): error TS2345: Argument of type '{ customer_id: string; customer_name: string; customer_phone: string; invoice_date: string; is_inter_state: false; payment_status: "unpaid"; line_items: any; }' is not assignable to parameter of type 'InvoiceInput'.
+  Property 'invoice_number' is missing in type '{ customer_id: string; customer_name: string; customer_phone: string; invoice_date: string; is_inter_state: false; payment_status: "unpaid"; line_items: any; }' but required in type 'InvoiceInput'.
+__tests__/fixtures/invoiceFixtures.ts(64,3): error TS2783: 'invoice_number' is specified more than once, so this usage will be overwritten.
+app/(app)/(tabs)/index.tsx(217,8): error TS2322: Type '({ minHeight: number; } | { flex: number; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { minHeight: number; } | { flex: number; }>(predicate: (value: { minHeight: number; } | { flex: number; }, index: number, array: ({ minHeight: number; } | { flex: number; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { ...; } | { ...; }, index: number, array: ({ ...; } | { ...; })[]) => ...' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/(tabs)/index.tsx(248,8): error TS2322: Type '({ minHeight: number; } | { flex: number; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { minHeight: number; } | { flex: number; }>(predicate: (value: { minHeight: number; } | { flex: number; }, index: number, array: ({ minHeight: number; } | { flex: number; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { ...; } | { ...; }, index: number, array: ({ ...; } | { ...; })[]) => ...' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/(tabs)/inventory.tsx(126,27): error TS2339: Property 'documentDirectory' does not exist on type 'typeof import("/Users/rupesh-20594/Documents/T/node_modules/expo-file-system/build/index")'.
+app/(app)/(tabs)/inventory.tsx(127,75): error TS2339: Property 'EncodingType' does not exist on type 'typeof import("/Users/rupesh-20594/Documents/T/node_modules/expo-file-system/build/index")'.
+app/(app)/finance/bank-accounts.tsx(98,7): error TS2322: Type '({ marginBottom: number; } | { backgroundColor: string; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { marginBottom: number; } | { backgroundColor: string; }>(predicate: (value: { marginBottom: number; } | { backgroundColor: string; }, index: number, array: ({ marginBottom: number; } | { backgroundColor: string; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { ...; } | { ...; }, index: n...' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/finance/bank-accounts/add.tsx(49,10): error TS2339: Property 'chip' does not exist on type '{ content: { padding: number; }; section: { marginBottom: number; }; fieldLabel: { marginBottom: number; fontWeight: "600"; }; chipRow: { flexDirection: "row"; flexWrap: "wrap"; gap: number; }; textField: { ...; }; amountRow: { ...; }; currencyPrefix: { ...; }; amountInput: { ...; }; primaryRow: { ...; }; }'.
+app/(app)/finance/cash.tsx(261,7): error TS2322: Type '({ flexDirection: "row"; alignItems: "center"; justifyContent: "space-between"; marginBottom: number; borderLeftWidth: number; } | { borderLeftColor: string; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { flexDirection: "row"; alignItems: "center"; justifyContent: "space-between"; marginBottom: number; borderLeftWidth: number; } | { borderLeftColor: string; }>(predicate: (value: { flexDirection: "row"; alignItems: "center"; justifyContent: "space-between"; marginBottom: number; borderLeftWidth: number;...' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/finance/cheques.tsx(173,45): error TS2322: Type '{ label: string; color: string; }' is not assignable to type 'IntrinsicAttributes & BadgeProps'.
+  Property 'color' does not exist on type 'IntrinsicAttributes & BadgeProps'.
+app/(app)/finance/ewallets.tsx(133,7): error TS2322: Type '({ marginBottom: number; } | { backgroundColor: string; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { marginBottom: number; } | { backgroundColor: string; }>(predicate: (value: { marginBottom: number; } | { backgroundColor: string; }, index: number, array: ({ marginBottom: number; } | { backgroundColor: string; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { ...; } | { ...; }, index: n...' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/finance/expenses/add.tsx(68,5): error TS2353: Object literal may only specify known properties, and 'payment_mode' does not exist in type 'Omit<Expense, "id" | "created_at" | "updated_at">'.
+app/(app)/finance/loans.tsx(50,10): error TS2322: Type '({ minHeight: number; } | { marginBottom: number; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { minHeight: number; } | { marginBottom: number; }>(predicate: (value: { minHeight: number; } | { marginBottom: number; }, index: number, array: ({ minHeight: number; } | { marginBottom: number; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { ...; } | { ...; }, index: number, array: ({ ....' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/finance/loans.tsx(62,25): error TS2339: Property 'xs' does not exist on type '{ none: number; sm: number; md: number; lg: number; xl: number; full: number; }'.
+app/(app)/finance/loans.tsx(85,60): error TS2339: Property 'xs' does not exist on type '{ none: number; sm: number; md: number; lg: number; xl: number; full: number; }'.
+app/(app)/finance/loans.tsx(94,25): error TS2339: Property 'xs' does not exist on type '{ none: number; sm: number; md: number; lg: number; xl: number; full: number; }'.
+app/(app)/finance/loans/[id].tsx(119,59): error TS2339: Property 'xs' does not exist on type '{ none: number; sm: number; md: number; lg: number; xl: number; full: number; }'.
+app/(app)/finance/loans/[id].tsx(187,15): error TS2345: Argument of type '"/(app)/finance/loans/add"' is not assignable to parameter of type '"/" | RelativePathString | ExternalPathString | "/_sitemap" | "/(app)/(tabs)/customers" | "/customers" | "/(app)/(tabs)" | "/(app)/(tabs)/inventory" | ... 269 more ... | { ...; }'.
+app/(app)/finance/loans/[id].tsx(373,25): error TS2339: Property 'xs' does not exist on type '{ none: number; sm: number; md: number; lg: number; xl: number; full: number; }'.
+app/(app)/finance/loans/[id].tsx(384,26): error TS2339: Property 'xs' does not exist on type '{ none: number; sm: number; md: number; lg: number; xl: number; full: number; }'.
+app/(app)/finance/loans/add.tsx(151,6): error TS2322: Type '{ value: string; onChange: Dispatch<SetStateAction<string>>; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & DatePickerFieldProps'.
+  Property 'placeholder' does not exist on type 'IntrinsicAttributes & DatePickerFieldProps'.
+app/(app)/finance/payments.tsx(78,23): error TS2322: Type '({ flexDirection: "row"; alignItems: "center"; gap: number; } | { borderRadius: number; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { flexDirection: "row"; alignItems: "center"; gap: number; } | { borderRadius: number; }>(predicate: (value: { flexDirection: "row"; alignItems: "center"; gap: number; } | { borderRadius: number; }, index: number, array: ({ ...; } | { ...; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { ...' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/finance/payments.tsx(134,43): error TS2322: Type '{ title: string; subtitle: string; }' is not assignable to type 'IntrinsicAttributes & EmptyStateProps'.
+  Property 'subtitle' does not exist on type 'IntrinsicAttributes & EmptyStateProps'.
+app/(app)/finance/payments/[id]/receipt.tsx(158,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: ViewProps): View', gave the following error.
+    Type '{ textAlign: "center"; }' is not assignable to type 'StyleProp<ViewStyle>'.
+  Overload 2 of 2, '(props: ViewProps, context: any): View', gave the following error.
+    Type '{ textAlign: "center"; }' is not assignable to type 'StyleProp<ViewStyle>'.
+app/(app)/finance/payments/make.tsx(333,6): error TS2322: Type '({ height: number; } | { marginTop: number; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { height: number; } | { marginTop: number; }>(predicate: (value: { height: number; } | { marginTop: number; }, index: number, array: ({ height: number; } | { marginTop: number; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { ...; } | { ...; }, index: number, array: ({ ...; } | { ...; })[...' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/finance/payments/receive.tsx(328,6): error TS2322: Type '({ height: number; } | { marginTop: number; })[]' is not assignable to type 'ViewStyle'.
+  Types of property 'filter' are incompatible.
+    Type '{ <S extends { height: number; } | { marginTop: number; }>(predicate: (value: { height: number; } | { marginTop: number; }, index: number, array: ({ height: number; } | { marginTop: number; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { ...; } | { ...; }, index: number, array: ({ ...; } | { ...; })[...' is not assignable to type 'string | readonly FilterFunction[] | undefined'.
+app/(app)/finance/purchases/[id].tsx(271,8): error TS2322: Type '"default" | "success" | "error" | "warning"' is not assignable to type 'BadgeVariant | undefined'.
+  Type '"default"' is not assignable to type 'BadgeVariant | undefined'.
+app/(app)/inventory/add.tsx(95,19): error TS2339: Property 'saveBtn' does not exist on type '{ footer: { borderTopWidth: number; }; toggleRow: { flexDirection: "row"; alignItems: "center"; borderWidth: number; paddingHorizontal: number; paddingVertical: number; gap: number; }; codeInput: { ...; }; autoGenBtn: { ...; }; }'.
+app/(app)/inventory/add.tsx(281,29): error TS2339: Property 'custom_category' does not exist on type 'InventoryItem'.
+app/(app)/inventory/import.tsx(90,27): error TS2339: Property 'documentDirectory' does not exist on type 'typeof import("/Users/rupesh-20594/Documents/T/node_modules/expo-file-system/build/index")'.
+app/(app)/inventory/import.tsx(91,75): error TS2339: Property 'EncodingType' does not exist on type 'typeof import("/Users/rupesh-20594/Documents/T/node_modules/expo-file-system/build/index")'.
+app/(app)/inventory/import.tsx(107,89): error TS2339: Property 'EncodingType' does not exist on type 'typeof import("/Users/rupesh-20594/Documents/T/node_modules/expo-file-system/build/index")'.
+app/(app)/inventory/import.tsx(120,33): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: {}): string[]', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type '{}'.
+  Overload 2 of 2, '(o: object): string[]', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'object'.

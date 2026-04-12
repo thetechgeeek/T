@@ -276,6 +276,8 @@ export default function ImportOrderScreen() {
 			category: '',
 			size: '',
 			box_count: 0,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 			price_per_box: 0,
 		};
 		setEditableItems((prev) => [...(prev ?? parsedData ?? []), blank]);

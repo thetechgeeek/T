@@ -6,7 +6,7 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
-import { SkeletonBlock } from '@/src/components/atoms/SkeletonBlock';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -125,8 +125,17 @@ export default function PurchaseReportScreen() {
 						{formatCurrency(purchase.grand_total)}
 					</ThemedText>
 					<Badge
-						label={purchase.payment_status}
-						color={statusColor(purchase.payment_status, c)}
+						label={
+							purchase.payment_status.charAt(0).toUpperCase() +
+							purchase.payment_status.slice(1)
+						}
+						variant={
+							purchase.payment_status === 'paid'
+								? 'paid'
+								: purchase.payment_status === 'partial'
+									? 'partial'
+									: 'unpaid'
+						}
 					/>
 					{outstanding > 0 && (
 						<ThemedText variant="caption" color={c.error}>

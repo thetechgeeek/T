@@ -76,6 +76,8 @@ describe('AddItemScreen', () => {
 					category: 'FLOOR',
 					selling_price: 500,
 					box_count: 100,
+					has_batch_tracking: false,
+					has_serial_tracking: false,
 					low_stock_threshold: 15,
 					gst_rate: 12,
 				}),

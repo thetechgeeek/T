@@ -45,7 +45,7 @@ export default function OrdersListScreen() {
 						leftIcon={
 							<Plus size={16} color={c.onPrimary} importantForAccessibility="no" />
 						}
-						onPress={() => router.push('/(app)/orders/import')}
+						onPress={() => router.push('/(app)/orders/import' as any)}
 					/>
 				}
 			/>
@@ -71,7 +71,7 @@ export default function OrdersListScreen() {
 					<Button
 						title={t('order.importFirstBtn')}
 						accessibilityLabel="import-first-order-button"
-						onPress={() => router.push('/(app)/orders/import')}
+						onPress={() => router.push('/(app)/orders/import' as any)}
 					/>
 				</View>
 			) : (

@@ -184,7 +184,7 @@ export default function LoanDetailScreen() {
 	};
 
 	const handleEdit = () => {
-		router.push(`/(app)/finance/loans/add`);
+		router.push(`/(app)/finance/loans/add` as any);
 	};
 
 	const loanTypeVariant = (): 'primary' | 'info' | 'warning' | 'neutral' => {

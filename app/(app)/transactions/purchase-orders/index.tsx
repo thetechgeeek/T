@@ -110,7 +110,15 @@ export default function PurchaseOrdersScreen() {
 					</ThemedText>
 					<Badge
 						label={item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-						color={statusColor(item.status, c)}
+						variant={
+							item.status === 'received'
+								? 'success'
+								: item.status === 'open'
+									? 'primary'
+									: item.status === 'partial'
+										? 'warning'
+										: 'neutral'
+						}
 					/>
 				</View>
 				{item.status === 'partial' && (
@@ -186,7 +194,7 @@ export default function PurchaseOrdersScreen() {
 
 			<Pressable
 				style={[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }]}
-				onPress={() => router.push('/(app)/transactions/purchase-orders/create')}
+				onPress={() => router.push('/(app)/transactions/purchase-orders/create' as any)}
 			>
 				<Plus color="white" size={28} />
 			</Pressable>

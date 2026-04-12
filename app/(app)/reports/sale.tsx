@@ -6,7 +6,7 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
-import { SkeletonBlock } from '@/src/components/atoms/SkeletonBlock';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { InvoiceStatusBadge } from '@/src/components/molecules/InvoiceStatusBadge';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -130,7 +130,7 @@ export default function SaleReportScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="Sale Report" showBack />
+			<ScreenHeader title="Sale Report" showBackButton />
 
 			{/* Date filter chips */}
 			<ScrollView

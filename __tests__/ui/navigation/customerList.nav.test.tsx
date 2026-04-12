@@ -28,7 +28,7 @@ beforeEach(() => {
 });
 
 describe('CustomerList Navigation Wiring', () => {
-	it('Press add button -> router.push("/(app)/customers/add") called', async () => {
+	it('Press add button -> router.push("/(app)/customers/add" as any) called', async () => {
 		const { getByLabelText } = renderWithTheme(<CustomersScreen />);
 		// FAB might be labelled add-customer-button
 		await waitFor(() => expect(getByLabelText('add-customer-button')).toBeTruthy());
@@ -36,7 +36,7 @@ describe('CustomerList Navigation Wiring', () => {
 		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/add');
 	});
 
-	it('Press customer row -> router.push("/(app)/customers/${id}") called', async () => {
+	it('Press customer row -> router.push("/(app)/customers/${id}" as any) called', async () => {
 		const mockCustomer = {
 			id: 'c-123',
 			name: 'John Doe',

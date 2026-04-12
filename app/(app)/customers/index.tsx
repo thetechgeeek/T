@@ -189,7 +189,7 @@ export default function CustomersScreen() {
 								description={t('customer.addFirstHint')}
 								icon={<UserPlus size={48} color={theme.colors.placeholder} />}
 								actionLabel={t('customer.addCustomer')}
-								onAction={() => router.push('/(app)/customers/add')}
+								onAction={() => router.push('/(app)/customers/add' as any)}
 							/>
 						) : null
 					}
@@ -202,7 +202,7 @@ export default function CustomersScreen() {
 					styles.fab,
 					{ backgroundColor: theme.colors.primary, ...(theme.shadows?.lg || {}) },
 				]}
-				onPress={() => router.push('/(app)/customers/add')}
+				onPress={() => router.push('/(app)/customers/add' as any)}
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-customer-button"

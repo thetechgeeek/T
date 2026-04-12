@@ -23,11 +23,22 @@ interface InventoryState {
 	page: number;
 	hasMore: boolean;
 
+	// Conflict Resolution
+	conflict: {
+		localItem: InventoryItem;
+		serverItem: InventoryItem;
+	} | null;
+
 	// Actions
 	setFilters: (filters: Partial<InventoryFilters>) => void;
 	fetchItems: (reset?: boolean) => Promise<void>;
 	createItem: (item: InventoryItemInsert) => Promise<InventoryItem>;
-	updateItem: (id: UUID, updates: Partial<InventoryItemInsert>) => Promise<InventoryItem>;
+	updateItem: (
+		id: UUID,
+		updates: Partial<InventoryItemInsert>,
+		checkConflict?: boolean,
+	) => Promise<InventoryItem>;
+	resolveConflict: (resolution: 'keepMine' | 'useServer') => Promise<void>;
 	performStockOperation: (
 		itemId: UUID,
 		type: StockOpType,
@@ -63,6 +74,7 @@ export const useInventoryStore = create<InventoryState>()(
 			filters: DEFAULT_FILTERS,
 			page: 1,
 			hasMore: true,
+			conflict: null,
 
 			setFilters: (newFilters) => {
 				set((state) => {
@@ -136,13 +148,21 @@ export const useInventoryStore = create<InventoryState>()(
 				}
 			},
 
-			updateItem: async (id, updates) => {
+			updateItem: async (id, updates, checkConflict = true) => {
+				const state = get();
+				const localItem = state.items.find((i) => i.id === id);
+
 				set((s) => {
 					s.loading = true;
 					s.error = null;
 				});
+
 				try {
-					const updated = await inventoryService.updateItem(id, updates);
+					const updated = await inventoryService.updateItem(
+						id,
+						updates,
+						checkConflict ? localItem?.updated_at : undefined,
+					);
 					set((s) => {
 						const idx = s.items.findIndex((i) => i.id === id);
 						if (idx !== -1) {
@@ -152,11 +172,70 @@ export const useInventoryStore = create<InventoryState>()(
 					});
 					return updated;
 				} catch (err: unknown) {
+					if (err instanceof Error && err.message === 'VERSION_CONFLICT' && localItem) {
+						// Fetch latest server version to show in modal
+						const serverItem = await inventoryService.fetchItemById(id);
+						set((s) => {
+							s.conflict = { localItem, serverItem };
+							s.loading = false;
+						});
+						throw err;
+					}
 					set((s) => {
 						s.error = (err as Error).message;
 						s.loading = false;
 					});
 					throw err;
+				}
+			},
+
+			resolveConflict: async (resolution) => {
+				const { conflict } = get();
+				if (!conflict) return;
+
+				const { localItem, serverItem } = conflict;
+
+				if (resolution === 'keepMine') {
+					// Force update without conflict check
+					// Usually we should re-apply the user's intended changes to the server values,
+					// but 'Force overwrite' is simpler for this implementation phase.
+					try {
+						// Extract only common editable fields or use localItem as is
+						const updates: Partial<InventoryItemInsert> = {
+							design_name: localItem.design_name,
+							selling_price: localItem.selling_price,
+							cost_price: localItem.cost_price,
+							category: localItem.category,
+							gst_rate: localItem.gst_rate,
+							hsn_code: localItem.hsn_code,
+							notes: localItem.notes,
+							size_name: localItem.size_name,
+							brand_name: localItem.brand_name,
+							pcs_per_box: localItem.pcs_per_box,
+							sqft_per_box: localItem.sqft_per_box,
+							box_count: localItem.box_count,
+							has_batch_tracking: false,
+							has_serial_tracking: false,
+							low_stock_threshold: localItem.low_stock_threshold,
+						};
+						await get().updateItem(localItem.id, updates, false);
+						set((s) => {
+							s.conflict = null;
+						});
+					} catch (err) {
+						set((s) => {
+							s.error = (err as Error).message;
+						});
+					}
+				} else {
+					// Resolution: useServer — discard local edits, accept server version
+					set((s) => {
+						const idx = s.items.findIndex((i) => i.id === serverItem.id);
+						if (idx !== -1) {
+							s.items[idx] = serverItem;
+						}
+						s.conflict = null;
+					});
 				}
 			},
 

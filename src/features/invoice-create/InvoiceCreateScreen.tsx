@@ -16,7 +16,6 @@ export default function InvoiceCreateScreen() {
 	const { t } = useLocale();
 
 	const flow = useInvoiceCreateFlow();
-
 	const steps = [
 		t('invoice.stepCustomer'),
 		t('invoice.stepItems'),
@@ -41,7 +40,6 @@ export default function InvoiceCreateScreen() {
 					const stepNum = i + 1;
 					const isActive = flow.step === stepNum;
 					const isCompleted = flow.step > stepNum;
-					const isPending = flow.step < stepNum;
 
 					const dotSize = isActive ? 12 : 10;
 					const dotStyle = isActive

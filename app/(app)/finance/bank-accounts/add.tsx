@@ -94,7 +94,7 @@ export default function AddBankAccountScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard>
-			<ScreenHeader title="Add Bank Account" showBack />
+			<ScreenHeader title="Add Bank Account" showBackButton />
 
 			<ScrollView
 				contentContainerStyle={[styles.content, { paddingBottom: 32 + insets.bottom }]}
@@ -335,6 +335,11 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		gap: 8,
+	},
+	chip: {
+		paddingHorizontal: 0,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	textField: {
 		borderWidth: 1,

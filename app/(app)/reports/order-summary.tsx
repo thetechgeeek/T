@@ -161,7 +161,7 @@ export default function OrderSummaryScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader
 				title="Order Summary"
-				showBack
+				showBackButton
 				rightElement={
 					<Pressable
 						onPress={() => Alert.alert('Export', 'Export feature coming soon.')}

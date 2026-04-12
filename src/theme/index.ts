@@ -18,6 +18,10 @@ export interface ThemeColors {
 	onPrimary: string;
 	primaryGradientStart: string;
 	primaryGradientEnd: string;
+	primaryContainer: string;
+	onPrimaryContainer: string;
+	secondary: string;
+	onSecondary: string;
 	// Semantic
 	success: string;
 	onSuccess: string;
@@ -86,6 +90,7 @@ export interface ThemeTypography {
 		amountLarge: TextStyle;
 		amountNegative: TextStyle;
 		label: TextStyle;
+		captionSmall: TextStyle;
 	};
 }
 
@@ -105,6 +110,7 @@ export interface Theme {
 	};
 	borderRadius: {
 		none: number; // 0
+		xs: number; // 2
 		sm: number; // 4
 		md: number; // 8
 		lg: number; // 12
@@ -128,3 +134,13 @@ export interface Theme {
 }
 
 export type ThemeMode = 'light' | 'dark' | 'system';
+
+export type BadgeVariant =
+	| 'success'
+	| 'warning'
+	| 'danger'
+	| 'info'
+	| 'paid'
+	| 'partial'
+	| 'unpaid'
+	| 'default';

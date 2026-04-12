@@ -8,6 +8,7 @@ export interface Supplier extends Timestamps {
 	gstin?: string;
 	address?: string;
 	city?: string;
+	state?: string;
 	payment_terms?: string;
 	notes?: string;
 }

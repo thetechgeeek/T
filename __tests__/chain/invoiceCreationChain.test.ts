@@ -41,6 +41,7 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 
 		// 2. Trigger
 		const result = await useInvoiceStore.getState().createInvoice({
+			invoice_number: 'INV-TEST-001',
 			customer_id: '11111111-1111-1111-1111-111111111111',
 			customer_name: 'Test Customer',
 			customer_phone: '9876543210',

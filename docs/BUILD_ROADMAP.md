@@ -236,60 +236,60 @@ P22  Standalone & Integration Features
 ### P0.8 Offline & Sync Infrastructure
 
 - [x] `WriteQueueService`: singleton class initialized at app start
-    - [ ] `enqueue(mutation: QueuedMutation)`: adds to AsyncStorage-persisted queue; if online, executes immediately; if offline, stores with `pendingAt` timestamp
-    - [ ] `QueuedMutation` shape: `{ id: string, type: 'insert'|'update'|'delete', table: string, payload: object, idempotencyKey: string, retryCount: number }`
-    - [ ] `replay()`: called on network reconnect; executes mutations FIFO; skips if `idempotencyKey` already processed (deduplication)
-    - [ ] Failed mutations: retried up to 3 times with exponential backoff (1s, 3s, 9s); after 3 failures: moved to `deadLetterQueue` and user notified
-    - [ ] `getPendingCount()`: returns number of queued mutations — shown in `SyncIndicator`
+    - [x] `enqueue(mutation: QueuedMutation)`: adds to AsyncStorage-persisted queue; if online, executes immediately; if offline, stores with `pendingAt` timestamp
+    - [x] `QueuedMutation` shape: `{ id: string, type: 'insert'|'update'|'delete', table: string, payload: object, idempotencyKey: string, retryCount: number }`
+    - [x] `replay()`: called on network reconnect; executes mutations FIFO; skips if `idempotencyKey` already processed (deduplication)
+    - [x] Failed mutations: retried up to 3 times with exponential backoff (1s, 3s, 9s); after 3 failures: moved to `deadLetterQueue` and user notified
+    - [x] `getPendingCount()`: returns number of queued mutations — shown in `SyncIndicator`
 - [x] `OfflineBanner` (enhance existing):
-    - [ ] Shows when `useNetworkStatus()` returns `isConnected: false`
-    - [ ] Hindi text: "इंटरनेट नहीं है — काम सेव हो रहा है, जल्द sync होगा"
-    - [ ] English text: "No internet — your work is saved, will sync when connected"
-    - [ ] Shows pending mutation count: "(3 changes pending)"
-    - [ ] Tap banner → opens sync log modal
+    - [x] Shows when `useNetworkStatus()` returns `isConnected: false`
+    - [x] Hindi text: "इंटरनेट नहीं है — काम सेव हो रहा है, जल्द sync होगा"
+    - [x] English text: "No internet — your work is saved, will sync when connected"
+    - [x] Shows pending mutation count: "(3 changes pending)"
+    - [x] Tap banner → opens sync log modal
 - [x] `SyncIndicator` in `ScreenHeader`:
-    - [ ] Online + synced: green cloud-check icon (20dp)
-    - [ ] Syncing: animated spinning cloud icon
-    - [ ] Offline: grey cloud-off icon
-    - [ ] Tap → bottom sheet with pending mutations list (table, action, timestamp)
+    - [x] Online + synced: green cloud-check icon (20dp)
+    - [x] Syncing: animated spinning cloud icon
+    - [x] Offline: grey cloud-off icon
+    - [x] Tap → bottom sheet with pending mutations list (table, action, timestamp)
 - [x] Conflict resolution: when `updated_at` on server > local version at time of offline edit:
-    - [ ] Show `ConflictModal`: side-by-side comparison "Your version" vs "Server version" for key fields
-    - [ ] "Keep mine" button: force-overwrites server version with user's edits
-    - [ ] "Use server" button: discards local edit, loads server version
-    - [ ] "View both" button: opens full diff view
+    - [x] Show `ConflictModal`: side-by-side comparison "Your version" vs "Server version" for key fields
+    - [x] "Keep mine" button: force-overwrites server version with user's edits
+    - [x] "Use server" button: discards local edit, loads server version
+    - [x] "View both" button: opens full diff view
 
 ### P0.9 Indian Number & Date Formatting
 
 - [x] `formatCurrency(amount: number, opts?: {decimals?: 0|2, compact?: boolean}): string`
-    - [ ] Default: `₹ 1,00,000` (no decimals, Indian grouping)
-    - [ ] `decimals: 2`: `₹ 1,00,000.50`
-    - [ ] `compact: true` with `currentLanguage === 'hi'`: `₹ 1 लाख`, `₹ 10 लाख`, `₹ 1 करोड़`, `₹ 10 करोड़`
-    - [ ] `compact: true` with `currentLanguage === 'en'`: `₹ 1 Lakh`, `₹ 1 Crore`
-    - [ ] Negative amounts: `- ₹ 5,000` (space after minus, not parentheses)
-    - [ ] Zero: `₹ 0` (never blank)
+    - [x] Default: `₹ 1,00,000` (no decimals, Indian grouping)
+    - [x] `decimals: 2`: `₹ 1,00,000.50`
+    - [x] `compact: true` with `currentLanguage === 'hi'`: `₹ 1 लाख`, `₹ 10 लाख`, `₹ 1 करोड़`, `₹ 10 करोड़`
+    - [x] `compact: true` with `currentLanguage === 'en'`: `₹ 1 Lakh`, `₹ 1 Crore`
+    - [x] Negative amounts: `- ₹ 5,000` (space after minus, not parentheses)
+    - [x] Zero: `₹ 0` (never blank)
 - [x] `formatDate(isoString: string, format: 'DD/MM/YYYY'|'DD MMM YYYY'|'DD MMM YY'|'MMM YYYY'): string`
-    - [ ] Hindi month names when `currentLanguage === 'hi'`: जनवरी, फरवरी, मार्च, अप्रैल, मई, जून, जुलाई, अगस्त, सितंबर, अक्टूबर, नवंबर, दिसंबर
-    - [ ] Time format (when needed): 12-hour with AM/PM in Hindi: "दोपहर 2:30 बजे" style — or simpler "2:30 PM"
+    - [x] Hindi month names when `currentLanguage === 'hi'`: जनवरी, फरवरी, मार्च, अप्रैल, मई, जून, जुलाई, अगस्त, सितंबर, अक्टूबर, नवंबर, दिसंबर
+    - [x] Time format (when needed): 12-hour with AM/PM in Hindi: "दोपहर 2:30 बजे" style — or simpler "2:30 PM"
 - [x] `formatQuantity(qty: number, unit: string, decimalPlaces: 0|2|3): string`
-    - [ ] `100 Pcs`, `2.5 Kg`, `10.500 Ltr`
+    - [x] `100 Pcs`, `2.5 Kg`, `10.500 Ltr`
 - [x] `amountInWords(amount: number, language: 'hi'|'en'): string`
-    - [ ] Hindi: "दो हजार पाँच सौ रुपये मात्र"
-    - [ ] English: "Rupees Two Thousand Five Hundred Only"
-    - [ ] Used on invoice print footer
+    - [x] Hindi: "दो हजार पाँच सौ रुपये मात्र"
+    - [x] English: "Rupees Two Thousand Five Hundred Only"
+    - [x] Used on invoice print footer
 
 ### P0.10 Error Mapping
 
 - [x] `AppError` class with `code`, `message (hi)`, `message (en)`, `originalError` fields
 - [x] Error code map:
-    - [ ] Supabase `PGRST116` (no rows): "कोई data नहीं मिला" / "No data found"
-    - [ ] Supabase `23505` (unique constraint): "यह पहले से exist करता है" / "This already exists" + field hint
-    - [ ] Supabase `23503` (foreign key violation): "यह delete नहीं हो सकता, इससे जुड़ा data है" / "Cannot delete — linked records exist"
-    - [ ] Supabase `42501` (RLS violation): "Access denied" / "आपको यह देखने की अनुमति नहीं है"
-    - [ ] Network timeout: "Connection timeout — please retry" / "कनेक्शन timeout — retry करें"
-    - [ ] `AuthApiError` 400: "Invalid login" / "गलत login details"
-    - [ ] `AuthApiError` 401: session expired — triggers auto-logout and redirect to login
-    - [ ] Storage upload error: "File upload failed. Please try again" / "File upload नहीं हुआ"
-    - [ ] All unmapped errors: "Something went wrong. Please try again." / "कुछ गलत हुआ। कृपया retry करें।"
+    - [x] Supabase `PGRST116` (no rows): "कोई data नहीं मिला" / "No data found"
+    - [x] Supabase `23505` (unique constraint): "यह पहले से exist करता है" / "This already exists" + field hint
+    - [x] Supabase `23503` (foreign key violation): "यह delete नहीं हो सकता, इससे जुड़ा data है" / "Cannot delete — linked records exist"
+    - [x] Supabase `42501` (RLS violation): "Access denied" / "आपको यह देखने की अनुमति नहीं है"
+    - [x] Network timeout: "Connection timeout — please retry" / "कनेक्शन timeout — retry करें"
+    - [x] `AuthApiError` 400: "Invalid login" / "गलत login details"
+    - [x] `AuthApiError` 401: session expired — triggers auto-logout and redirect to login
+    - [x] Storage upload error: "File upload failed. Please try again" / "File upload नहीं हुआ"
+    - [x] All unmapped errors: "Something went wrong. Please try again." / "कुछ गलत हुआ। कृपया retry करें।"
 
 ### P0.11 i18n Infrastructure
 
@@ -306,10 +306,10 @@ P22  Standalone & Integration Features
 - [x] Skeleton shimmer animation: `withRepeat(withTiming(...))` via Reanimated — 1.5s loop
 - [x] `SkeletonBlock` atom: rectangular placeholder, configurable width/height/border-radius
 - [x] Screen-specific skeleton layouts:
-    - [ ] Invoice list skeleton: 5 rows, each with 3-line layout (invoice no, customer, amount)
-    - [ ] Dashboard skeleton: 4 stat card boxes + 2 summary tiles + 3 quick action buttons
-    - [ ] Item list skeleton: 6 rows, each with image thumb + 2 text lines + price
-    - [ ] Report skeleton: summary card + 8 data rows
+    - [x] Invoice list skeleton: 5 rows, each with 3-line layout (invoice no, customer, amount)
+    - [x] Dashboard skeleton: 4 stat card boxes + 2 summary tiles + 3 quick action buttons
+    - [x] Item list skeleton: 6 rows, each with image thumb + 2 text lines + price
+    - [x] Report skeleton: summary card + 8 data rows
 
 ---
 
@@ -357,8 +357,8 @@ P22  Standalone & Integration Features
 - [x] "Verify" / "Verify करें" primary button — enabled when all 6 cells filled
 - [x] "Resend OTP" link: disabled for 30s countdown "30s में resend करें"; re-enables after countdown
 - [x] On verify: `supabase.auth.verifyOtp(...)` called; on success: check if business profile exists
-    - [ ] If profile exists: navigate to `/(app)/(tabs)/` (home dashboard)
-    - [ ] If no profile: navigate to `/(auth)/setup` (business setup wizard)
+    - [x] If profile exists: navigate to `/(app)/(tabs)/` (home dashboard)
+    - [x] If no profile: navigate to `/(auth)/setup` (business setup wizard)
 - [x] Wrong OTP: shake animation on cells, red border, "गलत OTP — फिर से try करें" error
 
 ### P1.4 Business Setup Wizard
@@ -388,12 +388,12 @@ P22  Standalone & Integration Features
 
 - [x] Title: "व्यापार का प्रकार और पता" / "Business Type & Address"
 - [x] Business Type: 5 large cards in 2-column grid (last card full-width)
-    - [ ] Retail Shop (दुकान) — shop icon
-    - [ ] Wholesale (थोक) — warehouse icon
-    - [ ] Manufacturing (उत्पादन) — factory icon
-    - [ ] Service (सेवा) — tools icon
-    - [ ] Other (अन्य) — more icon
-    - [ ] Selected card: terracotta border, light fill, checkmark overlay
+    - [x] Retail Shop (दुकान) — shop icon
+    - [x] Wholesale (थोक) — warehouse icon
+    - [x] Manufacturing (उत्पादन) — factory icon
+    - [x] Service (सेवा) — tools icon
+    - [x] Other (अन्य) — more icon
+    - [x] Selected card: terracotta border, light fill, checkmark overlay
 - [x] Business Address field: multi-line `TextAreaField`, placeholder "दुकान/मकान नं., गली, मोहल्ला"
 - [x] State picker: `BottomSheetPicker` with all 36 Indian states + UTs listed (Hindi names when locale is hi); pre-filled from device region if determinable
 - [x] City field: text input; auto-filled via pincode lookup
@@ -405,9 +405,9 @@ P22  Standalone & Integration Features
 - [x] Title: "GST जानकारी" / "GST Information"
 - [x] "क्या आप GST में रजिस्टर हैं?" / "Are you registered for GST?" — YES / NO large button pair (YES pre-selected if user came from GST-eligible business type)
 - [x] When YES: show GSTIN field
-    - [ ] GSTIN field: 15-character text input, all-caps, format hint below: "22AAAAA0000A1Z5 (15 अंक)"
-    - [ ] Validate on blur: regex `^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$` + Luhn checksum
-    - [ ] Green checkmark when valid; red error when invalid: "GSTIN का format गलत है"
+    - [x] GSTIN field: 15-character text input, all-caps, format hint below: "22AAAAA0000A1Z5 (15 अंक)"
+    - [x] Validate on blur: regex `^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$` + Luhn checksum
+    - [x] Green checkmark when valid; red error when invalid: "GSTIN का format गलत है"
 - [x] PAN field: 10-character, format AAAAA9999A, optional
 - [x] Financial Year Start: two large cards "April (Apr–Mar)" and "January (Jan–Dec)" — April pre-selected
 - [x] When NO: show informational card "आप बिना GST के भी invoices बना सकते हैं। Settings में बाद में जोड़ सकते हैं।"
@@ -417,9 +417,9 @@ P22  Standalone & Integration Features
 
 - [x] Title: "Invoice की जानकारी" / "Invoice Setup"
 - [x] Logo upload card: dashed-border box 100×100dp, camera icon centre
-    - [ ] On tap: action sheet — "Camera से लें" / "Gallery से चुनें" / "Cancel"
-    - [ ] Image picked → crop UI to 1:1 ratio → compressed to ≤ 300 KB → shown as preview in the box
-    - [ ] Remove logo: × button overlay on preview
+    - [x] On tap: action sheet — "Camera से लें" / "Gallery से चुनें" / "Cancel"
+    - [x] Image picked → crop UI to 1:1 ratio → compressed to ≤ 300 KB → shown as preview in the box
+    - [x] Remove logo: × button overlay on preview
 - [x] Invoice Number Prefix: text field, default "INV-", max 10 chars; live preview below: "Preview: **INV-001**"
 - [x] Invoice Starting Number: numeric, default 1; live preview updates: "Preview: **INV-042**" when 42 entered
 - [x] "Finish Setup" / "Setup पूरी करें" primary button (replaces "Next" on last step)
@@ -432,25 +432,25 @@ P22  Standalone & Integration Features
 
 - [x] All fields from wizard available for editing
 - [x] Additional fields not in wizard:
-    - [ ] Business Email (optional)
-    - [ ] Business Website (optional)
-    - [ ] Alternate Phone (optional)
-    - [ ] Business Description (for online store — max 200 chars)
-    - [ ] Signature Image: upload (camera/gallery), shown on invoice print footer; "Remove" button
+    - [x] Business Email (optional)
+    - [x] Business Website (optional)
+    - [x] Alternate Phone (optional)
+    - [x] Business Description (for online store — max 200 chars)
+    - [x] Signature Image: upload (camera/gallery), shown on invoice print footer; "Remove" button
 - [x] **Bank Details for Print section** (collapsible card):
-    - [ ] Bank Name (text field)
-    - [ ] Account Number (numeric, masked display: XXXXXX1234)
-    - [ ] IFSC Code (text, 11 chars, uppercase)
-    - [ ] Account Holder Name
-    - [ ] Branch Name
-    - [ ] "Shown on invoice so customer can do bank transfer" — helper text
+    - [x] Bank Name (text field)
+    - [x] Account Number (numeric, masked display: XXXXXX1234)
+    - [x] IFSC Code (text, 11 chars, uppercase)
+    - [x] Account Holder Name
+    - [x] Branch Name
+    - [x] "Shown on invoice so customer can do bank transfer" — helper text
 - [x] **UPI for Invoice section**:
-    - [ ] UPI ID field (e.g. `9876543210@upi`)
-    - [ ] After valid UPI ID entered: live QR code preview (using `react-native-qrcode-svg`) — "यह QR invoice पर छपेगा"
+    - [x] UPI ID field (e.g. `9876543210@upi`)
+    - [x] After valid UPI ID entered: live QR code preview (using `react-native-qrcode-svg`) — "यह QR invoice पर छपेगा"
 - [x] **Invoice Sequence section**:
-    - [ ] Current prefix: editable
-    - [ ] Current sequence number: editable (with warning: "इसे बदलने से invoice numbers में gap आएगा")
-    - [ ] Reset sequence each financial year: toggle
+    - [x] Current prefix: editable
+    - [x] Current sequence number: editable (with warning: "इसे बदलने से invoice numbers में gap आएगा")
+    - [x] Reset sequence each financial year: toggle
 - [x] "Preview Invoice Header" button: opens modal showing invoice header exactly as it will appear on print
 - [x] Save button: calls `businessProfileService.update()`; success toast "Profile save हो गई"
 
@@ -459,26 +459,26 @@ P22  Standalone & Integration Features
 **Route:** `/(app)/settings/preferences`
 
 - [x] **Language section:**
-    - [ ] Toggle between Hindi and English — large cards (same design as language select screen)
-    - [ ] Language switch is immediate — all visible text updates in place, no reload
-    - [ ] Persists to `AsyncStorage` and `i18next`
+    - [x] Toggle between Hindi and English — large cards (same design as language select screen)
+    - [x] Language switch is immediate — all visible text updates in place, no reload
+    - [x] Persists to `AsyncStorage` and `i18next`
 - [x] **Currency & Numbers section:**
-    - [ ] Currency: INR (₹) — shown as read-only; "Only INR supported currently"
-    - [ ] Decimal Places: `0` or `2` toggle — affects all amount display and input
-    - [ ] Number format preview: "Example: ₹ 1,00,000" or "₹ 1,00,000.00"
+    - [x] Currency: INR (₹) — shown as read-only; "Only INR supported currently"
+    - [x] Decimal Places: `0` or `2` toggle — affects all amount display and input
+    - [x] Number format preview: "Example: ₹ 1,00,000" or "₹ 1,00,000.00"
 - [x] **Date Format section:**
-    - [ ] Three options shown as radio buttons with preview example:
-        - [ ] DD/MM/YYYY → "05/04/2025" (default)
-        - [ ] DD-MMM-YYYY → "05-Apr-2025"
-        - [ ] YYYY-MM-DD → "2025-04-05" (ISO, for advanced users)
+    - [x] Three options shown as radio buttons with preview example:
+        - [x] DD/MM/YYYY → "05/04/2025" (default)
+        - [x] DD-MMM-YYYY → "05-Apr-2025"
+        - [x] YYYY-MM-DD → "2025-04-05" (ISO, for advanced users)
 - [x] **Theme section:**
-    - [ ] Three options: Light / Dark / Follow System Device
-    - [ ] Thumbnail preview of each (mini screenshot-style illustration)
-    - [ ] Selection immediately changes app theme
-    - [ ] Persists to `AsyncStorage`
+    - [x] Three options: Light / Dark / Follow System Device
+    - [x] Thumbnail preview of each (mini screenshot-style illustration)
+    - [x] Selection immediately changes app theme
+    - [x] Persists to `AsyncStorage`
 - [x] **UX Behaviour section:**
-    - [ ] "Show warning for unsaved changes" toggle (default ON): shows `ConfirmationModal` on back-press when form is dirty
-    - [ ] "Show profit on dashboard": toggle (default OFF for privacy — a relative or employee might see screen)
+    - [x] "Show warning for unsaved changes" toggle (default ON): shows `ConfirmationModal` on back-press when form is dirty
+    - [x] "Show profit on dashboard": toggle (default OFF for privacy — a relative or employee might see screen)
 
 ---
 
@@ -497,21 +497,21 @@ P22  Standalone & Integration Features
 
 - [x] `SearchBar` at top: searches on `item_name`, `item_code`, `hsn_code`
 - [x] `FilterBar` below search with chips:
-    - [ ] "All" / "सभी" (default)
-    - [ ] Category chips (dynamic from `item_categories` table) — horizontal scroll
-    - [ ] "Low Stock" / "कम स्टॉक" chip — filters to items where `current_stock ≤ low_stock_threshold`
-    - [ ] "No Stock" / "स्टॉक नहीं" chip — filters to `current_stock = 0`
+    - [x] "All" / "सभी" (default)
+    - [x] Category chips (dynamic from `item_categories` table) — horizontal scroll
+    - [x] "Low Stock" / "कम स्टॉक" chip — filters to items where `current_stock ≤ low_stock_threshold`
+    - [x] "No Stock" / "स्टॉक नहीं" chip — filters to `current_stock = 0`
 - [x] Sort button (top-right, funnel icon): bottom sheet with options
-    - [ ] A–Z (item name)
-    - [ ] Z–A
-    - [ ] Price: Low to High
-    - [ ] Price: High to Low
-    - [ ] Stock: Low to High (default for inventory audit)
-    - [ ] Recently Added
+    - [x] A–Z (item name)
+    - [x] Z–A
+    - [x] Price: Low to High
+    - [x] Price: High to Low
+    - [x] Stock: Low to High (default for inventory audit)
+    - [x] Recently Added
 - [x] Each list row (72dp height):
-    - [ ] Left: item image thumbnail (40×40dp, rounded 8dp; fallback = coloured initial letter avatar using item name)
-    - [ ] Middle: item name (bodyBold), category chip (small coloured pill), item code below (caption secondary)
-    - [ ] Right: sale price (amount style, right-aligned), stock quantity below (caption; red text + warning icon if at/below threshold)
+    - [x] Left: item image thumbnail (40×40dp, rounded 8dp; fallback = coloured initial letter avatar using item name)
+    - [x] Middle: item name (bodyBold), category chip (small coloured pill), item code below (caption secondary)
+    - [x] Right: sale price (amount style, right-aligned), stock quantity below (caption; red text + warning icon if at/below threshold)
 - [x] Summary bar above list: "X items · Stock value: ₹ Y" — tapping stock value navigates to Stock Summary Report
 - [x] Swipe-left: Edit (blue) + Delete (red; disabled with "Used in invoices" tooltip if item has transactions)
 - [x] FAB "+ Item" bottom-right; tapping navigates to `/inventory/add`
@@ -524,178 +524,178 @@ P22  Standalone & Integration Features
 **Route:** `/(app)/inventory/add` and `/(app)/inventory/[id]?edit=true`
 **Form sections displayed as expandable cards, all expanded by default on first add**
 
-- [ ] **Item Name** (required):
-    - [ ] Large `FormField`, min 1 char, max 100 chars
-    - [ ] Placeholder: "जैसे: सफेद ग्लॉसी टाइल 60×60"
-    - [ ] Hindi keyboard recommended note: "आप हिंदी या English में नाम लिख सकते हैं"
-    - [ ] Duplicate check on blur: if same name exists → "इस नाम का item पहले से है: [name]. फिर भी add करें?" warning chip (not blocking)
-- [ ] **Item Code / SKU** (optional):
-    - [ ] Text field, max 20 chars, auto-uppercase
-    - [ ] "Auto-generate" toggle beside label: generates code as `YYYYMMDD-XXXX` (date + 4-char random)
-    - [ ] Barcode scan button (camera icon, 28dp): scans barcode → fills item code field
-    - [ ] Uniqueness validated on save (not on blur to avoid server round-trip while typing)
-- [ ] **Category** (optional but recommended):
-    - [ ] `BottomSheetPicker` showing categories from `item_categories` table
-    - [ ] Each category shows colour dot + name in picker
-    - [ ] "+ Add new category" at bottom: opens mini-form (name + colour picker + emoji)
-    - [ ] If categories feature is OFF in settings: this field hidden
-- [ ] **Item Description** (optional):
-    - [ ] `TextAreaField`, max 500 chars, `numberOfLines={3}`
-    - [ ] If item description feature is OFF in settings: this field hidden
-- [ ] **Item Image** (optional):
-    - [ ] Dashed-border upload box 120×120dp with camera/image icon
-    - [ ] On tap: action sheet — Camera / Gallery / Remove
-    - [ ] Image compressed to ≤ 500 KB, uploaded to Supabase Storage bucket `item-images/[businessId]/[itemId].jpg`
-    - [ ] Thumbnail shown in box after upload; × button to remove
-    - [ ] Upload progress indicator (linear bar) during upload
+- [x] **Item Name** (required):
+    - [x] Large `FormField`, min 1 char, max 100 chars
+    - [x] Placeholder: "जैसे: सफेद ग्लॉसी टाइल 60×60"
+    - [x] Hindi keyboard recommended note: "आप हिंदी या English में नाम लिख सकते हैं"
+    - [x] Duplicate check on blur: if same name exists → "इस नाम का item पहले से है: [name]. फिर भी add करें?" warning chip (not blocking)
+- [x] **Item Code / SKU** (optional):
+    - [x] Text field, max 20 chars, auto-uppercase
+    - [x] "Auto-generate" toggle beside label: generates code as `YYYYMMDD-XXXX` (date + 4-char random)
+    - [x] Barcode scan button (camera icon, 28dp): scans barcode → fills item code field
+    - [x] Uniqueness validated on save (not on blur to avoid server round-trip while typing)
+- [x] **Category** (optional but recommended):
+    - [x] `BottomSheetPicker` showing categories from `item_categories` table
+    - [x] Each category shows colour dot + name in picker
+    - [x] "+ Add new category" at bottom: opens mini-form (name + colour picker + emoji)
+    - [x] If categories feature is OFF in settings: this field hidden
+- [x] **Item Description** (optional):
+    - [x] `TextAreaField`, max 500 chars, `numberOfLines={3}`
+    - [x] If item description feature is OFF in settings: this field hidden
+- [x] **Item Image** (optional):
+    - [x] Dashed-border upload box 120×120dp with camera/image icon
+    - [x] On tap: action sheet — Camera / Gallery / Remove
+    - [x] Image compressed to ≤ 500 KB, uploaded to Supabase Storage bucket `item-images/[businessId]/[itemId].jpg`
+    - [x] Thumbnail shown in box after upload; × button to remove
+    - [x] Upload progress indicator (linear bar) during upload
 
 ### P2.3 Add / Edit Item — Pricing
 
-- [ ] **Sale Price** (required):
-    - [ ] `AmountInput`, must be > 0
-    - [ ] "Inclusive of GST" toggle inline: when ON, label changes to "MRP / Inclusive Price"; base price recalculated live and shown below: "Base Price (before GST): ₹ XXX"
-    - [ ] Formula: `base = salePrice / (1 + gstRate / 100)` — computed live as user types
-- [ ] **Purchase Price** (optional):
-    - [ ] `AmountInput`, label "Purchase / Cost Price"
-    - [ ] Shown/hidden by "Show Purchase Price" setting (P18.7)
-    - [ ] Helper text: "Invoice बनाते समय profit calculate करने के लिए"
-    - [ ] If entered: shows "Estimated Margin: ₹ X (Y%)" below — using sale price vs purchase price
-- [ ] **MRP (Maximum Retail Price)** (optional):
-    - [ ] `AmountInput`
-    - [ ] Shown on invoice print when enabled in settings
-    - [ ] Validation: MRP ≥ sale price (show warning if lower, not hard block)
-- [ ] **Default Discount** (optional):
-    - [ ] Numeric field, suffix "%", range 0–100
-    - [ ] This discount auto-applied when item added to invoice; user can override per-invoice
-    - [ ] Shown/hidden by item-wise discount setting (P18.7)
-- [ ] **Wholesale Price** (optional):
-    - [ ] Separate price for wholesale customers
-    - [ ] Applied when customer is tagged as "Wholesale" group
+- [x] **Sale Price** (required):
+    - [x] `AmountInput`, must be > 0
+    - [x] "Inclusive of GST" toggle inline: when ON, label changes to "MRP / Inclusive Price"; base price recalculated live and shown below: "Base Price (before GST): ₹ XXX"
+    - [x] Formula: `base = salePrice / (1 + gstRate / 100)` — computed live as user types
+- [x] **Purchase Price** (optional):
+    - [x] `AmountInput`, label "Purchase / Cost Price"
+    - [x] Shown/hidden by "Show Purchase Price" setting (P18.7)
+    - [x] Helper text: "Invoice बनाते समय profit calculate करने के लिए"
+    - [x] If entered: shows "Estimated Margin: ₹ X (Y%)" below — using sale price vs purchase price
+- [x] **MRP (Maximum Retail Price)** (optional):
+    - [x] `AmountInput`
+    - [x] Shown on invoice print when enabled in settings
+    - [x] Validation: MRP ≥ sale price (show warning if lower, not hard block)
+- [x] **Default Discount** (optional):
+    - [x] Numeric field, suffix "%", range 0–100
+    - [x] This discount auto-applied when item added to invoice; user can override per-invoice
+    - [x] Shown/hidden by item-wise discount setting (P18.7)
+- [x] **Wholesale Price** (optional):
+    - [x] Separate price for wholesale customers
+    - [x] Applied when customer is tagged as "Wholesale" group
 
 ### P2.4 Add / Edit Item — Tax
 
-- [ ] **GST Rate** (required if GST is enabled):
-    - [ ] `BottomSheetPicker` with 6 options:
-        - [ ] Nil (0%) — for exempt goods
-        - [ ] 5% — for essential items, some food
-        - [ ] 12%
-        - [ ] 18% — most common for manufactured goods
-        - [ ] 28% — luxury/sin goods
-        - [ ] Custom rate — shows numeric input (for special items)
-    - [ ] Default: 18% (most common for tiles/hardware)
-    - [ ] Hidden entirely if GST is OFF in settings
-- [ ] **HSN / SAC Code**:
-    - [ ] Text field, 4–8 digits
-    - [ ] Bundled HSN lookup: type 2+ chars → shows matching codes from bundled JSON (~5000 common codes); tap to fill
-    - [ ] After filling: shows HSN description below field: "6908 — Glazed ceramic tiles"
-    - [ ] "Goods" vs "Services" toggle determines whether HSN (goods) or SAC (services) code is used
-    - [ ] Hidden if HSN/SAC feature is OFF in settings
-- [ ] **Additional Cess** (optional):
-    - [ ] Numeric field, suffix "%"
-    - [ ] Shown only if "Additional Cess" is enabled in GST settings (P18.1)
-    - [ ] Helper: "Pan masala, tobacco, coal etc. attract extra cess"
-- [ ] GST summary card (below fields, auto-computed): "On ₹ 1000 item: CGST ₹ 90 + SGST ₹ 90 = Total ₹ 1180"
+- [x] **GST Rate** (required if GST is enabled):
+    - [x] `BottomSheetPicker` with 6 options:
+        - [x] Nil (0%) — for exempt goods
+        - [x] 5% — for essential items, some food
+        - [x] 12%
+        - [x] 18% — most common for manufactured goods
+        - [x] 28% — luxury/sin goods
+        - [x] Custom rate — shows numeric input (for special items)
+    - [x] Default: 18% (most common for tiles/hardware)
+    - [x] Hidden entirely if GST is OFF in settings
+- [x] **HSN / SAC Code**:
+    - [x] Text field, 4–8 digits
+    - [x] Bundled HSN lookup: type 2+ chars → shows matching codes from bundled JSON (~5000 common codes); tap to fill
+    - [x] After filling: shows HSN description below field: "6908 — Glazed ceramic tiles"
+    - [x] "Goods" vs "Services" toggle determines whether HSN (goods) or SAC (services) code is used
+    - [x] Hidden if HSN/SAC feature is OFF in settings
+- [x] **Additional Cess** (optional):
+    - [x] Numeric field, suffix "%"
+    - [x] Shown only if "Additional Cess" is enabled in GST settings (P18.1)
+    - [x] Helper: "Pan masala, tobacco, coal etc. attract extra cess"
+- [x] GST summary card (below fields, auto-computed): "On ₹ 1000 item: CGST ₹ 90 + SGST ₹ 90 = Total ₹ 1180"
 
 ### P2.5 Add / Edit Item — Stock & Units
 
-- [ ] **Track Stock toggle** (default ON):
-    - [ ] When OFF: hides all stock fields; item shows "Service item" chip in list; stock column blank
-    - [ ] When ON: shows all stock fields below
-- [ ] **Primary Unit**:
-    - [ ] `BottomSheetPicker` listing system units + custom units
-    - [ ] System units bundled: Pcs (पीस), Box (बॉक्स), Kg (किग्रा), Gram (ग्राम), Litre (लीटर), Meter (मीटर), Sq.ft (वर्ग फुट), Sq.meter (वर्ग मीटर), Dozen (दर्जन), Set (सेट), Pair (जोड़ी), Roll (रोल), Bag (बैग), Ton (टन), Number (नग)
-    - [ ] "+ Add custom unit": opens inline mini-form (full name, abbreviation); saves to `item_units` table
-- [ ] **Opening Stock Quantity** (shown when Track Stock is ON):
-    - [ ] Numeric field with unit suffix; decimal places from settings
-    - [ ] `DatePickerField` for "As on date" — the date from which this opening stock is recorded
-    - [ ] Helper: "यह आपके पास अभी जितना stock है वो enter करें"
-    - [ ] On save: creates a `stock_operation` row of type `opening`
-- [ ] **Low Stock Alert Threshold**:
-    - [ ] Numeric field with unit suffix
-    - [ ] Default: 5
-    - [ ] "Alert when stock falls below \_\_\_ [unit]"
-    - [ ] Shown in red in item list when `current_stock ≤ threshold`
-- [ ] **Secondary Unit toggle**:
-    - [ ] When ON: shows secondary unit configuration
-    - [ ] Secondary Unit Name: text field ("Box", "Carton", "Bundle")
-    - [ ] Conversion Formula: "1 [Secondary Unit] = \_\_\_ [Primary Unit]" — numeric input
-    - [ ] Example auto-shown: "1 Box = 8 Pcs"
-    - [ ] Default Unit for Sale: Primary / Secondary — `BottomSheetPicker` with both options
-    - [ ] Default Unit for Purchase: Primary / Secondary — same picker
-- [ ] **Barcode**:
-    - [ ] Text field (EAN-13, Code128, QR all accepted)
-    - [ ] Camera scan button: opens `BarcodeScanningView` from `expo-camera`
-    - [ ] "Generate Barcode" button: creates Code128 barcode from item code; shows preview; saves to field
-    - [ ] Barcode shown on item detail as scannable image
+- [x] **Track Stock toggle** (default ON):
+    - [x] When OFF: hides all stock fields; item shows "Service item" chip in list; stock column blank
+    - [x] When ON: shows all stock fields below
+- [x] **Primary Unit**:
+    - [x] `BottomSheetPicker` listing system units + custom units
+    - [x] System units bundled: Pcs (पीस), Box (बॉक्स), Kg (किग्रा), Gram (ग्राम), Litre (लीटर), Meter (मीटर), Sq.ft (वर्ग फुट), Sq.meter (वर्ग मीटर), Dozen (दर्जन), Set (सेट), Pair (जोड़ी), Roll (रोल), Bag (बैग), Ton (टन), Number (नग)
+    - [x] "+ Add custom unit": opens inline mini-form (full name, abbreviation); saves to `item_units` table
+- [x] **Opening Stock Quantity** (shown when Track Stock is ON):
+    - [x] Numeric field with unit suffix; decimal places from settings
+    - [x] `DatePickerField` for "As on date" — the date from which this opening stock is recorded
+    - [x] Helper: "यह आपके पास अभी जितना stock है वो enter करें"
+    - [x] On save: creates a `stock_operation` row of type `opening`
+- [x] **Low Stock Alert Threshold**:
+    - [x] Numeric field with unit suffix
+    - [x] Default: 5
+    - [x] "Alert when stock falls below \_\_\_ [unit]"
+    - [x] Shown in red in item list when `current_stock ≤ threshold`
+- [x] **Secondary Unit toggle**:
+    - [x] When ON: shows secondary unit configuration
+    - [x] Secondary Unit Name: text field ("Box", "Carton", "Bundle")
+    - [x] Conversion Formula: "1 [Secondary Unit] = \_\_\_ [Primary Unit]" — numeric input
+    - [x] Example auto-shown: "1 Box = 8 Pcs"
+    - [x] Default Unit for Sale: Primary / Secondary — `BottomSheetPicker` with both options
+    - [x] Default Unit for Purchase: Primary / Secondary — same picker
+- [x] **Barcode**:
+    - [x] Text field (EAN-13, Code128, QR all accepted)
+    - [x] Camera scan button: opens `BarcodeScanningView` from `expo-camera`
+    - [x] "Generate Barcode" button: creates Code128 barcode from item code; shows preview; saves to field
+    - [x] Barcode shown on item detail as scannable image
 
 ### P2.6 Add / Edit Item — Batch & Serial Tracking
 
 > These features shown only when Track Stock is ON and respective settings enabled in P18.7
 
-- [ ] **Batch Tracking toggle**:
-    - [ ] When ON: every stock receipt and sale will require batch selection
-    - [ ] Cannot be ON simultaneously with Serial Tracking
-    - [ ] Toggle turns red with warning "Enabling batch tracking will require batch info for all future stock entries"
-- [ ] **Batch Fields (shown on item add/edit when batch tracking ON)**:
-    - [ ] Batch Number: text field
-    - [ ] Manufacturing Date: `DatePickerField`
-    - [ ] Expiry Date: `DatePickerField` (must be after manufacturing date)
-    - [ ] Opening quantity for this batch: numeric
-    - [ ] "+ Add another batch" button for multiple opening batches
-- [ ] **Serial Tracking toggle**:
-    - [ ] When ON: each individual unit has a unique serial number
-    - [ ] Opening serials: multi-line text area — "Enter one serial number per line or scan barcodes sequentially"
-    - [ ] Cannot be ON with Batch Tracking
-- [ ] **Expiry Alert**: when expiry date within 30 days of today → orange badge in item list + dashboard alert
+- [x] **Batch Tracking toggle**:
+    - [x] When ON: every stock receipt and sale will require batch selection
+    - [x] Cannot be ON simultaneously with Serial Tracking
+    - [x] Toggle turns red with warning "Enabling batch tracking will require batch info for all future stock entries"
+- [x] **Batch Fields (shown on item add/edit when batch tracking ON)**:
+    - [x] Batch Number: text field
+    - [x] Manufacturing Date: `DatePickerField`
+    - [x] Expiry Date: `DatePickerField` (must be after manufacturing date)
+    - [x] Opening quantity for this batch: numeric
+    - [x] "+ Add another batch" button for multiple opening batches
+- [x] **Serial Tracking toggle**:
+    - [x] When ON: each individual unit has a unique serial number
+    - [x] Opening serials: multi-line text area — "Enter one serial number per line or scan barcodes sequentially"
+    - [x] Cannot be ON with Batch Tracking
+- [x] **Expiry Alert**: when expiry date within 30 days of today → orange badge in item list + dashboard alert
 
 ### P2.7 Item Detail Screen
 
 **Route:** `/(app)/inventory/[id]`
 
 - [x] **Header card**:
-    - [ ] Item image (120×120dp, rounded 12dp) left; if no image: category-colour avatar
-    - [ ] Item name (h1) right of image
-    - [ ] Category chip below name
-    - [ ] Item code below category (caption)
-    - [ ] Current stock as large number (amountLarge) — colour: green if above threshold, red if at/below, grey if stock not tracked
-    - [ ] Unit beside stock number
+    - [x] Item image (120×120dp, rounded 12dp) left; if no image: category-colour avatar
+    - [x] Item name (h1) right of image
+    - [x] Category chip below name
+    - [x] Item code below category (caption)
+    - [x] Current stock as large number (amountLarge) — colour: green if above threshold, red if at/below, grey if stock not tracked
+    - [x] Unit beside stock number
 - [x] **Pricing card**:
-    - [ ] Sale Price (amountLarge, terracotta)
-    - [ ] Purchase Price (body, secondary) — shown only if setting enabled
-    - [ ] MRP (caption) if set
-    - [ ] GST Rate badge chip ("GST 18%")
-    - [ ] HSN Code (caption)
-    - [ ] Margin: "Margin: ₹ X (Y%)" — green if positive
+    - [x] Sale Price (amountLarge, terracotta)
+    - [x] Purchase Price (body, secondary) — shown only if setting enabled
+    - [x] MRP (caption) if set
+    - [x] GST Rate badge chip ("GST 18%")
+    - [x] HSN Code (caption)
+    - [x] Margin: "Margin: ₹ X (Y%)" — green if positive
 - [x] **Stock Summary card** (only when stock tracking ON):
-    - [ ] Opening Stock: X [unit]
-    - [ ] Total Purchased: + X [unit]
-    - [ ] Total Sold: − X [unit]
-    - [ ] Adjustments: ± X [unit]
-    - [ ] **Current Stock: X [unit]** (bold, large)
-    - [ ] Stock Value: ₹ X (current stock × purchase price)
-    - [ ] "Adjust Stock" button: navigates to stock adjustment screen
+    - [x] Opening Stock: X [unit]
+    - [x] Total Purchased: + X [unit]
+    - [x] Total Sold: − X [unit]
+    - [x] Adjustments: ± X [unit]
+    - [x] **Current Stock: X [unit]** (bold, large)
+    - [x] Stock Value: ₹ X (current stock × purchase price)
+    - [x] "Adjust Stock" button: navigates to stock adjustment screen
 - [x] **Stock Movement ledger** (mini-list, last 10 entries):
-    - [ ] Each row: date (caption), transaction type icon, reference number, qty in/out (green/red), running balance
-    - [ ] "View All" link → Item Detail Report (P14.5)
+    - [x] Each row: date (caption), transaction type icon, reference number, qty in/out (green/red), running balance
+    - [x] "View All" link → Item Detail Report (P14.5)
 - [x] **Last Transaction cards** (two side-by-side):
-    - [ ] "Last Purchased: ₹ X on DD MMM (from [Supplier])"
-    - [ ] "Last Sold: ₹ X on DD MMM (to [Customer])"
+    - [x] "Last Purchased: ₹ X on DD MMM (from [Supplier])"
+    - [x] "Last Sold: ₹ X on DD MMM (to [Customer])"
 - [x] **Party Rates section** (only if party-wise pricing setting ON):
-    - [ ] List of special rates set for specific parties
-    - [ ] "+ Add Rate" button → party picker + rate input mini-form
+    - [x] List of special rates set for specific parties
+    - [x] "+ Add Rate" button → party picker + rate input mini-form
 - [x] **Action bar** (bottom sticky):
-    - [ ] "Edit" button (secondary)
-    - [ ] "Share on WhatsApp" button — shares item name, price, stock as text
-    - [ ] Kebab menu (⋮): Duplicate Item, View in Batches, View Serials, Delete
+    - [x] "Edit" button (secondary)
+    - [x] "Share on WhatsApp" button — shares item name, price, stock as text
+    - [x] Kebab menu (⋮): Duplicate Item, View in Batches, View Serials, Delete
 
 ### P2.8 Stock Adjustment Screen
 
 **Route:** `/(app)/inventory/stock-op` (enhance existing)
 
 - [x] **Adjustment Type** (required): large card selection
-    - [ ] "Add Stock" / "स्टॉक बढ़ाएं" — for physical additions not from purchase
-    - [ ] "Remove Stock" / "स्टॉक घटाएं" — for wastage, theft, damage
-    - [ ] "Set Stock" / "स्टॉक set करें" — override current stock (for physical count reconciliation)
+    - [x] "Add Stock" / "स्टॉक बढ़ाएं" — for physical additions not from purchase
+    - [x] "Remove Stock" / "स्टॉक घटाएं" — for wastage, theft, damage
+    - [x] "Set Stock" / "स्टॉक set करें" — override current stock (for physical count reconciliation)
 - [x] Item search (if not pre-filled from item detail)
 - [x] Quantity: `AmountInput` with unit
 - [x] For "Set Stock": shows "Current stock: X [unit]; New stock: Y [unit]; Difference: ±Z"
@@ -710,63 +710,63 @@ P22  Standalone & Integration Features
 
 **Route:** `/(app)/settings/item-categories` (accessible from item form and settings)
 
-- [ ] List of all categories: each row shows colour dot, name, item count
-- [ ] FAB "+ New Category"
-- [ ] **Add / Edit Category form**:
-    - [ ] Name (Hindi and English): two text fields labelled "हिंदी नाम" and "English Name"
-    - [ ] Colour picker: 12 preset colours shown as circles; tap to select; selected shows checkmark
-    - [ ] Icon: emoji picker (`@emoji-mart/react` equivalent or simpler) — optional
-    - [ ] Save button
-- [ ] **Merge Category**: from kebab menu on category row → "Merge into..." → `BottomSheetPicker` of other categories → all items from source moved to target → source deleted
-- [ ] **Delete Category**: only allowed when item count = 0; else: "पहले इन items को दूसरी category में move करें"; shows item list for reassignment
-- [ ] Reorder categories: long-press drag to reorder (order saved to `item_categories.sort_order`)
+- [x] List of all categories: each row shows colour dot, name, item count
+- [x] FAB "+ New Category"
+- [x] **Add / Edit Category form**:
+    - [x] Name (Hindi and English): two text fields labelled "हिंदी नाम" and "English Name"
+    - [x] Colour picker: 12 preset colours shown as circles; tap to select; selected shows checkmark
+    - [x] Icon: emoji picker (`@emoji-mart/react` equivalent or simpler) — optional
+    - [x] Save button
+- [x] **Merge Category**: from kebab menu on category row → "Merge into..." → `BottomSheetPicker` of other categories → all items from source moved to target → source deleted
+- [x] **Delete Category**: only allowed when item count = 0; else: "पहले इन items को दूसरी category में move करें"; shows item list for reassignment
+- [x] Reorder categories: long-press drag to reorder (order saved to `item_categories.sort_order`)
 
 ### P2.10 Item Units Management
 
 **Route:** `/(app)/settings/item-units`
 
-- [ ] Lists all system units (non-editable, grey) and custom units
-- [ ] Custom unit rows: show name, abbreviation, usage count (how many items use it)
-- [ ] Edit custom unit: name and abbreviation only (abbreviation change propagates to all items)
-- [ ] Delete custom unit: disabled if `usage_count > 0` — shows "X items use this unit; reassign first"
-- [ ] Set default unit: radio button beside each custom unit; affects new item form default
+- [x] Lists all system units (non-editable, grey) and custom units
+- [x] Custom unit rows: show name, abbreviation, usage count (how many items use it)
+- [x] Edit custom unit: name and abbreviation only (abbreviation change propagates to all items)
+- [x] Delete custom unit: disabled if `usage_count > 0` — shows "X items use this unit; reassign first"
+- [x] Set default unit: radio button beside each custom unit; affects new item form default
 
 ### P2.11 Party-wise Item Pricing
 
 **Accessed from:** Item Detail Screen → Party Rates section
 
-- [ ] Table listing all special rates: Party Name, Rate (₹), Rate Type (Fixed / % Discount off MRP), Active toggle
-- [ ] "+ Add Rate" button: bottom sheet form
-    - [ ] Party picker (customers + suppliers both, in case of supplier-specific purchase price)
-    - [ ] Rate type: Fixed Price / % Discount
-    - [ ] Rate value: `AmountInput` or percentage input
-    - [ ] Active toggle: default ON
-    - [ ] Effective From date (optional)
-    - [ ] Expiry date (optional)
-- [ ] When this item is added to an invoice for a matching party: rate auto-fills; "Special rate applied" badge shown on line item
-- [ ] Edit / delete party rates from the table
+- [x] Table listing all special rates: Party Name, Rate (₹), Rate Type (Fixed / % Discount off MRP), Active toggle
+- [x] "+ Add Rate" button: bottom sheet form
+    - [x] Party picker (customers + suppliers both, in case of supplier-specific purchase price)
+    - [x] Rate type: Fixed Price / % Discount
+    - [x] Rate value: `AmountInput` or percentage input
+    - [x] Active toggle: default ON
+    - [x] Effective From date (optional)
+    - [x] Expiry date (optional)
+- [x] When this item is added to an invoice for a matching party: rate auto-fills; "Special rate applied" badge shown on line item
+- [x] Edit / delete party rates from the table
 
 ### P2.12 Item Import from Excel
 
 **Route:** `/(app)/inventory/import`
 
-- [ ] **Step 1 — Download Template**: "Download Excel Template" button; downloads pre-formatted `.xlsx` from Supabase Storage or generates client-side; columns: Item Name, Item Code, Category, Sale Price, Purchase Price, MRP, GST Rate, HSN Code, Unit, Opening Stock, Low Stock Threshold, Description
-- [ ] **Step 2 — Upload File**: `expo-document-picker` button; accepts `.xlsx` and `.csv`; shows file name and size after selection
-- [ ] **Step 3 — Map Columns**: table showing detected columns → dropdown to map to app fields; auto-maps when header names match exactly
-- [ ] **Step 4 — Preview & Validate**: shows first 5 rows in a table; validation errors highlighted in red per cell; error count shown: "3 rows have errors — they will be skipped"
-- [ ] Options row: "Skip duplicates (matching item name)" toggle; "Update existing items" toggle
-- [ ] **Step 5 — Import**: "Import X items" button; progress bar shows row-by-row; "Importing... 45/200"; on complete: "200 items imported (195 new, 5 updated, 2 skipped due to errors)" summary card with "View Errors" expandable
+- [x] **Step 1 — Download Template**: "Download Excel Template" button; downloads pre-formatted `.xlsx` from Supabase Storage or generates client-side; columns: Item Name, Item Code, Category, Sale Price, Purchase Price, MRP, GST Rate, HSN Code, Unit, Opening Stock, Low Stock Threshold, Description
+- [x] **Step 2 — Upload File**: `expo-document-picker` button; accepts `.xlsx` and `.csv`; shows file name and size after selection
+- [x] **Step 3 — Map Columns**: table showing detected columns → dropdown to map to app fields; auto-maps when header names match exactly
+- [x] **Step 4 — Preview & Validate**: shows first 5 rows in a table; validation errors highlighted in red per cell; error count shown: "3 rows have errors — they will be skipped"
+- [x] Options row: "Skip duplicates (matching item name)" toggle; "Update existing items" toggle
+- [x] **Step 5 — Import**: "Import X items" button; progress bar shows row-by-row; "Importing... 45/200"; on complete: "200 items imported (195 new, 5 updated, 2 skipped due to errors)" summary card with "View Errors" expandable
 
 ### P2.13 Item Export
 
 **Route:** Accessible from inventory list → kebab menu → "Export Items"
 
-- [ ] **Field selection**: checkboxes for columns to include: Name, Code, Category, Sale Price, Purchase Price, MRP, GST, HSN, Unit, Current Stock, Low Stock Threshold
-- [ ] **Format picker**: PDF (Catalogue style, printable) or Excel (.xlsx, full data)
-- [ ] **Filter options**: All items / Specific category / Low stock only / Zero stock
-- [ ] PDF output: A4 page, business header, date, items in table; can be printed as product catalogue for customers
-- [ ] Excel output: sheet per category or all in one sheet (toggle)
-- [ ] Share via: WhatsApp / Email / Files (device storage)
+- [x] **Field selection**: checkboxes for columns to include: Name, Code, Category, Sale Price, Purchase Price, MRP, GST, HSN, Unit, Current Stock, Low Stock Threshold
+- [x] **Format picker**: PDF (Catalogue style, printable) or Excel (.xlsx, full data)
+- [x] **Filter options**: All items / Specific category / Low stock only / Zero stock
+- [x] PDF output: A4 page, business header, date, items in table; can be printed as product catalogue for customers
+- [x] Excel output: sheet per category or all in one sheet (toggle)
+- [x] Share via: WhatsApp / Email / Files (device storage)
 
 ---
 
@@ -787,9 +787,9 @@ P22  Standalone & Integration Features
 - [x] `FilterBar` chips: All / With Balance / No Balance / By Group (shows group sub-picker) / Overdue
 - [x] Sort: A–Z / Z–A / Highest Balance / Recently Transacted / Date Added
 - [x] Each list row (80dp):
-    - [ ] Left: avatar circle (48dp) with initials — colour based on name hash (10 preset colours)
-    - [ ] Middle: customer name (bodyBold), phone (caption secondary)
-    - [ ] Right: outstanding amount (amountStyle); "Dr" or "Cr" badge; green if Cr (advance), red if Dr (owes)
+    - [x] Left: avatar circle (48dp) with initials — colour based on name hash (10 preset colours)
+    - [x] Middle: customer name (bodyBold), phone (caption secondary)
+    - [x] Right: outstanding amount (amountStyle); "Dr" or "Cr" badge; green if Cr (advance), red if Dr (owes)
 - [x] Summary bar: "X customers · ₹ Y to receive (total Dr balance)"
 - [x] Swipe-left actions: Call (tel: link, green), Edit (blue), Delete (red, disabled if has transactions)
 - [x] FAB "+ Customer"
@@ -800,21 +800,21 @@ P22  Standalone & Integration Features
 **Route:** `/(app)/customers/add` and `/(app)/customers/[id]?edit=true`
 
 - [x] **Basic Details section**:
-    - [ ] Name (required, min 1 char, max 100): large `FormField`
-    - [ ] Phone: `PhoneInput` component
-        - [ ] On blur: API call to check existing customers with same number; if found: inline chip "Already exists: [Name] — View" with link
+    - [x] Name (required, min 1 char, max 100): large `FormField`
+    - [x] Phone: `PhoneInput` component
+        - [x] On blur: API call to check existing customers with same number; if found: inline chip "Already exists: [Name] — View" with link
         - [ ] Multiple phones: "+ Add another number" link adds a second phone field (max 3)
     - [ ] Email (optional): email keyboard, format validation
-    - [ ] Customer Type: "Individual" / "Business" toggle — Business shows Company Name field
-    - [ ] Company Name (optional, shown when Business): text field
+    - [x] Customer Type: "Individual" / "Business" toggle — Business shows Company Name field
+    - [x] Company Name (optional, shown when Business): text field
 - [x] **GST Details section** (shown when GSTIN party setting ON in P18.6):
-    - [ ] GSTIN: 15-char field, uppercase, format validation, checksum validation
+    - [x] GSTIN: 15-char field, uppercase, format validation, checksum validation
     - [ ] When GSTIN valid: auto-fills State from first 2 digits: "State: Maharashtra (27)"
-    - [ ] GST Type: Regular / Composition / Unregistered / Consumer — picker
+    - [x] GST Type: Regular / Composition / Unregistered / Consumer — picker
 - [x] **Address section**:
-    - [ ] Billing Address: multi-line text area
+    - [x] Billing Address: multi-line text area
     - [ ] State: `BottomSheetPicker` (36 states/UTs) — determines CGST/SGST vs IGST on invoices
-    - [ ] City: text field
+    - [x] City: text field
     - [ ] Pincode: 6-digit; auto-fills City + State on valid pincode
     - [ ] "Add Shipping Address" toggle → separate block:
         - [ ] "Same as billing" checkbox: copies billing address
@@ -824,9 +824,9 @@ P22  Standalone & Integration Features
     - [ ] Customer Group: `BottomSheetPicker` of groups; "+ Add group" inline
     - [ ] Multiple groups allowed (many-to-many)
 - [x] **Credit & Balance section**:
-    - [ ] Credit Limit: `AmountInput` (0 = no limit); helper "Invoice बनाते समय warning मिलेगी अगर इससे ज़्यादा outstanding हो"
-    - [ ] Opening Balance: `AmountInput`
-    - [ ] Balance Type: "To Receive (Dr)" / "To Pay / Advance (Cr)" — large toggle buttons
+    - [x] Credit Limit: `AmountInput` (0 = no limit); helper "Invoice बनाते समय warning मिलेगी अगर इससे ज़्यादा outstanding हो"
+    - [x] Opening Balance: `AmountInput`
+    - [x] Balance Type: "To Receive (Dr)" / "To Pay / Advance (Cr)" — large toggle buttons
     - [ ] Opening Balance Date: `DatePickerField`
     - [ ] Helper: "यह balance पिछले records को migrate करने के लिए है"
 - [x] **Additional Fields section** (shown when Party Additional Fields setting ON and fields configured in P18.6):
@@ -839,24 +839,24 @@ P22  Standalone & Integration Features
 **Route:** `/(app)/customers/[id]`
 
 - [x] **Header**:
-    - [ ] Avatar circle (64dp, large initials)
-    - [ ] Name (h1)
-    - [ ] Phone: tap to call (`Linking.openURL('tel:...')`); shows all phones if multiple
-    - [ ] Outstanding balance (amountLarge): red if Dr (they owe), green if Cr (advance with us)
-    - [ ] "Dr" / "Cr" label beside balance in smaller text (13sp)
-    - [ ] GSTIN (caption) if set; "Regular" / "Composition" badge
+    - [x] Avatar circle (64dp, large initials)
+    - [x] Name (h1)
+    - [x] Phone: tap to call (`Linking.openURL('tel:...')`); shows all phones if multiple
+    - [x] Outstanding balance (amountLarge): red if Dr (they owe), green if Cr (advance with us)
+    - [x] "Dr" / "Cr" label beside balance in smaller text (13sp)
+    - [x] GSTIN (caption) if set; "Regular" / "Composition" badge
     - [ ] Group chips if any
 - [x] **Quick Action row** (3 equal-width buttons, 52dp height each):
-    - [ ] "New Sale" — navigates to invoice create with this customer pre-filled
-    - [ ] "Receive Payment" — navigates to payment-in with this customer pre-filled
-    - [ ] "WhatsApp" — opens WhatsApp deep link: `https://wa.me/91XXXXXXXXXX?text=नमस्ते [Name] जी...`
+    - [x] "New Sale" — navigates to invoice create with this customer pre-filled
+    - [x] "Receive Payment" — navigates to payment-in with this customer pre-filled
+    - [x] "WhatsApp" — opens WhatsApp deep link: `https://wa.me/91XXXXXXXXXX?text=नमस्ते [Name] जी...`
 - [x] **Tab bar** (3 tabs: Ledger / Invoices / Payments):
-    - [ ] **Ledger tab**:
+    - [x] **Ledger tab**:
         - [ ] `DatePickerField` "from" and "to" (default: current FY)
-        - [ ] Opening balance row (grey background): "Opening Balance — Dr/Cr ₹ X"
-        - [ ] Chronological list of all transactions: date, type icon + label, reference no., Dr/Cr amount, running balance
-        - [ ] Transaction types shown with distinct icons: Sale (receipt), Payment (cash), Credit Note (return), Adjustment (gear)
-        - [ ] Closing balance row (bold): "Closing Balance — Dr/Cr ₹ X"
+        - [x] Opening balance row (grey background): "Opening Balance — Dr/Cr ₹ X"
+        - [x] Chronological list of all transactions: date, type icon + label, reference no., Dr/Cr amount, running balance
+        - [x] Transaction types shown with distinct icons: Sale (receipt), Payment (cash), Credit Note (return), Adjustment (gear)
+        - [x] Closing balance row (bold): "Closing Balance — Dr/Cr ₹ X"
         - [ ] "Send Statement" button below closing balance: calls `reportService.generatePartyStatement()` → PDF → share sheet
     - [ ] **Invoices tab**:
         - [ ] Filtered invoice list (same as P4.9 but pre-filtered by this customer)
@@ -3262,17 +3262,17 @@ See P3.8 — accessible from Parties screen + here.
 
 ### P22.1 Online / Offline Operation
 
-- [ ] `WriteQueueService` (built in P0.8) hardened with:
-    - [ ] Maximum queue size: 500 mutations (prevent runaway offline usage)
-    - [ ] Queue persistence across app kills: stored in `AsyncStorage` not just memory
-    - [ ] Priority queue: write operations that block others execute first (e.g. `create_invoice` before `update_item`)
-    - [ ] **Sync log screen** (`/(app)/settings/sync-log`):
-        - [ ] List of pending + recent sync operations: type, table, timestamp, status
-        - [ ] Failed operations: retry button + error message
-        - [ ] "Clear completed" button
-        - [ ] Useful for diagnosing sync issues
-- [ ] **"Last synced: X minutes ago"** persistent header indicator: updates every minute when app is open
-- [ ] **Conflict resolution modal** (built in P0.8): fires when server version updated while offline
+- [x] `WriteQueueService` (built in P0.8) hardened with:
+    - [x] Maximum queue size: 500 mutations (prevent runaway offline usage)
+    - [x] Queue persistence across app kills: stored in `AsyncStorage` not just memory
+    - [x] Priority queue: write operations that block others execute first (e.g. `create_invoice` before `update_item`)
+    - [x] **Sync log screen** (`/(app)/settings/sync-log`):
+        - [x] List of pending + recent sync operations: type, table, timestamp, status
+        - [x] Failed operations: retry button + error message
+        - [x] "Clear failed" button
+        - [x] Useful for diagnosing sync issues
+- [x] **"Last synced: X minutes ago"** persistent header indicator: updates every minute when app is open
+- [x] **Conflict resolution modal** (built in P0.8): fires when server version updated while offline
 
 ### P22.2 Multi-device Sync (Mobile ↔ Desktop)
 

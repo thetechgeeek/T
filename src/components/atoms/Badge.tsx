@@ -12,7 +12,8 @@ export type BadgeVariant =
 	| 'neutral'
 	| 'paid'
 	| 'partial'
-	| 'unpaid';
+	| 'unpaid'
+	| 'default';
 
 interface BadgeProps {
 	label: string;
@@ -49,6 +50,7 @@ export const Badge: React.FC<BadgeProps> = ({
 				return { bg: theme.colors.infoLight, text: theme.colors.info };
 			case 'neutral':
 				return { bg: theme.colors.surfaceVariant, text: theme.colors.onSurfaceVariant };
+			case 'default':
 			default:
 				return { bg: withOpacity(theme.colors.primary, 0.12), text: theme.colors.primary };
 		}

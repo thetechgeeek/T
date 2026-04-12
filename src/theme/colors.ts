@@ -21,6 +21,10 @@ const LIGHT_COLORS: ThemeColors = {
 	onPrimary: '#FFFFFF',
 	primaryGradientStart: '#C1440E',
 	primaryGradientEnd: '#8B2F07',
+	primaryContainer: '#FCE7DF',
+	onPrimaryContainer: '#2D0D00',
+	secondary: '#6B5E52',
+	onSecondary: '#FFFFFF',
 	// Semantic
 	success: '#1A8754', // roadmap success green
 	onSuccess: '#FFFFFF',
@@ -71,6 +75,10 @@ const DARK_COLORS: ThemeColors = {
 	onPrimary: '#1A0A00',
 	primaryGradientStart: '#E8622A',
 	primaryGradientEnd: '#C1440E',
+	primaryContainer: '#451A03',
+	onPrimaryContainer: '#FFDBCF',
+	secondary: '#98989E',
+	onSecondary: '#000000',
 	// Semantic
 	success: '#2DB87A', // roadmap dark success
 	onSuccess: '#000000',
@@ -142,6 +150,7 @@ const TYPOGRAPHY: Theme['typography'] = {
 		amountLarge: { fontSize: 28, fontWeight: '700', lineHeight: 42, color: '#C1440E' },
 		amountNegative: { fontSize: 20, fontWeight: '700', lineHeight: 30, color: '#B91C1C' },
 		label: { fontSize: 13, fontWeight: '500', lineHeight: 18 },
+		captionSmall: { fontSize: 11, fontWeight: '400', lineHeight: 16 },
 	},
 };
 
@@ -158,6 +167,7 @@ const SPACING: Theme['spacing'] = {
 
 const BORDER_RADIUS: Theme['borderRadius'] = {
 	none: 0,
+	xs: 2,
 	sm: 4,
 	md: 8,
 	lg: 12,

@@ -92,7 +92,7 @@ export default function SecuritySettingsScreen() {
 				<SectionLabel label="PIN" c={c} />
 				<View style={[styles.card, { backgroundColor: c.surface }]}>
 					<Pressable
-						onPress={() => router.push('/(app)/settings/lock')}
+						onPress={() => router.push('/(app)/settings/lock' as any)}
 						style={[
 							styles.row,
 							{

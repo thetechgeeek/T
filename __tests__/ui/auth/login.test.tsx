@@ -10,47 +10,46 @@ jest.mock('@/src/stores/authStore', () => ({
 }));
 
 describe('LoginScreen', () => {
-	const mockLogin = jest.fn();
+	const mockSendOtp = jest.fn();
 
 	beforeEach(() => {
 		jest.clearAllMocks();
 		(useAuthStore as unknown as jest.Mock).mockReturnValue({
-			login: mockLogin,
+			sendOtp: mockSendOtp,
 			loading: false,
 		});
 	});
 
 	it('renders correctly', () => {
-		const { getByPlaceholderText, getAllByText } = renderWithTheme(<LoginScreen />);
+		const { getByPlaceholderText, getByText } = renderWithTheme(<LoginScreen />);
 
-		// Check exact text/placeholders from login.tsx
-		expect(getByPlaceholderText('you@example.com')).toBeTruthy();
-		expect(getByPlaceholderText('••••••••')).toBeTruthy();
+		// Check mobile sequence
+		expect(getByPlaceholderText('XXXXX XXXXX')).toBeTruthy();
 
-		// Heading and Button
-		const signInElements = getAllByText('Sign In');
-		expect(signInElements.length).toBeGreaterThan(0);
+		// Check button
+		expect(getByText('sendOtp')).toBeTruthy();
 	});
 
-	it('calls login on submit', async () => {
+	it('calls sendOtp on submit with +91 prefix', async () => {
 		const { getByPlaceholderText, getByTestId } = renderWithTheme(<LoginScreen />);
 
-		fireEvent.changeText(getByPlaceholderText('you@example.com'), 'test@example.com');
-		fireEvent.changeText(getByPlaceholderText('••••••••'), 'password123');
+		fireEvent.changeText(getByPlaceholderText('XXXXX XXXXX'), '9876543210');
 
-		// Use testID for reliable interaction in the presence of duplicate text
-		const signInButton = getByTestId('sign-in-button');
-		fireEvent.press(signInButton);
+		const sendOtpButton = getByTestId('send-otp-button');
+		fireEvent.press(sendOtpButton);
 
 		await waitFor(() => {
-			expect(mockLogin).toHaveBeenCalledWith('test@example.com', 'password123');
+			expect(mockSendOtp).toHaveBeenCalledWith('+919876543210');
 		});
 	});
 
-	it('navigates to setup screen when clicking setup link', () => {
-		const { getByText } = renderWithTheme(<LoginScreen />);
+	it('disables button when phone < 10 digits', () => {
+		const { getByPlaceholderText, getByTestId } = renderWithTheme(<LoginScreen />);
 
-		const setupLink = getByText('Set Up Your Business', { exact: false });
-		fireEvent.press(setupLink);
+		fireEvent.changeText(getByPlaceholderText('XXXXX XXXXX'), '12345');
+		const button = getByTestId('send-otp-button');
+
+		// In React Native, accessibilityState.disabled is common for testing button state
+		expect(button.props.accessibilityState.disabled).toBe(true);
 	});
 });

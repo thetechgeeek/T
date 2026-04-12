@@ -103,7 +103,7 @@ export default function FinanceOverviewScreen() {
 			<View style={styles.quickActions}>
 				<Pressable
 					style={[styles.quickBtn, { backgroundColor: c.primary, borderRadius: r.md }]}
-					onPress={() => router.push('/(app)/finance/payments/receive')}
+					onPress={() => router.push('/(app)/finance/payments/receive' as any)}
 					accessibilityLabel="receive-payment"
 				>
 					<ArrowDownLeft size={20} color={c.onPrimary} />
@@ -116,7 +116,7 @@ export default function FinanceOverviewScreen() {
 						styles.quickBtn,
 						{ backgroundColor: theme.colors.onSurfaceVariant, borderRadius: r.md },
 					]}
-					onPress={() => router.push('/(app)/finance/payments/make')}
+					onPress={() => router.push('/(app)/finance/payments/make' as any)}
 					accessibilityLabel="make-payment"
 				>
 					<ArrowUpRight size={20} color={c.onPrimary} />
@@ -138,7 +138,7 @@ export default function FinanceOverviewScreen() {
 					subtitle={t('finance.viewExpenses')}
 					accessibilityLabel="menu-expenses"
 					accessibilityHint={t('finance.viewExpenses')}
-					onPress={() => router.push('/(app)/finance/expenses')}
+					onPress={() => router.push('/(app)/finance/expenses' as any)}
 					leftIcon={
 						<Receipt
 							size={24}
@@ -152,7 +152,7 @@ export default function FinanceOverviewScreen() {
 					subtitle={t('finance.viewPurchases')}
 					accessibilityLabel="menu-purchases"
 					accessibilityHint={t('finance.viewPurchases')}
-					onPress={() => router.push('/(app)/finance/purchases')}
+					onPress={() => router.push('/(app)/finance/purchases' as any)}
 					leftIcon={
 						<ShoppingCart
 							color={theme.colors.primary}
@@ -166,7 +166,7 @@ export default function FinanceOverviewScreen() {
 					subtitle={t('customer.outstanding')}
 					accessibilityLabel="menu-aging-report"
 					accessibilityHint={t('finance.viewAging')}
-					onPress={() => router.push('/(app)/customers/aging')}
+					onPress={() => router.push('/(app)/customers/aging' as any)}
 					leftIcon={
 						<TrendingDown
 							size={24}
@@ -180,7 +180,7 @@ export default function FinanceOverviewScreen() {
 					subtitle={t('finance.viewProfitLoss')}
 					accessibilityLabel="menu-profit-loss"
 					accessibilityHint={t('finance.viewProfitLoss')}
-					onPress={() => router.push('/(app)/finance/profit-loss')}
+					onPress={() => router.push('/(app)/finance/profit-loss' as any)}
 					leftIcon={
 						<TrendingUp color={theme.colors.success} importantForAccessibility="no" />
 					}

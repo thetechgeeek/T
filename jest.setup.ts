@@ -65,7 +65,10 @@ jest.mock('react-native', () => {
 				onPress: handlePress,
 				disabled,
 				accessibilityRole: props.accessibilityRole || 'button',
-				accessibilityState: props.accessibilityState,
+				accessibilityState: {
+					disabled: !!disabled,
+					...props.accessibilityState,
+				},
 			},
 			children,
 		);
@@ -582,3 +585,30 @@ jest.mock('react-native-keyboard-controller', () => {
 // NOTE: Supabase is intentionally NOT mocked globally (QA issue 3.1).
 // Each test file must declare its own mock via createSupabaseMock() from
 // __tests__/utils/supabaseMock.ts to avoid mock/prod divergence.
+
+// Mock react-native-svg and react-native-qrcode-svg
+jest.mock('react-native-svg', () => {
+	const React = jest.requireActual('react');
+	return {
+		default: ({ children, ...props }: any) => React.createElement('Svg', props, children),
+		Svg: ({ children, ...props }: any) => React.createElement('Svg', props, children),
+		Circle: (props: any) => React.createElement('Circle', props),
+		Rect: (props: any) => React.createElement('Rect', props),
+		Path: (props: any) => React.createElement('Path', props),
+		G: ({ children, ...props }: any) => React.createElement('G', props, children),
+		Text: ({ children, ...props }: any) => React.createElement('Text', props, children),
+		TSpan: ({ children, ...props }: any) => React.createElement('TSpan', props, children),
+		Defs: ({ children, ...props }: any) => React.createElement('Defs', props, children),
+		LinearGradient: ({ children, ...props }: any) =>
+			React.createElement('LinearGradient', props, children),
+		Stop: (props: any) => React.createElement('Stop', props),
+		ClipPath: ({ children, ...props }: any) => React.createElement('ClipPath', props, children),
+		Polygon: (props: any) => React.createElement('Polygon', props),
+		Polyline: (props: any) => React.createElement('Polyline', props),
+	};
+});
+
+jest.mock('react-native-qrcode-svg', () => {
+	const React = jest.requireActual('react');
+	return (props: any) => React.createElement('QRCode', props);
+});

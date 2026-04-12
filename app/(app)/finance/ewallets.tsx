@@ -121,7 +121,7 @@ export default function EWalletsScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="E-Wallets" showBack />
+			<ScreenHeader title="E-Wallets" showBackButton />
 
 			<FlatList
 				data={wallets}
@@ -130,7 +130,9 @@ export default function EWalletsScreen() {
 				ListHeaderComponent={
 					<Card
 						padding="lg"
-						style={[styles.summaryCard, { backgroundColor: theme.colors.primary }]}
+						style={
+							[styles.summaryCard, { backgroundColor: theme.colors.primary }] as any
+						}
 					>
 						<ThemedText variant="caption" color="rgba(255,255,255,0.8)">
 							Total in Wallets
@@ -155,10 +157,12 @@ export default function EWalletsScreen() {
 					<Card padding="md" style={styles.walletCard}>
 						<View style={styles.walletRow}>
 							<View
-								style={[
-									styles.walletIcon,
-									{ backgroundColor: item.color + '22', borderRadius: r.md },
-								]}
+								style={
+									[
+										styles.walletIcon,
+										{ backgroundColor: item.color + '22', borderRadius: r.md },
+									] as any
+								}
 							>
 								<ThemedText style={{ fontSize: 26 }}>{item.emoji}</ThemedText>
 							</View>
@@ -191,7 +195,9 @@ export default function EWalletsScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }]}
+				style={
+					[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }] as any
+				}
 				onPress={() => setShowAddModal(true)}
 				accessibilityRole="button"
 				accessibilityLabel="Add E-wallet"
@@ -206,7 +212,7 @@ export default function EWalletsScreen() {
 				presentationStyle="pageSheet"
 				onRequestClose={() => setShowAddModal(false)}
 			>
-				<View style={[styles.modal, { backgroundColor: theme.colors.background }]}>
+				<View style={[styles.modal, { backgroundColor: theme.colors.background }] as any}>
 					<View style={styles.modalHeader}>
 						<ThemedText variant="h3">Add E-Wallet</ThemedText>
 						<Pressable
@@ -280,15 +286,17 @@ export default function EWalletsScreen() {
 								onChangeText={setWalletName}
 								placeholder="e.g. PhonePe Business"
 								placeholderTextColor={c.placeholder}
-								style={[
-									styles.textField,
-									{
-										color: c.onSurface,
-										borderColor: c.border,
-										borderRadius: r.md,
-										backgroundColor: theme.colors.surface,
-									},
-								]}
+								style={
+									[
+										styles.textField,
+										{
+											color: c.onSurface,
+											borderColor: c.border,
+											borderRadius: r.md,
+											backgroundColor: theme.colors.surface,
+										},
+									] as any
+								}
 							/>
 						</View>
 
@@ -308,15 +316,17 @@ export default function EWalletsScreen() {
 								placeholderTextColor={c.placeholder}
 								keyboardType="phone-pad"
 								maxLength={10}
-								style={[
-									styles.textField,
-									{
-										color: c.onSurface,
-										borderColor: c.border,
-										borderRadius: r.md,
-										backgroundColor: theme.colors.surface,
-									},
-								]}
+								style={
+									[
+										styles.textField,
+										{
+											color: c.onSurface,
+											borderColor: c.border,
+											borderRadius: r.md,
+											backgroundColor: theme.colors.surface,
+										},
+									] as any
+								}
 							/>
 						</View>
 
@@ -330,16 +340,20 @@ export default function EWalletsScreen() {
 								Opening Balance
 							</ThemedText>
 							<View
-								style={[
-									styles.amountRow,
-									{ borderColor: c.border, borderRadius: r.md },
-								]}
+								style={
+									[
+										styles.amountRow,
+										{ borderColor: c.border, borderRadius: r.md },
+									] as any
+								}
 							>
 								<ThemedText
-									style={[
-										styles.currencyPrefix,
-										{ color: c.onSurface, borderRightColor: c.border },
-									]}
+									style={
+										[
+											styles.currencyPrefix,
+											{ color: c.onSurface, borderRightColor: c.border },
+										] as any
+									}
 								>
 									₹
 								</ThemedText>
@@ -351,7 +365,7 @@ export default function EWalletsScreen() {
 									placeholder="0"
 									placeholderTextColor={c.placeholder}
 									keyboardType="decimal-pad"
-									style={[styles.amountInput, { color: c.onSurface }]}
+									style={[styles.amountInput, { color: c.onSurface }] as any}
 								/>
 							</View>
 						</View>

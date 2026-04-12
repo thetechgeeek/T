@@ -34,6 +34,8 @@ describe('INT-004: Inventory Flow', () => {
 			category: 'GLOSSY' as const,
 			size_name: '60x60',
 			box_count: initialBoxCount,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 			selling_price: 1500,
 			cost_price: 1000,
 		};
@@ -145,6 +147,8 @@ describe('INT-004: Inventory Flow', () => {
 			category: 'MATT' as const,
 			size_name: '60x60',
 			box_count: 30,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 			selling_price: 1400,
 			cost_price: 950,
 		});
@@ -180,6 +184,8 @@ describe('INT-004: Inventory Flow', () => {
 			base_item_number: `${prefix}DEL-001`,
 			category: 'OTHER' as const,
 			box_count: 5,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
 			selling_price: 500,
 		});
 

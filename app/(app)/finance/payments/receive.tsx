@@ -151,10 +151,12 @@ export default function ReceivePaymentScreen() {
 									{filteredCustomers().map((cust) => (
 										<Pressable
 											key={cust.id}
-											style={[
-												styles.dropdownRow,
-												{ borderBottomColor: c.border },
-											]}
+											style={
+												[
+													styles.dropdownRow,
+													{ borderBottomColor: c.border },
+												] as any
+											}
 											onPress={() => {
 												setSelectedCustomer(cust);
 												setCustomerSearch('');
@@ -176,7 +178,7 @@ export default function ReceivePaymentScreen() {
 				)}
 
 				{/* Payment Date */}
-				<View style={[styles.dateRow, { marginTop: s.md }]}>
+				<View style={[styles.dateRow, { marginTop: s.md }] as any}>
 					<ThemedText variant="label" color={c.onSurfaceVariant}>
 						Payment Date
 					</ThemedText>
@@ -193,10 +195,12 @@ export default function ReceivePaymentScreen() {
 				<Modal visible={showDateModal} transparent animationType="fade">
 					<Pressable style={styles.modalOverlay} onPress={() => setShowDateModal(false)}>
 						<View
-							style={[
-								styles.modalCard,
-								{ backgroundColor: c.surface, borderRadius: r.lg },
-							]}
+							style={
+								[
+									styles.modalCard,
+									{ backgroundColor: c.surface, borderRadius: r.lg },
+								] as any
+							}
 						>
 							<DatePickerField
 								label="Payment Date"
@@ -229,10 +233,12 @@ export default function ReceivePaymentScreen() {
 					/>
 					{outstandingBalance > 0 && (
 						<Pressable
-							style={[
-								styles.fullAmtChip,
-								{ borderColor: c.primary, borderRadius: r.full },
-							]}
+							style={
+								[
+									styles.fullAmtChip,
+									{ borderColor: c.primary, borderRadius: r.full },
+								] as any
+							}
 							onPress={() => setAmount(String(outstandingBalance))}
 						>
 							<ThemedText variant="caption" color={c.primary}>
@@ -258,14 +264,16 @@ export default function ReceivePaymentScreen() {
 								return (
 									<Pressable
 										key={m}
-										style={[
-											styles.modeChip,
-											{
-												backgroundColor: active ? c.primary : c.surface,
-												borderColor: active ? c.primary : c.border,
-												borderRadius: r.full,
-											},
-										]}
+										style={
+											[
+												styles.modeChip,
+												{
+													backgroundColor: active ? c.primary : c.surface,
+													borderColor: active ? c.primary : c.border,
+													borderRadius: r.full,
+												},
+											] as any
+										}
 										onPress={() => setPaymentMode(m)}
 									>
 										<ThemedText
@@ -325,7 +333,7 @@ export default function ReceivePaymentScreen() {
 					title={submitting ? 'Saving...' : 'Save Payment'}
 					onPress={handleSave}
 					disabled={submitting}
-					style={[styles.saveBtn, { marginTop: s.lg }]}
+					style={[styles.saveBtn, { marginTop: s.lg }] as any}
 					accessibilityLabel="save-payment"
 				/>
 			</ScrollView>

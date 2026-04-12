@@ -20,7 +20,7 @@ const STEPS = [
 const MOCK_ISSUE_STEP = 3;
 
 export default function DataVerificationScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, s } = useThemeTokens();
 	const [state, setState] = useState<VerifyState>('idle');
 	const [currentStep, setCurrentStep] = useState(-1);
 	const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -81,7 +81,7 @@ export default function DataVerificationScreen() {
 								for any issues.
 							</ThemedText>
 						</Card>
-						<Button label="Run Verification" onPress={runVerification} />
+						<Button title="Run Verification" onPress={runVerification} />
 					</>
 				)}
 
@@ -105,14 +105,16 @@ export default function DataVerificationScreen() {
 								return (
 									<View
 										key={step}
-										style={[
-											styles.stepRow,
-											{
-												borderTopColor: c.border,
-												borderTopWidth:
-													idx > 0 ? StyleSheet.hairlineWidth : 0,
-											},
-										]}
+										style={
+											[
+												styles.stepRow,
+												{
+													borderTopColor: c.border,
+													borderTopWidth:
+														idx > 0 ? StyleSheet.hairlineWidth : 0,
+												},
+											] as any
+										}
 									>
 										<View style={styles.stepIndicator}>
 											{isActive ? (
@@ -126,10 +128,12 @@ export default function DataVerificationScreen() {
 												</ThemedText>
 											) : (
 												<View
-													style={[
-														styles.stepDot,
-														{ backgroundColor: c.border },
-													]}
+													style={
+														[
+															styles.stepDot,
+															{ backgroundColor: c.border },
+														] as any
+													}
 												/>
 											)}
 										</View>
@@ -157,14 +161,16 @@ export default function DataVerificationScreen() {
 								{!hasIssue ? (
 									<Card
 										padding="md"
-										style={[
-											styles.resultCard,
-											{
-												backgroundColor: c.success + '18',
-												borderColor: c.success,
-												borderWidth: 1,
-											},
-										]}
+										style={
+											[
+												styles.resultCard,
+												{
+													backgroundColor: c.success + '18',
+													borderColor: c.success,
+													borderWidth: 1,
+												},
+											] as any
+										}
 									>
 										<ThemedText variant="h3" color={c.success}>
 											All Clear ✓
@@ -180,14 +186,16 @@ export default function DataVerificationScreen() {
 								) : (
 									<Card
 										padding="md"
-										style={[
-											styles.resultCard,
-											{
-												backgroundColor: '#FFF3CD',
-												borderColor: '#FFC107',
-												borderWidth: 1,
-											},
-										]}
+										style={
+											[
+												styles.resultCard,
+												{
+													backgroundColor: '#FFF3CD',
+													borderColor: '#FFC107',
+													borderWidth: 1,
+												},
+											] as any
+										}
 									>
 										<ThemedText variant="h3" color="#856404">
 											1 Issue Found
@@ -212,7 +220,7 @@ export default function DataVerificationScreen() {
 								)}
 
 								<Button
-									label="Run Again"
+									title="Run Again"
 									onPress={runVerification}
 									variant="outline"
 									style={{ marginTop: s.md }}

@@ -194,7 +194,7 @@ export default function ProfitLossScreen() {
 
 	return (
 		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Profit & Loss" showBack />
+			<ScreenHeader title="Profit & Loss" showBackButton />
 
 			{/* Period mode tabs */}
 			<View

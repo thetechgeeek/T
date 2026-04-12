@@ -88,6 +88,12 @@ export function toAppError(err: unknown): AppError {
 			);
 		case '23502': // Not null violation
 			return new ValidationError(message, { [errObj?.column || 'field']: ['isRequired'] });
+		case '42501': // RLS violation
+			return new AppError(
+				message,
+				'ACCESS_DENIED',
+				'आपको यह देखने या बदलने की अनुमति नहीं है (Access Denied)',
+			);
 		case 'P0001': // custom Raise Exception from PL/pgSQL
 			if (message.toLowerCase().includes('insufficient stock')) {
 				return new AppError(message, 'INSUFFICIENT_STOCK', message);

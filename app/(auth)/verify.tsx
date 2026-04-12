@@ -1,245 +1,179 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
-import { businessProfileService } from '@/src/services/businessProfileService';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useLocale } from '@/src/hooks/useLocale';
+import { Screen } from '@/src/components/atoms/Screen';
+import { Button } from '@/src/components/atoms/Button';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { businessProfileService } from '@/src/services/businessProfileService';
 
-const OTP_LENGTH = 6;
-const RESEND_COOLDOWN = 30; // seconds
-
-/**
- * P1.3 — OTP Verification Screen
- * Route: /(auth)/verify
- * Params: { phone: '+91XXXXXXXXXX' }
- */
-export default function OtpVerifyScreen() {
-	const { theme } = useTheme();
-	const c = theme.colors;
+export default function VerifyOtpScreen() {
+	const { c, s, r } = useThemeTokens();
+	const { t } = useLocale();
 	const router = useRouter();
 	const { phone } = useLocalSearchParams<{ phone: string }>();
+
 	const { verifyOtp, sendOtp, loading } = useAuthStore(
-		useShallow((s) => ({ verifyOtp: s.verifyOtp, sendOtp: s.sendOtp, loading: s.loading })),
+		useShallow((s) => ({
+			verifyOtp: s.verifyOtp,
+			sendOtp: s.sendOtp,
+			loading: s.loading,
+		})),
 	);
 
-	const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(''));
-	const [error, setError] = useState('');
-	const [resendEnabled, setResendEnabled] = useState(false);
-	const [countdown, setCountdown] = useState(RESEND_COOLDOWN);
-	const inputRefs = useRef<(TextInput | null)[]>([]);
+	const [code, setCode] = useState(['', '', '', '', '', '']);
+	const [timer, setTimer] = useState(30);
+	const inputs = useRef<Array<TextInput | null>>([]);
 
-	// Single timer — enables resend after RESEND_COOLDOWN seconds
 	useEffect(() => {
-		setResendEnabled(false);
-		setCountdown(RESEND_COOLDOWN);
 		const interval = setInterval(() => {
-			setCountdown((prev) => {
-				if (prev <= 1) {
-					clearInterval(interval);
-					setResendEnabled(true);
-					return 0;
-				}
-				return prev - 1;
-			});
+			setTimer((prev) => (prev > 0 ? prev - 1 : 0));
 		}, 1000);
 		return () => clearInterval(interval);
-		// Only run once on mount
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const fullOtp = otp.join('');
-	const isComplete = fullOtp.length === OTP_LENGTH && !otp.some((d) => d === '');
+	const handleChange = (text: string, index: number) => {
+		const newCode = [...code];
+		newCode[index] = text.slice(-1);
+		setCode(newCode);
 
-	const handleCellChange = (text: string, index: number) => {
-		const digit = text.slice(-1); // take last character
-		const newOtp = [...otp];
-		newOtp[index] = digit;
-		setOtp(newOtp);
-		setError('');
-		// Auto-advance
-		if (digit && index < OTP_LENGTH - 1) {
-			inputRefs.current[index + 1]?.focus();
+		if (text && index < 5) {
+			inputs.current[index + 1]?.focus();
 		}
 	};
 
-	const handleKeyPress = (e: { nativeEvent: { key: string } }, index: number) => {
-		if (e.nativeEvent.key === 'Backspace' && otp[index] === '' && index > 0) {
-			inputRefs.current[index - 1]?.focus();
+	const handleKeyPress = (e: any, index: number) => {
+		if (e.nativeEvent.key === 'Backspace' && !code[index] && index > 0) {
+			inputs.current[index - 1]?.focus();
 		}
 	};
 
 	const handleVerify = async () => {
-		if (!isComplete || loading) return;
-		setError('');
+		const otp = code.join('');
+		if (otp.length < 6) {
+			Alert.alert(t('common.error'), t('auth.errorInvalidOtp'));
+			return;
+		}
+
 		try {
-			await verifyOtp(phone ?? '', fullOtp);
-			// Check if business profile exists
-			const profile = await businessProfileService.get();
-			if (profile) {
-				router.replace('/(app)/(tabs)');
+			await verifyOtp(phone!, otp);
+			// After successful login, check if business profile exists
+			const profile = await businessProfileService.fetch();
+			if (profile && profile.business_name) {
+				router.replace('/inventory' as any);
 			} else {
-				router.push('/(auth)/setup');
+				router.replace('/(auth)/setup');
 			}
 		} catch (e: unknown) {
-			setError(e instanceof Error ? e.message : 'गलत OTP — फिर से try करें।');
+			Alert.alert(
+				t('auth.errorVerifyFailed'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
+			);
 		}
 	};
 
-	const handleResend = useCallback(async () => {
-		if (!resendEnabled) return;
-		setResendEnabled(false);
-		setCountdown(RESEND_COOLDOWN);
-		setOtp(Array(OTP_LENGTH).fill(''));
-		setError('');
+	const handleResend = async () => {
+		if (timer > 0) return;
 		try {
-			await sendOtp(phone ?? '');
+			await sendOtp(phone!);
+			setTimer(30);
+			Alert.alert(t('common.success'), t('auth.otpResent'));
 		} catch (e: unknown) {
-			setError(e instanceof Error ? e.message : 'OTP भेजने में समस्या।');
+			Alert.alert(
+				t('common.error'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
+			);
 		}
-	}, [resendEnabled, phone, sendOtp]);
-
-	const displayPhone = phone?.replace('+91', '') ?? '';
+	};
 
 	return (
-		<View style={[styles.root, { backgroundColor: c.background }]}>
-			{/* Header */}
-			<View style={[styles.header, { backgroundColor: c.primary }]}>
-				<ThemedText variant="h2" style={{ color: c.onPrimary }}>
-					OTP Verify करें
+		<Screen safeAreaEdges={['top']}>
+			<View style={[styles.container, { padding: s.xl }]}>
+				<ThemedText variant="h1" style={{ marginBottom: s.sm }}>
+					{t('auth.verifyPhone')}
 				</ThemedText>
-				<ThemedText
-					style={{ color: c.onPrimary, opacity: 0.9, marginTop: 6, fontSize: 14 }}
-				>
-					OTP sent to +91 {displayPhone}
+				<ThemedText color={c.onSurfaceVariant} style={{ marginBottom: s.xl * 1.5 }}>
+					हमने {phone} पर 6 अंकों का कोड भेजा है
 				</ThemedText>
-			</View>
 
-			<View style={[styles.form, { padding: theme.spacing.lg }]}>
-				{/* OTP Cells */}
 				<View style={styles.otpRow}>
-					{Array.from({ length: OTP_LENGTH }, (_, i) => (
+					{code.map((digit, idx) => (
 						<TextInput
-							key={i}
-							testID={`otp-cell-${i}`}
+							key={idx}
+							testID={`otp-cell-${idx}`}
 							ref={(ref) => {
-								inputRefs.current[i] = ref;
+								inputs.current[idx] = ref;
 							}}
-							value={otp[i]}
-							onChangeText={(text) => handleCellChange(text, i)}
-							onKeyPress={(e) => handleKeyPress(e, i)}
+							value={digit}
+							onChangeText={(text) => handleChange(text, idx)}
+							onKeyPress={(e) => handleKeyPress(e, idx)}
 							keyboardType="number-pad"
 							maxLength={1}
 							style={[
-								styles.cell,
+								styles.otpInput,
 								{
-									borderColor: otp[i] ? c.primary : c.border,
-									borderWidth: otp[i] ? 2 : 1,
+									borderColor: c.border,
+									borderRadius: r.sm,
 									backgroundColor: c.surface,
 									color: c.onSurface,
-									borderRadius: theme.borderRadius.md,
-									fontSize: 24,
 								},
 							]}
-							textAlign="center"
 						/>
 					))}
 				</View>
 
-				{error ? (
-					<Text
-						style={{ color: c.error, fontSize: 13, marginTop: 8, textAlign: 'center' }}
-					>
-						{error}
-					</Text>
-				) : null}
-
-				{/* Verify Button */}
-				<Pressable
+				<Button
+					title={t('auth.verify')}
+					accessibilityLabel="verify"
 					testID="verify-button"
 					onPress={handleVerify}
-					disabled={!isComplete || loading}
-					accessibilityRole="button"
-					accessibilityLabel="Verify करें"
-					accessibilityState={{ disabled: !isComplete || loading }}
-					style={[
-						styles.btn,
-						{
-							backgroundColor: isComplete && !loading ? c.primary : c.surfaceVariant,
-							borderRadius: theme.borderRadius.md,
-							marginTop: theme.spacing.xl,
-						},
-					]}
-				>
-					<Text
-						style={{
-							color: isComplete && !loading ? c.onPrimary : c.placeholder,
-							fontSize: 16,
-							fontWeight: '700',
-						}}
-					>
-						{loading ? 'Verify हो रहा है...' : 'Verify करें'}
-					</Text>
-				</Pressable>
+					disabled={loading || code.some((digit) => !digit)}
+					loading={loading}
+					size="lg"
+					style={{ marginTop: s.xl * 1.5 }}
+				/>
 
-				{/* Resend OTP */}
 				<View style={styles.resendRow}>
-					<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 14 }}>
-						OTP नहीं मिला?{' '}
-					</ThemedText>
-					<Pressable
-						testID="resend-button"
+					<ThemedText color={c.onSurfaceVariant}>코드 못 받았나요? </ThemedText>
+					<TouchableOpacity
 						onPress={handleResend}
-						disabled={!resendEnabled}
-						accessibilityRole="button"
-						accessibilityState={{ disabled: !resendEnabled }}
+						disabled={timer > 0}
+						testID="resend-button"
 					>
-						<Text
-							style={{
-								color: countdown > 0 ? c.placeholder : c.primary,
-								fontSize: 14,
-								fontWeight: '600',
-							}}
+						<ThemedText
+							color={timer > 0 ? c.onSurfaceVariant : c.primary}
+							weight="bold"
 						>
-							{!resendEnabled ? `${countdown}s में resend करें` : 'Resend OTP'}
-						</Text>
-					</Pressable>
+							{timer > 0 ? `Resend in ${timer}s` : t('auth.resendOtp')}
+						</ThemedText>
+					</TouchableOpacity>
 				</View>
 			</View>
-		</View>
+		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	root: { flex: 1 },
-	header: {
-		alignItems: 'center',
-		paddingVertical: 40,
-		paddingHorizontal: 24,
-	},
-	form: { flex: 1 },
+	container: { flex: 1, paddingTop: 40 },
 	otpRow: {
 		flexDirection: 'row',
-		justifyContent: 'center',
+		justifyContent: 'space-between',
 		gap: 8,
-		marginTop: 24,
 	},
-	cell: {
+	otpInput: {
 		width: 48,
 		height: 56,
 		borderWidth: 1,
 		textAlign: 'center',
-	},
-	btn: {
-		height: 52,
-		alignItems: 'center',
-		justifyContent: 'center',
+		fontSize: 24,
+		fontWeight: 'bold',
 	},
 	resendRow: {
 		flexDirection: 'row',
-		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 20,
+		marginTop: 32,
 	},
 });

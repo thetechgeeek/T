@@ -177,17 +177,19 @@ export default function PaymentReceiptScreen() {
 			>
 				{/* Receipt Card */}
 				<View
-					style={[
-						styles.receiptCard,
-						{
-							backgroundColor: c.card ?? c.surface,
-							borderRadius: r.lg,
-							borderColor: c.border,
-						},
-					]}
+					style={
+						[
+							styles.receiptCard,
+							{
+								backgroundColor: c.card ?? c.surface,
+								borderRadius: r.lg,
+								borderColor: c.border,
+							},
+						] as any
+					}
 				>
 					{/* Top dashed cut line */}
-					<View style={[styles.cutLine, { borderColor: c.border }]} />
+					<View style={[styles.cutLine, { borderColor: c.border }] as any} />
 
 					{/* Business Name */}
 					<View style={styles.header}>
@@ -198,7 +200,7 @@ export default function PaymentReceiptScreen() {
 						>
 							Your Business
 						</ThemedText>
-						<ThemedText variant="h2" style={[styles.centered, { marginTop: 4 }]}>
+						<ThemedText variant="h2" style={[styles.centered, { marginTop: 4 }] as any}>
 							PAYMENT RECEIPT
 						</ThemedText>
 					</View>
@@ -239,14 +241,16 @@ export default function PaymentReceiptScreen() {
 
 					{/* Amount hero */}
 					<View
-						style={[
-							styles.amountBlock,
-							{
-								backgroundColor: c.primaryContainer ?? c.surfaceVariant,
-								borderRadius: r.md,
-								margin: s.md,
-							},
-						]}
+						style={
+							[
+								styles.amountBlock,
+								{
+									backgroundColor: c.primaryContainer ?? c.surfaceVariant,
+									borderRadius: r.md,
+									margin: s.md,
+								},
+							] as any
+						}
 					>
 						<ThemedText
 							variant="caption"
@@ -258,14 +262,14 @@ export default function PaymentReceiptScreen() {
 						<ThemedText
 							variant="display"
 							color={c.primary}
-							style={[styles.centered, { marginTop: 4 }]}
+							style={[styles.centered, { marginTop: 4 }] as any}
 						>
 							{formatCurrency(payment.amount)}
 						</ThemedText>
 						<ThemedText
 							variant="caption"
 							color={c.onSurfaceVariant}
-							style={[styles.centered, { marginTop: 6, fontStyle: 'italic' }]}
+							style={[styles.centered, { marginTop: 6, fontStyle: 'italic' }] as any}
 						>
 							{amountWords}
 						</ThemedText>
@@ -295,7 +299,7 @@ export default function PaymentReceiptScreen() {
 					<Divider style={{ marginVertical: s.sm }} />
 
 					{/* Footer */}
-					<View style={[styles.footer, { paddingBottom: s.lg }]}>
+					<View style={[styles.footer, { paddingBottom: s.lg }] as any}>
 						<CheckCircle2 size={24} color={c.success} />
 						<ThemedText
 							variant="bodyBold"
@@ -307,17 +311,19 @@ export default function PaymentReceiptScreen() {
 					</View>
 
 					{/* Bottom dashed cut line */}
-					<View style={[styles.cutLine, { borderColor: c.border }]} />
+					<View style={[styles.cutLine, { borderColor: c.border }] as any} />
 				</View>
 
 				{/* Action Buttons */}
 				<View style={{ gap: s.sm, marginTop: s.lg }}>
 					{/* WhatsApp - prominent green */}
 					<Pressable
-						style={[
-							styles.whatsappBtn,
-							{ backgroundColor: '#25D366', borderRadius: r.md },
-						]}
+						style={
+							[
+								styles.whatsappBtn,
+								{ backgroundColor: '#25D366', borderRadius: r.md },
+							] as any
+						}
 						onPress={handleShareWhatsApp}
 						accessibilityLabel="Share on WhatsApp"
 					>
@@ -349,7 +355,7 @@ export default function PaymentReceiptScreen() {
 
 const styles = StyleSheet.create({
 	scroll: {},
-	center: { textAlign: 'center' as const },
+	center: { textAlign: 'center' as const } as any,
 	centered: { textAlign: 'center' as const },
 	receiptCard: {
 		borderWidth: 1,

@@ -13,7 +13,18 @@ import {
 	ScrollView,
 } from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
-import { Plus, Package, Search, SlidersHorizontal } from 'lucide-react-native';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import * as XLSX from 'xlsx';
+import {
+	Plus,
+	Package,
+	Search,
+	SlidersHorizontal,
+	MoreVertical,
+	FileDown,
+	FileUp,
+} from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
@@ -24,6 +35,7 @@ import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Chip } from '@/src/components/atoms/Chip';
+import { inventoryService } from '@/src/services/inventoryService';
 import type { TileSetGroup, TileCategory, InventoryFilters } from '@/src/types/inventory';
 import { layout } from '@/src/theme/layout';
 
@@ -73,6 +85,8 @@ export default function InventoryTab() {
 	const [refreshing, setRefreshing] = useState(false);
 	const [searchInput, setSearchInput] = useState(filters.search || '');
 	const [sortSheetOpen, setSortSheetOpen] = useState(false);
+	const [menuOpen, setMenuOpen] = useState(false);
+	const [exporting, setExporting] = useState(false);
 	const initialized = useRef(false);
 
 	const totalValue = useMemo(
@@ -104,6 +118,31 @@ export default function InventoryTab() {
 
 	const handleCategorySelect = (cat: 'ALL' | TileCategory) => {
 		setFilters({ category: cat });
+	};
+
+	const handleExport = async () => {
+		try {
+			setMenuOpen(false);
+			setExporting(true);
+			const data = await inventoryService.exportToExcel();
+
+			const ws = XLSX.utils.json_to_sheet(data);
+			const wb = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(wb, ws, 'Inventory');
+			const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
+
+			const uri =
+				(FileSystem as any).documentDirectory +
+				`Inventory_Export_${new Date().toISOString().split('T')[0]}.xlsx`;
+			await FileSystem.writeAsStringAsync(uri, wbout, {
+				encoding: (FileSystem as any).EncodingType.Base64,
+			});
+			await Sharing.shareAsync(uri);
+		} catch (err) {
+			Alert.alert(t('common.errorTitle'), 'Export failed');
+		} finally {
+			setExporting(false);
+		}
 	};
 
 	const groupedSets = useMemo(() => {
@@ -161,6 +200,13 @@ export default function InventoryTab() {
 					<ThemedText variant="h1" accessibilityLabel="inventory-screen">
 						{t('inventory.title')}
 					</ThemedText>
+					<TouchableOpacity
+						onPress={() => setMenuOpen(true)}
+						accessibilityRole="button"
+						accessibilityLabel="inventory-more-options"
+					>
+						<MoreVertical size={24} color={c.onSurface} />
+					</TouchableOpacity>
 				</View>
 
 				{/* Search Bar */}
@@ -230,6 +276,26 @@ export default function InventoryTab() {
 				</View>
 			</View>
 
+			{/* Exporting Loader Overlay */}
+			{exporting && (
+				<View
+					style={[
+						StyleSheet.absoluteFill,
+						{
+							backgroundColor: 'rgba(255,255,255,0.7)',
+							zIndex: 999,
+							alignItems: 'center',
+							justifyContent: 'center',
+						},
+					]}
+				>
+					<ActivityIndicator size="large" color={c.primary} />
+					<ThemedText variant="body" style={{ marginTop: s.md, color: c.primary }}>
+						{t('inventory.exportingItems')}
+					</ThemedText>
+				</View>
+			)}
+
 			{/* Summary Bar */}
 			<View
 				style={[
@@ -241,6 +307,44 @@ export default function InventoryTab() {
 					{`${items.length} items · Stock value: ${formatCurrency(totalValue)}`}
 				</ThemedText>
 			</View>
+
+			{/* More Options Modal */}
+			<Modal
+				visible={menuOpen}
+				transparent
+				animationType="fade"
+				onRequestClose={() => setMenuOpen(false)}
+			>
+				<Pressable
+					style={[styles.sortBackdrop, { backgroundColor: 'rgba(0,0,0,0.4)' }]}
+					onPress={() => setMenuOpen(false)}
+				/>
+				<View
+					style={[
+						styles.menuSheet,
+						{
+							backgroundColor: c.surface,
+							borderRadius: r.lg,
+							margin: s.lg,
+						},
+					]}
+				>
+					<Pressable
+						onPress={() => {
+							setMenuOpen(false);
+							router.push('/(app)/inventory/import' as any);
+						}}
+						style={styles.menuRow}
+					>
+						<FileUp size={20} color={c.onSurface} style={{ marginRight: s.md }} />
+						<ThemedText variant="body">{t('inventory.importItems')}</ThemedText>
+					</Pressable>
+					<Pressable onPress={handleExport} style={styles.menuRow}>
+						<FileDown size={20} color={c.onSurface} style={{ marginRight: s.md }} />
+						<ThemedText variant="body">{t('inventory.exportItems')}</ThemedText>
+					</Pressable>
+				</View>
+			</Modal>
 
 			{/* Sort Bottom Sheet */}
 			<Modal
@@ -352,7 +456,7 @@ export default function InventoryTab() {
 					styles.fab,
 					{ backgroundColor: c.primary, ...(theme.shadows.lg as object) },
 				]}
-				onPress={() => router.push('/(app)/inventory/add')}
+				onPress={() => router.push('/(app)/inventory/add' as any)}
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel="add-inventory-button"
@@ -410,6 +514,22 @@ const styles = StyleSheet.create({
 		right: 0,
 		maxHeight: '60%',
 		paddingBottom: 24,
+	},
+	menuSheet: {
+		position: 'absolute',
+		top: 60,
+		right: 0,
+		width: 200,
+		elevation: 5,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+	},
+	menuRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 16,
 	},
 	sortOption: {
 		flexDirection: 'row',

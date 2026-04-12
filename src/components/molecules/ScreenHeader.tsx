@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, type ViewStyle } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '../atoms/ThemedText';
+import { SyncIndicator, type SyncStatus } from '../atoms/SyncIndicator';
 import { layout } from '@/src/theme/layout';
+import { useSyncStore } from '@/src/stores/syncStore';
+import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
+import { useLocale } from '@/src/hooks/useLocale';
 
 export interface ScreenHeaderProps {
 	title: string | React.ReactNode;
@@ -13,12 +17,12 @@ export interface ScreenHeaderProps {
 	rightElement?: React.ReactNode;
 	style?: ViewStyle;
 	showBackButton?: boolean;
+	showSyncStatus?: boolean;
 }
 
 /**
  * A standardized header for all screens in the app.
- * Fulfills the user's request for a consistent back button.
- * Automatically respects the top safe area inset (status bar).
+ * P22.1 — Enhanced with sync status indicators.
  */
 export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 	title,
@@ -26,12 +30,46 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 	rightElement,
 	style,
 	showBackButton = true,
+	showSyncStatus = true,
 }) => {
 	const { c, s } = useThemeTokens();
 	const insets = useSafeAreaInsets();
 	const router = useRouter();
+	const { isConnected } = useNetworkStatus();
+	const { lastSyncedAt, isSyncing, pendingCount } = useSyncStore();
+	const { t } = useLocale();
+
+	const [lastSyncedText, setLastSyncedText] = useState('');
+
+	useEffect(() => {
+		if (!showSyncStatus) return;
+
+		const updateRelativeTime = () => {
+			if (!lastSyncedAt) {
+				setLastSyncedText('');
+				return;
+			}
+			const diff = Date.now() - new Date(lastSyncedAt).getTime();
+			const mins = Math.floor(diff / 60000);
+
+			if (mins < 1) {
+				setLastSyncedText(t('common.syncedJustNow') || 'Just now');
+			} else if (mins < 60) {
+				setLastSyncedText(`${mins} ${t('common.minsAgo') || 'mins ago'}`);
+			} else {
+				setLastSyncedText(t('common.syncedLongAgo') || 'Synced a while ago');
+			}
+		};
+
+		updateRelativeTime();
+		const timer = setInterval(updateRelativeTime, 60000);
+		return () => clearInterval(timer);
+	}, [lastSyncedAt, showSyncStatus, t]);
 
 	const handleBack = onBack || (() => router.back());
+
+	// Determine sync status for indicator
+	const syncStatus: SyncStatus = isSyncing ? 'syncing' : isConnected ? 'synced' : 'offline';
 
 	return (
 		<View
@@ -59,15 +97,30 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 						<ArrowLeft size={22} color={c.primary} strokeWidth={2} />
 					</TouchableOpacity>
 				)}
-				<ThemedText
-					variant="h2"
-					style={{ marginLeft: showBackButton ? s.md : 0, flex: 1 }}
-					numberOfLines={1}
-				>
-					{title}
-				</ThemedText>
+				<View style={{ marginLeft: showBackButton ? s.md : 0, flex: 1 }}>
+					<ThemedText variant="h2" numberOfLines={1}>
+						{title}
+					</ThemedText>
+					{showSyncStatus && lastSyncedText ? (
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: -2 }}
+						>
+							{lastSyncedText}
+						</ThemedText>
+					) : null}
+				</View>
 			</View>
-			{rightElement && <View style={styles.right}>{rightElement}</View>}
+
+			<View style={layout.row}>
+				{showSyncStatus && (
+					<View style={{ marginRight: rightElement ? s.md : 0 }}>
+						<SyncIndicator status={syncStatus} pendingCount={pendingCount} />
+					</View>
+				)}
+				{rightElement && <View style={styles.right}>{rightElement}</View>}
+			</View>
 		</View>
 	);
 };

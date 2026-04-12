@@ -101,7 +101,7 @@ export const orderService = {
 					category: normalizeCategory(item.category as string),
 					size_name: item.size || undefined,
 					brand_name: item.brand || undefined,
-					box_count: 0, // Set to 0, let performStockOperation handle it
+					box_count: 0,
 					selling_price: item.price_per_box || 0,
 					cost_price: item.price_per_box || 0,
 					gst_rate: 18,
@@ -109,6 +109,8 @@ export const orderService = {
 					low_stock_threshold: 10,
 					order_id: orderId,
 					party_name: partyName,
+					has_batch_tracking: false,
+					has_serial_tracking: false,
 				});
 
 				// Also perform stock_in for the new item to ensure consistent logging

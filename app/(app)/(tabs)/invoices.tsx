@@ -164,7 +164,7 @@ export default function InvoicesListScreen() {
 					title={t('invoice.newInvoice')}
 					accessibilityLabel="new-invoice-button"
 					leftIcon={<Plus color="#FFF" size={20} />}
-					onPress={() => router.push('/(app)/invoices/create')}
+					onPress={() => router.push('/(app)/invoices/create' as any)}
 				/>
 			</View>
 
@@ -366,7 +366,7 @@ export default function InvoicesListScreen() {
 								title={t('invoice.createFirst')}
 								variant="outline"
 								style={{ marginTop: s.lg }}
-								onPress={() => router.push('/(app)/invoices/create')}
+								onPress={() => router.push('/(app)/invoices/create' as any)}
 							/>
 						)}
 					</View>

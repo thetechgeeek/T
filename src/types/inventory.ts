@@ -1,17 +1,73 @@
 import type { UUID, Timestamps } from './common';
 
-export type TileCategory = 'GLOSSY' | 'FLOOR' | 'MATT' | 'SATIN' | 'WOODEN' | 'ELEVATION' | 'OTHER';
+export interface ItemCategory extends Timestamps {
+	id: UUID;
+	name_hi: string;
+	name_en: string;
+	color?: string;
+	icon?: string;
+	sort_order: number;
+}
+
+export type TileCategory =
+	| 'GLOSSY'
+	| 'FLOOR'
+	| 'MATT'
+	| 'SATIN'
+	| 'WOODEN'
+	| 'ELEVATION'
+	| 'OTHER'
+	| 'ALL';
+
+export interface ItemUnit extends Timestamps {
+	id: UUID;
+	name: string;
+	abbreviation: string;
+	is_default: boolean;
+}
+
+export interface ItemBatch extends Timestamps {
+	id: UUID;
+	item_id: UUID;
+	batch_number: string;
+	mfg_date?: string;
+	expiry_date?: string;
+	initial_quantity: number;
+	current_quantity: number;
+}
+
+export interface ItemSerial extends Timestamps {
+	id: UUID;
+	item_id: UUID;
+	serial_number: string;
+	status: 'in_stock' | 'sold' | 'returned' | 'damaged';
+}
+
+export interface ItemPartyRate extends Timestamps {
+	id: UUID;
+	item_id: UUID;
+	customer_id?: UUID;
+	supplier_id?: UUID;
+	custom_rate: number;
+}
 
 export type StockOpType = 'stock_in' | 'stock_out' | 'adjustment' | 'transfer' | 'return';
 
 export interface InventoryItem extends Timestamps {
 	id: UUID;
-	design_name: string; // e.g. "10526-HL-1-A" – the unique item number
-	base_item_number: string; // e.g. "10526" – auto-extracted by DB trigger
+	design_name: string; // the unique item name/code
+	base_item_number: string; // auto-extracted
+	item_code?: string;
 	brand_name?: string;
-	category: TileCategory;
-	size_name?: string; // e.g. "600x600"
-	grade?: string; // A, B, C
+
+	category_id?: UUID; // Updated: dynamic link
+	unit_id?: UUID; // Updated: dynamic link
+
+	// Legacy / Compatibility (can be phase out later)
+	category?: string;
+
+	size_name?: string;
+	grade?: string;
 	pcs_per_box?: number;
 	weight_per_box?: number;
 	sqft_per_box?: number;
@@ -20,8 +76,10 @@ export interface InventoryItem extends Timestamps {
 	box_count: number;
 	cost_price: number;
 	selling_price: number;
-	gst_rate: number; // 5 | 12 | 18 | 28
-	hsn_code: string; // Default: "6908"
+	mrp?: number;
+	default_discount_pct?: number;
+	gst_rate: number;
+	hsn_code: string;
 	location?: string;
 	low_stock_threshold: number;
 	supplier_id?: UUID;
@@ -29,6 +87,10 @@ export interface InventoryItem extends Timestamps {
 	party_name?: string;
 	last_restocked?: string;
 	notes?: string;
+
+	// New Phase 2 Fields
+	has_batch_tracking: boolean;
+	has_serial_tracking: boolean;
 }
 
 export type InventoryItemInsert = Omit<
@@ -50,10 +112,12 @@ export interface StockOperation extends Pick<Timestamps, 'created_at'> {
 
 export interface InventoryFilters {
 	search?: string;
-	category?: TileCategory | 'ALL';
+	category?: TileCategory | string; // Legacy support
+	category_id?: UUID;
+	unit_id?: UUID;
 	lowStockOnly?: boolean;
 	supplier_id?: UUID;
-	sortBy?: 'design_name' | 'box_count' | 'created_at';
+	sortBy?: 'design_name' | 'box_count' | 'selling_price' | 'created_at';
 	sortDir?: 'asc' | 'desc';
 }
 
@@ -61,7 +125,7 @@ export interface InventoryStats {
 	totalItems: number;
 	totalValue: number;
 	lowStockCount: number;
-	categoryBreakdown: Record<TileCategory, number>;
+	categoryBreakdown: Record<string, number>;
 }
 
 export interface TileSetGroup {

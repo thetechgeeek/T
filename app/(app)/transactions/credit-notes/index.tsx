@@ -177,7 +177,7 @@ export default function CreditNotesScreen() {
 			{/* FAB */}
 			<Pressable
 				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
-				onPress={() => router.push('/(app)/transactions/credit-notes/create')}
+				onPress={() => router.push('/(app)/transactions/credit-notes/create' as any)}
 				accessibilityLabel="new-credit-note"
 				accessibilityRole="button"
 			>

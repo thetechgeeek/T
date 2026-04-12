@@ -21,6 +21,8 @@ const sampleItem: InventoryItem = {
 	category: 'GLOSSY',
 	size_name: '60x60',
 	box_count: 50,
+	has_batch_tracking: false,
+	has_serial_tracking: false,
 	selling_price: 1500,
 	cost_price: 1000,
 	gst_rate: 18,

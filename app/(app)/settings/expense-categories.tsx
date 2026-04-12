@@ -246,7 +246,7 @@ export default function ExpenseCategoriesScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="Expense Categories" showBack />
+			<ScreenHeader title="Expense Categories" showBackButton />
 
 			<FlatList
 				data={categories}

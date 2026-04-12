@@ -79,6 +79,7 @@ describe('invoiceService', () => {
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			const mockInput = {
+				invoice_number: 'INV-TEST-001',
 				customer_name: 'John Doe',
 				is_inter_state: false,
 				invoice_date: '2026-03-28',
@@ -125,6 +126,7 @@ describe('invoiceService', () => {
 		it('throws ValidationError for invalid input', async () => {
 			await expect(
 				invoiceService.createInvoice({
+					invoice_number: 'INV-TEST-001',
 					customer_name: '',
 					is_inter_state: false,
 					invoice_date: 'bad-date',
@@ -328,6 +330,7 @@ describe('invoiceService', () => {
 			});
 
 			await invoiceService.createInvoice({
+				invoice_number: 'INV-TEST-001',
 				customer_name: 'Existing Customer',
 				customer_phone: '9876543210',
 				is_inter_state: false,

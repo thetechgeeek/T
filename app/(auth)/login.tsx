@@ -2,41 +2,39 @@ import React, { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Eye, EyeOff } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@/src/components/atoms/Screen';
 import { Button } from '@/src/components/atoms/Button';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { TextInput } from '@/src/components/atoms/TextInput';
+import { PhoneInput } from '@/src/components/molecules/PhoneInput';
 
 export default function LoginScreen() {
 	const { theme, c, s, r } = useThemeTokens();
 	const { t } = useLocale();
-	const { login, loading } = useAuthStore(
-		useShallow((s) => ({ login: s.login, loading: s.loading })),
+	const { sendOtp, loading } = useAuthStore(
+		useShallow((s) => ({ sendOtp: s.sendOtp, loading: s.loading })),
 	);
 	const router = useRouter();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [showPassword, setShowPassword] = useState(false);
+	const [phone, setPhone] = useState('');
 
-	const handleLogin = async () => {
-		if (!email || !password) {
-			Alert.alert(t('common.errorTitle'), t('auth.errorMissingFields'));
-			return;
-		}
-		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-			Alert.alert(t('common.errorTitle'), t('auth.errorInvalidEmail'));
+	const handleSendOtp = async () => {
+		if (phone.length < 10) {
+			Alert.alert(t('common.error'), t('auth.errorInvalidPhone'));
 			return;
 		}
 		try {
-			await login(email, password);
+			const e164Phone = `+91${phone}`;
+			await sendOtp(e164Phone);
+			router.push({
+				pathname: '/(auth)/verify',
+				params: { phone: e164Phone },
+			});
 		} catch (e: unknown) {
 			Alert.alert(
-				t('auth.loginFailed'),
-				e instanceof Error ? e.message : t('auth.invalidCredentials'),
+				t('auth.errorOtpFailed'),
+				e instanceof Error ? e.message : t('common.unexpectedError'),
 			);
 		}
 	};
@@ -46,116 +44,81 @@ export default function LoginScreen() {
 	return (
 		<Screen scrollable safeAreaEdges={['top']}>
 			{/* Header */}
-			<View style={[styles.header, { backgroundColor: c.primary, paddingTop: s.xl }]}>
+			<View style={[styles.header, { backgroundColor: c.primary, paddingTop: s.xl * 2 }]}>
 				<View
 					style={[
 						styles.logoMark,
-						{ backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: r.md },
+						{ backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: r.lg },
 					]}
 				>
 					<ThemedText
 						style={{
-							fontSize: typo.sizes['2xl'],
+							fontSize: 40,
 							color: c.onPrimary,
-							fontWeight: '700',
+							fontWeight: '800',
+							letterSpacing: -1,
 						}}
 					>
-						{t('branding.appShortName')}
+						T
 					</ThemedText>
 				</View>
-				<ThemedText variant="h1" style={[styles.appName, { color: c.onPrimary }]}>
+				<ThemedText
+					variant="h1"
+					style={[styles.appName, { color: c.onPrimary, marginTop: s.md }]}
+				>
 					{t('branding.appName')}
 				</ThemedText>
 				<ThemedText
 					style={[
 						styles.subtitle,
-						{ color: c.onPrimary, fontSize: typo.sizes.sm, opacity: 0.9 },
+						{
+							color: c.onPrimary,
+							fontSize: typo.sizes.md,
+							opacity: 0.9,
+							marginTop: s.xs,
+						},
 					]}
 				>
-					{t('auth.subtitle')}
+					आपका डिजिटल बही-खाता
 				</ThemedText>
 			</View>
 
 			{/* Form */}
-			<View style={[styles.form, { padding: s.lg }]}>
+			<View style={[styles.form, { padding: s.xl }]}>
+				<ThemedText variant="h2" style={{ marginBottom: s.xs, textAlign: 'center' }}>
+					{t('auth.welcome')}
+				</ThemedText>
 				<ThemedText
-					variant="h2"
-					accessibilityLabel="sign-in-heading"
-					style={{ marginBottom: s.lg }}
+					style={{ color: c.onSurfaceVariant, textAlign: 'center', marginBottom: s.xl }}
 				>
-					{t('auth.signIn')}
+					जारी रखने के लिए अपना मोबाइल नंबर भरें
 				</ThemedText>
 
-				{/* Email */}
-				<TextInput
-					label={t('auth.email')}
-					accessibilityLabel="email-input"
-					accessibilityHint={t('auth.placeholders.email')}
-					value={email}
-					onChangeText={setEmail}
-					keyboardType="email-address"
-					autoCapitalize="none"
-					autoComplete="email"
-					placeholder={t('auth.placeholders.email')}
-				/>
+				{/* Phone Input */}
+				<PhoneInput value={phone} onChange={setPhone} />
 
-				{/* Password */}
-				<TextInput
-					label={t('auth.password')}
-					accessibilityLabel="password-input"
-					accessibilityHint={t('auth.placeholders.password')}
-					value={password}
-					onChangeText={setPassword}
-					secureTextEntry={!showPassword}
-					autoComplete="password"
-					placeholder={t('auth.placeholders.password')}
-					rightIcon={
-						<TouchableOpacity
-							onPress={() => setShowPassword(!showPassword)}
-							accessibilityRole="button"
-							accessibilityLabel={
-								showPassword ? t('auth.hidePassword') : t('auth.showPassword')
-							}
-							accessibilityHint={
-								showPassword ? t('auth.passwordHidden') : t('auth.passwordShown')
-							}
-						>
-							{showPassword ? (
-								<EyeOff
-									size={20}
-									color={c.placeholder}
-									importantForAccessibility="no"
-								/>
-							) : (
-								<Eye
-									size={20}
-									color={c.placeholder}
-									importantForAccessibility="no"
-								/>
-							)}
-						</TouchableOpacity>
-					}
-					containerStyle={{ marginTop: s.md }}
-				/>
-
-				{/* Sign In Button */}
+				{/* Send OTP Button */}
 				<Button
-					title={t('auth.signIn')}
-					accessibilityLabel="sign-in-button"
-					testID="sign-in-button"
-					onPress={handleLogin}
+					title={t('auth.sendOtp')}
+					testID="send-otp-button"
+					onPress={handleSendOtp}
 					loading={loading}
+					disabled={phone.length < 10}
 					size="lg"
-					style={{ marginTop: s.lg }}
+					style={{ marginTop: s.xl }}
 				/>
 
-				{/* Setup link */}
-				<TouchableOpacity
-					style={[styles.linkBtn, { marginTop: s.md }]}
-					onPress={() => router.push('/(auth)/setup')}
-				>
-					<ThemedText color={c.primary}>{t('auth.setupBusiness')} →</ThemedText>
-				</TouchableOpacity>
+				{/* Help text */}
+				<View style={{ marginTop: s.xl * 2, alignItems: 'center' }}>
+					<ThemedText variant="caption" color={c.onSurfaceVariant}>
+						{t('auth.loginHelpText')}
+					</ThemedText>
+					<TouchableOpacity style={{ marginTop: s.sm }}>
+						<ThemedText color={c.primary} weight="bold">
+							{t('auth.contactSupport')}
+						</ThemedText>
+					</TouchableOpacity>
+				</View>
 			</View>
 		</Screen>
 	);
@@ -164,18 +127,18 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
 	header: {
 		alignItems: 'center',
-		paddingBottom: 40,
+		paddingBottom: 50,
 		paddingHorizontal: 24,
+		borderBottomLeftRadius: 32,
+		borderBottomRightRadius: 32,
 	},
 	logoMark: {
-		width: 64,
-		height: 64,
+		width: 80,
+		height: 80,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginBottom: 12,
 	},
-	appName: { marginBottom: 4 },
+	appName: { fontWeight: '800' },
 	subtitle: { textAlign: 'center' },
-	form: { flex: 1 },
-	linkBtn: { alignItems: 'center', height: 44, justifyContent: 'center' },
+	form: { flex: 1, marginTop: -30, backgroundColor: 'transparent' },
 });

@@ -144,7 +144,7 @@ export default function GSTDetailScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="GST Detail Report" showBack />
+			<ScreenHeader title="GST Detail Report" showBackButton />
 
 			<ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
 				{/* Period preset chips */}
