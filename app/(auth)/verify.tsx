@@ -21,6 +21,11 @@ import { Screen } from '@/src/components/atoms/Screen';
 import { Button } from '@/src/components/atoms/Button';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { businessProfileService } from '@/src/services/businessProfileService';
+import { SIZE_INPUT_HEIGHT } from '@/src/theme/uiMetrics';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const VERIFY_TOP_PADDING = 40;
 
 export default function VerifyOtpScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -172,23 +177,23 @@ export default function VerifyOtpScreen() {
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1, paddingTop: 40 },
+	container: { flex: 1, paddingTop: VERIFY_TOP_PADDING },
 	otpRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	otpInput: {
-		width: 48,
-		height: 56,
+		width: TOUCH_TARGET_MIN_PX,
+		height: SIZE_INPUT_HEIGHT,
 		borderWidth: 1,
 		textAlign: 'center',
-		fontSize: 24,
+		fontSize: FONT_SIZE.h1,
 		fontWeight: 'bold',
 	},
 	resendRow: {
 		flexDirection: 'row',
 		justifyContent: 'center',
-		marginTop: 32,
+		marginTop: SPACING_PX['2xl'],
 	},
 });

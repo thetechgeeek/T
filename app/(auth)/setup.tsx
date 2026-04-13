@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { View, TextInput, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useAuthStore } from '@/src/stores/authStore';
-import { SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@/theme/uiMetrics';
+import { OPACITY_TINT_LIGHT, SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE, LINE_HEIGHT } from '@/src/theme/typographyMetrics';
 
 const TEXTAREA_HEIGHT = 90;
 const REMOVE_BTN_OFFSET = -8;
@@ -16,8 +18,13 @@ import { storageService } from '@/src/services/storageService';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera, X } from 'lucide-react-native';
 import { Image } from 'expo-image';
+import { withOpacity } from '@/src/utils/color';
 
 const TOTAL_STEPS = 4;
+const SETUP_PROGRESS_HEIGHT = 4;
+const SETUP_HELPER_FONT_SIZE = 12;
+const LOGO_REMOVE_SIZE = 24;
+const LOGO_REMOVE_RADIUS = 12;
 
 type BusinessType = 'retail' | 'wholesale' | 'manufacturing' | 'service' | 'other';
 
@@ -157,7 +164,8 @@ export default function SetupScreen() {
 			<View style={styles.stepIndicatorRow}>
 				<ThemedText
 					testID="step-indicator"
-					style={{ color: c.onSurfaceVariant, fontSize: 14 }}
+					variant="caption"
+					style={{ color: c.onSurfaceVariant }}
 				>
 					{`चरण ${step} / ${TOTAL_STEPS}`}
 				</ThemedText>
@@ -165,7 +173,10 @@ export default function SetupScreen() {
 
 			{/* Step Title */}
 			<View style={{ paddingHorizontal: theme.spacing.lg }}>
-				<ThemedText variant="h2" style={{ color: c.onSurface, marginBottom: 8 }}>
+				<ThemedText
+					variant="h2"
+					style={{ color: c.onSurface, marginBottom: SPACING_PX.sm }}
+				>
 					{stepTitles[step - 1]}
 				</ThemedText>
 			</View>
@@ -173,7 +184,7 @@ export default function SetupScreen() {
 			{/* Content */}
 			<ScrollView
 				style={{ flex: 1 }}
-				contentContainerStyle={{ padding: theme.spacing.lg, paddingTop: 8 }}
+				contentContainerStyle={{ padding: theme.spacing.lg, paddingTop: SPACING_PX.sm }}
 				keyboardShouldPersistTaps="handled"
 			>
 				{step === 1 && <Step1 data={data} update={update} c={c} theme={theme} />}
@@ -182,11 +193,12 @@ export default function SetupScreen() {
 				{step === 4 && <Step4 data={data} update={update} c={c} theme={theme} />}
 
 				{error ? (
-					<Text
-						style={{ color: c.error, fontSize: 13, marginTop: 12, textAlign: 'center' }}
+					<ThemedText
+						variant="label"
+						style={{ color: c.error, marginTop: SPACING_PX.md, textAlign: 'center' }}
 					>
 						{error}
-					</Text>
+					</ThemedText>
 				) : null}
 			</ScrollView>
 
@@ -205,9 +217,9 @@ export default function SetupScreen() {
 							{ borderColor: c.primary, borderRadius: theme.borderRadius.md },
 						]}
 					>
-						<Text style={{ color: c.primary, fontSize: 16, fontWeight: '600' }}>
+						<ThemedText variant="body" style={{ color: c.primary, fontWeight: '600' }}>
 							← वापस
-						</Text>
+						</ThemedText>
 					</Pressable>
 				) : (
 					<View style={styles.actionBtn} />
@@ -228,15 +240,15 @@ export default function SetupScreen() {
 							},
 						]}
 					>
-						<Text
+						<ThemedText
+							variant="body"
 							style={{
 								color: canGoNext() ? c.onPrimary : c.placeholder,
-								fontSize: 16,
 								fontWeight: '700',
 							}}
 						>
 							अगला →
-						</Text>
+						</ThemedText>
 					</Pressable>
 				) : (
 					<Pressable
@@ -253,15 +265,15 @@ export default function SetupScreen() {
 							},
 						]}
 					>
-						<Text
+						<ThemedText
+							variant="body"
 							style={{
 								color: loading ? c.placeholder : c.onPrimary,
-								fontSize: 16,
 								fontWeight: '700',
 							}}
 						>
 							{loading ? 'Save हो रहा है...' : 'Setup पूरी करें ✓'}
-						</Text>
+						</ThemedText>
 					</Pressable>
 				)}
 			</View>
@@ -284,7 +296,10 @@ function Step1({
 }) {
 	return (
 		<View>
-			<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 14, marginBottom: 16 }}>
+			<ThemedText
+				variant="caption"
+				style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.lg }}
+			>
 				व्यापार का नाम और आपकी जानकारी भरें
 			</ThemedText>
 
@@ -309,7 +324,9 @@ function Step1({
 				maxLength={100}
 			/>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+			>
 				मालिक का नाम *
 			</ThemedText>
 			<TextInput
@@ -329,7 +346,9 @@ function Step1({
 				]}
 			/>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+			>
 				Mobile Number
 			</ThemedText>
 			<View
@@ -342,11 +361,16 @@ function Step1({
 					},
 				]}
 			>
-				<Text
-					style={{ color: c.onSurface, fontSize: 16, paddingLeft: 12, paddingRight: 4 }}
+				<ThemedText
+					variant="body"
+					style={{
+						color: c.onSurface,
+						paddingLeft: SPACING_PX.md,
+						paddingRight: SPACING_PX.xs,
+					}}
 				>
 					+91
-				</Text>
+				</ThemedText>
 				<TextInput
 					testID="phone-input"
 					value={data.phone}
@@ -355,7 +379,12 @@ function Step1({
 					placeholderTextColor={c.placeholder}
 					keyboardType="number-pad"
 					maxLength={10}
-					style={{ flex: 1, color: c.onSurface, fontSize: 16, height: SIZE_INPUT_HEIGHT }}
+					style={{
+						flex: 1,
+						color: c.onSurface,
+						fontSize: FONT_SIZE.body,
+						height: SIZE_INPUT_HEIGHT,
+					}}
 				/>
 			</View>
 		</View>
@@ -377,7 +406,9 @@ function Step2({
 }) {
 	return (
 		<View>
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginBottom: 8 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginBottom: SPACING_PX.sm }]}
+			>
 				व्यापार का प्रकार चुनें
 			</ThemedText>
 
@@ -394,23 +425,33 @@ function Step2({
 								{
 									borderColor: selected ? c.primary : c.border,
 									borderWidth: selected ? 2 : 1,
-									backgroundColor: selected ? `${c.primary}15` : c.surface,
+									backgroundColor: selected
+										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+										: c.surface,
 									borderRadius: theme.borderRadius.md,
 								},
 							]}
 						>
-							<Text style={{ color: c.onSurface, fontSize: 15, fontWeight: '600' }}>
+							<ThemedText
+								variant="body"
+								style={{ color: c.onSurface, fontWeight: '600' }}
+							>
 								{bt.label}
-							</Text>
-							<Text style={{ color: c.onSurfaceVariant, fontSize: 13, marginTop: 2 }}>
+							</ThemedText>
+							<ThemedText
+								variant="label"
+								style={{ color: c.onSurfaceVariant, marginTop: SPACING_PX.xxs }}
+							>
 								{bt.subLabel}
-							</Text>
+							</ThemedText>
 						</Pressable>
 					);
 				})}
 			</View>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+			>
 				पता
 			</ThemedText>
 			<TextInput
@@ -433,7 +474,9 @@ function Step2({
 				]}
 			/>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+			>
 				Pincode
 			</ThemedText>
 			<TextInput
@@ -455,7 +498,9 @@ function Step2({
 				]}
 			/>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+			>
 				शहर / City
 			</ThemedText>
 			<TextInput
@@ -475,7 +520,9 @@ function Step2({
 				]}
 			/>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+			>
 				राज्य / State
 			</ThemedText>
 			<TextInput
@@ -513,7 +560,10 @@ function Step3({
 }) {
 	return (
 		<View>
-			<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 14, marginBottom: 16 }}>
+			<ThemedText
+				variant="caption"
+				style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.lg }}
+			>
 				क्या आप GST में रजिस्टर हैं?
 			</ThemedText>
 
@@ -527,15 +577,17 @@ function Step3({
 							borderColor: data.gstRegistered === true ? c.primary : c.border,
 							borderWidth: data.gstRegistered === true ? 2 : 1,
 							backgroundColor:
-								data.gstRegistered === true ? `${c.primary}15` : c.surface,
+								data.gstRegistered === true
+									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+									: c.surface,
 							borderRadius: theme.borderRadius.md,
-							marginRight: 8,
+							marginRight: SPACING_PX.sm,
 						},
 					]}
 				>
-					<Text style={{ color: c.onSurface, fontSize: 16, fontWeight: '700' }}>
+					<ThemedText variant="body" style={{ color: c.onSurface, fontWeight: '700' }}>
 						हाँ (YES)
-					</Text>
+					</ThemedText>
 				</Pressable>
 
 				<Pressable
@@ -547,19 +599,21 @@ function Step3({
 							borderColor: data.gstRegistered === false ? c.primary : c.border,
 							borderWidth: data.gstRegistered === false ? 2 : 1,
 							backgroundColor:
-								data.gstRegistered === false ? `${c.primary}15` : c.surface,
+								data.gstRegistered === false
+									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+									: c.surface,
 							borderRadius: theme.borderRadius.md,
 						},
 					]}
 				>
-					<Text style={{ color: c.onSurface, fontSize: 16, fontWeight: '700' }}>
+					<ThemedText variant="body" style={{ color: c.onSurface, fontWeight: '700' }}>
 						नहीं (NO)
-					</Text>
+					</ThemedText>
 				</Pressable>
 			</View>
 
 			{data.gstRegistered === true && (
-				<View style={{ marginTop: 20 }}>
+				<View style={{ marginTop: SPACING_PX.xl }}>
 					<ThemedText style={[styles.label, { color: c.onSurfaceVariant }]}>
 						GSTIN (15 अंक)
 					</ThemedText>
@@ -584,7 +638,10 @@ function Step3({
 					/>
 
 					<ThemedText
-						style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+						style={[
+							styles.label,
+							{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+						]}
 					>
 						PAN (वैकल्पिक)
 					</ThemedText>
@@ -615,17 +672,20 @@ function Step3({
 					style={[
 						styles.infoCard,
 						{
-							backgroundColor: `${c.primary}10`,
+							backgroundColor: withOpacity(c.primary, OPACITY_TINT_LIGHT),
 							borderColor: c.border,
 							borderRadius: theme.borderRadius.md,
-							marginTop: 16,
+							marginTop: SPACING_PX.lg,
 						},
 					]}
 				>
-					<Text style={{ color: c.onSurfaceVariant, fontSize: 14, lineHeight: 22 }}>
+					<ThemedText
+						variant="caption"
+						style={{ color: c.onSurfaceVariant, lineHeight: LINE_HEIGHT.caption }}
+					>
 						आप बिना GST के भी invoices बना सकते हैं।{'\n'}Settings में बाद में जोड़ सकते
 						हैं।
-					</Text>
+					</ThemedText>
 				</View>
 			)}
 		</View>
@@ -650,7 +710,9 @@ function Step4({
 
 	return (
 		<View>
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+			>
 				व्यापार का Logo
 			</ThemedText>
 			<LogoPicker
@@ -660,7 +722,9 @@ function Step4({
 				theme={theme}
 			/>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 24 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.xl }]}
+			>
 				Invoice Prefix
 			</ThemedText>
 			<TextInput
@@ -682,7 +746,9 @@ function Step4({
 				]}
 			/>
 
-			<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+			<ThemedText
+				style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+			>
 				Starting Number
 			</ThemedText>
 			<TextInput
@@ -710,15 +776,16 @@ function Step4({
 						backgroundColor: c.surface,
 						borderColor: c.border,
 						borderRadius: theme.borderRadius.md,
-						marginTop: 20,
+						marginTop: SPACING_PX.xl,
 					},
 				]}
 			>
-				<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 13 }}>
+				<ThemedText variant="label" style={{ color: c.onSurfaceVariant }}>
 					Preview:
 				</ThemedText>
 				<ThemedText
-					style={{ color: c.primary, fontSize: 22, fontWeight: '700', marginTop: 4 }}
+					variant="h1"
+					style={{ color: c.primary, fontWeight: '700', marginTop: SPACING_PX.xs }}
 				>
 					{preview}
 				</ThemedText>
@@ -800,9 +867,16 @@ function LogoPicker({
 			) : (
 				<View style={{ alignItems: 'center' }}>
 					<Camera size={32} color={c.placeholder} strokeWidth={1.5} />
-					<Text style={{ color: c.placeholder, fontSize: 12, marginTop: 4 }}>
+					<ThemedText
+						variant="captionSmall"
+						style={{
+							color: c.placeholder,
+							fontSize: SETUP_HELPER_FONT_SIZE,
+							marginTop: SPACING_PX.xs,
+						}}
+					>
 						{uploading ? 'Uploading...' : 'Upload Logo'}
-					</Text>
+					</ThemedText>
 				</View>
 			)}
 		</Pressable>
@@ -811,27 +885,27 @@ function LogoPicker({
 
 const styles = StyleSheet.create({
 	root: { flex: 1 },
-	progressTrack: { height: 4, width: '100%' },
-	progressFill: { height: 4 },
+	progressTrack: { height: SETUP_PROGRESS_HEIGHT, width: '100%' },
+	progressFill: { height: SETUP_PROGRESS_HEIGHT },
 	stepIndicatorRow: {
-		paddingHorizontal: 16,
-		paddingVertical: 10,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm,
 	},
 	label: {
-		fontSize: 14,
+		fontSize: FONT_SIZE.caption,
 		fontWeight: '600',
-		marginBottom: 6,
+		marginBottom: SPACING_PX.xs,
 	},
 	input: {
 		height: SIZE_INPUT_HEIGHT,
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		fontSize: 16,
+		paddingHorizontal: SPACING_PX.md,
+		fontSize: FONT_SIZE.body,
 	},
 	textarea: {
 		height: TEXTAREA_HEIGHT,
 		textAlignVertical: 'top',
-		paddingTop: 12,
+		paddingTop: SPACING_PX.md,
 	},
 	phoneRow: {
 		flexDirection: 'row',
@@ -842,11 +916,11 @@ const styles = StyleSheet.create({
 	typeGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	typeCard: {
 		width: '47%',
-		padding: 14,
+		padding: SPACING_PX.md,
 		borderWidth: 1,
 	},
 	gstToggleRow: {
@@ -854,26 +928,26 @@ const styles = StyleSheet.create({
 	},
 	gstToggleBtn: {
 		flex: 1,
-		height: 56,
+		height: SIZE_INPUT_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderWidth: 1,
 	},
 	infoCard: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		borderWidth: 1,
 	},
 	previewCard: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		borderWidth: 1,
 		alignItems: 'center',
 	},
 	actionBar: {
 		flexDirection: 'row',
-		paddingHorizontal: 16,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
 		borderTopWidth: 1,
-		gap: 12,
+		gap: SPACING_PX.md,
 	},
 	actionBtn: {
 		flex: 1,
@@ -896,9 +970,9 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: REMOVE_BTN_OFFSET,
 		right: REMOVE_BTN_OFFSET,
-		width: 24,
-		height: 24,
-		borderRadius: 12,
+		width: LOGO_REMOVE_SIZE,
+		height: LOGO_REMOVE_SIZE,
+		borderRadius: LOGO_REMOVE_RADIUS,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

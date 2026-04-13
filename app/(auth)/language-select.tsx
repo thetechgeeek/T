@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SIZE_LANGUAGE_FLAG, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const LANGUAGE_SCREEN_PADDING_VERTICAL = 40;
+const LANGUAGE_LOGO_SIZE = 64;
 
 const LANG_KEY = '@app/language';
 const LANG_SELECTED_KEY = '@app/languageSelected';
@@ -46,7 +52,11 @@ export default function LanguageSelectScreen() {
 	};
 
 	return (
-		<View style={[styles.root, { backgroundColor: c.background }]}>
+		<Screen
+			safeAreaEdges={['top', 'bottom']}
+			style={styles.root}
+			backgroundColor={c.background}
+		>
 			{/* Logo + Tagline */}
 			<View style={styles.header}>
 				<View
@@ -55,11 +65,16 @@ export default function LanguageSelectScreen() {
 						{ backgroundColor: c.primary, borderRadius: theme.borderRadius.lg },
 					]}
 				>
-					<Text style={{ color: c.onPrimary, fontSize: 28, fontWeight: '700' }}>T</Text>
+					<ThemedText variant="h1" style={{ color: c.onPrimary, fontWeight: '700' }}>
+						T
+					</ThemedText>
 				</View>
-				<Text style={[styles.tagline, { color: c.onSurface, fontSize: 16, marginTop: 12 }]}>
+				<ThemedText
+					variant="body"
+					style={[styles.tagline, { color: c.onSurface, marginTop: SPACING_PX.md }]}
+				>
 					आपका डिजिटल बही-खाता
-				</Text>
+				</ThemedText>
 			</View>
 
 			{/* Language Cards */}
@@ -84,26 +99,26 @@ export default function LanguageSelectScreen() {
 								},
 							]}
 						>
-							<Text
+							<ThemedText
+								variant="h1"
 								style={{
-									fontSize: 28,
 									fontWeight: '700',
 									color: isSelected ? c.primary : c.onSurface,
 									textAlign: 'center',
 								}}
 							>
 								{title}
-							</Text>
-							<Text
+							</ThemedText>
+							<ThemedText
+								variant="caption"
 								style={{
-									fontSize: 14,
 									color: isSelected ? c.primary : c.onSurfaceVariant,
 									textAlign: 'center',
-									marginTop: 6,
+									marginTop: SPACING_PX.xs,
 								}}
 							>
 								{subtitle}
-							</Text>
+							</ThemedText>
 						</Pressable>
 					);
 				})}
@@ -126,27 +141,25 @@ export default function LanguageSelectScreen() {
 						},
 					]}
 				>
-					<Text
+					<ThemedText
+						variant="body"
 						style={{
 							color: selected ? c.onPrimary : c.placeholder,
-							fontSize: 16,
 							fontWeight: '700',
 						}}
 					>
 						{selected === 'hi' ? 'आगे बढ़ें' : 'Continue'}
-					</Text>
+					</ThemedText>
 				</Pressable>
 
-				<Text
-					style={[
-						styles.hint,
-						{ color: c.onSurfaceVariant, fontSize: 13, marginTop: 16 },
-					]}
+				<ThemedText
+					variant="label"
+					style={[styles.hint, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
 				>
 					आप बाद में Settings से भाषा बदल सकते हैं
-				</Text>
+				</ThemedText>
 			</View>
-		</View>
+		</Screen>
 	);
 }
 
@@ -155,16 +168,16 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		paddingHorizontal: 24,
-		paddingVertical: 40,
+		paddingHorizontal: SPACING_PX.xl,
+		paddingVertical: LANGUAGE_SCREEN_PADDING_VERTICAL,
 	},
 	header: {
 		alignItems: 'center',
-		marginTop: 20,
+		marginTop: SPACING_PX.xl,
 	},
 	logo: {
-		width: 64,
-		height: 64,
+		width: LANGUAGE_LOGO_SIZE,
+		height: LANGUAGE_LOGO_SIZE,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -173,7 +186,7 @@ const styles = StyleSheet.create({
 	},
 	cards: {
 		flexDirection: 'row',
-		gap: 12,
+		gap: SPACING_PX.md,
 		width: '100%',
 	},
 	card: {
@@ -181,7 +194,7 @@ const styles = StyleSheet.create({
 		height: SIZE_LANGUAGE_FLAG,
 		alignItems: 'center',
 		justifyContent: 'center',
-		padding: 12,
+		padding: SPACING_PX.md,
 	},
 	footer: {
 		width: '100%',

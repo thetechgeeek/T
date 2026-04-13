@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import { useAuthStore } from '@/src/stores/authStore';
 import { OPACITY_HOVER, SIZE_INPUT_HEIGHT, GLASS_WHITE_LIGHT } from '@/theme/uiMetrics';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { Screen } from '@/src/components/atoms/Screen';
 import { PhoneInput } from '@/src/components/molecules/PhoneInput';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const AUTH_HEADER_PADDING = 40;
+const AUTH_LOGO_SIZE = 64;
 
 /**
  * P1.2 — Phone OTP Login Screen
@@ -42,7 +47,7 @@ export default function PhoneLoginScreen() {
 	};
 
 	return (
-		<View style={[styles.root, { backgroundColor: c.background }]}>
+		<Screen safeAreaEdges={['top']} style={styles.root} backgroundColor={c.background}>
 			{/* Header */}
 			<View style={[styles.header, { backgroundColor: c.primary }]}>
 				<View
@@ -54,19 +59,19 @@ export default function PhoneLoginScreen() {
 						},
 					]}
 				>
-					<ThemedText style={{ fontSize: 28, color: c.onPrimary, fontWeight: '700' }}>
+					<ThemedText variant="h1" style={{ color: c.onPrimary, fontWeight: '700' }}>
 						T
 					</ThemedText>
 				</View>
-				<ThemedText variant="h1" style={{ color: c.onPrimary, marginTop: 8 }}>
+				<ThemedText variant="h1" style={{ color: c.onPrimary, marginTop: SPACING_PX.sm }}>
 					TileMaster
 				</ThemedText>
 				<ThemedText
+					variant="caption"
 					style={{
 						color: c.onPrimary,
 						opacity: OPACITY_HOVER,
-						fontSize: 14,
-						marginTop: 4,
+						marginTop: SPACING_PX.xs,
 					}}
 				>
 					आपका डिजिटल बही-खाता
@@ -79,10 +84,10 @@ export default function PhoneLoginScreen() {
 					Vyapar में आपका स्वागत है
 				</ThemedText>
 				<ThemedText
+					variant="caption"
 					style={{
 						color: c.onSurfaceVariant,
 						marginBottom: theme.spacing.lg,
-						fontSize: 14,
 					}}
 				>
 					अपना mobile number enter करें
@@ -96,7 +101,12 @@ export default function PhoneLoginScreen() {
 				/>
 
 				{error ? (
-					<Text style={{ color: c.error, fontSize: 13, marginTop: 8 }}>{error}</Text>
+					<ThemedText
+						variant="label"
+						style={{ color: c.error, marginTop: SPACING_PX.sm }}
+					>
+						{error}
+					</ThemedText>
 				) : null}
 
 				{/* Send OTP Button */}
@@ -116,30 +126,30 @@ export default function PhoneLoginScreen() {
 						},
 					]}
 				>
-					<Text
+					<ThemedText
+						variant="body"
 						style={{
 							color: isValid && !loading ? c.onPrimary : c.placeholder,
-							fontSize: 16,
 							fontWeight: '700',
 						}}
 					>
 						{loading ? 'भेज रहे हैं...' : 'OTP भेजें'}
-					</Text>
+					</ThemedText>
 				</Pressable>
 
 				{/* Support link */}
 				<View style={styles.supportRow}>
-					<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 14 }}>
+					<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
 						Having trouble?{' '}
 					</ThemedText>
 					<Pressable accessibilityRole="link">
-						<ThemedText style={{ color: c.primary, fontSize: 14 }}>
+						<ThemedText variant="caption" style={{ color: c.primary }}>
 							Contact support
 						</ThemedText>
 					</Pressable>
 				</View>
 			</View>
-		</View>
+		</Screen>
 	);
 }
 
@@ -147,12 +157,12 @@ const styles = StyleSheet.create({
 	root: { flex: 1 },
 	header: {
 		alignItems: 'center',
-		paddingVertical: 40,
-		paddingHorizontal: 24,
+		paddingVertical: AUTH_HEADER_PADDING,
+		paddingHorizontal: SPACING_PX.xl,
 	},
 	logo: {
-		width: 64,
-		height: 64,
+		width: AUTH_LOGO_SIZE,
+		height: AUTH_LOGO_SIZE,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -166,6 +176,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 24,
+		marginTop: SPACING_PX.xl,
 	},
 });
