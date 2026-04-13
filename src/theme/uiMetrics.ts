@@ -97,8 +97,29 @@ export const GLASS_WHITE_TEXT = 'rgba(255,255,255,0.8)';
 /** Near-opaque white card on coloured surface */
 export const GLASS_WHITE_CARD = 'rgba(255,255,255,0.95)';
 
+/** Subtle row highlight / very faint surface tint (e.g. alternating rows) */
+export const OPACITY_ROW_HIGHLIGHT = 0.06;
+
+/** Subtle success/error background tint (e.g. status chip background) */
+export const OPACITY_TINT_SUBTLE = 0.09;
+
 /** Lightly tinted card / icon background (e.g. category chip) */
 export const OPACITY_TINT_LIGHT = 0.12;
+
+/** Badge / chip background tint (slightly stronger than TINT_LIGHT) */
+export const OPACITY_BADGE_BG = 0.13;
+
+/** Subtle panel / inner bar background (e.g. FY bar overlay) */
+export const OPACITY_PANEL = 0.18;
+
+/** Border / outline tint */
+export const OPACITY_BORDER_TINT = 0.19;
+
+/** Dimmed surface (e.g. alternating table row) */
+export const OPACITY_DIM = 0.38;
+
+/** Neutral separator / divider on coloured surface */
+export const OPACITY_SEPARATOR = 0.4;
 
 /** Medium tint for section backgrounds */
 export const OPACITY_TINT_MEDIUM = 0.2;

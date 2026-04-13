@@ -21,7 +21,7 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { palette } from '@/src/theme/palette';
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { LETTER_SPACING_ACCOUNT } from '@/theme/uiMetrics';
+import { LETTER_SPACING_ACCOUNT, GLASS_WHITE_TEXT } from '@/theme/uiMetrics';
 import { MOCK_BANK_ACCOUNTS } from '@/src/mocks/finance/bankAccounts';
 
 // TODO: connect to store — fetch from bank_accounts table via Supabase
@@ -80,8 +80,8 @@ export default function BankAccountsScreen() {
 						}
 					>
 						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-							<Building2 size={20} color="rgba(255,255,255,0.8)" />
-							<ThemedText variant="caption" color="rgba(255,255,255,0.8)">
+							<Building2 size={20} color={GLASS_WHITE_TEXT} />
+							<ThemedText variant="caption" color={GLASS_WHITE_TEXT}>
 								Total in Banks
 							</ThemedText>
 						</View>

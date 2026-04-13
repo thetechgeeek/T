@@ -5,6 +5,8 @@ import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { Plus, ChevronRight, FileText } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_SKELETON_BASE } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { Button } from '@/src/components/atoms/Button';
@@ -117,7 +119,17 @@ export default function OrdersListScreen() {
 								</ThemedText>
 							</View>
 							<View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-								<View style={[styles.badge, { backgroundColor: c.success + '15' }]}>
+								<View
+									style={[
+										styles.badge,
+										{
+											backgroundColor: withOpacity(
+												c.success,
+												OPACITY_SKELETON_BASE,
+											),
+										},
+									]}
+								>
 									<ThemedText
 										color={c.success}
 										weight="semibold"

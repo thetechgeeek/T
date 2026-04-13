@@ -17,10 +17,16 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
 import { useLocale } from '@/src/hooks/useLocale';
 import { palette } from '@/src/theme/palette';
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import {
+	SIZE_INPUT_HEIGHT,
+	OVERLAY_COLOR_DIVIDER,
+	GLASS_WHITE_TEXT,
+	OPACITY_BADGE_BG,
+} from '@/theme/uiMetrics';
 import { MOCK_EWALLETS } from '@/src/mocks/finance/ewallets';
 
 // TODO: connect to store — e-wallets table
@@ -129,7 +135,7 @@ export default function EWalletsScreen() {
 						padding="lg"
 						style={[styles.summaryCard, { backgroundColor: theme.colors.primary }]}
 					>
-						<ThemedText variant="caption" color="rgba(255,255,255,0.8)">
+						<ThemedText variant="caption" color={GLASS_WHITE_TEXT}>
 							Total in Wallets
 						</ThemedText>
 						<ThemedText variant="h2" color={palette.white} style={{ marginTop: 6 }}>
@@ -154,7 +160,10 @@ export default function EWalletsScreen() {
 							<View
 								style={[
 									styles.walletIcon,
-									{ backgroundColor: item.color + '22', borderRadius: r.md },
+									{
+										backgroundColor: withOpacity(item.color, OPACITY_BADGE_BG),
+										borderRadius: r.md,
+									},
 								]}
 							>
 								<ThemedText style={{ fontSize: EMOJI_FONT_SIZE }}>
@@ -412,7 +421,7 @@ const styles = StyleSheet.create({
 		padding: 16,
 		paddingTop: 20,
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		borderBottomColor: 'rgba(0,0,0,0.1)',
+		borderBottomColor: OVERLAY_COLOR_DIVIDER,
 	},
 	section: {
 		marginBottom: 20,

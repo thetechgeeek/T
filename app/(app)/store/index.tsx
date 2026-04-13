@@ -1,4 +1,11 @@
-import { LETTER_SPACING_SECTION, SIZE_ICON_CONTAINER } from '@/theme/uiMetrics';
+import {
+	LETTER_SPACING_SECTION,
+	SIZE_ICON_CONTAINER,
+	GLASS_WHITE_MEDIUM,
+	OPACITY_PANEL,
+	OPACITY_TINT_LIGHT,
+} from '@/theme/uiMetrics';
+import { withOpacity } from '@/src/utils/color';
 import React, { useState } from 'react';
 import { palette } from '@/src/theme/palette';
 import {
@@ -165,7 +172,7 @@ export default function OnlineStoreScreen() {
 							value={storeEnabled}
 							onValueChange={setStoreEnabled}
 							thumbColor={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
-							trackColor={{ false: c.border, true: 'rgba(255,255,255,0.4)' }}
+							trackColor={{ false: c.border, true: GLASS_WHITE_MEDIUM }}
 							accessibilityLabel="Toggle store online status"
 						/>
 					</View>
@@ -175,7 +182,7 @@ export default function OnlineStoreScreen() {
 							styles.urlRow,
 							{
 								backgroundColor: storeEnabled
-									? 'rgba(255,255,255,0.18)'
+									? withOpacity('#ffffff', OPACITY_PANEL)
 									: c.surfaceVariant,
 								borderRadius: r.sm,
 							},
@@ -276,7 +283,8 @@ export default function OnlineStoreScreen() {
 					style={[
 						styles.banner,
 						{
-							backgroundColor: c.infoLight ?? 'rgba(59,130,246,0.12)',
+							backgroundColor:
+								c.infoLight ?? withOpacity('#3b82f6', OPACITY_TINT_LIGHT),
 							borderRadius: r.md,
 							borderLeftColor: c.info ?? c.primary,
 						},

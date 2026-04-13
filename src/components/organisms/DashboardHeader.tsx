@@ -6,7 +6,8 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
 import { Cloud } from 'lucide-react-native';
-import { OPACITY_PRESSED, OPACITY_HOVER } from '@/theme/uiMetrics';
+import { OPACITY_PRESSED, OPACITY_HOVER, GLASS_WHITE_CARD, OPACITY_PANEL } from '@/theme/uiMetrics';
+import { withOpacity } from '@/src/utils/color';
 import { FINANCIAL_YEAR_SHORT_YEAR_DIGITS } from '@/utils/dateUtils';
 
 /** Hour boundaries for greeting copy (local day, 24h clock) */
@@ -14,7 +15,7 @@ const HOUR_NOON = 12;
 const HOUR_AFTERNOON_END = 17;
 
 /** Opacity for secondary text (greeting translation) */
-const DASHBOARD_HEADER_FY_BAR_OPACITY = 0.18;
+const DASHBOARD_HEADER_FY_BAR_OPACITY = OPACITY_PANEL;
 const DASHBOARD_HEADER_DATE_OPACITY = 0.75;
 const DASHBOARD_HEADER_LETTER_SPACING = 0.3;
 
@@ -92,7 +93,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 			>
 				{/* Left: avatar */}
 				<View
-					style={[styles.avatar, { backgroundColor: 'rgba(255,255,255,0.95)' }]}
+					style={[styles.avatar, { backgroundColor: GLASS_WHITE_CARD }]}
 					accessible
 					accessibilityLabel={`Business initial: ${initial}`}
 				>
@@ -146,7 +147,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 			<View
 				style={[
 					styles.fyBar,
-					{ backgroundColor: `rgba(0,0,0,${DASHBOARD_HEADER_FY_BAR_OPACITY})` },
+					{ backgroundColor: withOpacity('#000000', DASHBOARD_HEADER_FY_BAR_OPACITY) },
 				]}
 				accessible
 				accessibilityLabel={`Financial year: ${fyLabel}`}

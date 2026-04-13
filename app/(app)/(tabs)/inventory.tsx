@@ -1,5 +1,5 @@
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+import { SIZE_AVATAR_MD, GLASS_WHITE_STRONG, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
 
 const OVERLAY_ZINDEX = 999;
 const FAB_SIZE = SIZE_AVATAR_MD;
@@ -291,7 +291,7 @@ export default function InventoryTab() {
 					style={[
 						StyleSheet.absoluteFill,
 						{
-							backgroundColor: 'rgba(255,255,255,0.7)',
+							backgroundColor: GLASS_WHITE_STRONG,
 							zIndex: OVERLAY_ZINDEX,
 							alignItems: 'center',
 							justifyContent: 'center',
@@ -325,7 +325,7 @@ export default function InventoryTab() {
 				onRequestClose={() => setMenuOpen(false)}
 			>
 				<Pressable
-					style={[styles.sortBackdrop, { backgroundColor: 'rgba(0,0,0,0.4)' }]}
+					style={[styles.sortBackdrop, { backgroundColor: OVERLAY_COLOR_MEDIUM }]}
 					onPress={() => setMenuOpen(false)}
 				/>
 				<View
@@ -363,7 +363,7 @@ export default function InventoryTab() {
 				onRequestClose={() => setSortSheetOpen(false)}
 			>
 				<Pressable
-					style={[styles.sortBackdrop, { backgroundColor: 'rgba(0,0,0,0.4)' }]}
+					style={[styles.sortBackdrop, { backgroundColor: OVERLAY_COLOR_MEDIUM }]}
 					onPress={() => setSortSheetOpen(false)}
 				/>
 				<View

@@ -7,7 +7,7 @@ import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
 import { palette } from '@/src/theme/palette';
-import { FLEX_AMT_WIDE } from '@/theme/uiMetrics';
+import { FLEX_AMT_WIDE, OVERLAY_COLOR_STRONG } from '@/theme/uiMetrics';
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
 
 export interface ConflictField {
@@ -42,7 +42,7 @@ export function ConflictModal({
 
 	return (
 		<Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
-			<View style={[styles.overlay, { backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+			<View style={[styles.overlay, { backgroundColor: OVERLAY_COLOR_STRONG }]}>
 				<View style={[styles.content, { backgroundColor: c.surface, borderRadius: r.lg }]}>
 					<View style={[layout.row, { marginBottom: s.md }]}>
 						<AlertTriangle size={24} color={c.warning} />

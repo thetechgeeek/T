@@ -5,6 +5,8 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import { OVERLAY_COLOR_STRONG, OPACITY_SKELETON_BASE } from '@/src/theme/uiMetrics';
 
 const GST_RATES = [0, 5, 12, 18, 28];
 
@@ -316,7 +318,13 @@ export default function CalculatorScreen() {
 							<View
 								style={[
 									styles.emiResult,
-									{ backgroundColor: c.primary + '15', borderRadius: r.md },
+									{
+										backgroundColor: withOpacity(
+											c.primary,
+											OPACITY_SKELETON_BASE,
+										),
+										borderRadius: r.md,
+									},
 								]}
 							>
 								<ThemedText variant="h3" color={c.primary}>
@@ -368,7 +376,7 @@ const styles = StyleSheet.create({
 	row: { flexDirection: 'row', gap: 8 },
 	btn: { height: 64, alignItems: 'center', justifyContent: 'center' },
 	btnText: { fontWeight: '600' },
-	modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
+	modalOverlay: { flex: 1, backgroundColor: OVERLAY_COLOR_STRONG, justifyContent: 'flex-end' },
 	modalBox: { padding: 24, gap: 8 },
 	gstRow: { padding: 12, borderWidth: 1, marginBottom: 8 },
 	emiInput: { borderWidth: 1, padding: 12, fontSize: 16 },

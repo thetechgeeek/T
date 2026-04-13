@@ -1,4 +1,4 @@
-import { LETTER_SPACING_SECTION, FLEX_AMT_WIDE } from '@/theme/uiMetrics';
+import { LETTER_SPACING_SECTION, FLEX_AMT_WIDE, OVERLAY_COLOR_STRONG } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import {
 	View,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
-	modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
+	modalOverlay: { flex: 1, backgroundColor: OVERLAY_COLOR_STRONG, justifyContent: 'flex-end' },
 	modalContent: {
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,

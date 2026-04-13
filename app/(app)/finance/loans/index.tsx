@@ -1,5 +1,5 @@
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { SIZE_AVATAR_MD, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { SIZE_AVATAR_MD, SIZE_INPUT_HEIGHT, OPACITY_BADGE_BG } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
 import { useLocale } from '@/src/hooks/useLocale';
 import { loanTypeColors, palette } from '@/src/theme/palette';
 
@@ -52,7 +53,7 @@ export default function LoansScreen() {
 						style={[
 							styles.badge,
 							{
-								backgroundColor: badgeColor + '22',
+								backgroundColor: withOpacity(badgeColor, OPACITY_BADGE_BG),
 								borderColor: badgeColor,
 								borderWidth: 1,
 								borderRadius: r.xs,

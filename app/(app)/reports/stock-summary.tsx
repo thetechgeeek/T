@@ -9,6 +9,8 @@ import { Card } from '@/src/components/atoms/Card';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_BADGE_BG } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { InventoryItem, TileCategory } from '@/src/types/inventory';
 
@@ -291,7 +293,8 @@ export default function StockSummaryScreen() {
 													styles.badge,
 													{
 														backgroundColor:
-															c.errorLight ?? c.error + '22',
+															c.errorLight ??
+															withOpacity(c.error, OPACITY_BADGE_BG),
 														borderRadius: r.sm,
 													},
 												]}

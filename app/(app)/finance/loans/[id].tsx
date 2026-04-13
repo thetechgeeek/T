@@ -9,6 +9,8 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Button } from '@/src/components/atoms/Button';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_SUBTLE, OPACITY_DIM } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import { palette } from '@/src/theme/palette';
 import { MOCK_LOAN } from '@/src/mocks/finance/loans';
@@ -83,7 +85,10 @@ function InfoRow({
 			<View
 				style={[
 					infoRowStyles.iconWrap,
-					{ backgroundColor: iconColor + '18', borderRadius: r.xs },
+					{
+						backgroundColor: withOpacity(iconColor, OPACITY_TINT_SUBTLE),
+						borderRadius: r.xs,
+					},
 				]}
 			>
 				{icon}
@@ -197,7 +202,10 @@ export default function LoanDetailScreen() {
 		<View
 			style={[
 				styles.tableRow,
-				{ backgroundColor: index % 2 === 0 ? c.surface : c.surfaceVariant + '60' },
+				{
+					backgroundColor:
+						index % 2 === 0 ? c.surface : withOpacity(c.surfaceVariant, OPACITY_DIM),
+				},
 			]}
 		>
 			<ThemedText variant="caption" color={c.onSurface} style={styles.tableCell}>
@@ -266,7 +274,8 @@ export default function LoanDetailScreen() {
 						style={[
 							styles.outstandingBadge,
 							{
-								backgroundColor: c.errorLight ?? c.error + '18',
+								backgroundColor:
+									c.errorLight ?? withOpacity(c.error, OPACITY_TINT_SUBTLE),
 								borderRadius: r.sm,
 								marginTop: s.sm,
 							},

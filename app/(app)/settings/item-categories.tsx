@@ -1,4 +1,4 @@
-import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+import { SIZE_AVATAR_MD, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
 import React, { useState, useEffect } from 'react';
 import {
 	View,
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
 		elevation: 4,
 	},
 	modalOverlay: { flex: 1, justifyContent: 'flex-end' },
-	modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' },
+	modalBackdrop: { flex: 1, backgroundColor: OVERLAY_COLOR_MEDIUM },
 	modalSheet: { maxHeight: '85%' },
 	sheetHandle: {
 		width: 40,

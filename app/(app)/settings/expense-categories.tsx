@@ -1,5 +1,5 @@
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+import { SIZE_AVATAR_MD, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
 
 const COLOR_SWATCH_SELECTED_SHADOW = 0.5;
 const COLOR_SWATCH_SELECTED_ELEVATION = 4;
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
 	},
 	modalBackdrop: {
 		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.4)',
+		backgroundColor: OVERLAY_COLOR_MEDIUM,
 	},
 	modalSheet: {
 		maxHeight: '85%',

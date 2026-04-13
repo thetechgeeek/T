@@ -7,6 +7,8 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_ROW_HIGHLIGHT } from '@/src/theme/uiMetrics';
 import { useRouter } from 'expo-router';
 
 interface LineItem {
@@ -261,7 +263,10 @@ export default function CreatePOScreen() {
 					<View
 						style={[
 							styles.totalCard,
-							{ backgroundColor: c.primary + '10', borderRadius: r.md },
+							{
+								backgroundColor: withOpacity(c.primary, OPACITY_ROW_HIGHLIGHT),
+								borderRadius: r.md,
+							},
 						]}
 					>
 						<ThemedText variant="caption" color={c.onSurfaceVariant}>

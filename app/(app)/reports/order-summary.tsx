@@ -6,6 +6,8 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_BADGE_BG } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import { MOCK_ORDER_SUMMARY_ROWS } from '@/src/mocks/reports/orderSummary';
 import type { OrderRow, OrderStatus } from '@/src/mocks/reports/orderSummary';
@@ -64,7 +66,7 @@ export default function OrderSummaryScreen() {
 
 	const renderItem = ({ item }: { item: OrderRow }) => {
 		const cfg = STATUS_CONFIG[item.status];
-		const bgColor = (c[cfg.bgKey] ?? c.primary) + '22';
+		const bgColor = withOpacity(c[cfg.bgKey] ?? c.primary, OPACITY_BADGE_BG);
 		const fgColor = c[cfg.fgKey] ?? c.primary;
 
 		const StatusIcon =

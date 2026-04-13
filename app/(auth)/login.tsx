@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { OPACITY_HOVER } from '@/theme/uiMetrics';
+import { OPACITY_HOVER, GLASS_WHITE_LIGHT } from '@/theme/uiMetrics';
 
 /** Vertical padding at base of header to create visual depth */
 const HEADER_PADDING_BOTTOM = 50;
@@ -54,7 +54,7 @@ export default function LoginScreen() {
 				<View
 					style={[
 						styles.logoMark,
-						{ backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: r.lg },
+						{ backgroundColor: GLASS_WHITE_LIGHT, borderRadius: r.lg },
 					]}
 				>
 					<ThemedText

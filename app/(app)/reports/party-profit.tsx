@@ -9,11 +9,11 @@ import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { OPACITY_ROW_HIGHLIGHT } from '@/src/theme/uiMetrics';
 const SEEDED_RAND_MODULUS = 90001;
 const SEEDED_RAND_MIN = 10000;
 const HASH_PRIME = 31;
 const COGS_RATIO = 0.6;
-const OPACITY_ROW_HIGHLIGHT = 0.06;
 
 type ModeType = 'customers' | 'suppliers';
 type DateRange = 'month' | 'quarter' | 'fy';

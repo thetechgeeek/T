@@ -3,6 +3,8 @@ import { Alert, Modal, View, StyleSheet, ScrollView, Platform } from 'react-nati
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
+import { OVERLAY_COLOR_STRONG, OPACITY_SEPARATOR } from '@/src/theme/uiMetrics';
+import { withOpacity } from '@/src/utils/color';
 import { X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
@@ -201,14 +203,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 const styles = StyleSheet.create({
 	overlay: {
 		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.5)',
+		backgroundColor: OVERLAY_COLOR_STRONG,
 		justifyContent: 'flex-end',
 	},
 	handle: {
 		width: 40,
 		height: 4,
 		borderRadius: 2,
-		backgroundColor: 'rgba(128,128,128,0.4)',
+		backgroundColor: withOpacity('#808080', OPACITY_SEPARATOR),
 		alignSelf: 'center',
 		marginBottom: 12,
 	},

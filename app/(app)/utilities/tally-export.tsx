@@ -7,6 +7,8 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_SKELETON_BASE } from '@/src/theme/uiMetrics';
 import type { ThemeColors } from '@/src/theme';
 
 const EXPORT_ITEMS = [
@@ -94,7 +96,10 @@ export default function TallyExportScreen() {
 				<View
 					style={[
 						styles.infoCard,
-						{ backgroundColor: c.primary + '15', borderRadius: r.lg },
+						{
+							backgroundColor: withOpacity(c.primary, OPACITY_SKELETON_BASE),
+							borderRadius: r.lg,
+						},
 					]}
 				>
 					<FileCode size={24} color={c.primary} style={{ marginBottom: s.sm }} />

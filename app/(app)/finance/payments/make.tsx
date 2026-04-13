@@ -1,4 +1,4 @@
-import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
 	View,
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
 	changeBtn: { paddingHorizontal: 8, paddingVertical: 4 },
 	modalOverlay: {
 		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.4)',
+		backgroundColor: OVERLAY_COLOR_MEDIUM,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

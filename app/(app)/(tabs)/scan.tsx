@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { palette } from '@/src/theme/palette';
-import { MS_SYNC_POLL, OPACITY_INACTIVE } from '@/theme/uiMetrics';
+import { MS_SYNC_POLL, OPACITY_INACTIVE, OVERLAY_COLOR_DARK } from '@/theme/uiMetrics';
 
 const CAMERA_QUALITY = 0.5;
 const OCR_PLACEHOLDER_DELAY_MS = MS_SYNC_POLL;
@@ -250,7 +250,7 @@ export default function ScanTab() {
 
 const styles = StyleSheet.create({
 	overlay: { flex: 1 },
-	darkness: { backgroundColor: 'rgba(0,0,0,0.6)' },
+	darkness: { backgroundColor: OVERLAY_COLOR_DARK },
 	scanFrame: {
 		width: 300,
 		height: 180,

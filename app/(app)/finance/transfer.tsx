@@ -6,6 +6,12 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import {
+	OPACITY_SKELETON_BASE,
+	OPACITY_ROW_HIGHLIGHT,
+	OPACITY_BORDER_TINT,
+} from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { MOCK_TRANSFER_ACCOUNTS } from '@/src/mocks/finance/transfer';
@@ -40,7 +46,9 @@ function AccountPicker({
 							styles.accountRow,
 							{
 								backgroundColor:
-									selectedId === account.id ? c.primary + '15' : 'transparent',
+									selectedId === account.id
+										? withOpacity(c.primary, OPACITY_SKELETON_BASE)
+										: 'transparent',
 								borderBottomColor: c.border,
 							},
 						]}
@@ -161,9 +169,9 @@ export default function FundTransferScreen() {
 						style={[
 							styles.previewCard,
 							{
-								backgroundColor: c.primary + '10',
+								backgroundColor: withOpacity(c.primary, OPACITY_ROW_HIGHLIGHT),
 								borderRadius: r.md,
-								borderColor: c.primary + '30',
+								borderColor: withOpacity(c.primary, OPACITY_BORDER_TINT),
 								borderWidth: 1,
 							},
 						]}

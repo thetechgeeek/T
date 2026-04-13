@@ -6,6 +6,8 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_SUBTLE } from '@/src/theme/uiMetrics';
 import { palette } from '@/src/theme/palette';
 
 type VerifyState = 'idle' | 'running' | 'complete';
@@ -166,7 +168,10 @@ export default function DataVerificationScreen() {
 											[
 												styles.resultCard,
 												{
-													backgroundColor: c.success + '18',
+													backgroundColor: withOpacity(
+														c.success,
+														OPACITY_TINT_SUBTLE,
+													),
 													borderColor: c.success,
 													borderWidth: 1,
 												},

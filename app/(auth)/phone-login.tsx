@@ -3,7 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import { useAuthStore } from '@/src/stores/authStore';
-import { OPACITY_HOVER, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { OPACITY_HOVER, SIZE_INPUT_HEIGHT, GLASS_WHITE_LIGHT } from '@/theme/uiMetrics';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { PhoneInput } from '@/src/components/molecules/PhoneInput';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -49,7 +49,7 @@ export default function PhoneLoginScreen() {
 					style={[
 						styles.logo,
 						{
-							backgroundColor: 'rgba(255,255,255,0.2)',
+							backgroundColor: GLASS_WHITE_LIGHT,
 							borderRadius: theme.borderRadius.md,
 						},
 					]}

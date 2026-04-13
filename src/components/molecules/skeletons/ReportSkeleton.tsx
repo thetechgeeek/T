@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { SkeletonBlock } from '../SkeletonBlock';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { OVERLAY_COLOR_SEPARATOR } from '@/src/theme/uiMetrics';
 
 /**
  * P0.12 — Report skeleton: summary card + 8 data rows
@@ -22,7 +23,7 @@ export function ReportSkeleton() {
 					gap: s.sm,
 					borderRadius: r.lg,
 					borderWidth: 1,
-					borderColor: 'rgba(0,0,0,0.05)',
+					borderColor: OVERLAY_COLOR_SEPARATOR,
 				}}
 			>
 				<SkeletonBlock width="40%" height={16} />
@@ -60,7 +61,7 @@ export function ReportSkeleton() {
 							alignItems: 'center',
 							paddingVertical: s.md,
 							borderBottomWidth: i === 7 ? 0 : 1,
-							borderBottomColor: 'rgba(0,0,0,0.05)',
+							borderBottomColor: OVERLAY_COLOR_SEPARATOR,
 						}}
 					>
 						<View style={{ gap: s.xs, flex: 1 }}>

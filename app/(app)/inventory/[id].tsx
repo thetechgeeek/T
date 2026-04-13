@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
+import {
+	OPACITY_SKELETON_BASE,
+	OPACITY_ROW_HIGHLIGHT,
+	OVERLAY_COLOR_STRONG,
+} from '@/theme/uiMetrics';
 
 const SPEC_BOX_HALF_WIDTH = '50%' as const;
 const SPEC_BOX_PADDING = 6;
 const SPECS_GRID_MARGIN = -6;
-const OPACITY_ROW_HIGHLIGHT = 0.06;
 import {
 	View,
 	StyleSheet,
@@ -441,7 +444,7 @@ export default function ItemDetailScreen() {
 				animationType="slide"
 				onRequestClose={() => setIsModalVisible(false)}
 			>
-				<View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+				<View style={[styles.modalOverlay, { backgroundColor: OVERLAY_COLOR_STRONG }]}>
 					<View
 						style={[
 							styles.modalContent,

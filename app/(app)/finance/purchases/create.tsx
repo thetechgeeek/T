@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
 
 const DROPDOWN_MAX_HEIGHT = 160;
 const MODAL_CARD_WIDTH = 320;
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
 	changeBtn: { paddingHorizontal: 8, paddingVertical: 4 },
 	modalOverlay: {
 		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.4)',
+		backgroundColor: OVERLAY_COLOR_MEDIUM,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

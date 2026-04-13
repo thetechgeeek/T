@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { palette } from '@/src/theme/palette';
+import { GLASS_WHITE_TEXT } from '@/src/theme/uiMetrics';
 import {
 	View,
 	StyleSheet,
@@ -118,7 +119,7 @@ export default function CashInHandScreen() {
 								{ backgroundColor: theme.colors.primary, borderRadius: r.lg },
 							]}
 						>
-							<ThemedText variant="caption" color="rgba(255,255,255,0.8)">
+							<ThemedText variant="caption" color={GLASS_WHITE_TEXT}>
 								Cash in Hand
 							</ThemedText>
 							<ThemedText
