@@ -232,213 +232,202 @@ export default function LoanDetailScreen() {
 	);
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			contentContainerStyle={[
+				styles.scrollContent,
+				{ padding: s.lg, paddingBottom: LOAN_SCROLL_BOTTOM_PADDING },
+			]}
+			scrollViewProps={{ showsVerticalScrollIndicator: false }}
+		>
 			<ScreenHeader title="Loan Detail" />
-			<ScrollView
-				contentContainerStyle={[
-					styles.scrollContent,
-					{ padding: s.lg, paddingBottom: LOAN_SCROLL_BOTTOM_PADDING },
+			{/* ── Summary card ─────────────────────────────────────────── */}
+			<View
+				style={[
+					styles.summaryCard,
+					{
+						backgroundColor: c.surface,
+						borderRadius: r.md,
+						borderColor: c.border,
+					},
 				]}
-				showsVerticalScrollIndicator={false}
 			>
-				{/* ── Summary card ─────────────────────────────────────────── */}
-				<View
-					style={[
-						styles.summaryCard,
-						{
-							backgroundColor: c.surface,
-							borderRadius: r.md,
-							borderColor: c.border,
-						},
-					]}
-				>
-					{/* Lender & badge */}
-					<View style={styles.summaryTop}>
-						<ThemedText
-							variant="h3"
-							weight="bold"
-							color={c.onSurface}
-							style={{ flex: 1 }}
-						>
-							{loan.lenderName}
-						</ThemedText>
-						<Badge label={loan.loanType} variant={loanTypeVariant()} size="md" />
-					</View>
-
-					{/* Principal */}
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={{ marginTop: s.md }}
-					>
-						Principal Amount
+				{/* Lender & badge */}
+				<View style={styles.summaryTop}>
+					<ThemedText variant="h3" weight="bold" color={c.onSurface} style={{ flex: 1 }}>
+						{loan.lenderName}
 					</ThemedText>
-					<ThemedText variant="h1" weight="bold" color={c.primary}>
-						{formatCurrency(loan.principalAmount)}
-					</ThemedText>
-
-					{/* Outstanding */}
-					<View
-						style={[
-							styles.outstandingBadge,
-							{
-								backgroundColor:
-									c.errorLight ?? withOpacity(c.error, OPACITY_TINT_SUBTLE),
-								borderRadius: r.sm,
-								marginTop: s.sm,
-							},
-						]}
-					>
-						<ThemedText variant="caption" color={c.error}>
-							Outstanding: {formatCurrency(loan.outstandingAmount)}
-						</ThemedText>
-					</View>
-
-					{/* Divider */}
-					<View
-						style={[
-							styles.divider,
-							{ backgroundColor: c.border, marginVertical: s.md },
-						]}
-					/>
-
-					{/* Info rows */}
-					<InfoRow
-						icon={<Percent size={18} color={c.primary} />}
-						label="Interest Rate"
-						value={`${loan.interestRate}% p.a.`}
-						iconColor={c.primary}
-					/>
-					<InfoRow
-						icon={<Clock size={18} color={c.info} />}
-						label="Tenure"
-						value={`${loan.tenureMonths} months`}
-						iconColor={c.info}
-					/>
-					<InfoRow
-						icon={<CreditCard size={18} color={c.primary} />}
-						label="Monthly EMI"
-						value={formatCurrency(Math.round(emi))}
-						iconColor={c.primary}
-					/>
-					<InfoRow
-						icon={<CalendarDays size={18} color={c.warning} />}
-						label="Disbursement Date"
-						value={formatDate(loan.disbursementDate)}
-						iconColor={c.warning}
-					/>
-					<InfoRow
-						icon={<TrendingDown size={18} color={c.success} />}
-						label="Next EMI Date"
-						value={formatDate(loan.nextEmiDate)}
-						iconColor={c.success}
-					/>
+					<Badge label={loan.loanType} variant={loanTypeVariant()} size="md" />
 				</View>
 
-				{/* ── Repayment progress ───────────────────────────────────── */}
-				<View
-					style={[
-						styles.progressCard,
-						{
-							backgroundColor: c.surface,
-							borderRadius: r.md,
-							borderColor: c.border,
-							marginTop: s.md,
-						},
-					]}
-				>
-					<View style={styles.progressHeader}>
-						<ThemedText variant="body" weight="medium" color={c.onSurface}>
-							Repayment Progress
-						</ThemedText>
-						<ThemedText variant="body" weight="bold" color={c.primary}>
-							{Math.round(clampedPct * 100)}%
-						</ThemedText>
-					</View>
-					<View
-						style={[
-							styles.progressTrack,
-							{
-								backgroundColor: c.surfaceVariant,
-								borderRadius: r.xs,
-								marginTop: s.sm,
-							},
-						]}
-					>
-						<View
-							style={[
-								styles.progressFill,
-								{
-									width: `${Math.round(clampedPct * 100)}%` as `${number}%`,
-									backgroundColor: c.primary,
-									borderRadius: r.xs,
-								},
-							]}
-						/>
-					</View>
-					<View style={[styles.progressLegend, { marginTop: s.xs }]}>
-						<ThemedText variant="caption" color={c.onSurfaceVariant}>
-							Paid: {formatCurrency(repaidAmount)}
-						</ThemedText>
-						<ThemedText variant="caption" color={c.onSurfaceVariant}>
-							Remaining: {formatCurrency(loan.outstandingAmount)}
-						</ThemedText>
-					</View>
-				</View>
-
-				{/* ── Record EMI button ────────────────────────────────────── */}
-				<Button
-					title="Record EMI Payment"
-					variant="primary"
-					onPress={handleRecordEmi}
-					style={{ marginTop: s.lg }}
-					leftIcon={
-						<CreditCard
-							size={18}
-							color={c.onPrimary}
-							style={{ marginRight: SPACING_PX.xs }}
-						/>
-					}
-				/>
-
-				{/* ── Amortisation schedule ────────────────────────────────── */}
-				<ThemedText
-					variant="h3"
-					weight="semibold"
-					color={c.onSurface}
-					style={{ marginTop: s.xl, marginBottom: s.sm }}
-				>
-					Amortisation Schedule
-				</ThemedText>
+				{/* Principal */}
 				<ThemedText
 					variant="caption"
 					color={c.onSurfaceVariant}
-					style={{ marginBottom: s.md }}
+					style={{ marginTop: s.md }}
 				>
-					First 12 months — principal {formatCurrency(loan.principalAmount)},{' '}
-					{loan.interestRate}% p.a., {loan.tenureMonths} months
+					Principal Amount
+				</ThemedText>
+				<ThemedText variant="h1" weight="bold" color={c.primary}>
+					{formatCurrency(loan.principalAmount)}
 				</ThemedText>
 
-				<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-					<View style={{ minWidth: LOAN_TABLE_MIN_WIDTH }}>
-						<TableHeader />
-						<FlatList
-							data={schedule}
-							keyExtractor={(item) => String(item.month)}
-							renderItem={renderScheduleRow}
-							scrollEnabled={false}
-						/>
-					</View>
-				</ScrollView>
+				{/* Outstanding */}
+				<View
+					style={[
+						styles.outstandingBadge,
+						{
+							backgroundColor:
+								c.errorLight ?? withOpacity(c.error, OPACITY_TINT_SUBTLE),
+							borderRadius: r.sm,
+							marginTop: s.sm,
+						},
+					]}
+				>
+					<ThemedText variant="caption" color={c.error}>
+						Outstanding: {formatCurrency(loan.outstandingAmount)}
+					</ThemedText>
+				</View>
 
-				{/* ── Edit Loan button ─────────────────────────────────────── */}
-				<Button
-					title="Edit Loan"
-					variant="secondary"
-					onPress={handleEdit}
-					style={{ marginTop: s.xl }}
+				{/* Divider */}
+				<View
+					style={[styles.divider, { backgroundColor: c.border, marginVertical: s.md }]}
 				/>
+
+				{/* Info rows */}
+				<InfoRow
+					icon={<Percent size={18} color={c.primary} />}
+					label="Interest Rate"
+					value={`${loan.interestRate}% p.a.`}
+					iconColor={c.primary}
+				/>
+				<InfoRow
+					icon={<Clock size={18} color={c.info} />}
+					label="Tenure"
+					value={`${loan.tenureMonths} months`}
+					iconColor={c.info}
+				/>
+				<InfoRow
+					icon={<CreditCard size={18} color={c.primary} />}
+					label="Monthly EMI"
+					value={formatCurrency(Math.round(emi))}
+					iconColor={c.primary}
+				/>
+				<InfoRow
+					icon={<CalendarDays size={18} color={c.warning} />}
+					label="Disbursement Date"
+					value={formatDate(loan.disbursementDate)}
+					iconColor={c.warning}
+				/>
+				<InfoRow
+					icon={<TrendingDown size={18} color={c.success} />}
+					label="Next EMI Date"
+					value={formatDate(loan.nextEmiDate)}
+					iconColor={c.success}
+				/>
+			</View>
+
+			{/* ── Repayment progress ───────────────────────────────────── */}
+			<View
+				style={[
+					styles.progressCard,
+					{
+						backgroundColor: c.surface,
+						borderRadius: r.md,
+						borderColor: c.border,
+						marginTop: s.md,
+					},
+				]}
+			>
+				<View style={styles.progressHeader}>
+					<ThemedText variant="body" weight="medium" color={c.onSurface}>
+						Repayment Progress
+					</ThemedText>
+					<ThemedText variant="body" weight="bold" color={c.primary}>
+						{Math.round(clampedPct * 100)}%
+					</ThemedText>
+				</View>
+				<View
+					style={[
+						styles.progressTrack,
+						{
+							backgroundColor: c.surfaceVariant,
+							borderRadius: r.xs,
+							marginTop: s.sm,
+						},
+					]}
+				>
+					<View
+						style={[
+							styles.progressFill,
+							{
+								width: `${Math.round(clampedPct * 100)}%` as `${number}%`,
+								backgroundColor: c.primary,
+								borderRadius: r.xs,
+							},
+						]}
+					/>
+				</View>
+				<View style={[styles.progressLegend, { marginTop: s.xs }]}>
+					<ThemedText variant="caption" color={c.onSurfaceVariant}>
+						Paid: {formatCurrency(repaidAmount)}
+					</ThemedText>
+					<ThemedText variant="caption" color={c.onSurfaceVariant}>
+						Remaining: {formatCurrency(loan.outstandingAmount)}
+					</ThemedText>
+				</View>
+			</View>
+
+			{/* ── Record EMI button ────────────────────────────────────── */}
+			<Button
+				title="Record EMI Payment"
+				variant="primary"
+				onPress={handleRecordEmi}
+				style={{ marginTop: s.lg }}
+				leftIcon={
+					<CreditCard
+						size={18}
+						color={c.onPrimary}
+						style={{ marginRight: SPACING_PX.xs }}
+					/>
+				}
+			/>
+
+			{/* ── Amortisation schedule ────────────────────────────────── */}
+			<ThemedText
+				variant="h3"
+				weight="semibold"
+				color={c.onSurface}
+				style={{ marginTop: s.xl, marginBottom: s.sm }}
+			>
+				Amortisation Schedule
+			</ThemedText>
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginBottom: s.md }}>
+				First 12 months — principal {formatCurrency(loan.principalAmount)},{' '}
+				{loan.interestRate}% p.a., {loan.tenureMonths} months
+			</ThemedText>
+
+			<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+				<View style={{ minWidth: LOAN_TABLE_MIN_WIDTH }}>
+					<TableHeader />
+					<FlatList
+						data={schedule}
+						keyExtractor={(item) => String(item.month)}
+						renderItem={renderScheduleRow}
+						scrollEnabled={false}
+					/>
+				</View>
 			</ScrollView>
+
+			{/* ── Edit Loan button ─────────────────────────────────────── */}
+			<Button
+				title="Edit Loan"
+				variant="secondary"
+				onPress={handleEdit}
+				style={{ marginTop: s.xl }}
+			/>
 		</AtomicScreen>
 	);
 }

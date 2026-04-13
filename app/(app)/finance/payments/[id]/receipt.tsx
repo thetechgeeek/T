@@ -9,7 +9,7 @@ import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const RECEIPT_BOTTOM_PADDING = SIZE_LANGUAGE_FLAG;
 const ID_TAIL_DIGITS = 6;
-import { View, ScrollView, StyleSheet, Share, Pressable } from 'react-native';
+import { View, StyleSheet, Share, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MessageCircle, FileText, CheckCircle2 } from 'lucide-react-native';
 import { paymentService } from '@/src/services/paymentService';
@@ -149,7 +149,7 @@ export default function PaymentReceiptScreen() {
 
 	if (loading) {
 		return (
-			<Screen safeAreaEdges={['bottom']}>
+			<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
 				<ScreenHeader title="Payment Receipt" />
 				<View style={{ padding: s.md, gap: s.sm }}>
 					<SkeletonBlock height={200} borderRadius={12} />
@@ -163,7 +163,7 @@ export default function PaymentReceiptScreen() {
 
 	if (!payment) {
 		return (
-			<Screen safeAreaEdges={['bottom']}>
+			<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
 				<ScreenHeader title="Payment Receipt" />
 				<View style={styles.emptyState}>
 					<ThemedText color={c.error}>Payment not found.</ThemedText>
@@ -179,197 +179,190 @@ export default function PaymentReceiptScreen() {
 	}
 
 	return (
-		<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			contentContainerStyle={[
+				styles.scroll,
+				{ padding: s.md, paddingBottom: RECEIPT_BOTTOM_PADDING },
+			]}
+		>
 			<ScreenHeader title="Payment Receipt" />
-
-			<ScrollView
-				contentContainerStyle={[
-					styles.scroll,
-					{ padding: s.md, paddingBottom: RECEIPT_BOTTOM_PADDING },
+			<View
+				style={[
+					styles.receiptCard,
+					{
+						backgroundColor: c.card ?? c.surface,
+						borderRadius: r.lg,
+						borderColor: c.border,
+					},
 				]}
 			>
+				{/* Top dashed cut line */}
+				<View style={[styles.cutLine, { borderColor: c.border }]} />
+
+				{/* Business Name */}
+				<View style={styles.header}>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.textCenter}
+					>
+						Your Business
+					</ThemedText>
+					<ThemedText
+						variant="h2"
+						style={[styles.centered, { marginTop: SPACING_PX.xs }]}
+					>
+						PAYMENT RECEIPT
+					</ThemedText>
+				</View>
+
+				<Divider style={{ marginVertical: s.sm }} />
+
+				{/* Receipt meta */}
+				<View style={styles.metaGrid}>
+					<View style={styles.metaRow}>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							Receipt No.
+						</ThemedText>
+						<ThemedText variant="captionBold">{receiptNumber}</ThemedText>
+					</View>
+					<View style={styles.metaRow}>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							Date
+						</ThemedText>
+						<ThemedText variant="captionBold">
+							{formatDate(payment.payment_date)}
+						</ThemedText>
+					</View>
+				</View>
+
+				<Divider style={{ marginVertical: s.sm }} />
+
+				{/* Party */}
+				<View style={{ paddingHorizontal: s.md, paddingBottom: s.sm }}>
+					<ThemedText variant="caption" color={c.onSurfaceVariant}>
+						{partyLabel}
+					</ThemedText>
+					<ThemedText variant="h3" style={{ marginTop: SPACING_PX.xxs }}>
+						{partyName}
+					</ThemedText>
+				</View>
+
+				<Divider style={{ marginVertical: s.sm }} />
+
 				<View
 					style={[
-						styles.receiptCard,
+						styles.amountBlock,
 						{
-							backgroundColor: c.card ?? c.surface,
-							borderRadius: r.lg,
-							borderColor: c.border,
+							backgroundColor: c.primaryContainer ?? c.surfaceVariant,
+							borderRadius: r.md,
+							margin: s.md,
 						},
 					]}
 				>
-					{/* Top dashed cut line */}
-					<View style={[styles.cutLine, { borderColor: c.border }]} />
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.centered}
+					>
+						Amount {isReceived ? 'Received' : 'Paid'}
+					</ThemedText>
+					<ThemedText
+						variant="display"
+						color={c.primary}
+						style={[styles.centered, { marginTop: SPACING_PX.xs }]}
+					>
+						{formatCurrency(payment.amount)}
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={[
+							styles.centered,
+							{ marginTop: SPACING_PX.xs + SPACING_PX.xxs, fontStyle: 'italic' },
+						]}
+					>
+						{amountWords}
+					</ThemedText>
+				</View>
 
-					{/* Business Name */}
-					<View style={styles.header}>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.textCenter}
-						>
-							Your Business
-						</ThemedText>
-						<ThemedText
-							variant="h2"
-							style={[styles.centered, { marginTop: SPACING_PX.xs }]}
-						>
-							PAYMENT RECEIPT
-						</ThemedText>
-					</View>
-
-					<Divider style={{ marginVertical: s.sm }} />
-
-					{/* Receipt meta */}
-					<View style={styles.metaGrid}>
-						<View style={styles.metaRow}>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Receipt No.
-							</ThemedText>
-							<ThemedText variant="captionBold">{receiptNumber}</ThemedText>
-						</View>
-						<View style={styles.metaRow}>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Date
-							</ThemedText>
-							<ThemedText variant="captionBold">
-								{formatDate(payment.payment_date)}
-							</ThemedText>
-						</View>
-					</View>
-
-					<Divider style={{ marginVertical: s.sm }} />
-
-					{/* Party */}
-					<View style={{ paddingHorizontal: s.md, paddingBottom: s.sm }}>
+				{/* Payment mode */}
+				<View
+					style={{
+						paddingHorizontal: s.md,
+						paddingBottom: s.sm,
+						gap: SPACING_PX.xs + SPACING_PX.xxs,
+					}}
+				>
+					<View style={styles.metaRow}>
 						<ThemedText variant="caption" color={c.onSurfaceVariant}>
-							{partyLabel}
+							Payment Mode
 						</ThemedText>
-						<ThemedText variant="h3" style={{ marginTop: SPACING_PX.xxs }}>
-							{partyName}
-						</ThemedText>
-					</View>
-
-					<Divider style={{ marginVertical: s.sm }} />
-
-					<View
-						style={[
-							styles.amountBlock,
-							{
-								backgroundColor: c.primaryContainer ?? c.surfaceVariant,
-								borderRadius: r.md,
-								margin: s.md,
-							},
-						]}
-					>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.centered}
-						>
-							Amount {isReceived ? 'Received' : 'Paid'}
-						</ThemedText>
-						<ThemedText
-							variant="display"
-							color={c.primary}
-							style={[styles.centered, { marginTop: SPACING_PX.xs }]}
-						>
-							{formatCurrency(payment.amount)}
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={[
-								styles.centered,
-								{ marginTop: SPACING_PX.xs + SPACING_PX.xxs, fontStyle: 'italic' },
-							]}
-						>
-							{amountWords}
+						<ThemedText variant="captionBold">
+							{formatMode(payment.payment_mode)}
 						</ThemedText>
 					</View>
 
-					{/* Payment mode */}
-					<View
-						style={{
-							paddingHorizontal: s.md,
-							paddingBottom: s.sm,
-							gap: SPACING_PX.xs + SPACING_PX.xxs,
-						}}
-					>
+					{!!payment.notes && (
 						<View style={styles.metaRow}>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Payment Mode
+								Reference
 							</ThemedText>
-							<ThemedText variant="captionBold">
-								{formatMode(payment.payment_mode)}
-							</ThemedText>
+							<ThemedText variant="captionBold">{payment.notes}</ThemedText>
 						</View>
-
-						{!!payment.notes && (
-							<View style={styles.metaRow}>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									Reference
-								</ThemedText>
-								<ThemedText variant="captionBold">{payment.notes}</ThemedText>
-							</View>
-						)}
-					</View>
-
-					<Divider style={{ marginVertical: s.sm }} />
-
-					{/* Footer */}
-					<View style={[styles.footer, { paddingBottom: s.lg }]}>
-						<CheckCircle2 size={24} color={c.success} />
-						<ThemedText
-							variant="bodyBold"
-							color={c.success}
-							style={{ marginTop: s.xs }}
-						>
-							Thank You for your payment!
-						</ThemedText>
-					</View>
-
-					{/* Bottom dashed cut line */}
-					<View style={[styles.cutLine, { borderColor: c.border }]} />
+					)}
 				</View>
 
-				{/* Action Buttons */}
-				<View style={{ gap: s.sm, marginTop: s.lg }}>
-					{/* WhatsApp - prominent green */}
-					<Pressable
-						style={[
-							styles.whatsappBtn,
-							{ backgroundColor: c.success, borderRadius: r.md },
-						]}
-						onPress={handleShareWhatsApp}
-						accessibilityLabel="Share on WhatsApp"
+				<Divider style={{ marginVertical: s.sm }} />
+
+				{/* Footer */}
+				<View style={[styles.footer, { paddingBottom: s.lg }]}>
+					<CheckCircle2 size={24} color={c.success} />
+					<ThemedText variant="bodyBold" color={c.success} style={{ marginTop: s.xs }}>
+						Thank You for your payment!
+					</ThemedText>
+				</View>
+
+				{/* Bottom dashed cut line */}
+				<View style={[styles.cutLine, { borderColor: c.border }]} />
+			</View>
+
+			{/* Action Buttons */}
+			<View style={{ gap: s.sm, marginTop: s.lg }}>
+				{/* WhatsApp - prominent green */}
+				<Pressable
+					style={[styles.whatsappBtn, { backgroundColor: c.success, borderRadius: r.md }]}
+					onPress={handleShareWhatsApp}
+					accessibilityLabel="Share on WhatsApp"
+				>
+					<MessageCircle size={20} color={c.onPrimary} />
+					<ThemedText
+						variant="bodyBold"
+						color={c.onPrimary}
+						style={{ marginLeft: SPACING_PX.sm }}
 					>
-						<MessageCircle size={20} color={c.onPrimary} />
-						<ThemedText
-							variant="bodyBold"
-							color={c.onPrimary}
-							style={{ marginLeft: SPACING_PX.sm }}
-						>
-							Share on WhatsApp
-						</ThemedText>
-					</Pressable>
+						Share on WhatsApp
+					</ThemedText>
+				</Pressable>
 
-					<Button
-						title="Share PDF"
-						variant="outline"
-						leftIcon={<FileText size={18} color={c.primary} />}
-						onPress={handleSharePdf}
-						accessibilityLabel="share-pdf"
-					/>
+				<Button
+					title="Share PDF"
+					variant="outline"
+					leftIcon={<FileText size={18} color={c.primary} />}
+					onPress={handleSharePdf}
+					accessibilityLabel="share-pdf"
+				/>
 
-					<Button
-						title="Done"
-						variant="ghost"
-						onPress={() => router.back()}
-						accessibilityLabel="done"
-					/>
-				</View>
-			</ScrollView>
+				<Button
+					title="Done"
+					variant="ghost"
+					onPress={() => router.back()}
+					accessibilityLabel="done"
+				/>
+			</View>
 		</Screen>
 	);
 }

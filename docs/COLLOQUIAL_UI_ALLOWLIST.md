@@ -10,4 +10,7 @@ This file is the **only** sanctioned place for temporary exceptions to the styli
 
 ## Current exceptions
 
-_None yet._
+| File                                   | Line  | Rule                                    | Rationale                                                                                                                                                    | Follow-up                      |
+| -------------------------------------- | ----- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `app/(app)/finance/payments/[id].tsx`  | `181` | Direct top-level `ScrollView` in `app/` | Retained temporarily because the screen has a sticky bottom action bar; converting to `Screen scrollable` with the current API would make the footer scroll. | `phase-5-finance-shell-sticky` |
+| `app/(app)/finance/purchases/[id].tsx` | `257` | Direct top-level `ScrollView` in `app/` | Retained temporarily because the screen has a sticky bottom action bar; converting to `Screen scrollable` with the current API would make the footer scroll. | `phase-5-finance-shell-sticky` |

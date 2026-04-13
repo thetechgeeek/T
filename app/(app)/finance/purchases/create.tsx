@@ -184,341 +184,320 @@ export default function PurchaseCreateScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard
+			scrollable
+			contentContainerStyle={[styles.content, { padding: s.md }]}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+		>
 			<ScreenHeader title="New Purchase Bill" />
-			<ScrollView
-				contentContainerStyle={[styles.content, { padding: s.md }]}
-				keyboardShouldPersistTaps="handled"
-			>
-				{/* Supplier Section */}
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
-					Supplier
-				</ThemedText>
-				{selectedSupplier ? (
-					<Card padding="sm" style={styles.selectedCard}>
-						<View style={styles.selectedRow}>
-							<View>
-								<ThemedText variant="bodyBold">{selectedSupplier.name}</ThemedText>
-								{selectedSupplier.city ? (
-									<ThemedText variant="caption" color={c.onSurfaceVariant}>
-										{selectedSupplier.city}
-									</ThemedText>
-								) : null}
-							</View>
-							<TouchableOpacity
-								onPress={() => {
-									setSelectedSupplier(null);
-									setSupplierSearch('');
-								}}
-								accessibilityLabel="Deselect supplier"
-							>
-								<X size={20} color={c.onSurfaceVariant} />
-							</TouchableOpacity>
-						</View>
-					</Card>
-				) : (
-					<View>
-						<TextInput
-							placeholder="Search supplier..."
-							value={supplierSearch}
-							onChangeText={setSupplierSearch}
-							accessibilityLabel="supplier-search"
-						/>
-						{filteredSuppliers().length > 0 && (
-							<Card padding="none" style={styles.dropdown}>
-								<ScrollView
-									style={{ maxHeight: 180 }}
-									keyboardShouldPersistTaps="handled"
-								>
-									{filteredSuppliers().map((sup) => (
-										<Pressable
-											key={sup.id}
-											style={[
-												styles.dropdownRow,
-												{ borderBottomColor: c.border },
-											]}
-											onPress={() => {
-												setSelectedSupplier(sup);
-												setSupplierSearch('');
-											}}
-										>
-											<ThemedText variant="body">{sup.name}</ThemedText>
-											{sup.city ? (
-												<ThemedText
-													variant="caption"
-													color={c.onSurfaceVariant}
-												>
-													{sup.city}
-												</ThemedText>
-											) : null}
-										</Pressable>
-									))}
-								</ScrollView>
-							</Card>
-						)}
-					</View>
-				)}
-
-				{/* Bill Reference */}
-				<View style={{ marginTop: s.md, gap: s.sm }}>
-					<TextInput
-						label="Supplier's Bill No. *"
-						value={billNumber}
-						onChangeText={setBillNumber}
-						placeholder="e.g. INV-2024-001"
-						accessibilityLabel="bill-number"
-					/>
-
-					<View style={styles.dateRow}>
-						<ThemedText variant="label" color={c.onSurfaceVariant}>
-							Bill Date
-						</ThemedText>
-						<View style={styles.dateRight}>
-							<ThemedText variant="body">{formatDate(billDate)}</ThemedText>
-							<Pressable
-								onPress={() => setShowDateModal(true)}
-								style={styles.changeBtn}
-							>
-								<ThemedText variant="caption" color={c.primary}>
-									Change
-								</ThemedText>
-							</Pressable>
-						</View>
-					</View>
-
-					<Modal visible={showDateModal} transparent animationType="fade">
-						<Pressable
-							style={styles.modalOverlay}
-							onPress={() => setShowDateModal(false)}
-						>
-							<View
-								style={[
-									styles.modalCard,
-									{ backgroundColor: c.surface, borderRadius: r.lg },
-								]}
-							>
-								<DatePickerField
-									label="Bill Date"
-									value={billDate}
-									onChange={(d) => {
-										setBillDate(d);
-										setShowDateModal(false);
-									}}
-								/>
-							</View>
-						</Pressable>
-					</Modal>
-
-					<TextInput
-						label="Our Reference (optional)"
-						value={ourRef}
-						onChangeText={setOurRef}
-						placeholder="PUR-001"
-					/>
-				</View>
-
-				{/* Line Items */}
-				<View style={{ marginTop: s.md }}>
-					<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
-						Items
-					</ThemedText>
-
-					{lineItems.map((li) => (
-						<View
-							key={li.id}
-							style={[styles.lineItemRow, { borderBottomColor: c.border }]}
-						>
-							<View style={{ flex: 1 }}>
-								<ThemedText variant="body">{li.item.design_name}</ThemedText>
+			{/* Supplier Section */}
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
+				Supplier
+			</ThemedText>
+			{selectedSupplier ? (
+				<Card padding="sm" style={styles.selectedCard}>
+					<View style={styles.selectedRow}>
+						<View>
+							<ThemedText variant="bodyBold">{selectedSupplier.name}</ThemedText>
+							{selectedSupplier.city ? (
 								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									{li.quantity} × {formatCurrency(li.price)}
+									{selectedSupplier.city}
 								</ThemedText>
-							</View>
-							<ThemedText variant="bodyBold">
-								{formatCurrency(li.quantity * li.price)}
-							</ThemedText>
-							<TouchableOpacity
-								onPress={() => removeLineItem(li.id)}
-								style={{ marginLeft: SPACING_PX.sm }}
+							) : null}
+						</View>
+						<TouchableOpacity
+							onPress={() => {
+								setSelectedSupplier(null);
+								setSupplierSearch('');
+							}}
+							accessibilityLabel="Deselect supplier"
+						>
+							<X size={20} color={c.onSurfaceVariant} />
+						</TouchableOpacity>
+					</View>
+				</Card>
+			) : (
+				<View>
+					<TextInput
+						placeholder="Search supplier..."
+						value={supplierSearch}
+						onChangeText={setSupplierSearch}
+						accessibilityLabel="supplier-search"
+					/>
+					{filteredSuppliers().length > 0 && (
+						<Card padding="none" style={styles.dropdown}>
+							<ScrollView
+								style={{ maxHeight: 180 }}
+								keyboardShouldPersistTaps="handled"
 							>
-								<Trash2 size={18} color={c.error} />
-							</TouchableOpacity>
-						</View>
-					))}
-
-					{/* Running total */}
-					{lineItems.length > 0 && (
-						<View style={[styles.totalRow, { backgroundColor: c.surface }]}>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{lineItems.length} item{lineItems.length !== 1 ? 's' : ''} ·
-								Subtotal: {formatCurrency(subtotal)} · GST:{' '}
-								{formatCurrency(gstTotal)}
-							</ThemedText>
-							<ThemedText variant="bodyBold">
-								Total: {formatCurrency(grandTotal)}
-							</ThemedText>
-						</View>
-					)}
-
-					{/* Add Item form */}
-					{showItemForm ? (
-						<Card padding="sm" style={{ marginTop: s.sm }}>
-							<TextInput
-								placeholder="Search item..."
-								value={itemSearch}
-								onChangeText={setItemSearch}
-								accessibilityLabel="item-search"
-							/>
-							{filteredItems().length > 0 && !selectedItem && (
-								<ScrollView
-									style={{ maxHeight: DROPDOWN_MAX_HEIGHT }}
-									keyboardShouldPersistTaps="handled"
-								>
-									{filteredItems().map((itm) => (
-										<Pressable
-											key={itm.id}
-											style={[
-												styles.dropdownRow,
-												{ borderBottomColor: c.border },
-											]}
-											onPress={() => {
-												setSelectedItem(itm);
-												setItemSearch(itm.design_name);
-												setItemPrice(String(itm.cost_price));
-											}}
-										>
-											<ThemedText variant="body">
-												{itm.design_name}
-											</ThemedText>
+								{filteredSuppliers().map((sup) => (
+									<Pressable
+										key={sup.id}
+										style={[
+											styles.dropdownRow,
+											{ borderBottomColor: c.border },
+										]}
+										onPress={() => {
+											setSelectedSupplier(sup);
+											setSupplierSearch('');
+										}}
+									>
+										<ThemedText variant="body">{sup.name}</ThemedText>
+										{sup.city ? (
 											<ThemedText
 												variant="caption"
 												color={c.onSurfaceVariant}
 											>
-												{formatCurrency(itm.cost_price)}
+												{sup.city}
 											</ThemedText>
-										</Pressable>
-									))}
-								</ScrollView>
-							)}
-							{selectedItem && (
-								<View style={{ marginTop: s.sm, gap: s.sm }}>
-									<TextInput
-										label="Quantity"
-										value={itemQty}
-										onChangeText={setItemQty}
-										keyboardType="numeric"
-									/>
-									<TextInput
-										label="Purchase Price (₹)"
-										value={itemPrice}
-										onChangeText={setItemPrice}
-										keyboardType="numeric"
-									/>
-									<View style={styles.formBtns}>
-										<Button
-											title="Add"
-											onPress={addLineItem}
-											style={{ flex: 1 }}
-										/>
-										<Button
-											title="Cancel"
-											variant="outline"
-											onPress={() => {
-												setShowItemForm(false);
-												setSelectedItem(null);
-												setItemSearch('');
-											}}
-											style={{ flex: 1 }}
-										/>
-									</View>
-								</View>
-							)}
+										) : null}
+									</Pressable>
+								))}
+							</ScrollView>
 						</Card>
-					) : (
-						<Pressable
-							style={[
-								styles.addItemBtn,
-								{ borderColor: c.primary, borderRadius: r.md },
-							]}
-							onPress={() => setShowItemForm(true)}
-						>
-							<Plus size={16} color={c.primary} />
+					)}
+				</View>
+			)}
+
+			{/* Bill Reference */}
+			<View style={{ marginTop: s.md, gap: s.sm }}>
+				<TextInput
+					label="Supplier's Bill No. *"
+					value={billNumber}
+					onChangeText={setBillNumber}
+					placeholder="e.g. INV-2024-001"
+					accessibilityLabel="bill-number"
+				/>
+
+				<View style={styles.dateRow}>
+					<ThemedText variant="label" color={c.onSurfaceVariant}>
+						Bill Date
+					</ThemedText>
+					<View style={styles.dateRight}>
+						<ThemedText variant="body">{formatDate(billDate)}</ThemedText>
+						<Pressable onPress={() => setShowDateModal(true)} style={styles.changeBtn}>
 							<ThemedText variant="caption" color={c.primary}>
-								Add Item
+								Change
 							</ThemedText>
 						</Pressable>
-					)}
+					</View>
 				</View>
 
-				{/* Payment Section */}
-				<View style={{ marginTop: s.md }}>
-					<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
-						Payment
-					</ThemedText>
-					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-						<View style={styles.chipsRow}>
-							{PAYMENT_MODES.map((m) => {
-								const active = paymentMode === m;
-								return (
+				<Modal visible={showDateModal} transparent animationType="fade">
+					<Pressable style={styles.modalOverlay} onPress={() => setShowDateModal(false)}>
+						<View
+							style={[
+								styles.modalCard,
+								{ backgroundColor: c.surface, borderRadius: r.lg },
+							]}
+						>
+							<DatePickerField
+								label="Bill Date"
+								value={billDate}
+								onChange={(d) => {
+									setBillDate(d);
+									setShowDateModal(false);
+								}}
+							/>
+						</View>
+					</Pressable>
+				</Modal>
+
+				<TextInput
+					label="Our Reference (optional)"
+					value={ourRef}
+					onChangeText={setOurRef}
+					placeholder="PUR-001"
+				/>
+			</View>
+
+			{/* Line Items */}
+			<View style={{ marginTop: s.md }}>
+				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
+					Items
+				</ThemedText>
+
+				{lineItems.map((li) => (
+					<View key={li.id} style={[styles.lineItemRow, { borderBottomColor: c.border }]}>
+						<View style={{ flex: 1 }}>
+							<ThemedText variant="body">{li.item.design_name}</ThemedText>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{li.quantity} × {formatCurrency(li.price)}
+							</ThemedText>
+						</View>
+						<ThemedText variant="bodyBold">
+							{formatCurrency(li.quantity * li.price)}
+						</ThemedText>
+						<TouchableOpacity
+							onPress={() => removeLineItem(li.id)}
+							style={{ marginLeft: SPACING_PX.sm }}
+						>
+							<Trash2 size={18} color={c.error} />
+						</TouchableOpacity>
+					</View>
+				))}
+
+				{/* Running total */}
+				{lineItems.length > 0 && (
+					<View style={[styles.totalRow, { backgroundColor: c.surface }]}>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							{lineItems.length} item{lineItems.length !== 1 ? 's' : ''} · Subtotal:{' '}
+							{formatCurrency(subtotal)} · GST: {formatCurrency(gstTotal)}
+						</ThemedText>
+						<ThemedText variant="bodyBold">
+							Total: {formatCurrency(grandTotal)}
+						</ThemedText>
+					</View>
+				)}
+
+				{/* Add Item form */}
+				{showItemForm ? (
+					<Card padding="sm" style={{ marginTop: s.sm }}>
+						<TextInput
+							placeholder="Search item..."
+							value={itemSearch}
+							onChangeText={setItemSearch}
+							accessibilityLabel="item-search"
+						/>
+						{filteredItems().length > 0 && !selectedItem && (
+							<ScrollView
+								style={{ maxHeight: DROPDOWN_MAX_HEIGHT }}
+								keyboardShouldPersistTaps="handled"
+							>
+								{filteredItems().map((itm) => (
 									<Pressable
-										key={m}
+										key={itm.id}
 										style={[
-											styles.modeChip,
-											{
-												backgroundColor: active ? c.primary : c.surface,
-												borderColor: active ? c.primary : c.border,
-												borderRadius: r.full,
-											},
+											styles.dropdownRow,
+											{ borderBottomColor: c.border },
 										]}
 										onPress={() => {
-											setPaymentMode(m);
-											if (m === 'Credit / No Payment') setPaymentAmount('0');
+											setSelectedItem(itm);
+											setItemSearch(itm.design_name);
+											setItemPrice(String(itm.cost_price));
 										}}
 									>
-										<ThemedText
-											variant="caption"
-											color={active ? c.onPrimary : c.onSurface}
-										>
-											{m}
+										<ThemedText variant="body">{itm.design_name}</ThemedText>
+										<ThemedText variant="caption" color={c.onSurfaceVariant}>
+											{formatCurrency(itm.cost_price)}
 										</ThemedText>
 									</Pressable>
-								);
-							})}
-						</View>
-					</ScrollView>
+								))}
+							</ScrollView>
+						)}
+						{selectedItem && (
+							<View style={{ marginTop: s.sm, gap: s.sm }}>
+								<TextInput
+									label="Quantity"
+									value={itemQty}
+									onChangeText={setItemQty}
+									keyboardType="numeric"
+								/>
+								<TextInput
+									label="Purchase Price (₹)"
+									value={itemPrice}
+									onChangeText={setItemPrice}
+									keyboardType="numeric"
+								/>
+								<View style={styles.formBtns}>
+									<Button title="Add" onPress={addLineItem} style={{ flex: 1 }} />
+									<Button
+										title="Cancel"
+										variant="outline"
+										onPress={() => {
+											setShowItemForm(false);
+											setSelectedItem(null);
+											setItemSearch('');
+										}}
+										style={{ flex: 1 }}
+									/>
+								</View>
+							</View>
+						)}
+					</Card>
+				) : (
+					<Pressable
+						style={[styles.addItemBtn, { borderColor: c.primary, borderRadius: r.md }]}
+						onPress={() => setShowItemForm(true)}
+					>
+						<Plus size={16} color={c.primary} />
+						<ThemedText variant="caption" color={c.primary}>
+							Add Item
+						</ThemedText>
+					</Pressable>
+				)}
+			</View>
 
-					{paymentMode !== 'Credit / No Payment' && (
-						<TextInput
-							label="Amount Paid (₹)"
-							value={paymentAmount}
-							onChangeText={setPaymentAmount}
-							keyboardType="numeric"
-							style={{ marginTop: s.sm }}
-						/>
-					)}
-				</View>
+			{/* Payment Section */}
+			<View style={{ marginTop: s.md }}>
+				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
+					Payment
+				</ThemedText>
+				<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+					<View style={styles.chipsRow}>
+						{PAYMENT_MODES.map((m) => {
+							const active = paymentMode === m;
+							return (
+								<Pressable
+									key={m}
+									style={[
+										styles.modeChip,
+										{
+											backgroundColor: active ? c.primary : c.surface,
+											borderColor: active ? c.primary : c.border,
+											borderRadius: r.full,
+										},
+									]}
+									onPress={() => {
+										setPaymentMode(m);
+										if (m === 'Credit / No Payment') setPaymentAmount('0');
+									}}
+								>
+									<ThemedText
+										variant="caption"
+										color={active ? c.onPrimary : c.onSurface}
+									>
+										{m}
+									</ThemedText>
+								</Pressable>
+							);
+						})}
+					</View>
+				</ScrollView>
 
-				{/* Notes */}
-				<View style={{ marginTop: s.md }}>
+				{paymentMode !== 'Credit / No Payment' && (
 					<TextInput
-						label="Notes (optional)"
-						value={notes}
-						onChangeText={setNotes}
-						multiline
-						numberOfLines={3}
-						placeholder="Optional notes..."
-						inputStyle={{ minHeight: 72, textAlignVertical: 'top' }}
+						label="Amount Paid (₹)"
+						value={paymentAmount}
+						onChangeText={setPaymentAmount}
+						keyboardType="numeric"
+						style={{ marginTop: s.sm }}
 					/>
-				</View>
+				)}
+			</View>
 
-				<Button
-					title={submitting ? 'Saving...' : 'Save Purchase Bill'}
-					onPress={handleSave}
-					disabled={submitting}
-					style={[styles.saveBtn, { marginTop: s.lg }]}
-					accessibilityLabel="save-purchase"
+			{/* Notes */}
+			<View style={{ marginTop: s.md }}>
+				<TextInput
+					label="Notes (optional)"
+					value={notes}
+					onChangeText={setNotes}
+					multiline
+					numberOfLines={3}
+					placeholder="Optional notes..."
+					inputStyle={{ minHeight: 72, textAlignVertical: 'top' }}
 				/>
-			</ScrollView>
+			</View>
+
+			<Button
+				title={submitting ? 'Saving...' : 'Save Purchase Bill'}
+				onPress={handleSave}
+				disabled={submitting}
+				style={[styles.saveBtn, { marginTop: s.lg }]}
+				accessibilityLabel="save-purchase"
+			/>
 		</Screen>
 	);
 }

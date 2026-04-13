@@ -118,7 +118,7 @@ export default function PaymentsScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
+		<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader title={t('common.payments')} />
 
 			{/* Summary bar */}

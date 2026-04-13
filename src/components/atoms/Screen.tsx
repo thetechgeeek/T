@@ -5,6 +5,7 @@ import {
 	ScrollView,
 	Platform,
 	type ViewStyle,
+	type StyleProp,
 	type ScrollViewProps,
 } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
@@ -15,8 +16,8 @@ export interface ScreenProps {
 	children: React.ReactNode;
 	scrollable?: boolean;
 	withKeyboard?: boolean;
-	style?: ViewStyle;
-	contentContainerStyle?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
+	contentContainerStyle?: StyleProp<ViewStyle>;
 	safeAreaEdges?: ('top' | 'bottom' | 'left' | 'right')[];
 	scrollViewProps?: ScrollViewProps;
 	backgroundColor?: string;

@@ -59,7 +59,7 @@ export default function PurchasesScreen() {
 	const totalToPay = totalPurchases - totalPaid;
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']}>
+		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader title={t('finance.purchases')} />
 
 			{/* Summary Card */}

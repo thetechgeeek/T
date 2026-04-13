@@ -157,7 +157,7 @@ export default function PurchaseBillDetailScreen() {
 
 	if (loading) {
 		return (
-			<Screen safeAreaEdges={['bottom']}>
+			<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
 				<ScreenHeader title="Purchase Bill" />
 				<View style={{ padding: s.md, gap: s.sm }}>
 					<SkeletonBlock height={80} borderRadius={8} />
@@ -171,7 +171,7 @@ export default function PurchaseBillDetailScreen() {
 
 	if (!purchase) {
 		return (
-			<Screen safeAreaEdges={['bottom']}>
+			<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
 				<ScreenHeader title="Purchase Bill" />
 				<View style={styles.center}>
 					<ThemedText color={c.error}>Purchase bill not found.</ThemedText>

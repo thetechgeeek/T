@@ -122,7 +122,7 @@ export default function PaymentDetailScreen() {
 
 	if (loading) {
 		return (
-			<Screen safeAreaEdges={['bottom']}>
+			<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
 				<ScreenHeader title="Payment Details" />
 				<View style={{ padding: s.md, gap: s.sm }}>
 					<SkeletonBlock height={120} borderRadius={12} />
@@ -135,7 +135,7 @@ export default function PaymentDetailScreen() {
 
 	if (!payment) {
 		return (
-			<Screen safeAreaEdges={['bottom']}>
+			<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
 				<ScreenHeader title="Payment Details" />
 				<View style={styles.center}>
 					<ThemedText color={c.error}>Payment not found.</ThemedText>

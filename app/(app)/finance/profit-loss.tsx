@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
 
 const DISABLED_NAV_OPACITY = OPACITY_TINT_STRONG;
@@ -202,7 +202,16 @@ export default function ProfitLossScreen() {
 	const canGoForward = mode !== 'fy' && offset < 0;
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			contentContainerStyle={{
+				padding: s.md,
+				paddingBottom: PROFIT_LOSS_SCROLL_BOTTOM_PADDING,
+				gap: SPACING_PX.md,
+			}}
+		>
 			<ScreenHeader title="Profit & Loss" showBackButton />
 
 			{/* Period mode tabs */}
@@ -257,148 +266,134 @@ export default function ProfitLossScreen() {
 				</Pressable>
 			</View>
 
-			<ScrollView
-				contentContainerStyle={{
-					padding: s.md,
-					paddingBottom: PROFIT_LOSS_SCROLL_BOTTOM_PADDING,
-					gap: SPACING_PX.md,
+			{/* Revenue Section */}
+			<Card padding="md">
+				<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
+					Revenue
+				</ThemedText>
+				<SectionRow
+					label="Sale Revenue"
+					value={saleRevenue}
+					indent
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="Other Income"
+					value={otherIncome}
+					indent
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow
+					label="Gross Revenue"
+					value={grossRevenue}
+					bold
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+			</Card>
+
+			{/* COGS Section */}
+			<Card padding="md">
+				<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
+					Cost of Goods Sold
+				</ThemedText>
+				<SectionRow
+					label="Opening Stock"
+					value={openingStock}
+					indent
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="+ Purchases"
+					value={purchasesTotal}
+					indent
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="– Closing Stock"
+					value={closingStock}
+					indent
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow label="COGS" value={cogs} bold c={c} formatCurrency={formatCurrency} />
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow
+					label="Gross Profit"
+					value={grossProfit}
+					bold
+					accent={grossProfit >= 0 ? c.success : c.error}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+			</Card>
+
+			{/* Expenses Section */}
+			<Card padding="md">
+				<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
+					Expenses
+				</ThemedText>
+				{expenseCategories.length === 0 ? (
+					<ThemedText variant="caption" color={c.onSurfaceVariant}>
+						No expenses in this period
+					</ThemedText>
+				) : (
+					expenseCategories.map((cat) => (
+						<SectionRow
+							key={cat.category}
+							label={cat.category}
+							value={cat.total}
+							indent
+							c={c}
+							formatCurrency={formatCurrency}
+						/>
+					))
+				)}
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow
+					label="Total Expenses"
+					value={totalExpenses}
+					bold
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+			</Card>
+
+			{/* Net Profit / Loss */}
+			<Card
+				padding="lg"
+				style={{
+					borderRadius: r.md,
+					backgroundColor: withOpacity(
+						isProfit ? c.success : c.error,
+						OPACITY_SKELETON_BASE,
+					),
+					borderWidth: SUMMARY_CARD_BORDER_WIDTH,
+					borderColor: isProfit ? c.success : c.error,
 				}}
 			>
-				{/* Revenue Section */}
-				<Card padding="md">
-					<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
-						Revenue
-					</ThemedText>
-					<SectionRow
-						label="Sale Revenue"
-						value={saleRevenue}
-						indent
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="Other Income"
-						value={otherIncome}
-						indent
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="Gross Revenue"
-						value={grossRevenue}
-						bold
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-				</Card>
-
-				{/* COGS Section */}
-				<Card padding="md">
-					<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
-						Cost of Goods Sold
-					</ThemedText>
-					<SectionRow
-						label="Opening Stock"
-						value={openingStock}
-						indent
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="+ Purchases"
-						value={purchasesTotal}
-						indent
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="– Closing Stock"
-						value={closingStock}
-						indent
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="COGS"
-						value={cogs}
-						bold
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="Gross Profit"
-						value={grossProfit}
-						bold
-						accent={grossProfit >= 0 ? c.success : c.error}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-				</Card>
-
-				{/* Expenses Section */}
-				<Card padding="md">
-					<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
-						Expenses
-					</ThemedText>
-					{expenseCategories.length === 0 ? (
-						<ThemedText variant="caption" color={c.onSurfaceVariant}>
-							No expenses in this period
-						</ThemedText>
-					) : (
-						expenseCategories.map((cat) => (
-							<SectionRow
-								key={cat.category}
-								label={cat.category}
-								value={cat.total}
-								indent
-								c={c}
-								formatCurrency={formatCurrency}
-							/>
-						))
-					)}
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="Total Expenses"
-						value={totalExpenses}
-						bold
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-				</Card>
-
-				{/* Net Profit / Loss */}
-				<Card
-					padding="lg"
-					style={{
-						borderRadius: r.md,
-						backgroundColor: withOpacity(
-							isProfit ? c.success : c.error,
-							OPACITY_SKELETON_BASE,
-						),
-						borderWidth: SUMMARY_CARD_BORDER_WIDTH,
-						borderColor: isProfit ? c.success : c.error,
-					}}
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					style={{ textAlign: 'center', marginBottom: s.xs }}
 				>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={{ textAlign: 'center', marginBottom: s.xs }}
-					>
-						Net {isProfit ? 'Profit' : 'Loss'}
-					</ThemedText>
-					<ThemedText
-						weight="bold"
-						color={isProfit ? c.success : c.error}
-						style={{ fontSize: NET_PROFIT_VALUE_SIZE, textAlign: 'center' }}
-					>
-						{isProfit ? '' : '– '}
-						{formatCurrency(Math.abs(netProfit))}
-					</ThemedText>
-				</Card>
-			</ScrollView>
+					Net {isProfit ? 'Profit' : 'Loss'}
+				</ThemedText>
+				<ThemedText
+					weight="bold"
+					color={isProfit ? c.success : c.error}
+					style={{ fontSize: NET_PROFIT_VALUE_SIZE, textAlign: 'center' }}
+				>
+					{isProfit ? '' : '– '}
+					{formatCurrency(Math.abs(netProfit))}
+				</ThemedText>
+			</Card>
 		</Screen>
 	);
 }

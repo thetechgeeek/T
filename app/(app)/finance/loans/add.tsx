@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, ScrollView, TextInput, StyleSheet, Alert, Switch, Pressable } from 'react-native';
+import { View, TextInput, StyleSheet, Alert, Switch, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 
 /** Multi-line notes input height */
@@ -71,217 +71,216 @@ export default function AddLoanScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard>
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			withKeyboard
+			scrollable
+			contentContainerStyle={[styles.scrollContent, { padding: s.lg }]}
+			scrollViewProps={{
+				keyboardShouldPersistTaps: 'handled',
+				showsVerticalScrollIndicator: false,
+			}}
+		>
 			<ScreenHeader title="Add Loan" />
-			<ScrollView
-				contentContainerStyle={[styles.scrollContent, { padding: s.lg }]}
-				keyboardShouldPersistTaps="handled"
-				showsVerticalScrollIndicator={false}
-			>
-				{/* Lender Name */}
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
-					Lender Name
-				</ThemedText>
-				<TextInput
-					style={inputStyle}
-					placeholder="e.g. SBI, HDFC Bank"
-					placeholderTextColor={c.placeholder}
-					value={lenderName}
-					onChangeText={setLenderName}
-					returnKeyType="next"
-				/>
+			{/* Lender Name */}
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
+				Lender Name
+			</ThemedText>
+			<TextInput
+				style={inputStyle}
+				placeholder="e.g. SBI, HDFC Bank"
+				placeholderTextColor={c.placeholder}
+				value={lenderName}
+				onChangeText={setLenderName}
+				returnKeyType="next"
+			/>
 
-				{/* Loan Type chips */}
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
-					Loan Type
-				</ThemedText>
-				<View style={styles.chipsRow}>
-					{LOAN_TYPES.map((type) => {
-						const active = loanType === type;
-						return (
-							<Pressable
-								key={type}
-								style={[
-									styles.chip,
-									{
-										backgroundColor: active ? c.primary : c.surface,
-										borderColor: active ? c.primary : c.border,
-										borderRadius: r.sm,
-									},
-								]}
-								onPress={() => setLoanType(type)}
-							>
-								<ThemedText
-									variant="caption"
-									color={active ? c.onPrimary : c.onSurface}
-									weight={active ? 'medium' : 'regular'}
-								>
-									{type}
-								</ThemedText>
-							</Pressable>
-						);
-					})}
-				</View>
-
-				{/* Loan Amount */}
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
-					Loan Amount
-				</ThemedText>
-				<View
-					style={[
-						styles.inputRow,
-						{ backgroundColor: c.surface, borderColor: c.border, borderRadius: r.sm },
-					]}
-				>
-					<ThemedText color={c.onSurfaceVariant} style={styles.prefix}>
-						₹
-					</ThemedText>
-					<TextInput
-						style={[styles.inputFlex, { color: c.onSurface }]}
-						placeholder="0"
-						placeholderTextColor={c.placeholder}
-						keyboardType="numeric"
-						value={loanAmount}
-						onChangeText={setLoanAmount}
-					/>
-				</View>
-
-				{/* Disbursement Date */}
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
-					Disbursement Date
-				</ThemedText>
-				<DatePickerField
-					label="Disbursement Date"
-					value={disbursementDate}
-					onChange={setDisbursementDate}
-					showShortcuts
-				/>
-
-				{/* Interest Rate */}
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
-					Interest Rate
-				</ThemedText>
-				<View
-					style={[
-						styles.inputRow,
-						{ backgroundColor: c.surface, borderColor: c.border, borderRadius: r.sm },
-					]}
-				>
-					<TextInput
-						style={[styles.inputFlex, { color: c.onSurface }]}
-						placeholder="0"
-						placeholderTextColor={c.placeholder}
-						keyboardType="numeric"
-						value={interestRate}
-						onChangeText={setInterestRate}
-					/>
-					<ThemedText color={c.onSurfaceVariant} style={styles.suffix}>
-						% p.a.
-					</ThemedText>
-				</View>
-
-				{/* Tenure */}
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
-					Tenure
-				</ThemedText>
-				<View
-					style={[
-						styles.inputRow,
-						{ backgroundColor: c.surface, borderColor: c.border, borderRadius: r.sm },
-					]}
-				>
-					<TextInput
-						style={[styles.inputFlex, { color: c.onSurface }]}
-						placeholder="0"
-						placeholderTextColor={c.placeholder}
-						keyboardType="numeric"
-						value={tenure}
-						onChangeText={setTenure}
-					/>
-					<ThemedText color={c.onSurfaceVariant} style={styles.suffix}>
-						months
-					</ThemedText>
-				</View>
-
-				{/* Auto-calculate EMI Switch */}
-				<View style={styles.switchRow}>
-					<ThemedText variant="body">Auto-calculate EMI</ThemedText>
-					<Switch
-						value={autoCalc}
-						onValueChange={setAutoCalc}
-						trackColor={{ true: c.primary, false: c.border }}
-						thumbColor={autoCalc ? c.onPrimary : c.placeholder}
-					/>
-				</View>
-
-				{/* EMI display / input */}
-				{autoCalc ? (
-					calculatedEMI > 0 ? (
-						<View
+			{/* Loan Type chips */}
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
+				Loan Type
+			</ThemedText>
+			<View style={styles.chipsRow}>
+				{LOAN_TYPES.map((type) => {
+					const active = loanType === type;
+					return (
+						<Pressable
+							key={type}
 							style={[
-								styles.emiDisplay,
-								{ backgroundColor: c.surfaceVariant, borderRadius: r.sm },
-							]}
-						>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Monthly EMI
-							</ThemedText>
-							<ThemedText variant="h3" color={c.primary}>
-								{formatCurrency(Math.round(calculatedEMI))}
-							</ThemedText>
-						</View>
-					) : null
-				) : (
-					<>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.label}
-						>
-							EMI Amount
-						</ThemedText>
-						<View
-							style={[
-								styles.inputRow,
+								styles.chip,
 								{
-									backgroundColor: c.surface,
-									borderColor: c.border,
+									backgroundColor: active ? c.primary : c.surface,
+									borderColor: active ? c.primary : c.border,
 									borderRadius: r.sm,
 								},
 							]}
+							onPress={() => setLoanType(type)}
 						>
-							<ThemedText color={c.onSurfaceVariant} style={styles.prefix}>
-								₹
+							<ThemedText
+								variant="caption"
+								color={active ? c.onPrimary : c.onSurface}
+								weight={active ? 'medium' : 'regular'}
+							>
+								{type}
 							</ThemedText>
-							<TextInput
-								style={[styles.inputFlex, { color: c.onSurface }]}
-								placeholder="0"
-								placeholderTextColor={c.placeholder}
-								keyboardType="numeric"
-								value={emiAmount}
-								onChangeText={setEmiAmount}
-							/>
-						</View>
-					</>
-				)}
+						</Pressable>
+					);
+				})}
+			</View>
 
-				{/* Notes */}
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
-					Notes
+			{/* Loan Amount */}
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
+				Loan Amount
+			</ThemedText>
+			<View
+				style={[
+					styles.inputRow,
+					{ backgroundColor: c.surface, borderColor: c.border, borderRadius: r.sm },
+				]}
+			>
+				<ThemedText color={c.onSurfaceVariant} style={styles.prefix}>
+					₹
 				</ThemedText>
 				<TextInput
-					style={[inputStyle, styles.notesInput]}
-					placeholder="Optional notes..."
+					style={[styles.inputFlex, { color: c.onSurface }]}
+					placeholder="0"
 					placeholderTextColor={c.placeholder}
-					multiline
-					numberOfLines={3}
-					value={notes}
-					onChangeText={setNotes}
-					textAlignVertical="top"
+					keyboardType="numeric"
+					value={loanAmount}
+					onChangeText={setLoanAmount}
 				/>
+			</View>
 
-				<Button title="Save Loan" onPress={handleSave} style={{ marginTop: s.xl }} />
-			</ScrollView>
+			{/* Disbursement Date */}
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
+				Disbursement Date
+			</ThemedText>
+			<DatePickerField
+				label="Disbursement Date"
+				value={disbursementDate}
+				onChange={setDisbursementDate}
+				showShortcuts
+			/>
+
+			{/* Interest Rate */}
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
+				Interest Rate
+			</ThemedText>
+			<View
+				style={[
+					styles.inputRow,
+					{ backgroundColor: c.surface, borderColor: c.border, borderRadius: r.sm },
+				]}
+			>
+				<TextInput
+					style={[styles.inputFlex, { color: c.onSurface }]}
+					placeholder="0"
+					placeholderTextColor={c.placeholder}
+					keyboardType="numeric"
+					value={interestRate}
+					onChangeText={setInterestRate}
+				/>
+				<ThemedText color={c.onSurfaceVariant} style={styles.suffix}>
+					% p.a.
+				</ThemedText>
+			</View>
+
+			{/* Tenure */}
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
+				Tenure
+			</ThemedText>
+			<View
+				style={[
+					styles.inputRow,
+					{ backgroundColor: c.surface, borderColor: c.border, borderRadius: r.sm },
+				]}
+			>
+				<TextInput
+					style={[styles.inputFlex, { color: c.onSurface }]}
+					placeholder="0"
+					placeholderTextColor={c.placeholder}
+					keyboardType="numeric"
+					value={tenure}
+					onChangeText={setTenure}
+				/>
+				<ThemedText color={c.onSurfaceVariant} style={styles.suffix}>
+					months
+				</ThemedText>
+			</View>
+
+			{/* Auto-calculate EMI Switch */}
+			<View style={styles.switchRow}>
+				<ThemedText variant="body">Auto-calculate EMI</ThemedText>
+				<Switch
+					value={autoCalc}
+					onValueChange={setAutoCalc}
+					trackColor={{ true: c.primary, false: c.border }}
+					thumbColor={autoCalc ? c.onPrimary : c.placeholder}
+				/>
+			</View>
+
+			{/* EMI display / input */}
+			{autoCalc ? (
+				calculatedEMI > 0 ? (
+					<View
+						style={[
+							styles.emiDisplay,
+							{ backgroundColor: c.surfaceVariant, borderRadius: r.sm },
+						]}
+					>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							Monthly EMI
+						</ThemedText>
+						<ThemedText variant="h3" color={c.primary}>
+							{formatCurrency(Math.round(calculatedEMI))}
+						</ThemedText>
+					</View>
+				) : null
+			) : (
+				<>
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
+						EMI Amount
+					</ThemedText>
+					<View
+						style={[
+							styles.inputRow,
+							{
+								backgroundColor: c.surface,
+								borderColor: c.border,
+								borderRadius: r.sm,
+							},
+						]}
+					>
+						<ThemedText color={c.onSurfaceVariant} style={styles.prefix}>
+							₹
+						</ThemedText>
+						<TextInput
+							style={[styles.inputFlex, { color: c.onSurface }]}
+							placeholder="0"
+							placeholderTextColor={c.placeholder}
+							keyboardType="numeric"
+							value={emiAmount}
+							onChangeText={setEmiAmount}
+						/>
+					</View>
+				</>
+			)}
+
+			{/* Notes */}
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
+				Notes
+			</ThemedText>
+			<TextInput
+				style={[inputStyle, styles.notesInput]}
+				placeholder="Optional notes..."
+				placeholderTextColor={c.placeholder}
+				multiline
+				numberOfLines={3}
+				value={notes}
+				onChangeText={setNotes}
+				textAlignVertical="top"
+			/>
+
+			<Button title="Save Loan" onPress={handleSave} style={{ marginTop: s.xl }} />
 		</AtomicScreen>
 	);
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Alert, TextInput } from 'react-native';
+import { View, StyleSheet, Pressable, Alert, TextInput } from 'react-native';
 import { ArrowRightLeft } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -125,122 +125,123 @@ export default function FundTransferScreen() {
 	};
 
 	return (
-		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
+		<AtomicScreen
+			withKeyboard
+			safeAreaEdges={['bottom']}
+			scrollable
+			contentContainerStyle={{
+				padding: s.lg,
+				paddingBottom: TRANSFER_FORM_BOTTOM_PADDING,
+			}}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+		>
 			<ScreenHeader title="Fund Transfer" />
-			<ScrollView
-				contentContainerStyle={{
-					padding: s.lg,
-					paddingBottom: TRANSFER_FORM_BOTTOM_PADDING,
-				}}
-				keyboardShouldPersistTaps="handled"
+			<AccountPicker
+				label="From Account *"
+				selectedId={fromId}
+				excludeId={toId}
+				onSelect={setFromId}
+			/>
+
+			{/* Arrow indicator */}
+			<View style={styles.arrowRow}>
+				<View style={[styles.arrowLine, { backgroundColor: c.border }]} />
+				<View style={[styles.arrowCircle, { backgroundColor: c.surfaceVariant }]}>
+					<ArrowRightLeft size={18} color={c.primary} />
+				</View>
+				<View style={[styles.arrowLine, { backgroundColor: c.border }]} />
+			</View>
+
+			<AccountPicker
+				label="To Account *"
+				selectedId={toId}
+				excludeId={fromId}
+				onSelect={setToId}
+			/>
+
+			<ThemedText
+				variant="label"
+				color={c.onSurfaceVariant}
+				style={{ marginBottom: SPACING_PX.xs + SPACING_PX.xxs }}
 			>
-				<AccountPicker
-					label="From Account *"
-					selectedId={fromId}
-					excludeId={toId}
-					onSelect={setFromId}
-				/>
-
-				{/* Arrow indicator */}
-				<View style={styles.arrowRow}>
-					<View style={[styles.arrowLine, { backgroundColor: c.border }]} />
-					<View style={[styles.arrowCircle, { backgroundColor: c.surfaceVariant }]}>
-						<ArrowRightLeft size={18} color={c.primary} />
-					</View>
-					<View style={[styles.arrowLine, { backgroundColor: c.border }]} />
-				</View>
-
-				<AccountPicker
-					label="To Account *"
-					selectedId={toId}
-					excludeId={fromId}
-					onSelect={setToId}
-				/>
-
-				<ThemedText
-					variant="label"
-					color={c.onSurfaceVariant}
-					style={{ marginBottom: SPACING_PX.xs + SPACING_PX.xxs }}
-				>
-					Transfer Amount *
-				</ThemedText>
-				<View
-					style={[
-						styles.amountInput,
-						{ borderColor: c.border, borderRadius: r.md, backgroundColor: c.surface },
-					]}
-				>
-					<ThemedText variant="h3" color={c.onSurfaceVariant}>
-						₹
-					</ThemedText>
-					<TextInput
-						value={amount}
-						onChangeText={setAmount}
-						keyboardType="numeric"
-						placeholder="0"
-						placeholderTextColor={c.placeholder}
-						style={[styles.amountText, { color: c.onSurface, fontSize: FONT_SIZE.h2 }]}
-					/>
-				</View>
-
-				{parsedAmount > 0 && fromAccount && toAccount && (
-					<View
-						style={[
-							styles.previewCard,
-							{
-								backgroundColor: withOpacity(c.primary, OPACITY_ROW_HIGHLIGHT),
-								borderRadius: r.md,
-								borderColor: withOpacity(c.primary, OPACITY_BORDER_TINT),
-								borderWidth: 1,
-							},
-						]}
-					>
-						<ThemedText variant="body" align="center">
-							Transfer{' '}
-							<ThemedText variant="bodyBold" color={c.primary}>
-								{formatCurrency(parsedAmount)}
-							</ThemedText>{' '}
-							from <ThemedText variant="bodyBold">{fromAccount.name}</ThemedText> to{' '}
-							<ThemedText variant="bodyBold">{toAccount.name}</ThemedText>
-						</ThemedText>
-					</View>
-				)}
-
-				<DatePickerField label="Date" value={date} onChange={setDate} />
-
-				<ThemedText
-					variant="label"
-					color={c.onSurfaceVariant}
-					style={{ marginBottom: SPACING_PX.xs + SPACING_PX.xxs, marginTop: s.sm }}
-				>
-					Notes (optional)
+				Transfer Amount *
+			</ThemedText>
+			<View
+				style={[
+					styles.amountInput,
+					{ borderColor: c.border, borderRadius: r.md, backgroundColor: c.surface },
+				]}
+			>
+				<ThemedText variant="h3" color={c.onSurfaceVariant}>
+					₹
 				</ThemedText>
 				<TextInput
-					value={notes}
-					onChangeText={setNotes}
-					placeholder="e.g. Cash deposited to HDFC"
+					value={amount}
+					onChangeText={setAmount}
+					keyboardType="numeric"
+					placeholder="0"
 					placeholderTextColor={c.placeholder}
-					multiline
-					numberOfLines={2}
+					style={[styles.amountText, { color: c.onSurface, fontSize: FONT_SIZE.h2 }]}
+				/>
+			</View>
+
+			{parsedAmount > 0 && fromAccount && toAccount && (
+				<View
 					style={[
-						styles.notesInput,
+						styles.previewCard,
 						{
-							borderColor: c.border,
+							backgroundColor: withOpacity(c.primary, OPACITY_ROW_HIGHLIGHT),
 							borderRadius: r.md,
-							color: c.onSurface,
-							backgroundColor: c.surface,
+							borderColor: withOpacity(c.primary, OPACITY_BORDER_TINT),
+							borderWidth: 1,
 						},
 					]}
-				/>
+				>
+					<ThemedText variant="body" align="center">
+						Transfer{' '}
+						<ThemedText variant="bodyBold" color={c.primary}>
+							{formatCurrency(parsedAmount)}
+						</ThemedText>{' '}
+						from <ThemedText variant="bodyBold">{fromAccount.name}</ThemedText> to{' '}
+						<ThemedText variant="bodyBold">{toAccount.name}</ThemedText>
+					</ThemedText>
+				</View>
+			)}
 
-				<View style={{ height: SPACING_PX.xl }} />
-				<Button
-					title="Transfer Funds"
-					onPress={handleTransfer}
-					loading={submitting}
-					disabled={!fromId || !toId || parsedAmount <= 0}
-				/>
-			</ScrollView>
+			<DatePickerField label="Date" value={date} onChange={setDate} />
+
+			<ThemedText
+				variant="label"
+				color={c.onSurfaceVariant}
+				style={{ marginBottom: SPACING_PX.xs + SPACING_PX.xxs, marginTop: s.sm }}
+			>
+				Notes (optional)
+			</ThemedText>
+			<TextInput
+				value={notes}
+				onChangeText={setNotes}
+				placeholder="e.g. Cash deposited to HDFC"
+				placeholderTextColor={c.placeholder}
+				multiline
+				numberOfLines={2}
+				style={[
+					styles.notesInput,
+					{
+						borderColor: c.border,
+						borderRadius: r.md,
+						color: c.onSurface,
+						backgroundColor: c.surface,
+					},
+				]}
+			/>
+
+			<View style={{ height: SPACING_PX.xl }} />
+			<Button
+				title="Transfer Funds"
+				onPress={handleTransfer}
+				loading={submitting}
+				disabled={!fromId || !toId || parsedAmount <= 0}
+			/>
 		</AtomicScreen>
 	);
 }

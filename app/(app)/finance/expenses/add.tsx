@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -97,210 +97,187 @@ export default function AddExpenseScreen() {
 	const chipTextColor = (selected: boolean) => (selected ? c.onPrimary : c.primary);
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard>
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			withKeyboard
+			scrollable
+			contentContainerStyle={[
+				styles.scrollContent,
+				{ paddingBottom: EXPENSE_FORM_BOTTOM_PADDING + insets.bottom },
+			]}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+		>
 			<ScreenHeader title={t('finance.newExpense')} showBackButton />
-
-			<ScrollView
-				contentContainerStyle={[
-					styles.scrollContent,
-					{ paddingBottom: EXPENSE_FORM_BOTTOM_PADDING + insets.bottom },
-				]}
-				keyboardShouldPersistTaps="handled"
-			>
-				{/* Date */}
-				<View style={styles.section}>
-					<DatePickerField
-						label="Date"
-						value={expenseDate}
-						onChange={setExpenseDate}
-						showShortcuts
-					/>
-				</View>
-
-				{/* Amount */}
-				<View style={styles.section}>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={styles.fieldLabel}
-					>
-						Amount *
-					</ThemedText>
-					<View style={[styles.amountRow, { borderColor: c.border, borderRadius: r.md }]}>
-						<ThemedText
-							style={[
-								styles.currencyPrefix,
-								{
-									color: c.onSurface,
-									borderRightColor: c.border,
-									fontSize: FONT_SIZE.h2,
-								},
-							]}
-						>
-							₹
-						</ThemedText>
-						<TextInput
-							value={amount}
-							onChangeText={setAmount}
-							placeholder="0"
-							placeholderTextColor={c.placeholder}
-							keyboardType="numeric"
-							style={[
-								styles.amountInput,
-								{ color: c.onSurface, fontSize: FONT_SIZE.h1 },
-							]}
-							accessibilityLabel="expense-amount"
-						/>
-					</View>
-				</View>
-
-				{/* Category chips */}
-				<View style={styles.section}>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={styles.fieldLabel}
-					>
-						Category *
-					</ThemedText>
-					<View style={styles.chipGrid}>
-						{CATEGORIES.map((cat) => (
-							<Pressable
-								key={cat.value}
-								onPress={() => setCategory(cat.value)}
-								style={chipStyle(category === cat.value)}
-								accessibilityRole="button"
-								accessibilityState={{ selected: category === cat.value }}
-							>
-								<ThemedText
-									variant="caption"
-									color={chipTextColor(category === cat.value)}
-									style={{ fontWeight: category === cat.value ? '600' : '400' }}
-								>
-									{cat.label}
-								</ThemedText>
-							</Pressable>
-						))}
-					</View>
-				</View>
-
-				{/* Payment Mode chips */}
-				<View style={styles.section}>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={styles.fieldLabel}
-					>
-						Payment Mode
-					</ThemedText>
-					<View style={styles.chipRow}>
-						{PAYMENT_MODES.map((mode) => (
-							<Pressable
-								key={mode.value}
-								onPress={() => setPaymentMode(mode.value)}
-								style={chipStyle(paymentMode === mode.value)}
-								accessibilityRole="button"
-								accessibilityState={{ selected: paymentMode === mode.value }}
-							>
-								<ThemedText
-									variant="caption"
-									color={chipTextColor(paymentMode === mode.value)}
-									style={{
-										fontWeight: paymentMode === mode.value ? '600' : '400',
-									}}
-								>
-									{mode.label}
-								</ThemedText>
-							</Pressable>
-						))}
-					</View>
-
-					{paymentMode === 'upi' ? (
-						<TextInput
-							value={referenceNo}
-							onChangeText={setReferenceNo}
-							placeholder="Reference No."
-							placeholderTextColor={c.placeholder}
-							style={[
-								styles.textField,
-								{
-									color: c.onSurface,
-									borderColor: c.border,
-									borderRadius: r.md,
-									backgroundColor: c.surface,
-									marginTop: SPACING_PX.md - SPACING_PX.xxs,
-								},
-							]}
-							accessibilityLabel="upi-reference"
-						/>
-					) : null}
-				</View>
-
-				{/* Description */}
-				<View style={styles.section}>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={styles.fieldLabel}
-					>
-						Description
-					</ThemedText>
-					<TextInput
-						value={notes}
-						onChangeText={setNotes}
-						placeholder="What was this expense for?"
-						placeholderTextColor={c.placeholder}
-						multiline
-						numberOfLines={3}
-						style={[
-							styles.textField,
-							styles.multilineField,
-							{
-								color: c.onSurface,
-								borderColor: c.border,
-								borderRadius: r.md,
-								backgroundColor: c.surface,
-							},
-						]}
-						accessibilityLabel="expense-description"
-					/>
-				</View>
-
-				{/* Paid To */}
-				<View style={styles.section}>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={styles.fieldLabel}
-					>
-						Paid To
-					</ThemedText>
-					<TextInput
-						value={paidTo}
-						onChangeText={setPaidTo}
-						placeholder="Vendor / person name (optional)"
-						placeholderTextColor={c.placeholder}
-						style={[
-							styles.textField,
-							{
-								color: c.onSurface,
-								borderColor: c.border,
-								borderRadius: r.md,
-								backgroundColor: c.surface,
-							},
-						]}
-						accessibilityLabel="expense-paid-to"
-					/>
-				</View>
-
-				{/* Save button */}
-				<Button
-					title={saving ? t('common.loading') : t('finance.saveExpense')}
-					onPress={handleSave}
-					loading={saving}
-					style={styles.saveButton}
+			{/* Date */}
+			<View style={styles.section}>
+				<DatePickerField
+					label="Date"
+					value={expenseDate}
+					onChange={setExpenseDate}
+					showShortcuts
 				/>
-			</ScrollView>
+			</View>
+
+			{/* Amount */}
+			<View style={styles.section}>
+				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.fieldLabel}>
+					Amount *
+				</ThemedText>
+				<View style={[styles.amountRow, { borderColor: c.border, borderRadius: r.md }]}>
+					<ThemedText
+						style={[
+							styles.currencyPrefix,
+							{
+								color: c.onSurface,
+								borderRightColor: c.border,
+								fontSize: FONT_SIZE.h2,
+							},
+						]}
+					>
+						₹
+					</ThemedText>
+					<TextInput
+						value={amount}
+						onChangeText={setAmount}
+						placeholder="0"
+						placeholderTextColor={c.placeholder}
+						keyboardType="numeric"
+						style={[styles.amountInput, { color: c.onSurface, fontSize: FONT_SIZE.h1 }]}
+						accessibilityLabel="expense-amount"
+					/>
+				</View>
+			</View>
+
+			{/* Category chips */}
+			<View style={styles.section}>
+				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.fieldLabel}>
+					Category *
+				</ThemedText>
+				<View style={styles.chipGrid}>
+					{CATEGORIES.map((cat) => (
+						<Pressable
+							key={cat.value}
+							onPress={() => setCategory(cat.value)}
+							style={chipStyle(category === cat.value)}
+							accessibilityRole="button"
+							accessibilityState={{ selected: category === cat.value }}
+						>
+							<ThemedText
+								variant="caption"
+								color={chipTextColor(category === cat.value)}
+								style={{ fontWeight: category === cat.value ? '600' : '400' }}
+							>
+								{cat.label}
+							</ThemedText>
+						</Pressable>
+					))}
+				</View>
+			</View>
+
+			{/* Payment Mode chips */}
+			<View style={styles.section}>
+				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.fieldLabel}>
+					Payment Mode
+				</ThemedText>
+				<View style={styles.chipRow}>
+					{PAYMENT_MODES.map((mode) => (
+						<Pressable
+							key={mode.value}
+							onPress={() => setPaymentMode(mode.value)}
+							style={chipStyle(paymentMode === mode.value)}
+							accessibilityRole="button"
+							accessibilityState={{ selected: paymentMode === mode.value }}
+						>
+							<ThemedText
+								variant="caption"
+								color={chipTextColor(paymentMode === mode.value)}
+								style={{
+									fontWeight: paymentMode === mode.value ? '600' : '400',
+								}}
+							>
+								{mode.label}
+							</ThemedText>
+						</Pressable>
+					))}
+				</View>
+
+				{paymentMode === 'upi' ? (
+					<TextInput
+						value={referenceNo}
+						onChangeText={setReferenceNo}
+						placeholder="Reference No."
+						placeholderTextColor={c.placeholder}
+						style={[
+							styles.textField,
+							{
+								color: c.onSurface,
+								borderColor: c.border,
+								borderRadius: r.md,
+								backgroundColor: c.surface,
+								marginTop: SPACING_PX.md - SPACING_PX.xxs,
+							},
+						]}
+						accessibilityLabel="upi-reference"
+					/>
+				) : null}
+			</View>
+
+			{/* Description */}
+			<View style={styles.section}>
+				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.fieldLabel}>
+					Description
+				</ThemedText>
+				<TextInput
+					value={notes}
+					onChangeText={setNotes}
+					placeholder="What was this expense for?"
+					placeholderTextColor={c.placeholder}
+					multiline
+					numberOfLines={3}
+					style={[
+						styles.textField,
+						styles.multilineField,
+						{
+							color: c.onSurface,
+							borderColor: c.border,
+							borderRadius: r.md,
+							backgroundColor: c.surface,
+						},
+					]}
+					accessibilityLabel="expense-description"
+				/>
+			</View>
+
+			{/* Paid To */}
+			<View style={styles.section}>
+				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.fieldLabel}>
+					Paid To
+				</ThemedText>
+				<TextInput
+					value={paidTo}
+					onChangeText={setPaidTo}
+					placeholder="Vendor / person name (optional)"
+					placeholderTextColor={c.placeholder}
+					style={[
+						styles.textField,
+						{
+							color: c.onSurface,
+							borderColor: c.border,
+							borderRadius: r.md,
+							backgroundColor: c.surface,
+						},
+					]}
+					accessibilityLabel="expense-paid-to"
+				/>
+			</View>
+
+			{/* Save button */}
+			<Button
+				title={saving ? t('common.loading') : t('finance.saveExpense')}
+				onPress={handleSave}
+				loading={saving}
+				style={styles.saveButton}
+			/>
 		</AtomicScreen>
 	);
 }

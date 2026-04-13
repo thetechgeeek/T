@@ -116,242 +116,232 @@ export default function ReceivePaymentScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard
+			scrollable
+			contentContainerStyle={[styles.content, { padding: s.md }]}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+		>
 			<ScreenHeader title="Receive Payment" />
-			<ScrollView
-				contentContainerStyle={[styles.content, { padding: s.md }]}
-				keyboardShouldPersistTaps="handled"
-			>
-				{/* Customer Section */}
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.sectionLabel}>
-					Select Customer
-				</ThemedText>
-				{selectedCustomer ? (
-					<Card padding="sm" style={styles.selectedCard}>
-						<View style={styles.selectedRow}>
-							<View>
-								<ThemedText variant="bodyBold">{selectedCustomer.name}</ThemedText>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									Outstanding: {formatCurrency(outstandingBalance)}
-								</ThemedText>
-							</View>
-							<TouchableOpacity
-								onPress={() => {
-									setSelectedCustomer(null);
-									setCustomerSearch('');
-								}}
-								accessibilityLabel="Deselect customer"
-							>
-								<X size={20} color={c.onSurfaceVariant} />
-							</TouchableOpacity>
-						</View>
-					</Card>
-				) : (
-					<View>
-						<TextInput
-							placeholder="Search customer..."
-							value={customerSearch}
-							onChangeText={setCustomerSearch}
-							accessibilityLabel="customer-search"
-						/>
-						{filteredCustomers().length > 0 && (
-							<Card padding="none" style={styles.dropdown}>
-								<ScrollView
-									style={{ maxHeight: 200 }}
-									keyboardShouldPersistTaps="handled"
-								>
-									{filteredCustomers().map((cust) => (
-										<Pressable
-											key={cust.id}
-											style={
-												[
-													styles.dropdownRow,
-													{ borderBottomColor: c.border },
-												] as StyleProp<ViewStyle>
-											}
-											onPress={() => {
-												setSelectedCustomer(cust);
-												setCustomerSearch('');
-											}}
-										>
-											<ThemedText variant="body">{cust.name}</ThemedText>
-											<ThemedText
-												variant="caption"
-												color={c.onSurfaceVariant}
-											>
-												{formatCurrency(cust.current_balance ?? 0)}
-											</ThemedText>
-										</Pressable>
-									))}
-								</ScrollView>
-							</Card>
-						)}
-					</View>
-				)}
-
-				{/* Payment Date */}
-				<View style={[styles.dateRow, { marginTop: s.md }] as StyleProp<ViewStyle>}>
-					<ThemedText variant="label" color={c.onSurfaceVariant}>
-						Payment Date
-					</ThemedText>
-					<View style={styles.dateRight}>
-						<ThemedText variant="body">{formatDate(paymentDate)}</ThemedText>
-						<Pressable onPress={() => setShowDateModal(true)} style={styles.changeBtn}>
-							<ThemedText variant="caption" color={c.primary}>
-								Change
+			{/* Customer Section */}
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.sectionLabel}>
+				Select Customer
+			</ThemedText>
+			{selectedCustomer ? (
+				<Card padding="sm" style={styles.selectedCard}>
+					<View style={styles.selectedRow}>
+						<View>
+							<ThemedText variant="bodyBold">{selectedCustomer.name}</ThemedText>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								Outstanding: {formatCurrency(outstandingBalance)}
 							</ThemedText>
-						</Pressable>
-					</View>
-				</View>
-
-				<Modal visible={showDateModal} transparent animationType="fade">
-					<Pressable style={styles.modalOverlay} onPress={() => setShowDateModal(false)}>
-						<View
-							style={
-								[
-									styles.modalCard,
-									{ backgroundColor: c.surface, borderRadius: r.lg },
-								] as StyleProp<ViewStyle>
-							}
-						>
-							<DatePickerField
-								label="Payment Date"
-								value={paymentDate}
-								onChange={(d) => {
-									setPaymentDate(d);
-									setShowDateModal(false);
-								}}
-							/>
 						</View>
-					</Pressable>
-				</Modal>
-
-				{/* Amount */}
-				<View style={{ marginTop: s.md }}>
-					<ThemedText
-						variant="label"
-						color={c.onSurfaceVariant}
-						style={styles.sectionLabel}
-					>
-						Amount Received (₹)
-					</ThemedText>
+						<TouchableOpacity
+							onPress={() => {
+								setSelectedCustomer(null);
+								setCustomerSearch('');
+							}}
+							accessibilityLabel="Deselect customer"
+						>
+							<X size={20} color={c.onSurfaceVariant} />
+						</TouchableOpacity>
+					</View>
+				</Card>
+			) : (
+				<View>
 					<TextInput
-						keyboardType="numeric"
-						value={amount}
-						onChangeText={setAmount}
-						inputStyle={{ fontSize: FONT_SIZE.h2 }}
-						placeholder="0"
-						accessibilityLabel="amount-received"
+						placeholder="Search customer..."
+						value={customerSearch}
+						onChangeText={setCustomerSearch}
+						accessibilityLabel="customer-search"
 					/>
-					{outstandingBalance > 0 && (
-						<Pressable
-							style={
-								[
-									styles.fullAmtChip,
-									{ borderColor: c.primary, borderRadius: r.full },
-								] as StyleProp<ViewStyle>
-							}
-							onPress={() => setAmount(String(outstandingBalance))}
-						>
-							<ThemedText variant="caption" color={c.primary}>
-								Full Amount {formatCurrency(outstandingBalance)}
-							</ThemedText>
-						</Pressable>
-					)}
-				</View>
-
-				{/* Payment Mode */}
-				<View style={{ marginTop: s.md }}>
-					<ThemedText
-						variant="label"
-						color={c.onSurfaceVariant}
-						style={styles.sectionLabel}
-					>
-						Payment Mode
-					</ThemedText>
-					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-						<View style={styles.chipsRow}>
-							{PAYMENT_MODES.map((m) => {
-								const active = paymentMode === m;
-								return (
+					{filteredCustomers().length > 0 && (
+						<Card padding="none" style={styles.dropdown}>
+							<ScrollView
+								style={{ maxHeight: 200 }}
+								keyboardShouldPersistTaps="handled"
+							>
+								{filteredCustomers().map((cust) => (
 									<Pressable
-										key={m}
+										key={cust.id}
 										style={
 											[
-												styles.modeChip,
-												{
-													backgroundColor: active ? c.primary : c.surface,
-													borderColor: active ? c.primary : c.border,
-													borderRadius: r.full,
-												},
+												styles.dropdownRow,
+												{ borderBottomColor: c.border },
 											] as StyleProp<ViewStyle>
 										}
-										onPress={() => setPaymentMode(m)}
+										onPress={() => {
+											setSelectedCustomer(cust);
+											setCustomerSearch('');
+										}}
 									>
-										<ThemedText
-											variant="caption"
-											color={active ? c.onPrimary : c.onSurface}
-										>
-											{m}
+										<ThemedText variant="body">{cust.name}</ThemedText>
+										<ThemedText variant="caption" color={c.onSurfaceVariant}>
+											{formatCurrency(cust.current_balance ?? 0)}
 										</ThemedText>
 									</Pressable>
-								);
-							})}
-						</View>
-					</ScrollView>
+								))}
+							</ScrollView>
+						</Card>
+					)}
+				</View>
+			)}
 
-					{paymentMode === 'UPI' && (
-						<TextInput
-							label="UPI Reference (optional)"
-							value={upiRef}
-							onChangeText={setUpiRef}
-							placeholder="UPI transaction ID"
-							style={{ marginTop: s.sm }}
+			{/* Payment Date */}
+			<View style={[styles.dateRow, { marginTop: s.md }] as StyleProp<ViewStyle>}>
+				<ThemedText variant="label" color={c.onSurfaceVariant}>
+					Payment Date
+				</ThemedText>
+				<View style={styles.dateRight}>
+					<ThemedText variant="body">{formatDate(paymentDate)}</ThemedText>
+					<Pressable onPress={() => setShowDateModal(true)} style={styles.changeBtn}>
+						<ThemedText variant="caption" color={c.primary}>
+							Change
+						</ThemedText>
+					</Pressable>
+				</View>
+			</View>
+
+			<Modal visible={showDateModal} transparent animationType="fade">
+				<Pressable style={styles.modalOverlay} onPress={() => setShowDateModal(false)}>
+					<View
+						style={
+							[
+								styles.modalCard,
+								{ backgroundColor: c.surface, borderRadius: r.lg },
+							] as StyleProp<ViewStyle>
+						}
+					>
+						<DatePickerField
+							label="Payment Date"
+							value={paymentDate}
+							onChange={(d) => {
+								setPaymentDate(d);
+								setShowDateModal(false);
+							}}
 						/>
-					)}
-					{paymentMode === 'Cheque' && (
-						<View style={{ marginTop: s.sm, gap: s.sm }}>
-							<TextInput
-								label="Cheque Number"
-								value={chequeNumber}
-								onChangeText={setChequeNumber}
-								keyboardType="numeric"
-							/>
-							<TextInput
-								label="Bank Name"
-								value={bankName}
-								onChangeText={setBankName}
-								placeholder="e.g. SBI"
-							/>
-						</View>
-					)}
-				</View>
+					</View>
+				</Pressable>
+			</Modal>
 
-				{/* Notes */}
-				<View style={{ marginTop: s.md }}>
-					<TextInput
-						label="Notes (optional)"
-						value={notes}
-						onChangeText={setNotes}
-						multiline
-						numberOfLines={3}
-						placeholder="Optional notes..."
-						inputStyle={{
-							minHeight: PAYMENT_NOTES_MIN_HEIGHT,
-							textAlignVertical: 'top',
-						}}
-					/>
-				</View>
-
-				{/* Save Button */}
-				<Button
-					title={submitting ? 'Saving...' : 'Save Payment'}
-					onPress={handleSave}
-					disabled={submitting}
-					style={[styles.saveBtn, { marginTop: s.lg }]}
-					accessibilityLabel="save-payment"
+			{/* Amount */}
+			<View style={{ marginTop: s.md }}>
+				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.sectionLabel}>
+					Amount Received (₹)
+				</ThemedText>
+				<TextInput
+					keyboardType="numeric"
+					value={amount}
+					onChangeText={setAmount}
+					inputStyle={{ fontSize: FONT_SIZE.h2 }}
+					placeholder="0"
+					accessibilityLabel="amount-received"
 				/>
-			</ScrollView>
+				{outstandingBalance > 0 && (
+					<Pressable
+						style={
+							[
+								styles.fullAmtChip,
+								{ borderColor: c.primary, borderRadius: r.full },
+							] as StyleProp<ViewStyle>
+						}
+						onPress={() => setAmount(String(outstandingBalance))}
+					>
+						<ThemedText variant="caption" color={c.primary}>
+							Full Amount {formatCurrency(outstandingBalance)}
+						</ThemedText>
+					</Pressable>
+				)}
+			</View>
+
+			{/* Payment Mode */}
+			<View style={{ marginTop: s.md }}>
+				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.sectionLabel}>
+					Payment Mode
+				</ThemedText>
+				<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+					<View style={styles.chipsRow}>
+						{PAYMENT_MODES.map((m) => {
+							const active = paymentMode === m;
+							return (
+								<Pressable
+									key={m}
+									style={
+										[
+											styles.modeChip,
+											{
+												backgroundColor: active ? c.primary : c.surface,
+												borderColor: active ? c.primary : c.border,
+												borderRadius: r.full,
+											},
+										] as StyleProp<ViewStyle>
+									}
+									onPress={() => setPaymentMode(m)}
+								>
+									<ThemedText
+										variant="caption"
+										color={active ? c.onPrimary : c.onSurface}
+									>
+										{m}
+									</ThemedText>
+								</Pressable>
+							);
+						})}
+					</View>
+				</ScrollView>
+
+				{paymentMode === 'UPI' && (
+					<TextInput
+						label="UPI Reference (optional)"
+						value={upiRef}
+						onChangeText={setUpiRef}
+						placeholder="UPI transaction ID"
+						style={{ marginTop: s.sm }}
+					/>
+				)}
+				{paymentMode === 'Cheque' && (
+					<View style={{ marginTop: s.sm, gap: s.sm }}>
+						<TextInput
+							label="Cheque Number"
+							value={chequeNumber}
+							onChangeText={setChequeNumber}
+							keyboardType="numeric"
+						/>
+						<TextInput
+							label="Bank Name"
+							value={bankName}
+							onChangeText={setBankName}
+							placeholder="e.g. SBI"
+						/>
+					</View>
+				)}
+			</View>
+
+			{/* Notes */}
+			<View style={{ marginTop: s.md }}>
+				<TextInput
+					label="Notes (optional)"
+					value={notes}
+					onChangeText={setNotes}
+					multiline
+					numberOfLines={3}
+					placeholder="Optional notes..."
+					inputStyle={{
+						minHeight: PAYMENT_NOTES_MIN_HEIGHT,
+						textAlignVertical: 'top',
+					}}
+				/>
+			</View>
+
+			{/* Save Button */}
+			<Button
+				title={submitting ? 'Saving...' : 'Save Payment'}
+				onPress={handleSave}
+				disabled={submitting}
+				style={[styles.saveBtn, { marginTop: s.lg }]}
+				accessibilityLabel="save-payment"
+			/>
 		</Screen>
 	);
 }
