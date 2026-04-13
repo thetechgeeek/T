@@ -3,6 +3,12 @@ import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { OPACITY_HOVER } from '@/theme/uiMetrics';
+
+/** Vertical padding at base of header to create visual depth */
+const HEADER_PADDING_BOTTOM = 50;
+/** Pull the form card up under the header for overlap effect */
+const FORM_MARGIN_TOP = -30;
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -74,7 +80,7 @@ export default function LoginScreen() {
 						{
 							color: c.onPrimary,
 							fontSize: typo.sizes.md,
-							opacity: 0.9,
+							opacity: OPACITY_HOVER,
 							marginTop: s.xs,
 						},
 					]}
@@ -127,7 +133,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
 	header: {
 		alignItems: 'center',
-		paddingBottom: 50,
+		paddingBottom: HEADER_PADDING_BOTTOM,
 		paddingHorizontal: 24,
 		borderBottomLeftRadius: 32,
 		borderBottomRightRadius: 32,
@@ -140,5 +146,5 @@ const styles = StyleSheet.create({
 	},
 	appName: { fontWeight: '800' },
 	subtitle: { textAlign: 'center' },
-	form: { flex: 1, marginTop: -30, backgroundColor: 'transparent' },
+	form: { flex: 1, marginTop: FORM_MARGIN_TOP, backgroundColor: 'transparent' },
 });

@@ -1,3 +1,4 @@
+import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
 	View,
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	modalCard: { width: 320, padding: 20 },
+	modalCard: { width: SIZE_INPUT_HEIGHT * 6 + 8, padding: 20 },
 	fullAmtChip: {
 		alignSelf: 'flex-start',
 		marginTop: 8,
@@ -385,5 +386,5 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 		borderWidth: 1,
 	},
-	saveBtn: { height: 52 },
+	saveBtn: { height: SIZE_INPUT_HEIGHT },
 });

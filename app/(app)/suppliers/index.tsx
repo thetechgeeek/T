@@ -1,3 +1,4 @@
+import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -208,9 +209,9 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		right: 20,
 		bottom: 20,
-		width: 60,
-		height: 60,
-		borderRadius: 30,
+		width: SIZE_AVATAR_MD,
+		height: SIZE_AVATAR_MD,
+		borderRadius: SIZE_AVATAR_MD / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
 		elevation: 8,

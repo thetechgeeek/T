@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import {
 	View,
 	ScrollView,
@@ -372,5 +373,5 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		alignItems: 'center',
 	},
-	saveBtn: { height: 52 },
+	saveBtn: { height: SIZE_INPUT_HEIGHT },
 });

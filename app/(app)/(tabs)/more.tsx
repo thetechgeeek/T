@@ -14,6 +14,7 @@ import {
 	ChevronRight,
 } from 'lucide-react-native';
 import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -128,7 +129,7 @@ export default function MoreTab() {
 							style={[
 								styles.iconWrap,
 								{
-									backgroundColor: withOpacity(item.color, 0.12),
+									backgroundColor: withOpacity(item.color, OPACITY_TINT_LIGHT),
 									borderRadius: 10,
 								},
 							]}
@@ -173,7 +174,7 @@ export default function MoreTab() {
 							style={[
 								styles.iconWrap,
 								{
-									backgroundColor: withOpacity(item.color, 0.12),
+									backgroundColor: withOpacity(item.color, OPACITY_TINT_LIGHT),
 									borderRadius: 10,
 								},
 							]}
@@ -218,7 +219,10 @@ export default function MoreTab() {
 					<View
 						style={[
 							styles.iconWrap,
-							{ backgroundColor: withOpacity(c.primary, 0.12), borderRadius: 10 },
+							{
+								backgroundColor: withOpacity(c.primary, OPACITY_TINT_LIGHT),
+								borderRadius: 10,
+							},
 						]}
 					>
 						<Languages size={22} color={c.primary} strokeWidth={2} />
@@ -256,7 +260,10 @@ export default function MoreTab() {
 						style={[
 							styles.iconWrap,
 							{
-								backgroundColor: withOpacity(c.onSurfaceVariant, 0.12),
+								backgroundColor: withOpacity(
+									c.onSurfaceVariant,
+									OPACITY_TINT_LIGHT,
+								),
 								borderRadius: 10,
 							},
 						]}

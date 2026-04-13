@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
+import { HTTP_NO_CONTENT, MS_NETWORK_TIMEOUT } from '@/theme/uiMetrics';
 
 const CHECK_URL = 'https://www.google.com/generate_204';
 const CHECK_INTERVAL_MS = 10_000;
@@ -7,10 +8,10 @@ const CHECK_INTERVAL_MS = 10_000;
 async function checkReachability(): Promise<boolean> {
 	try {
 		const ctrl = new AbortController();
-		const timeout = setTimeout(() => ctrl.abort(), 5_000);
+		const timeout = setTimeout(() => ctrl.abort(), MS_NETWORK_TIMEOUT);
 		const res = await fetch(CHECK_URL, { method: 'HEAD', signal: ctrl.signal });
 		clearTimeout(timeout);
-		return res.status === 204 || res.ok;
+		return res.status === HTTP_NO_CONTENT || res.ok;
 	} catch {
 		return false;
 	}

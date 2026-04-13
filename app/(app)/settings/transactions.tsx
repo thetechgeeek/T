@@ -1,3 +1,6 @@
+import { LETTER_SPACING_SECTION, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+
+const PREFIX_INPUT_WIDTH = SIZE_AVATAR_MD;
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -17,7 +20,7 @@ function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
 				marginHorizontal: 16,
 				fontWeight: '600',
 				textTransform: 'uppercase',
-				letterSpacing: 0.8,
+				letterSpacing: LETTER_SPACING_SECTION,
 			}}
 		>
 			{label}
@@ -204,7 +207,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 16,
 	},
 	prefixInput: {
-		width: 60,
+		width: PREFIX_INPUT_WIDTH,
 		borderWidth: 1,
 		borderRadius: 6,
 		paddingHorizontal: 8,

@@ -3,6 +3,12 @@ import { View, Text, TextInput, Pressable, ScrollView, StyleSheet } from 'react-
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useAuthStore } from '@/src/stores/authStore';
+import { SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@/theme/uiMetrics';
+
+const TEXTAREA_HEIGHT = 90;
+const REMOVE_BTN_OFFSET = -8;
+/** ImagePicker quality for business logo (medium – balances file size vs clarity) */
+const LOGO_IMAGE_QUALITY = 0.7;
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -349,7 +355,7 @@ function Step1({
 					placeholderTextColor={c.placeholder}
 					keyboardType="number-pad"
 					maxLength={10}
-					style={{ flex: 1, color: c.onSurface, fontSize: 16, height: 52 }}
+					style={{ flex: 1, color: c.onSurface, fontSize: 16, height: SIZE_INPUT_HEIGHT }}
 				/>
 			</View>
 		</View>
@@ -739,7 +745,7 @@ function LogoPicker({
 			mediaTypes: ['images'],
 			allowsEditing: true,
 			aspect: [1, 1],
-			quality: 0.7,
+			quality: LOGO_IMAGE_QUALITY,
 		});
 
 		if (!result.canceled && result.assets[0].uri) {
@@ -817,13 +823,13 @@ const styles = StyleSheet.create({
 		marginBottom: 6,
 	},
 	input: {
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 		borderWidth: 1,
 		paddingHorizontal: 12,
 		fontSize: 16,
 	},
 	textarea: {
-		height: 90,
+		height: TEXTAREA_HEIGHT,
 		textAlignVertical: 'top',
 		paddingTop: 12,
 	},
@@ -831,7 +837,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 	},
 	typeGrid: {
 		flexDirection: 'row',
@@ -871,7 +877,7 @@ const styles = StyleSheet.create({
 	},
 	actionBtn: {
 		flex: 1,
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -879,8 +885,8 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 	},
 	logoBox: {
-		width: 120,
-		height: 120,
+		width: SIZE_LANGUAGE_FLAG,
+		height: SIZE_LANGUAGE_FLAG,
 		borderWidth: 2,
 		borderStyle: 'dashed',
 		alignItems: 'center',
@@ -888,8 +894,8 @@ const styles = StyleSheet.create({
 	},
 	removeBtn: {
 		position: 'absolute',
-		top: -8,
-		right: -8,
+		top: REMOVE_BTN_OFFSET,
+		right: REMOVE_BTN_OFFSET,
 		width: 24,
 		height: 24,
 		borderRadius: 12,

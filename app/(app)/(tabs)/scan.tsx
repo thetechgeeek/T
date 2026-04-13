@@ -1,5 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { palette } from '@/src/theme/palette';
+import { MS_SYNC_POLL, OPACITY_INACTIVE } from '@/theme/uiMetrics';
+
+const CAMERA_QUALITY = 0.5;
+const OCR_PLACEHOLDER_DELAY_MS = MS_SYNC_POLL;
+const QR_FRAME_TOP_MARGIN = 62;
+const CAPTURE_BTN_OPACITY_IDLE = 1;
+const CAPTURE_BTN_OPACITY_BUSY = 0.5;
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -75,10 +82,10 @@ export default function ScanTab() {
 		setCapturing(true);
 		try {
 			// 1. Take photo
-			await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
+			await cameraRef.current.takePictureAsync({ base64: true, quality: CAMERA_QUALITY });
 
 			// 2. OCR placeholder: We will send photo.base64 to an LLM / Cloud Vision API
-			await new Promise((res) => setTimeout(res, 1500));
+			await new Promise((res) => setTimeout(res, OCR_PLACEHOLDER_DELAY_MS));
 
 			Alert.alert(
 				t('scanner.itemFound'),
@@ -145,7 +152,7 @@ export default function ScanTab() {
 								width={56}
 								height={56}
 								borderRadius={28}
-								style={{ marginTop: 62, alignSelf: 'center' }}
+								style={{ marginTop: QR_FRAME_TOP_MARGIN, alignSelf: 'center' }}
 							/>
 						)}
 					</View>
@@ -158,7 +165,7 @@ export default function ScanTab() {
 				>
 					<ThemedText
 						color={palette.white}
-						style={{ fontSize: 14, opacity: 0.8, marginBottom: s.xl }}
+						style={{ fontSize: 14, opacity: OPACITY_INACTIVE, marginBottom: s.xl }}
 					>
 						{capturing ? t('scanner.analyzing') : t('scanner.alignFrame')}
 					</ThemedText>
@@ -173,7 +180,12 @@ export default function ScanTab() {
 						accessibilityState={{ busy: capturing }}
 						style={[
 							styles.captureBtn,
-							{ backgroundColor: c.primary, opacity: capturing ? 0.5 : 1 },
+							{
+								backgroundColor: c.primary,
+								opacity: capturing
+									? CAPTURE_BTN_OPACITY_BUSY
+									: CAPTURE_BTN_OPACITY_IDLE,
+							},
 						]}
 					>
 						<Aperture size={32} color={c.onPrimary} importantForAccessibility="no" />

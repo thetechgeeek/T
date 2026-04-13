@@ -10,6 +10,13 @@ import { layout } from '@/src/theme/layout';
 import { useSyncStore } from '@/src/stores/syncStore';
 import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
 import { useLocale } from '@/src/hooks/useLocale';
+import { MS_HEADER_SYNC_REFRESH } from '@/theme/uiMetrics';
+
+const MINS_PER_HOUR = 60;
+/** Negative padding offset to tighten the sync-text gap under the title */
+const SYNC_TEXT_MARGIN_TOP = -2;
+/** Back-button hit-area padding (equals the negative margin to align to edge) */
+const BACK_BUTTON_HIT_AREA = 11;
 
 export interface ScreenHeaderProps {
 	title: string | React.ReactNode;
@@ -50,11 +57,11 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 				return;
 			}
 			const diff = Date.now() - new Date(lastSyncedAt).getTime();
-			const mins = Math.floor(diff / 60000);
+			const mins = Math.floor(diff / MS_HEADER_SYNC_REFRESH);
 
 			if (mins < 1) {
 				setLastSyncedText(t('common.syncedJustNow') || 'Just now');
-			} else if (mins < 60) {
+			} else if (mins < MINS_PER_HOUR) {
 				setLastSyncedText(`${mins} ${t('common.minsAgo') || 'mins ago'}`);
 			} else {
 				setLastSyncedText(t('common.syncedLongAgo') || 'Synced a while ago');
@@ -62,7 +69,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 		};
 
 		updateRelativeTime();
-		const timer = setInterval(updateRelativeTime, 60000);
+		const timer = setInterval(updateRelativeTime, MS_HEADER_SYNC_REFRESH);
 		return () => clearInterval(timer);
 	}, [lastSyncedAt, showSyncStatus, t]);
 
@@ -105,7 +112,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 						<ThemedText
 							variant="caption"
 							color={c.onSurfaceVariant}
-							style={{ marginTop: -2 }}
+							style={{ marginTop: SYNC_TEXT_MARGIN_TOP }}
 						>
 							{lastSyncedText}
 						</ThemedText>
@@ -130,8 +137,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	back: {
-		padding: 11,
-		marginLeft: -11,
+		padding: BACK_BUTTON_HIT_AREA,
+		marginLeft: -BACK_BUTTON_HIT_AREA,
 	},
 	right: {
 		marginLeft: 12,

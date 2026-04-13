@@ -1,4 +1,8 @@
 import React, { useState, useCallback } from 'react';
+import { OPACITY_SKELETON_PEAK } from '@/theme/uiMetrics';
+
+const TEXTAREA_MIN_HEIGHT = 160;
+const UPLOAD_ZONE_BORDER_WIDTH = 1.5;
 import {
 	View,
 	StyleSheet,
@@ -294,7 +298,7 @@ export default function ImportOrderScreen() {
 				<FileText
 					size={64}
 					color={c.primary}
-					style={{ opacity: 0.5, marginBottom: s.xl }}
+					style={{ opacity: OPACITY_SKELETON_PEAK, marginBottom: s.xl }}
 				/>
 				<ThemedText variant="h3">{t('order.analyzing')}</ThemedText>
 				<ThemedText
@@ -592,7 +596,7 @@ const styles = StyleSheet.create({
 	textArea: {
 		fontSize: 14,
 		lineHeight: 22,
-		minHeight: 160,
+		minHeight: TEXTAREA_MIN_HEIGHT,
 	},
 
 	// Review screen
@@ -628,7 +632,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderWidth: 1.5,
+		borderWidth: UPLOAD_ZONE_BORDER_WIDTH,
 		borderStyle: 'dashed',
 		borderRadius: 10,
 		paddingVertical: 12,

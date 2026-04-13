@@ -4,6 +4,7 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import type { LucideIcon } from 'lucide-react-native';
 
 export interface QuickAction {
@@ -56,7 +57,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions }) =
 					>
 						<View
 							style={{
-								backgroundColor: withOpacity(action.color, 0.12),
+								backgroundColor: withOpacity(action.color, OPACITY_TINT_LIGHT),
 								borderRadius: r.md,
 								padding: s.sm,
 								alignSelf: 'flex-start',

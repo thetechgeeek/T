@@ -8,6 +8,9 @@ import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { Card } from '@/src/components/atoms/Card';
 import { withOpacity } from '@/src/utils/color';
 import { palette } from '@/src/theme/palette';
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+
+const TOGGLE_BORDER_WIDTH = 1.5;
 import type { CustomerDraft } from './useInvoiceCreateFlow';
 
 interface Props {
@@ -83,7 +86,7 @@ export function CustomerStep({
 						paddingVertical: s.sm,
 						paddingHorizontal: s.md,
 						backgroundColor: isCashSale ? c.primary : c.surface,
-						borderWidth: isCashSale ? 0 : 1.5,
+						borderWidth: isCashSale ? 0 : TOGGLE_BORDER_WIDTH,
 						borderColor: c.primary,
 						borderRadius: r.sm,
 						alignItems: 'center',
@@ -104,7 +107,7 @@ export function CustomerStep({
 						paddingVertical: s.sm,
 						paddingHorizontal: s.md,
 						backgroundColor: !isCashSale ? c.primary : c.surface,
-						borderWidth: !isCashSale ? 0 : 1.5,
+						borderWidth: !isCashSale ? 0 : TOGGLE_BORDER_WIDTH,
 						borderColor: c.primary,
 						borderRadius: r.sm,
 						alignItems: 'center',
@@ -156,7 +159,7 @@ export function CustomerStep({
 							marginTop: s.lg,
 							padding: s.md,
 							backgroundColor: isInterState
-								? withOpacity(c.primary, 0.12)
+								? withOpacity(c.primary, OPACITY_TINT_LIGHT)
 								: c.surface,
 							borderWidth: 1,
 							borderColor: isInterState ? c.primary : c.border,

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'top',
 	},
 	saveButton: {
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 		marginTop: 8,
 	},
 });

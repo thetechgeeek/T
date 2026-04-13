@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { SIZE_LANGUAGE_FLAG, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
 	},
 	card: {
 		flex: 1,
-		height: 120,
+		height: SIZE_LANGUAGE_FLAG,
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 12,
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
 	},
 	continueBtn: {
 		width: '100%',
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

@@ -1,3 +1,4 @@
+import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -19,7 +20,7 @@ function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
 				marginHorizontal: 16,
 				fontWeight: '600',
 				textTransform: 'uppercase',
-				letterSpacing: 0.8,
+				letterSpacing: LETTER_SPACING_SECTION,
 			}}
 		>
 			{label}

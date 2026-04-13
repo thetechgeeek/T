@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MAX_LONG_TEXT_CHARS } from '@/theme/uiMetrics';
 
 export const InvoiceLineItemSchema = z.object({
 	item_id: z.string().uuid().optional(),
@@ -30,8 +31,11 @@ export const InvoiceInputSchema = z.object({
 	payment_status: z.enum(['paid', 'partial', 'unpaid']),
 	payment_mode: z.enum(['cash', 'upi', 'bank_transfer', 'credit', 'cheque']).optional(),
 	amount_paid: z.number().min(0).default(0),
-	notes: z.string().max(1000).optional(),
-	terms: z.string().max(2000).optional(),
+	notes: z
+		.string()
+		.max(MAX_LONG_TEXT_CHARS / 2)
+		.optional(),
+	terms: z.string().max(MAX_LONG_TEXT_CHARS).optional(),
 });
 
 export type InvoiceLineItemInput = z.infer<typeof InvoiceLineItemSchema>;

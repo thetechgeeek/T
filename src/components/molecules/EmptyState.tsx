@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
+import { SIZE_EMPTY_STATE_ICON } from '@/theme/uiMetrics';
 
 interface EmptyStateProps {
 	title: string;
@@ -89,6 +90,6 @@ const styles = StyleSheet.create({
 		marginBottom: 24,
 	},
 	button: {
-		minWidth: 150,
+		minWidth: SIZE_EMPTY_STATE_ICON,
 	},
 });

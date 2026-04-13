@@ -1,3 +1,4 @@
+import { LETTER_SPACING_SECTION, SIZE_ICON_CONTAINER } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { palette } from '@/src/theme/palette';
 import {
@@ -350,7 +351,7 @@ const styles = StyleSheet.create({
 		marginTop: 4,
 		marginBottom: 2,
 		marginLeft: 4,
-		letterSpacing: 0.8,
+		letterSpacing: LETTER_SPACING_SECTION,
 	},
 	/* Card + rows */
 	card: {
@@ -364,8 +365,8 @@ const styles = StyleSheet.create({
 		gap: 12,
 	},
 	rowIconWrap: {
-		width: 34,
-		height: 34,
+		width: SIZE_ICON_CONTAINER,
+		height: SIZE_ICON_CONTAINER,
 		borderRadius: 8,
 		alignItems: 'center',
 		justifyContent: 'center',

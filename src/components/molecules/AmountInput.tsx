@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { INDIAN_GROUPING_TAIL_DIGIT_COUNT } from '@/constants/money';
 
 /**
  * Format a number with Indian grouping: 100000 → "1,00,000"
@@ -8,9 +10,10 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 function formatIndian(value: number): string {
 	if (value === 0) return '';
 	const str = Math.floor(value).toString();
-	if (str.length <= 3) return str;
-	const last3 = str.slice(-3);
-	const rest = str.slice(0, -3);
+	const tail = INDIAN_GROUPING_TAIL_DIGIT_COUNT;
+	if (str.length <= tail) return str;
+	const last3 = str.slice(-tail);
+	const rest = str.slice(0, -tail);
 	const withGroups = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
 	return `${withGroups},${last3}`;
 }
@@ -91,7 +94,7 @@ export function AmountInput({
 					{
 						borderColor: exceeded ? c.error : c.border,
 						borderRadius: theme.borderRadius.md,
-						minHeight: 52,
+						minHeight: SIZE_INPUT_HEIGHT,
 						borderWidth: exceeded ? 2 : 1,
 					},
 				]}

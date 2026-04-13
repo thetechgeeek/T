@@ -1,4 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+
+const DROPDOWN_MAX_HEIGHT = 160;
+const MODAL_CARD_WIDTH = 320;
 import {
 	View,
 	ScrollView,
@@ -365,7 +369,7 @@ export default function PurchaseCreateScreen() {
 							/>
 							{filteredItems().length > 0 && !selectedItem && (
 								<ScrollView
-									style={{ maxHeight: 160 }}
+									style={{ maxHeight: DROPDOWN_MAX_HEIGHT }}
 									keyboardShouldPersistTaps="handled"
 								>
 									{filteredItems().map((itm) => (
@@ -540,7 +544,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	modalCard: { width: 320, padding: 20 },
+	modalCard: { width: MODAL_CARD_WIDTH, padding: 20 },
 	lineItemRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -562,5 +566,5 @@ const styles = StyleSheet.create({
 	chipsRow: { flexDirection: 'row', gap: 8 },
 	modeChip: { paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1 },
 	formBtns: { flexDirection: 'row', gap: 8 },
-	saveBtn: { height: 52 },
+	saveBtn: { height: SIZE_INPUT_HEIGHT },
 });

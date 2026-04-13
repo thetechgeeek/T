@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { palette } from '@/src/theme/palette';
+import {
+	AMOUNT_SHORT_FORMAT_ONE_CRORE,
+	AMOUNT_SHORT_FORMAT_ONE_LAKH,
+	AMOUNT_SHORT_FORMAT_ONE_THOUSAND,
+} from '@/constants/money';
+import { SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@/theme/uiMetrics';
+
+const RECEIPT_BOTTOM_PADDING = SIZE_LANGUAGE_FLAG;
+const ID_TAIL_DIGITS = 6;
 import { View, ScrollView, StyleSheet, Share, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MessageCircle, FileText, CheckCircle2 } from 'lucide-react-native';
@@ -50,9 +59,11 @@ function numberToWords(amount: number): string {
 	if (n === 0) return 'Zero';
 	if (n < 0) return 'Minus ' + numberToWords(-n);
 
-	const crore = Math.floor(n / 10000000);
-	const lakh = Math.floor((n % 10000000) / 100000);
-	const thousand = Math.floor((n % 100000) / 1000);
+	const crore = Math.floor(n / AMOUNT_SHORT_FORMAT_ONE_CRORE);
+	const lakh = Math.floor((n % AMOUNT_SHORT_FORMAT_ONE_CRORE) / AMOUNT_SHORT_FORMAT_ONE_LAKH);
+	const thousand = Math.floor(
+		(n % AMOUNT_SHORT_FORMAT_ONE_LAKH) / AMOUNT_SHORT_FORMAT_ONE_THOUSAND,
+	);
 	const hundred = Math.floor((n % 1000) / 100);
 	const rest = n % 100;
 
@@ -72,8 +83,8 @@ function formatMode(mode: string): string {
 
 function padId(id: string): string {
 	// Use last 6 chars of UUID or numeric part
-	const numeric = id.replace(/\D/g, '').slice(-6);
-	return numeric.padStart(6, '0');
+	const numeric = id.replace(/\D/g, '').slice(-ID_TAIL_DIGITS);
+	return numeric.padStart(ID_TAIL_DIGITS, '0');
 }
 
 // ── Component ──────────────────────────────────────────────────────────────
@@ -172,7 +183,10 @@ export default function PaymentReceiptScreen() {
 			<ScreenHeader title="Payment Receipt" />
 
 			<ScrollView
-				contentContainerStyle={[styles.scroll, { padding: s.md, paddingBottom: 120 }]}
+				contentContainerStyle={[
+					styles.scroll,
+					{ padding: s.md, paddingBottom: RECEIPT_BOTTOM_PADDING },
+				]}
 			>
 				<View
 					style={[
@@ -394,6 +408,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 	},
 });

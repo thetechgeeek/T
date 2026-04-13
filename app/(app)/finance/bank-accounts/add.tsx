@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
+import { SIZE_INPUT_HEIGHT, LETTER_SPACING_ACCOUNT } from '@/theme/uiMetrics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -191,7 +192,7 @@ export default function AddBankAccountScreen() {
 								borderRadius: r.md,
 								backgroundColor: theme.colors.surface,
 								fontFamily: 'monospace',
-								letterSpacing: 1.5,
+								letterSpacing: LETTER_SPACING_ACCOUNT,
 							},
 						]}
 						accessibilityLabel="ifsc-code"
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		minHeight: 52,
+		minHeight: SIZE_INPUT_HEIGHT,
 	},
 	currencyPrefix: {
 		paddingHorizontal: 14,

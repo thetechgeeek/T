@@ -1,4 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+
+const MS_SAVED_TOAST = 3000;
+const TEXTAREA_HEIGHT = 90;
+const TEXTAREA_COMPACT_HEIGHT = 60;
+const REMOVE_BTN_OFFSET = -8;
+/** ImagePicker quality for business logo (medium – balances size vs clarity) */
+const LOGO_IMAGE_QUALITY = 0.7;
 import {
 	View,
 	Text,
@@ -168,7 +176,7 @@ export default function BusinessProfileScreen() {
 				invoice_sequence: parseInt(form.invoice_sequence, 10) || 1,
 			});
 			setSaved(true);
-			setTimeout(() => setSaved(false), 3000);
+			setTimeout(() => setSaved(false), MS_SAVED_TOAST);
 		} catch (e: unknown) {
 			setSaveError(e instanceof Error ? e.message : 'Save नहीं हुआ। फिर से try करें।');
 		} finally {
@@ -592,18 +600,18 @@ const styles = StyleSheet.create({
 	},
 	label: { fontSize: 14, fontWeight: '600', marginBottom: 6 },
 	input: {
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 		borderWidth: 1,
 		paddingHorizontal: 12,
 		fontSize: 16,
 	},
 	textarea: {
-		height: 90,
+		height: TEXTAREA_HEIGHT,
 		textAlignVertical: 'top',
 		paddingTop: 12,
 	},
 	saveBtn: {
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -620,7 +628,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 	},
 	textareaCompact: {
-		height: 60,
+		height: TEXTAREA_COMPACT_HEIGHT,
 		textAlignVertical: 'top',
 		paddingTop: 8,
 	},
@@ -642,8 +650,8 @@ const styles = StyleSheet.create({
 	},
 	removeBtn: {
 		position: 'absolute',
-		top: -8,
-		right: -8,
+		top: REMOVE_BTN_OFFSET,
+		right: REMOVE_BTN_OFFSET,
 		width: 24,
 		height: 24,
 		borderRadius: 12,
@@ -672,7 +680,7 @@ function ImagePickerBox({
 			mediaTypes: ['images'],
 			allowsEditing: true,
 			aspect: [1, 1],
-			quality: 0.7,
+			quality: LOGO_IMAGE_QUALITY,
 		});
 
 		if (!result.canceled && result.assets[0].uri) {

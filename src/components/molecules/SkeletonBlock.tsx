@@ -4,6 +4,7 @@ import Animated, { useAnimatedStyle, interpolate } from 'react-native-reanimated
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { useSkeletonShimmer } from '@/src/hooks/useSkeletonShimmer';
+import { OPACITY_SKELETON_BASE, OPACITY_SKELETON_PEAK } from '@/theme/uiMetrics';
 
 interface SkeletonBlockProps {
 	width?: number | `${number}%`;
@@ -22,7 +23,7 @@ export function SkeletonBlock({
 	const progress = useSkeletonShimmer();
 
 	const shimmerStyle = useAnimatedStyle(() => ({
-		opacity: interpolate(progress.value, [0, 1], [0.5, 1]),
+		opacity: interpolate(progress.value, [0, 1], [OPACITY_SKELETON_PEAK, 1]),
 	}));
 
 	return (
@@ -34,7 +35,7 @@ export function SkeletonBlock({
 					width,
 					height,
 					borderRadius: borderRadius ?? r.sm,
-					backgroundColor: withOpacity(c.onSurface, 0.08),
+					backgroundColor: withOpacity(c.onSurface, OPACITY_SKELETON_BASE),
 				},
 				shimmerStyle,
 				style,

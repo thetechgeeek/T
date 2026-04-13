@@ -9,87 +9,15 @@ import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { GST_DETAIL_COL_WIDTH_PX } from '@/constants/reportLayout';
+import {
+	GST_DETAIL_DEFAULT_FROM,
+	GST_DETAIL_DEFAULT_TO,
+	MOCK_GST_DETAIL_ROWS,
+} from '@/src/mocks/reports/gstDetail';
 
 // TODO: Replace mock data with Supabase query filtered by fromDate/toDate across
 //       sale_invoices, purchase_bills, and expense records.
-
-type TxType = 'Sale' | 'Purchase';
-
-interface GSTDetailRow {
-	id: string;
-	date: string;
-	type: TxType;
-	party: string;
-	invoiceNo: string;
-	taxable: number;
-	rate: number;
-	cgst: number;
-	sgst: number;
-	igst: number;
-}
-
-const MOCK_ROWS: GSTDetailRow[] = [
-	{
-		id: '1',
-		date: '2025-03-05',
-		type: 'Sale',
-		party: 'Sharma Tiles Pvt Ltd',
-		invoiceNo: 'INV-001',
-		taxable: 85000,
-		rate: 18,
-		cgst: 7650,
-		sgst: 7650,
-		igst: 0,
-	},
-	{
-		id: '2',
-		date: '2025-03-08',
-		type: 'Sale',
-		party: 'Karnataka Ceramics',
-		invoiceNo: 'INV-002',
-		taxable: 42000,
-		rate: 18,
-		cgst: 0,
-		sgst: 0,
-		igst: 7560,
-	},
-	{
-		id: '3',
-		date: '2025-03-12',
-		type: 'Purchase',
-		party: 'National Glaze Suppliers',
-		invoiceNo: 'PB-0045',
-		taxable: 35000,
-		rate: 18,
-		cgst: 3150,
-		sgst: 3150,
-		igst: 0,
-	},
-	{
-		id: '4',
-		date: '2025-03-18',
-		type: 'Sale',
-		party: 'Rohan Construction',
-		invoiceNo: 'INV-003',
-		taxable: 28000,
-		rate: 12,
-		cgst: 1680,
-		sgst: 1680,
-		igst: 0,
-	},
-	{
-		id: '5',
-		date: '2025-03-22',
-		type: 'Purchase',
-		party: 'Mumbai Mosaic Co.',
-		invoiceNo: 'PB-0048',
-		taxable: 60000,
-		rate: 18,
-		cgst: 0,
-		sgst: 0,
-		igst: 10800,
-	},
-];
 
 type PeriodPreset = 'month' | 'quarter' | 'year';
 
@@ -113,8 +41,8 @@ export default function GSTDetailScreen() {
 	const { c, s, r } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 
-	const [fromDate, setFromDate] = useState('2025-03-01');
-	const [toDate, setToDate] = useState('2025-03-31');
+	const [fromDate, setFromDate] = useState(GST_DETAIL_DEFAULT_FROM);
+	const [toDate, setToDate] = useState(GST_DETAIL_DEFAULT_TO);
 	const [preset, setPreset] = useState<PeriodPreset | null>('month');
 
 	function applyPreset(p: PeriodPreset) {
@@ -123,8 +51,8 @@ export default function GSTDetailScreen() {
 		setToDate(todayISO());
 	}
 
-	// TODO: filter MOCK_ROWS by fromDate/toDate; real query will do this server-side
-	const rows = MOCK_ROWS;
+	// TODO: filter MOCK_GST_DETAIL_ROWS by fromDate/toDate; real query will do this server-side
+	const rows = MOCK_GST_DETAIL_ROWS;
 
 	const salesRows = rows.filter((r) => r.type === 'Sale');
 	const purchaseRows = rows.filter((r) => r.type === 'Purchase');
@@ -569,11 +497,11 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
-	colDate: { width: 72 },
-	colType: { width: 62 },
-	colParty: { width: 120 },
-	colInvoice: { width: 72 },
-	colNum: { width: 76 },
+	colDate: { width: GST_DETAIL_COL_WIDTH_PX.date },
+	colType: { width: GST_DETAIL_COL_WIDTH_PX.type },
+	colParty: { width: GST_DETAIL_COL_WIDTH_PX.party },
+	colInvoice: { width: GST_DETAIL_COL_WIDTH_PX.invoice },
+	colNum: { width: GST_DETAIL_COL_WIDTH_PX.num },
 	colRateCell: { width: 44 },
 	typeBadge: {
 		paddingHorizontal: 6,

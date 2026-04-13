@@ -1,3 +1,4 @@
+import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
 import React, { useState, useEffect } from 'react';
 import {
 	View,
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
 	listContent: { padding: 16 },
 	card: { marginBottom: 0 },
 	dot: { width: 12, height: 12, borderRadius: 6, marginRight: 8 },
-	empty: { textAlign: 'center', marginTop: 60 },
+	empty: { textAlign: 'center', marginTop: SIZE_AVATAR_MD },
 	fab: {
 		position: 'absolute',
 		right: 24,

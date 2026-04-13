@@ -1,6 +1,15 @@
 import type { Theme } from './index';
 import { Platform } from 'react-native';
 import { darkColors, lightColors, palette } from './palette';
+import {
+	ANIMATION_MS,
+	BORDER_RADIUS_PX,
+	SPACING_PX,
+	SPRING_PHYSICS,
+	TOUCH_TARGET_MIN_PX,
+} from './layoutMetrics';
+import { ELEVATION, SHADOW_IOS, SHADOW_OFFSET, SHADOW_RADIUS } from './shadowMetrics';
+import { FONT_SIZE, FONT_SIZE_SCALE, LINE_HEIGHT, LINE_HEIGHT_RATIO } from './typographyMetrics';
 
 export { lightColors, darkColors };
 
@@ -10,73 +19,69 @@ const TYPOGRAPHY: Theme['typography'] = {
 	fontFamilyBold:
 		Platform?.select({ ios: 'System', android: 'sans-serif-medium', default: 'System' }) ??
 		'System',
-	sizes: {
-		xs: 11,
-		sm: 13,
-		md: 14,
-		lg: 16,
-		xl: 18,
-		'2xl': 20,
-		'3xl': 24,
-	},
+	sizes: FONT_SIZE_SCALE,
 	weights: {
 		regular: '400',
 		medium: '500',
 		semibold: '600',
 		bold: '700',
 	},
-	lineHeights: {
-		tight: 1.2,
-		normal: 1.5,
-		relaxed: 1.75,
-	},
+	lineHeights: LINE_HEIGHT_RATIO,
 	variants: {
-		display: { fontSize: 30, fontWeight: '700', lineHeight: 45 },
-		h1: { fontSize: 24, fontWeight: '700', lineHeight: 36 },
-		h2: { fontSize: 20, fontWeight: '600', lineHeight: 30 },
-		h3: { fontSize: 18, fontWeight: '600', lineHeight: 28 },
-		body: { fontSize: 16, fontWeight: '400', lineHeight: 24 },
-		bodyBold: { fontSize: 16, fontWeight: '700', lineHeight: 24 },
-		caption: { fontSize: 14, fontWeight: '400', lineHeight: 21 },
-		captionBold: { fontSize: 14, fontWeight: '700', lineHeight: 21 },
-		amount: { fontSize: 20, fontWeight: '700', lineHeight: 30, color: lightColors.primary },
-		amountLarge: {
-			fontSize: 28,
+		display: {
+			fontSize: FONT_SIZE.display,
 			fontWeight: '700',
-			lineHeight: 42,
+			lineHeight: LINE_HEIGHT.display,
+		},
+		h1: { fontSize: FONT_SIZE.h1, fontWeight: '700', lineHeight: LINE_HEIGHT.h1 },
+		h2: { fontSize: FONT_SIZE.h2, fontWeight: '600', lineHeight: LINE_HEIGHT.h2 },
+		h3: { fontSize: FONT_SIZE.h3, fontWeight: '600', lineHeight: LINE_HEIGHT.h3 },
+		body: { fontSize: FONT_SIZE.body, fontWeight: '400', lineHeight: LINE_HEIGHT.body },
+		bodyBold: { fontSize: FONT_SIZE.body, fontWeight: '700', lineHeight: LINE_HEIGHT.body },
+		caption: {
+			fontSize: FONT_SIZE.caption,
+			fontWeight: '400',
+			lineHeight: LINE_HEIGHT.caption,
+		},
+		captionBold: {
+			fontSize: FONT_SIZE.caption,
+			fontWeight: '700',
+			lineHeight: LINE_HEIGHT.caption,
+		},
+		amount: {
+			fontSize: FONT_SIZE.amount,
+			fontWeight: '700',
+			lineHeight: LINE_HEIGHT.amount,
+			color: lightColors.primary,
+		},
+		amountLarge: {
+			fontSize: FONT_SIZE.amountLarge,
+			fontWeight: '700',
+			lineHeight: LINE_HEIGHT.amountLarge,
 			color: lightColors.primary,
 		},
 		amountNegative: {
-			fontSize: 20,
+			fontSize: FONT_SIZE.amount,
 			fontWeight: '700',
-			lineHeight: 30,
+			lineHeight: LINE_HEIGHT.amount,
 			color: lightColors.error,
 		},
-		label: { fontSize: 13, fontWeight: '500', lineHeight: 18 },
-		captionSmall: { fontSize: 11, fontWeight: '400', lineHeight: 16 },
+		label: {
+			fontSize: FONT_SIZE.label,
+			fontWeight: '500',
+			lineHeight: LINE_HEIGHT.label,
+		},
+		captionSmall: {
+			fontSize: FONT_SIZE.captionSmall,
+			fontWeight: '400',
+			lineHeight: LINE_HEIGHT.captionSmall,
+		},
 	},
 };
 
-const SPACING: Theme['spacing'] = {
-	xs: 4,
-	sm: 8,
-	md: 12,
-	lg: 16,
-	xl: 24,
-	'2xl': 32,
-	'3xl': 48,
-	'4xl': 64,
-};
+const SPACING: Theme['spacing'] = SPACING_PX;
 
-const BORDER_RADIUS: Theme['borderRadius'] = {
-	none: 0,
-	xs: 2,
-	sm: 4,
-	md: 8,
-	lg: 12,
-	xl: 16,
-	full: 9999,
-};
+const BORDER_RADIUS: Theme['borderRadius'] = BORDER_RADIUS_PX;
 
 const makeShadows = (isDark: boolean): Theme['shadows'] => {
 	const iosShadow = isDark ? palette.shadow : palette.shadowWarm;
@@ -85,44 +90,44 @@ const makeShadows = (isDark: boolean): Theme['shadows'] => {
 			Platform?.select({
 				ios: {
 					shadowColor: iosShadow,
-					shadowOffset: { width: 0, height: 1 },
-					shadowOpacity: isDark ? 0.2 : 0.05,
-					shadowRadius: 1,
+					shadowOffset: SHADOW_OFFSET.xs,
+					shadowOpacity: isDark ? SHADOW_IOS.xs.dark : SHADOW_IOS.xs.light,
+					shadowRadius: SHADOW_RADIUS.xs,
 				},
-				android: { elevation: 1 },
+				android: { elevation: ELEVATION.xs },
 				default: {},
 			}) ?? {},
 		sm:
 			Platform?.select({
 				ios: {
 					shadowColor: iosShadow,
-					shadowOffset: { width: 0, height: 1 },
-					shadowOpacity: isDark ? 0.3 : 0.08,
-					shadowRadius: 2,
+					shadowOffset: SHADOW_OFFSET.sm,
+					shadowOpacity: isDark ? SHADOW_IOS.sm.dark : SHADOW_IOS.sm.light,
+					shadowRadius: SHADOW_RADIUS.sm,
 				},
-				android: { elevation: 2 },
+				android: { elevation: ELEVATION.sm },
 				default: {},
 			}) ?? {},
 		md:
 			Platform?.select({
 				ios: {
 					shadowColor: iosShadow,
-					shadowOffset: { width: 0, height: 3 },
-					shadowOpacity: isDark ? 0.4 : 0.12,
-					shadowRadius: 6,
+					shadowOffset: SHADOW_OFFSET.md,
+					shadowOpacity: isDark ? SHADOW_IOS.md.dark : SHADOW_IOS.md.light,
+					shadowRadius: SHADOW_RADIUS.md,
 				},
-				android: { elevation: 4 },
+				android: { elevation: ELEVATION.md },
 				default: {},
 			}) ?? {},
 		lg:
 			Platform?.select({
 				ios: {
 					shadowColor: iosShadow,
-					shadowOffset: { width: 0, height: 6 },
-					shadowOpacity: isDark ? 0.5 : 0.16,
-					shadowRadius: 12,
+					shadowOffset: SHADOW_OFFSET.lg,
+					shadowOpacity: isDark ? SHADOW_IOS.lg.dark : SHADOW_IOS.lg.light,
+					shadowRadius: SHADOW_RADIUS.lg,
 				},
-				android: { elevation: 8 },
+				android: { elevation: ELEVATION.lg },
 				default: {},
 			}) ?? {},
 	};
@@ -137,13 +142,13 @@ export function buildTheme(isDark: boolean): Theme {
 		borderRadius: BORDER_RADIUS,
 		shadows: makeShadows(isDark),
 		animation: {
-			durationFast: 150,
-			durationNormal: 200,
-			durationSlow: 400,
-			springDamping: 20,
-			springStiffness: 200,
+			durationFast: ANIMATION_MS.fast,
+			durationNormal: ANIMATION_MS.normal,
+			durationSlow: ANIMATION_MS.slow,
+			springDamping: SPRING_PHYSICS.damping,
+			springStiffness: SPRING_PHYSICS.stiffness,
 		},
-		touchTarget: 48,
+		touchTarget: TOUCH_TARGET_MIN_PX,
 	};
 }
 

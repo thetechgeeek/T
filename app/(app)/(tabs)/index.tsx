@@ -1,4 +1,7 @@
 import React from 'react';
+
+/** Min height for business KPI tiles in the dashboard grid */
+const BUSINESS_TILE_MIN_HEIGHT = 90;
 import { useShallow } from 'zustand/react/shallow';
 import { View, RefreshControl, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -405,7 +408,7 @@ const styles = StyleSheet.create({
 		marginBottom: 8,
 	},
 	businessTile: {
-		minHeight: 90,
+		minHeight: BUSINESS_TILE_MIN_HEIGHT,
 	},
 	tileIcon: {
 		width: 28,

@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { palette } from '@/src/theme/palette';
 import {
+	AMOUNT_SHORT_FORMAT_ONE_CRORE,
+	AMOUNT_SHORT_FORMAT_ONE_LAKH,
+	AMOUNT_SHORT_FORMAT_ONE_THOUSAND,
+} from '@/constants/money';
+import {
 	View,
 	StyleSheet,
 	ScrollView,
@@ -118,16 +123,16 @@ function numberToWords(n: number): string {
 	let result = '';
 	let remaining = wholePart;
 
-	const crore = Math.floor(remaining / 10_000_000);
-	remaining %= 10_000_000;
+	const crore = Math.floor(remaining / AMOUNT_SHORT_FORMAT_ONE_CRORE);
+	remaining %= AMOUNT_SHORT_FORMAT_ONE_CRORE;
 	if (crore > 0) result += below1000(crore) + ' Crore ';
 
-	const lakh = Math.floor(remaining / 100_000);
-	remaining %= 100_000;
+	const lakh = Math.floor(remaining / AMOUNT_SHORT_FORMAT_ONE_LAKH);
+	remaining %= AMOUNT_SHORT_FORMAT_ONE_LAKH;
 	if (lakh > 0) result += below1000(lakh) + ' Lakh ';
 
-	const thousand = Math.floor(remaining / 1_000);
-	remaining %= 1_000;
+	const thousand = Math.floor(remaining / AMOUNT_SHORT_FORMAT_ONE_THOUSAND);
+	remaining %= AMOUNT_SHORT_FORMAT_ONE_THOUSAND;
 	if (thousand > 0) result += below1000(thousand) + ' Thousand ';
 
 	if (remaining > 0) result += below1000(remaining) + ' ';

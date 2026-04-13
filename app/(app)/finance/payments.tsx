@@ -1,3 +1,4 @@
+import { OPACITY_TINT_MEDIUM } from '@/theme/uiMetrics';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
 		elevation: 6,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 3 },
-		shadowOpacity: 0.2,
+		shadowOpacity: OPACITY_TINT_MEDIUM,
 		shadowRadius: 4,
 	},
 });

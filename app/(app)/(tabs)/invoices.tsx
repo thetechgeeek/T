@@ -1,3 +1,4 @@
+const STATUS_DOT_SIZE = 7;
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
@@ -468,9 +469,9 @@ const styles = StyleSheet.create({
 		// dynamic styles applied inline
 	},
 	statusDot: {
-		width: 7,
-		height: 7,
-		borderRadius: 3.5,
+		width: STATUS_DOT_SIZE,
+		height: STATUS_DOT_SIZE,
+		borderRadius: STATUS_DOT_SIZE / 2,
 	},
 	invoiceCard: {
 		padding: 16,

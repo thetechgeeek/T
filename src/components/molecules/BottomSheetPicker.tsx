@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Modal, View, Text, Pressable, ScrollView, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 
 export interface PickerOption {
 	label: string;
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 		paddingVertical: 16,
 		borderTopWidth: 1,
-		minHeight: 52,
+		minHeight: SIZE_INPUT_HEIGHT,
 		justifyContent: 'center',
 	},
 });

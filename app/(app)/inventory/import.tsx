@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+
+/** Template preview: sample item cost price shown before user data is loaded */
+const TEMPLATE_PREVIEW_COST_PRICE = 350;
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
@@ -78,7 +81,7 @@ export default function InventoryImportScreen() {
 					category: categories[0]?.name_en || 'Tiles',
 					unit: units[0]?.abbreviation || 'Box',
 					selling_price: 500,
-					cost_price: 350,
+					cost_price: TEMPLATE_PREVIEW_COST_PRICE,
 					hsn_code: '6908',
 					gst_rate: 18,
 					low_stock_threshold: 10,

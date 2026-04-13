@@ -6,6 +6,10 @@ import { useLocale } from '@/src/hooks/useLocale';
 import type { ErrorBoundaryProps } from 'expo-router';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
+import { OPACITY_GLOW, SIZE_TAB_BAR_IOS } from '@/theme/uiMetrics';
+
+/** Glow ring opacity behind the scan button */
+const SCAN_GLOW_RING_OPACITY = 0.25;
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 	const { t } = useLocale();
@@ -33,7 +37,7 @@ function ScanTabIcon({ _focused }: { _focused: boolean }) {
 						{
 							backgroundColor: c.primary,
 							shadowColor: c.primary,
-							shadowOpacity: 0.4,
+							shadowOpacity: OPACITY_GLOW,
 							shadowRadius: 8,
 							shadowOffset: { width: 0, height: 0 },
 						},
@@ -68,7 +72,7 @@ export default function TabLayout() {
 					backgroundColor: c.tabBar,
 					borderTopColor: c.border,
 					borderTopWidth: StyleSheet.hairlineWidth,
-					height: Platform.OS === 'ios' ? 88 : 64,
+					height: Platform.OS === 'ios' ? SIZE_TAB_BAR_IOS : 64,
 					paddingBottom: Platform.OS === 'ios' ? 28 : 8,
 					paddingTop: 8,
 				},
@@ -143,7 +147,7 @@ const styles = StyleSheet.create({
 		width: 64,
 		height: 64,
 		borderRadius: 32,
-		opacity: 0.25,
+		opacity: SCAN_GLOW_RING_OPACITY,
 	},
 	scanIconOuter: {
 		width: 56,

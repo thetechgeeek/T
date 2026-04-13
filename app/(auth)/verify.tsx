@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+
+/** Spacing multiplier for extra-wide gap below header text in verify screen */
+const VERIFY_SPACING_FACTOR = 1.5;
 import {
 	View,
 	StyleSheet,
@@ -104,7 +107,10 @@ export default function VerifyOtpScreen() {
 				<ThemedText variant="h1" style={{ marginBottom: s.sm }}>
 					{t('auth.verifyPhone')}
 				</ThemedText>
-				<ThemedText color={c.onSurfaceVariant} style={{ marginBottom: s.xl * 1.5 }}>
+				<ThemedText
+					color={c.onSurfaceVariant}
+					style={{ marginBottom: s.xl * VERIFY_SPACING_FACTOR }}
+				>
 					हमने {phone} पर 6 अंकों का कोड भेजा है
 				</ThemedText>
 
@@ -142,7 +148,7 @@ export default function VerifyOtpScreen() {
 					disabled={loading || code.some((digit) => !digit)}
 					loading={loading}
 					size="lg"
-					style={{ marginTop: s.xl * 1.5 }}
+					style={{ marginTop: s.xl * VERIFY_SPACING_FACTOR }}
 				/>
 
 				<View style={styles.resendRow}>

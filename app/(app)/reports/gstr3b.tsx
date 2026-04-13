@@ -9,14 +9,15 @@ import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { GSTR3B_NUM_CELL_WIDTH_PX } from '@/constants/reportLayout';
+import {
+	GSTR3B_PERIOD_CHIPS,
+	MOCK_GSTR3B_INTERSTATE_32,
+	MOCK_GSTR3B_ITC,
+	MOCK_GSTR3B_OUTWARD_31,
+} from '@/src/mocks/reports/gstr3b';
 
 // TODO: Replace all mock values with aggregated Supabase queries for the selected period.
-
-const PERIODS = [
-	{ label: 'Jan 25', value: '2025-01' },
-	{ label: 'Feb 25', value: '2025-02' },
-	{ label: 'Mar 25', value: '2025-03' },
-];
 
 function getCurrentPeriod() {
 	const d = new Date();
@@ -25,60 +26,27 @@ function getCurrentPeriod() {
 	return `${y}-${m}`;
 }
 
-// TODO: Fetch section 3.1 outward supply totals from invoice + sales data for the period
-const MOCK_31 = [
-	{
-		label: 'Taxable supplies (other than zero rated, nil rated & exempt)',
-		taxable: 230000,
-		igst: 14760,
-		cgst: 14580,
-		sgst: 14580,
-	},
-	{
-		label: 'Zero rated supply (export) on payment of tax',
-		taxable: 0,
-		igst: 0,
-		cgst: 0,
-		sgst: 0,
-	},
-	{ label: 'Nil rated / exempted supplies', taxable: 5000, igst: 0, cgst: 0, sgst: 0 },
-	{ label: 'Non-GST outward supplies', taxable: 2000, igst: 0, cgst: 0, sgst: 0 },
-];
-
-// TODO: Fetch inter-state supply breakdown (intra-state vs inter-state registered/unregistered)
-const MOCK_32 = [
-	{ label: 'Supplies to unregistered persons', taxable: 24000, igst: 2160 },
-	{ label: 'Supplies to composition taxable persons', taxable: 0, igst: 0 },
-	{ label: 'Supplies to UIN holders', taxable: 0, igst: 0 },
-];
-
-// TODO: Fetch ITC from purchase bills and input invoices for the period
-const MOCK_ITC = [
-	{ label: 'Import of goods', igst: 0, cgst: 0, sgst: 0 },
-	{ label: 'Import of services', igst: 0, cgst: 0, sgst: 0 },
-	{ label: 'Inward supplies (other than import)', igst: 7560, cgst: 6300, sgst: 6300 },
-	{ label: 'ITC reversal (rules 42 & 43)', igst: 0, cgst: 0, sgst: 0 },
-];
-
 export default function GSTR3BScreen() {
 	const { c, s, r } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const currentPeriod = getCurrentPeriod();
-	const allPeriods = PERIODS.some((p) => p.value === currentPeriod)
-		? PERIODS
-		: [...PERIODS, { label: 'Current', value: currentPeriod }];
+	const allPeriods = GSTR3B_PERIOD_CHIPS.some((p) => p.value === currentPeriod)
+		? GSTR3B_PERIOD_CHIPS
+		: [...GSTR3B_PERIOD_CHIPS, { label: 'Current', value: currentPeriod }];
 
 	const [period, setPeriod] = useState(allPeriods[allPeriods.length - 1].value);
 
 	// TODO: compute net payable from real data
-	const taxableRow = MOCK_31[0];
-	const itcInward = MOCK_ITC[2];
+	const taxableRow = MOCK_GSTR3B_OUTWARD_31[0];
+	const itcInward = MOCK_GSTR3B_ITC[2];
 	const netCGST = Math.max(0, taxableRow.cgst - itcInward.cgst);
 	const netSGST = Math.max(0, taxableRow.sgst - itcInward.sgst);
 	const netIGST = Math.max(
 		0,
-		taxableRow.igst + MOCK_32.reduce((a, r) => a + r.igst, 0) - itcInward.igst,
+		taxableRow.igst +
+			MOCK_GSTR3B_INTERSTATE_32.reduce((a, r) => a + r.igst, 0) -
+			itcInward.igst,
 	);
 	const netTotal = netCGST + netSGST + netIGST;
 
@@ -184,7 +152,9 @@ export default function GSTR3BScreen() {
 						</ThemedText>
 					</View>
 
-					{MOCK_31.map((row) => renderAmtRow(row.label, row.igst, row.cgst, row.sgst))}
+					{MOCK_GSTR3B_OUTWARD_31.map((row) =>
+						renderAmtRow(row.label, row.igst, row.cgst, row.sgst),
+					)}
 
 					{/* Taxable value total row */}
 					{divider}
@@ -193,13 +163,13 @@ export default function GSTR3BScreen() {
 							Taxable Value
 						</ThemedText>
 						<ThemedText variant="captionBold" style={styles.numCell} align="right">
-							{formatCurrency(MOCK_31.reduce((a, r) => a + r.igst, 0))}
+							{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.igst, 0))}
 						</ThemedText>
 						<ThemedText variant="captionBold" style={styles.numCell} align="right">
-							{formatCurrency(MOCK_31.reduce((a, r) => a + r.cgst, 0))}
+							{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.cgst, 0))}
 						</ThemedText>
 						<ThemedText variant="captionBold" style={styles.numCell} align="right">
-							{formatCurrency(MOCK_31.reduce((a, r) => a + r.sgst, 0))}
+							{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.sgst, 0))}
 						</ThemedText>
 					</View>
 				</Card>
@@ -240,13 +210,15 @@ export default function GSTR3BScreen() {
 						</ThemedText>
 					</View>
 
-					{MOCK_32.map((row, idx) => (
+					{MOCK_GSTR3B_INTERSTATE_32.map((row, idx) => (
 						<View
 							key={row.label}
 							style={[
 								styles.tableRow,
 								{ borderBottomColor: c.border },
-								idx === MOCK_32.length - 1 && { borderBottomWidth: 0 },
+								idx === MOCK_GSTR3B_INTERSTATE_32.length - 1 && {
+									borderBottomWidth: 0,
+								},
 							]}
 						>
 							<ThemedText
@@ -310,7 +282,9 @@ export default function GSTR3BScreen() {
 						</ThemedText>
 					</View>
 
-					{MOCK_ITC.map((row) => renderAmtRow(row.label, row.igst, row.cgst, row.sgst))}
+					{MOCK_GSTR3B_ITC.map((row) =>
+						renderAmtRow(row.label, row.igst, row.cgst, row.sgst),
+					)}
 
 					{divider}
 					<View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
@@ -323,7 +297,7 @@ export default function GSTR3BScreen() {
 							style={styles.numCell}
 							align="right"
 						>
-							{formatCurrency(MOCK_ITC.reduce((a, r) => a + r.igst, 0))}
+							{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.igst, 0))}
 						</ThemedText>
 						<ThemedText
 							variant="captionBold"
@@ -331,7 +305,7 @@ export default function GSTR3BScreen() {
 							style={styles.numCell}
 							align="right"
 						>
-							{formatCurrency(MOCK_ITC.reduce((a, r) => a + r.cgst, 0))}
+							{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.cgst, 0))}
 						</ThemedText>
 						<ThemedText
 							variant="captionBold"
@@ -339,7 +313,7 @@ export default function GSTR3BScreen() {
 							style={styles.numCell}
 							align="right"
 						>
-							{formatCurrency(MOCK_ITC.reduce((a, r) => a + r.sgst, 0))}
+							{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.sgst, 0))}
 						</ThemedText>
 					</View>
 				</Card>
@@ -456,7 +430,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	numCell: {
-		width: 68,
+		width: GSTR3B_NUM_CELL_WIDTH_PX,
 	},
 	payableRow: {
 		flexDirection: 'row',

@@ -1,5 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Pressable, TextInput, Alert } from 'react-native';
+import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
+
+const DISABLED_NAV_OPACITY = OPACITY_TINT_STRONG;
+const BALANCE_CARD_BORDER_WIDTH = 1.5;
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -192,7 +196,7 @@ export default function BalanceSheetScreen() {
 				<Pressable
 					onPress={() => offset < 0 && setOffset((o) => o + 1)}
 					disabled={offset >= 0}
-					style={[styles.navBtn, { opacity: offset < 0 ? 1 : 0.3 }]}
+					style={[styles.navBtn, { opacity: offset < 0 ? 1 : DISABLED_NAV_OPACITY }]}
 					accessibilityLabel="Next month"
 				>
 					<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
@@ -346,8 +350,11 @@ export default function BalanceSheetScreen() {
 				<Card
 					padding="md"
 					style={{
-						backgroundColor: withOpacity(isBalanced ? c.success : c.error, 0.08),
-						borderWidth: 1.5,
+						backgroundColor: withOpacity(
+							isBalanced ? c.success : c.error,
+							OPACITY_SKELETON_BASE,
+						),
+						borderWidth: BALANCE_CARD_BORDER_WIDTH,
 						borderColor: isBalanced ? c.success : c.error,
 					}}
 				>

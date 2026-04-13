@@ -86,12 +86,38 @@ module.exports = [
 				'error',
 				{ argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
 			],
+			'no-magic-numbers': 'off',
+			'@typescript-eslint/no-magic-numbers': [
+				'error',
+				{
+					detectObjects: true,
+					enforceConst: false,
+					ignore: [
+						-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 21,
+						22, 24, 28, 30, 32, 36, 40, 44, 48, 56, 64, 72, 80, 96, 100, 128, 180,
+						200, 255, 256, 300, 360, 400, 500, 512, 600, 720, 750, 800, 900, 1000,
+					],
+					ignoreArrayIndexes: true,
+					ignoreDefaultValues: true,
+					ignoreEnums: true,
+					ignoreNumericLiteralTypes: true,
+					ignoreReadonlyClassProperties: true,
+					ignoreTypeIndexes: true,
+				},
+			],
 			'react-hooks/exhaustive-deps': 'warn',
 			'react-native/no-unused-styles': 'error',
 			'react/react-in-jsx-scope': 'off',
 			'react/prop-types': 'off',
 			// Disable base rule in favour of TypeScript-aware version
 			'no-undef': 'off',
+		},
+	},
+	{
+		files: ['src/mocks/**/*.{ts,tsx}', 'src/__mocks__/**/*.{ts,tsx}'],
+		rules: {
+			// Fixture / demo seed data is inherently arbitrary; keep literals in mocks only.
+			'@typescript-eslint/no-magic-numbers': 'off',
 		},
 	},
 	{
@@ -109,6 +135,7 @@ module.exports = [
 			'@typescript-eslint/no-explicit-any': 'warn',
 			'@typescript-eslint/no-require-imports': 'warn',
 			'@typescript-eslint/no-unused-vars': 'warn',
+			'@typescript-eslint/no-magic-numbers': 'off',
 		},
 	},
 	prettierConfig,

@@ -5,6 +5,7 @@ import { Package, AlertCircle } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { OPACITY_SKELETON_BASE, SIZE_TILE_IMAGE } from '@/theme/uiMetrics';
 import type { ViewStyle } from 'react-native';
 import type { TileSetGroup, InventoryItem } from '@/src/types/inventory';
 import { getThumbUrl } from '@/src/utils/imageTransform';
@@ -133,7 +134,9 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 							>
 								{item.tile_image_url ? (
 									<Image
-										source={{ uri: getThumbUrl(item.tile_image_url, 112) }}
+										source={{
+											uri: getThumbUrl(item.tile_image_url, SIZE_TILE_IMAGE),
+										}}
 										style={styles.image}
 										contentFit="cover"
 										accessible={true}
@@ -180,7 +183,10 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 											style={[
 												styles.catBadge,
 												{
-													backgroundColor: withOpacity(c.primary, 0.08),
+													backgroundColor: withOpacity(
+														c.primary,
+														OPACITY_SKELETON_BASE,
+													),
 													borderRadius: r.sm,
 												},
 											]}

@@ -10,48 +10,15 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ThemeColors } from '@/src/theme';
 import { palette } from '@/src/theme/palette';
+import {
+	MOCK_ESTIMATES,
+	type Estimate,
+	type EstimateStatus,
+} from '@/src/mocks/transactions/estimates';
+import { OPACITY_TINT_MEDIUM, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
 
-type EstimateStatus = 'open' | 'accepted' | 'expired' | 'converted';
-
-interface Estimate {
-	id: string;
-	est_number: string;
-	date: string;
-	valid_until: string;
-	customer_name: string;
-	amount: number;
-	status: EstimateStatus;
-}
-
-const MOCK_ESTIMATES: Estimate[] = [
-	{
-		id: '1',
-		est_number: 'EST-001',
-		date: '2025-04-08',
-		valid_until: '2025-04-22',
-		customer_name: 'Sharma Tiles',
-		amount: 45000,
-		status: 'open',
-	},
-	{
-		id: '2',
-		est_number: 'EST-002',
-		date: '2025-04-05',
-		valid_until: '2025-04-12',
-		customer_name: 'Patel Construction',
-		amount: 120000,
-		status: 'accepted',
-	},
-	{
-		id: '3',
-		est_number: 'EST-003',
-		date: '2025-03-20',
-		valid_until: '2025-04-03',
-		customer_name: 'Mehta Builders',
-		amount: 78000,
-		status: 'expired',
-	},
-];
+const EMPTY_SECTION_PADDING_VERTICAL = SIZE_AVATAR_MD;
+const FAB_SHADOW_OPACITY = OPACITY_TINT_MEDIUM;
 
 type FilterType = 'all' | EstimateStatus;
 
@@ -268,11 +235,11 @@ const styles = StyleSheet.create({
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.2,
+		shadowOpacity: FAB_SHADOW_OPACITY,
 		shadowRadius: 4,
 	},
 	empty: {
-		paddingVertical: 60,
+		paddingVertical: EMPTY_SECTION_PADDING_VERTICAL,
 		alignItems: 'center',
 	},
 });

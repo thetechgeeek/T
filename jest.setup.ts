@@ -311,7 +311,6 @@ jest.mock(
 
 // Mock Supabase config globally to prevent "supabaseUrl is required" errors (QA issue 3.1)
 jest.mock('@/src/config/supabase', () => {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const { createSupabaseMock } = require('./__tests__/utils/supabaseMock');
 	return {
 		supabase: createSupabaseMock(),
@@ -319,16 +318,14 @@ jest.mock('@/src/config/supabase', () => {
 });
 
 jest.mock('@react-native-async-storage/async-storage', () =>
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 
 // Manual Reanimated mock — avoids react-native-worklets native module init in Jest
 jest.mock('react-native-reanimated', () => {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const ReactNative = require('react-native');
 	const sharedValueFactory = (val: unknown) => ({ value: val });
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 	const safeCall = (fn: () => unknown): any => {
 		try {
 			return fn();
@@ -396,7 +393,6 @@ jest.mock('expo-router', () => {
 });
 
 jest.mock('expo-image', () => {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const React = require('react');
 	return {
 		Image: ({ children, ...props }: { children?: React.ReactNode } & Record<string, unknown>) =>
@@ -444,7 +440,6 @@ jest.mock('expo-camera', () => ({
 
 // Mock i18next globally — loads real en.json so tests see actual English strings
 jest.mock('i18next', () => {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const enJson = require('./src/i18n/locales/en.json') as Record<string, unknown>;
 
 	// Flatten nested JSON into dot-separated keys
@@ -497,14 +492,13 @@ jest.mock('i18next', () => {
 // Helper for shared translations to avoid discrepancies between different i18n mocks
 // Note: We used to have separate mocks for @/src/i18n and i18next, but i18next mock is more fundamental.
 // We'll keep @/src/i18n mock as a simple re-export of the i18next mock for completeness.
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+
 jest.mock('@/src/i18n', () => require('i18next'));
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+
 jest.mock('./src/i18n', () => require('i18next'));
 
 // react-i18next — fallback returns last key segment so tests don't assert raw keys (QA issue 3.4)
 jest.mock('react-i18next', () => {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const i18n = require('i18next').default;
 	return {
 		useTranslation: () => ({
@@ -520,7 +514,6 @@ jest.mock('react-i18next', () => {
 
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => {
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const i18n = require('i18next').default;
 		return {
 			t: i18n.t,
@@ -536,7 +529,6 @@ jest.mock('@/src/hooks/useLocale', () => ({
 
 // Mock lucide-react-native to avoid SVG issues
 jest.mock('lucide-react-native', () => {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const React = require('react');
 	return new Proxy(
 		{},
@@ -564,7 +556,6 @@ jest.mock('react-native-safe-area-context', () => {
 
 // Mock react-native-keyboard-controller
 jest.mock('react-native-keyboard-controller', () => {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const React = require('react');
 	return {
 		KeyboardAvoidingView: ({ children, ...props }: { children?: React.ReactNode }) =>

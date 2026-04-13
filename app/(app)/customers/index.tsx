@@ -1,3 +1,4 @@
+import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
@@ -233,9 +234,9 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		right: 20,
 		bottom: 20,
-		width: 60,
-		height: 60,
-		borderRadius: 30,
+		width: SIZE_AVATAR_MD,
+		height: SIZE_AVATAR_MD,
+		borderRadius: SIZE_AVATAR_MD / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
 		elevation: 8,

@@ -1,3 +1,5 @@
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { SIZE_AVATAR_MD, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
 	},
 	emptyState: {
 		alignItems: 'center',
-		paddingTop: 60,
+		paddingTop: SIZE_AVATAR_MD,
 		paddingHorizontal: 32,
 	},
 	emptyIllustration: {
@@ -216,12 +218,11 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingHorizontal: 20,
-		height: 52,
-		borderRadius: 26,
+		height: SIZE_INPUT_HEIGHT,
+		borderRadius: SIZE_INPUT_HEIGHT / 2,
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 });

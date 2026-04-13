@@ -1,3 +1,8 @@
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+
+const COLOR_SWATCH_SELECTED_SHADOW = 0.5;
+const COLOR_SWATCH_SELECTED_ELEVATION = 4;
 import React, { useState } from 'react';
 import {
 	View,
@@ -407,10 +412,16 @@ export default function ExpenseCategoriesScreen() {
 												borderWidth: form.color === col ? 3 : 0,
 												borderColor: 'white',
 												shadowColor: col,
-												shadowOpacity: form.color === col ? 0.5 : 0,
+												shadowOpacity:
+													form.color === col
+														? COLOR_SWATCH_SELECTED_SHADOW
+														: 0,
 												shadowRadius: 4,
 												shadowOffset: { width: 0, height: 0 },
-												elevation: form.color === col ? 4 : 0,
+												elevation:
+													form.color === col
+														? COLOR_SWATCH_SELECTED_ELEVATION
+														: 0,
 											},
 										]}
 										accessibilityRole="radio"
@@ -477,7 +488,7 @@ const styles = StyleSheet.create({
 	},
 	empty: {
 		textAlign: 'center',
-		marginTop: 60,
+		marginTop: SIZE_AVATAR_MD,
 	},
 	fab: {
 		position: 'absolute',
@@ -490,8 +501,7 @@ const styles = StyleSheet.create({
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 	modalOverlay: {
 		flex: 1,

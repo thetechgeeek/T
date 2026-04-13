@@ -13,18 +13,19 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
 import { SPRING_PRESS, TIMING_NORMAL } from '@/src/theme/animations';
+import { SIZE_OFFLINE_BANNER_OFFSET } from '@/theme/uiMetrics';
 
 export function OfflineBanner() {
 	const { isConnected } = useNetworkStatus();
 	const { theme } = useTheme();
 	const router = useRouter();
 
-	const translateY = useSharedValue(-44);
+	const translateY = useSharedValue(SIZE_OFFLINE_BANNER_OFFSET);
 	const opacity = useSharedValue(0);
 
 	useEffect(() => {
 		if (!isConnected) {
-			translateY.value = -44;
+			translateY.value = SIZE_OFFLINE_BANNER_OFFSET;
 			opacity.value = 0;
 			translateY.value = withSpring(0, SPRING_PRESS);
 			opacity.value = withTiming(1, TIMING_NORMAL);

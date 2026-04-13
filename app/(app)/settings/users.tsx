@@ -1,3 +1,4 @@
+import { LETTER_SPACING_SECTION, FLEX_AMT_WIDE } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import {
 	View,
@@ -77,7 +78,7 @@ export default function UsersScreen() {
 						marginHorizontal: 16,
 						fontWeight: '600',
 						textTransform: 'uppercase',
-						letterSpacing: 0.8,
+						letterSpacing: LETTER_SPACING_SECTION,
 					}}
 				>
 					Users
@@ -217,7 +218,10 @@ export default function UsersScreen() {
 							</Pressable>
 							<Pressable
 								onPress={handleSendInvite}
-								style={[styles.btn, { backgroundColor: c.primary, flex: 1.5 }]}
+								style={[
+									styles.btn,
+									{ backgroundColor: c.primary, flex: FLEX_AMT_WIDE },
+								]}
 							>
 								<ThemedText style={{ color: palette.white, fontWeight: '700' }}>
 									Send Invite

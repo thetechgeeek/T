@@ -1,3 +1,7 @@
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { SIZE_ICON_CONTAINER } from '@/theme/uiMetrics';
+
+const ICON_WRAP_SIZE = SIZE_ICON_CONTAINER + 4;
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, RefreshControl, Pressable, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -263,8 +267,8 @@ const styles = StyleSheet.create({
 		marginBottom: 0,
 	},
 	iconWrap: {
-		width: 38,
-		height: 38,
+		width: ICON_WRAP_SIZE,
+		height: ICON_WRAP_SIZE,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -279,7 +283,6 @@ const styles = StyleSheet.create({
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 });

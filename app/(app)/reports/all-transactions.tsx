@@ -1,5 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, TextInput } from 'react-native';
+import { OPACITY_TINT_LIGHT, OPACITY_TOAST } from '@/theme/uiMetrics';
+
+const ICON_CIRCLE_SIZE = 38;
+const ICON_CIRCLE_RADIUS = ICON_CIRCLE_SIZE / 2;
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
@@ -193,7 +197,7 @@ export default function AllTransactionsScreen() {
 	const dateChipStyle = (active: boolean) => [
 		styles.chip,
 		{
-			backgroundColor: active ? withOpacity(c.info, 0.15) : c.surface,
+			backgroundColor: active ? withOpacity(c.info, OPACITY_TOAST) : c.surface,
 			borderColor: active ? c.info : c.border,
 			borderRadius: r.full,
 		},
@@ -212,7 +216,10 @@ export default function AllTransactionsScreen() {
 				accessibilityRole="button"
 			>
 				<View
-					style={[styles.iconCircle, { backgroundColor: withOpacity(meta.color, 0.12) }]}
+					style={[
+						styles.iconCircle,
+						{ backgroundColor: withOpacity(meta.color, OPACITY_TINT_LIGHT) },
+					]}
 				>
 					<IconComp size={18} color={meta.color} strokeWidth={2} />
 				</View>
@@ -399,9 +406,9 @@ const styles = StyleSheet.create({
 		gap: 12,
 	},
 	iconCircle: {
-		width: 38,
-		height: 38,
-		borderRadius: 19,
+		width: ICON_CIRCLE_SIZE,
+		height: ICON_CIRCLE_SIZE,
+		borderRadius: ICON_CIRCLE_RADIUS,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

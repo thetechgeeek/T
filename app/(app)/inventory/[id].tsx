@@ -1,4 +1,10 @@
 import React, { useCallback, useState } from 'react';
+import { OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
+
+const SPEC_BOX_HALF_WIDTH = '50%' as const;
+const SPEC_BOX_PADDING = 6;
+const SPECS_GRID_MARGIN = -6;
+const OPACITY_ROW_HIGHLIGHT = 0.06;
 import {
 	View,
 	StyleSheet,
@@ -223,7 +229,7 @@ export default function ItemDetailScreen() {
 				<View
 					style={[
 						layout.row,
-						{ flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: -6 },
+						{ flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: SPECS_GRID_MARGIN },
 					]}
 				>
 					<SpecBox label={t('inventory.addItem')} value={item.base_item_number} />
@@ -257,7 +263,7 @@ export default function ItemDetailScreen() {
 						{
 							backgroundColor: isLowStock
 								? c.errorLight
-								: withOpacity(c.success, 0.08),
+								: withOpacity(c.success, OPACITY_SKELETON_BASE),
 							borderRadius: r.md,
 							marginTop: s.xl,
 							borderColor: isLowStock ? c.error : c.success,
@@ -574,10 +580,12 @@ function SpecBox({
 }) {
 	const { c, r } = useThemeTokens();
 	return (
-		<View style={{ width: '50%', padding: 6 }}>
+		<View style={{ width: SPEC_BOX_HALF_WIDTH, padding: SPEC_BOX_PADDING }}>
 			<View
 				style={{
-					backgroundColor: highlight ? withOpacity(c.primary, 0.06) : c.surfaceVariant,
+					backgroundColor: highlight
+						? withOpacity(c.primary, OPACITY_ROW_HIGHLIGHT)
+						: c.surfaceVariant,
 					padding: 12,
 					borderRadius: r.md,
 				}}

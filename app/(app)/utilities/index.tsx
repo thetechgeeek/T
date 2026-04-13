@@ -1,3 +1,4 @@
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
@@ -84,7 +85,7 @@ export default function UtilitiesHubScreen() {
 							style={[
 								styles.iconWrap,
 								{
-									backgroundColor: withOpacity(card.color, 0.12),
+									backgroundColor: withOpacity(card.color, OPACITY_TINT_LIGHT),
 									borderRadius: 10,
 								},
 							]}

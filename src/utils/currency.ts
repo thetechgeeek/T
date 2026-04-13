@@ -3,14 +3,33 @@
  * E.g., 100000 -> "1,00,000"
  * E.g., 1234567.50 -> "12,34,567.50"
  */
-export function formatINR(amount: number, showSymbol = true, decimals = 2): string {
+import {
+	AMOUNT_SHORT_FORMAT_ONE_CRORE,
+	AMOUNT_SHORT_FORMAT_ONE_LAKH,
+	AMOUNT_SHORT_FORMAT_ONE_THOUSAND,
+	DEFAULT_DISPLAY_FRACTION_DIGITS,
+	INDIAN_PLACE_CRORE,
+	INDIAN_PLACE_HUNDRED,
+	INDIAN_PLACE_LAKH,
+	INDIAN_PLACE_THOUSAND,
+	INDIAN_PLACE_TWENTY,
+	INDIAN_GROUPING_TAIL_DIGIT_COUNT,
+	INR_MINOR_UNITS_PER_MAJOR,
+} from '@/constants/money';
+
+export function formatINR(
+	amount: number,
+	showSymbol = true,
+	decimals: number = DEFAULT_DISPLAY_FRACTION_DIGITS,
+): string {
 	const fixed = amount.toFixed(decimals);
 	const [intPart, decPart] = fixed.split('.');
 	const num = parseInt(intPart, 10);
 
-	// Indian grouping: last 3 digits, then groups of 2
-	const lastThree = String(Math.abs(num)).slice(-3);
-	const rest = String(Math.abs(num)).slice(0, -3);
+	// Indian grouping: last block (tail digits), then groups of 2
+	const tail = INDIAN_GROUPING_TAIL_DIGIT_COUNT;
+	const lastThree = String(Math.abs(num)).slice(-tail);
+	const rest = String(Math.abs(num)).slice(0, -tail);
 	const grouped =
 		rest.length > 0 ? rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastThree : lastThree;
 
@@ -37,12 +56,14 @@ export function formatINRShort(amount: number, lang: 'en' | 'hi' = 'en'): string
 		hi: { lakh: ' लाख', crore: ' करोड़', thousand: ' हजार' },
 	}[lang];
 
-	if (amount >= 10_000_000) {
-		return `₹${(amount / 10_000_000).toFixed(1)}${suffix.crore}`;
-	} else if (amount >= 100_000) {
-		return `₹${(amount / 100_000).toFixed(1)}${suffix.lakh}`;
-	} else if (amount >= 1_000) {
-		return `₹${(amount / 1_000).toFixed(1)}${suffix.thousand}`;
+	if (amount >= AMOUNT_SHORT_FORMAT_ONE_CRORE) {
+		return `₹${(amount / AMOUNT_SHORT_FORMAT_ONE_CRORE).toFixed(1)}${suffix.crore}`;
+	}
+	if (amount >= AMOUNT_SHORT_FORMAT_ONE_LAKH) {
+		return `₹${(amount / AMOUNT_SHORT_FORMAT_ONE_LAKH).toFixed(1)}${suffix.lakh}`;
+	}
+	if (amount >= AMOUNT_SHORT_FORMAT_ONE_THOUSAND) {
+		return `₹${(amount / AMOUNT_SHORT_FORMAT_ONE_THOUSAND).toFixed(1)}${suffix.thousand}`;
 	}
 	return `₹${amount.toFixed(0)}`;
 }
@@ -92,16 +113,33 @@ export function numberToIndianWords(amount: number, lang: 'en' | 'hi' = 'en'): s
 
 	function convert(n: number): string {
 		if (n === 0) return '';
-		if (n < 20) return ones[n] + ' ';
-		if (n < 100) return tens[Math.floor(n / 10)] + ' ' + convert(n % 10);
-		if (n < 1000) return ones[Math.floor(n / 100)] + ' Hundred ' + convert(n % 100);
-		if (n < 100000) return convert(Math.floor(n / 1000)) + 'Thousand ' + convert(n % 1000);
-		if (n < 10000000) return convert(Math.floor(n / 100000)) + 'Lakh ' + convert(n % 100000);
-		return convert(Math.floor(n / 10000000)) + 'Crore ' + convert(n % 10000000);
+		if (n < INDIAN_PLACE_TWENTY) return ones[n] + ' ';
+		if (n < INDIAN_PLACE_HUNDRED) return tens[Math.floor(n / 10)] + ' ' + convert(n % 10);
+		if (n < INDIAN_PLACE_THOUSAND)
+			return (
+				ones[Math.floor(n / INDIAN_PLACE_HUNDRED)] +
+				' Hundred ' +
+				convert(n % INDIAN_PLACE_HUNDRED)
+			);
+		if (n < INDIAN_PLACE_LAKH)
+			return (
+				convert(Math.floor(n / INDIAN_PLACE_THOUSAND)) +
+				'Thousand ' +
+				convert(n % INDIAN_PLACE_THOUSAND)
+			);
+		if (n < INDIAN_PLACE_CRORE)
+			return (
+				convert(Math.floor(n / INDIAN_PLACE_LAKH)) +
+				'Lakh ' +
+				convert(n % INDIAN_PLACE_LAKH)
+			);
+		return (
+			convert(Math.floor(n / INDIAN_PLACE_CRORE)) + 'Crore ' + convert(n % INDIAN_PLACE_CRORE)
+		);
 	}
 
 	const rupees = Math.floor(amount);
-	const paise = Math.round((amount - rupees) * 100);
+	const paise = Math.round((amount - rupees) * INR_MINOR_UNITS_PER_MAJOR);
 
 	let result = convert(rupees).trim();
 	if (result === '') result = 'Zero';
@@ -141,16 +179,35 @@ function numberToHindiWords(amount: number): string {
 
 	function convert(n: number): string {
 		if (n === 0) return '';
-		if (n < 20) return ones[n] + ' ';
-		if (n < 100) return tens[Math.floor(n / 10)] + ' ' + convert(n % 10);
-		if (n < 1000) return ones[Math.floor(n / 100)] + ' सौ ' + convert(n % 100);
-		if (n < 100000) return convert(Math.floor(n / 1000)) + ' हजार ' + convert(n % 1000);
-		if (n < 10000000) return convert(Math.floor(n / 100000)) + ' लाख ' + convert(n % 100000);
-		return convert(Math.floor(n / 10000000)) + ' करोड़ ' + convert(n % 10000000);
+		if (n < INDIAN_PLACE_TWENTY) return ones[n] + ' ';
+		if (n < INDIAN_PLACE_HUNDRED) return tens[Math.floor(n / 10)] + ' ' + convert(n % 10);
+		if (n < INDIAN_PLACE_THOUSAND)
+			return (
+				ones[Math.floor(n / INDIAN_PLACE_HUNDRED)] +
+				' सौ ' +
+				convert(n % INDIAN_PLACE_HUNDRED)
+			);
+		if (n < INDIAN_PLACE_LAKH)
+			return (
+				convert(Math.floor(n / INDIAN_PLACE_THOUSAND)) +
+				' हजार ' +
+				convert(n % INDIAN_PLACE_THOUSAND)
+			);
+		if (n < INDIAN_PLACE_CRORE)
+			return (
+				convert(Math.floor(n / INDIAN_PLACE_LAKH)) +
+				' लाख ' +
+				convert(n % INDIAN_PLACE_LAKH)
+			);
+		return (
+			convert(Math.floor(n / INDIAN_PLACE_CRORE)) +
+			' करोड़ ' +
+			convert(n % INDIAN_PLACE_CRORE)
+		);
 	}
 
 	const rupees = Math.floor(amount);
-	const paise = Math.round((amount - rupees) * 100);
+	const paise = Math.round((amount - rupees) * INR_MINOR_UNITS_PER_MAJOR);
 
 	let result = convert(rupees).trim();
 	if (result === '') result = 'शून्य';

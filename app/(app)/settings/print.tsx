@@ -1,3 +1,4 @@
+import { LETTER_SPACING_SECTION, OPACITY_HOVER } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -29,7 +30,7 @@ function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
 				marginHorizontal: 16,
 				fontWeight: '600',
 				textTransform: 'uppercase',
-				letterSpacing: 0.8,
+				letterSpacing: LETTER_SPACING_SECTION,
 			}}
 		>
 			{label}
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	themeSelected: { borderWidth: 2, borderColor: palette.white, opacity: 0.9 },
+	themeSelected: { borderWidth: 2, borderColor: palette.white, opacity: OPACITY_HOVER },
 	textInput: {
 		borderWidth: 1,
 		borderRadius: 8,

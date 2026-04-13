@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const MULTILINE_INPUT_MIN_HEIGHT = 90;
 import i18n from 'i18next';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -294,7 +296,7 @@ const styles = StyleSheet.create({
 		padding: 16,
 		alignItems: 'center',
 		borderWidth: 1,
-		minHeight: 90,
+		minHeight: MULTILINE_INPUT_MIN_HEIGHT,
 		justifyContent: 'center',
 	},
 	themeRow: {

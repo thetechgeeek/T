@@ -10,52 +10,15 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ThemeColors } from '@/src/theme';
 import { palette } from '@/src/theme/palette';
+import {
+	MOCK_CREDIT_NOTES,
+	type CreditNote,
+	type CreditNoteStatus,
+} from '@/src/mocks/transactions/creditNotes';
+import { OPACITY_TINT_MEDIUM, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
 
-type CreditNoteStatus = 'open' | 'adjusted' | 'refunded';
-
-interface CreditNote {
-	id: string;
-	cn_number: string;
-	date: string;
-	customer_name: string;
-	original_invoice: string;
-	amount: number;
-	reason: string;
-	status: CreditNoteStatus;
-}
-
-const MOCK_CREDIT_NOTES: CreditNote[] = [
-	{
-		id: '1',
-		cn_number: 'CN-001',
-		date: '2025-04-08',
-		customer_name: 'Rajesh Kumar',
-		original_invoice: 'INV-042',
-		amount: 5000,
-		reason: 'Defective goods',
-		status: 'open',
-	},
-	{
-		id: '2',
-		cn_number: 'CN-002',
-		date: '2025-04-05',
-		customer_name: 'Sharma Tiles',
-		original_invoice: 'INV-038',
-		amount: 12500,
-		reason: 'Wrong item delivered',
-		status: 'adjusted',
-	},
-	{
-		id: '3',
-		cn_number: 'CN-003',
-		date: '2025-03-28',
-		customer_name: 'Patel Construction',
-		original_invoice: 'INV-031',
-		amount: 3200,
-		reason: 'Price difference',
-		status: 'refunded',
-	},
-];
+const EMPTY_SECTION_PADDING_VERTICAL = SIZE_AVATAR_MD;
+const FAB_SHADOW_OPACITY = OPACITY_TINT_MEDIUM;
 
 type FilterType = 'all' | CreditNoteStatus;
 
@@ -246,11 +209,11 @@ const styles = StyleSheet.create({
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.2,
+		shadowOpacity: FAB_SHADOW_OPACITY,
 		shadowRadius: 4,
 	},
 	empty: {
-		paddingVertical: 60,
+		paddingVertical: EMPTY_SECTION_PADDING_VERTICAL,
 		alignItems: 'center',
 	},
 });

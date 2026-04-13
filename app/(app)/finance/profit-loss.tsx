@@ -1,5 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
+
+const DISABLED_NAV_OPACITY = OPACITY_TINT_STRONG;
+const SUMMARY_CARD_BORDER_WIDTH = 1.5;
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -231,7 +235,7 @@ export default function ProfitLossScreen() {
 				<Pressable
 					onPress={() => canGoBack && setOffset((o) => o - 1)}
 					disabled={!canGoBack}
-					style={[styles.navBtn, { opacity: canGoBack ? 1 : 0.3 }]}
+					style={[styles.navBtn, { opacity: canGoBack ? 1 : DISABLED_NAV_OPACITY }]}
 					accessibilityLabel="Previous period"
 				>
 					<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
@@ -242,7 +246,7 @@ export default function ProfitLossScreen() {
 				<Pressable
 					onPress={() => canGoForward && setOffset((o) => o + 1)}
 					disabled={!canGoForward}
-					style={[styles.navBtn, { opacity: canGoForward ? 1 : 0.3 }]}
+					style={[styles.navBtn, { opacity: canGoForward ? 1 : DISABLED_NAV_OPACITY }]}
 					accessibilityLabel="Next period"
 				>
 					<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
@@ -369,8 +373,11 @@ export default function ProfitLossScreen() {
 					padding="lg"
 					style={{
 						borderRadius: r.md,
-						backgroundColor: withOpacity(isProfit ? c.success : c.error, 0.08),
-						borderWidth: 1.5,
+						backgroundColor: withOpacity(
+							isProfit ? c.success : c.error,
+							OPACITY_SKELETON_BASE,
+						),
+						borderWidth: SUMMARY_CARD_BORDER_WIDTH,
 						borderColor: isProfit ? c.success : c.error,
 					}}
 				>

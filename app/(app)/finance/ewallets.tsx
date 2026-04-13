@@ -19,6 +19,9 @@ import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { palette } from '@/src/theme/palette';
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { MOCK_EWALLETS } from '@/src/mocks/finance/ewallets';
 
 // TODO: connect to store — e-wallets table
 interface EWallet {
@@ -31,6 +34,15 @@ interface EWallet {
 	color: string;
 }
 
+const EMOJI_FONT_SIZE = 26;
+
+const WALLET_TYPE_COLORS: Record<string, string> = {
+	phonePe: palette.ewalletPhonePe,
+	gpay: palette.ewalletGPay,
+	paytm: palette.ewalletPaytm,
+	other: palette.ewalletOther,
+};
+
 const WALLET_TYPES = [
 	{ label: 'PhonePe', value: 'phonePe', emoji: '📱', color: palette.ewalletPhonePe },
 	{ label: 'GPay', value: 'gpay', emoji: '📱', color: palette.ewalletGPay },
@@ -38,26 +50,11 @@ const WALLET_TYPES = [
 	{ label: 'Other', value: 'other', emoji: '💼', color: palette.ewalletOther },
 ];
 
-const mockWallets: EWallet[] = [
-	{
-		id: '1',
-		type: 'phonePe',
-		name: 'PhonePe',
-		phone: '98765XXXXX',
-		balance: 12500,
-		emoji: '📱',
-		color: palette.ewalletPhonePe,
-	},
-	{
-		id: '2',
-		type: 'gpay',
-		name: 'GPay',
-		phone: '98765XXXXX',
-		balance: 4800,
-		emoji: '📱',
-		color: palette.ewalletGPay,
-	},
-];
+const MOCK_WALLETS_WITH_COLORS: EWallet[] = MOCK_EWALLETS.map((w) => ({
+	...w,
+	phone: w.phone ?? '',
+	color: WALLET_TYPE_COLORS[w.type] ?? palette.ewalletOther,
+}));
 
 export default function EWalletsScreen() {
 	const { theme, c, r } = useThemeTokens();
@@ -65,7 +62,7 @@ export default function EWalletsScreen() {
 
 	const insets = useSafeAreaInsets();
 
-	const [wallets, setWallets] = useState<EWallet[]>(mockWallets);
+	const [wallets, setWallets] = useState<EWallet[]>(MOCK_WALLETS_WITH_COLORS);
 	const [showAddModal, setShowAddModal] = useState(false);
 
 	// Add form state
@@ -160,7 +157,9 @@ export default function EWalletsScreen() {
 									{ backgroundColor: item.color + '22', borderRadius: r.md },
 								]}
 							>
-								<ThemedText style={{ fontSize: 26 }}>{item.emoji}</ThemedText>
+								<ThemedText style={{ fontSize: EMOJI_FONT_SIZE }}>
+									{item.emoji}
+								</ThemedText>
 							</View>
 							<View style={{ flex: 1, marginLeft: 14 }}>
 								<ThemedText weight="bold" style={{ fontSize: 16 }}>
@@ -385,8 +384,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	walletIcon: {
-		width: 52,
-		height: 52,
+		width: SIZE_INPUT_HEIGHT,
+		height: SIZE_INPUT_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -401,8 +400,7 @@ const styles = StyleSheet.create({
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 	modal: {
 		flex: 1,
@@ -443,7 +441,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		minHeight: 52,
+		minHeight: SIZE_INPUT_HEIGHT,
 	},
 	currencyPrefix: {
 		paddingHorizontal: 14,

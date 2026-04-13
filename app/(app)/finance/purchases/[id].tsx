@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { OPACITY_TOAST } from '@/theme/uiMetrics';
+
+/** Minimum width of the kebab-menu dropdown */
+const KEBAB_MENU_MIN_WIDTH = 140;
 import type { Href } from 'expo-router';
 import {
 	Trash2,
@@ -689,12 +693,12 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		zIndex: 100,
 		top: 56,
-		minWidth: 140,
+		minWidth: KEBAB_MENU_MIN_WIDTH,
 		borderWidth: 1,
 		elevation: 8,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.15,
+		shadowOpacity: OPACITY_TOAST,
 		shadowRadius: 4,
 	},
 	kebabItem: {

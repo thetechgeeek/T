@@ -5,6 +5,12 @@
  * formatQuantity — quantity formatting with configurable decimal places
  */
 
+import {
+	AMOUNT_SHORT_FORMAT_ONE_CRORE,
+	AMOUNT_SHORT_FORMAT_ONE_LAKH,
+	INDIAN_GROUPING_TAIL_DIGIT_COUNT,
+} from '@/constants/money';
+
 export type SupportedLanguage = 'hi' | 'en';
 
 export interface FormatCurrencyOptions {
@@ -22,20 +28,21 @@ export interface FormatCurrencyOptions {
  */
 function indianGrouping(int: number): string {
 	const str = String(Math.abs(Math.floor(int)));
-	if (str.length <= 3) return str;
-	const last3 = str.slice(-3);
-	const rest = str.slice(0, -3);
-	return rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + last3;
+	const tail = INDIAN_GROUPING_TAIL_DIGIT_COUNT;
+	if (str.length <= tail) return str;
+	const lastBlock = str.slice(-tail);
+	const rest = str.slice(0, -tail);
+	return rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastBlock;
 }
 
 const COMPACT_EN: [number, string][] = [
-	[10_000_000, 'Crore'],
-	[100_000, 'Lakh'],
+	[AMOUNT_SHORT_FORMAT_ONE_CRORE, 'Crore'],
+	[AMOUNT_SHORT_FORMAT_ONE_LAKH, 'Lakh'],
 ];
 
 const COMPACT_HI: [number, string][] = [
-	[10_000_000, 'करोड़'],
-	[100_000, 'लाख'],
+	[AMOUNT_SHORT_FORMAT_ONE_CRORE, 'करोड़'],
+	[AMOUNT_SHORT_FORMAT_ONE_LAKH, 'लाख'],
 ];
 
 /**

@@ -1,3 +1,6 @@
+import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
+
+const GST_CARD_BORDER_WIDTH = 1.5;
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, TextInput, Pressable } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -19,7 +22,7 @@ function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
 				marginHorizontal: 16,
 				fontWeight: '600',
 				textTransform: 'uppercase',
-				letterSpacing: 0.8,
+				letterSpacing: LETTER_SPACING_SECTION,
 			}}
 		>
 			{label}
@@ -205,7 +208,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 16,
 		marginTop: 20,
 		borderRadius: 12,
-		borderWidth: 1.5,
+		borderWidth: GST_CARD_BORDER_WIDTH,
 		padding: 16,
 		flexDirection: 'row',
 		alignItems: 'center',

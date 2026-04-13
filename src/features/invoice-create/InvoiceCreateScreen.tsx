@@ -6,6 +6,8 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { Screen } from '@/src/components/atoms/Screen';
 import { useInvoiceCreateFlow } from './useInvoiceCreateFlow';
+
+const STEP_BORDER_WIDTH = 1.5;
 import { CustomerStep } from './CustomerStep';
 import { LineItemsStep } from './LineItemsStep';
 import { PaymentStep } from './PaymentStep';
@@ -48,12 +50,12 @@ export default function InvoiceCreateScreen() {
 						: isCompleted
 							? {
 									backgroundColor: 'transparent',
-									borderWidth: 1.5,
+									borderWidth: STEP_BORDER_WIDTH,
 									borderColor: c.primary,
 								}
 							: {
 									backgroundColor: palette.segmentTrack,
-									borderWidth: 1.5,
+									borderWidth: STEP_BORDER_WIDTH,
 									borderColor: palette.segmentBorder,
 								};
 

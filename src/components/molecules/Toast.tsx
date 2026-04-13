@@ -2,6 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { palette } from '@/src/theme/palette';
+import { OPACITY_TOAST } from '@/theme/uiMetrics';
+
+/** Bottom offset so Toast floats above the tab bar */
+const TOAST_BOTTOM_OFFSET = 90;
 
 export type ToastVariant = 'success' | 'error' | 'info';
 
@@ -79,7 +83,7 @@ export function Toast({
 const styles = StyleSheet.create({
 	container: {
 		position: 'absolute',
-		bottom: 90,
+		bottom: TOAST_BOTTOM_OFFSET,
 		left: 16,
 		right: 16,
 		borderLeftWidth: 4,
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
 		elevation: 6,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.15,
+		shadowOpacity: OPACITY_TOAST,
 		shadowRadius: 4,
 	},
 });

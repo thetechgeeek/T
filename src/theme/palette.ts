@@ -217,12 +217,19 @@ export const printThemeSwatches = [
 	{ key: 'colourful', label: 'Colourful', color: '#7C3AED' },
 ] as const;
 
+/** Demo chart data (major units); not tied to a live currency */
+const DEMO_EXPENSE_PURCHASE = 820_000;
+const DEMO_EXPENSE_SALARIES = 185_000;
+const DEMO_EXPENSE_TRANSPORT = 42_000;
+const DEMO_EXPENSE_UTILITIES = 18_500;
+const DEMO_EXPENSE_MISC = 11_200;
+
 export const expenseReportDemoSlices = [
-	{ id: '1', name: 'Purchase', amount: 820000, color: '#4A90E2' },
-	{ id: '2', name: 'Salaries', amount: 185000, color: '#E67E22' },
-	{ id: '3', name: 'Transport', amount: 42000, color: '#2ECC71' },
-	{ id: '4', name: 'Utilities', amount: 18500, color: '#9B59B6' },
-	{ id: '5', name: 'Misc', amount: 11200, color: '#E74C3C' },
+	{ id: '1', name: 'Purchase', amount: DEMO_EXPENSE_PURCHASE, color: '#4A90E2' },
+	{ id: '2', name: 'Salaries', amount: DEMO_EXPENSE_SALARIES, color: '#E67E22' },
+	{ id: '3', name: 'Transport', amount: DEMO_EXPENSE_TRANSPORT, color: '#2ECC71' },
+	{ id: '4', name: 'Utilities', amount: DEMO_EXPENSE_UTILITIES, color: '#9B59B6' },
+	{ id: '5', name: 'Misc', amount: DEMO_EXPENSE_MISC, color: '#E74C3C' },
 ] as const;
 
 export const allTransactionsTypeColors = {

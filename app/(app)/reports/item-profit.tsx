@@ -7,6 +7,8 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { REPORT_NUM_COLUMN_MIN_WIDTH_PX } from '@/constants/reportLayout';
+import { MOCK_ITEM_PROFIT_ROWS, type ItemProfitRow } from '@/src/mocks/reports/itemProfit';
 
 // TODO: Replace with real data from Supabase (sales + purchase cost joined on item_id)
 type Period = 'month' | 'quarter' | 'year' | 'fy';
@@ -25,81 +27,6 @@ const SORT_CHIPS: { label: string; value: SortKey }[] = [
 	{ label: 'Qty', value: 'qty' },
 ];
 
-interface ItemProfitRow {
-	id: string;
-	name: string;
-	category: string;
-	qtySold: number;
-	revenue: number;
-	cost: number;
-	profit: number;
-	margin: number;
-}
-
-// TODO: Replace with live query — SELECT item_id, SUM(qty), SUM(sale_amount), SUM(cost_amount) FROM invoice_items GROUP BY item_id
-const MOCK_ITEMS: ItemProfitRow[] = [
-	{
-		id: '1',
-		name: 'Kajaria 600×600 Glossy',
-		category: 'Glossy',
-		qtySold: 420,
-		revenue: 189000,
-		cost: 126000,
-		profit: 63000,
-		margin: 33,
-	},
-	{
-		id: '2',
-		name: 'Johnson Endura Floor',
-		category: 'Floor',
-		qtySold: 310,
-		revenue: 139500,
-		cost: 99000,
-		profit: 40500,
-		margin: 29,
-	},
-	{
-		id: '3',
-		name: 'Somany Matt 300×600',
-		category: 'Matt',
-		qtySold: 280,
-		revenue: 98000,
-		cost: 73500,
-		profit: 24500,
-		margin: 25,
-	},
-	{
-		id: '4',
-		name: 'RAK Wooden Plank',
-		category: 'Wooden',
-		qtySold: 195,
-		revenue: 136500,
-		cost: 110500,
-		profit: 26000,
-		margin: 19,
-	},
-	{
-		id: '5',
-		name: 'Nitco Satin 600×1200',
-		category: 'Satin',
-		qtySold: 155,
-		revenue: 108500,
-		cost: 80750,
-		profit: 27750,
-		margin: 26,
-	},
-	{
-		id: '6',
-		name: 'Cera Elevation Outdoor',
-		category: 'Elevation',
-		qtySold: 90,
-		revenue: 63000,
-		cost: 52500,
-		profit: 10500,
-		margin: 17,
-	},
-];
-
 export default function ItemProfitScreen() {
 	const { c, r, theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
@@ -108,13 +35,13 @@ export default function ItemProfitScreen() {
 	const [sortKey, setSortKey] = useState<SortKey>('profit');
 
 	const sortedItems = useMemo<ItemProfitRow[]>(() => {
-		// TODO: filter MOCK_ITEMS by period when real date-range data is available
-		return [...MOCK_ITEMS].sort(
+		// TODO: filter MOCK_ITEM_PROFIT_ROWS by period when real date-range data is available
+		return [...MOCK_ITEM_PROFIT_ROWS].sort(
 			(a, b) =>
 				b[sortKey === 'qty' ? 'qtySold' : sortKey] -
 				a[sortKey === 'qty' ? 'qtySold' : sortKey],
 		);
-	}, [sortKey, period]);
+	}, [sortKey]);
 
 	const totals = useMemo(() => {
 		const revenue = sortedItems.reduce((sum, i) => sum + i.revenue, 0);
@@ -374,7 +301,7 @@ const styles = StyleSheet.create({
 	},
 	numCol: {
 		textAlign: 'right',
-		minWidth: 110,
+		minWidth: REPORT_NUM_COLUMN_MIN_WIDTH_PX,
 	},
 	emptyState: {
 		paddingVertical: 32,

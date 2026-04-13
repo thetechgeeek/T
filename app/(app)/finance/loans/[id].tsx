@@ -11,22 +11,11 @@ import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { palette } from '@/src/theme/palette';
+import { MOCK_LOAN } from '@/src/mocks/finance/loans';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
-
-interface Loan {
-	id: string;
-	lenderName: string;
-	loanType: string;
-	principalAmount: number;
-	outstandingAmount: number;
-	interestRate: number; // % p.a.
-	tenureMonths: number;
-	disbursementDate: string;
-	nextEmiDate: string;
-}
 
 interface AmortisationRow {
 	month: number;
@@ -35,23 +24,6 @@ interface AmortisationRow {
 	interest: number;
 	balance: number;
 }
-
-// ---------------------------------------------------------------------------
-// Mock data — TODO: replace with Zustand store lookup by loanId once store
-// supports Loan entities (see finance slice roadmap).
-// ---------------------------------------------------------------------------
-
-const MOCK_LOAN: Loan = {
-	id: '1',
-	lenderName: 'State Bank of India',
-	loanType: 'Term Loan',
-	principalAmount: 500000,
-	outstandingAmount: 423180,
-	interestRate: 10.5,
-	tenureMonths: 60,
-	disbursementDate: '2024-01-15',
-	nextEmiDate: '2026-05-15',
-};
 
 // ---------------------------------------------------------------------------
 // EMI & amortisation helpers
@@ -203,8 +175,12 @@ export default function LoanDetailScreen() {
 		router.push('/(app)/finance/loans/add' as Href);
 	};
 
+	/** Widen mock literal so variant mapping stays exhaustive when real data loads */
+	type LoanTypeKey = 'Term Loan' | 'OD' | 'Mortgage' | 'Personal' | 'Vehicle';
+
 	const loanTypeVariant = (): 'primary' | 'info' | 'warning' | 'neutral' => {
-		switch (loan.loanType) {
+		const t = loan.loanType as LoanTypeKey;
+		switch (t) {
 			case 'OD':
 				return 'info';
 			case 'Mortgage':

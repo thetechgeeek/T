@@ -11,6 +11,9 @@ import { useRouter } from 'expo-router';
 const CURRENT_FY = '2024-25';
 const NEXT_FY = '2025-26';
 
+/** Delay between progress-step ticks in the close-FY animation */
+const MS_CLOSE_FY_STEP_DELAY = 700;
+
 const PROCESSING_STEPS = [
 	'Creating opening balance entries for all parties...',
 	'Creating opening cash balance for FY ' + NEXT_FY + '...',
@@ -36,7 +39,7 @@ export default function CloseFYScreen() {
 			if (i < PROCESSING_STEPS.length) {
 				setProcessingStep(i);
 				i++;
-				setTimeout(tick, 700);
+				setTimeout(tick, MS_CLOSE_FY_STEP_DELAY);
 			} else {
 				setStep('done');
 			}

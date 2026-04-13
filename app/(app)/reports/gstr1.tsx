@@ -9,57 +9,8 @@ import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-
-// TODO: Replace mock data with Supabase query filtered by period + invoice type
-const MOCK_B2B = [
-	{
-		id: '1',
-		invoiceNo: 'INV-001',
-		gstin: '27AAPFU0939F1ZV',
-		customer: 'Sharma Tiles Pvt Ltd',
-		taxable: 85000,
-		cgst: 7650,
-		sgst: 7650,
-		igst: 0,
-		rate: 18,
-	},
-	{
-		id: '2',
-		invoiceNo: 'INV-002',
-		gstin: '29ABCDE1234F1Z5',
-		customer: 'Karnataka Ceramics',
-		taxable: 42000,
-		cgst: 0,
-		sgst: 0,
-		igst: 7560,
-		rate: 18,
-	},
-	{
-		id: '3',
-		invoiceNo: 'INV-004',
-		gstin: '07AAACP4716N1ZR',
-		customer: 'Delhi Granite Works',
-		taxable: 60000,
-		cgst: 0,
-		sgst: 0,
-		igst: 7200,
-		rate: 12,
-	},
-];
-
-// TODO: Replace mock data with Supabase query for B2C invoices grouped by GST rate
-const MOCK_B2C: { rate: number; taxable: number; cgst: number; sgst: number; igst: number }[] = [
-	{ rate: 5, taxable: 12000, cgst: 300, sgst: 300, igst: 0 },
-	{ rate: 12, taxable: 28000, cgst: 1680, sgst: 1680, igst: 0 },
-	{ rate: 18, taxable: 55000, cgst: 4950, sgst: 4950, igst: 0 },
-	{ rate: 28, taxable: 8000, cgst: 1120, sgst: 1120, igst: 0 },
-];
-
-const PERIODS = [
-	{ label: 'Jan', value: '2025-01' },
-	{ label: 'Feb', value: '2025-02' },
-	{ label: 'Mar', value: '2025-03' },
-];
+import { GSTR1_COL_AMT_FLEX } from '@/constants/reportLayout';
+import { GSTR1_PERIOD_CHIPS, MOCK_GSTR1_B2B, MOCK_GSTR1_B2C } from '@/src/mocks/reports/gstr1';
 
 function getCurrentPeriod() {
 	const d = new Date();
@@ -73,21 +24,25 @@ export default function GSTR1Screen() {
 	const { formatCurrency } = useLocale();
 
 	const currentPeriod = getCurrentPeriod();
-	const allPeriods = PERIODS.some((p) => p.value === currentPeriod)
-		? PERIODS
-		: [...PERIODS, { label: 'Current', value: currentPeriod }];
+	const allPeriods = GSTR1_PERIOD_CHIPS.some((p) => p.value === currentPeriod)
+		? GSTR1_PERIOD_CHIPS
+		: [...GSTR1_PERIOD_CHIPS, { label: 'Current', value: currentPeriod }];
 
 	const [period, setPeriod] = useState(allPeriods[allPeriods.length - 1].value);
 
 	// TODO: derive totals from real data filtered by period
 	const totalTaxable =
-		MOCK_B2B.reduce((a, r) => a + r.taxable, 0) + MOCK_B2C.reduce((a, r) => a + r.taxable, 0);
+		MOCK_GSTR1_B2B.reduce((a, r) => a + r.taxable, 0) +
+		MOCK_GSTR1_B2C.reduce((a, r) => a + r.taxable, 0);
 	const totalCGST =
-		MOCK_B2B.reduce((a, r) => a + r.cgst, 0) + MOCK_B2C.reduce((a, r) => a + r.cgst, 0);
+		MOCK_GSTR1_B2B.reduce((a, r) => a + r.cgst, 0) +
+		MOCK_GSTR1_B2C.reduce((a, r) => a + r.cgst, 0);
 	const totalSGST =
-		MOCK_B2B.reduce((a, r) => a + r.sgst, 0) + MOCK_B2C.reduce((a, r) => a + r.sgst, 0);
+		MOCK_GSTR1_B2B.reduce((a, r) => a + r.sgst, 0) +
+		MOCK_GSTR1_B2C.reduce((a, r) => a + r.sgst, 0);
 	const totalIGST =
-		MOCK_B2B.reduce((a, r) => a + r.igst, 0) + MOCK_B2C.reduce((a, r) => a + r.igst, 0);
+		MOCK_GSTR1_B2B.reduce((a, r) => a + r.igst, 0) +
+		MOCK_GSTR1_B2C.reduce((a, r) => a + r.igst, 0);
 
 	const divider = <View style={[styles.divider, { backgroundColor: c.border }]} />;
 
@@ -207,13 +162,13 @@ export default function GSTR1Screen() {
 						</ThemedText>
 					</View>
 
-					{MOCK_B2B.map((row, idx) => (
+					{MOCK_GSTR1_B2B.map((row, idx) => (
 						<View
 							key={row.id}
 							style={[
 								styles.tableRow,
 								{ borderBottomColor: c.border },
-								idx === MOCK_B2B.length - 1 && { borderBottomWidth: 0 },
+								idx === MOCK_GSTR1_B2B.length - 1 && { borderBottomWidth: 0 },
 							]}
 						>
 							<View style={styles.colInvoice}>
@@ -304,13 +259,13 @@ export default function GSTR1Screen() {
 						</ThemedText>
 					</View>
 
-					{MOCK_B2C.map((row, idx) => (
+					{MOCK_GSTR1_B2C.map((row, idx) => (
 						<View
 							key={row.rate}
 							style={[
 								styles.tableRow,
 								{ borderBottomColor: c.border },
-								idx === MOCK_B2C.length - 1 && { borderBottomWidth: 0 },
+								idx === MOCK_GSTR1_B2C.length - 1 && { borderBottomWidth: 0 },
 							]}
 						>
 							<ThemedText variant="captionBold" style={{ flex: 1 }}>
@@ -345,7 +300,7 @@ export default function GSTR1Screen() {
 							Total
 						</ThemedText>
 						<ThemedText variant="captionBold" style={styles.colAmt} align="right">
-							{formatCurrency(MOCK_B2C.reduce((a, r) => a + r.taxable, 0))}
+							{formatCurrency(MOCK_GSTR1_B2C.reduce((a, r) => a + r.taxable, 0))}
 						</ThemedText>
 						<ThemedText
 							variant="captionBold"
@@ -353,7 +308,7 @@ export default function GSTR1Screen() {
 							style={styles.colAmt}
 							align="right"
 						>
-							{formatCurrency(MOCK_B2C.reduce((a, r) => a + r.cgst, 0))}
+							{formatCurrency(MOCK_GSTR1_B2C.reduce((a, r) => a + r.cgst, 0))}
 						</ThemedText>
 						<ThemedText
 							variant="captionBold"
@@ -361,7 +316,7 @@ export default function GSTR1Screen() {
 							style={styles.colAmt}
 							align="right"
 						>
-							{formatCurrency(MOCK_B2C.reduce((a, r) => a + r.sgst, 0))}
+							{formatCurrency(MOCK_GSTR1_B2C.reduce((a, r) => a + r.sgst, 0))}
 						</ThemedText>
 					</View>
 				</Card>
@@ -453,7 +408,7 @@ const styles = StyleSheet.create({
 		paddingRight: 4,
 	},
 	colAmt: {
-		flex: 1.5,
+		flex: GSTR1_COL_AMT_FLEX,
 	},
 	actionRow: {
 		flexDirection: 'row',

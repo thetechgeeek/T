@@ -1,3 +1,8 @@
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+
+const OVERLAY_ZINDEX = 999;
+const FAB_SIZE = SIZE_AVATAR_MD;
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
@@ -287,7 +292,7 @@ export default function InventoryTab() {
 						StyleSheet.absoluteFill,
 						{
 							backgroundColor: 'rgba(255,255,255,0.7)',
-							zIndex: 999,
+							zIndex: OVERLAY_ZINDEX,
 							alignItems: 'center',
 							justifyContent: 'center',
 						},
@@ -490,9 +495,9 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		right: 20,
 		bottom: 20,
-		width: 60,
-		height: 60,
-		borderRadius: 30,
+		width: FAB_SIZE,
+		height: FAB_SIZE,
+		borderRadius: FAB_SIZE / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -518,14 +523,13 @@ const styles = StyleSheet.create({
 	},
 	menuSheet: {
 		position: 'absolute',
-		top: 60,
+		top: FAB_SIZE,
 		right: 0,
 		width: 200,
 		elevation: 5,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 	menuRow: {
 		flexDirection: 'row',

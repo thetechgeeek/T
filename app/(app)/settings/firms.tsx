@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, Pressable, Alert } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+
+const ADD_FIRM_BORDER_WIDTH = 1.5;
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 16,
 		marginTop: 16,
 		borderRadius: 10,
-		borderWidth: 1.5,
+		borderWidth: ADD_FIRM_BORDER_WIDTH,
 		borderStyle: 'dashed',
 		padding: 16,
 		alignItems: 'center',

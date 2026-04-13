@@ -57,7 +57,6 @@ describe('Screen', () => {
 	});
 
 	it('applies padding based on safeAreaInsets', () => {
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const { useSafeAreaInsets } = require('react-native-safe-area-context');
 		useSafeAreaInsets.mockReturnValue({ top: 50, bottom: 30, left: 0, right: 0 });
 
@@ -77,7 +76,6 @@ describe('Screen', () => {
 	});
 
 	it('respects empty safeAreaEdges', () => {
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const { useSafeAreaInsets } = require('react-native-safe-area-context');
 		useSafeAreaInsets.mockReturnValue({ top: 50, bottom: 30, left: 0, right: 0 });
 

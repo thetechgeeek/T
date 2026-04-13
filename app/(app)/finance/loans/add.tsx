@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { View, ScrollView, TextInput, StyleSheet, Alert, Switch, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+
+/** Multi-line notes input height */
+const NOTES_INPUT_HEIGHT = 88;
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -337,7 +340,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	notesInput: {
-		height: 88,
+		height: NOTES_INPUT_HEIGHT,
 		paddingTop: 10,
 	},
 });

@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
+const PHONE_DIGITS = 10;
+const PHONE_WITH_COUNTRY_CODE_DIGITS = 12;
+const COUNTRY_CODE_DIGITS = 2;
+
 /**
  * Strip +91 prefix, spaces, dashes; take last 10 digits.
  */
 function normalizePhone(raw: string): string {
 	let cleaned = raw.replace(/[+\s-]/g, '');
 	// Remove leading 91 if 12-digit number
-	if (cleaned.length === 12 && cleaned.startsWith('91')) {
-		cleaned = cleaned.slice(2);
+	if (cleaned.length === PHONE_WITH_COUNTRY_CODE_DIGITS && cleaned.startsWith('91')) {
+		cleaned = cleaned.slice(COUNTRY_CODE_DIGITS);
 	}
 	// Take last 10 digits
-	return cleaned.slice(-10);
+	return cleaned.slice(-PHONE_DIGITS);
 }
 
 export interface PhoneInputProps {

@@ -1,3 +1,4 @@
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, RefreshControl, Alert, Pressable } from 'react-native';
@@ -193,7 +194,6 @@ const styles = StyleSheet.create({
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 });

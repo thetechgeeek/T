@@ -23,77 +23,11 @@ import { supplierRepository } from '@/src/repositories/supplierRepository';
 import type { Customer } from '@/src/types/customer';
 import type { Supplier } from '@/src/types/supplier';
 import { layout } from '@/src/theme/layout';
+import { PARTY_PICKER_PREVIEW_LIMIT, PARTY_STMT_COL_WIDTH_PX } from '@/constants/reportLayout';
+import { MOCK_PARTY_STATEMENT_TXS } from '@/src/mocks/reports/partyStatement';
 
 type Tab = 'customers' | 'suppliers';
 type DateRange = 'this-month' | 'this-fy' | 'custom';
-
-interface StatementTx {
-	id: string;
-	date: string;
-	description: string;
-	debit: number;
-	credit: number;
-	balance: number;
-}
-
-const MOCK_TRANSACTIONS: StatementTx[] = [
-	{
-		id: '1',
-		date: '2024-04-05',
-		description: 'Opening Balance',
-		debit: 0,
-		credit: 0,
-		balance: 5000,
-	},
-	{
-		id: '2',
-		date: '2024-04-12',
-		description: 'Invoice #INV-001 – Vitrified Tiles (60x60)',
-		debit: 18500,
-		credit: 0,
-		balance: 23500,
-	},
-	{
-		id: '3',
-		date: '2024-04-20',
-		description: 'Payment Received – UPI',
-		debit: 0,
-		credit: 15000,
-		balance: 8500,
-	},
-	{
-		id: '4',
-		date: '2024-05-03',
-		description: 'Invoice #INV-007 – Ceramic Wall Tiles',
-		debit: 12400,
-		credit: 0,
-		balance: 20900,
-	},
-	{
-		id: '5',
-		date: '2024-05-15',
-		description: 'Payment Received – NEFT',
-		debit: 0,
-		credit: 10000,
-		balance: 10900,
-	},
-	{
-		id: '6',
-		date: '2024-06-08',
-		description: 'Invoice #INV-015 – Mosaic Tiles',
-		debit: 8750,
-		credit: 0,
-		balance: 19650,
-	},
-	{
-		id: '7',
-		date: '2024-06-25',
-		description: 'Payment Received – Cheque',
-		debit: 0,
-		credit: 19650,
-		balance: 0,
-	},
-];
 
 const DATE_RANGE_LABELS: Record<DateRange, string> = {
 	'this-month': 'This Month',
@@ -166,19 +100,19 @@ export default function PartyStatementScreen() {
 				: 'Custom Period';
 
 	const filteredCustomers = useMemo(() => {
-		if (!search) return customers.slice(0, 15);
+		if (!search) return customers.slice(0, PARTY_PICKER_PREVIEW_LIMIT);
 		const q = search.toLowerCase();
 		return customers
 			.filter((c) => c.name.toLowerCase().includes(q) || (c.phone ?? '').includes(q))
-			.slice(0, 15);
+			.slice(0, PARTY_PICKER_PREVIEW_LIMIT);
 	}, [customers, search]);
 
 	const filteredSuppliers = useMemo(() => {
-		if (!search) return suppliers.slice(0, 15);
+		if (!search) return suppliers.slice(0, PARTY_PICKER_PREVIEW_LIMIT);
 		const q = search.toLowerCase();
 		return suppliers
 			.filter((s) => s.name.toLowerCase().includes(q) || (s.phone ?? '').includes(q))
-			.slice(0, 15);
+			.slice(0, PARTY_PICKER_PREVIEW_LIMIT);
 	}, [suppliers, search]);
 
 	const selectedParty = tab === 'customers' ? selectedCustomer : selectedSupplier;
@@ -187,7 +121,7 @@ export default function PartyStatementScreen() {
 	const partyGstin =
 		tab === 'customers' ? (selectedCustomer?.gstin ?? '') : (selectedSupplier?.gstin ?? '');
 
-	const txs = MOCK_TRANSACTIONS; // TODO: replace with real ledger from store
+	const txs = MOCK_PARTY_STATEMENT_TXS; // TODO: replace with real ledger from store
 	const openingBal = txs[0]?.balance ?? 0;
 	const closingBal = txs[txs.length - 1]?.balance ?? 0;
 	const totalDebit = txs.slice(1).reduce((a, t) => a + t.debit, 0);
@@ -817,7 +751,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	colDate: {
-		width: 42,
+		width: PARTY_STMT_COL_WIDTH_PX.date,
 		marginRight: 4,
 	},
 	colDesc: {
@@ -825,7 +759,7 @@ const styles = StyleSheet.create({
 		marginRight: 4,
 	},
 	colAmt: {
-		width: 68,
+		width: PARTY_STMT_COL_WIDTH_PX.amount,
 	},
 	actionBtn: {
 		flexDirection: 'row',

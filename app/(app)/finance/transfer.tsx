@@ -8,12 +8,9 @@ import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
+import { MOCK_TRANSFER_ACCOUNTS } from '@/src/mocks/finance/transfer';
 
-const ACCOUNTS = [
-	{ id: 'cash', name: 'Cash in Hand', balance: 15000, type: 'Cash' },
-	{ id: 'sbi', name: 'SBI Savings', balance: 85000, type: 'Bank' },
-	{ id: 'hdfc', name: 'HDFC Current', balance: 230000, type: 'Bank' },
-];
+const ACCOUNTS = MOCK_TRANSFER_ACCOUNTS;
 
 function AccountPicker({
 	label,

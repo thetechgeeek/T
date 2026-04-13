@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { palette } from '@/src/theme/palette';
+
+const ID_TAIL_DIGITS = 6;
 import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
@@ -53,8 +55,8 @@ function formatMode(mode: string): string {
 }
 
 function padId(id: string): string {
-	const numeric = id.replace(/\D/g, '').slice(-6);
-	return numeric.padStart(6, '0');
+	const numeric = id.replace(/\D/g, '').slice(-ID_TAIL_DIGITS);
+	return numeric.padStart(ID_TAIL_DIGITS, '0');
 }
 
 export default function PaymentDetailScreen() {

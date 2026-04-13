@@ -1,12 +1,12 @@
 /**
  * Jest configuration for TileMaster (React Native / Expo)
  *
- * Alias convention (canonical):
- *   @/src/...  →  <rootDir>/src/...   (covers all src imports)
- *   @/app/...  →  <rootDir>/app/...   (covers all app route imports in tests)
- *
- * The single mapping '^@/(.*)$': '<rootDir>/$1' handles BOTH patterns correctly.
- * Do NOT add a second '^@/(.*)$' entry — moduleNameMapper keys must be unique.
+ * Path aliases mirror tsconfig.json "paths". Specific prefixes (@/theme, @/constants, …)
+ * must be listed BEFORE the catch-all '^@/(.*)$' — Jest uses first match.
+ *   @/theme/...     →  <rootDir>/src/theme/...
+ *   @/constants/... →  <rootDir>/src/constants/...
+ *   @/src/...        →  <rootDir>/src/...
+ *   @/app/...        →  <rootDir>/app/...   (catch-all)
  *
  * Supabase is NOT globally mocked here or in jest.setup.ts.
  * Each test file that needs a Supabase mock must declare its own local
@@ -58,8 +58,17 @@ module.exports = {
 	testPathIgnorePatterns: ['/node_modules/', '<rootDir>/__tests__/integration/'],
 
 	moduleNameMapper: {
-		// Canonical alias: @/src/hooks/useLocale → src/hooks/useLocale
-		//                  @/app/(app)/...       → app/(app)/...
+		'^@/theme/(.*)$': '<rootDir>/src/theme/$1',
+		'^@/constants/(.*)$': '<rootDir>/src/constants/$1',
+		'^@/components/(.*)$': '<rootDir>/src/components/$1',
+		'^@/services/(.*)$': '<rootDir>/src/services/$1',
+		'^@/stores/(.*)$': '<rootDir>/src/stores/$1',
+		'^@/hooks/(.*)$': '<rootDir>/src/hooks/$1',
+		'^@/utils/(.*)$': '<rootDir>/src/utils/$1',
+		'^@/types/(.*)$': '<rootDir>/src/types/$1',
+		'^@/config/(.*)$': '<rootDir>/src/config/$1',
+		'^@/i18n/(.*)$': '<rootDir>/src/i18n/$1',
+		'^@/src/(.*)$': '<rootDir>/src/$1',
 		'^@/(.*)$': '<rootDir>/$1',
 		// Module stubs for native-only packages not available in Jest
 		'^expo-file-system$': '<rootDir>/src/__mocks__/expo-file-system.ts',

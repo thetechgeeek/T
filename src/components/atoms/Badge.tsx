@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 
 export type BadgeVariant =
 	| 'primary'
@@ -52,7 +53,10 @@ export const Badge: React.FC<BadgeProps> = ({
 				return { bg: theme.colors.surfaceVariant, text: theme.colors.onSurfaceVariant };
 			case 'default':
 			default:
-				return { bg: withOpacity(theme.colors.primary, 0.12), text: theme.colors.primary };
+				return {
+					bg: withOpacity(theme.colors.primary, OPACITY_TINT_LIGHT),
+					text: theme.colors.primary,
+				};
 		}
 	};
 

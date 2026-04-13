@@ -4,7 +4,6 @@ import { supabase } from '../config/supabase';
 import { createSupabaseMock } from '../../__tests__/utils/supabaseMock';
 
 jest.mock('../config/supabase', () => {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const { createSupabaseMock } = require('../../__tests__/utils/supabaseMock');
 	return {
 		supabase: createSupabaseMock(),

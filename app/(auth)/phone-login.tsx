@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import { useAuthStore } from '@/src/stores/authStore';
+import { OPACITY_HOVER, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { PhoneInput } from '@/src/components/molecules/PhoneInput';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -61,7 +62,12 @@ export default function PhoneLoginScreen() {
 					TileMaster
 				</ThemedText>
 				<ThemedText
-					style={{ color: c.onPrimary, opacity: 0.9, fontSize: 14, marginTop: 4 }}
+					style={{
+						color: c.onPrimary,
+						opacity: OPACITY_HOVER,
+						fontSize: 14,
+						marginTop: 4,
+					}}
 				>
 					आपका डिजिटल बही-खाता
 				</ThemedText>
@@ -152,7 +158,7 @@ const styles = StyleSheet.create({
 	},
 	form: { flex: 1 },
 	btn: {
-		height: 52,
+		height: SIZE_INPUT_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

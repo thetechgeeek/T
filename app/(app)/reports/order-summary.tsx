@@ -7,10 +7,11 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { MOCK_ORDER_SUMMARY_ROWS } from '@/src/mocks/reports/orderSummary';
+import type { OrderRow, OrderStatus } from '@/src/mocks/reports/orderSummary';
 
 // TODO: Replace with real data — SELECT id, party_name, amount, status, date FROM sales_orders WHERE date BETWEEN ? AND ?
 type Period = 'month' | 'quarter' | 'year' | 'fy';
-type OrderStatus = 'fulfilled' | 'pending' | 'cancelled';
 
 const PERIOD_CHIPS: { label: string; value: Period }[] = [
 	{ label: 'Month', value: 'month' },
@@ -19,55 +20,7 @@ const PERIOD_CHIPS: { label: string; value: Period }[] = [
 	{ label: 'FY', value: 'fy' },
 ];
 
-interface OrderRow {
-	id: string;
-	orderNo: string;
-	partyName: string;
-	amount: number;
-	items: number;
-	date: string;
-	status: OrderStatus;
-}
-
-// TODO: Replace with Supabase query filtered by period
-const MOCK_ORDERS: OrderRow[] = [
-	{
-		id: '1',
-		orderNo: 'ORD-2024-001',
-		partyName: 'Ravi Construction Co.',
-		amount: 87500,
-		items: 3,
-		date: '10 Apr 2026',
-		status: 'fulfilled',
-	},
-	{
-		id: '2',
-		orderNo: 'ORD-2024-002',
-		partyName: 'Metro Builders Pvt Ltd',
-		amount: 142000,
-		items: 5,
-		date: '08 Apr 2026',
-		status: 'pending',
-	},
-	{
-		id: '3',
-		orderNo: 'ORD-2024-003',
-		partyName: 'Sharma Interiors',
-		amount: 36800,
-		items: 2,
-		date: '05 Apr 2026',
-		status: 'cancelled',
-	},
-	{
-		id: '4',
-		orderNo: 'ORD-2024-004',
-		partyName: 'GreenField Developers',
-		amount: 215000,
-		items: 7,
-		date: '02 Apr 2026',
-		status: 'fulfilled',
-	},
-];
+const MOCK_ORDERS = MOCK_ORDER_SUMMARY_ROWS;
 
 const STATUS_CONFIG: Record<
 	OrderStatus,

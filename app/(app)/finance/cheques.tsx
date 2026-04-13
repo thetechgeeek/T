@@ -10,61 +10,13 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { palette } from '@/src/theme/palette';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BadgeVariant } from '@/src/components/atoms/Badge';
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
+const SECS_PER_MIN = 60;
+const MS_PER_DAY = 1000 * SECS_PER_MIN * SECS_PER_MIN * 24;
+import { MOCK_CHEQUES_RECEIVED, MOCK_CHEQUES_ISSUED } from '@/src/mocks/finance/cheques';
+import type { Cheque, ChequeStatus } from '@/src/mocks/finance/cheques';
 
-type ChequeStatus = 'open' | 'deposited' | 'bounced';
 type ChequeTab = 'received' | 'issued';
-
-interface Cheque {
-	id: string;
-	party_name: string;
-	cheque_number: string;
-	bank_name: string;
-	cheque_date: string;
-	amount: number;
-	status: ChequeStatus;
-}
-
-const MOCK_RECEIVED: Cheque[] = [
-	{
-		id: '1',
-		party_name: 'Rajesh Kumar',
-		cheque_number: '123456',
-		bank_name: 'SBI',
-		cheque_date: '2025-04-10',
-		amount: 25000,
-		status: 'open',
-	},
-	{
-		id: '2',
-		party_name: 'Sharma Tiles',
-		cheque_number: '789012',
-		bank_name: 'HDFC',
-		cheque_date: '2025-04-12',
-		amount: 50000,
-		status: 'open',
-	},
-	{
-		id: '3',
-		party_name: 'Patel & Sons',
-		cheque_number: '345678',
-		bank_name: 'ICICI',
-		cheque_date: '2025-03-28',
-		amount: 15000,
-		status: 'deposited',
-	},
-];
-
-const MOCK_ISSUED: Cheque[] = [
-	{
-		id: '4',
-		party_name: 'Kajaria Ceramics',
-		cheque_number: '654321',
-		bank_name: 'SBI',
-		cheque_date: '2025-04-15',
-		amount: 80000,
-		status: 'open',
-	},
-];
 
 function statusBadgeVariant(status: ChequeStatus): BadgeVariant {
 	if (status === 'deposited') return 'success';
@@ -81,7 +33,7 @@ function statusLabel(status: ChequeStatus) {
 function isChequeDueSoon(dateStr: string): boolean {
 	const date = new Date(dateStr);
 	const now = new Date();
-	const diffDays = (date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+	const diffDays = (date.getTime() - now.getTime()) / MS_PER_DAY;
 	return diffDays >= 0 && diffDays <= 3;
 }
 
@@ -93,12 +45,14 @@ export default function ChequesScreen() {
 	const [tab, setTab] = useState<ChequeTab>('received');
 	const [statusFilter, setStatusFilter] = useState<ChequeStatus | 'all'>('all');
 
-	const data = tab === 'received' ? MOCK_RECEIVED : MOCK_ISSUED;
+	const data = tab === 'received' ? MOCK_CHEQUES_RECEIVED : MOCK_CHEQUES_ISSUED;
 	const filtered = statusFilter === 'all' ? data : data.filter((c) => c.status === statusFilter);
 
 	const dueSoon =
 		tab === 'received'
-			? MOCK_RECEIVED.filter((ch) => ch.status === 'open' && isChequeDueSoon(ch.cheque_date))
+			? MOCK_CHEQUES_RECEIVED.filter(
+					(ch) => ch.status === 'open' && isChequeDueSoon(ch.cheque_date),
+				)
 			: [];
 
 	const handleAction = (cheque: Cheque, action: 'deposit' | 'bounce' | 'delete') => {
@@ -331,7 +285,6 @@ const styles = StyleSheet.create({
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 });

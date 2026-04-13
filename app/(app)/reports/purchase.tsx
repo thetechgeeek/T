@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
+
+/** Number of days in a quarter (365/4 rounded down) */
+const QUARTER_DAYS = 89;
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -44,7 +47,7 @@ function getDateRange(filter: DateFilter): { from: string; to: string } {
 	}
 	if (filter === 'quarter') {
 		const from = new Date(now);
-		from.setDate(now.getDate() - 89);
+		from.setDate(now.getDate() - QUARTER_DAYS);
 		return { from: toISO(from), to: today };
 	}
 	return { from: today, to: today };

@@ -11,6 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from './ThemedText';
+import { MS_SYNC_POLL, SYNC_BADGE_MAX, SIZE_BADGE_OFFSET } from '@/theme/uiMetrics';
 
 export type SyncStatus = 'synced' | 'syncing' | 'offline';
 
@@ -34,7 +35,7 @@ export function SyncIndicator({ status, pendingCount = 0 }: SyncIndicatorProps) 
 	useEffect(() => {
 		if (status === 'syncing') {
 			rotation.value = withRepeat(
-				withTiming(360, { duration: 1500, easing: Easing.linear }),
+				withTiming(360, { duration: MS_SYNC_POLL, easing: Easing.linear }),
 				-1,
 				false,
 			);
@@ -83,13 +84,22 @@ export function SyncIndicator({ status, pendingCount = 0 }: SyncIndicatorProps) 
 		<View style={styles.container} accessibilityLabel={`Sync status: ${status}`}>
 			<View style={styles.iconContainer}>{renderIcon()}</View>
 			{pendingCount > 0 && (
-				<View style={[styles.badge, { backgroundColor: c.primary, right: -4, top: -4 }]}>
+				<View
+					style={[
+						styles.badge,
+						{
+							backgroundColor: c.primary,
+							right: SIZE_BADGE_OFFSET,
+							top: SIZE_BADGE_OFFSET,
+						},
+					]}
+				>
 					<ThemedText
 						variant="label"
 						weight="bold"
 						style={{ color: c.onPrimary, fontSize: 9 }}
 					>
-						{pendingCount > 99 ? '99+' : pendingCount}
+						{pendingCount > SYNC_BADGE_MAX ? `${SYNC_BADGE_MAX}+` : pendingCount}
 					</ThemedText>
 				</View>
 			)}

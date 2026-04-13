@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert, RefreshControl } from 'react-native';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { OPACITY_ROW_DIVIDER } from '@/theme/uiMetrics';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -97,7 +98,11 @@ export default function SyncLogScreen() {
 					<View
 						style={[
 							styles.errorBox,
-							{ backgroundColor: c.error, borderRadius: r.sm, opacity: 0.1 },
+							{
+								backgroundColor: c.error,
+								borderRadius: r.sm,
+								opacity: OPACITY_ROW_DIVIDER,
+							},
 						]}
 					>
 						<ThemedText variant="caption" color={c.error}>

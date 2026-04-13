@@ -6,6 +6,17 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
 import { Cloud } from 'lucide-react-native';
+import { OPACITY_PRESSED, OPACITY_HOVER } from '@/theme/uiMetrics';
+import { FINANCIAL_YEAR_SHORT_YEAR_DIGITS } from '@/utils/dateUtils';
+
+/** Hour boundaries for greeting copy (local day, 24h clock) */
+const HOUR_NOON = 12;
+const HOUR_AFTERNOON_END = 17;
+
+/** Opacity for secondary text (greeting translation) */
+const DASHBOARD_HEADER_FY_BAR_OPACITY = 0.18;
+const DASHBOARD_HEADER_DATE_OPACITY = 0.75;
+const DASHBOARD_HEADER_LETTER_SPACING = 0.3;
 
 export interface DashboardHeaderProps {
 	businessName: string;
@@ -14,8 +25,8 @@ export interface DashboardHeaderProps {
 
 function getGreeting(): { en: string; hi: string } {
 	const hour = new Date().getHours();
-	if (hour < 12) return { en: 'Good Morning', hi: 'नमस्ते' };
-	if (hour < 17) return { en: 'Good Afternoon', hi: 'नमस्ते' };
+	if (hour < HOUR_NOON) return { en: 'Good Morning', hi: 'नमस्ते' };
+	if (hour < HOUR_AFTERNOON_END) return { en: 'Good Afternoon', hi: 'नमस्ते' };
 	return { en: 'Good Evening', hi: 'नमस्ते' };
 }
 
@@ -26,7 +37,7 @@ function getFinancialYearLabel(): string {
 	const fyStart = month >= 4 ? year : year - 1;
 	const fyEnd = fyStart + 1;
 	// e.g. "FY 2024-25 · Apr – Mar"
-	return `FY ${fyStart}-${String(fyEnd).slice(2)} · Apr – Mar`;
+	return `FY ${fyStart}-${String(fyEnd).slice(-FINANCIAL_YEAR_SHORT_YEAR_DIGITS)} · Apr – Mar`;
 }
 
 function getFormattedDate(): string {
@@ -103,7 +114,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 						<ThemedText
 							variant="body"
 							color={c.onPrimary}
-							style={{ opacity: 0.85 }}
+							style={{ opacity: OPACITY_PRESSED }}
 							importantForAccessibility="no"
 						>
 							{greeting.hi}
@@ -112,7 +123,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 					<ThemedText
 						variant="caption"
 						color={c.onPrimary}
-						style={{ opacity: 0.75, marginTop: 2 }}
+						style={{ opacity: DASHBOARD_HEADER_DATE_OPACITY, marginTop: 2 }}
 						importantForAccessibility="no"
 					>
 						{formattedDate}
@@ -127,20 +138,26 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 					style={styles.syncBtn}
 					hitSlop={8}
 				>
-					<Cloud size={22} color={c.onPrimary} opacity={0.9} />
+					<Cloud size={22} color={c.onPrimary} opacity={OPACITY_HOVER} />
 				</Pressable>
 			</View>
 
 			{/* Financial year bar */}
 			<View
-				style={[styles.fyBar, { backgroundColor: 'rgba(0,0,0,0.18)' }]}
+				style={[
+					styles.fyBar,
+					{ backgroundColor: `rgba(0,0,0,${DASHBOARD_HEADER_FY_BAR_OPACITY})` },
+				]}
 				accessible
 				accessibilityLabel={`Financial year: ${fyLabel}`}
 			>
 				<ThemedText
 					variant="caption"
 					color={c.onPrimary}
-					style={{ opacity: 0.85, letterSpacing: 0.3 }}
+					style={{
+						opacity: OPACITY_PRESSED,
+						letterSpacing: DASHBOARD_HEADER_LETTER_SPACING,
+					}}
 				>
 					{fyLabel}
 				</ThemedText>

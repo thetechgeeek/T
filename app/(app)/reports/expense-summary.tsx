@@ -1,6 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, Alert } from 'react-native';
 import { Download } from 'lucide-react-native';
+
+const CHART_PLACEHOLDER_HEIGHT = 160;
+/** Section label caps letter-spacing (narrower than LETTER_SPACING_SECTION) */
+const LETTER_SPACING_CAPS_LABEL = 0.6;
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -192,7 +196,7 @@ export default function ExpenseSummaryScreen() {
 							style={{
 								marginBottom: 8,
 								textTransform: 'uppercase',
-								letterSpacing: 0.6,
+								letterSpacing: LETTER_SPACING_CAPS_LABEL,
 							}}
 						>
 							By Category
@@ -234,7 +238,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 32,
 	},
 	chartPlaceholder: {
-		height: 160,
+		height: CHART_PLACEHOLDER_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

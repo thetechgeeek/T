@@ -20,51 +20,18 @@ import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { palette } from '@/src/theme/palette';
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { LETTER_SPACING_ACCOUNT } from '@/theme/uiMetrics';
+import { MOCK_BANK_ACCOUNTS } from '@/src/mocks/finance/bankAccounts';
 
 // TODO: connect to store — fetch from bank_accounts table via Supabase
-interface BankAccount {
-	id: string;
-	bank_name: string;
-	account_type: 'Savings' | 'Current' | 'Overdraft';
-	account_number: string;
-	account_holder: string;
-	balance: number;
-	is_primary: boolean;
-}
+type BankAccount = (typeof MOCK_BANK_ACCOUNTS)[number] & { balance: number };
 
-const mockBankAccounts: BankAccount[] = [
-	{
-		id: '1',
-		bank_name: 'HDFC Bank',
-		account_type: 'Current',
-		account_number: '50100123456789',
-		account_holder: 'Ravi Tiles & Ceramics',
-		balance: 285000,
-		is_primary: true,
-	},
-	{
-		id: '2',
-		bank_name: 'SBI',
-		account_type: 'Savings',
-		account_number: '32101234567890',
-		account_holder: 'Ravi Kumar',
-		balance: 52000,
-		is_primary: false,
-	},
-	{
-		id: '3',
-		bank_name: 'ICICI Bank',
-		account_type: 'Overdraft',
-		account_number: '006201234567',
-		account_holder: 'Ravi Tiles & Ceramics',
-		balance: -15000,
-		is_primary: false,
-	},
-];
+const ACCOUNT_MASK_TAIL_DIGITS = 4;
 
 function maskAccountNumber(num: string): string {
-	if (num.length <= 4) return num;
-	return '••••' + num.slice(-4);
+	if (num.length <= ACCOUNT_MASK_TAIL_DIGITS) return num;
+	return '••••' + num.slice(-ACCOUNT_MASK_TAIL_DIGITS);
 }
 
 export default function BankAccountsScreen() {
@@ -75,7 +42,7 @@ export default function BankAccountsScreen() {
 	const [refreshing, setRefreshing] = useState(false);
 
 	// TODO: connect to store
-	const accounts = mockBankAccounts;
+	const accounts = MOCK_BANK_ACCOUNTS as unknown as BankAccount[];
 	const totalBalance = accounts.reduce((s, a) => s + a.balance, 0);
 
 	const accountTypeBadgeVariant = (type: BankAccount['account_type']) => {
@@ -245,7 +212,7 @@ const styles = StyleSheet.create({
 	},
 	accountNumber: {
 		fontFamily: 'monospace',
-		letterSpacing: 1.5,
+		letterSpacing: LETTER_SPACING_ACCOUNT,
 		fontSize: 14,
 	},
 	fab: {
@@ -259,7 +226,6 @@ const styles = StyleSheet.create({
 		elevation: 4,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 });

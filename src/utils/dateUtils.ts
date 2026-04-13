@@ -2,6 +2,9 @@ import { format, formatDistanceToNow, isToday, isYesterday, parseISO, type Local
 import { enIN, hi } from 'date-fns/locale';
 import i18n from '../i18n';
 
+/** Digits shown for the second year in labels like `2025-26` */
+export const FINANCIAL_YEAR_SHORT_YEAR_DIGITS = 2;
+
 /**
  * Get internal date-fns locale based on i18next state.
  */
@@ -36,10 +39,11 @@ export function getCurrentFinancialYear(): string {
 	const month = now.getMonth(); // 0-indexed
 	const year = now.getFullYear();
 	// Financial year starts in April (month 3)
+	const suffixLen = FINANCIAL_YEAR_SHORT_YEAR_DIGITS;
 	if (month >= 3) {
-		return `${year}-${String(year + 1).slice(-2)}`;
+		return `${year}-${String(year + 1).slice(-suffixLen)}`;
 	} else {
-		return `${year - 1}-${String(year).slice(-2)}`;
+		return `${year - 1}-${String(year).slice(-suffixLen)}`;
 	}
 }
 

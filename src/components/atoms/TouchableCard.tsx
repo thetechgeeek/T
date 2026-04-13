@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, type PressableProps, type ViewStyle } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPRING_PRESS } from '@/src/theme/animations';
+import { PRESS_OPACITY, PRESS_SCALE, SPRING_PRESS } from '@/src/theme/animations';
 
 export interface TouchableCardProps extends Omit<PressableProps, 'style'> {
 	children: React.ReactNode;
@@ -43,9 +43,9 @@ export function TouchableCard({
 	const handlePressIn = (e: Parameters<NonNullable<PressableProps['onPressIn']>>[0]) => {
 		if (disabled) return;
 		// eslint-disable-next-line react-hooks/immutability
-		scale.value = withSpring(0.97, SPRING_PRESS);
+		scale.value = withSpring(PRESS_SCALE.pressed, SPRING_PRESS);
 		// eslint-disable-next-line react-hooks/immutability
-		opacity.value = withSpring(0.85, SPRING_PRESS);
+		opacity.value = withSpring(PRESS_OPACITY.pressed, SPRING_PRESS);
 		onPressIn?.(e);
 	};
 

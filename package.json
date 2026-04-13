@@ -14,12 +14,13 @@
 		"test:e2e:report": "maestro test .maestro/ --format junit --output report.xml",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
+		"lint:magic-numbers": "eslint . 2>&1 | grep -c '@typescript-eslint/no-magic-numbers' || true",
 		"lint:style": "stylelint \"**/*.{css,scss}\" --allow-empty-input",
 		"i18n:extract": "i18next-parser",
 		"format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
 		"typecheck": "tsc --noEmit",
 		"check:hex": "node scripts/check-no-hex.mjs",
-		"validate": "npm run typecheck && npm run check:hex && npm run lint && npm run test && npm run test:integration",
+		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run lint && npm run test && npm run test:integration",
 		"prepare": "husky"
 	},
 	"dependencies": {
@@ -102,7 +103,8 @@
 	"private": true,
 	"lint-staged": {
 		"*.{ts,tsx}": [
-			"prettier --write"
+			"prettier --write",
+			"eslint"
 		],
 		"*.{json,md}": [
 			"prettier --write"

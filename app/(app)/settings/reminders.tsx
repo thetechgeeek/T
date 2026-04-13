@@ -1,5 +1,8 @@
+import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
+
+const MULTILINE_INPUT_MIN_HEIGHT = 90;
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -215,7 +218,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 16,
 		fontWeight: '600',
 		textTransform: 'uppercase',
-		letterSpacing: 0.8,
+		letterSpacing: LETTER_SPACING_SECTION,
 	},
 	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
 	row: {
@@ -242,7 +245,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 12,
 		paddingVertical: 10,
 		fontSize: 14,
-		minHeight: 90,
+		minHeight: MULTILINE_INPUT_MIN_HEIGHT,
 		textAlignVertical: 'top',
 	},
 	varChip: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12, borderWidth: 1 },

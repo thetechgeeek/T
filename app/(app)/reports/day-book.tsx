@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
+import { OPACITY_ROW_DIVIDER } from '@/theme/uiMetrics';
 import { ChevronLeft, ChevronRight, Printer } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -317,7 +318,7 @@ export default function DayBookScreen() {
 					style={[
 						styles.exportBtn,
 						{
-							backgroundColor: withOpacity(c.primary, 0.1),
+							backgroundColor: withOpacity(c.primary, OPACITY_ROW_DIVIDER),
 							borderRadius: r.md,
 							borderColor: c.primary,
 							marginTop: s.md,

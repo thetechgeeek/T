@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MAX_LONG_TEXT_CHARS } from '@/theme/uiMetrics';
 
 export const BusinessProfileSchema = z.object({
 	business_name: z.string().min(1, 'Business name is required'),
@@ -52,7 +53,7 @@ export const BusinessProfileSchema = z.object({
 		.string()
 		.min(1, 'Invoice prefix is required')
 		.max(5, 'Invoice prefix must be 5 characters or fewer'),
-	terms_and_conditions: z.string().max(2000).optional(),
+	terms_and_conditions: z.string().max(MAX_LONG_TEXT_CHARS).optional(),
 });
 
 export type BusinessProfileFormInput = z.infer<typeof BusinessProfileSchema>;

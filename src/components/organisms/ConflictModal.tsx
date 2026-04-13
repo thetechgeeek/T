@@ -7,6 +7,8 @@ import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
 import { palette } from '@/src/theme/palette';
+import { FLEX_AMT_WIDE } from '@/theme/uiMetrics';
+import { FAB_SHADOW } from '@/theme/shadowMetrics';
 
 export interface ConflictField {
 	label: string;
@@ -66,7 +68,7 @@ export function ConflictModal({
 							<ThemedText
 								variant="caption"
 								weight="bold"
-								style={{ flex: 1.5, textAlign: 'center' }}
+								style={{ flex: FLEX_AMT_WIDE, textAlign: 'center' }}
 							>
 								{t('sync.yourVersion') || 'Your Version'}
 							</ThemedText>
@@ -74,7 +76,7 @@ export function ConflictModal({
 							<ThemedText
 								variant="caption"
 								weight="bold"
-								style={{ flex: 1.5, textAlign: 'center' }}
+								style={{ flex: FLEX_AMT_WIDE, textAlign: 'center' }}
 							>
 								{t('sync.serverVersion') || 'Server Version'}
 							</ThemedText>
@@ -98,7 +100,7 @@ export function ConflictModal({
 								<View
 									style={[
 										styles.valueBox,
-										{ backgroundColor: c.warningLight, flex: 1.5 },
+										{ backgroundColor: c.warningLight, flex: FLEX_AMT_WIDE },
 									]}
 								>
 									<ThemedText variant="caption" style={{ color: c.onWarning }}>
@@ -111,7 +113,7 @@ export function ConflictModal({
 								<View
 									style={[
 										styles.valueBox,
-										{ backgroundColor: c.surfaceVariant, flex: 1.5 },
+										{ backgroundColor: c.surfaceVariant, flex: FLEX_AMT_WIDE },
 									]}
 								>
 									<ThemedText
@@ -159,8 +161,7 @@ const styles = StyleSheet.create({
 		elevation: 5,
 		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		...FAB_SHADOW,
 	},
 	row: {
 		flexDirection: 'row',

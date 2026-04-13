@@ -9,6 +9,11 @@ import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+const SEEDED_RAND_MODULUS = 90001;
+const SEEDED_RAND_MIN = 10000;
+const HASH_PRIME = 31;
+const COGS_RATIO = 0.6;
+const OPACITY_ROW_HIGHLIGHT = 0.06;
 
 type ModeType = 'customers' | 'suppliers';
 type DateRange = 'month' | 'quarter' | 'fy';
@@ -29,9 +34,9 @@ const DATE_RANGES: { label: string; value: DateRange }[] = [
 function seededRandom(seed: string): number {
 	let h = 0;
 	for (let i = 0; i < seed.length; i++) {
-		h = (Math.imul(31, h) + seed.charCodeAt(i)) | 0;
+		h = (Math.imul(HASH_PRIME, h) + seed.charCodeAt(i)) | 0;
 	}
-	return Math.abs(h % 90001) + 10000; // 10_000 – 100_000
+	return Math.abs(h % SEEDED_RAND_MODULUS) + SEEDED_RAND_MIN; // SEEDED_RAND_MIN – 100_000
 }
 
 interface PartyRow {
@@ -65,7 +70,7 @@ export default function PartyProfitScreen() {
 		if (mode === 'suppliers') return [];
 		return customers.map((cust) => {
 			const sale = seededRandom(cust.id + dateRange);
-			const cogs = Math.round(sale * 0.6);
+			const cogs = Math.round(sale * COGS_RATIO);
 			const profit = sale - cogs;
 			const profitPct = Math.round((profit / sale) * 100);
 			return {
@@ -145,7 +150,9 @@ export default function PartyProfitScreen() {
 					{
 						borderBottomColor: c.border,
 						borderBottomWidth: StyleSheet.hairlineWidth,
-						backgroundColor: isNegative ? withOpacity(c.error, 0.06) : 'transparent',
+						backgroundColor: isNegative
+							? withOpacity(c.error, OPACITY_ROW_HIGHLIGHT)
+							: 'transparent',
 					},
 				]}
 			>
@@ -181,7 +188,7 @@ export default function PartyProfitScreen() {
 			style={[
 				styles.tableRow,
 				{
-					backgroundColor: withOpacity(c.primary, 0.06),
+					backgroundColor: withOpacity(c.primary, OPACITY_ROW_HIGHLIGHT),
 					borderTopColor: c.border,
 					borderTopWidth: 1,
 				},
