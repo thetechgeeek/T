@@ -1,6 +1,4 @@
-import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
-
-const GST_CARD_BORDER_WIDTH = 1.5;
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, TextInput, Pressable } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -8,27 +6,15 @@ import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { withOpacity } from '@/src/utils/color';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 type FilingPeriod = 'monthly' | 'quarterly';
 
-function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
-	return (
-		<ThemedText
-			variant="caption"
-			style={{
-				color: c.primary,
-				marginTop: 20,
-				marginBottom: 4,
-				marginHorizontal: 16,
-				fontWeight: '600',
-				textTransform: 'uppercase',
-				letterSpacing: LETTER_SPACING_SECTION,
-			}}
-		>
-			{label}
-		</ThemedText>
-	);
-}
+const GST_CARD_BORDER_WIDTH = 1.5;
 
 function SwitchRow({
 	label,
@@ -85,19 +71,21 @@ export default function GstSettingsScreen() {
 	return (
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="GST Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
 				{/* GST Registered toggle card */}
 				<View
 					style={[
 						styles.gstCard,
 						{
-							backgroundColor: gstRegistered ? `${c.primary}15` : c.surface,
+							backgroundColor: gstRegistered
+								? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+								: c.surface,
 							borderColor: gstRegistered ? c.primary : c.border,
 						},
 					]}
 				>
 					<View style={{ flex: 1 }}>
-						<ThemedText variant="body" style={{ fontWeight: '700' }}>
+						<ThemedText variant="body" weight="bold">
 							GST Registered Business
 						</ThemedText>
 						<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
@@ -115,20 +103,14 @@ export default function GstSettingsScreen() {
 
 				{gstRegistered && (
 					<>
-						<SectionLabel label="GSTIN" c={c} />
-						<View
-							style={[
-								styles.card,
-								{
-									backgroundColor: c.surface,
-									paddingHorizontal: 16,
-									paddingVertical: 14,
-								},
-							]}
+						<SectionHeader title="GSTIN" variant="uppercase" titleColor={c.primary} />
+						<SettingsCard
+							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+							padding="md"
 						>
 							<ThemedText
 								variant="caption"
-								style={{ color: c.onSurfaceVariant, marginBottom: 6 }}
+								style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.xs }}
 							>
 								GSTIN Number
 							</ThemedText>
@@ -144,10 +126,14 @@ export default function GstSettingsScreen() {
 									{ borderColor: c.border, color: c.onSurface },
 								]}
 							/>
-						</View>
+						</SettingsCard>
 
-						<SectionLabel label="GST Filing Period" c={c} />
-						<View style={[styles.chipRow, { marginHorizontal: 16 }]}>
+						<SectionHeader
+							title="GST Filing Period"
+							variant="uppercase"
+							titleColor={c.primary}
+						/>
+						<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
 							{(['monthly', 'quarterly'] as FilingPeriod[]).map((p) => (
 								<Pressable
 									key={p}
@@ -160,10 +146,10 @@ export default function GstSettingsScreen() {
 									]}
 								>
 									<ThemedText
-										variant="body"
+										variant="label"
+										weight="semibold"
 										style={{
 											color: filingPeriod === p ? c.onPrimary : c.onSurface,
-											fontWeight: '600',
 										}}
 									>
 										{p === 'monthly' ? 'Monthly' : 'Quarterly'}
@@ -172,8 +158,15 @@ export default function GstSettingsScreen() {
 							))}
 						</View>
 
-						<SectionLabel label="GST Options" c={c} />
-						<View style={[styles.card, { backgroundColor: c.surface }]}>
+						<SectionHeader
+							title="GST Options"
+							variant="uppercase"
+							titleColor={c.primary}
+						/>
+						<SettingsCard
+							padding="none"
+							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+						>
 							<SwitchRow
 								label="Composite Scheme"
 								sub="For turnover under ₹1.5 crore"
@@ -195,7 +188,7 @@ export default function GstSettingsScreen() {
 								c={c}
 								last
 							/>
-						</View>
+						</SettingsCard>
 					</>
 				)}
 			</ScrollView>
@@ -205,30 +198,35 @@ export default function GstSettingsScreen() {
 
 const styles = StyleSheet.create({
 	gstCard: {
-		marginHorizontal: 16,
-		marginTop: 20,
-		borderRadius: 12,
+		marginHorizontal: SPACING_PX.lg,
+		marginTop: SPACING_PX.xl,
+		borderRadius: BORDER_RADIUS_PX.lg,
 		borderWidth: GST_CARD_BORDER_WIDTH,
-		padding: 16,
+		padding: SPACING_PX.lg,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
-	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
+	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
-	chipRow: { flexDirection: 'row', gap: 10 },
-	chip: { paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20, borderWidth: 1 },
+	chipRow: { flexDirection: 'row', gap: SPACING_PX.md },
+	chip: {
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm,
+		borderRadius: BORDER_RADIUS_PX.full,
+		borderWidth: 1,
+	},
 	textInput: {
 		borderWidth: 1,
-		borderRadius: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 15,
+		borderRadius: BORDER_RADIUS_PX.md,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		fontSize: FONT_SIZE.body,
 		fontFamily: 'monospace',
 		letterSpacing: 1,
 	},

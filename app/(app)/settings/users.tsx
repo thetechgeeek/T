@@ -1,4 +1,9 @@
-import { LETTER_SPACING_SECTION, FLEX_AMT_WIDE, OVERLAY_COLOR_STRONG } from '@/theme/uiMetrics';
+import {
+	FLEX_AMT_WIDE,
+	OVERLAY_COLOR_STRONG,
+	OPACITY_TINT_LIGHT,
+	SIZE_AVATAR_MD,
+} from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import {
 	View,
@@ -14,7 +19,16 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { withOpacity } from '@/src/utils/color';
 import { palette } from '@/src/theme/palette';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const USER_CARD_AVATAR_SIZE = SIZE_AVATAR_MD;
+const USER_CARD_AVATAR_RADIUS = SIZE_AVATAR_MD / 2;
+const MODAL_RADIUS = 20;
 
 type Role = 'salesperson' | 'admin';
 
@@ -41,20 +55,25 @@ export default function UsersScreen() {
 	return (
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="User Management" />
-			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
 				{/* Current user card */}
-				<View
+				<SettingsCard
 					style={[styles.userCard, { backgroundColor: c.surface, borderColor: c.border }]}
+					padding="md"
 				>
 					<View style={[styles.avatar, { backgroundColor: c.primary }]}>
 						<ThemedText
-							style={{ color: palette.white, fontWeight: '700', fontSize: 20 }}
+							style={{
+								color: palette.white,
+								fontWeight: '700',
+								fontSize: FONT_SIZE.h2,
+							}}
 						>
 							B
 						</ThemedText>
 					</View>
-					<View style={{ flex: 1, marginLeft: 14 }}>
-						<ThemedText variant="body" style={{ fontWeight: '700' }}>
+					<View style={{ flex: 1, marginLeft: SPACING_PX.md }}>
+						<ThemedText variant="body" weight="bold">
 							Business Owner
 						</ThemedText>
 						<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
@@ -66,28 +85,16 @@ export default function UsersScreen() {
 							Owner
 						</ThemedText>
 					</View>
-				</View>
+				</SettingsCard>
 
 				{/* Users section */}
-				<ThemedText
-					variant="caption"
-					style={{
-						color: c.primary,
-						marginTop: 24,
-						marginBottom: 4,
-						marginHorizontal: 16,
-						fontWeight: '600',
-						textTransform: 'uppercase',
-						letterSpacing: LETTER_SPACING_SECTION,
-					}}
-				>
-					Users
-				</ThemedText>
-				<View
+				<SectionHeader title="Users" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
 					style={[
 						styles.emptyState,
 						{ backgroundColor: c.surface, borderColor: c.border },
 					]}
+					padding="lg"
 				>
 					<ThemedText
 						variant="body"
@@ -95,23 +102,24 @@ export default function UsersScreen() {
 					>
 						No additional users.{'\n'}Invite staff to help manage the business.
 					</ThemedText>
-				</View>
+				</SettingsCard>
 
 				<Pressable
 					onPress={() => setModalVisible(true)}
 					style={[styles.inviteBtn, { backgroundColor: c.primary }]}
 				>
-					<ThemedText style={{ color: palette.white, fontWeight: '700', fontSize: 15 }}>
+					<ThemedText variant="body" style={{ color: palette.white, fontWeight: '700' }}>
 						+ Invite User
 					</ThemedText>
 				</Pressable>
 
 				{/* Track sales switch */}
-				<View
+				<SettingsCard
 					style={[
 						styles.switchCard,
 						{ backgroundColor: c.surface, borderColor: c.border },
 					]}
+					padding="md"
 				>
 					<ThemedText variant="body" style={{ flex: 1 }}>
 						Track Sales by User
@@ -121,7 +129,7 @@ export default function UsersScreen() {
 						value={trackByUser}
 						onValueChange={setTrackByUser}
 					/>
-				</View>
+				</SettingsCard>
 			</ScrollView>
 
 			{/* Invite Modal */}
@@ -133,17 +141,23 @@ export default function UsersScreen() {
 			>
 				<View style={styles.modalOverlay}>
 					<View style={[styles.modalContent, { backgroundColor: c.surface }]}>
-						<ThemedText variant="h2" style={{ marginBottom: 16 }}>
+						<ThemedText variant="h2" style={{ marginBottom: SPACING_PX.lg }}>
 							Invite User
 						</ThemedText>
 
 						<ThemedText
 							variant="caption"
-							style={{ color: c.onSurfaceVariant, marginBottom: 6 }}
+							style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.xs }}
 						>
 							Role
 						</ThemedText>
-						<View style={{ flexDirection: 'row', gap: 10, marginBottom: 16 }}>
+						<View
+							style={{
+								flexDirection: 'row',
+								gap: SPACING_PX.md,
+								marginBottom: SPACING_PX.lg,
+							}}
+						>
 							{(['salesperson', 'admin'] as Role[]).map((r) => (
 								<Pressable
 									key={r}
@@ -159,9 +173,10 @@ export default function UsersScreen() {
 									]}
 								>
 									<ThemedText
+										variant="body"
+										weight="semibold"
 										style={{
 											color: inviteRole === r ? c.onPrimary : c.onSurface,
-											fontWeight: '600',
 											textTransform: 'capitalize',
 										}}
 									>
@@ -174,7 +189,10 @@ export default function UsersScreen() {
 						<View
 							style={[
 								styles.roleDesc,
-								{ backgroundColor: `${c.primary}10`, borderColor: c.primary },
+								{
+									backgroundColor: withOpacity(c.primary, OPACITY_TINT_LIGHT),
+									borderColor: c.primary,
+								},
 							]}
 						>
 							<ThemedText variant="caption" style={{ color: c.onSurface }}>
@@ -184,7 +202,11 @@ export default function UsersScreen() {
 
 						<ThemedText
 							variant="caption"
-							style={{ color: c.onSurfaceVariant, marginBottom: 6, marginTop: 16 }}
+							style={{
+								color: c.onSurfaceVariant,
+								marginBottom: SPACING_PX.xs,
+								marginTop: SPACING_PX.lg,
+							}}
 						>
 							Phone Number
 						</ThemedText>
@@ -200,7 +222,13 @@ export default function UsersScreen() {
 							]}
 						/>
 
-						<View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
+						<View
+							style={{
+								flexDirection: 'row',
+								gap: SPACING_PX.md,
+								marginTop: SPACING_PX.xl,
+							}}
+						>
 							<Pressable
 								onPress={() => setModalVisible(false)}
 								style={[
@@ -212,7 +240,10 @@ export default function UsersScreen() {
 									},
 								]}
 							>
-								<ThemedText style={{ color: c.onSurface, fontWeight: '600' }}>
+								<ThemedText
+									variant="body"
+									style={{ color: c.onSurface, fontWeight: '600' }}
+								>
 									Cancel
 								</ThemedText>
 							</Pressable>
@@ -223,7 +254,10 @@ export default function UsersScreen() {
 									{ backgroundColor: c.primary, flex: FLEX_AMT_WIDE },
 								]}
 							>
-								<ThemedText style={{ color: palette.white, fontWeight: '700' }}>
+								<ThemedText
+									variant="body"
+									style={{ color: palette.white, fontWeight: '700' }}
+								>
 									Send Invite
 								</ThemedText>
 							</Pressable>
@@ -237,60 +271,69 @@ export default function UsersScreen() {
 
 const styles = StyleSheet.create({
 	userCard: {
-		marginHorizontal: 16,
-		marginTop: 20,
-		borderRadius: 12,
-		borderWidth: 1,
-		padding: 16,
+		marginHorizontal: SPACING_PX.lg,
+		marginTop: SPACING_PX.xl,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	avatar: {
-		width: 48,
-		height: 48,
-		borderRadius: 24,
+		width: USER_CARD_AVATAR_SIZE,
+		height: USER_CARD_AVATAR_SIZE,
+		borderRadius: USER_CARD_AVATAR_RADIUS,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+	badge: {
+		paddingHorizontal: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.xs,
+		borderRadius: BORDER_RADIUS_PX.lg,
+	},
 	emptyState: {
-		marginHorizontal: 16,
-		borderRadius: 10,
-		borderWidth: 1,
-		padding: 24,
+		marginHorizontal: SPACING_PX.lg,
 		alignItems: 'center',
 	},
 	inviteBtn: {
-		marginHorizontal: 16,
-		marginTop: 14,
-		borderRadius: 10,
-		padding: 14,
+		marginHorizontal: SPACING_PX.lg,
+		marginTop: SPACING_PX.md,
+		borderRadius: BORDER_RADIUS_PX.lg,
+		padding: SPACING_PX.md,
 		alignItems: 'center',
 	},
 	switchCard: {
-		marginHorizontal: 16,
-		marginTop: 20,
-		borderRadius: 10,
-		borderWidth: 1,
-		padding: 16,
+		marginHorizontal: SPACING_PX.lg,
+		marginTop: SPACING_PX.xl,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	modalOverlay: { flex: 1, backgroundColor: OVERLAY_COLOR_STRONG, justifyContent: 'flex-end' },
 	modalContent: {
-		borderTopLeftRadius: 20,
-		borderTopRightRadius: 20,
-		padding: 24,
-		paddingBottom: 40,
+		borderTopLeftRadius: MODAL_RADIUS,
+		borderTopRightRadius: MODAL_RADIUS,
+		padding: SPACING_PX.xl,
+		paddingBottom: SPACING_PX['2xl'],
 	},
-	roleChip: { paddingHorizontal: 18, paddingVertical: 10, borderRadius: 20, borderWidth: 1 },
-	roleDesc: { borderRadius: 8, borderWidth: 1, padding: 12 },
+	roleChip: {
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm,
+		borderRadius: BORDER_RADIUS_PX.full,
+		borderWidth: 1,
+	},
+	roleDesc: {
+		borderRadius: BORDER_RADIUS_PX.md,
+		borderWidth: 1,
+		padding: SPACING_PX.md,
+	},
 	textInput: {
 		borderWidth: 1,
-		borderRadius: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 15,
+		borderRadius: BORDER_RADIUS_PX.md,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		fontSize: FONT_SIZE.body,
 	},
-	btn: { flex: 1, paddingVertical: 13, borderRadius: 10, alignItems: 'center' },
+	btn: {
+		flex: 1,
+		paddingVertical: SPACING_PX.md,
+		borderRadius: BORDER_RADIUS_PX.lg,
+		alignItems: 'center',
+	},
 });

@@ -1,8 +1,20 @@
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { SIZE_AVATAR_MD, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
+import {
+	SIZE_AVATAR_MD,
+	OVERLAY_COLOR_MEDIUM,
+	FAB_OFFSET_RIGHT,
+	FAB_OFFSET_BOTTOM,
+	SIZE_FAB,
+	RADIUS_FAB,
+	SIZE_MODAL_HANDLE_WIDTH,
+	SIZE_MODAL_HANDLE_HEIGHT,
+} from '@/theme/uiMetrics';
 
 const COLOR_SWATCH_SELECTED_SHADOW = 0.5;
 const COLOR_SWATCH_SELECTED_ELEVATION = 4;
+const ZERO_SPACING = 0;
+const SHADOW_OFFSET_Y = 2;
+const LIST_BOTTOM_PADDING = 100;
 import React, { useState } from 'react';
 import {
 	View,
@@ -27,12 +39,19 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
 import { expenseCategoryPickColors, palette } from '@/src/theme/palette';
+import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
 const PRESET_COLORS = [...expenseCategoryPickColors];
+const CATEGORY_DOT_SIZE = 12;
+const CATEGORY_DOT_RADIUS = 6;
+const COLOR_SWATCH_SIZE = 36;
+const COLOR_SWATCH_RADIUS = 18;
+const EMOJI_INPUT_WIDTH = 72;
 
 const FALLBACK_CATEGORIES: ExpenseCategory[] = [
 	{
@@ -205,7 +224,7 @@ export default function ExpenseCategoriesScreen() {
 					<View style={[layout.row, { alignItems: 'center', flex: 1 }]}>
 						{/* Colored dot */}
 						<View style={[styles.dot, { backgroundColor: item.color }]} />
-						<ThemedText style={{ marginRight: s.xs, fontSize: 20 }}>
+						<ThemedText variant="h2" style={{ marginRight: s.xs }}>
 							{item.emoji}
 						</ThemedText>
 						<View style={{ flex: 1 }}>
@@ -259,7 +278,10 @@ export default function ExpenseCategoriesScreen() {
 				data={categories}
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
-				contentContainerStyle={[styles.listContent, { paddingBottom: 100 + insets.bottom }]}
+				contentContainerStyle={[
+					styles.listContent,
+					{ paddingBottom: LIST_BOTTOM_PADDING + insets.bottom },
+				]}
 				ItemSeparatorComponent={() => <View style={{ height: s.sm }} />}
 				ListEmptyComponent={
 					<ThemedText variant="body" color={c.onSurfaceVariant} style={styles.empty}>
@@ -274,7 +296,7 @@ export default function ExpenseCategoriesScreen() {
 					styles.fab,
 					{
 						backgroundColor: c.primary,
-						bottom: 32 + insets.bottom,
+						bottom: FAB_OFFSET_BOTTOM + insets.bottom,
 					},
 				]}
 				onPress={openAdd}
@@ -386,7 +408,7 @@ export default function ExpenseCategoriesScreen() {
 										borderColor: c.border,
 										borderRadius: r.md,
 										backgroundColor: c.surface,
-										fontSize: 24,
+										fontSize: FONT_SIZE.h1,
 									},
 								]}
 								accessibilityLabel="category-emoji"
@@ -417,7 +439,10 @@ export default function ExpenseCategoriesScreen() {
 														? COLOR_SWATCH_SELECTED_SHADOW
 														: 0,
 												shadowRadius: 4,
-												shadowOffset: { width: 0, height: 0 },
+												shadowOffset: {
+													width: ZERO_SPACING,
+													height: ZERO_SPACING,
+												},
 												elevation:
 													form.color === col
 														? COLOR_SWATCH_SELECTED_ELEVATION
@@ -444,7 +469,7 @@ export default function ExpenseCategoriesScreen() {
 								]}
 							>
 								<View style={[styles.dot, { backgroundColor: form.color }]} />
-								<ThemedText style={{ fontSize: 20, marginRight: s.xs }}>
+								<ThemedText variant="h2" style={{ marginRight: s.xs }}>
 									{form.emoji}
 								</ThemedText>
 								<ThemedText variant="body" weight="bold">
@@ -475,16 +500,16 @@ export default function ExpenseCategoriesScreen() {
 
 const styles = StyleSheet.create({
 	listContent: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
 	row: {
-		marginBottom: 0,
+		marginBottom: ZERO_SPACING,
 	},
 	dot: {
-		width: 12,
-		height: 12,
-		borderRadius: 6,
-		marginRight: 8,
+		width: CATEGORY_DOT_SIZE,
+		height: CATEGORY_DOT_SIZE,
+		borderRadius: CATEGORY_DOT_RADIUS,
+		marginRight: SPACING_PX.sm,
 	},
 	empty: {
 		textAlign: 'center',
@@ -492,15 +517,15 @@ const styles = StyleSheet.create({
 	},
 	fab: {
 		position: 'absolute',
-		right: 24,
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		right: FAB_OFFSET_RIGHT,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
 		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
+		shadowOffset: { width: ZERO_SPACING, height: SHADOW_OFFSET_Y },
 		...FAB_SHADOW,
 	},
 	modalOverlay: {
@@ -515,56 +540,56 @@ const styles = StyleSheet.create({
 		maxHeight: '85%',
 	},
 	sheetHandle: {
-		width: 40,
-		height: 4,
-		borderRadius: 2,
+		width: SIZE_MODAL_HANDLE_WIDTH,
+		height: SIZE_MODAL_HANDLE_HEIGHT,
+		borderRadius: BORDER_RADIUS_PX.xs,
 		backgroundColor: palette.grayCCC,
 		alignSelf: 'center',
-		marginTop: 12,
-		marginBottom: 4,
+		marginTop: SPACING_PX.md,
+		marginBottom: SPACING_PX.xs,
 	},
 	modalTitle: {
 		textAlign: 'center',
-		marginBottom: 12,
-		marginTop: 8,
-		paddingHorizontal: 16,
+		marginBottom: SPACING_PX.md,
+		marginTop: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.lg,
 	},
 	modalScroll: {
-		paddingHorizontal: 20,
-		paddingBottom: 16,
+		paddingHorizontal: SPACING_PX.xl,
+		paddingBottom: SPACING_PX.lg,
 	},
 	label: {
 		fontWeight: '600',
-		marginBottom: 6,
+		marginBottom: SPACING_PX.xs,
 	},
 	textInput: {
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 15,
-		minHeight: 48,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		fontSize: FONT_SIZE.body,
+		minHeight: TOUCH_TARGET_MIN_PX,
 	},
 	emojiInput: {
-		width: 72,
+		width: EMOJI_INPUT_WIDTH,
 		textAlign: 'center',
 	},
 	colorGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 12,
-		marginTop: 4,
+		gap: SPACING_PX.md,
+		marginTop: SPACING_PX.xs,
 	},
 	colorCircle: {
-		width: 36,
-		height: 36,
-		borderRadius: 18,
+		width: COLOR_SWATCH_SIZE,
+		height: COLOR_SWATCH_SIZE,
+		borderRadius: COLOR_SWATCH_RADIUS,
 	},
 	preview: {
-		padding: 12,
+		padding: SPACING_PX.md,
 		alignItems: 'center',
 	},
 	modalActions: {
 		flexDirection: 'row',
-		paddingTop: 12,
+		paddingTop: SPACING_PX.md,
 	},
 });

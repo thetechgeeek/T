@@ -70,7 +70,19 @@ export default function SyncLogScreen() {
 		const isFailed = item.status === 'failed' || item.retryCount >= 3;
 
 		return (
-			<View style={[styles.card, { backgroundColor: c.surface, borderColor: c.border }]}>
+			<View
+				style={[
+					styles.card,
+					{
+						backgroundColor: c.surface,
+						borderColor: c.border,
+						padding: s.md,
+						borderRadius: r.lg,
+						borderWidth: 1,
+						marginBottom: s.md,
+					},
+				]}
+			>
 				<View style={[layout.rowBetween, { marginBottom: s.xs }]}>
 					<View style={layout.row}>
 						{isFailed ? (
@@ -80,7 +92,7 @@ export default function SyncLogScreen() {
 						)}
 						<ThemedText
 							variant="bodyBold"
-							style={{ marginLeft: 8, textTransform: 'uppercase' }}
+							style={{ marginLeft: s.sm, textTransform: 'uppercase' }}
 						>
 							{`${item.type} ${item.table}`}
 						</ThemedText>
@@ -97,7 +109,7 @@ export default function SyncLogScreen() {
 				{item.lastError && (
 					<View
 						style={[
-							styles.errorBox,
+							{ marginTop: s.sm, padding: s.sm },
 							{
 								backgroundColor: c.error,
 								borderRadius: r.sm,
@@ -135,7 +147,7 @@ export default function SyncLogScreen() {
 				showSyncStatus={false}
 				rightElement={
 					failed.length > 0 ? (
-						<TouchableOpacity onPress={handleRetryAll} style={{ padding: 4 }}>
+						<TouchableOpacity onPress={handleRetryAll} style={{ padding: s.xs }}>
 							<RotateCcw size={22} color={c.primary} />
 						</TouchableOpacity>
 					) : null
@@ -156,7 +168,7 @@ export default function SyncLogScreen() {
 						/>
 					}
 					ListEmptyComponent={
-						<View style={styles.empty}>
+						<View style={[styles.empty, { paddingTop: s['4xl'] }]}>
 							<Info size={48} color={c.onSurfaceVariant} strokeWidth={1} />
 							<ThemedText
 								variant="body"
@@ -184,7 +196,7 @@ export default function SyncLogScreen() {
 											variant="caption"
 											color={c.error}
 											weight="bold"
-											style={{ marginLeft: 4 }}
+											style={{ marginLeft: s.xs }}
 										>
 											{t('sync.clearFailed') || 'Clear Failed'}
 										</ThemedText>
@@ -203,19 +215,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
-	card: {
-		padding: 12,
-		borderRadius: 12,
-		borderWidth: 1,
-		marginBottom: 12,
-	},
-	errorBox: {
-		marginTop: 8,
-		padding: 8,
-	},
+	card: {},
 	empty: {
 		flex: 1,
-		paddingTop: 100,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

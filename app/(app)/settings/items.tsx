@@ -1,4 +1,3 @@
-import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -6,25 +5,9 @@ import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-
-function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
-	return (
-		<ThemedText
-			variant="caption"
-			style={{
-				color: c.primary,
-				marginTop: 20,
-				marginBottom: 4,
-				marginHorizontal: 16,
-				fontWeight: '600',
-				textTransform: 'uppercase',
-				letterSpacing: LETTER_SPACING_SECTION,
-			}}
-		>
-			{label}
-		</ThemedText>
-	);
-}
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 function SwitchRow({
 	label,
@@ -86,9 +69,12 @@ export default function ItemSettingsScreen() {
 	return (
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Item Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-				<SectionLabel label="General" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
+				<SectionHeader title="General" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Items Module"
 						sub="Master switch for all item features"
@@ -115,10 +101,13 @@ export default function ItemSettingsScreen() {
 						c={c}
 						last
 					/>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Pricing" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Party-wise Item Rates"
 						sub="Different prices per party"
@@ -134,10 +123,13 @@ export default function ItemSettingsScreen() {
 						c={c}
 					/>
 					<SwitchRow label="Show MRP" value={showMrp} onChange={setShowMrp} c={c} last />
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Display" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Display" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Show Item Description"
 						value={showDesc}
@@ -145,10 +137,13 @@ export default function ItemSettingsScreen() {
 						c={c}
 						last
 					/>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Tracking" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Tracking" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Batch Number Tracking"
 						sub="For manufacturing & pharma"
@@ -163,19 +158,19 @@ export default function ItemSettingsScreen() {
 						c={c}
 						last
 					/>
-				</View>
+				</SettingsCard>
 			</ScrollView>
 		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
+	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
 });

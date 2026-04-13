@@ -9,8 +9,11 @@ import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 const MULTILINE_INPUT_MIN_HEIGHT = 90;
+const DAYS_INPUT_WIDTH = 44;
 
 type Channel = 'whatsapp' | 'sms' | 'both';
 
@@ -37,7 +40,7 @@ export default function RemindersScreen() {
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Payment Reminders" />
 			<ScrollView
-				contentContainerStyle={{ paddingBottom: 32 }}
+				contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 				keyboardShouldPersistTaps="handled"
 			>
 				{/* Auto reminders toggle */}
@@ -91,7 +94,7 @@ export default function RemindersScreen() {
 										style={{
 											flexDirection: 'row',
 											alignItems: 'center',
-											gap: 6,
+											gap: SPACING_PX.xs,
 										}}
 									>
 										<TextInput
@@ -116,7 +119,7 @@ export default function RemindersScreen() {
 						</SettingsCard>
 
 						<SectionHeader title="Channel" variant="uppercase" titleColor={c.primary} />
-						<View style={[styles.chipRow, { marginHorizontal: 16 }]}>
+						<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
 							{(
 								[
 									{ key: 'whatsapp', label: 'WhatsApp' },
@@ -135,9 +138,10 @@ export default function RemindersScreen() {
 									]}
 								>
 									<ThemedText
+										variant="label"
+										weight="semibold"
 										style={{
 											color: channel === ch.key ? c.onPrimary : c.onSurface,
-											fontWeight: '600',
 										}}
 									>
 										{ch.label}
@@ -169,13 +173,19 @@ export default function RemindersScreen() {
 								variant="caption"
 								style={{
 									color: c.onSurfaceVariant,
-									marginTop: 10,
-									marginBottom: 6,
+									marginTop: SPACING_PX.md,
+									marginBottom: SPACING_PX.xs,
 								}}
 							>
 								Tap to insert variable:
 							</ThemedText>
-							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+							<View
+								style={{
+									flexDirection: 'row',
+									flexWrap: 'wrap',
+									gap: SPACING_PX.sm,
+								}}
+							>
 								{VARIABLES.map((v) => (
 									<Pressable
 										key={v}
@@ -193,7 +203,8 @@ export default function RemindersScreen() {
 									>
 										<ThemedText
 											variant="caption"
-											style={{ color: c.primary, fontWeight: '600' }}
+											color={c.primary}
+											weight="semibold"
 										>
 											{v}
 										</ThemedText>
@@ -210,37 +221,47 @@ export default function RemindersScreen() {
 
 const styles = StyleSheet.create({
 	topCard: {
-		marginHorizontal: 16,
-		marginTop: 20,
+		marginHorizontal: SPACING_PX.lg,
+		marginTop: SPACING_PX.xl,
 	},
 	topRow: { flexDirection: 'row', alignItems: 'center' },
-	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
+	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
-	chipRow: { flexDirection: 'row', gap: 8 },
-	chip: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 20, borderWidth: 1 },
-	daysInput: {
-		width: 44,
+	chipRow: { flexDirection: 'row', gap: SPACING_PX.sm },
+	chip: {
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm,
+		borderRadius: BORDER_RADIUS_PX.full,
 		borderWidth: 1,
-		borderRadius: 6,
-		paddingHorizontal: 8,
-		paddingVertical: 6,
-		fontSize: 15,
+	},
+	daysInput: {
+		width: DAYS_INPUT_WIDTH,
+		borderWidth: 1,
+		borderRadius: BORDER_RADIUS_PX.md,
+		paddingHorizontal: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.xs,
+		fontSize: FONT_SIZE.body,
 		textAlign: 'center',
 	},
 	templateInput: {
 		borderWidth: 1,
-		borderRadius: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 14,
+		borderRadius: BORDER_RADIUS_PX.md,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		fontSize: FONT_SIZE.caption,
 		minHeight: MULTILINE_INPUT_MIN_HEIGHT,
 		textAlignVertical: 'top',
 	},
-	varChip: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12, borderWidth: 1 },
+	varChip: {
+		paddingHorizontal: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.xs,
+		borderRadius: BORDER_RADIUS_PX.lg,
+		borderWidth: 1,
+	},
 });

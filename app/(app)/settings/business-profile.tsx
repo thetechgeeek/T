@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 const MS_SAVED_TOAST = 3000;
 const TEXTAREA_HEIGHT = 90;
 const TEXTAREA_COMPACT_HEIGHT = 60;
 const REMOVE_BTN_OFFSET = -8;
+const QR_PREVIEW_SIZE = 120;
+const IMAGE_PICKER_BOX_SIZE = 100;
+const REMOVE_BUTTON_SIZE = 24;
+const REMOVE_BUTTON_RADIUS = 12;
+const IMAGE_PICKER_HELPER_SIZE = 10;
 /** ImagePicker quality for business logo (medium – balances size vs clarity) */
 const LOGO_IMAGE_QUALITY = 0.7;
 import {
 	View,
-	Text,
 	TextInput,
 	Pressable,
 	ScrollView,
@@ -205,12 +211,13 @@ export default function BusinessProfileScreen() {
 	if (fetchError) {
 		return (
 			<View style={[styles.root, styles.center, { backgroundColor: c.background }]}>
-				<Text
+				<ThemedText
 					testID="error-message"
-					style={{ color: c.error, fontSize: 15, textAlign: 'center' }}
+					variant="body"
+					style={{ color: c.error, textAlign: 'center' }}
 				>
 					{fetchError}
-				</Text>
+				</ThemedText>
 				<Pressable
 					onPress={() => router.back()}
 					style={[
@@ -218,7 +225,9 @@ export default function BusinessProfileScreen() {
 						{ backgroundColor: c.primary, borderRadius: theme.borderRadius.md },
 					]}
 				>
-					<Text style={{ color: c.onPrimary, fontSize: 15 }}>वापस जाएं</Text>
+					<ThemedText variant="body" style={{ color: c.onPrimary }}>
+						वापस जाएं
+					</ThemedText>
 				</Pressable>
 			</View>
 		);
@@ -252,7 +261,9 @@ export default function BusinessProfileScreen() {
 				/>
 
 				{/* Phone */}
-				<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+				<ThemedText
+					style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+				>
 					Mobile Number
 				</ThemedText>
 				<TextInput
@@ -266,7 +277,9 @@ export default function BusinessProfileScreen() {
 				/>
 
 				{/* GSTIN */}
-				<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+				<ThemedText
+					style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+				>
 					GSTIN (वैकल्पिक)
 				</ThemedText>
 				<TextInput
@@ -281,7 +294,9 @@ export default function BusinessProfileScreen() {
 				/>
 
 				{/* Address */}
-				<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+				<ThemedText
+					style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+				>
 					पता
 				</ThemedText>
 				<TextInput
@@ -296,7 +311,9 @@ export default function BusinessProfileScreen() {
 				/>
 
 				{/* City */}
-				<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+				<ThemedText
+					style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+				>
 					शहर / City
 				</ThemedText>
 				<TextInput
@@ -309,7 +326,9 @@ export default function BusinessProfileScreen() {
 				/>
 
 				{/* State */}
-				<ThemedText style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}>
+				<ThemedText
+					style={[styles.label, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+				>
 					राज्य / State
 				</ThemedText>
 				<TextInput
@@ -331,7 +350,7 @@ export default function BusinessProfileScreen() {
 				</Pressable>
 
 				{sections.branding && (
-					<View style={{ marginTop: 12 }}>
+					<View style={{ marginTop: SPACING_PX.md }}>
 						{/* Email */}
 						<ThemedText style={[styles.label, { color: c.onSurfaceVariant }]}>
 							Email Address
@@ -347,7 +366,10 @@ export default function BusinessProfileScreen() {
 
 						{/* Website */}
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							Website
 						</ThemedText>
@@ -361,7 +383,10 @@ export default function BusinessProfileScreen() {
 
 						{/* Description */}
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							Business Description (max 200 chars)
 						</ThemedText>
@@ -377,7 +402,10 @@ export default function BusinessProfileScreen() {
 
 						{/* Logo Picker */}
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							Business Logo
 						</ThemedText>
@@ -391,7 +419,10 @@ export default function BusinessProfileScreen() {
 
 						{/* Signature Picker */}
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							Signature Image (for invoices)
 						</ThemedText>
@@ -408,14 +439,17 @@ export default function BusinessProfileScreen() {
 				{/* Bank Details & UPI Section */}
 				<Pressable
 					onPress={() => toggleSection('bank')}
-					style={[styles.sectionHeader, { borderBottomColor: c.border, marginTop: 24 }]}
+					style={[
+						styles.sectionHeader,
+						{ borderBottomColor: c.border, marginTop: SPACING_PX.xl },
+					]}
 				>
 					<ThemedText variant="h3">Bank Details & UPI</ThemedText>
 					{sections.bank ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
 				</Pressable>
 
 				{sections.bank && (
-					<View style={{ marginTop: 12 }}>
+					<View style={{ marginTop: SPACING_PX.md }}>
 						<ThemedText style={[styles.label, { color: c.onSurfaceVariant }]}>
 							UPI ID (for payments)
 						</ThemedText>
@@ -431,16 +465,19 @@ export default function BusinessProfileScreen() {
 							<View style={styles.qrContainer}>
 								<QRCode
 									value={`upi://pay?pa=${form.upi_id}&pn=${form.business_name}`}
-									size={120}
+									size={QR_PREVIEW_SIZE}
 								/>
-								<ThemedText variant="caption" style={{ marginTop: 8 }}>
+								<ThemedText variant="caption" style={{ marginTop: SPACING_PX.sm }}>
 									PREVIEW: This QR will appear on invoices
 								</ThemedText>
 							</View>
 						) : null}
 
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							Bank Name
 						</ThemedText>
@@ -452,7 +489,10 @@ export default function BusinessProfileScreen() {
 						/>
 
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							Account Number
 						</ThemedText>
@@ -465,7 +505,10 @@ export default function BusinessProfileScreen() {
 						/>
 
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							IFSC Code
 						</ThemedText>
@@ -478,7 +521,10 @@ export default function BusinessProfileScreen() {
 						/>
 
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							Account Holder Name
 						</ThemedText>
@@ -494,14 +540,17 @@ export default function BusinessProfileScreen() {
 				{/* Invoice Sequence Section */}
 				<Pressable
 					onPress={() => toggleSection('sequence')}
-					style={[styles.sectionHeader, { borderBottomColor: c.border, marginTop: 24 }]}
+					style={[
+						styles.sectionHeader,
+						{ borderBottomColor: c.border, marginTop: SPACING_PX.xl },
+					]}
 				>
 					<ThemedText variant="h3">Invoice Settings</ThemedText>
 					{sections.sequence ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
 				</Pressable>
 
 				{sections.sequence && (
-					<View style={{ marginTop: 12 }}>
+					<View style={{ marginTop: SPACING_PX.md }}>
 						<ThemedText style={[styles.label, { color: c.onSurfaceVariant }]}>
 							Invoice Prefix
 						</ThemedText>
@@ -516,7 +565,10 @@ export default function BusinessProfileScreen() {
 						/>
 
 						<ThemedText
-							style={[styles.label, { color: c.onSurfaceVariant, marginTop: 16 }]}
+							style={[
+								styles.label,
+								{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
+							]}
 						>
 							Next Invoice Number
 						</ThemedText>
@@ -532,13 +584,21 @@ export default function BusinessProfileScreen() {
 				)}
 
 				{saveError ? (
-					<Text style={{ color: c.error, fontSize: 13, marginTop: 12 }}>{saveError}</Text>
+					<ThemedText
+						variant="label"
+						style={{ color: c.error, marginTop: SPACING_PX.md }}
+					>
+						{saveError}
+					</ThemedText>
 				) : null}
 
 				{saved ? (
-					<Text style={{ color: c.success, fontSize: 13, marginTop: 12 }}>
+					<ThemedText
+						variant="label"
+						style={{ color: c.success, marginTop: SPACING_PX.md }}
+					>
 						✓ Profile save हो गई
-					</Text>
+					</ThemedText>
 				) : null}
 
 				{/* Save Button */}
@@ -560,18 +620,18 @@ export default function BusinessProfileScreen() {
 						},
 					]}
 				>
-					<Text
+					<ThemedText
+						variant="body"
 						style={{
 							color:
 								saveLoading || !form.business_name.trim()
 									? c.placeholder
 									: c.onPrimary,
-							fontSize: 16,
 							fontWeight: '700',
 						}}
 					>
 						{saveLoading ? 'Save हो रहा है...' : 'Save करें'}
-					</Text>
+					</ThemedText>
 				</Pressable>
 			</ScrollView>
 		</View>
@@ -595,20 +655,20 @@ const styles = StyleSheet.create({
 	center: { alignItems: 'center', justifyContent: 'center' },
 	header: {
 		alignItems: 'center',
-		paddingVertical: 20,
-		paddingHorizontal: 24,
+		paddingVertical: SPACING_PX.xl,
+		paddingHorizontal: SPACING_PX.xl,
 	},
-	label: { fontSize: 14, fontWeight: '600', marginBottom: 6 },
+	label: { fontSize: FONT_SIZE.caption, fontWeight: '600', marginBottom: SPACING_PX.xs },
 	input: {
 		height: SIZE_INPUT_HEIGHT,
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		fontSize: 16,
+		paddingHorizontal: SPACING_PX.md,
+		fontSize: FONT_SIZE.body,
 	},
 	textarea: {
 		height: TEXTAREA_HEIGHT,
 		textAlignVertical: 'top',
-		paddingTop: 12,
+		paddingTop: SPACING_PX.md,
 	},
 	saveBtn: {
 		height: SIZE_INPUT_HEIGHT,
@@ -616,45 +676,45 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	retryBtn: {
-		marginTop: 16,
-		paddingHorizontal: 24,
-		paddingVertical: 12,
+		marginTop: SPACING_PX.lg,
+		paddingHorizontal: SPACING_PX.xl,
+		paddingVertical: SPACING_PX.md,
 	},
 	sectionHeader: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: 1,
 	},
 	textareaCompact: {
 		height: TEXTAREA_COMPACT_HEIGHT,
 		textAlignVertical: 'top',
-		paddingTop: 8,
+		paddingTop: SPACING_PX.sm,
 	},
 	qrContainer: {
 		alignItems: 'center',
-		marginTop: 16,
-		padding: 16,
+		marginTop: SPACING_PX.lg,
+		padding: SPACING_PX.lg,
 		backgroundColor: 'white',
-		borderRadius: 8,
+		borderRadius: BORDER_RADIUS_PX.md,
 	},
 	imageBox: {
-		width: 100,
-		height: 100,
+		width: IMAGE_PICKER_BOX_SIZE,
+		height: IMAGE_PICKER_BOX_SIZE,
 		borderWidth: 1,
 		borderStyle: 'dashed',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 4,
+		marginTop: SPACING_PX.xs,
 	},
 	removeBtn: {
 		position: 'absolute',
 		top: REMOVE_BTN_OFFSET,
 		right: REMOVE_BTN_OFFSET,
-		width: 24,
-		height: 24,
-		borderRadius: 12,
+		width: REMOVE_BUTTON_SIZE,
+		height: REMOVE_BUTTON_SIZE,
+		borderRadius: REMOVE_BUTTON_RADIUS,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -735,9 +795,15 @@ function ImagePickerBox({
 			) : (
 				<View style={{ alignItems: 'center' }}>
 					<Camera size={24} color={c.placeholder} strokeWidth={1.5} />
-					<Text style={{ color: c.placeholder, fontSize: 10, marginTop: 4 }}>
+					<ThemedText
+						style={{
+							color: c.placeholder,
+							fontSize: IMAGE_PICKER_HELPER_SIZE,
+							marginTop: SPACING_PX.xs,
+						}}
+					>
 						{uploading ? '...' : `Add ${label}`}
-					</Text>
+					</ThemedText>
 				</View>
 			)}
 		</Pressable>

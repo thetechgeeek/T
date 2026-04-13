@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { View, Pressable, ScrollView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const MULTILINE_INPUT_MIN_HEIGHT = 90;
 import i18n from 'i18next';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { ThemeMode } from '@/src/theme/index';
+import { Screen } from '@/src/components/atoms/Screen';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const LANG_KEY = '@app/language';
 const DATE_FORMAT_KEY = '@app/dateFormat';
 const DECIMAL_KEY = '@app/decimalPlaces';
+const OPTION_CARD_MIN_HEIGHT = 90;
+const RADIO_OUTER_SIZE = 20;
+const RADIO_OUTER_RADIUS = 10;
+const RADIO_INNER_SIZE = 10;
+const RADIO_INNER_RADIUS = 5;
+const ZERO_SPACING = 0;
 
 type Lang = 'hi' | 'en';
 type DateFormat = 'dmy' | 'dmy-dash' | 'iso';
@@ -57,22 +67,17 @@ export default function PreferencesScreen() {
 	};
 
 	return (
-		<View style={[styles.root, { backgroundColor: c.background }]}>
-			{/* Header */}
-			<View style={[styles.header, { backgroundColor: c.primary }]}>
-				<ThemedText variant="h2" style={{ color: c.onPrimary }}>
-					Preferences / प्राथमिकताएं
-				</ThemedText>
-			</View>
-
+		<Screen safeAreaEdges={['bottom']}>
+			<ScreenHeader title="Preferences / प्राथमिकताएं" />
 			<ScrollView
-				contentContainerStyle={{ padding: theme.spacing.lg }}
+				contentContainerStyle={{
+					padding: theme.spacing.lg,
+					paddingBottom: SPACING_PX['2xl'],
+				}}
 				keyboardShouldPersistTaps="handled"
 			>
 				{/* Language Section */}
-				<ThemedText variant="h3" style={{ color: c.onSurface, marginBottom: 12 }}>
-					भाषा / Language
-				</ThemedText>
+				<SectionHeader title="भाषा / Language" style={styles.sectionHeader} />
 				<View style={styles.langRow}>
 					<Pressable
 						testID="lang-card-hi"
@@ -83,18 +88,24 @@ export default function PreferencesScreen() {
 								borderColor: selectedLang === 'hi' ? c.primary : c.border,
 								borderWidth: selectedLang === 'hi' ? 2 : 1,
 								backgroundColor:
-									selectedLang === 'hi' ? `${c.primary}15` : c.surface,
+									selectedLang === 'hi'
+										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+										: c.surface,
 								borderRadius: theme.borderRadius.md,
-								marginRight: 8,
+								marginRight: SPACING_PX.sm,
 							},
 						]}
 					>
-						<Text style={{ fontSize: 22, fontWeight: '700', color: c.onSurface }}>
+						<ThemedText variant="h1" weight="bold" color={c.onSurface}>
 							हिंदी
-						</Text>
-						<Text style={{ fontSize: 13, color: c.onSurfaceVariant, marginTop: 4 }}>
+						</ThemedText>
+						<ThemedText
+							variant="label"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: SPACING_PX.xs }}
+						>
 							हिंदी में चलाएं
-						</Text>
+						</ThemedText>
 					</Pressable>
 
 					<Pressable
@@ -106,27 +117,28 @@ export default function PreferencesScreen() {
 								borderColor: selectedLang === 'en' ? c.primary : c.border,
 								borderWidth: selectedLang === 'en' ? 2 : 1,
 								backgroundColor:
-									selectedLang === 'en' ? `${c.primary}15` : c.surface,
+									selectedLang === 'en'
+										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+										: c.surface,
 								borderRadius: theme.borderRadius.md,
 							},
 						]}
 					>
-						<Text style={{ fontSize: 22, fontWeight: '700', color: c.onSurface }}>
+						<ThemedText variant="h1" weight="bold" color={c.onSurface}>
 							English
-						</Text>
-						<Text style={{ fontSize: 13, color: c.onSurfaceVariant, marginTop: 4 }}>
+						</ThemedText>
+						<ThemedText
+							variant="label"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: SPACING_PX.xs }}
+						>
 							Use in English
-						</Text>
+						</ThemedText>
 					</Pressable>
 				</View>
 
 				{/* Theme Section */}
-				<ThemedText
-					variant="h3"
-					style={{ color: c.onSurface, marginTop: 28, marginBottom: 12 }}
-				>
-					थीम / Theme
-				</ThemedText>
+				<SectionHeader title="थीम / Theme" style={styles.sectionHeader} />
 				<View style={styles.themeRow}>
 					{(
 						[
@@ -145,28 +157,29 @@ export default function PreferencesScreen() {
 									borderColor: mode === opt.key ? c.primary : c.border,
 									borderWidth: mode === opt.key ? 2 : 1,
 									backgroundColor:
-										mode === opt.key ? `${c.primary}15` : c.surface,
+										mode === opt.key
+											? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+											: c.surface,
 									borderRadius: theme.borderRadius.md,
 								},
 							]}
 						>
-							<Text style={{ fontSize: 15, fontWeight: '600', color: c.onSurface }}>
+							<ThemedText variant="body" weight="semibold" color={c.onSurface}>
 								{opt.label}
-							</Text>
-							<Text style={{ fontSize: 12, color: c.onSurfaceVariant, marginTop: 2 }}>
+							</ThemedText>
+							<ThemedText
+								variant="captionSmall"
+								color={c.onSurfaceVariant}
+								style={{ marginTop: SPACING_PX.xxs }}
+							>
 								{opt.subLabel}
-							</Text>
+							</ThemedText>
 						</Pressable>
 					))}
 				</View>
 
 				{/* Date Format Section */}
-				<ThemedText
-					variant="h3"
-					style={{ color: c.onSurface, marginTop: 28, marginBottom: 12 }}
-				>
-					Date Format
-				</ThemedText>
+				<SectionHeader title="Date Format" style={styles.sectionHeader} />
 				{(
 					[
 						{ key: 'dmy', label: 'DD/MM/YYYY' },
@@ -182,11 +195,13 @@ export default function PreferencesScreen() {
 							styles.dateRow,
 							{
 								backgroundColor:
-									dateFormat === fmt.key ? `${c.primary}15` : c.surface,
+									dateFormat === fmt.key
+										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+										: c.surface,
 								borderColor: dateFormat === fmt.key ? c.primary : c.border,
 								borderWidth: dateFormat === fmt.key ? 2 : 1,
 								borderRadius: theme.borderRadius.md,
-								marginBottom: 8,
+								marginBottom: SPACING_PX.sm,
 							},
 						]}
 					>
@@ -203,24 +218,29 @@ export default function PreferencesScreen() {
 									/>
 								)}
 							</View>
-							<Text style={{ fontSize: 15, color: c.onSurface, marginLeft: 10 }}>
+							<ThemedText
+								variant="body"
+								color={c.onSurface}
+								style={{ marginLeft: SPACING_PX.md }}
+							>
 								{fmt.label}
-							</Text>
+							</ThemedText>
 						</View>
-						<Text style={{ fontSize: 13, color: c.onSurfaceVariant }}>
+						<ThemedText variant="label" color={c.onSurfaceVariant}>
 							{dateFormatExamples[fmt.key]}
-						</Text>
+						</ThemedText>
 					</Pressable>
 				))}
 
 				{/* Decimal Places Section */}
+				<SectionHeader title="Decimal Places" style={styles.sectionHeader} />
 				<ThemedText
-					variant="h3"
-					style={{ color: c.onSurface, marginTop: 28, marginBottom: 12 }}
+					variant="caption"
+					style={{
+						color: c.onSurfaceVariant,
+						marginBottom: SPACING_PX.md,
+					}}
 				>
-					Decimal Places
-				</ThemedText>
-				<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 14, marginBottom: 10 }}>
 					Currency: INR (₹) — Only INR supported currently
 				</ThemedText>
 				<View style={styles.decimalRow}>
@@ -232,16 +252,21 @@ export default function PreferencesScreen() {
 							{
 								borderColor: decimalPlaces === 0 ? c.primary : c.border,
 								borderWidth: decimalPlaces === 0 ? 2 : 1,
-								backgroundColor: decimalPlaces === 0 ? `${c.primary}15` : c.surface,
+								backgroundColor:
+									decimalPlaces === 0
+										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+										: c.surface,
 								borderRadius: theme.borderRadius.md,
-								marginRight: 8,
+								marginRight: SPACING_PX.sm,
 							},
 						]}
 					>
-						<Text style={{ fontSize: 15, fontWeight: '600', color: c.onSurface }}>
+						<ThemedText variant="body" weight="semibold" color={c.onSurface}>
 							0
-						</Text>
-						<Text style={{ fontSize: 12, color: c.onSurfaceVariant }}>₹ 1,00,000</Text>
+						</ThemedText>
+						<ThemedText variant="captionSmall" color={c.onSurfaceVariant}>
+							₹ 1,00,000
+						</ThemedText>
 					</Pressable>
 
 					<Pressable
@@ -252,60 +277,58 @@ export default function PreferencesScreen() {
 							{
 								borderColor: decimalPlaces === 2 ? c.primary : c.border,
 								borderWidth: decimalPlaces === 2 ? 2 : 1,
-								backgroundColor: decimalPlaces === 2 ? `${c.primary}15` : c.surface,
+								backgroundColor:
+									decimalPlaces === 2
+										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+										: c.surface,
 								borderRadius: theme.borderRadius.md,
 							},
 						]}
 					>
-						<Text style={{ fontSize: 15, fontWeight: '600', color: c.onSurface }}>
+						<ThemedText variant="body" weight="semibold" color={c.onSurface}>
 							2
-						</Text>
-						<Text style={{ fontSize: 12, color: c.onSurfaceVariant }}>
+						</ThemedText>
+						<ThemedText variant="captionSmall" color={c.onSurfaceVariant}>
 							₹ 1,00,000.00
-						</Text>
+						</ThemedText>
 					</Pressable>
 				</View>
 
 				<ThemedText
+					variant="label"
 					style={{
 						color: c.onSurfaceVariant,
-						fontSize: 13,
-						marginTop: 28,
+						marginTop: SPACING_PX.xl,
 						textAlign: 'center',
 					}}
 				>
 					आप बाद में Settings से भाषा बदल सकते हैं
 				</ThemedText>
 			</ScrollView>
-		</View>
+		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	root: { flex: 1 },
-	header: {
-		alignItems: 'center',
-		paddingVertical: 20,
-		paddingHorizontal: 24,
-	},
+	sectionHeader: { paddingHorizontal: ZERO_SPACING },
 	langRow: {
 		flexDirection: 'row',
 	},
 	langCard: {
 		flex: 1,
-		padding: 16,
+		padding: SPACING_PX.lg,
 		alignItems: 'center',
 		borderWidth: 1,
-		minHeight: MULTILINE_INPUT_MIN_HEIGHT,
+		minHeight: OPTION_CARD_MIN_HEIGHT,
 		justifyContent: 'center',
 	},
 	themeRow: {
 		flexDirection: 'row',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	themeCard: {
 		flex: 1,
-		padding: 14,
+		padding: SPACING_PX.md,
 		alignItems: 'center',
 		borderWidth: 1,
 	},
@@ -313,7 +336,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		padding: 14,
+		padding: SPACING_PX.md,
 		borderWidth: 1,
 	},
 	dateRadio: {
@@ -321,24 +344,24 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	radioOuter: {
-		width: 20,
-		height: 20,
-		borderRadius: 10,
+		width: RADIO_OUTER_SIZE,
+		height: RADIO_OUTER_SIZE,
+		borderRadius: RADIO_OUTER_RADIUS,
 		borderWidth: 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	radioInner: {
-		width: 10,
-		height: 10,
-		borderRadius: 5,
+		width: RADIO_INNER_SIZE,
+		height: RADIO_INNER_SIZE,
+		borderRadius: RADIO_INNER_RADIUS,
 	},
 	decimalRow: {
 		flexDirection: 'row',
 	},
 	decimalBtn: {
 		flex: 1,
-		padding: 14,
+		padding: SPACING_PX.md,
 		alignItems: 'center',
 		borderWidth: 1,
 	},

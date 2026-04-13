@@ -7,6 +7,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { palette } from '@/src/theme/palette';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 
 type AutoBackup = 'off' | 'daily' | 'weekly';
 
@@ -17,7 +18,7 @@ export default function BackupScreen() {
 	return (
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Backup & Restore" />
-			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
 				<SectionHeader title="Google Drive" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
@@ -39,9 +40,7 @@ export default function BackupScreen() {
 							</ThemedText>
 						</View>
 						<Pressable style={[styles.outlineBtn, { borderColor: c.primary }]}>
-							<ThemedText
-								style={{ color: c.primary, fontWeight: '600', fontSize: 13 }}
-							>
+							<ThemedText variant="label" color={c.primary} weight="semibold">
 								Connect Google Account
 							</ThemedText>
 						</Pressable>
@@ -59,7 +58,7 @@ export default function BackupScreen() {
 						<ThemedText variant="body" style={{ flex: 1 }}>
 							Auto Backup
 						</ThemedText>
-						<View style={{ flexDirection: 'row', gap: 6 }}>
+						<View style={{ flexDirection: 'row', gap: SPACING_PX.xs }}>
 							{(['off', 'daily', 'weekly'] as AutoBackup[]).map((opt) => (
 								<Pressable
 									key={opt}
@@ -157,7 +156,7 @@ export default function BackupScreen() {
 						},
 					]}
 				>
-					<ThemedText style={{ color: c.unpaid, fontSize: 14 }}>
+					<ThemedText variant="caption" color={c.unpaid}>
 						{'⚠  Restoring replaces ALL current data permanently'}
 					</ThemedText>
 				</View>
@@ -189,22 +188,41 @@ export default function BackupScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
-	row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 16 },
+	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
+	row: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
+	},
 	statusRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
-	outlineBtn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, borderWidth: 1 },
-	miniChip: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12, borderWidth: 1 },
-	primaryBtn: { paddingVertical: 12, borderRadius: 8, alignItems: 'center' },
-	warningCard: {
-		marginHorizontal: 16,
-		borderRadius: 8,
+	outlineBtn: {
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		borderRadius: BORDER_RADIUS_PX.md,
 		borderWidth: 1,
-		padding: 14,
-		marginBottom: 8,
+	},
+	miniChip: {
+		paddingHorizontal: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.xs,
+		borderRadius: BORDER_RADIUS_PX.lg,
+		borderWidth: 1,
+	},
+	primaryBtn: {
+		paddingVertical: SPACING_PX.md,
+		borderRadius: BORDER_RADIUS_PX.md,
+		alignItems: 'center',
+	},
+	warningCard: {
+		marginHorizontal: SPACING_PX.lg,
+		borderRadius: BORDER_RADIUS_PX.md,
+		borderWidth: 1,
+		padding: SPACING_PX.md,
+		marginBottom: SPACING_PX.sm,
 	},
 });

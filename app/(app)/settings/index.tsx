@@ -8,6 +8,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface NavRow {
 	label: string;
@@ -125,7 +126,7 @@ export default function SettingsScreen() {
 	return (
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Settings" showBackButton={false} />
-			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
 				{SECTIONS.map((section) => (
 					<React.Fragment key={section.title}>
 						<SectionHeader
@@ -176,13 +177,13 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
 	card: {
-		marginHorizontal: 16,
+		marginHorizontal: SPACING_PX.lg,
 		overflow: 'hidden',
 	},
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
 });

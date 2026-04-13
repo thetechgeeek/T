@@ -1,4 +1,3 @@
-import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -6,27 +5,14 @@ import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 type ExtraFields = 0 | 1 | 2 | 3;
-
-function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
-	return (
-		<ThemedText
-			variant="caption"
-			style={{
-				color: c.primary,
-				marginTop: 20,
-				marginBottom: 4,
-				marginHorizontal: 16,
-				fontWeight: '600',
-				textTransform: 'uppercase',
-				letterSpacing: LETTER_SPACING_SECTION,
-			}}
-		>
-			{label}
-		</ThemedText>
-	);
-}
+const EXTRA_FIELD_CHIP_WIDTH = 44;
+const EXTRA_FIELD_CHIP_HEIGHT = 40;
 
 function SwitchRow({
 	label,
@@ -93,11 +79,14 @@ export default function PartySettingsScreen() {
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Party Settings" />
 			<ScrollView
-				contentContainerStyle={{ paddingBottom: 32 }}
+				contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 				keyboardShouldPersistTaps="handled"
 			>
-				<SectionLabel label="Party Fields" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Party Fields" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Show GSTIN Field"
 						value={showGstin}
@@ -131,27 +120,30 @@ export default function PartySettingsScreen() {
 						c={c}
 						last
 					/>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Additional Party Fields" c={c} />
-				<View
-					style={[
-						styles.card,
-						{
-							backgroundColor: c.surface,
-							paddingHorizontal: 16,
-							paddingTop: 14,
-							paddingBottom: 6,
-						},
-					]}
+				<SectionHeader
+					title="Additional Party Fields"
+					variant="uppercase"
+					titleColor={c.primary}
+				/>
+				<SettingsCard
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					padding="md"
 				>
 					<ThemedText
 						variant="caption"
-						style={{ color: c.onSurfaceVariant, marginBottom: 10 }}
+						style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.md }}
 					>
 						Number of additional fields
 					</ThemedText>
-					<View style={{ flexDirection: 'row', gap: 8, marginBottom: 16 }}>
+					<View
+						style={{
+							flexDirection: 'row',
+							gap: SPACING_PX.sm,
+							marginBottom: SPACING_PX.lg,
+						}}
+					>
 						{([0, 1, 2, 3] as ExtraFields[]).map((n) => (
 							<Pressable
 								key={n}
@@ -164,10 +156,9 @@ export default function PartySettingsScreen() {
 								]}
 							>
 								<ThemedText
-									style={{
-										color: extraFields === n ? c.onPrimary : c.onSurface,
-										fontWeight: '700',
-									}}
+									variant="body"
+									color={extraFields === n ? c.onPrimary : c.onSurface}
+									weight="bold"
 								>
 									{n}
 								</ThemedText>
@@ -176,10 +167,10 @@ export default function PartySettingsScreen() {
 					</View>
 
 					{Array.from({ length: extraFields }).map((_, idx) => (
-						<View key={idx} style={{ marginBottom: 12 }}>
+						<View key={idx} style={{ marginBottom: SPACING_PX.md }}>
 							<ThemedText
 								variant="caption"
-								style={{ color: c.onSurfaceVariant, marginBottom: 4 }}
+								style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.xs }}
 							>
 								Field {idx + 1} Label
 							</ThemedText>
@@ -195,34 +186,34 @@ export default function PartySettingsScreen() {
 							/>
 						</View>
 					))}
-				</View>
+				</SettingsCard>
 			</ScrollView>
 		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
+	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
 	chip: {
-		width: 44,
-		height: 40,
-		borderRadius: 8,
+		width: EXTRA_FIELD_CHIP_WIDTH,
+		height: EXTRA_FIELD_CHIP_HEIGHT,
+		borderRadius: BORDER_RADIUS_PX.md,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	textInput: {
 		borderWidth: 1,
-		borderRadius: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 15,
+		borderRadius: BORDER_RADIUS_PX.md,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		fontSize: FONT_SIZE.body,
 	},
 });

@@ -1,4 +1,4 @@
-import { LETTER_SPACING_SECTION, OPACITY_HOVER } from '@/theme/uiMetrics';
+import { OPACITY_HOVER } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -6,7 +6,11 @@ import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { printThemeSwatches, palette } from '@/src/theme/palette';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 type PaperType = 'thermal58' | 'thermal80' | 'a4' | 'a5';
 
@@ -18,25 +22,10 @@ const PAPER_TYPES: { key: PaperType; label: string }[] = [
 ];
 
 const THEMES = [...printThemeSwatches];
-
-function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
-	return (
-		<ThemedText
-			variant="caption"
-			style={{
-				color: c.primary,
-				marginTop: 20,
-				marginBottom: 4,
-				marginHorizontal: 16,
-				fontWeight: '600',
-				textTransform: 'uppercase',
-				letterSpacing: LETTER_SPACING_SECTION,
-			}}
-		>
-			{label}
-		</ThemedText>
-	);
-}
+const THEME_RECT_WIDTH = 40;
+const THEME_RECT_HEIGHT = 56;
+const THEME_CHECK_SIZE = 18;
+const ZERO_SPACING = 0;
 
 function SwitchRow({
 	label,
@@ -101,9 +90,9 @@ export default function PrintSettingsScreen() {
 	return (
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Invoice Print Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-				<SectionLabel label="Paper Type" c={c} />
-				<View style={[styles.chipRow, { marginHorizontal: 16 }]}>
+			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
+				<SectionHeader title="Paper Type" variant="uppercase" titleColor={c.primary} />
+				<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
 					{PAPER_TYPES.map((p) => (
 						<Pressable
 							key={p.key}
@@ -117,10 +106,8 @@ export default function PrintSettingsScreen() {
 						>
 							<ThemedText
 								variant="caption"
-								style={{
-									color: paper === p.key ? c.onPrimary : c.onSurface,
-									fontWeight: '600',
-								}}
+								color={paper === p.key ? c.onPrimary : c.onSurface}
+								weight="semibold"
 							>
 								{p.label}
 							</ThemedText>
@@ -128,8 +115,8 @@ export default function PrintSettingsScreen() {
 					))}
 				</View>
 
-				<SectionLabel label="Invoice Theme" c={c} />
-				<View style={[styles.themeRow, { marginHorizontal: 16 }]}>
+				<SectionHeader title="Invoice Theme" variant="uppercase" titleColor={c.primary} />
+				<View style={[styles.themeRow, { marginHorizontal: SPACING_PX.lg }]}>
 					{THEMES.map((t) => (
 						<Pressable
 							key={t.key}
@@ -144,7 +131,9 @@ export default function PrintSettingsScreen() {
 								]}
 							>
 								{theme === t.key && (
-									<ThemedText style={{ color: palette.white, fontSize: 18 }}>
+									<ThemedText
+										style={{ color: palette.white, fontSize: THEME_CHECK_SIZE }}
+									>
 										✓
 									</ThemedText>
 								)}
@@ -153,7 +142,7 @@ export default function PrintSettingsScreen() {
 								variant="caption"
 								style={{
 									color: c.onSurfaceVariant,
-									marginTop: 4,
+									marginTop: SPACING_PX.xs,
 									textAlign: 'center',
 								}}
 								numberOfLines={1}
@@ -164,17 +153,23 @@ export default function PrintSettingsScreen() {
 					))}
 				</View>
 
-				<SectionLabel label="Company Header" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Company Header" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow label="Logo" value={logo} onChange={setLogo} c={c} />
 					<SwitchRow label="Business Name" value={bizName} onChange={setBizName} c={c} />
 					<SwitchRow label="Address" value={address} onChange={setAddress} c={c} />
 					<SwitchRow label="Phone" value={phone} onChange={setPhone} c={c} />
 					<SwitchRow label="GSTIN" value={gstin} onChange={setGstin} c={c} last />
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Invoice Fields" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Invoice Fields" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow label="Item Code" value={itemCode} onChange={setItemCode} c={c} />
 					<SwitchRow label="HSN Code" value={hsnCode} onChange={setHsnCode} c={c} />
 					<SwitchRow
@@ -184,10 +179,13 @@ export default function PrintSettingsScreen() {
 						c={c}
 					/>
 					<SwitchRow label="MRP" value={mrp} onChange={setMrp} c={c} last />
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Totals" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Totals" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="GST Breakup"
 						value={gstBreakup}
@@ -201,23 +199,16 @@ export default function PrintSettingsScreen() {
 						c={c}
 					/>
 					<SwitchRow label="UPI QR Code" value={upiQr} onChange={setUpiQr} c={c} last />
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Footer" c={c} />
-				<View
-					style={[
-						styles.card,
-						{
-							backgroundColor: c.surface,
-							paddingHorizontal: 16,
-							paddingTop: 12,
-							paddingBottom: 4,
-						},
-					]}
+				<SectionHeader title="Footer" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					padding="md"
 				>
 					<ThemedText
 						variant="caption"
-						style={{ color: c.onSurfaceVariant, marginBottom: 4 }}
+						style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.xs }}
 					>
 						Footer Line 1
 					</ThemedText>
@@ -230,7 +221,11 @@ export default function PrintSettingsScreen() {
 					/>
 					<ThemedText
 						variant="caption"
-						style={{ color: c.onSurfaceVariant, marginBottom: 4, marginTop: 10 }}
+						style={{
+							color: c.onSurfaceVariant,
+							marginBottom: SPACING_PX.xs,
+							marginTop: SPACING_PX.md,
+						}}
 					>
 						Footer Line 2
 					</ThemedText>
@@ -241,14 +236,18 @@ export default function PrintSettingsScreen() {
 						placeholderTextColor={c.placeholder}
 						style={[
 							styles.textInput,
-							{ borderColor: c.border, color: c.onSurface, marginBottom: 10 },
+							{
+								borderColor: c.border,
+								color: c.onSurface,
+								marginBottom: SPACING_PX.md,
+							},
 						]}
 					/>
 					<View
 						style={[
 							styles.row,
 							{
-								paddingHorizontal: 0,
+								paddingHorizontal: ZERO_SPACING,
 								borderTopColor: c.border,
 								borderTopWidth: StyleSheet.hairlineWidth,
 							},
@@ -263,37 +262,42 @@ export default function PrintSettingsScreen() {
 							onValueChange={setSignature}
 						/>
 					</View>
-				</View>
+				</SettingsCard>
 			</ScrollView>
 		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
+	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
-	chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-	chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, borderWidth: 1 },
-	themeRow: { flexDirection: 'row', gap: 10, flexWrap: 'wrap' },
+	chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: SPACING_PX.sm },
+	chip: {
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		borderRadius: BORDER_RADIUS_PX.full,
+		borderWidth: 1,
+	},
+	themeRow: { flexDirection: 'row', gap: SPACING_PX.md, flexWrap: 'wrap' },
 	themeRect: {
-		width: 40,
-		height: 56,
-		borderRadius: 6,
+		width: THEME_RECT_WIDTH,
+		height: THEME_RECT_HEIGHT,
+		borderRadius: BORDER_RADIUS_PX.md,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	themeSelected: { borderWidth: 2, borderColor: palette.white, opacity: OPACITY_HOVER },
 	textInput: {
 		borderWidth: 1,
-		borderRadius: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		fontSize: 14,
+		borderRadius: BORDER_RADIUS_PX.md,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		fontSize: FONT_SIZE.caption,
 	},
 });

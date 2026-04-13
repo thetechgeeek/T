@@ -1,4 +1,3 @@
-import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -7,6 +6,9 @@ import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 
 type AutoLock = 'never' | '1min' | '5min' | '15min';
 
@@ -16,25 +18,6 @@ const AUTO_LOCK_OPTIONS: { key: AutoLock; label: string }[] = [
 	{ key: '5min', label: '5 min' },
 	{ key: '15min', label: '15 min' },
 ];
-
-function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
-	return (
-		<ThemedText
-			variant="caption"
-			style={{
-				color: c.primary,
-				marginTop: 20,
-				marginBottom: 4,
-				marginHorizontal: 16,
-				fontWeight: '600',
-				textTransform: 'uppercase',
-				letterSpacing: LETTER_SPACING_SECTION,
-			}}
-		>
-			{label}
-		</ThemedText>
-	);
-}
 
 function SwitchRow({
 	label,
@@ -90,9 +73,12 @@ export default function SecuritySettingsScreen() {
 	return (
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Security Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-				<SectionLabel label="PIN" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
+				<SectionHeader title="PIN" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<Pressable
 						onPress={() => router.push('/(app)/settings/lock')}
 						style={[
@@ -109,7 +95,7 @@ export default function SecuritySettingsScreen() {
 								Protect app with a PIN code
 							</ThemedText>
 						</View>
-						<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 18 }}>
+						<ThemedText variant="h3" color={c.onSurfaceVariant}>
 							›
 						</ThemedText>
 					</Pressable>
@@ -121,10 +107,10 @@ export default function SecuritySettingsScreen() {
 						c={c}
 						last
 					/>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Auto-lock" c={c} />
-				<View style={[styles.chipRow, { marginHorizontal: 16 }]}>
+				<SectionHeader title="Auto-lock" variant="uppercase" titleColor={c.primary} />
+				<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
 					{AUTO_LOCK_OPTIONS.map((opt) => (
 						<Pressable
 							key={opt.key}
@@ -137,9 +123,10 @@ export default function SecuritySettingsScreen() {
 							]}
 						>
 							<ThemedText
+								variant="label"
+								weight="semibold"
 								style={{
 									color: autoLock === opt.key ? c.onPrimary : c.onSurface,
-									fontWeight: '600',
 								}}
 							>
 								{opt.label}
@@ -148,8 +135,15 @@ export default function SecuritySettingsScreen() {
 					))}
 				</View>
 
-				<SectionLabel label="Transaction Protection" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader
+					title="Transaction Protection"
+					variant="uppercase"
+					titleColor={c.primary}
+				/>
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Require PIN to Edit Transactions"
 						value={pinToEdit}
@@ -163,21 +157,26 @@ export default function SecuritySettingsScreen() {
 						c={c}
 						last
 					/>
-				</View>
+				</SettingsCard>
 			</ScrollView>
 		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
+	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
-	chipRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
-	chip: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 20, borderWidth: 1 },
+	chipRow: { flexDirection: 'row', gap: SPACING_PX.sm, flexWrap: 'wrap' },
+	chip: {
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm,
+		borderRadius: BORDER_RADIUS_PX.full,
+		borderWidth: 1,
+	},
 });

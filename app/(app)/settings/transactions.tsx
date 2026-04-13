@@ -1,6 +1,4 @@
-import { LETTER_SPACING_SECTION, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
-
-const PREFIX_INPUT_WIDTH = SIZE_AVATAR_MD;
+import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -8,25 +6,12 @@ import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
-function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
-	return (
-		<ThemedText
-			variant="caption"
-			style={{
-				color: c.primary,
-				marginTop: 20,
-				marginBottom: 4,
-				marginHorizontal: 16,
-				fontWeight: '600',
-				textTransform: 'uppercase',
-				letterSpacing: LETTER_SPACING_SECTION,
-			}}
-		>
-			{label}
-		</ThemedText>
-	);
-}
+const PREFIX_INPUT_WIDTH = SIZE_AVATAR_MD;
 
 function SwitchRow({
 	label,
@@ -84,9 +69,12 @@ export default function TransactionSettingsScreen() {
 	return (
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Transaction Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-				<SectionLabel label="Invoice Number" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
+				<SectionHeader title="Invoice Number" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Auto-increment Invoice No."
 						value={autoIncrement}
@@ -125,10 +113,17 @@ export default function TransactionSettingsScreen() {
 						onChange={setResetFY}
 						c={c}
 					/>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Invoice Defaults" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader
+					title="Invoice Defaults"
+					variant="uppercase"
+					titleColor={c.primary}
+				/>
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Default to Cash Sale"
 						value={cashSale}
@@ -141,10 +136,13 @@ export default function TransactionSettingsScreen() {
 						onChange={setPreviewBefore}
 						c={c}
 					/>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Fields" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Fields" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Show PO Number Field"
 						value={showPO}
@@ -169,10 +167,13 @@ export default function TransactionSettingsScreen() {
 						onChange={setShowRC}
 						c={c}
 					/>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Pricing" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<SwitchRow
 						label="Transaction-wise Discount"
 						value={txnDiscount}
@@ -191,28 +192,28 @@ export default function TransactionSettingsScreen() {
 						onChange={setRoundOff}
 						c={c}
 					/>
-				</View>
+				</SettingsCard>
 			</ScrollView>
 		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
+	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 14,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
 	prefixInput: {
 		width: PREFIX_INPUT_WIDTH,
 		borderWidth: 1,
-		borderRadius: 6,
-		paddingHorizontal: 8,
-		paddingVertical: 6,
-		fontSize: 14,
+		borderRadius: BORDER_RADIUS_PX.md,
+		paddingHorizontal: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.xs,
+		fontSize: FONT_SIZE.caption,
 		textAlign: 'center',
 	},
 });

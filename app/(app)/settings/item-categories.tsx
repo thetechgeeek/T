@@ -1,4 +1,13 @@
-import { SIZE_AVATAR_MD, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
+import {
+	SIZE_AVATAR_MD,
+	OVERLAY_COLOR_MEDIUM,
+	FAB_OFFSET_RIGHT,
+	FAB_OFFSET_BOTTOM,
+	SIZE_FAB,
+	RADIUS_FAB,
+	SIZE_MODAL_HANDLE_WIDTH,
+	SIZE_MODAL_HANDLE_HEIGHT,
+} from '@/theme/uiMetrics';
 import React, { useState, useEffect } from 'react';
 import {
 	View,
@@ -27,8 +36,17 @@ import { itemCategoryService } from '@/src/services/itemCategoryService';
 import type { ItemCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { expenseCategoryPickColors, palette } from '@/src/theme/palette';
+import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
+const ZERO_SPACING = 0;
+const LIST_BOTTOM_PADDING = 100;
 const PRESET_COLORS = [...expenseCategoryPickColors];
+const CATEGORY_DOT_SIZE = 12;
+const CATEGORY_DOT_RADIUS = 6;
+const COLOR_SWATCH_SIZE = 36;
+const COLOR_SWATCH_RADIUS = 18;
+const EMOJI_INPUT_WIDTH = 72;
 
 interface CategoryFormState {
 	name_en: string;
@@ -145,7 +163,7 @@ export default function ItemCategoriesScreen() {
 				<View style={layout.rowBetween}>
 					<View style={[layout.row, { alignItems: 'center', flex: 1 }]}>
 						<View style={[styles.dot, { backgroundColor: item.color || c.primary }]} />
-						<ThemedText style={{ marginRight: s.xs, fontSize: 20 }}>
+						<ThemedText variant="h2" style={{ marginRight: s.xs }}>
 							{item.icon || '📁'}
 						</ThemedText>
 						<View style={{ flex: 1 }}>
@@ -191,7 +209,7 @@ export default function ItemCategoriesScreen() {
 					renderItem={renderItem}
 					contentContainerStyle={[
 						styles.listContent,
-						{ paddingBottom: 100 + insets.bottom },
+						{ paddingBottom: LIST_BOTTOM_PADDING + insets.bottom },
 					]}
 					ItemSeparatorComponent={() => <View style={{ height: s.sm }} />}
 					ListEmptyComponent={
@@ -203,7 +221,10 @@ export default function ItemCategoriesScreen() {
 			)}
 
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }]}
+				style={[
+					styles.fab,
+					{ backgroundColor: c.primary, bottom: FAB_OFFSET_BOTTOM + insets.bottom },
+				]}
 				onPress={openAdd}
 			>
 				<Plus color="white" size={28} />
@@ -305,7 +326,7 @@ export default function ItemCategoriesScreen() {
 										borderColor: c.border,
 										borderRadius: r.md,
 										backgroundColor: c.surface,
-										fontSize: 24,
+										fontSize: FONT_SIZE.h1,
 									},
 								]}
 							/>
@@ -357,16 +378,21 @@ export default function ItemCategoriesScreen() {
 }
 
 const styles = StyleSheet.create({
-	listContent: { padding: 16 },
-	card: { marginBottom: 0 },
-	dot: { width: 12, height: 12, borderRadius: 6, marginRight: 8 },
+	listContent: { padding: SPACING_PX.lg },
+	card: { marginBottom: ZERO_SPACING },
+	dot: {
+		width: CATEGORY_DOT_SIZE,
+		height: CATEGORY_DOT_SIZE,
+		borderRadius: CATEGORY_DOT_RADIUS,
+		marginRight: SPACING_PX.sm,
+	},
 	empty: { textAlign: 'center', marginTop: SIZE_AVATAR_MD },
 	fab: {
 		position: 'absolute',
-		right: 24,
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		right: FAB_OFFSET_RIGHT,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
@@ -375,26 +401,40 @@ const styles = StyleSheet.create({
 	modalBackdrop: { flex: 1, backgroundColor: OVERLAY_COLOR_MEDIUM },
 	modalSheet: { maxHeight: '85%' },
 	sheetHandle: {
-		width: 40,
-		height: 4,
-		borderRadius: 2,
+		width: SIZE_MODAL_HANDLE_WIDTH,
+		height: SIZE_MODAL_HANDLE_HEIGHT,
+		borderRadius: BORDER_RADIUS_PX.xs,
 		backgroundColor: palette.grayCCC,
 		alignSelf: 'center',
-		marginTop: 12,
-		marginBottom: 4,
+		marginTop: SPACING_PX.md,
+		marginBottom: SPACING_PX.xs,
 	},
-	modalTitle: { textAlign: 'center', marginBottom: 12, marginTop: 8, paddingHorizontal: 16 },
-	modalScroll: { paddingHorizontal: 20, paddingBottom: 16 },
-	label: { fontWeight: '600', marginBottom: 6 },
+	modalTitle: {
+		textAlign: 'center',
+		marginBottom: SPACING_PX.md,
+		marginTop: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.lg,
+	},
+	modalScroll: { paddingHorizontal: SPACING_PX.xl, paddingBottom: SPACING_PX.lg },
+	label: { fontWeight: '600', marginBottom: SPACING_PX.xs },
 	textInput: {
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 15,
-		minHeight: 48,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		fontSize: FONT_SIZE.body,
+		minHeight: TOUCH_TARGET_MIN_PX,
 	},
-	emojiInput: { width: 72, textAlign: 'center' },
-	colorGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginTop: 4 },
-	colorCircle: { width: 36, height: 36, borderRadius: 18 },
-	modalActions: { flexDirection: 'row', paddingTop: 12 },
+	emojiInput: { width: EMOJI_INPUT_WIDTH, textAlign: 'center' },
+	colorGrid: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		gap: SPACING_PX.md,
+		marginTop: SPACING_PX.xs,
+	},
+	colorCircle: {
+		width: COLOR_SWATCH_SIZE,
+		height: COLOR_SWATCH_SIZE,
+		borderRadius: COLOR_SWATCH_RADIUS,
+	},
+	modalActions: { flexDirection: 'row', paddingTop: SPACING_PX.md },
 });
