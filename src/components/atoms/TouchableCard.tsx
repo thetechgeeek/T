@@ -1,12 +1,12 @@
 import React from 'react';
-import { Pressable, type PressableProps, type ViewStyle } from 'react-native';
+import { Pressable, type PressableProps, type ViewStyle, type StyleProp } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { PRESS_OPACITY, PRESS_SCALE, SPRING_PRESS } from '@/src/theme/animations';
 
 export interface TouchableCardProps extends Omit<PressableProps, 'style'> {
 	children: React.ReactNode;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
 	testID?: string;
 }
 

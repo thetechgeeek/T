@@ -1,4 +1,4 @@
-import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
+import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM, Z_INDEX } from '@/theme/uiMetrics';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
 	View,
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
 	sectionLabel: { marginBottom: 6 },
 	selectedCard: { marginBottom: 4 },
 	selectedRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-	dropdown: { marginTop: 4, zIndex: 100 },
+	dropdown: { marginTop: 4, zIndex: Z_INDEX.overlay },
 	dropdownRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',

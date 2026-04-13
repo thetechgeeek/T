@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
+import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM, Z_INDEX } from '@/theme/uiMetrics';
 
 const DROPDOWN_MAX_HEIGHT = 160;
 const MODAL_CARD_WIDTH = 320;
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
 	label: { marginBottom: 6 },
 	selectedCard: { marginBottom: 4 },
 	selectedRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-	dropdown: { marginTop: 4, zIndex: 100 },
+	dropdown: { marginTop: 4, zIndex: Z_INDEX.overlay },
 	dropdownRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',

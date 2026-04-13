@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { OPACITY_TOAST } from '@/theme/uiMetrics';
+import { OPACITY_TOAST, Z_INDEX } from '@/theme/uiMetrics';
 
 /** Minimum width of the kebab-menu dropdown */
 const KEBAB_MENU_MIN_WIDTH = 140;
@@ -691,7 +691,7 @@ const styles = StyleSheet.create({
 	},
 	kebabMenu: {
 		position: 'absolute',
-		zIndex: 100,
+		zIndex: Z_INDEX.overlay,
 		top: 56,
 		minWidth: KEBAB_MENU_MIN_WIDTH,
 		borderWidth: 1,

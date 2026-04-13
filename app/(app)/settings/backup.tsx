@@ -1,33 +1,14 @@
-import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet, Pressable, Alert } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { palette } from '@/src/theme/palette';
 
 type AutoBackup = 'off' | 'daily' | 'weekly';
-
-function SectionLabel({ label, c }: { label: string; c: ThemeColors }) {
-	return (
-		<ThemedText
-			variant="caption"
-			style={{
-				color: c.primary,
-				marginTop: 20,
-				marginBottom: 4,
-				marginHorizontal: 16,
-				fontWeight: '600',
-				textTransform: 'uppercase',
-				letterSpacing: LETTER_SPACING_SECTION,
-			}}
-		>
-			{label}
-		</ThemedText>
-	);
-}
 
 export default function BackupScreen() {
 	const { c } = useThemeTokens();
@@ -37,8 +18,11 @@ export default function BackupScreen() {
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Backup & Restore" />
 			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-				<SectionLabel label="Google Drive" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Google Drive" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<View
 						style={[
 							styles.statusRow,
@@ -136,10 +120,13 @@ export default function BackupScreen() {
 							</ThemedText>
 						</Pressable>
 					</View>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Local Backup" c={c} />
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SectionHeader title="Local Backup" variant="uppercase" titleColor={c.primary} />
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<View style={styles.row}>
 						<Pressable
 							onPress={() =>
@@ -158,9 +145,9 @@ export default function BackupScreen() {
 							</ThemedText>
 						</Pressable>
 					</View>
-				</View>
+				</SettingsCard>
 
-				<SectionLabel label="Restore" c={c} />
+				<SectionHeader title="Restore" variant="uppercase" titleColor={c.primary} />
 				<View
 					style={[
 						styles.warningCard,
@@ -174,7 +161,10 @@ export default function BackupScreen() {
 						{'⚠  Restoring replaces ALL current data permanently'}
 					</ThemedText>
 				</View>
-				<View style={[styles.card, { backgroundColor: c.surface }]}>
+				<SettingsCard
+					padding="none"
+					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				>
 					<View style={styles.row}>
 						<Pressable
 							onPress={() => Alert.alert('Restore', 'Select a .backup file')}
@@ -192,7 +182,7 @@ export default function BackupScreen() {
 							</ThemedText>
 						</Pressable>
 					</View>
-				</View>
+				</SettingsCard>
 			</ScrollView>
 		</Screen>
 	);

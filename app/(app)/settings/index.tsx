@@ -1,4 +1,3 @@
-import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
 import React from 'react';
 import { View, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -7,6 +6,8 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 
 interface NavRow {
 	label: string;
@@ -127,13 +128,15 @@ export default function SettingsScreen() {
 			<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
 				{SECTIONS.map((section) => (
 					<React.Fragment key={section.title}>
-						<ThemedText
-							variant="caption"
-							style={[styles.sectionLabel, { color: c.primary }]}
+						<SectionHeader
+							title={section.title}
+							variant="uppercase"
+							titleColor={c.primary}
+						/>
+						<SettingsCard
+							padding="none"
+							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
 						>
-							{section.title.toUpperCase()}
-						</ThemedText>
-						<View style={[styles.card, { backgroundColor: c.surface }]}>
 							{section.rows.map((row, idx) => (
 								<Pressable
 									key={row.route}
@@ -158,12 +161,12 @@ export default function SettingsScreen() {
 											</ThemedText>
 										) : null}
 									</View>
-									<ThemedText style={{ color: c.onSurfaceVariant, fontSize: 20 }}>
+									<ThemedText variant="h2" color={c.onSurfaceVariant}>
 										›
 									</ThemedText>
 								</Pressable>
 							))}
-						</View>
+						</SettingsCard>
 					</React.Fragment>
 				))}
 			</ScrollView>
@@ -172,16 +175,8 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-	sectionLabel: {
-		marginTop: 20,
-		marginBottom: 4,
-		marginHorizontal: 16,
-		fontWeight: '600',
-		letterSpacing: LETTER_SPACING_SECTION,
-	},
 	card: {
 		marginHorizontal: 16,
-		borderRadius: 10,
 		overflow: 'hidden',
 	},
 	row: {

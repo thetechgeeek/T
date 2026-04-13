@@ -1,12 +1,16 @@
-import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 
-const MULTILINE_INPUT_MIN_HEIGHT = 90;
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+
+const MULTILINE_INPUT_MIN_HEIGHT = 90;
 
 type Channel = 'whatsapp' | 'sms' | 'both';
 
@@ -37,28 +41,30 @@ export default function RemindersScreen() {
 				keyboardShouldPersistTaps="handled"
 			>
 				{/* Auto reminders toggle */}
-				<View
-					style={[styles.topCard, { backgroundColor: c.surface, borderColor: c.border }]}
-				>
-					<ThemedText variant="body" style={{ flex: 1, fontWeight: '700' }}>
-						Auto Reminders
-					</ThemedText>
-					<Switch
-						trackColor={{ true: c.primary, false: c.border }}
-						value={autoReminders}
-						onValueChange={setAutoReminders}
-					/>
-				</View>
+				<SettingsCard style={styles.topCard} padding="md">
+					<View style={styles.topRow}>
+						<ThemedText variant="body" style={{ flex: 1 }} weight="semibold">
+							Auto Reminders
+						</ThemedText>
+						<Switch
+							trackColor={{ true: c.primary, false: c.border }}
+							value={autoReminders}
+							onValueChange={setAutoReminders}
+						/>
+					</View>
+				</SettingsCard>
 
 				{autoReminders && (
 					<>
-						<ThemedText
-							variant="caption"
-							style={[styles.sectionLabel, { color: c.primary }]}
+						<SectionHeader
+							title="Reminder Schedule"
+							variant="uppercase"
+							titleColor={c.primary}
+						/>
+						<SettingsCard
+							padding="none"
+							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
 						>
-							Reminder Schedule
-						</ThemedText>
-						<View style={[styles.card, { backgroundColor: c.surface }]}>
 							{[
 								{ label: 'First reminder after', value: first, setter: setFirst },
 								{
@@ -107,14 +113,9 @@ export default function RemindersScreen() {
 									</View>
 								</View>
 							))}
-						</View>
+						</SettingsCard>
 
-						<ThemedText
-							variant="caption"
-							style={[styles.sectionLabel, { color: c.primary }]}
-						>
-							Channel
-						</ThemedText>
+						<SectionHeader title="Channel" variant="uppercase" titleColor={c.primary} />
 						<View style={[styles.chipRow, { marginHorizontal: 16 }]}>
 							{(
 								[
@@ -145,13 +146,15 @@ export default function RemindersScreen() {
 							))}
 						</View>
 
-						<ThemedText
-							variant="caption"
-							style={[styles.sectionLabel, { color: c.primary }]}
+						<SectionHeader
+							title="Message Template"
+							variant="uppercase"
+							titleColor={c.primary}
+						/>
+						<SettingsCard
+							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+							padding="md"
 						>
-							Message Template
-						</ThemedText>
-						<View style={[styles.card, { backgroundColor: c.surface, padding: 14 }]}>
 							<TextInput
 								value={template}
 								onChangeText={setTemplate}
@@ -180,7 +183,10 @@ export default function RemindersScreen() {
 										style={[
 											styles.varChip,
 											{
-												backgroundColor: `${c.primary}15`,
+												backgroundColor: withOpacity(
+													c.primary,
+													OPACITY_TINT_LIGHT,
+												),
 												borderColor: c.primary,
 											},
 										]}
@@ -194,7 +200,7 @@ export default function RemindersScreen() {
 									</Pressable>
 								))}
 							</View>
-						</View>
+						</SettingsCard>
 					</>
 				)}
 			</ScrollView>
@@ -206,20 +212,8 @@ const styles = StyleSheet.create({
 	topCard: {
 		marginHorizontal: 16,
 		marginTop: 20,
-		borderRadius: 12,
-		borderWidth: 1,
-		padding: 16,
-		flexDirection: 'row',
-		alignItems: 'center',
 	},
-	sectionLabel: {
-		marginTop: 20,
-		marginBottom: 4,
-		marginHorizontal: 16,
-		fontWeight: '600',
-		textTransform: 'uppercase',
-		letterSpacing: LETTER_SPACING_SECTION,
-	},
+	topRow: { flexDirection: 'row', alignItems: 'center' },
 	card: { marginHorizontal: 16, borderRadius: 10, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',

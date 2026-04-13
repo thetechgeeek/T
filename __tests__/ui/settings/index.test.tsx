@@ -18,7 +18,7 @@ describe('SettingsScreen', () => {
 
 	it('renders Business section', () => {
 		const { getByText } = renderWithTheme(<SettingsScreen />);
-		expect(getByText('BUSINESS')).toBeTruthy();
+		expect(getByText('Business')).toBeTruthy();
 	});
 
 	it('renders without crashing', () => {
