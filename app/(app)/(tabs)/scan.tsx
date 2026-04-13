@@ -1,12 +1,24 @@
 import React, { useState, useRef } from 'react';
-import { palette } from '@/src/theme/palette';
-import { MS_SYNC_POLL, OPACITY_INACTIVE, OVERLAY_COLOR_DARK } from '@/theme/uiMetrics';
+import {
+	GLASS_WHITE_MEDIUM,
+	GLASS_WHITE_TEXT,
+	MS_SYNC_POLL,
+	OPACITY_INACTIVE,
+	OVERLAY_COLOR_DARK,
+} from '@/theme/uiMetrics';
 
 const CAMERA_QUALITY = 0.5;
 const OCR_PLACEHOLDER_DELAY_MS = MS_SYNC_POLL;
 const QR_FRAME_TOP_MARGIN = 62;
 const CAPTURE_BTN_OPACITY_IDLE = 1;
 const CAPTURE_BTN_OPACITY_BUSY = 0.5;
+const SCAN_FRAME_WIDTH = 300;
+const SCAN_FRAME_HEIGHT = 180;
+const SCAN_MANUAL_BOX_MAX_WIDTH = 400;
+const SCAN_MANUAL_BOX_MARGIN_BOTTOM = 40;
+const SCAN_CAPTURE_BUTTON_SIZE = 72;
+const SCAN_CAPTURE_BUTTON_RADIUS = 36;
+const SCAN_CAPTURE_BORDER_WIDTH = 4;
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -21,6 +33,7 @@ import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import logger from '@/src/utils/logger';
+import { BORDER_RADIUS_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
 export default function ScanTab() {
 	const { theme, c, s, r } = useThemeTokens();
@@ -118,7 +131,7 @@ export default function ScanTab() {
 	if (!permission.granted) {
 		return (
 			<AtomicScreen style={{ justifyContent: 'center', padding: s.xl }}>
-				<ThemedText align="center" style={{ marginBottom: s.lg, fontSize: 16 }}>
+				<ThemedText variant="body" align="center" style={{ marginBottom: s.lg }}>
 					{t('scanner.permissionText')}
 				</ThemedText>
 				<Button
@@ -132,19 +145,19 @@ export default function ScanTab() {
 	}
 
 	return (
-		<AtomicScreen backgroundColor={palette.black} safeAreaEdges={[]}>
+		<AtomicScreen backgroundColor={c.background} safeAreaEdges={[]}>
 			<CameraView ref={cameraRef} style={StyleSheet.absoluteFillObject} facing="back" />
 			<View style={styles.overlay}>
 				{/* Top dark area */}
 				<View style={[styles.darkness, { flex: 1 }]} />
 
 				{/* Middle scan area */}
-				<View style={{ flexDirection: 'row', height: 180 }}>
+				<View style={styles.scanRow}>
 					<View style={styles.darkness} />
 					<View
 						style={[
 							styles.scanFrame,
-							{ borderColor: capturing ? c.primary : palette.white50alpha },
+							{ borderColor: capturing ? c.primary : GLASS_WHITE_MEDIUM },
 						]}
 					>
 						{capturing && (
@@ -164,8 +177,9 @@ export default function ScanTab() {
 					style={[styles.darkness, { flex: 1, paddingTop: s.xl, alignItems: 'center' }]}
 				>
 					<ThemedText
-						color={palette.white}
-						style={{ fontSize: 14, opacity: OPACITY_INACTIVE, marginBottom: s.xl }}
+						variant="caption"
+						color={GLASS_WHITE_TEXT}
+						style={{ opacity: OPACITY_INACTIVE, marginBottom: s.xl }}
 					>
 						{capturing ? t('scanner.analyzing') : t('scanner.alignFrame')}
 					</ThemedText>
@@ -237,7 +251,7 @@ export default function ScanTab() {
 									/>
 								}
 								onPress={() => handleSearch(manualInput)}
-								style={{ width: 48, paddingHorizontal: 0 }}
+								style={{ width: TOUCH_TARGET_MIN_PX, paddingHorizontal: 0 }}
 								loading={loading}
 							/>
 						</View>
@@ -251,21 +265,26 @@ export default function ScanTab() {
 const styles = StyleSheet.create({
 	overlay: { flex: 1 },
 	darkness: { backgroundColor: OVERLAY_COLOR_DARK },
+	scanRow: { flexDirection: 'row', height: SCAN_FRAME_HEIGHT },
 	scanFrame: {
-		width: 300,
-		height: 180,
+		width: SCAN_FRAME_WIDTH,
+		height: SCAN_FRAME_HEIGHT,
 		borderWidth: 2,
-		borderRadius: 16,
+		borderRadius: BORDER_RADIUS_PX.xl,
 		backgroundColor: 'transparent',
 	},
-	manualBox: { width: '85%', maxWidth: 400, marginBottom: 40 },
+	manualBox: {
+		width: '85%',
+		maxWidth: SCAN_MANUAL_BOX_MAX_WIDTH,
+		marginBottom: SCAN_MANUAL_BOX_MARGIN_BOTTOM,
+	},
 	captureBtn: {
-		width: 72,
-		height: 72,
-		borderRadius: 36,
+		width: SCAN_CAPTURE_BUTTON_SIZE,
+		height: SCAN_CAPTURE_BUTTON_SIZE,
+		borderRadius: SCAN_CAPTURE_BUTTON_RADIUS,
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderWidth: 4,
-		borderColor: palette.white50alpha,
+		borderWidth: SCAN_CAPTURE_BORDER_WIDTH,
+		borderColor: GLASS_WHITE_MEDIUM,
 	},
 });

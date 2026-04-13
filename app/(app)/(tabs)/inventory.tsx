@@ -1,8 +1,13 @@
-import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { SIZE_AVATAR_MD, GLASS_WHITE_STRONG, OVERLAY_COLOR_MEDIUM } from '@/theme/uiMetrics';
-
-const OVERLAY_ZINDEX = 999;
-const FAB_SIZE = SIZE_AVATAR_MD;
+import {
+	FAB_OFFSET_BOTTOM,
+	FAB_OFFSET_RIGHT,
+	GLASS_WHITE_STRONG,
+	OVERLAY_COLOR_MEDIUM,
+	RADIUS_FAB,
+	SIZE_BUTTON_HEIGHT_SM,
+	SIZE_FAB,
+	Z_INDEX,
+} from '@/theme/uiMetrics';
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
@@ -32,7 +37,6 @@ import {
 } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { TileSetCard } from '@/src/components/organisms/TileSetCard';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -44,6 +48,16 @@ import { Chip } from '@/src/components/atoms/Chip';
 import { inventoryService } from '@/src/services/inventoryService';
 import type { TileSetGroup, TileCategory, InventoryFilters } from '@/src/types/inventory';
 import { layout } from '@/src/theme/layout';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+
+const FAB_SIZE = SIZE_FAB;
+const LIST_BOTTOM_PADDING = 100;
+const MENU_SHEET_WIDTH = 200;
+const MENU_SHEET_TOP_OFFSET = FAB_SIZE;
+const SORT_SHEET_HEADER_PADDING = 20;
+const SUMMARY_BAR_VERTICAL_PADDING = 6;
+const MENU_SHEET_ELEVATION = 5;
+const SORT_OPTION_VERTICAL_PADDING = 14;
 
 interface SortOption {
 	label: string;
@@ -205,7 +219,7 @@ export default function InventoryTab() {
 					},
 				]}
 			>
-				<View style={[layout.rowBetween, { marginBottom: 16 }]}>
+				<View style={[layout.rowBetween, { marginBottom: s.lg }]}>
 					<ThemedText variant="h1" accessibilityLabel="inventory-screen">
 						{t('inventory.title')}
 					</ThemedText>
@@ -219,7 +233,7 @@ export default function InventoryTab() {
 				</View>
 
 				{/* Search Bar */}
-				<View style={[layout.row, { gap: 12 }]}>
+				<View style={[layout.row, { gap: s.md }]}>
 					<View style={{ flex: 1 }}>
 						<TextInput
 							accessibilityLabel="inventory-search-input"
@@ -292,7 +306,7 @@ export default function InventoryTab() {
 						StyleSheet.absoluteFill,
 						{
 							backgroundColor: GLASS_WHITE_STRONG,
-							zIndex: OVERLAY_ZINDEX,
+							zIndex: Z_INDEX.max,
 							alignItems: 'center',
 							justifyContent: 'center',
 						},
@@ -335,6 +349,7 @@ export default function InventoryTab() {
 							backgroundColor: c.surface,
 							borderRadius: r.lg,
 							margin: s.lg,
+							...(theme.shadows.lg as object),
 						},
 					]}
 				>
@@ -378,7 +393,11 @@ export default function InventoryTab() {
 				>
 					<ThemedText
 						variant="h3"
-						style={{ paddingHorizontal: 20, paddingTop: 20, paddingBottom: 12 }}
+						style={{
+							paddingHorizontal: SORT_SHEET_HEADER_PADDING,
+							paddingTop: SORT_SHEET_HEADER_PADDING,
+							paddingBottom: s.md,
+						}}
 					>
 						Sort By
 					</ThemedText>
@@ -412,7 +431,7 @@ export default function InventoryTab() {
 										{opt.label}
 									</ThemedText>
 									{isActive ? (
-										<ThemedText color={c.primary} style={{ fontSize: 18 }}>
+										<ThemedText variant="h3" color={c.primary}>
 											✓
 										</ThemedText>
 									) : null}
@@ -427,7 +446,7 @@ export default function InventoryTab() {
 			<FlatList
 				data={groupedSets}
 				keyExtractor={(item) => item.baseItemNumber}
-				contentContainerStyle={{ padding: s.md, paddingBottom: 100 }}
+				contentContainerStyle={{ padding: s.md, paddingBottom: LIST_BOTTOM_PADDING }}
 				renderItem={({ item }) => (
 					<TileSetCard
 						group={item}
@@ -482,28 +501,33 @@ export default function InventoryTab() {
 // Map the icon since SlidersHorizontal isn't standard in older lucide but we imported it, if it fails we can fallback.
 
 const styles = StyleSheet.create({
-	filterBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-	chipScrollWrap: { marginTop: 8 },
+	filterBtn: {
+		width: SIZE_BUTTON_HEIGHT_SM,
+		height: SIZE_BUTTON_HEIGHT_SM,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	chipScrollWrap: { marginTop: SPACING_PX.sm },
 	centerFlex: {
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		padding: 32,
-		marginTop: 100,
+		padding: SPACING_PX['2xl'],
+		marginTop: LIST_BOTTOM_PADDING,
 	},
 	fab: {
 		position: 'absolute',
-		right: 20,
-		bottom: 20,
+		right: FAB_OFFSET_RIGHT,
+		bottom: FAB_OFFSET_BOTTOM,
 		width: FAB_SIZE,
 		height: FAB_SIZE,
-		borderRadius: FAB_SIZE / 2,
+		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	summaryBar: {
-		paddingHorizontal: 16,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SUMMARY_BAR_VERTICAL_PADDING,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	sortBackdrop: {
@@ -519,30 +543,27 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		maxHeight: '60%',
-		paddingBottom: 24,
+		paddingBottom: SPACING_PX.xl,
 	},
 	menuSheet: {
 		position: 'absolute',
-		top: FAB_SIZE,
+		top: MENU_SHEET_TOP_OFFSET,
 		right: 0,
-		width: 200,
-		elevation: 5,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		...FAB_SHADOW,
+		width: MENU_SHEET_WIDTH,
+		elevation: MENU_SHEET_ELEVATION,
 	},
 	menuRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
 	sortOption: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		paddingHorizontal: 20,
-		paddingVertical: 14,
+		paddingHorizontal: SORT_SHEET_HEADER_PADDING,
+		paddingVertical: SORT_OPTION_VERTICAL_PADDING,
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		minHeight: 48,
+		minHeight: TOUCH_TARGET_MIN_PX,
 	},
 });

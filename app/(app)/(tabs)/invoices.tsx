@@ -1,4 +1,5 @@
 const STATUS_DOT_SIZE = 7;
+const STATUS_DOT_INLINE_SIZE = 8;
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
@@ -14,6 +15,8 @@ import { InvoiceStatusBadge } from '@/src/components/molecules/InvoiceStatusBadg
 import type { InvoiceStatus } from '@/src/components/molecules/InvoiceStatusBadge';
 import { InvoiceListSkeleton } from '@/src/components/molecules/skeletons/InvoiceListSkeleton';
 import type { Invoice, PaymentStatus } from '@/src/types/invoice';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
@@ -226,7 +229,7 @@ export default function InvoicesListScreen() {
 					},
 				]}
 			>
-				<Search size={16} color={c.placeholder} style={{ marginRight: 6 }} />
+				<Search size={16} color={c.placeholder} style={{ marginRight: SPACING_PX.xs }} />
 				<TextInput
 					style={[styles.searchInput, { color: c.onSurface }]}
 					placeholder="Search invoice no. or customer..."
@@ -312,7 +315,7 @@ export default function InvoicesListScreen() {
 									paddingVertical: s.xs,
 									flexDirection: 'row',
 									alignItems: 'center',
-									gap: 4,
+									gap: s.xs,
 								},
 							]}
 							onPress={() => setStatusChip(chip)}
@@ -431,14 +434,14 @@ export default function InvoicesListScreen() {
 
 const styles = StyleSheet.create({
 	header: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		borderBottomWidth: 1,
 	},
 	summaryCard: {
-		padding: 12,
+		padding: SPACING_PX.md,
 	},
 	summaryRow: {
 		flexDirection: 'row',
@@ -447,22 +450,22 @@ const styles = StyleSheet.create({
 	summaryCol: {
 		flex: 1,
 		alignItems: 'center',
-		gap: 2,
+		gap: SPACING_PX.xxs,
 	},
 	summaryDivider: {
-		width: 1,
-		height: 32,
-		marginHorizontal: 4,
+		width: StyleSheet.hairlineWidth,
+		height: SPACING_PX['2xl'],
+		marginHorizontal: SPACING_PX.xs,
 	},
 	searchBar: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 10,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
 	},
 	searchInput: {
 		flex: 1,
-		fontSize: 14,
+		fontSize: FONT_SIZE.caption,
 		paddingVertical: 0,
 	},
 	chip: {
@@ -474,25 +477,25 @@ const styles = StyleSheet.create({
 		borderRadius: STATUS_DOT_SIZE / 2,
 	},
 	invoiceCard: {
-		padding: 16,
-		borderRadius: 12,
-		marginBottom: 12,
+		padding: SPACING_PX.lg,
+		borderRadius: BORDER_RADIUS_PX.lg,
+		marginBottom: SPACING_PX.md,
 	},
 	cardHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: 4,
-		gap: 6,
+		marginBottom: SPACING_PX.xs,
+		gap: SPACING_PX.xs,
 	},
 	statusDotInline: {
-		width: 8,
-		height: 8,
-		borderRadius: 4,
+		width: STATUS_DOT_INLINE_SIZE,
+		height: STATUS_DOT_INLINE_SIZE,
+		borderRadius: BORDER_RADIUS_PX.sm,
 	},
 	cardFooter: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginTop: 8,
+		marginTop: SPACING_PX.sm,
 	},
 });

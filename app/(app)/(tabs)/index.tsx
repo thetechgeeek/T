@@ -11,8 +11,10 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
 import { layout } from '@/src/theme/layout';
+import { withOpacity } from '@/src/utils/color';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 
 // Atomic Design Components
 import { StatCard } from '@/src/components/molecules/StatCard';
@@ -32,10 +34,15 @@ import {
 	Wallet,
 } from 'lucide-react-native';
 import type { RecentTransaction } from '@/src/types/finance';
+import { OPACITY_TINT_LIGHT, SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
+
+const ALERT_BORDER_WIDTH = 4;
+const BUSINESS_TILE_ICON_SIZE = 28;
+const BUSINESS_TILE_ICON_RADIUS = BUSINESS_TILE_ICON_SIZE / 2;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -197,11 +204,15 @@ export default function DashboardScreen() {
 					</View>
 
 					{/* ── Today's Business ── */}
-					<View
-						style={[styles.sectionHeader, { marginTop: s.lg, paddingHorizontal: s.md }]}
-					>
-						<ThemedText variant="bodyBold">Today&apos;s Business</ThemedText>
-					</View>
+					<SectionHeader
+						title="Today's Business"
+						style={{
+							marginTop: s.lg,
+							marginBottom: s.sm,
+							paddingHorizontal: s.md,
+							paddingVertical: 0,
+						}}
+					/>
 					<View style={[layout.row, { paddingHorizontal: s.md, gap: s.sm }]}>
 						{/* Today's Sale */}
 						<Card
@@ -213,7 +224,15 @@ export default function DashboardScreen() {
 								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
 							>
 								<View
-									style={[styles.tileIcon, { backgroundColor: `${c.success}18` }]}
+									style={[
+										styles.tileIcon,
+										{
+											backgroundColor: withOpacity(
+												c.success,
+												OPACITY_TINT_LIGHT,
+											),
+										},
+									]}
 								>
 									<TrendingUp size={16} color={c.success} />
 								</View>
@@ -242,7 +261,17 @@ export default function DashboardScreen() {
 							<View
 								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
 							>
-								<View style={[styles.tileIcon, { backgroundColor: `${c.info}18` }]}>
+								<View
+									style={[
+										styles.tileIcon,
+										{
+											backgroundColor: withOpacity(
+												c.info,
+												OPACITY_TINT_LIGHT,
+											),
+										},
+									]}
+								>
 									<ArrowDownCircle size={16} color={c.info} />
 								</View>
 								<ThemedText
@@ -273,7 +302,7 @@ export default function DashboardScreen() {
 								padding: s.md,
 								backgroundColor: c.warningLight,
 								borderRadius: r.md,
-								borderLeftWidth: 4,
+								borderLeftWidth: ALERT_BORDER_WIDTH,
 								borderLeftColor: c.warning,
 							}}
 						>
@@ -308,25 +337,18 @@ export default function DashboardScreen() {
 					{/* ── Recent Activity ── */}
 					{recentTransactions.length > 0 && (
 						<View style={{ marginBottom: s.md }}>
-							<View
-								style={[
-									layout.rowBetween,
-									{ paddingHorizontal: s.md, marginBottom: s.sm },
-								]}
-							>
-								<ThemedText variant="bodyBold">Recent Activity</ThemedText>
-								<Pressable
-									onPress={() =>
-										router.push('/(app)/reports/all-transactions' as never)
-									}
-									accessibilityRole="link"
-									accessibilityLabel="view-all-transactions"
-								>
-									<ThemedText variant="caption" color={c.primary}>
-										View All
-									</ThemedText>
-								</Pressable>
-							</View>
+							<SectionHeader
+								title="Recent Activity"
+								actionLabel="View All"
+								onActionPress={() =>
+									router.push('/(app)/reports/all-transactions' as never)
+								}
+								style={{
+									marginBottom: s.sm,
+									paddingHorizontal: s.md,
+									paddingVertical: 0,
+								}}
+							/>
 
 							<Card style={{ marginHorizontal: s.md }} padding="none">
 								{recentTransactions.slice(0, 5).map((tx, idx) => {
@@ -358,7 +380,10 @@ export default function DashboardScreen() {
 													style={[
 														styles.txIconWrap,
 														{
-															backgroundColor: `${iconColor}18`,
+															backgroundColor: withOpacity(
+																iconColor,
+																OPACITY_TINT_LIGHT,
+															),
 															borderRadius: r.full,
 														},
 													]}
@@ -404,16 +429,13 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-	sectionHeader: {
-		marginBottom: 8,
-	},
 	businessTile: {
 		minHeight: BUSINESS_TILE_MIN_HEIGHT,
 	},
 	tileIcon: {
-		width: 28,
-		height: 28,
-		borderRadius: 14,
+		width: BUSINESS_TILE_ICON_SIZE,
+		height: BUSINESS_TILE_ICON_SIZE,
+		borderRadius: BUSINESS_TILE_ICON_RADIUS,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -421,8 +443,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	txIconWrap: {
-		width: 36,
-		height: 36,
+		width: SIZE_CHIP_HEIGHT,
+		height: SIZE_CHIP_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

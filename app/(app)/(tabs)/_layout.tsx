@@ -6,19 +6,32 @@ import { useLocale } from '@/src/hooks/useLocale';
 import type { ErrorBoundaryProps } from 'expo-router';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
-import { OPACITY_GLOW, SIZE_TAB_BAR_IOS } from '@/theme/uiMetrics';
+import {
+	FAB_OFFSET_BOTTOM,
+	OPACITY_GLOW,
+	RADIUS_FAB,
+	SIZE_FAB,
+	SIZE_TAB_BAR_IOS,
+} from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 /** Glow ring opacity behind the scan button */
 const SCAN_GLOW_RING_OPACITY = 0.25;
+const TAB_BAR_HEIGHT_ANDROID = 64;
+const TAB_BAR_PADDING_BOTTOM_IOS = 28;
+const SCAN_GLOW_SIZE = 64;
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 	const { t } = useLocale();
 	return (
 		<View style={styles.errorContainer}>
-			<ThemedText variant="h2" style={{ marginBottom: 8 }}>
+			<ThemedText variant="h2" style={{ marginBottom: SPACING_PX.sm }}>
 				{t('common.error')}
 			</ThemedText>
-			<ThemedText align="center" style={{ marginBottom: 24, paddingHorizontal: 20 }}>
+			<ThemedText
+				align="center"
+				style={{ marginBottom: SPACING_PX.xl, paddingHorizontal: SPACING_PX.xl }}
+			>
 				{error.message}
 			</ThemedText>
 			<Button title={t('common.retry')} onPress={retry} />
@@ -72,9 +85,10 @@ export default function TabLayout() {
 					backgroundColor: c.tabBar,
 					borderTopColor: c.border,
 					borderTopWidth: StyleSheet.hairlineWidth,
-					height: Platform.OS === 'ios' ? SIZE_TAB_BAR_IOS : 64,
-					paddingBottom: Platform.OS === 'ios' ? 28 : 8,
-					paddingTop: 8,
+					height: Platform.OS === 'ios' ? SIZE_TAB_BAR_IOS : TAB_BAR_HEIGHT_ANDROID,
+					paddingBottom:
+						Platform.OS === 'ios' ? TAB_BAR_PADDING_BOTTOM_IOS : SPACING_PX.sm,
+					paddingTop: SPACING_PX.sm,
 				},
 				tabBarActiveTintColor: c.tabActive,
 				tabBarInactiveTintColor: c.tabInactive,
@@ -138,23 +152,28 @@ const styles = StyleSheet.create({
 	scanIconWrap: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: 56,
-		height: 56,
-		marginBottom: 20,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		marginBottom: FAB_OFFSET_BOTTOM,
 	},
 	scanIconGlow: {
 		position: 'absolute',
-		width: 64,
-		height: 64,
-		borderRadius: 32,
+		width: SCAN_GLOW_SIZE,
+		height: SCAN_GLOW_SIZE,
+		borderRadius: SCAN_GLOW_SIZE / 2,
 		opacity: SCAN_GLOW_RING_OPACITY,
 	},
 	scanIconOuter: {
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	errorContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
+	errorContainer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: SPACING_PX.xl,
+	},
 });

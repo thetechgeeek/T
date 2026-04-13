@@ -22,6 +22,9 @@ import { useAuthStore } from '@/src/stores/authStore';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Divider } from '@/src/components/atoms/Divider';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const MENU_ICON_WRAP_SIZE = 40;
 
 export default function MoreTab() {
 	const { theme, c, s } = useThemeTokens();
@@ -130,16 +133,13 @@ export default function MoreTab() {
 								styles.iconWrap,
 								{
 									backgroundColor: withOpacity(item.color, OPACITY_TINT_LIGHT),
-									borderRadius: 10,
+									borderRadius: BORDER_RADIUS_PX.lg,
 								},
 							]}
 						>
 							<item.icon size={22} color={item.color} strokeWidth={2} />
 						</View>
-						<ThemedText
-							weight="medium"
-							style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
-						>
+						<ThemedText variant="caption" weight="medium" style={styles.menuLabel}>
 							{item.label}
 						</ThemedText>
 						<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
@@ -175,16 +175,13 @@ export default function MoreTab() {
 								styles.iconWrap,
 								{
 									backgroundColor: withOpacity(item.color, OPACITY_TINT_LIGHT),
-									borderRadius: 10,
+									borderRadius: BORDER_RADIUS_PX.lg,
 								},
 							]}
 						>
 							<item.icon size={22} color={item.color} strokeWidth={2} />
 						</View>
-						<ThemedText
-							weight="medium"
-							style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
-						>
+						<ThemedText variant="caption" weight="medium" style={styles.menuLabel}>
 							{item.label}
 						</ThemedText>
 						<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
@@ -221,16 +218,13 @@ export default function MoreTab() {
 							styles.iconWrap,
 							{
 								backgroundColor: withOpacity(c.primary, OPACITY_TINT_LIGHT),
-								borderRadius: 10,
+								borderRadius: BORDER_RADIUS_PX.lg,
 							},
 						]}
 					>
 						<Languages size={22} color={c.primary} strokeWidth={2} />
 					</View>
-					<ThemedText
-						weight="medium"
-						style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
-					>
+					<ThemedText variant="caption" weight="medium" style={styles.menuLabel}>
 						{t('settings.switchLanguage', {
 							lang: currentLanguage === 'en' ? 'Hindi (हिंदी)' : 'English',
 						})}
@@ -264,7 +258,7 @@ export default function MoreTab() {
 									c.onSurfaceVariant,
 									OPACITY_TINT_LIGHT,
 								),
-								borderRadius: 10,
+								borderRadius: BORDER_RADIUS_PX.lg,
 							},
 						]}
 					>
@@ -274,10 +268,7 @@ export default function MoreTab() {
 							<Moon size={22} color={c.onSurfaceVariant} strokeWidth={2} />
 						)}
 					</View>
-					<ThemedText
-						weight="medium"
-						style={[styles.menuLabel, { fontSize: theme.typography.sizes.md }]}
-					>
+					<ThemedText variant="caption" weight="medium" style={styles.menuLabel}>
 						{isDark ? t('settings.lightMode') : t('settings.darkMode')}
 					</ThemedText>
 				</TouchableOpacity>
@@ -309,10 +300,11 @@ export default function MoreTab() {
 						style={{ marginRight: s.sm }}
 					/>
 					<ThemedText
+						variant="caption"
 						color={c.error}
 						weight="medium"
 						align="center"
-						style={{ flex: 1, fontSize: theme.typography.sizes.md }}
+						style={styles.menuLabel}
 					>
 						{t('auth.signOut')}
 					</ThemedText>
@@ -323,14 +315,14 @@ export default function MoreTab() {
 }
 
 const styles = StyleSheet.create({
-	header: { paddingVertical: 12 },
-	menuItem: { flexDirection: 'row', alignItems: 'center', padding: 14 },
+	header: { paddingVertical: SPACING_PX.md },
+	menuItem: { flexDirection: 'row', alignItems: 'center', padding: SPACING_PX.md },
 	iconWrap: {
-		width: 40,
-		height: 40,
+		width: MENU_ICON_WRAP_SIZE,
+		height: MENU_ICON_WRAP_SIZE,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginRight: 12,
+		marginRight: SPACING_PX.md,
 	},
 	menuLabel: { flex: 1 },
 });
