@@ -138,6 +138,38 @@ describe('invoiceService', () => {
 			).rejects.toBeInstanceOf(ValidationError);
 		});
 
+		it('ValidationError.fieldErrors lists customer_phone and line_items.0.rate_per_unit when invalid', async () => {
+			const itemId = '123e4567-e89b-12d3-a456-426614174000';
+			let caught: unknown;
+			try {
+				await invoiceService.createInvoice({
+					invoice_number: 'INV-TEST-001',
+					customer_name: 'Valid Name',
+					is_inter_state: false,
+					invoice_date: '2026-04-01',
+					customer_phone: '12',
+					payment_status: 'unpaid',
+					line_items: [
+						{
+							item_id: itemId,
+							design_name: 'X',
+							quantity: 1,
+							rate_per_unit: 0,
+							gst_rate: 18,
+							discount: 0,
+						},
+					],
+					amount_paid: 0,
+				} as Parameters<typeof invoiceService.createInvoice>[0]);
+			} catch (e) {
+				caught = e;
+			}
+			expect(caught).toBeInstanceOf(ValidationError);
+			const ve = caught as ValidationError;
+			expect(ve.fieldErrors.customer_phone?.length).toBeGreaterThan(0);
+			expect(ve.fieldErrors['line_items.0.rate_per_unit']?.length).toBeGreaterThan(0);
+		});
+
 		it('full payload: p_invoice includes place_of_supply, reverse_charge, cgst_total, sgst_total, igst_total, grand_total', async () => {
 			(supabase.rpc as jest.Mock).mockResolvedValue({
 				data: { id: 'inv-001', invoice_number: 'TM/2026-27/0001' },

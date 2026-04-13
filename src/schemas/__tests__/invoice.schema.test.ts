@@ -1,4 +1,5 @@
-import { InvoiceLineItemSchema, InvoiceInputSchema } from '../invoice';
+import { CASH_WALK_IN_CUSTOMER_NAME } from '@/src/constants/invoiceCustomer';
+import { InvoiceLineItemSchema, InvoiceInputSchema, isInvoiceCustomerPhoneValid } from '../invoice';
 
 const validLineItem = {
 	item_id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
@@ -128,6 +129,61 @@ describe('InvoiceInputSchema', () => {
 		expect(result.success).toBe(true);
 	});
 
+	it('rejects customer_phone with fewer than 10 digits', () => {
+		const result = InvoiceInputSchema.safeParse({
+			...validInvoiceInput,
+			customer_phone: '987654321',
+		});
+		expect(result.success).toBe(false);
+		if (!result.success) {
+			expect(result.error.issues.some((i) => i.path.join('.') === 'customer_phone')).toBe(
+				true,
+			);
+		}
+	});
+
+	it('rejects customer_phone with non-digit characters', () => {
+		const result = InvoiceInputSchema.safeParse({
+			...validInvoiceInput,
+			customer_phone: '98765 43210',
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects customer_phone with +91 prefix (must be digits only)', () => {
+		const result = InvoiceInputSchema.safeParse({
+			...validInvoiceInput,
+			customer_phone: '+919876543210',
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it('accepts exactly 10-digit customer_phone', () => {
+		const result = InvoiceInputSchema.safeParse({
+			...validInvoiceInput,
+			customer_phone: '9988776655',
+		});
+		expect(result.success).toBe(true);
+	});
+
+	it('allows empty customer_phone for walk-in / cash display name', () => {
+		const result = InvoiceInputSchema.safeParse({
+			...validInvoiceInput,
+			customer_name: CASH_WALK_IN_CUSTOMER_NAME,
+			customer_phone: '',
+		});
+		expect(result.success).toBe(true);
+	});
+
+	it('rejects empty customer_phone for named customers', () => {
+		const result = InvoiceInputSchema.safeParse({
+			...validInvoiceInput,
+			customer_name: 'Registered Customer',
+			customer_phone: '',
+		});
+		expect(result.success).toBe(false);
+	});
+
 	it('rejects empty line_items array', () => {
 		const result = InvoiceInputSchema.safeParse({
 			...validInvoiceInput,
@@ -159,5 +215,23 @@ describe('InvoiceInputSchema', () => {
 		if (result.success) {
 			expect(result.data.amount_paid).toBe(0);
 		}
+	});
+});
+
+describe('isInvoiceCustomerPhoneValid', () => {
+	it('returns false for empty or missing', () => {
+		expect(isInvoiceCustomerPhoneValid('')).toBe(false);
+		expect(isInvoiceCustomerPhoneValid(undefined)).toBe(false);
+		expect(isInvoiceCustomerPhoneValid(null)).toBe(false);
+	});
+
+	it('returns false for fewer than 10 digits', () => {
+		expect(isInvoiceCustomerPhoneValid('987654321')).toBe(false);
+	});
+
+	it('returns true for 10+ digits numeric only', () => {
+		expect(isInvoiceCustomerPhoneValid('9876543210')).toBe(true);
+		// 11+ still satisfies schema min(10)
+		expect(isInvoiceCustomerPhoneValid('09876543210')).toBe(true);
 	});
 });

@@ -2,6 +2,7 @@ import { CustomerSchema } from '../customer';
 
 const validCustomer = {
 	name: 'Test Customer',
+	phone: '9876543210',
 	type: 'retail' as const,
 	credit_limit: 0,
 };
@@ -26,9 +27,15 @@ describe('CustomerSchema', () => {
 		expect(result.success).toBe(false);
 	});
 
-	it('accepts empty phone (optional field)', () => {
+	it('rejects empty phone', () => {
 		const result = CustomerSchema.safeParse({ ...validCustomer, phone: '' });
-		expect(result.success).toBe(true);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects missing phone', () => {
+		const { phone: _p, ...withoutPhone } = validCustomer;
+		const result = CustomerSchema.safeParse(withoutPhone);
+		expect(result.success).toBe(false);
 	});
 
 	it('accepts valid 15-char GSTIN', () => {

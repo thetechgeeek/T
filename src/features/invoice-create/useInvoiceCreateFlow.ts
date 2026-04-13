@@ -6,17 +6,12 @@ import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { calculateInvoiceTotals } from '@/src/utils/gstCalculator';
 import logger from '@/src/utils/logger';
 import { useLocale } from '@/src/hooks/useLocale';
+import { isInvoiceCustomerPhoneValid } from '@/src/schemas/invoice';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
+import { buildInvoiceCreatePayload } from './buildInvoiceCreatePayload';
+import type { CustomerDraft, PaymentMode } from './invoiceCreateTypes';
 
-export interface CustomerDraft {
-	id?: string;
-	name: string;
-	phone?: string;
-	gstin?: string;
-	address?: string;
-}
-
-export type PaymentMode = 'cash' | 'upi' | 'bank_transfer' | 'cheque' | 'credit';
+export type { CustomerDraft, PaymentMode } from './invoiceCreateTypes';
 
 export function useInvoiceCreateFlow() {
 	const router = useRouter();
@@ -71,15 +66,16 @@ export function useInvoiceCreateFlow() {
 	const grandTotal = invoiceTotals.grand_total;
 	const amountPaidNum = parseFloat(amountPaid) || 0;
 
+	const step1Complete =
+		isCashSale || (!!customer?.name && isInvoiceCustomerPhoneValid(customer.phone));
+
 	// Navigation
 	const handleNext = useCallback(() => {
-		const canNext =
-			(step === 1 && (isCashSale || !!customer?.name)) ||
-			(step === 2 && lineItems.length > 0);
+		const canNext = (step === 1 && step1Complete) || (step === 2 && lineItems.length > 0);
 		if (canNext) {
 			setStep((s) => Math.min(s + 1, 3));
 		}
-	}, [step, customer, lineItems, isCashSale]);
+	}, [step, customer, lineItems, isCashSale, step1Complete]);
 	const handleBack = useCallback(() => setStep((s) => Math.max(s - 1, 1)), []);
 
 	// Line item management
@@ -101,13 +97,23 @@ export function useInvoiceCreateFlow() {
 			return;
 		}
 
+		const ratePerUnit = selectedItem.selling_price ?? 0;
+		if (!(ratePerUnit > 0)) {
+			Alert.alert(
+				t('common.errorTitle'),
+				t('invoice.errors.noSellingPrice', { name: selectedItem.design_name }),
+				[{ text: t('common.ok') }],
+			);
+			return;
+		}
+
 		setLineItems((prev) => [
 			...prev,
 			{
 				item_id: selectedItem.id,
 				design_name: selectedItem.design_name,
 				quantity,
-				rate_per_unit: selectedItem.selling_price || 0,
+				rate_per_unit: ratePerUnit,
 				discount: parseFloat(inputDiscount) || 0,
 				gst_rate: 18,
 				tile_image_url: selectedItem.tile_image_url,
@@ -132,25 +138,23 @@ export function useInvoiceCreateFlow() {
 
 	// Submit
 	const submitInvoice = useCallback(async () => {
-		if (!isCashSale && !customer) return;
+		if (!isCashSale && (!customer || !isInvoiceCustomerPhoneValid(customer.phone))) return;
 		if (lineItems.length === 0) return;
 		setSubmitting(true);
 		try {
-			const newInvoice = await useInvoiceStore.getState().createInvoice({
-				customer_id: customer?.id,
-				customer_name: customer?.name ?? 'Cash / Walk-in Customer',
-				customer_phone: customer?.phone || '',
-				customer_address: customer?.address,
-				customer_gstin: customer?.gstin,
-				is_inter_state: isInterState,
-				line_items: lineItems,
-				invoice_date: invoiceDate,
-				invoice_number: invoiceNumber,
-				payment_status:
-					amountPaidNum >= grandTotal ? 'paid' : amountPaidNum > 0 ? 'partial' : 'unpaid',
-				payment_mode: amountPaidNum > 0 ? paymentMode : undefined,
-				amount_paid: amountPaidNum,
-			});
+			const newInvoice = await useInvoiceStore.getState().createInvoice(
+				buildInvoiceCreatePayload({
+					isCashSale,
+					customer,
+					isInterState,
+					lineItems,
+					invoiceDate,
+					invoiceNumber,
+					amountPaidNum,
+					grandTotal,
+					paymentMode,
+				}),
+			);
 			router.replace(`/(app)/invoices/${newInvoice.id}`);
 		} catch (e: unknown) {
 			logger.error('Failed to create invoice', e instanceof Error ? e : new Error(String(e)));
@@ -181,9 +185,7 @@ export function useInvoiceCreateFlow() {
 		step,
 		handleNext,
 		handleBack,
-		canGoNext:
-			(step === 1 && (isCashSale || !!customer?.name)) ||
-			(step === 2 && lineItems.length > 0),
+		canGoNext: (step === 1 && step1Complete) || (step === 2 && lineItems.length > 0),
 
 		// Customer step
 		customer,

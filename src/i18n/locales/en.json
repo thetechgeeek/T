@@ -299,7 +299,8 @@
 		"errors": {
 			"insufficientStock": "Insufficient Stock",
 			"stockLimitReached": "You only have {{count}} boxes of {{name}} available.",
-			"createFailed": "Error Creating Invoice"
+			"createFailed": "Error Creating Invoice",
+			"noSellingPrice": "\"{{name}}\" has no selling price. Add a price in inventory before invoicing."
 		},
 		"viewAllInvoices": "View all invoices",
 		"tapToOpen": "Double tap to open",
@@ -343,6 +344,7 @@
 		"addHint": "Add a new customer to your database.",
 		"loadError": "Failed to load customers.",
 		"addErrorTitle": "Error Saving Customer",
+		"invalidPhone": "Enter a valid 10-digit Indian mobile number",
 		"saveCustomer": "Save Customer",
 		"addSuccess": "Customer saved successfully!",
 		"types": {

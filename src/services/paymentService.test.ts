@@ -87,6 +87,23 @@ describe('paymentService', () => {
 				ValidationError,
 			);
 		});
+
+		it('ValidationError.fieldErrors includes path for mutual exclusion refine', async () => {
+			let caught: unknown;
+			try {
+				await service.recordPayment({
+					...validPayment,
+					supplier_id: 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
+				});
+			} catch (e) {
+				caught = e;
+			}
+			expect(caught).toBeInstanceOf(ValidationError);
+			const ve = caught as ValidationError;
+			expect(
+				ve.fieldErrors.supplier_id?.length ?? ve.fieldErrors.customer_id?.length,
+			).toBeGreaterThan(0);
+		});
 	});
 
 	describe('fetchPayments', () => {

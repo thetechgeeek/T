@@ -20,7 +20,8 @@
 		"format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
 		"typecheck": "tsc --noEmit",
 		"check:hex": "node scripts/check-no-hex.mjs",
-		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run lint && npm run test && npm run test:integration",
+		"check:routes": "node scripts/check-expo-route-collisions.mjs",
+		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run lint && npm run test && npm run test:integration",
 		"prepare": "husky"
 	},
 	"dependencies": {

@@ -1,5 +1,8 @@
+import { z } from 'zod';
 import { supabase } from '../config/supabase';
 import { toAppError } from '../errors/AppError';
+import { validateWith } from '../utils/validation';
+import { CustomerSchema } from '../schemas/customer';
 import type {
 	Customer,
 	CustomerInsert,
@@ -45,6 +48,7 @@ export const customerService = {
 	},
 
 	async createCustomer(customer: CustomerInsert): Promise<Customer> {
+		validateWith(CustomerSchema, customer);
 		const { data, error } = await supabase
 			.from('customers')
 			.insert([customer])
@@ -56,6 +60,11 @@ export const customerService = {
 	},
 
 	async updateCustomer(id: UUID, updates: Partial<CustomerInsert>): Promise<Customer> {
+		if (updates.phone !== undefined) {
+			z.string()
+				.regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number')
+				.parse(updates.phone);
+		}
 		const { data, error } = await supabase
 			.from('customers')
 			.update(updates)

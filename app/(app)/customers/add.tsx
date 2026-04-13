@@ -20,7 +20,7 @@ import logger from '@/src/utils/logger';
 
 interface CustomerFormData {
 	name: string;
-	phone?: string;
+	phone: string;
 	email?: string;
 	gstin?: string;
 	address?: string;
@@ -38,7 +38,10 @@ interface CustomerFormData {
 const getCustomerSchema = (t: (key: string) => string) =>
 	z.object({
 		name: z.string().min(2, t('common.required')),
-		phone: z.string().optional(),
+		phone: z
+			.string()
+			.min(1, t('common.required'))
+			.regex(/^[6-9]\d{9}$/, t('customer.invalidPhone')),
 		email: z.string().email('Invalid email').optional().or(z.literal('')),
 		gstin: z
 			.string()
@@ -78,6 +81,8 @@ export default function AddCustomerScreen() {
 	} = useForm<CustomerFormData>({
 		resolver: zodResolver(customerSchema) as Resolver<CustomerFormData>,
 		defaultValues: {
+			name: '',
+			phone: '',
 			type: 'retail',
 			customer_type: 'individual',
 			credit_limit: 0,
@@ -209,6 +214,7 @@ export default function AddCustomerScreen() {
 								<FormField
 									label={t('customer.phone')}
 									accessibilityLabel="customer-phone-input"
+									required
 									placeholder={t('customer.form.placeholders.phone')}
 									keyboardType="phone-pad"
 									value={value}

@@ -25,17 +25,18 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import type { Supplier } from '@/src/types/supplier';
-import type { PaymentFormInput } from '@/src/schemas/payment';
+import type { PaymentMode } from '@/src/types/invoice';
+import { buildMakePaymentRecordPayload } from '@/src/features/payments/buildPaymentRecordPayload';
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Card'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
 
-const modeToKey: Record<PaymentModeLabel, string> = {
+const modeToKey: Record<PaymentModeLabel, PaymentMode> = {
 	Cash: 'cash',
 	UPI: 'upi',
 	'Bank Transfer': 'bank_transfer',
 	Cheque: 'cheque',
-	Card: 'card',
+	Card: 'credit',
 };
 
 function todayString() {
@@ -90,14 +91,15 @@ export default function MakePaymentScreen() {
 
 		setSubmitting(true);
 		try {
-			await paymentService.recordPayment({
-				payment_date: paymentDate,
-				amount: amt,
-				payment_mode: modeToKey[paymentMode] as PaymentFormInput['payment_mode'],
-				direction: 'made',
-				supplier_id: selectedSupplier.id,
-				notes: notes.trim() || undefined,
-			});
+			await paymentService.recordPayment(
+				buildMakePaymentRecordPayload({
+					paymentDate,
+					amount: amt,
+					paymentMode: modeToKey[paymentMode],
+					supplierId: selectedSupplier.id,
+					notes: notes.trim() || undefined,
+				}),
+			);
 			Alert.alert('Payment Recorded ✓', 'The payment has been saved.', [
 				{ text: 'OK', onPress: () => router.back() },
 			]);

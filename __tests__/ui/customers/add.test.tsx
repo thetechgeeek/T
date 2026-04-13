@@ -34,8 +34,9 @@ describe('AddCustomerScreen', () => {
 
 		const { getByPlaceholderText, getByText } = renderWithTheme(<AddCustomerScreen />);
 
-		// Fill in required name
+		// Fill in required fields
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.changeText(getByPlaceholderText('10-digit mobile number'), '9876543210');
 
 		// Submit form
 		fireEvent.press(getByText('Save Customer'));
@@ -56,6 +57,7 @@ describe('AddCustomerScreen', () => {
 		const { getByPlaceholderText, getByText } = renderWithTheme(<AddCustomerScreen />);
 
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.changeText(getByPlaceholderText('10-digit mobile number'), '9876543210');
 		fireEvent.press(getByText('Save Customer'));
 
 		await waitFor(() => {

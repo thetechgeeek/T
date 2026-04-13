@@ -2,6 +2,8 @@ import React from 'react';
 import { waitFor, fireEvent } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import CreateInvoiceScreen from '@/app/(app)/invoices/create';
+import { buildInvoiceCreatePayload } from '@/src/features/invoice-create/buildInvoiceCreatePayload';
+import { InvoiceInputSchema } from '@/src/schemas/invoice';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
@@ -138,8 +140,9 @@ describe('CreateInvoiceScreen', () => {
 			<CreateInvoiceScreen />,
 		);
 
-		// Fill valid customer data on Step 1
+		// Fill valid customer data on Step 1 (phone required for regular customer)
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.changeText(getByPlaceholderText('10-digit mobile number'), '9876543210');
 		fireEvent.press(getByText('Next'));
 
 		await waitFor(() => expect(getByText('Items')).toBeTruthy());
@@ -157,6 +160,7 @@ describe('CreateInvoiceScreen', () => {
 
 		// Step 1
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.changeText(getByPlaceholderText('10-digit mobile number'), '9876543210');
 		fireEvent.press(getByText('Next'));
 
 		// Step 2
@@ -188,6 +192,7 @@ describe('CreateInvoiceScreen', () => {
 
 		// Go to Step 2
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.changeText(getByPlaceholderText('10-digit mobile number'), '9876543210');
 		fireEvent.press(getByText('Next'));
 		await waitFor(() => expect(getByText('Items')).toBeTruthy());
 
@@ -218,6 +223,7 @@ describe('CreateInvoiceScreen', () => {
 
 		// Step 1
 		fireEvent.changeText(getByPlaceholderText('e.g. Rahul Sharma'), 'Test Customer');
+		fireEvent.changeText(getByPlaceholderText('10-digit mobile number'), '9876543210');
 		fireEvent.press(getByText('Next'));
 
 		// Step 2
@@ -239,5 +245,36 @@ describe('CreateInvoiceScreen', () => {
 				expect.any(Array),
 			);
 		});
+	});
+});
+
+/** Layer B: same numeric scenario as the full UI test, fed through the pure payload builder + Zod. */
+describe('CreateInvoiceScreen — InvoiceInputSchema contract', () => {
+	const schemaValidItemId = '123e4567-e89b-12d3-a456-426614174000';
+
+	it('happy path (10 qty, ₹1000 rate, ₹100 discount, fully paid) satisfies InvoiceInputSchema', () => {
+		const parsed = InvoiceInputSchema.safeParse(
+			buildInvoiceCreatePayload({
+				isCashSale: false,
+				customer: { name: 'Test Customer', phone: '9876543210' },
+				isInterState: false,
+				lineItems: [
+					{
+						item_id: schemaValidItemId,
+						design_name: 'Marble gold',
+						quantity: 10,
+						rate_per_unit: 1000,
+						discount: 100,
+						gst_rate: 18,
+					},
+				],
+				invoiceDate: '2026-04-01',
+				invoiceNumber: 'INV-001',
+				amountPaidNum: 11682,
+				grandTotal: 11682,
+				paymentMode: 'cash',
+			}),
+		);
+		expect(parsed.success).toBe(true);
 	});
 });

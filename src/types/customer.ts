@@ -5,7 +5,8 @@ export type CustomerType = 'retail' | 'contractor' | 'builder' | 'dealer';
 export interface Customer extends Timestamps {
 	id: UUID;
 	name: string;
-	phone?: string;
+	/** Natural key — unique in DB; used for invoice link-or-create by phone. */
+	phone: string;
 	gstin?: string;
 	address?: string;
 	city?: string;

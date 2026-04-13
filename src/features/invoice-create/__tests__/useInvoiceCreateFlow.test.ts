@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { renderHook, act } from '@testing-library/react-native';
 import { useInvoiceCreateFlow } from '../useInvoiceCreateFlow';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
@@ -93,12 +94,26 @@ describe('useInvoiceCreateFlow', () => {
 		expect(result.current.step).toBe(2);
 	});
 
+	it('setCustomer with name only does NOT advance (phone required for regular customer)', () => {
+		const { result } = renderHook(() => useInvoiceCreateFlow());
+
+		act(() => {
+			result.current.setCustomer({ name: 'John' });
+		});
+
+		expect(result.current.canGoNext).toBe(false);
+		act(() => {
+			result.current.handleNext();
+		});
+		expect(result.current.step).toBe(1);
+	});
+
 	it('handleNext at step 2 with no lineItems does NOT advance to step 3', () => {
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
 		// Advance to step 2
 		act(() => {
-			result.current.setCustomer({ name: 'John' });
+			result.current.setCustomer({ name: 'John', phone: '9876543210' });
 		});
 		act(() => {
 			result.current.handleNext();
@@ -203,6 +218,26 @@ describe('useInvoiceCreateFlow', () => {
 		);
 	});
 
+	it('addLineItem does not add row when selling_price is zero (shows alert)', () => {
+		const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+		const { result } = renderHook(() => useInvoiceCreateFlow());
+
+		try {
+			act(() =>
+				result.current.selectInventoryItem({
+					...sampleInventoryItem,
+					selling_price: 0,
+				} as Parameters<typeof result.current.selectInventoryItem>[0]),
+			);
+			act(() => result.current.addLineItem());
+
+			expect(result.current.lineItems).toHaveLength(0);
+			expect(alertSpy).toHaveBeenCalled();
+		} finally {
+			alertSpy.mockRestore();
+		}
+	});
+
 	it('submitInvoice sets submitting=true during submission, false after', async () => {
 		let resolveSubmit!: (v: unknown) => void;
 		const deferredPromise = new Promise((r) => {
@@ -212,7 +247,7 @@ describe('useInvoiceCreateFlow', () => {
 
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
-		act(() => result.current.setCustomer({ name: 'Customer' }));
+		act(() => result.current.setCustomer({ name: 'Customer', phone: '9876543210' }));
 		act(() =>
 			result.current.selectInventoryItem(
 				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
@@ -240,7 +275,7 @@ describe('useInvoiceCreateFlow', () => {
 
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 
-		act(() => result.current.setCustomer({ name: 'Customer' }));
+		act(() => result.current.setCustomer({ name: 'Customer', phone: '9876543210' }));
 		act(() =>
 			result.current.selectInventoryItem(
 				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],

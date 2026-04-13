@@ -70,4 +70,20 @@ describe('PaymentSchema', () => {
 		});
 		expect(result.success).toBe(true);
 	});
+
+	it('rejects when neither customer_id nor supplier_id is set', () => {
+		const result = PaymentSchema.safeParse({
+			...validPayment,
+			customer_id: undefined,
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects notes longer than 500 characters', () => {
+		const result = PaymentSchema.safeParse({
+			...validPayment,
+			notes: 'x'.repeat(501),
+		});
+		expect(result.success).toBe(false);
+	});
 });

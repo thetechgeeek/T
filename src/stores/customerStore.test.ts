@@ -40,7 +40,12 @@ describe('customerStore', () => {
 		(customerService.createCustomer as jest.Mock).mockRejectedValue(error);
 
 		await expect(
-			useCustomerStore.getState().createCustomer({ name: 'Test' } as any),
+			useCustomerStore.getState().createCustomer({
+				name: 'Test',
+				phone: '9876543210',
+				type: 'retail',
+				credit_limit: 0,
+			} as any),
 		).rejects.toThrow(error);
 
 		const state = useCustomerStore.getState();
@@ -52,7 +57,12 @@ describe('customerStore', () => {
 		const mockCustomer = makeCustomer();
 		(customerService.createCustomer as jest.Mock).mockResolvedValue(mockCustomer);
 
-		const result = await useCustomerStore.getState().createCustomer({ name: 'Test' } as any);
+		const result = await useCustomerStore.getState().createCustomer({
+			name: 'Test',
+			phone: '9876543210',
+			type: 'retail',
+			credit_limit: 0,
+		} as any);
 
 		expect(result).toEqual(mockCustomer);
 		const state = useCustomerStore.getState();
@@ -191,7 +201,12 @@ describe('customerStore', () => {
 		});
 		(customerService.createCustomer as jest.Mock).mockReturnValue(p);
 
-		const createPromise = useCustomerStore.getState().createCustomer({ name: 'Test' } as any);
+		const createPromise = useCustomerStore.getState().createCustomer({
+			name: 'Test',
+			phone: '9876543210',
+			type: 'retail',
+			credit_limit: 0,
+		} as any);
 		expect(useCustomerStore.getState().loading).toBe(true);
 
 		const newCustomer = makeCustomer();
@@ -208,7 +223,12 @@ describe('customerStore', () => {
 		const newCustomer = makeCustomer({ id: 'new-cust' });
 		(customerService.createCustomer as jest.Mock).mockResolvedValue(newCustomer);
 
-		await useCustomerStore.getState().createCustomer({ name: 'New' } as any);
+		await useCustomerStore.getState().createCustomer({
+			name: 'New',
+			phone: '9123456789',
+			type: 'retail',
+			credit_limit: 0,
+		} as any);
 
 		const state = useCustomerStore.getState();
 		expect(state.customers[0].id).toBe('new-cust');

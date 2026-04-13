@@ -11,7 +11,7 @@ import { palette } from '@/src/theme/palette';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 
 const TOGGLE_BORDER_WIDTH = 1.5;
-import type { CustomerDraft } from './useInvoiceCreateFlow';
+import type { CustomerDraft } from './invoiceCreateTypes';
 
 interface Props {
 	customer: CustomerDraft | null;
@@ -134,6 +134,7 @@ export function CustomerStep({
 					<FormField
 						label={t('common.phone')}
 						accessibilityLabel="customer-phone-input"
+						required
 						placeholder={t('customer.form.placeholders.phone')}
 						keyboardType="phone-pad"
 						value={customer?.phone || ''}

@@ -1,5 +1,6 @@
 import { customerService } from './customerService';
 import { supabase } from '../config/supabase';
+import { ValidationError } from '../errors/AppError';
 import { makeCustomer } from '../../__tests__/fixtures/customerFixtures';
 
 // Mock the Supabase client
@@ -45,9 +46,12 @@ describe('customerService', () => {
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
 			await expect(
-				customerService.createCustomer({ name: 'Test' } as Parameters<
-					typeof customerService.createCustomer
-				>[0]),
+				customerService.createCustomer({
+					name: 'Test',
+					phone: '9876543210',
+					type: 'retail',
+					credit_limit: 0,
+				} as Parameters<typeof customerService.createCustomer>[0]),
 			).rejects.toMatchObject({ code: 'PGRST205' });
 		});
 
@@ -59,8 +63,30 @@ describe('customerService', () => {
 
 			const result = await customerService.createCustomer({
 				name: 'Test Customer',
+				phone: '9876543210',
+				type: 'retail',
+				credit_limit: 0,
 			} as Parameters<typeof customerService.createCustomer>[0]);
 			expect(result).toEqual(customer);
+		});
+
+		it('throws ValidationError when phone is missing or invalid', async () => {
+			await expect(
+				customerService.createCustomer({
+					name: 'Test',
+					type: 'retail',
+					credit_limit: 0,
+				} as Parameters<typeof customerService.createCustomer>[0]),
+			).rejects.toBeInstanceOf(ValidationError);
+
+			await expect(
+				customerService.createCustomer({
+					name: 'Test',
+					phone: '123',
+					type: 'retail',
+					credit_limit: 0,
+				} as Parameters<typeof customerService.createCustomer>[0]),
+			).rejects.toBeInstanceOf(ValidationError);
 		});
 	});
 

@@ -6,7 +6,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { FormField } from '@/src/components/molecules/FormField';
 import { layout } from '@/src/theme/layout';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
-import type { CustomerDraft, PaymentMode } from './useInvoiceCreateFlow';
+import type { CustomerDraft, PaymentMode } from './invoiceCreateTypes';
 
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
 
