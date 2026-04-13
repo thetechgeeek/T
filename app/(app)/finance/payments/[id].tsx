@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { palette } from '@/src/theme/palette';
-
 const ID_TAIL_DIGITS = 6;
 import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -28,6 +26,11 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const PAYMENT_DETAIL_SCROLL_BOTTOM_PADDING = 100;
 
 type PaymentWithParty = Payment & {
 	customer?: { name: string };
@@ -167,7 +170,7 @@ export default function PaymentDetailScreen() {
 				rightElement={
 					<Pressable
 						onPress={handleDelete}
-						style={{ padding: 8 }}
+						style={{ padding: SPACING_PX.sm }}
 						accessibilityLabel="Delete payment"
 					>
 						<Trash2 size={20} color={c.error} />
@@ -176,7 +179,10 @@ export default function PaymentDetailScreen() {
 			/>
 
 			<ScrollView
-				contentContainerStyle={[styles.scroll, { padding: s.md, paddingBottom: 100 }]}
+				contentContainerStyle={[
+					styles.scroll,
+					{ padding: s.md, paddingBottom: PAYMENT_DETAIL_SCROLL_BOTTOM_PADDING },
+				]}
 			>
 				{/* Direction badge */}
 				<View style={styles.directionRow}>
@@ -185,7 +191,11 @@ export default function PaymentDetailScreen() {
 					) : (
 						<ArrowUpRight size={20} color={c.error} />
 					)}
-					<ThemedText variant="captionBold" color={amountColor} style={{ marginLeft: 4 }}>
+					<ThemedText
+						variant="captionBold"
+						color={amountColor}
+						style={{ marginLeft: SPACING_PX.xs }}
+					>
 						{directionLabel}
 					</ThemedText>
 				</View>
@@ -196,8 +206,8 @@ export default function PaymentDetailScreen() {
 						styles.amountCard,
 						{
 							backgroundColor: isReceived
-								? (c.successLight ?? palette.inventoryGainTint)
-								: (c.errorLight ?? palette.inventoryLossTint),
+								? (c.successLight ?? withOpacity(c.success, OPACITY_TINT_LIGHT))
+								: (c.errorLight ?? withOpacity(c.error, OPACITY_TINT_LIGHT)),
 							borderRadius: r.lg,
 							marginBottom: s.md,
 						},
@@ -210,7 +220,7 @@ export default function PaymentDetailScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={[styles.centered, { marginTop: 4 }]}
+						style={[styles.centered, { marginTop: SPACING_PX.xs }]}
 					>
 						{formatDate(payment.payment_date)}
 					</ThemedText>
@@ -259,7 +269,7 @@ export default function PaymentDetailScreen() {
 							<ThemedText color={c.onSurfaceVariant}>Mode</ThemedText>
 							<View style={styles.modeRow}>
 								{getModeIcon(payment.payment_mode, c.onSurfaceVariant)}
-								<ThemedText style={{ marginLeft: 6 }}>
+								<ThemedText style={{ marginLeft: SPACING_PX.xs + SPACING_PX.xxs }}>
 									{formatMode(payment.payment_mode)}
 								</ThemedText>
 							</View>
@@ -309,7 +319,7 @@ export default function PaymentDetailScreen() {
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ marginTop: 6 }}
+									style={{ marginTop: SPACING_PX.xs + SPACING_PX.xxs }}
 								>
 									This payment is not linked to any invoice. It will be applied as
 									advance credit.
@@ -381,10 +391,10 @@ const styles = StyleSheet.create({
 	directionRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: 8,
+		marginBottom: SPACING_PX.sm,
 	},
 	amountCard: {
-		padding: 24,
+		padding: SPACING_PX.xl,
 		alignItems: 'center',
 	},
 	section: { overflow: 'hidden' },
@@ -403,7 +413,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	advanceRow: {
-		gap: 6,
+		gap: SPACING_PX.xs + SPACING_PX.xxs,
 	},
 	actionBar: {
 		position: 'absolute',
@@ -411,7 +421,7 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		flexDirection: 'row',
-		gap: 8,
+		gap: SPACING_PX.sm,
 		borderTopWidth: StyleSheet.hairlineWidth,
 	},
 });

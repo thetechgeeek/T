@@ -9,7 +9,10 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const FORM_BOTTOM_PADDING = 32;
 
 // TODO: connect to store — save to bank_accounts table via Supabase
 const BANKS = [
@@ -99,7 +102,10 @@ export default function AddBankAccountScreen() {
 			<ScreenHeader title="Add Bank Account" showBackButton />
 
 			<ScrollView
-				contentContainerStyle={[styles.content, { paddingBottom: 32 + insets.bottom }]}
+				contentContainerStyle={[
+					styles.content,
+					{ paddingBottom: FORM_BOTTOM_PADDING + insets.bottom },
+				]}
 				keyboardShouldPersistTaps="handled"
 			>
 				{/* Bank selection */}
@@ -127,8 +133,8 @@ export default function AddBankAccountScreen() {
 										color={chipTextColor(selectedBank === bank)}
 										style={{
 											fontWeight: selectedBank === bank ? '700' : '400',
-											paddingHorizontal: 14,
-											paddingVertical: 8,
+											paddingHorizontal: SPACING_PX.md,
+											paddingVertical: SPACING_PX.sm,
 										}}
 									>
 										{bank}
@@ -223,8 +229,8 @@ export default function AddBankAccountScreen() {
 									color={chipTextColor(accountType === type)}
 									style={{
 										fontWeight: accountType === type ? '700' : '400',
-										paddingHorizontal: 14,
-										paddingVertical: 8,
+										paddingHorizontal: SPACING_PX.md,
+										paddingVertical: SPACING_PX.sm,
 									}}
 								>
 									{type}
@@ -304,7 +310,7 @@ export default function AddBankAccountScreen() {
 							value={isPrimary}
 							onValueChange={setIsPrimary}
 							trackColor={{ false: theme.colors.surfaceVariant, true: c.primary }}
-							thumbColor={palette.white}
+							thumbColor={c.onPrimary}
 							accessibilityLabel="set-primary"
 						/>
 					</View>
@@ -315,7 +321,7 @@ export default function AddBankAccountScreen() {
 					onPress={handleSave}
 					loading={saving}
 					accessibilityLabel="save-bank-account"
-					style={{ marginTop: 8 }}
+					style={{ marginTop: SPACING_PX.sm }}
 				/>
 			</ScrollView>
 		</AtomicScreen>
@@ -324,31 +330,30 @@ export default function AddBankAccountScreen() {
 
 const styles = StyleSheet.create({
 	content: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
 	section: {
-		marginBottom: 20,
+		marginBottom: SPACING_PX.xl,
 	},
 	fieldLabel: {
-		marginBottom: 8,
+		marginBottom: SPACING_PX.sm,
 		fontWeight: '600',
 	},
 	chipRow: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 0,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	textField: {
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 15,
-		minHeight: 48,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xs / 2,
+		fontSize: FONT_SIZE.body,
+		minHeight: TOUCH_TARGET_MIN_PX,
 	},
 	amountRow: {
 		flexDirection: 'row',
@@ -357,15 +362,15 @@ const styles = StyleSheet.create({
 		minHeight: SIZE_INPUT_HEIGHT,
 	},
 	currencyPrefix: {
-		paddingHorizontal: 14,
+		paddingHorizontal: SPACING_PX.md,
 		borderRightWidth: 1,
-		fontSize: 18,
+		fontSize: FONT_SIZE.h3,
 		fontWeight: '600',
 	},
 	amountInput: {
 		flex: 1,
-		paddingHorizontal: 14,
-		fontSize: 18,
+		paddingHorizontal: SPACING_PX.md,
+		fontSize: FONT_SIZE.h3,
 		fontWeight: '600',
 	},
 	primaryRow: {

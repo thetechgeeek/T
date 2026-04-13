@@ -1,4 +1,3 @@
-import { FAB_SHADOW } from '@/theme/shadowMetrics';
 import { SIZE_ICON_CONTAINER } from '@/theme/uiMetrics';
 
 const ICON_WRAP_SIZE = SIZE_ICON_CONTAINER + 4;
@@ -24,8 +23,10 @@ import { Card } from '@/src/components/atoms/Card';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
 import { layout } from '@/src/theme/layout';
+import { withOpacity } from '@/src/utils/color';
+import { FAB_OFFSET_RIGHT, OPACITY_TINT_LIGHT, RADIUS_FAB, SIZE_FAB } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -53,6 +54,7 @@ const CATEGORY_FILTERS = [
 	{ label: 'Dividend', value: 'dividend' },
 	{ label: 'Other', value: 'miscellaneous' },
 ];
+const LIST_BOTTOM_PADDING = 100;
 
 function getCategoryIcon(category: string, color: string) {
 	const size = 18;
@@ -99,7 +101,7 @@ function getMonthTotal(entries: IncomeEntry[]): number {
 // ---------------------------------------------------------------------------
 
 export default function OtherIncomeScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { theme, c, s, r } = useThemeTokens();
 	const insets = useSafeAreaInsets();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
@@ -139,7 +141,7 @@ export default function OtherIncomeScreen() {
 							style={[
 								styles.iconWrap,
 								{
-									backgroundColor: `${c.success}18`,
+									backgroundColor: withOpacity(c.success, OPACITY_TINT_LIGHT),
 									borderRadius: r.full,
 								},
 							]}
@@ -189,7 +191,10 @@ export default function OtherIncomeScreen() {
 			<View
 				style={[
 					styles.summaryCard,
-					{ backgroundColor: `${c.success}12`, borderRadius: r.md },
+					{
+						backgroundColor: withOpacity(c.success, OPACITY_TINT_LIGHT),
+						borderRadius: r.md,
+					},
 				]}
 			>
 				<ThemedText variant="caption" color={c.onSurfaceVariant}>
@@ -213,7 +218,10 @@ export default function OtherIncomeScreen() {
 				data={filtered}
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
-				contentContainerStyle={[styles.listContent, { paddingBottom: 100 + insets.bottom }]}
+				contentContainerStyle={[
+					styles.listContent,
+					{ paddingBottom: LIST_BOTTOM_PADDING + insets.bottom },
+				]}
 				ItemSeparatorComponent={() => <View style={{ height: s.sm }} />}
 				refreshControl={
 					<RefreshControl
@@ -239,14 +247,15 @@ export default function OtherIncomeScreen() {
 					styles.fab,
 					{
 						backgroundColor: c.success,
-						bottom: 32 + insets.bottom,
+						bottom: SIZE_FAB - SPACING_PX.xl + insets.bottom,
+						...(theme.shadows.lg as object),
 					},
 				]}
 				onPress={() => router.push('/(app)/finance/other-income/add' as Href)}
 				accessibilityRole="button"
 				accessibilityLabel="add-other-income"
 			>
-				<Plus color="white" size={28} />
+				<Plus color={c.onPrimary} size={28} />
 			</Pressable>
 		</AtomicScreen>
 	);
@@ -254,18 +263,16 @@ export default function OtherIncomeScreen() {
 
 const styles = StyleSheet.create({
 	summaryCard: {
-		marginHorizontal: 16,
-		marginTop: 12,
-		marginBottom: 4,
-		padding: 16,
+		marginHorizontal: SPACING_PX.lg,
+		marginTop: SPACING_PX.md,
+		marginBottom: SPACING_PX.xs,
+		padding: SPACING_PX.lg,
 		alignItems: 'center',
 	},
 	listContent: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
-	card: {
-		marginBottom: 0,
-	},
+	card: {},
 	iconWrap: {
 		width: ICON_WRAP_SIZE,
 		height: ICON_WRAP_SIZE,
@@ -274,15 +281,11 @@ const styles = StyleSheet.create({
 	},
 	fab: {
 		position: 'absolute',
-		right: 24,
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		right: FAB_OFFSET_RIGHT + SPACING_PX.xs,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		...FAB_SHADOW,
 	},
 });

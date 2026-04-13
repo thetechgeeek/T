@@ -12,8 +12,13 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_SUBTLE, OPACITY_DIM } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
 import { MOCK_LOAN } from '@/src/mocks/finance/loans';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const LOAN_INFO_ICON_SIZE = 36;
+const LOAN_PROGRESS_HEIGHT = 8;
+const LOAN_TABLE_MIN_WIDTH = 500;
+const LOAN_SCROLL_BOTTOM_PADDING = 48;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -109,14 +114,14 @@ const infoRowStyles = StyleSheet.create({
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: 14,
+		marginBottom: SPACING_PX.md,
 	},
 	iconWrap: {
-		width: 36,
-		height: 36,
+		width: LOAN_INFO_ICON_SIZE,
+		height: LOAN_INFO_ICON_SIZE,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginRight: 12,
+		marginRight: SPACING_PX.md,
 	},
 	text: {
 		flex: 1,
@@ -230,7 +235,10 @@ export default function LoanDetailScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader title="Loan Detail" />
 			<ScrollView
-				contentContainerStyle={[styles.scrollContent, { padding: s.lg, paddingBottom: 48 }]}
+				contentContainerStyle={[
+					styles.scrollContent,
+					{ padding: s.lg, paddingBottom: LOAN_SCROLL_BOTTOM_PADDING },
+				]}
 				showsVerticalScrollIndicator={false}
 			>
 				{/* ── Summary card ─────────────────────────────────────────── */}
@@ -302,28 +310,28 @@ export default function LoanDetailScreen() {
 						iconColor={c.primary}
 					/>
 					<InfoRow
-						icon={<Clock size={18} color={palette.materialPurple} />}
+						icon={<Clock size={18} color={c.info} />}
 						label="Tenure"
 						value={`${loan.tenureMonths} months`}
-						iconColor={palette.materialPurple}
+						iconColor={c.info}
 					/>
 					<InfoRow
-						icon={<CreditCard size={18} color={palette.materialBlue} />}
+						icon={<CreditCard size={18} color={c.primary} />}
 						label="Monthly EMI"
 						value={formatCurrency(Math.round(emi))}
-						iconColor={palette.materialBlue}
+						iconColor={c.primary}
 					/>
 					<InfoRow
-						icon={<CalendarDays size={18} color={palette.materialOrange} />}
+						icon={<CalendarDays size={18} color={c.warning} />}
 						label="Disbursement Date"
 						value={formatDate(loan.disbursementDate)}
-						iconColor={palette.materialOrange}
+						iconColor={c.warning}
 					/>
 					<InfoRow
-						icon={<TrendingDown size={18} color={palette.materialGreen} />}
+						icon={<TrendingDown size={18} color={c.success} />}
 						label="Next EMI Date"
 						value={formatDate(loan.nextEmiDate)}
-						iconColor={palette.materialGreen}
+						iconColor={c.success}
 					/>
 				</View>
 
@@ -362,7 +370,7 @@ export default function LoanDetailScreen() {
 								styles.progressFill,
 								{
 									width: `${Math.round(clampedPct * 100)}%` as `${number}%`,
-									backgroundColor: palette.loanAccent,
+									backgroundColor: c.primary,
 									borderRadius: r.xs,
 								},
 							]}
@@ -384,7 +392,13 @@ export default function LoanDetailScreen() {
 					variant="primary"
 					onPress={handleRecordEmi}
 					style={{ marginTop: s.lg }}
-					leftIcon={<CreditCard size={18} color="white" style={{ marginRight: 4 }} />}
+					leftIcon={
+						<CreditCard
+							size={18}
+							color={c.onPrimary}
+							style={{ marginRight: SPACING_PX.xs }}
+						/>
+					}
 				/>
 
 				{/* ── Amortisation schedule ────────────────────────────────── */}
@@ -406,7 +420,7 @@ export default function LoanDetailScreen() {
 				</ThemedText>
 
 				<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-					<View style={{ minWidth: 500 }}>
+					<View style={{ minWidth: LOAN_TABLE_MIN_WIDTH }}>
 						<TableHeader />
 						<FlatList
 							data={schedule}
@@ -435,12 +449,12 @@ export default function LoanDetailScreen() {
 
 const styles = StyleSheet.create({
 	scrollContent: {
-		paddingBottom: 40,
+		paddingBottom: SPACING_PX['3xl'] - SPACING_PX.xs,
 	},
 
 	// Summary card
 	summaryCard: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		borderWidth: 1,
 	},
 	summaryTop: {
@@ -449,16 +463,16 @@ const styles = StyleSheet.create({
 	},
 	outstandingBadge: {
 		alignSelf: 'flex-start',
-		paddingHorizontal: 10,
-		paddingVertical: 4,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.xs,
 	},
 	divider: {
-		height: 1,
+		height: StyleSheet.hairlineWidth,
 	},
 
 	// Progress
 	progressCard: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		borderWidth: 1,
 	},
 	progressHeader: {
@@ -467,12 +481,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	progressTrack: {
-		height: 8,
+		height: LOAN_PROGRESS_HEIGHT,
 		width: '100%',
 		overflow: 'hidden',
 	},
 	progressFill: {
-		height: 8,
+		height: LOAN_PROGRESS_HEIGHT,
 	},
 	progressLegend: {
 		flexDirection: 'row',
@@ -482,16 +496,16 @@ const styles = StyleSheet.create({
 	// Table
 	tableRow: {
 		flexDirection: 'row',
-		paddingVertical: 8,
-		paddingHorizontal: 4,
+		paddingVertical: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.xs,
 	},
 	tableHeaderRow: {
-		borderTopLeftRadius: 6,
-		borderTopRightRadius: 6,
+		borderTopLeftRadius: SPACING_PX.xs + SPACING_PX.xxs,
+		borderTopRightRadius: SPACING_PX.xs + SPACING_PX.xxs,
 	},
 	tableCell: {
 		flex: 1,
 		textAlign: 'right',
-		paddingHorizontal: 4,
+		paddingHorizontal: SPACING_PX.xs,
 	},
 });

@@ -19,15 +19,18 @@ import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
-import { FAB_SHADOW } from '@/theme/shadowMetrics';
 import {
 	SIZE_INPUT_HEIGHT,
 	OVERLAY_COLOR_DIVIDER,
 	GLASS_WHITE_TEXT,
 	OPACITY_BADGE_BG,
+	FAB_OFFSET_BOTTOM,
+	FAB_OFFSET_RIGHT,
+	SIZE_FAB,
 } from '@/theme/uiMetrics';
 import { MOCK_EWALLETS } from '@/src/mocks/finance/ewallets';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 // TODO: connect to store — e-wallets table
 interface EWallet {
@@ -41,26 +44,15 @@ interface EWallet {
 }
 
 const EMOJI_FONT_SIZE = 26;
+const EWALLETS_LIST_BOTTOM_PADDING = 100;
+const EWALLET_MODAL_BOTTOM_PADDING = 40;
 
-const WALLET_TYPE_COLORS: Record<string, string> = {
-	phonePe: palette.ewalletPhonePe,
-	gpay: palette.ewalletGPay,
-	paytm: palette.ewalletPaytm,
-	other: palette.ewalletOther,
-};
-
-const WALLET_TYPES = [
-	{ label: 'PhonePe', value: 'phonePe', emoji: '📱', color: palette.ewalletPhonePe },
-	{ label: 'GPay', value: 'gpay', emoji: '📱', color: palette.ewalletGPay },
-	{ label: 'Paytm', value: 'paytm', emoji: '📱', color: palette.ewalletPaytm },
-	{ label: 'Other', value: 'other', emoji: '💼', color: palette.ewalletOther },
-];
-
-const MOCK_WALLETS_WITH_COLORS: EWallet[] = MOCK_EWALLETS.map((w) => ({
-	...w,
-	phone: w.phone ?? '',
-	color: WALLET_TYPE_COLORS[w.type] ?? palette.ewalletOther,
-}));
+function walletTypeColor(type: string, colors: ReturnType<typeof useThemeTokens>['c']): string {
+	if (type === 'phonePe') return colors.primary;
+	if (type === 'gpay') return colors.info;
+	if (type === 'paytm') return colors.success;
+	return colors.secondary;
+}
 
 export default function EWalletsScreen() {
 	const { theme, c, r } = useThemeTokens();
@@ -68,7 +60,19 @@ export default function EWalletsScreen() {
 
 	const insets = useSafeAreaInsets();
 
-	const [wallets, setWallets] = useState<EWallet[]>(MOCK_WALLETS_WITH_COLORS);
+	const walletTypes = [
+		{ label: 'PhonePe', value: 'phonePe', emoji: '📱', color: walletTypeColor('phonePe', c) },
+		{ label: 'GPay', value: 'gpay', emoji: '📱', color: walletTypeColor('gpay', c) },
+		{ label: 'Paytm', value: 'paytm', emoji: '📱', color: walletTypeColor('paytm', c) },
+		{ label: 'Other', value: 'other', emoji: '💼', color: walletTypeColor('other', c) },
+	];
+	const [wallets, setWallets] = useState<EWallet[]>(
+		MOCK_EWALLETS.map((w) => ({
+			...w,
+			phone: w.phone ?? '',
+			color: walletTypeColor(w.type, c),
+		})),
+	);
 	const [showAddModal, setShowAddModal] = useState(false);
 
 	// Add form state
@@ -92,7 +96,7 @@ export default function EWalletsScreen() {
 			Alert.alert('Validation', 'Please select a wallet type.');
 			return;
 		}
-		const typeInfo = WALLET_TYPES.find((t) => t.value === selectedType);
+		const typeInfo = walletTypes.find((t) => t.value === selectedType);
 		setSaving(true);
 		try {
 			await new Promise((res) => setTimeout(res, 400));
@@ -104,7 +108,7 @@ export default function EWalletsScreen() {
 				phone: phone || '',
 				balance: parseFloat(openingBalance) || 0,
 				emoji: typeInfo?.emoji || '📱',
-				color: typeInfo?.color || palette.ewalletOther,
+				color: typeInfo?.color || walletTypeColor('other', c),
 			};
 			setWallets((prev) => [...prev, newWallet]);
 			resetForm();
@@ -138,17 +142,23 @@ export default function EWalletsScreen() {
 						<ThemedText variant="caption" color={GLASS_WHITE_TEXT}>
 							Total in Wallets
 						</ThemedText>
-						<ThemedText variant="h2" color={palette.white} style={{ marginTop: 6 }}>
+						<ThemedText
+							variant="h2"
+							color={c.onPrimary}
+							style={{ marginTop: SPACING_PX.xs + SPACING_PX.xxs }}
+						>
 							{formatCurrency(totalBalance)}
 						</ThemedText>
 					</Card>
 				}
 				ListEmptyComponent={
-					<Card padding="lg" style={{ alignItems: 'center', marginTop: 12 }}>
-						<ThemedText style={{ fontSize: 40 }}>📱</ThemedText>
+					<Card padding="lg" style={{ alignItems: 'center', marginTop: SPACING_PX.md }}>
+						<ThemedText style={{ fontSize: SPACING_PX['3xl'] - SPACING_PX.sm }}>
+							📱
+						</ThemedText>
 						<ThemedText
 							color={theme.colors.onSurfaceVariant}
-							style={{ marginTop: 12, textAlign: 'center' }}
+							style={{ marginTop: SPACING_PX.md, textAlign: 'center' }}
 						>
 							No e-wallets added yet. Add your first wallet.
 						</ThemedText>
@@ -170,8 +180,8 @@ export default function EWalletsScreen() {
 									{item.emoji}
 								</ThemedText>
 							</View>
-							<View style={{ flex: 1, marginLeft: 14 }}>
-								<ThemedText weight="bold" style={{ fontSize: 16 }}>
+							<View style={{ flex: 1, marginLeft: SPACING_PX.md }}>
+								<ThemedText weight="bold" style={{ fontSize: FONT_SIZE.body }}>
 									{item.name}
 								</ThemedText>
 								{item.phone ? (
@@ -188,7 +198,7 @@ export default function EWalletsScreen() {
 								color={
 									item.balance >= 0 ? theme.colors.success : theme.colors.error
 								}
-								style={{ fontSize: 18 }}
+								style={{ fontSize: FONT_SIZE.h3 }}
 							>
 								{formatCurrency(item.balance)}
 							</ThemedText>
@@ -199,12 +209,19 @@ export default function EWalletsScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }]}
+				style={[
+					styles.fab,
+					{
+						backgroundColor: c.primary,
+						bottom: FAB_OFFSET_BOTTOM + SPACING_PX.md + insets.bottom,
+						...(theme.shadows.lg as object),
+					},
+				]}
 				onPress={() => setShowAddModal(true)}
 				accessibilityRole="button"
 				accessibilityLabel="Add E-wallet"
 			>
-				<Plus color={palette.white} size={28} />
+				<Plus color={c.onPrimary} size={SIZE_FAB / 2} />
 			</Pressable>
 
 			{/* Add Wallet Modal */}
@@ -229,7 +246,10 @@ export default function EWalletsScreen() {
 					</View>
 
 					<ScrollView
-						contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+						contentContainerStyle={{
+							padding: SPACING_PX.lg,
+							paddingBottom: EWALLET_MODAL_BOTTOM_PADDING,
+						}}
 						keyboardShouldPersistTaps="handled"
 					>
 						{/* Wallet type */}
@@ -242,7 +262,7 @@ export default function EWalletsScreen() {
 								Wallet Type *
 							</ThemedText>
 							<View style={styles.chipRow}>
-								{WALLET_TYPES.map((wt) => (
+								{walletTypes.map((wt) => (
 									<Pressable
 										key={wt.value}
 										onPress={() => {
@@ -263,8 +283,8 @@ export default function EWalletsScreen() {
 											style={{
 												fontWeight:
 													selectedType === wt.value ? '700' : '400',
-												paddingHorizontal: 14,
-												paddingVertical: 8,
+												paddingHorizontal: SPACING_PX.md,
+												paddingVertical: SPACING_PX.sm,
 											}}
 										>
 											{wt.emoji} {wt.label}
@@ -379,14 +399,14 @@ export default function EWalletsScreen() {
 
 const styles = StyleSheet.create({
 	listContent: {
-		padding: 16,
-		paddingBottom: 100,
+		padding: SPACING_PX.lg,
+		paddingBottom: EWALLETS_LIST_BOTTOM_PADDING,
 	},
 	summaryCard: {
-		marginBottom: 20,
+		marginBottom: SPACING_PX.xl,
 	},
 	walletCard: {
-		marginBottom: 12,
+		marginBottom: SPACING_PX.md,
 	},
 	walletRow: {
 		flexDirection: 'row',
@@ -400,16 +420,12 @@ const styles = StyleSheet.create({
 	},
 	fab: {
 		position: 'absolute',
-		right: 24,
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		right: FAB_OFFSET_RIGHT + SPACING_PX.xs,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: SIZE_FAB / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		...FAB_SHADOW,
 	},
 	modal: {
 		flex: 1,
@@ -418,22 +434,22 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		padding: 16,
-		paddingTop: 20,
+		padding: SPACING_PX.lg,
+		paddingTop: SPACING_PX.xl - SPACING_PX.xxs,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: OVERLAY_COLOR_DIVIDER,
 	},
 	section: {
-		marginBottom: 20,
+		marginBottom: SPACING_PX.xl,
 	},
 	fieldLabel: {
-		marginBottom: 8,
+		marginBottom: SPACING_PX.sm,
 		fontWeight: '600',
 	},
 	chipRow: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
 		alignItems: 'center',
@@ -441,10 +457,10 @@ const styles = StyleSheet.create({
 	},
 	textField: {
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 15,
-		minHeight: 48,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xs / 2,
+		fontSize: FONT_SIZE.body,
+		minHeight: TOUCH_TARGET_MIN_PX,
 	},
 	amountRow: {
 		flexDirection: 'row',
@@ -453,15 +469,15 @@ const styles = StyleSheet.create({
 		minHeight: SIZE_INPUT_HEIGHT,
 	},
 	currencyPrefix: {
-		paddingHorizontal: 14,
+		paddingHorizontal: SPACING_PX.md,
 		borderRightWidth: 1,
-		fontSize: 18,
+		fontSize: FONT_SIZE.h3,
 		fontWeight: '600',
 	},
 	amountInput: {
 		flex: 1,
-		paddingHorizontal: 14,
-		fontSize: 18,
+		paddingHorizontal: SPACING_PX.md,
+		fontSize: FONT_SIZE.h3,
 		fontWeight: '600',
 	},
 });

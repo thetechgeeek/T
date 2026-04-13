@@ -7,6 +7,10 @@ import { Button } from '@/src/components/atoms/Button';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useRouter } from 'expo-router';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const OTHER_INCOME_BOTTOM_PADDING = 32;
 
 const CATEGORIES = [
 	'Interest',
@@ -52,7 +56,10 @@ export default function AddOtherIncomeScreen() {
 		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Add Other Income" />
 			<ScrollView
-				contentContainerStyle={{ padding: s.lg, paddingBottom: 32 }}
+				contentContainerStyle={{
+					padding: s.lg,
+					paddingBottom: OTHER_INCOME_BOTTOM_PADDING,
+				}}
 				keyboardShouldPersistTaps="handled"
 			>
 				<DatePickerField label="Date" value={date} onChange={setDate} />
@@ -173,7 +180,7 @@ export default function AddOtherIncomeScreen() {
 					]}
 				/>
 
-				<View style={{ height: 24 }} />
+				<View style={{ height: SPACING_PX.xl }} />
 				<Button title="Save Income" onPress={handleSave} loading={submitting} />
 			</ScrollView>
 		</AtomicScreen>
@@ -181,41 +188,43 @@ export default function AddOtherIncomeScreen() {
 }
 
 const styles = StyleSheet.create({
-	label: { marginBottom: 6, marginTop: 12 },
+	label: { marginBottom: SPACING_PX.xs + SPACING_PX.xxs, marginTop: SPACING_PX.md },
 	amountRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		paddingHorizontal: 16,
-		paddingVertical: 12,
-		gap: 8,
-		marginBottom: 4,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.xs,
 	},
 	amountInput: {
 		flex: 1,
-		fontSize: 24,
+		fontSize: FONT_SIZE.h2,
 		fontWeight: '700',
 	},
 	chipRow: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
-		marginBottom: 4,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.xs,
 	},
 	chip: {
-		paddingHorizontal: 12,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 	},
 	textInput: {
 		borderWidth: 1,
-		padding: 12,
-		fontSize: 16,
+		padding: SPACING_PX.md,
+		fontSize: FONT_SIZE.body,
+		minHeight: TOUCH_TARGET_MIN_PX,
 	},
 	textArea: {
 		borderWidth: 1,
-		padding: 12,
-		fontSize: 16,
+		padding: SPACING_PX.md,
+		fontSize: FONT_SIZE.body,
+		minHeight: SPACING_PX['4xl'] + SPACING_PX.lg,
 		textAlignVertical: 'top',
 	},
 });

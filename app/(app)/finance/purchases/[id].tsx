@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { OPACITY_TOAST, Z_INDEX } from '@/theme/uiMetrics';
+import { OPACITY_TINT_LIGHT, Z_INDEX } from '@/theme/uiMetrics';
 
 /** Minimum width of the kebab-menu dropdown */
 const KEBAB_MENU_MIN_WIDTH = 140;
@@ -19,7 +19,7 @@ import {
 import { supabase } from '@/src/config/supabase';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
+import { withOpacity } from '@/src/utils/color';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
@@ -30,6 +30,11 @@ import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { Purchase, PurchaseLineItem, Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
 import type { ThemeColors } from '@/src/theme';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const PURCHASE_DETAIL_SCROLL_BOTTOM_PADDING = 100;
+const PURCHASE_KEBAB_TOP_OFFSET = 56;
+const PURCHASE_KEBAB_ELEVATION = 8;
 
 type PurchaseWithDetails = Purchase & {
 	suppliers?: { name: string; phone?: string } | null;
@@ -54,14 +59,14 @@ function statusLabel(status: string): string {
 }
 
 function statusBannerColor(status: string, c: ThemeColors): string {
-	if (status === 'paid') return c.successLight ?? palette.inventoryGainTint;
-	if (status === 'partial') return c.warningLight ?? palette.purchasePartialTint;
-	return c.errorLight ?? palette.inventoryLossTint;
+	if (status === 'paid') return c.successLight ?? withOpacity(c.success, OPACITY_TINT_LIGHT);
+	if (status === 'partial') return c.warningLight ?? withOpacity(c.warning, OPACITY_TINT_LIGHT);
+	return c.errorLight ?? withOpacity(c.error, OPACITY_TINT_LIGHT);
 }
 
 function statusTextColor(status: string, c: ThemeColors): string {
 	if (status === 'paid') return c.success;
-	if (status === 'partial') return c.warning ?? palette.purchasePartialText;
+	if (status === 'partial') return c.warning;
 	return c.error;
 }
 
@@ -194,14 +199,14 @@ export default function PurchaseBillDetailScreen() {
 					<View style={styles.headerActions}>
 						<Pressable
 							onPress={handleShare}
-							style={{ padding: 8 }}
+							style={{ padding: SPACING_PX.sm }}
 							accessibilityLabel="Share purchase"
 						>
 							<Share2 size={20} color={c.onSurfaceVariant} />
 						</Pressable>
 						<Pressable
 							onPress={() => setShowKebab((v) => !v)}
-							style={{ padding: 8 }}
+							style={{ padding: SPACING_PX.sm }}
 							accessibilityLabel="More options"
 						>
 							<MoreVertical size={20} color={c.onSurfaceVariant} />
@@ -221,6 +226,7 @@ export default function PurchaseBillDetailScreen() {
 							borderRadius: r.md,
 							right: s.md,
 							top: 0,
+							...(theme.shadows.lg as object),
 						},
 					]}
 				>
@@ -232,11 +238,11 @@ export default function PurchaseBillDetailScreen() {
 						}}
 					>
 						<Pencil size={16} color={c.onSurface} />
-						<ThemedText style={{ marginLeft: 8 }}>Edit</ThemedText>
+						<ThemedText style={{ marginLeft: SPACING_PX.sm }}>Edit</ThemedText>
 					</Pressable>
 					<Pressable style={styles.kebabItem} onPress={handleDelete}>
 						<Trash2 size={16} color={c.error} />
-						<ThemedText style={{ marginLeft: 8 }} color={c.error}>
+						<ThemedText style={{ marginLeft: SPACING_PX.sm }} color={c.error}>
 							Delete
 						</ThemedText>
 					</Pressable>
@@ -249,7 +255,10 @@ export default function PurchaseBillDetailScreen() {
 			)}
 
 			<ScrollView
-				contentContainerStyle={[styles.scroll, { padding: s.md, paddingBottom: 100 }]}
+				contentContainerStyle={[
+					styles.scroll,
+					{ padding: s.md, paddingBottom: PURCHASE_DETAIL_SCROLL_BOTTOM_PADDING },
+				]}
 			>
 				{/* Status Banner */}
 				<View
@@ -276,7 +285,11 @@ export default function PurchaseBillDetailScreen() {
 						</ThemedText>
 					</View>
 					{balanceDue > 0 && (
-						<ThemedText variant="caption" color={c.error} style={{ marginTop: 4 }}>
+						<ThemedText
+							variant="caption"
+							color={c.error}
+							style={{ marginTop: SPACING_PX.xs }}
+						>
 							Balance Due: {formatCurrency(balanceDue)}
 						</ThemedText>
 					)}
@@ -321,7 +334,10 @@ export default function PurchaseBillDetailScreen() {
 						<View style={styles.detailRow}>
 							<View style={styles.iconRow}>
 								<Calendar size={14} color={c.onSurfaceVariant} />
-								<ThemedText color={c.onSurfaceVariant} style={{ marginLeft: 4 }}>
+								<ThemedText
+									color={c.onSurfaceVariant}
+									style={{ marginLeft: SPACING_PX.xs }}
+								>
 									Date
 								</ThemedText>
 							</View>
@@ -331,7 +347,10 @@ export default function PurchaseBillDetailScreen() {
 						<View style={styles.detailRow}>
 							<View style={styles.iconRow}>
 								<User size={14} color={c.onSurfaceVariant} />
-								<ThemedText color={c.onSurfaceVariant} style={{ marginLeft: 4 }}>
+								<ThemedText
+									color={c.onSurfaceVariant}
+									style={{ marginLeft: SPACING_PX.xs }}
+								>
 									Supplier
 								</ThemedText>
 							</View>
@@ -345,7 +364,7 @@ export default function PurchaseBillDetailScreen() {
 										<Phone size={14} color={c.onSurfaceVariant} />
 										<ThemedText
 											color={c.onSurfaceVariant}
-											style={{ marginLeft: 4 }}
+											style={{ marginLeft: SPACING_PX.xs }}
 										>
 											Phone
 										</ThemedText>
@@ -360,7 +379,11 @@ export default function PurchaseBillDetailScreen() {
 								<View style={styles.detailRow}>
 									<ThemedText color={c.onSurfaceVariant}>Notes</ThemedText>
 									<ThemedText
-										style={{ flex: 1, textAlign: 'right', marginLeft: 8 }}
+										style={{
+											flex: 1,
+											textAlign: 'right',
+											marginLeft: SPACING_PX.sm,
+										}}
 									>
 										{purchase.notes}
 									</ThemedText>
@@ -554,7 +577,7 @@ export default function PurchaseBillDetailScreen() {
 								<ThemedText
 									variant="caption"
 									color={c.primary}
-									style={{ marginLeft: 4 }}
+									style={{ marginLeft: SPACING_PX.xs }}
 								>
 									Record
 								</ThemedText>
@@ -692,20 +715,16 @@ const styles = StyleSheet.create({
 	kebabMenu: {
 		position: 'absolute',
 		zIndex: Z_INDEX.overlay,
-		top: 56,
+		top: PURCHASE_KEBAB_TOP_OFFSET,
 		minWidth: KEBAB_MENU_MIN_WIDTH,
 		borderWidth: 1,
-		elevation: 8,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: OPACITY_TOAST,
-		shadowRadius: 4,
+		elevation: PURCHASE_KEBAB_ELEVATION,
 	},
 	kebabItem: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 16,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 });

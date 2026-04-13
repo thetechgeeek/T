@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { palette } from '@/src/theme/palette';
-import { GLASS_WHITE_TEXT } from '@/src/theme/uiMetrics';
+import { GLASS_WHITE_TEXT, LETTER_SPACING_SECTION } from '@/src/theme/uiMetrics';
 import {
 	View,
 	StyleSheet,
@@ -18,11 +17,14 @@ import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { MOCK_CASH_TRANSACTIONS } from '@/src/mocks/finance/cash';
-
-const SECTION_LABEL_LETTER_SPACING = 0.8;
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 // TODO: connect to store — derive from invoices, expenses, purchases with cash payment
 const MOCK_OPENING_BALANCE = 0;
+const CASH_BALANCE_VALUE_SIZE = 40;
+const CASH_LEFT_BORDER_WIDTH = 4;
+const CASH_LIST_BOTTOM_PADDING = 40;
 
 type DateFilter = 'today' | 'week' | 'month' | 'fy';
 
@@ -124,7 +126,7 @@ export default function CashInHandScreen() {
 							</ThemedText>
 							<ThemedText
 								variant="h1"
-								color={palette.white}
+								color={c.onPrimary}
 								style={styles.balanceAmount}
 								accessibilityLabel={`Cash in hand ${formatCurrency(cashInHand)}`}
 							>
@@ -138,7 +140,7 @@ export default function CashInHandScreen() {
 								<ThemedText
 									variant="caption"
 									color={theme.colors.onSurfaceVariant}
-									style={{ marginBottom: 12 }}
+									style={{ marginBottom: SPACING_PX.md }}
 								>
 									No opening balance set. Set your cash opening balance to get
 									accurate totals.
@@ -155,7 +157,10 @@ export default function CashInHandScreen() {
 										]}
 									>
 										<ThemedText
-											style={{ paddingHorizontal: 10, color: c.onSurface }}
+											style={{
+												paddingHorizontal: SPACING_PX.md,
+												color: c.onSurface,
+											}}
 										>
 											₹
 										</ThemedText>
@@ -173,7 +178,7 @@ export default function CashInHandScreen() {
 										title="Save"
 										onPress={handleSaveBalance}
 										size="sm"
-										style={{ marginLeft: 10 }}
+										style={{ marginLeft: SPACING_PX.md }}
 										accessibilityLabel="save-opening-balance"
 									/>
 								</View>
@@ -227,7 +232,7 @@ export default function CashInHandScreen() {
 					</>
 				}
 				ListEmptyComponent={
-					<Card padding="lg" style={{ alignItems: 'center', marginTop: 12 }}>
+					<Card padding="lg" style={{ alignItems: 'center', marginTop: SPACING_PX.md }}>
 						<ThemedText color={theme.colors.onSurfaceVariant}>
 							No cash transactions found for this period.
 						</ThemedText>
@@ -267,7 +272,7 @@ export default function CashInHandScreen() {
 								{
 									backgroundColor: theme.colors.surfaceVariant,
 									borderRadius: r.md,
-									marginTop: 8,
+									marginTop: SPACING_PX.sm,
 								},
 							]}
 						>
@@ -311,21 +316,21 @@ export default function CashInHandScreen() {
 
 const styles = StyleSheet.create({
 	listContent: {
-		padding: 16,
-		paddingBottom: 40,
+		padding: SPACING_PX.lg,
+		paddingBottom: CASH_LIST_BOTTOM_PADDING,
 	},
 	balanceCard: {
 		alignItems: 'center',
-		padding: 24,
-		marginBottom: 16,
+		padding: SPACING_PX.xl,
+		marginBottom: SPACING_PX.lg,
 	},
 	balanceAmount: {
-		marginTop: 6,
-		fontSize: 40,
+		marginTop: SPACING_PX.xs,
+		fontSize: CASH_BALANCE_VALUE_SIZE,
 		fontWeight: '700',
 	},
 	openingBalanceCard: {
-		marginBottom: 16,
+		marginBottom: SPACING_PX.lg,
 	},
 	balanceInputRow: {
 		flexDirection: 'row',
@@ -335,41 +340,41 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		height: 44,
+		height: TOUCH_TARGET_MIN_PX,
 	},
 	balanceInput: {
 		flex: 1,
-		fontSize: 16,
-		paddingRight: 10,
+		fontSize: FONT_SIZE.body,
+		paddingRight: SPACING_PX.md,
 	},
 	filterRow: {
 		flexDirection: 'row',
-		gap: 8,
-		marginBottom: 16,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.lg,
 	},
 	filterChip: {
-		paddingHorizontal: 16,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm,
 	},
 	sectionLabel: {
-		marginBottom: 8,
-		letterSpacing: SECTION_LABEL_LETTER_SPACING,
+		marginBottom: SPACING_PX.sm,
+		letterSpacing: LETTER_SPACING_SECTION,
 		fontWeight: '600',
 	},
 	txRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginBottom: 10,
-		borderLeftWidth: 4,
+		marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+		borderLeftWidth: CASH_LEFT_BORDER_WIDTH,
 	},
 	txLeft: {
 		flex: 1,
-		marginRight: 12,
+		marginRight: SPACING_PX.md,
 	},
 	footer: {
-		padding: 14,
+		padding: SPACING_PX.md,
 		alignItems: 'center',
-		marginBottom: 16,
+		marginBottom: SPACING_PX.lg,
 	},
 });

@@ -3,6 +3,7 @@ import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM, Z_INDEX } from '@/theme/uiMetr
 
 const DROPDOWN_MAX_HEIGHT = 160;
 const MODAL_CARD_WIDTH = 320;
+const PURCHASE_CREATE_BOTTOM_PADDING = 40;
 import {
 	View,
 	ScrollView,
@@ -30,6 +31,7 @@ import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import type { Supplier } from '@/src/types/supplier';
 import type { InventoryItem } from '@/src/types/inventory';
 import type { PaymentStatus } from '@/src/types/invoice';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Credit / No Payment'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
@@ -337,7 +339,7 @@ export default function PurchaseCreateScreen() {
 							</ThemedText>
 							<TouchableOpacity
 								onPress={() => removeLineItem(li.id)}
-								style={{ marginLeft: 8 }}
+								style={{ marginLeft: SPACING_PX.sm }}
 							>
 								<Trash2 size={18} color={c.error} />
 							</TouchableOpacity>
@@ -522,49 +524,57 @@ export default function PurchaseCreateScreen() {
 }
 
 const styles = StyleSheet.create({
-	content: { paddingBottom: 40 },
-	label: { marginBottom: 6 },
-	selectedCard: { marginBottom: 4 },
+	content: { paddingBottom: PURCHASE_CREATE_BOTTOM_PADDING },
+	label: { marginBottom: SPACING_PX.xs + SPACING_PX.xxs },
+	selectedCard: { marginBottom: SPACING_PX.xs },
 	selectedRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-	dropdown: { marginTop: 4, zIndex: Z_INDEX.overlay },
+	dropdown: { marginTop: SPACING_PX.xs, zIndex: Z_INDEX.overlay },
 	dropdownRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingHorizontal: 12,
-		paddingVertical: 10,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xs / 2,
 		borderBottomWidth: 1,
 	},
 	dateRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-	dateRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-	changeBtn: { paddingHorizontal: 8, paddingVertical: 4 },
+	dateRight: { flexDirection: 'row', alignItems: 'center', gap: SPACING_PX.sm },
+	changeBtn: { paddingHorizontal: SPACING_PX.sm, paddingVertical: SPACING_PX.xs },
 	modalOverlay: {
 		flex: 1,
 		backgroundColor: OVERLAY_COLOR_MEDIUM,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	modalCard: { width: MODAL_CARD_WIDTH, padding: 20 },
+	modalCard: { width: MODAL_CARD_WIDTH, padding: SPACING_PX.xl - SPACING_PX.xxs },
 	lineItemRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 8,
+		paddingVertical: SPACING_PX.sm,
 		borderBottomWidth: 1,
 	},
-	totalRow: { padding: 8, marginTop: 4, borderRadius: 6 },
+	totalRow: {
+		padding: SPACING_PX.sm,
+		marginTop: SPACING_PX.xs,
+		borderRadius: SPACING_PX.xs + SPACING_PX.xxs,
+	},
 	addItemBtn: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 6,
-		marginTop: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 8,
+		gap: SPACING_PX.xs + SPACING_PX.xxs,
+		marginTop: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		borderStyle: 'dashed',
 		alignSelf: 'flex-start',
 	},
-	chipsRow: { flexDirection: 'row', gap: 8 },
-	modeChip: { paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1 },
-	formBtns: { flexDirection: 'row', gap: 8 },
+	chipsRow: { flexDirection: 'row', gap: SPACING_PX.sm },
+	modeChip: {
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		borderWidth: 1,
+	},
+	formBtns: { flexDirection: 'row', gap: SPACING_PX.sm },
 	saveBtn: { height: SIZE_INPUT_HEIGHT },
 });

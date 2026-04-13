@@ -27,6 +27,11 @@ import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import type { Supplier } from '@/src/types/supplier';
 import type { PaymentMode } from '@/src/types/invoice';
 import { buildMakePaymentRecordPayload } from '@/src/features/payments/buildPaymentRecordPayload';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const PAYMENT_FORM_BOTTOM_PADDING = 40;
+const PAYMENT_NOTES_MIN_HEIGHT = 72;
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Card'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
@@ -238,7 +243,7 @@ export default function MakePaymentScreen() {
 						keyboardType="numeric"
 						value={amount}
 						onChangeText={setAmount}
-						inputStyle={{ fontSize: 24 }}
+						inputStyle={{ fontSize: FONT_SIZE.h2 }}
 						placeholder="0"
 						accessibilityLabel="amount-paid"
 					/>
@@ -335,7 +340,10 @@ export default function MakePaymentScreen() {
 						multiline
 						numberOfLines={3}
 						placeholder="Optional notes..."
-						inputStyle={{ minHeight: 72, textAlignVertical: 'top' }}
+						inputStyle={{
+							minHeight: PAYMENT_NOTES_MIN_HEIGHT,
+							textAlignVertical: 'top',
+						}}
 					/>
 				</View>
 
@@ -353,37 +361,44 @@ export default function MakePaymentScreen() {
 }
 
 const styles = StyleSheet.create({
-	content: { paddingBottom: 40 },
-	sectionLabel: { marginBottom: 6 },
-	selectedCard: { marginBottom: 4 },
+	content: { paddingBottom: PAYMENT_FORM_BOTTOM_PADDING },
+	sectionLabel: { marginBottom: SPACING_PX.xs + SPACING_PX.xxs },
+	selectedCard: { marginBottom: SPACING_PX.xs },
 	selectedRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-	dropdown: { marginTop: 4, zIndex: Z_INDEX.overlay },
+	dropdown: { marginTop: SPACING_PX.xs, zIndex: Z_INDEX.overlay },
 	dropdownRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingHorizontal: 12,
-		paddingVertical: 10,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xs / 2,
 		borderBottomWidth: 1,
 	},
 	dateRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-	dateRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-	changeBtn: { paddingHorizontal: 8, paddingVertical: 4 },
+	dateRight: { flexDirection: 'row', alignItems: 'center', gap: SPACING_PX.sm },
+	changeBtn: { paddingHorizontal: SPACING_PX.sm, paddingVertical: SPACING_PX.xs },
 	modalOverlay: {
 		flex: 1,
 		backgroundColor: OVERLAY_COLOR_MEDIUM,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	modalCard: { width: SIZE_INPUT_HEIGHT * 6 + 8, padding: 20 },
+	modalCard: {
+		width: SIZE_INPUT_HEIGHT * 6 + SPACING_PX.sm,
+		padding: SPACING_PX.xl - SPACING_PX.xxs,
+	},
 	fullAmtChip: {
 		alignSelf: 'flex-start',
-		marginTop: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 6,
+		marginTop: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.xs + SPACING_PX.xxs,
 		borderWidth: 1,
 	},
-	chipsRow: { flexDirection: 'row', gap: 8 },
-	modeChip: { paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1 },
+	chipsRow: { flexDirection: 'row', gap: SPACING_PX.sm },
+	modeChip: {
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		borderWidth: 1,
+	},
 	saveBtn: { height: SIZE_INPUT_HEIGHT },
 });

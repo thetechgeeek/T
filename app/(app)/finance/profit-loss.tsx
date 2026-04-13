@@ -16,8 +16,12 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
 
 type PeriodMode = 'monthly' | 'quarterly' | 'fy';
+const PROFIT_LOSS_SCROLL_BOTTOM_PADDING = 40;
+const NET_PROFIT_VALUE_SIZE = 32;
 
 const PERIOD_TABS: { label: string; value: PeriodMode }[] = [
 	{ label: 'Monthly', value: 'monthly' },
@@ -98,7 +102,7 @@ function SectionRow({
 	formatCurrency: (v: number) => string;
 }) {
 	return (
-		<View style={[styles.sectionRow, indent && { paddingLeft: 12 }]}>
+		<View style={[styles.sectionRow, indent && { paddingLeft: SPACING_PX.md }]}>
 			<ThemedText
 				color={accent ?? c.onSurface}
 				weight={bold ? 'bold' : 'regular'}
@@ -114,7 +118,7 @@ function SectionRow({
 }
 
 export default function ProfitLossScreen() {
-	const { c, s, r, theme } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const [mode, setMode] = useState<PeriodMode>('monthly');
@@ -231,7 +235,7 @@ export default function ProfitLossScreen() {
 			</View>
 
 			{/* Period navigation */}
-			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginTop: 8 }]}>
+			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginTop: s.sm }]}>
 				<Pressable
 					onPress={() => canGoBack && setOffset((o) => o - 1)}
 					disabled={!canGoBack}
@@ -253,13 +257,16 @@ export default function ProfitLossScreen() {
 				</Pressable>
 			</View>
 
-			<ScrollView contentContainerStyle={{ padding: s.md, paddingBottom: 40, gap: 12 }}>
+			<ScrollView
+				contentContainerStyle={{
+					padding: s.md,
+					paddingBottom: PROFIT_LOSS_SCROLL_BOTTOM_PADDING,
+					gap: SPACING_PX.md,
+				}}
+			>
 				{/* Revenue Section */}
 				<Card padding="md">
-					<ThemedText
-						weight="bold"
-						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
-					>
+					<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
 						Revenue
 					</ThemedText>
 					<SectionRow
@@ -288,10 +295,7 @@ export default function ProfitLossScreen() {
 
 				{/* COGS Section */}
 				<Card padding="md">
-					<ThemedText
-						weight="bold"
-						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
-					>
+					<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
 						Cost of Goods Sold
 					</ThemedText>
 					<SectionRow
@@ -336,10 +340,7 @@ export default function ProfitLossScreen() {
 
 				{/* Expenses Section */}
 				<Card padding="md">
-					<ThemedText
-						weight="bold"
-						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
-					>
+					<ThemedText variant="caption" weight="bold" style={{ marginBottom: s.sm }}>
 						Expenses
 					</ThemedText>
 					{expenseCategories.length === 0 ? (
@@ -384,14 +385,14 @@ export default function ProfitLossScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ textAlign: 'center', marginBottom: 4 }}
+						style={{ textAlign: 'center', marginBottom: s.xs }}
 					>
 						Net {isProfit ? 'Profit' : 'Loss'}
 					</ThemedText>
 					<ThemedText
 						weight="bold"
 						color={isProfit ? c.success : c.error}
-						style={{ fontSize: 32, textAlign: 'center' }}
+						style={{ fontSize: NET_PROFIT_VALUE_SIZE, textAlign: 'center' }}
 					>
 						{isProfit ? '' : '– '}
 						{formatCurrency(Math.abs(netProfit))}
@@ -405,31 +406,31 @@ export default function ProfitLossScreen() {
 const styles = StyleSheet.create({
 	tabBar: {
 		flexDirection: 'row',
-		padding: 3,
-		marginTop: 8,
+		padding: SPACING_PX.xs,
+		marginTop: SPACING_PX.sm,
 	},
 	tab: {
 		flex: 1,
 		alignItems: 'center',
-		paddingVertical: 7,
+		paddingVertical: SPACING_PX.sm,
 	},
 	periodNav: {
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	navBtn: {
-		width: 36,
-		height: 36,
+		width: SIZE_CHIP_HEIGHT,
+		height: SIZE_CHIP_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	sectionRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingVertical: 5,
+		paddingVertical: SPACING_PX.xs,
 	},
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		marginVertical: 6,
+		marginVertical: SPACING_PX.xs,
 	},
 });

@@ -7,14 +7,20 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BadgeVariant } from '@/src/components/atoms/Badge';
-import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FAB_OFFSET_BOTTOM, FAB_OFFSET_RIGHT, SIZE_FAB } from '@/src/theme/uiMetrics';
+
 const SECS_PER_MIN = 60;
 const MS_PER_DAY = 1000 * SECS_PER_MIN * SECS_PER_MIN * 24;
 import { MOCK_CHEQUES_RECEIVED, MOCK_CHEQUES_ISSUED } from '@/src/mocks/finance/cheques';
 import type { Cheque, ChequeStatus } from '@/src/mocks/finance/cheques';
+
+const CHEQUES_LIST_BOTTOM_PADDING = 80;
+const CHEQUE_TAB_BORDER_WIDTH = 2;
+const CHEQUE_ICON_SIZE = 40;
+const CHEQUE_ICON_RADIUS = 20;
 
 type ChequeTab = 'received' | 'issued';
 
@@ -38,7 +44,7 @@ function isChequeDueSoon(dateStr: string): boolean {
 }
 
 export default function ChequesScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, s, r, theme } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const insets = useSafeAreaInsets();
 
@@ -126,7 +132,7 @@ export default function ChequesScreen() {
 					Cheque #{item.cheque_number} · {item.bank_name} · {formatDate(item.cheque_date)}
 				</ThemedText>
 			</View>
-			<View style={{ alignItems: 'flex-end', gap: 4 }}>
+			<View style={{ alignItems: 'flex-end', gap: SPACING_PX.xs }}>
 				<ThemedText variant="amount">{formatCurrency(item.amount)}</ThemedText>
 				<Badge label={statusLabel(item.status)} variant={statusBadgeVariant(item.status)} />
 			</View>
@@ -152,7 +158,10 @@ export default function ChequesScreen() {
 						onPress={() => setTab(t)}
 						style={[
 							styles.tabBtn,
-							tab === t && { borderBottomColor: c.primary, borderBottomWidth: 2 },
+							tab === t && {
+								borderBottomColor: c.primary,
+								borderBottomWidth: CHEQUE_TAB_BORDER_WIDTH,
+							},
 						]}
 					>
 						<ThemedText
@@ -205,7 +214,9 @@ export default function ChequesScreen() {
 				data={filtered}
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
-				contentContainerStyle={{ paddingBottom: 80 + insets.bottom }}
+				contentContainerStyle={{
+					paddingBottom: CHEQUES_LIST_BOTTOM_PADDING + insets.bottom,
+				}}
 				ListEmptyComponent={
 					<View style={styles.empty}>
 						<ThemedText variant="caption" color={c.onSurfaceVariant} align="center">
@@ -216,12 +227,19 @@ export default function ChequesScreen() {
 			/>
 
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }]}
+				style={[
+					styles.fab,
+					{
+						backgroundColor: c.primary,
+						bottom: FAB_OFFSET_BOTTOM + SPACING_PX.md + insets.bottom,
+						...(theme.shadows.lg as object),
+					},
+				]}
 				onPress={() => Alert.alert('Add Cheque', 'Add a cheque record manually')}
 				accessibilityRole="button"
 				accessibilityLabel="Add cheque"
 			>
-				<Plus color="white" size={28} />
+				<Plus color={c.onPrimary} size={SIZE_FAB / 2} />
 			</Pressable>
 		</AtomicScreen>
 	);
@@ -235,56 +253,52 @@ const styles = StyleSheet.create({
 	tabBtn: {
 		flex: 1,
 		alignItems: 'center',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 	},
 	alertBanner: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 16,
-		paddingVertical: 10,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
 	},
 	filterRow: {
 		flexDirection: 'row',
-		gap: 8,
-		paddingHorizontal: 16,
-		paddingVertical: 10,
+		gap: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	chip: {
-		paddingHorizontal: 12,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.xs + SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 16,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		gap: 12,
+		gap: SPACING_PX.md,
 	},
 	iconCircle: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		width: CHEQUE_ICON_SIZE,
+		height: CHEQUE_ICON_SIZE,
+		borderRadius: CHEQUE_ICON_RADIUS,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	empty: {
-		paddingVertical: 48,
+		paddingVertical: SPACING_PX['3xl'],
 		alignItems: 'center',
 	},
 	fab: {
 		position: 'absolute',
-		right: 24,
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		right: FAB_OFFSET_RIGHT + SPACING_PX.xs,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: SIZE_FAB / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		...FAB_SHADOW,
 	},
 });

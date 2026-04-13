@@ -11,6 +11,8 @@ import { Button } from '@/src/components/atoms/Button';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 const LOAN_TYPES = ['Term Loan', 'OD', 'Personal', 'Vehicle', 'Mortgage'] as const;
 type LoanType = (typeof LOAN_TYPES)[number];
@@ -286,61 +288,61 @@ export default function AddLoanScreen() {
 
 const styles = StyleSheet.create({
 	scrollContent: {
-		paddingBottom: 40,
+		paddingBottom: SPACING_PX['3xl'] - SPACING_PX.xs,
 	},
 	label: {
-		marginBottom: 6,
-		marginTop: 16,
+		marginBottom: SPACING_PX.xs + SPACING_PX.xxs,
+		marginTop: SPACING_PX.lg,
 	},
 	input: {
-		height: 44,
+		height: TOUCH_TARGET_MIN_PX,
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		fontSize: 15,
+		paddingHorizontal: SPACING_PX.md,
+		fontSize: FONT_SIZE.body,
 	},
 	inputRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		height: 44,
+		height: TOUCH_TARGET_MIN_PX,
 		borderWidth: 1,
-		paddingHorizontal: 12,
+		paddingHorizontal: SPACING_PX.md,
 	},
 	inputFlex: {
 		flex: 1,
-		fontSize: 15,
+		fontSize: FONT_SIZE.body,
 	},
 	prefix: {
-		marginRight: 8,
-		fontSize: 15,
+		marginRight: SPACING_PX.sm,
+		fontSize: FONT_SIZE.body,
 	},
 	suffix: {
-		marginLeft: 8,
-		fontSize: 13,
+		marginLeft: SPACING_PX.sm,
+		fontSize: FONT_SIZE.caption,
 	},
 	chipsRow: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 12,
-		paddingVertical: 7,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.xs + SPACING_PX.xxs / 2,
 		borderWidth: 1,
 	},
 	switchRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginTop: 16,
-		paddingVertical: 4,
+		marginTop: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.xs,
 	},
 	emiDisplay: {
-		marginTop: 12,
-		padding: 16,
+		marginTop: SPACING_PX.md,
+		padding: SPACING_PX.lg,
 		alignItems: 'center',
 	},
 	notesInput: {
 		height: NOTES_INPUT_HEIGHT,
-		paddingTop: 10,
+		paddingTop: SPACING_PX.md,
 	},
 });

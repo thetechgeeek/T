@@ -12,6 +12,10 @@ import { useFinanceStore } from '@/src/stores/financeStore';
 import type { PaymentMode } from '@/src/types/invoice';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const EXPENSE_FORM_BOTTOM_PADDING = 32;
 
 const CATEGORIES = [
 	{ label: 'Rent', value: 'rent' },
@@ -99,7 +103,7 @@ export default function AddExpenseScreen() {
 			<ScrollView
 				contentContainerStyle={[
 					styles.scrollContent,
-					{ paddingBottom: 32 + insets.bottom },
+					{ paddingBottom: EXPENSE_FORM_BOTTOM_PADDING + insets.bottom },
 				]}
 				keyboardShouldPersistTaps="handled"
 			>
@@ -129,7 +133,7 @@ export default function AddExpenseScreen() {
 								{
 									color: c.onSurface,
 									borderRightColor: c.border,
-									fontSize: 22,
+									fontSize: FONT_SIZE.h2,
 								},
 							]}
 						>
@@ -141,7 +145,10 @@ export default function AddExpenseScreen() {
 							placeholder="0"
 							placeholderTextColor={c.placeholder}
 							keyboardType="numeric"
-							style={[styles.amountInput, { color: c.onSurface, fontSize: 28 }]}
+							style={[
+								styles.amountInput,
+								{ color: c.onSurface, fontSize: FONT_SIZE.h1 },
+							]}
 							accessibilityLabel="expense-amount"
 						/>
 					</View>
@@ -221,7 +228,7 @@ export default function AddExpenseScreen() {
 									borderColor: c.border,
 									borderRadius: r.md,
 									backgroundColor: c.surface,
-									marginTop: 10,
+									marginTop: SPACING_PX.md - SPACING_PX.xxs,
 								},
 							]}
 							accessibilityLabel="upi-reference"
@@ -300,61 +307,61 @@ export default function AddExpenseScreen() {
 
 const styles = StyleSheet.create({
 	scrollContent: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
 	section: {
-		marginBottom: 20,
+		marginBottom: SPACING_PX.xl,
 	},
 	fieldLabel: {
-		marginBottom: 8,
+		marginBottom: SPACING_PX.sm,
 		fontWeight: '600',
 	},
 	amountRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		minHeight: 56,
+		minHeight: SIZE_INPUT_HEIGHT,
 	},
 	currencyPrefix: {
-		paddingHorizontal: 14,
+		paddingHorizontal: SPACING_PX.md,
 		borderRightWidth: 1,
 		fontWeight: '600',
 	},
 	amountInput: {
 		flex: 1,
-		paddingHorizontal: 14,
+		paddingHorizontal: SPACING_PX.md,
 		fontWeight: '600',
 	},
 	chipGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	chipRow: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	textField: {
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		fontSize: 15,
-		minHeight: 48,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xs / 2,
+		fontSize: FONT_SIZE.body,
+		minHeight: TOUCH_TARGET_MIN_PX,
 	},
 	multilineField: {
-		minHeight: 80,
+		minHeight: SPACING_PX['4xl'] + SPACING_PX.lg,
 		textAlignVertical: 'top',
 	},
 	saveButton: {
 		height: SIZE_INPUT_HEIGHT,
-		marginTop: 8,
+		marginTop: SPACING_PX.sm,
 	},
 });

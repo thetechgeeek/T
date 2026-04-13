@@ -1,4 +1,10 @@
-import { OPACITY_TINT_MEDIUM } from '@/theme/uiMetrics';
+import {
+	FAB_OFFSET_BOTTOM,
+	FAB_OFFSET_RIGHT,
+	RADIUS_FAB,
+	SIZE_CHIP_HEIGHT,
+	SIZE_FAB,
+} from '@/theme/uiMetrics';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -6,7 +12,6 @@ import { Plus, Banknote, CreditCard, Smartphone, Building2, Coins } from 'lucide
 import { paymentService } from '@/src/services/paymentService';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
@@ -14,6 +19,9 @@ import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { Payment } from '@/src/types/finance';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const LIST_BOTTOM_PADDING = 100;
 
 function getModeIcon(mode: string, color: string) {
 	const size = 20;
@@ -42,7 +50,7 @@ function thisMonthCount(payments: Payment[]) {
 }
 
 export default function PaymentsScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { theme, c, s, r } = useThemeTokens();
 	const { t, formatCurrency, formatDateShort } = useLocale();
 	const router = useRouter();
 
@@ -152,7 +160,14 @@ export default function PaymentsScreen() {
 			)}
 
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
+				style={[
+					styles.fab,
+					{
+						backgroundColor: c.primary,
+						borderRadius: r.full,
+						...(theme.shadows.lg as object),
+					},
+				]}
 				onPress={() => router.push('/(app)/finance/payments/receive')}
 				accessibilityLabel="Record payment"
 			>
@@ -164,35 +179,31 @@ export default function PaymentsScreen() {
 
 const styles = StyleSheet.create({
 	summaryBar: {
-		paddingHorizontal: 16,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm,
 		borderBottomWidth: 1,
 	},
-	listContent: { paddingBottom: 100 },
+	listContent: { paddingBottom: LIST_BOTTOM_PADDING },
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 12,
+		gap: SPACING_PX.md,
 	},
 	modeIcon: {
-		width: 36,
-		height: 36,
+		width: SIZE_CHIP_HEIGHT,
+		height: SIZE_CHIP_HEIGHT,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	info: { flex: 1 },
 	fab: {
 		position: 'absolute',
-		bottom: 32,
-		right: 24,
-		width: 56,
-		height: 56,
+		bottom: FAB_OFFSET_BOTTOM + SPACING_PX.md,
+		right: FAB_OFFSET_RIGHT + SPACING_PX.xs,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 6,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 3 },
-		shadowOpacity: OPACITY_TINT_MEDIUM,
-		shadowRadius: 4,
+		borderRadius: RADIUS_FAB,
 	},
 });

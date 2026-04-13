@@ -1,4 +1,3 @@
-import { FAB_SHADOW } from '@/theme/shadowMetrics';
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, RefreshControl, Alert, Pressable } from 'react-native';
@@ -11,13 +10,16 @@ import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import type { Expense } from '@/src/types/finance';
 import { layout } from '@/src/theme/layout';
+import { FAB_OFFSET_RIGHT, RADIUS_FAB, SIZE_FAB } from '@/theme/uiMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const LIST_BOTTOM_PADDING = 100;
 
 const CATEGORIES = [
 	{ label: 'All', value: 'all' },
@@ -158,7 +160,8 @@ export default function ExpensesScreen() {
 					styles.fab,
 					{
 						backgroundColor: c.primary,
-						bottom: 32 + insets.bottom,
+						bottom: SIZE_FAB - SPACING_PX.xl + insets.bottom,
+						...(theme.shadows.lg as object),
 					},
 				]}
 				onPress={() => router.push('/(app)/finance/expenses/add')}
@@ -166,7 +169,7 @@ export default function ExpensesScreen() {
 				accessibilityRole="button"
 				accessibilityLabel={t('finance.addExpense')}
 			>
-				<Plus color="white" size={28} />
+				<Plus color={c.onPrimary} size={28} />
 			</Pressable>
 		</AtomicScreen>
 	);
@@ -174,26 +177,22 @@ export default function ExpensesScreen() {
 
 const styles = StyleSheet.create({
 	summaryCard: {
-		marginHorizontal: 16,
-		marginTop: 12,
-		marginBottom: 4,
-		padding: 16,
-		borderRadius: 12,
+		marginHorizontal: SPACING_PX.lg,
+		marginTop: SPACING_PX.md,
+		marginBottom: SPACING_PX.xs,
+		padding: SPACING_PX.lg,
+		borderRadius: BORDER_RADIUS_PX.lg,
 		alignItems: 'center',
 	},
-	scrollContent: { padding: 16, paddingBottom: 100 },
-	expenseCard: { marginBottom: 12 },
+	scrollContent: { padding: SPACING_PX.lg, paddingBottom: LIST_BOTTOM_PADDING },
+	expenseCard: { marginBottom: SPACING_PX.md },
 	fab: {
 		position: 'absolute',
-		right: 24,
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		right: FAB_OFFSET_RIGHT + SPACING_PX.xs,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		...FAB_SHADOW,
 	},
 });

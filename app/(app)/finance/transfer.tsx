@@ -15,6 +15,14 @@ import {
 import { useLocale } from '@/src/hooks/useLocale';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { MOCK_TRANSFER_ACCOUNTS } from '@/src/mocks/finance/transfer';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const TRANSFER_FORM_BOTTOM_PADDING = 32;
+const TRANSFER_DOT_SIZE = 10;
+const TRANSFER_DOT_RADIUS = 5;
+const TRANSFER_ARROW_SIZE = 40;
+const TRANSFER_ARROW_RADIUS = 20;
 
 const ACCOUNTS = MOCK_TRANSFER_ACCOUNTS;
 
@@ -34,7 +42,11 @@ function AccountPicker({
 
 	return (
 		<View style={{ marginBottom: s.md }}>
-			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
+			<ThemedText
+				variant="label"
+				color={c.onSurfaceVariant}
+				style={{ marginBottom: SPACING_PX.xs + SPACING_PX.xxs }}
+			>
 				{label}
 			</ThemedText>
 			<View style={[styles.pickerBox, { borderColor: c.border, borderRadius: r.md }]}>
@@ -116,7 +128,10 @@ export default function FundTransferScreen() {
 		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Fund Transfer" />
 			<ScrollView
-				contentContainerStyle={{ padding: s.lg, paddingBottom: 32 }}
+				contentContainerStyle={{
+					padding: s.lg,
+					paddingBottom: TRANSFER_FORM_BOTTOM_PADDING,
+				}}
 				keyboardShouldPersistTaps="handled"
 			>
 				<AccountPicker
@@ -142,7 +157,11 @@ export default function FundTransferScreen() {
 					onSelect={setToId}
 				/>
 
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
+				<ThemedText
+					variant="label"
+					color={c.onSurfaceVariant}
+					style={{ marginBottom: SPACING_PX.xs + SPACING_PX.xxs }}
+				>
 					Transfer Amount *
 				</ThemedText>
 				<View
@@ -160,7 +179,7 @@ export default function FundTransferScreen() {
 						keyboardType="numeric"
 						placeholder="0"
 						placeholderTextColor={c.placeholder}
-						style={[styles.amountText, { color: c.onSurface, fontSize: 24 }]}
+						style={[styles.amountText, { color: c.onSurface, fontSize: FONT_SIZE.h2 }]}
 					/>
 				</View>
 
@@ -192,7 +211,7 @@ export default function FundTransferScreen() {
 				<ThemedText
 					variant="label"
 					color={c.onSurfaceVariant}
-					style={{ marginBottom: 6, marginTop: s.sm }}
+					style={{ marginBottom: SPACING_PX.xs + SPACING_PX.xxs, marginTop: s.sm }}
 				>
 					Notes (optional)
 				</ThemedText>
@@ -214,7 +233,7 @@ export default function FundTransferScreen() {
 					]}
 				/>
 
-				<View style={{ height: 24 }} />
+				<View style={{ height: SPACING_PX.xl }} />
 				<Button
 					title="Transfer Funds"
 					onPress={handleTransfer}
@@ -234,53 +253,53 @@ const styles = StyleSheet.create({
 	accountRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 14,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	dot: {
-		width: 10,
-		height: 10,
-		borderRadius: 5,
+		width: TRANSFER_DOT_SIZE,
+		height: TRANSFER_DOT_SIZE,
+		borderRadius: TRANSFER_DOT_RADIUS,
 	},
 	arrowRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginVertical: 8,
+		marginVertical: SPACING_PX.sm,
 	},
 	arrowLine: {
 		flex: 1,
-		height: 1,
+		height: StyleSheet.hairlineWidth,
 	},
 	arrowCircle: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		width: TRANSFER_ARROW_SIZE,
+		height: TRANSFER_ARROW_SIZE,
+		borderRadius: TRANSFER_ARROW_RADIUS,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginHorizontal: 12,
+		marginHorizontal: SPACING_PX.md,
 	},
 	amountInput: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		paddingHorizontal: 16,
-		paddingVertical: 12,
-		marginBottom: 12,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
+		marginBottom: SPACING_PX.md,
+		gap: SPACING_PX.sm,
 	},
 	amountText: {
 		flex: 1,
 		fontWeight: '700',
 	},
 	previewCard: {
-		padding: 14,
-		marginBottom: 16,
+		padding: SPACING_PX.md,
+		marginBottom: SPACING_PX.lg,
 	},
 	notesInput: {
 		borderWidth: 1,
-		padding: 12,
+		padding: SPACING_PX.md,
 		textAlignVertical: 'top',
-		fontSize: 16,
+		fontSize: FONT_SIZE.body,
 	},
 });

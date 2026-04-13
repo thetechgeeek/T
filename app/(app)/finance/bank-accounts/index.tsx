@@ -19,15 +19,22 @@ import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
-import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { LETTER_SPACING_ACCOUNT, GLASS_WHITE_TEXT } from '@/theme/uiMetrics';
+import {
+	FAB_OFFSET_RIGHT,
+	GLASS_WHITE_TEXT,
+	LETTER_SPACING_ACCOUNT,
+	RADIUS_FAB,
+	SIZE_FAB,
+} from '@/theme/uiMetrics';
 import { MOCK_BANK_ACCOUNTS } from '@/src/mocks/finance/bankAccounts';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 // TODO: connect to store — fetch from bank_accounts table via Supabase
 type BankAccount = (typeof MOCK_BANK_ACCOUNTS)[number] & { balance: number };
 
 const ACCOUNT_MASK_TAIL_DIGITS = 4;
+const LIST_BOTTOM_PADDING = 100;
 
 function maskAccountNumber(num: string): string {
 	if (num.length <= ACCOUNT_MASK_TAIL_DIGITS) return num;
@@ -79,7 +86,13 @@ export default function BankAccountsScreen() {
 							] as StyleProp<ViewStyle>
 						}
 					>
-						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+						<View
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								gap: SPACING_PX.sm,
+							}}
+						>
 							<Building2 size={20} color={GLASS_WHITE_TEXT} />
 							<ThemedText variant="caption" color={GLASS_WHITE_TEXT}>
 								Total in Banks
@@ -87,8 +100,8 @@ export default function BankAccountsScreen() {
 						</View>
 						<ThemedText
 							variant="h2"
-							color={palette.white}
-							style={{ marginTop: 6 }}
+							color={c.onPrimary}
+							style={{ marginTop: SPACING_PX.xs }}
 							accessibilityLabel={`Total bank balance ${formatCurrency(totalBalance)}`}
 						>
 							{formatCurrency(totalBalance)}
@@ -96,11 +109,11 @@ export default function BankAccountsScreen() {
 					</Card>
 				}
 				ListEmptyComponent={
-					<Card padding="lg" style={{ alignItems: 'center', marginTop: 12 }}>
+					<Card padding="lg" style={{ alignItems: 'center', marginTop: SPACING_PX.md }}>
 						<Building2 size={40} color={theme.colors.onSurfaceVariant} />
 						<ThemedText
 							color={theme.colors.onSurfaceVariant}
-							style={{ marginTop: 12, textAlign: 'center' }}
+							style={{ marginTop: SPACING_PX.md, textAlign: 'center' }}
 						>
 							No bank accounts added yet. Add your first bank account.
 						</ThemedText>
@@ -110,7 +123,7 @@ export default function BankAccountsScreen() {
 					<Card padding="md" style={styles.accountCard}>
 						<View style={styles.accountHeader}>
 							<View style={styles.accountTitleRow}>
-								<ThemedText weight="bold" style={{ fontSize: 16 }}>
+								<ThemedText variant="body" weight="bold">
 									{item.bank_name}
 								</ThemedText>
 								<View style={styles.badgeRow}>
@@ -129,7 +142,7 @@ export default function BankAccountsScreen() {
 						<ThemedText
 							variant="caption"
 							color={theme.colors.onSurfaceVariant}
-							style={{ marginTop: 2 }}
+							style={{ marginTop: SPACING_PX.xxs }}
 						>
 							{item.account_holder}
 						</ThemedText>
@@ -147,7 +160,7 @@ export default function BankAccountsScreen() {
 								color={
 									item.balance >= 0 ? theme.colors.success : theme.colors.error
 								}
-								style={{ fontSize: 18 }}
+								variant="h3"
 							>
 								{formatCurrency(item.balance)}
 							</ThemedText>
@@ -163,7 +176,8 @@ export default function BankAccountsScreen() {
 						styles.fab,
 						{
 							backgroundColor: c.primary,
-							bottom: 32 + insets.bottom,
+							bottom: SIZE_FAB - SPACING_PX.xl + insets.bottom,
+							...(theme.shadows.lg as object),
 						},
 					] as StyleProp<ViewStyle>
 				}
@@ -171,7 +185,7 @@ export default function BankAccountsScreen() {
 				accessibilityRole="button"
 				accessibilityLabel="Add Bank Account"
 			>
-				<Plus color={palette.white} size={28} />
+				<Plus color={c.onPrimary} size={28} />
 			</Pressable>
 		</AtomicScreen>
 	);
@@ -179,14 +193,14 @@ export default function BankAccountsScreen() {
 
 const styles = StyleSheet.create({
 	listContent: {
-		padding: 16,
-		paddingBottom: 100,
+		padding: SPACING_PX.lg,
+		paddingBottom: LIST_BOTTOM_PADDING,
 	},
 	summaryCard: {
-		marginBottom: 20,
+		marginBottom: SPACING_PX.xl,
 	},
 	accountCard: {
-		marginBottom: 12,
+		marginBottom: SPACING_PX.md,
 	},
 	accountHeader: {
 		flexDirection: 'row',
@@ -198,34 +212,30 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		flexWrap: 'wrap',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	badgeRow: {
 		flexDirection: 'row',
-		gap: 6,
+		gap: SPACING_PX.xs,
 	},
 	accountFooter: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginTop: 12,
+		marginTop: SPACING_PX.md,
 	},
 	accountNumber: {
 		fontFamily: 'monospace',
 		letterSpacing: LETTER_SPACING_ACCOUNT,
-		fontSize: 14,
+		fontSize: FONT_SIZE.caption,
 	},
 	fab: {
 		position: 'absolute',
-		right: 24,
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		right: FAB_OFFSET_RIGHT + SPACING_PX.xs,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		...FAB_SHADOW,
 	},
 });

@@ -1,4 +1,4 @@
-import { OPACITY_TINT_MEDIUM } from '@/theme/uiMetrics';
+import { FAB_OFFSET_BOTTOM, FAB_OFFSET_RIGHT, RADIUS_FAB, SIZE_FAB } from '@/theme/uiMetrics';
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, RefreshControl, Alert, Pressable } from 'react-native';
@@ -10,16 +10,16 @@ import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
 import { Card } from '@/src/components/atoms/Card';
 import { Badge } from '@/src/components/atoms/Badge';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { Purchase } from '@/src/types/finance';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export default function PurchasesScreen() {
-	const { theme, r } = useThemeTokens();
+	const { theme, c, r } = useThemeTokens();
 	const { t, formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
 	const { purchases, loading, fetchPurchases } = useFinanceStore(
@@ -106,7 +106,7 @@ export default function PurchasesScreen() {
 						<View style={styles.header}>
 							<View style={styles.supplierInfo}>
 								<User size={16} color={theme.colors.primary} />
-								<ThemedText weight="bold" style={{ fontSize: 16 }}>
+								<ThemedText variant="body" weight="bold">
 									{p.supplier_name || t('supplier.title')}
 								</ThemedText>
 							</View>
@@ -125,11 +125,11 @@ export default function PurchasesScreen() {
 							</View>
 						</View>
 
-						<View style={styles.footer}>
+						<View style={[styles.footer, { borderTopColor: c.border }]}>
 							<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
 								{t('invoice.total')}
 							</ThemedText>
-							<ThemedText weight="bold" style={{ fontSize: 18 }}>
+							<ThemedText variant="h3" weight="bold">
 								{formatCurrency(p.grand_total)}
 							</ThemedText>
 						</View>
@@ -141,7 +141,11 @@ export default function PurchasesScreen() {
 			<Pressable
 				style={[
 					styles.fab,
-					{ backgroundColor: theme.colors.primary, borderRadius: r.full },
+					{
+						backgroundColor: theme.colors.primary,
+						borderRadius: r.full,
+						...(theme.shadows.lg as object),
+					},
 				]}
 				onPress={() => router.push('/(app)/finance/purchases/create' as Href)}
 				accessibilityLabel="New purchase bill"
@@ -153,40 +157,35 @@ export default function PurchasesScreen() {
 }
 
 const styles = StyleSheet.create({
-	scrollContent: { padding: 16 },
-	purchaseCard: { marginBottom: 16 },
-	summaryCard: { marginHorizontal: 16, marginTop: 12 },
+	scrollContent: { padding: SPACING_PX.lg },
+	purchaseCard: { marginBottom: SPACING_PX.lg },
+	summaryCard: { marginHorizontal: SPACING_PX.lg, marginTop: SPACING_PX.md },
 	summaryRow: { flexDirection: 'row', justifyContent: 'space-between' },
 	summaryItem: { alignItems: 'center', flex: 1 },
 	fab: {
 		position: 'absolute',
-		bottom: 32,
-		right: 24,
-		width: 56,
-		height: 56,
+		bottom: FAB_OFFSET_BOTTOM + SPACING_PX.md,
+		right: FAB_OFFSET_RIGHT + SPACING_PX.xs,
+		width: SIZE_FAB,
+		height: SIZE_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 6,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 3 },
-		shadowOpacity: OPACITY_TINT_MEDIUM,
-		shadowRadius: 4,
+		borderRadius: RADIUS_FAB,
 	},
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: 12,
+		marginBottom: SPACING_PX.md,
 	},
-	supplierInfo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-	details: { marginBottom: 12 },
-	detailItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+	supplierInfo: { flexDirection: 'row', alignItems: 'center', gap: SPACING_PX.sm },
+	details: { marginBottom: SPACING_PX.md },
+	detailItem: { flexDirection: 'row', alignItems: 'center', gap: SPACING_PX.xs },
 	footer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		borderTopWidth: 1,
-		borderTopColor: palette.grayF0,
-		paddingTop: 12,
+		paddingTop: SPACING_PX.md,
 	},
 });

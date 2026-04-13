@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { palette } from '@/src/theme/palette';
 import {
 	AMOUNT_SHORT_FORMAT_ONE_CRORE,
 	AMOUNT_SHORT_FORMAT_ONE_LAKH,
 	AMOUNT_SHORT_FORMAT_ONE_THOUSAND,
 } from '@/constants/money';
 import { SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const RECEIPT_BOTTOM_PADDING = SIZE_LANGUAGE_FLAG;
 const ID_TAIL_DIGITS = 6;
@@ -210,7 +210,10 @@ export default function PaymentReceiptScreen() {
 						>
 							Your Business
 						</ThemedText>
-						<ThemedText variant="h2" style={[styles.centered, { marginTop: 4 }]}>
+						<ThemedText
+							variant="h2"
+							style={[styles.centered, { marginTop: SPACING_PX.xs }]}
+						>
 							PAYMENT RECEIPT
 						</ThemedText>
 					</View>
@@ -242,7 +245,7 @@ export default function PaymentReceiptScreen() {
 						<ThemedText variant="caption" color={c.onSurfaceVariant}>
 							{partyLabel}
 						</ThemedText>
-						<ThemedText variant="h3" style={{ marginTop: 2 }}>
+						<ThemedText variant="h3" style={{ marginTop: SPACING_PX.xxs }}>
 							{partyName}
 						</ThemedText>
 					</View>
@@ -269,21 +272,30 @@ export default function PaymentReceiptScreen() {
 						<ThemedText
 							variant="display"
 							color={c.primary}
-							style={[styles.centered, { marginTop: 4 }]}
+							style={[styles.centered, { marginTop: SPACING_PX.xs }]}
 						>
 							{formatCurrency(payment.amount)}
 						</ThemedText>
 						<ThemedText
 							variant="caption"
 							color={c.onSurfaceVariant}
-							style={[styles.centered, { marginTop: 6, fontStyle: 'italic' }]}
+							style={[
+								styles.centered,
+								{ marginTop: SPACING_PX.xs + SPACING_PX.xxs, fontStyle: 'italic' },
+							]}
 						>
 							{amountWords}
 						</ThemedText>
 					</View>
 
 					{/* Payment mode */}
-					<View style={{ paddingHorizontal: s.md, paddingBottom: s.sm, gap: 6 }}>
+					<View
+						style={{
+							paddingHorizontal: s.md,
+							paddingBottom: s.sm,
+							gap: SPACING_PX.xs + SPACING_PX.xxs,
+						}}
+					>
 						<View style={styles.metaRow}>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
 								Payment Mode
@@ -311,7 +323,7 @@ export default function PaymentReceiptScreen() {
 						<ThemedText
 							variant="bodyBold"
 							color={c.success}
-							style={{ marginTop: s.xs ?? 4 }}
+							style={{ marginTop: s.xs }}
 						>
 							Thank You for your payment!
 						</ThemedText>
@@ -327,16 +339,16 @@ export default function PaymentReceiptScreen() {
 					<Pressable
 						style={[
 							styles.whatsappBtn,
-							{ backgroundColor: palette.whatsapp, borderRadius: r.md },
+							{ backgroundColor: c.success, borderRadius: r.md },
 						]}
 						onPress={handleShareWhatsApp}
 						accessibilityLabel="Share on WhatsApp"
 					>
-						<MessageCircle size={20} color={palette.white} />
+						<MessageCircle size={20} color={c.onPrimary} />
 						<ThemedText
 							variant="bodyBold"
-							color={palette.white}
-							style={{ marginLeft: 8 }}
+							color={c.onPrimary}
+							style={{ marginLeft: SPACING_PX.sm }}
 						>
 							Share on WhatsApp
 						</ThemedText>
@@ -367,7 +379,7 @@ const styles = StyleSheet.create({
 	emptyState: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 20,
+		paddingVertical: SPACING_PX.xl - SPACING_PX.xxs,
 	},
 	textCenter: { textAlign: 'center' },
 	centered: { textAlign: 'center' as const },
@@ -377,19 +389,18 @@ const styles = StyleSheet.create({
 	},
 	cutLine: {
 		borderWidth: 0,
-		borderTopWidth: 2,
+		borderTopWidth: SPACING_PX.xxs,
 		borderStyle: 'dashed',
-		marginHorizontal: 0,
 	},
 	header: {
-		paddingTop: 20,
-		paddingHorizontal: 16,
-		paddingBottom: 8,
+		paddingTop: SPACING_PX.xl - SPACING_PX.xxs,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingBottom: SPACING_PX.sm,
 		alignItems: 'center',
 	},
 	metaGrid: {
-		paddingHorizontal: 16,
-		gap: 6,
+		paddingHorizontal: SPACING_PX.lg,
+		gap: SPACING_PX.xs + SPACING_PX.xxs,
 	},
 	metaRow: {
 		flexDirection: 'row',
@@ -397,12 +408,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	amountBlock: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		alignItems: 'center',
 	},
 	footer: {
 		alignItems: 'center',
-		paddingTop: 8,
+		paddingTop: SPACING_PX.sm,
 	},
 	whatsappBtn: {
 		flexDirection: 'row',

@@ -21,6 +21,7 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import React, { useEffect, useState } from 'react';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export default function FinanceOverviewScreen() {
 	const { theme, c, r } = useThemeTokens();
@@ -108,7 +109,11 @@ export default function FinanceOverviewScreen() {
 					accessibilityLabel="receive-payment"
 				>
 					<ArrowDownLeft size={20} color={c.onPrimary} />
-					<ThemedText variant="caption" color={c.onPrimary} style={{ marginTop: 4 }}>
+					<ThemedText
+						variant="caption"
+						color={c.onPrimary}
+						style={{ marginTop: SPACING_PX.xs }}
+					>
 						Receive Payment
 					</ThemedText>
 				</Pressable>
@@ -121,15 +126,22 @@ export default function FinanceOverviewScreen() {
 					accessibilityLabel="make-payment"
 				>
 					<ArrowUpRight size={20} color={c.onPrimary} />
-					<ThemedText variant="caption" color={c.onPrimary} style={{ marginTop: 4 }}>
+					<ThemedText
+						variant="caption"
+						color={c.onPrimary}
+						style={{ marginTop: SPACING_PX.xs }}
+					>
 						Make Payment
 					</ThemedText>
 				</Pressable>
 			</View>
 
-			<Divider style={{ marginVertical: 24 }} />
+			<Divider style={{ marginVertical: SPACING_PX.xl }} />
 
-			<ThemedText variant="h3" style={{ marginBottom: 16, paddingLeft: 4 }}>
+			<ThemedText
+				variant="h3"
+				style={{ marginBottom: SPACING_PX.lg, paddingLeft: SPACING_PX.xs }}
+			>
 				{t('finance.reportsAndManagement')}
 			</ThemedText>
 
@@ -193,23 +205,23 @@ export default function FinanceOverviewScreen() {
 
 const styles = StyleSheet.create({
 	scrollContent: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
 	metricsGrid: {
-		gap: 16,
+		gap: SPACING_PX.lg,
 	},
 	quickActions: {
 		flexDirection: 'row',
-		gap: 12,
-		marginTop: 20,
+		gap: SPACING_PX.md,
+		marginTop: SPACING_PX.xl,
 	},
 	quickBtn: {
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 14,
+		paddingVertical: SPACING_PX.md,
 	},
 	section: {
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 });
