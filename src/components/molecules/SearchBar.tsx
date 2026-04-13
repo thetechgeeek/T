@@ -3,6 +3,7 @@ import { View, TextInput, StyleSheet, ViewStyle, Pressable } from 'react-native'
 import { Search, X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface SearchBarProps {
 	value: string;
@@ -81,10 +82,10 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		height: 48,
+		height: SPACING_PX['3xl'],
 	},
 	icon: {
-		marginRight: 8,
+		marginRight: SPACING_PX.sm,
 	},
 	input: {
 		flex: 1,

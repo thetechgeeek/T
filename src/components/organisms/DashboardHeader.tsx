@@ -6,13 +6,23 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
 import { Cloud } from 'lucide-react-native';
-import { OPACITY_PRESSED, OPACITY_HOVER, GLASS_WHITE_CARD, OPACITY_PANEL } from '@/theme/uiMetrics';
+import {
+	OPACITY_PRESSED,
+	OPACITY_HOVER,
+	GLASS_WHITE_CARD,
+	OPACITY_PANEL,
+	SIZE_BUTTON_HEIGHT_SM,
+} from '@/theme/uiMetrics';
 import { withOpacity } from '@/src/utils/color';
 import { FINANCIAL_YEAR_SHORT_YEAR_DIGITS } from '@/utils/dateUtils';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 
 /** Hour boundaries for greeting copy (local day, 24h clock) */
 const HOUR_NOON = 12;
 const HOUR_AFTERNOON_END = 17;
+
+const HEADER_INNER_GAP = SPACING_PX.xs + SPACING_PX.xxs;
+const HEADER_AVATAR_HIT_AREA = SIZE_BUTTON_HEIGHT_SM;
 
 /** Opacity for secondary text (greeting translation) */
 const DASHBOARD_HEADER_FY_BAR_OPACITY = OPACITY_PANEL;
@@ -104,7 +114,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 
 				{/* Centre: greeting + date */}
 				<View style={styles.centreBlock} importantForAccessibility="no">
-					<View style={[layout.row, { alignItems: 'center', gap: 6 }]}>
+					<View style={[layout.row, { alignItems: 'center', gap: HEADER_INNER_GAP }]}>
 						<ThemedText
 							variant="bodyBold"
 							color={c.onPrimary}
@@ -124,7 +134,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 					<ThemedText
 						variant="caption"
 						color={c.onPrimary}
-						style={{ opacity: DASHBOARD_HEADER_DATE_OPACITY, marginTop: 2 }}
+						style={{ opacity: DASHBOARD_HEADER_DATE_OPACITY, marginTop: s.xxs }}
 						importantForAccessibility="no"
 					>
 						{formattedDate}
@@ -147,7 +157,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 			<View
 				style={[
 					styles.fyBar,
-					{ backgroundColor: withOpacity('#000000', DASHBOARD_HEADER_FY_BAR_OPACITY) },
+					{ backgroundColor: withOpacity(c.overlay, DASHBOARD_HEADER_FY_BAR_OPACITY) },
 				]}
 				accessible
 				accessibilityLabel={`Financial year: ${fyLabel}`}
@@ -169,34 +179,34 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 
 const styles = StyleSheet.create({
 	headerWrap: {
-		borderBottomLeftRadius: 24,
-		borderBottomRightRadius: 24,
+		borderBottomLeftRadius: BORDER_RADIUS_PX.xl,
+		borderBottomRightRadius: BORDER_RADIUS_PX.xl,
 		overflow: 'hidden',
 	},
 	avatar: {
-		width: 44,
-		height: 44,
-		borderRadius: 22,
+		width: HEADER_AVATAR_HIT_AREA,
+		height: HEADER_AVATAR_HIT_AREA,
+		borderRadius: BORDER_RADIUS_PX.full,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	avatarText: {
-		lineHeight: 44,
+		lineHeight: HEADER_AVATAR_HIT_AREA,
 		textAlign: 'center',
 	},
 	centreBlock: {
 		flex: 1,
 		alignItems: 'center',
-		paddingHorizontal: 8,
+		paddingHorizontal: SPACING_PX.sm,
 	},
 	syncBtn: {
-		width: 44,
-		height: 44,
+		width: HEADER_AVATAR_HIT_AREA,
+		height: HEADER_AVATAR_HIT_AREA,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	fyBar: {
 		alignItems: 'center',
-		paddingVertical: 5,
+		paddingVertical: SPACING_PX.xs,
 	},
 });

@@ -2,10 +2,8 @@ import {
 	LETTER_SPACING_SECTION,
 	SIZE_ICON_CONTAINER,
 	GLASS_WHITE_MEDIUM,
-	OPACITY_PANEL,
-	OPACITY_TINT_LIGHT,
+	GLASS_WHITE_LIGHT,
 } from '@/theme/uiMetrics';
-import { withOpacity } from '@/src/utils/color';
 import React, { useState } from 'react';
 import { palette } from '@/src/theme/palette';
 import {
@@ -182,7 +180,7 @@ export default function OnlineStoreScreen() {
 							styles.urlRow,
 							{
 								backgroundColor: storeEnabled
-									? withOpacity('#ffffff', OPACITY_PANEL)
+									? GLASS_WHITE_LIGHT
 									: c.surfaceVariant,
 								borderRadius: r.sm,
 							},
@@ -283,8 +281,7 @@ export default function OnlineStoreScreen() {
 					style={[
 						styles.banner,
 						{
-							backgroundColor:
-								c.infoLight ?? withOpacity('#3b82f6', OPACITY_TINT_LIGHT),
+							backgroundColor: c.infoLight,
 							borderRadius: r.md,
 							borderLeftColor: c.info ?? c.primary,
 						},

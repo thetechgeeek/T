@@ -11,7 +11,7 @@ export function CustomerDetailSkeleton() {
 			{/* Outstanding balance card */}
 			<View style={{ padding: s.lg, borderRadius: r.md, alignItems: 'center', gap: s.sm }}>
 				<SkeletonBlock width="50%" height={12} />
-				<SkeletonBlock width="70%" height={36} style={{ marginTop: 4 }} />
+				<SkeletonBlock width="70%" height={36} style={{ marginTop: s.xs }} />
 				{/* stats row */}
 				<View style={{ flexDirection: 'row', width: '100%', marginTop: s.sm, gap: s.md }}>
 					<View style={{ flex: 1, alignItems: 'center', gap: s.xs }}>
@@ -41,7 +41,7 @@ export function CustomerDetailSkeleton() {
 							flexDirection: 'row',
 							alignItems: 'center',
 							gap: s.md,
-							paddingVertical: 12,
+							paddingVertical: s.md,
 						}}
 					>
 						<SkeletonBlock width={18} height={18} borderRadius={r.sm} />
@@ -54,12 +54,12 @@ export function CustomerDetailSkeleton() {
 			<View style={{ gap: s.sm }}>
 				<SkeletonBlock width="40%" height={14} />
 				{Array.from({ length: 3 }).map((_, i) => (
-					<View key={i} style={{ padding: 12, borderRadius: r.md, gap: s.xs }}>
+					<View key={i} style={{ padding: s.md, borderRadius: r.md, gap: s.xs }}>
 						<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 							<SkeletonBlock width="35%" height={14} />
 							<SkeletonBlock width="25%" height={12} />
 						</View>
-						<View style={{ flexDirection: 'row', gap: s.lg, marginTop: 4 }}>
+						<View style={{ flexDirection: 'row', gap: s.lg, marginTop: s.xs }}>
 							<SkeletonBlock width="30%" height={12} />
 							<SkeletonBlock width="30%" height={12} />
 						</View>

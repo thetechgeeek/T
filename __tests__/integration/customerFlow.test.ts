@@ -6,6 +6,7 @@
 import {
 	createTestSupabaseClient,
 	testPrefix,
+	testPhone,
 	cleanupByPrefix,
 	signInTestUser,
 } from '../utils/integrationHelpers';
@@ -28,9 +29,10 @@ describe('INT-003: Customer Flow', () => {
 	let createdCustomerId: string;
 
 	it('creates a new customer and returns the record', async () => {
+		const phone = testPhone();
 		const input = {
 			name: `${prefix}Rajesh Tiles`,
-			phone: '9876543210',
+			phone,
 			city: 'Morbi',
 			state: 'Gujarat',
 			type: 'dealer' as const,
@@ -85,15 +87,17 @@ describe('INT-003: Customer Flow', () => {
 	});
 
 	it('updates customer phone', async () => {
+		const newPhone = testPhone();
 		const updated = await customerRepository.update(createdCustomerId, {
-			phone: '8000000001',
+			phone: newPhone,
 		});
-		expect(updated.phone).toBe('8000000001');
+		expect(updated.phone).toBe(newPhone);
 	});
 
 	it('creates a second customer for list count verification', async () => {
 		const second = await customerRepository.create({
 			name: `${prefix}Second Customer`,
+			phone: testPhone(),
 			type: 'retail' as const,
 		});
 		expect(second.id).toBeTruthy();
@@ -115,6 +119,7 @@ describe('INT-003: Customer Flow', () => {
 	it('removes customer successfully when no invoices linked', async () => {
 		const toDelete = await customerRepository.create({
 			name: `${prefix}To Delete`,
+			phone: testPhone(),
 			type: 'retail' as const,
 		});
 
@@ -123,8 +128,10 @@ describe('INT-003: Customer Flow', () => {
 	});
 
 	it('sets customer_id to null when deleting customer with linked invoice (ON DELETE SET NULL)', async () => {
+		const invoicedPhone = testPhone();
 		const customer = await customerRepository.create({
 			name: `${prefix}Invoiced`,
+			phone: invoicedPhone,
 			type: 'dealer',
 		});
 
@@ -140,7 +147,7 @@ describe('INT-003: Customer Flow', () => {
 				igst_total: 0,
 				discount_total: 0,
 				grand_total: 100,
-				customer_phone: '1234567890',
+				customer_phone: invoicedPhone,
 				is_inter_state: false,
 				payment_status: 'unpaid',
 				amount_paid: 0,

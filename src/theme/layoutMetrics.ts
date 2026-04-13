@@ -1,5 +1,6 @@
 /** Spacing scale (px) — use via `theme.spacing` */
 export const SPACING_PX = {
+	xxs: 2,
 	xs: 4,
 	sm: 8,
 	md: 12,

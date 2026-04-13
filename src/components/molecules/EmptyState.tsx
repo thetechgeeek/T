@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
 import { SIZE_EMPTY_STATE_ICON } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface EmptyStateProps {
 	title: string;
@@ -74,20 +75,20 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 32,
+		padding: SPACING_PX['2xl'],
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	icon: {
-		marginBottom: 16,
+		marginBottom: SPACING_PX.lg,
 	},
 	title: {
 		textAlign: 'center',
-		marginBottom: 8,
+		marginBottom: SPACING_PX.sm,
 	},
 	description: {
 		textAlign: 'center',
-		marginBottom: 24,
+		marginBottom: SPACING_PX.xl,
 	},
 	button: {
 		minWidth: SIZE_EMPTY_STATE_ICON,

@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { palette } from '@/src/theme/palette';
-import { OPACITY_TOAST } from '@/theme/uiMetrics';
-
-/** Bottom offset so Toast floats above the tab bar */
-const TOAST_BOTTOM_OFFSET = 90;
+import { SIZE_TOAST_BOTTOM_OFFSET } from '@/theme/uiMetrics';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export type ToastVariant = 'success' | 'error' | 'info';
 
@@ -58,6 +56,7 @@ export function Toast({
 			testID={testID}
 			style={[
 				styles.container,
+				theme.shadows.md,
 				{
 					backgroundColor: c.surface,
 					borderLeftColor: borderColor,
@@ -67,15 +66,9 @@ export function Toast({
 			accessibilityLiveRegion="polite"
 			accessibilityRole="alert"
 		>
-			<Text
-				style={{
-					color: c.onSurface,
-					fontSize: 15,
-					lineHeight: 22,
-				}}
-			>
+			<ThemedText variant="caption" style={{ color: c.onSurface }}>
 				{message}
-			</Text>
+			</ThemedText>
 		</View>
 	);
 }
@@ -83,16 +76,11 @@ export function Toast({
 const styles = StyleSheet.create({
 	container: {
 		position: 'absolute',
-		bottom: TOAST_BOTTOM_OFFSET,
-		left: 16,
-		right: 16,
-		borderLeftWidth: 4,
-		paddingVertical: 12,
-		paddingHorizontal: 16,
-		elevation: 6,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: OPACITY_TOAST,
-		shadowRadius: 4,
+		bottom: SIZE_TOAST_BOTTOM_OFFSET,
+		left: SPACING_PX.lg,
+		right: SPACING_PX.lg,
+		borderLeftWidth: SPACING_PX.xs,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
 });

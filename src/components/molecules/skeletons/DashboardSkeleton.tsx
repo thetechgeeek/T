@@ -20,7 +20,11 @@ export function DashboardSkeleton() {
 						}}
 					>
 						<SkeletonBlock width={24} height={24} borderRadius={r.sm} />
-						<SkeletonBlock width="80%" height={20} style={{ marginTop: 6 }} />
+						<SkeletonBlock
+							width="80%"
+							height={20}
+							style={{ marginTop: s.xs + s.xxs }}
+						/>
 						<SkeletonBlock width="60%" height={11} />
 					</View>
 				))}

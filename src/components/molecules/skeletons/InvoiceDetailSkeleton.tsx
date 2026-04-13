@@ -11,7 +11,7 @@ export function InvoiceDetailSkeleton() {
 			{/* Billed to block */}
 			<View style={{ gap: s.xs }}>
 				<SkeletonBlock width="25%" height={11} />
-				<SkeletonBlock width="55%" height={20} style={{ marginTop: 4 }} />
+				<SkeletonBlock width="55%" height={20} style={{ marginTop: s.xs }} />
 				<SkeletonBlock width="40%" height={14} />
 			</View>
 

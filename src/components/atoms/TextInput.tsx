@@ -10,6 +10,7 @@ import {
 	type TextStyle,
 } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
 export interface TextInputProps extends RNTextInputProps {
 	label?: string;
@@ -135,15 +136,15 @@ TextInput.displayName = 'TextInput';
 
 const styles = StyleSheet.create({
 	container: {},
-	label: { marginBottom: 6 },
+	label: { marginBottom: SPACING_PX.xs },
 	inputContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		minHeight: 48,
-		paddingHorizontal: 12,
+		minHeight: TOUCH_TARGET_MIN_PX,
+		paddingHorizontal: SPACING_PX.md,
 	},
-	input: { flex: 1, height: '100%', paddingVertical: 10 },
-	leftIcon: { marginRight: 8 },
-	rightIcon: { marginLeft: 8 },
-	helper: { marginTop: 4 },
+	input: { flex: 1, height: '100%', paddingVertical: SPACING_PX.sm },
+	leftIcon: { marginRight: SPACING_PX.sm },
+	rightIcon: { marginLeft: SPACING_PX.sm },
+	helper: { marginTop: SPACING_PX.xs },
 });

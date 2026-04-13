@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_TEXTAREA_MIN_HEIGHT } from '@/theme/uiMetrics';
+import { LINE_HEIGHT } from '@/src/theme/typographyMetrics';
 
 export interface TextAreaFieldProps {
 	label: string;
@@ -39,7 +42,7 @@ export function TextAreaField({
 					fontSize: theme.typography.sizes.sm,
 					color: c.onSurfaceVariant,
 					fontWeight: '600',
-					marginBottom: 4,
+					marginBottom: SPACING_PX.xs,
 				}}
 			>
 				{label}
@@ -70,7 +73,7 @@ export function TextAreaField({
 						{
 							fontSize: theme.typography.sizes.md,
 							color: c.onSurface,
-							maxHeight: maxLines * 24,
+							maxHeight: maxLines * LINE_HEIGHT.body,
 						},
 					]}
 				/>
@@ -95,15 +98,15 @@ export function TextAreaField({
 const styles = StyleSheet.create({
 	container: {
 		borderWidth: 1,
-		minHeight: 80,
+		minHeight: SIZE_TEXTAREA_MIN_HEIGHT,
 	},
 	input: {
-		padding: 12,
+		padding: SPACING_PX.md,
 		textAlignVertical: 'top',
 	},
 	counter: {
 		position: 'absolute',
-		bottom: 6,
-		right: 10,
+		bottom: SPACING_PX.xs,
+		right: SPACING_PX.sm,
 	},
 });

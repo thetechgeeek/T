@@ -3,6 +3,7 @@ import { render } from '@testing-library/react-native';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { StatCard } from '../StatCard';
 import { TrendingUp } from 'lucide-react-native';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);
 
@@ -70,9 +71,9 @@ describe('StatCard', () => {
 
 	it('applies custom style prop', () => {
 		const { toJSON } = renderWithTheme(
-			<StatCard label="L" value="V" style={{ marginTop: 20 }} />,
+			<StatCard label="L" value="V" style={{ marginTop: SPACING_PX.xl }} />,
 		);
 		const json = JSON.stringify(toJSON());
-		expect(json).toContain('20');
+		expect(json).toContain(String(SPACING_PX.xl));
 	});
 });

@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Modal, View, Text, Pressable, ScrollView, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { SIZE_BUTTON_HEIGHT_SM, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
 export interface PickerOption {
 	label: string;
@@ -78,7 +80,7 @@ export function BottomSheetPicker({
 						accessibilityLabel="Close"
 						style={styles.closeBtn}
 					>
-						<Text style={{ fontSize: 20, color: c.onSurfaceVariant }}>×</Text>
+						<Text style={{ fontSize: FONT_SIZE.h2, color: c.onSurfaceVariant }}>×</Text>
 					</Pressable>
 				</View>
 
@@ -124,7 +126,7 @@ export function BottomSheetPicker({
 								{isSelected ? (
 									<Text
 										testID={`check-${option.value}`}
-										style={{ color: c.success, fontSize: 18 }}
+										style={{ color: c.success, fontSize: FONT_SIZE.h3 }}
 									>
 										✓
 									</Text>
@@ -175,27 +177,27 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		maxHeight: '80%',
-		paddingBottom: 24,
+		paddingBottom: SPACING_PX.xl,
 	},
 	header: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 20,
-		paddingTop: 20,
-		paddingBottom: 12,
+		paddingHorizontal: SPACING_PX.xl,
+		paddingTop: SPACING_PX.xl,
+		paddingBottom: SPACING_PX.md,
 	},
 	closeBtn: {
-		width: 32,
-		height: 32,
+		width: SPACING_PX['2xl'],
+		height: SPACING_PX['2xl'],
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	search: {
-		marginHorizontal: 16,
-		marginBottom: 8,
+		marginHorizontal: SPACING_PX.lg,
+		marginBottom: SPACING_PX.sm,
 		borderWidth: 1,
-		paddingHorizontal: 16,
-		height: 44,
+		paddingHorizontal: SPACING_PX.lg,
+		height: SIZE_BUTTON_HEIGHT_SM,
 	},
 	list: {
 		flex: 1,
@@ -203,14 +205,14 @@ const styles = StyleSheet.create({
 	option: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 20,
-		paddingVertical: 14,
+		paddingHorizontal: SPACING_PX.xl,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		minHeight: 48,
+		minHeight: TOUCH_TARGET_MIN_PX,
 	},
 	addNew: {
-		paddingHorizontal: 20,
-		paddingVertical: 16,
+		paddingHorizontal: SPACING_PX.xl,
+		paddingVertical: SPACING_PX.lg,
 		borderTopWidth: 1,
 		minHeight: SIZE_INPUT_HEIGHT,
 		justifyContent: 'center',

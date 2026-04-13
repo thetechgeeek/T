@@ -11,12 +11,9 @@ import { useSyncStore } from '@/src/stores/syncStore';
 import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
 import { useLocale } from '@/src/hooks/useLocale';
 import { MS_HEADER_SYNC_REFRESH } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const MINS_PER_HOUR = 60;
-/** Negative padding offset to tighten the sync-text gap under the title */
-const SYNC_TEXT_MARGIN_TOP = -2;
-/** Back-button hit-area padding (equals the negative margin to align to edge) */
-const BACK_BUTTON_HIT_AREA = 11;
 
 export interface ScreenHeaderProps {
 	title: string | React.ReactNode;
@@ -112,7 +109,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 						<ThemedText
 							variant="caption"
 							color={c.onSurfaceVariant}
-							style={{ marginTop: SYNC_TEXT_MARGIN_TOP }}
+							style={{ marginTop: -s.xxs }}
 						>
 							{lastSyncedText}
 						</ThemedText>
@@ -126,7 +123,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 						<SyncIndicator status={syncStatus} pendingCount={pendingCount} />
 					</View>
 				)}
-				{rightElement && <View style={styles.right}>{rightElement}</View>}
+				{rightElement && <View style={{ marginLeft: s.md }}>{rightElement}</View>}
 			</View>
 		</View>
 	);
@@ -137,10 +134,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	back: {
-		padding: BACK_BUTTON_HIT_AREA,
-		marginLeft: -BACK_BUTTON_HIT_AREA,
-	},
-	right: {
-		marginLeft: 12,
+		padding: SPACING_PX.md,
+		marginLeft: -SPACING_PX.md,
 	},
 });

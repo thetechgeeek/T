@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
 export interface ConfirmationModalProps {
 	visible: boolean;
@@ -69,7 +70,11 @@ export function ConfirmationModal({
 					<Text
 						style={[
 							styles.message,
-							{ color: c.onSurfaceVariant, fontSize: theme.typography.sizes.md },
+							{
+								color: c.onSurfaceVariant,
+								fontSize: theme.typography.sizes.md,
+								lineHeight: theme.typography.variants.body.lineHeight,
+							},
 						]}
 					>
 						{message}
@@ -130,27 +135,26 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		paddingHorizontal: 24,
+		paddingHorizontal: SPACING_PX.xl,
 	},
 	card: {
 		width: '100%',
-		padding: 24,
+		padding: SPACING_PX.xl,
 	},
 	title: {
 		fontWeight: '700',
-		marginBottom: 8,
+		marginBottom: SPACING_PX.sm,
 	},
 	message: {
-		marginBottom: 24,
-		lineHeight: 24,
+		marginBottom: SPACING_PX.xl,
 	},
 	actions: {
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
 	},
 	button: {
-		minHeight: 48,
-		paddingHorizontal: 20,
+		minHeight: TOUCH_TARGET_MIN_PX,
+		paddingHorizontal: SPACING_PX.lg,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

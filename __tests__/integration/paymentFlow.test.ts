@@ -6,6 +6,7 @@
 import {
 	createTestSupabaseClient,
 	testPrefix,
+	testPhone,
 	cleanupByPrefix,
 	signInTestUser,
 } from '../utils/integrationHelpers';
@@ -22,6 +23,7 @@ beforeAll(async () => {
 	// Create a test customer to attach payments to
 	const customer = await customerRepository.create({
 		name: `${prefix}Payment Test Customer`,
+		phone: testPhone(),
 		type: 'retail' as const,
 	});
 	customerId = customer.id;

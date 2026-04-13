@@ -12,6 +12,8 @@ import {
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPRING_PRESS, PRESS_SCALE } from '@/src/theme/animations';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_BUTTON_HEIGHT_SM, SIZE_BUTTON_HEIGHT_LG } from '@/src/theme/uiMetrics';
 
 export interface ButtonProps extends Omit<PressableProps, 'style'> {
 	title?: string;
@@ -69,12 +71,24 @@ export function Button({
 		switch (size) {
 			case 'sm':
 				// 44pt minimum touch target (Apple HIG / Material)
-				return { height: 44, px: 16, fontSize: theme.typography.sizes.sm };
+				return {
+					height: SIZE_BUTTON_HEIGHT_SM,
+					px: SPACING_PX.lg,
+					fontSize: theme.typography.sizes.sm,
+				};
 			case 'lg':
-				return { height: 56, px: 32, fontSize: theme.typography.sizes.lg };
+				return {
+					height: SIZE_BUTTON_HEIGHT_LG,
+					px: SPACING_PX['2xl'],
+					fontSize: theme.typography.sizes.lg,
+				};
 			case 'md':
 			default:
-				return { height: 48, px: 24, fontSize: theme.typography.sizes.md };
+				return {
+					height: theme.touchTarget,
+					px: SPACING_PX.xl,
+					fontSize: theme.typography.sizes.md,
+				};
 		}
 	};
 
@@ -141,8 +155,8 @@ export function Button({
 									color: isDisabled ? c.placeholder : v.text,
 									fontSize: s.fontSize,
 									fontWeight: theme.typography.weights.semibold,
-									marginLeft: leftIcon ? 8 : 0,
-									marginRight: rightIcon ? 8 : 0,
+									marginLeft: leftIcon ? SPACING_PX.sm : 0,
+									marginRight: rightIcon ? SPACING_PX.sm : 0,
 								},
 							]}
 						>

@@ -5,6 +5,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import type { LucideIcon } from 'lucide-react-native';
 
 export interface QuickAction {
@@ -76,5 +77,5 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions }) =
 };
 
 const styles = StyleSheet.create({
-	actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+	actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: SPACING_PX.sm },
 });

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet, type ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { RADIUS_FAB, SIZE_FAB, SIZE_FAB_ICON } from '@/src/theme/uiMetrics';
 
 export interface IconButtonProps {
 	icon: React.ReactNode;
@@ -48,7 +50,7 @@ export function IconButton({
 					style={{
 						fontSize: theme.typography.sizes.xs,
 						color: disabled ? theme.colors.placeholder : theme.colors.onSurface,
-						marginTop: 2,
+						marginTop: theme.spacing.xxs,
 						textAlign: 'center',
 					}}
 				>
@@ -61,8 +63,8 @@ export function IconButton({
 
 const styles = StyleSheet.create({
 	container: {
-		minWidth: 48,
-		minHeight: 48,
+		minWidth: TOUCH_TARGET_MIN_PX,
+		minHeight: TOUCH_TARGET_MIN_PX,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -94,9 +96,9 @@ export function FAB({ onPress, testID, accessibilityLabel, style }: FABProps) {
 			accessibilityLabel={accessibilityLabel ?? 'Add'}
 			style={[
 				{
-					width: 56,
-					height: 56,
-					borderRadius: 28,
+					width: SIZE_FAB,
+					height: SIZE_FAB,
+					borderRadius: RADIUS_FAB,
 					backgroundColor: theme.colors.primary,
 					alignItems: 'center',
 					justifyContent: 'center',
@@ -107,8 +109,8 @@ export function FAB({ onPress, testID, accessibilityLabel, style }: FABProps) {
 			<Text
 				style={{
 					color: theme.colors.onPrimary,
-					fontSize: 28,
-					lineHeight: 32,
+					fontSize: SIZE_FAB_ICON,
+					lineHeight: theme.spacing['2xl'],
 					fontWeight: '400',
 				}}
 			>

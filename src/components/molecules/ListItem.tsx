@@ -4,6 +4,7 @@ import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-na
 import { ChevronRight } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPRING_PRESS, PRESS_SCALE } from '@/src/theme/animations';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface ListItemProps {
 	title: string;
@@ -108,24 +109,24 @@ export const ListItem: React.FC<ListItemProps> = ({
 
 const styles = StyleSheet.create({
 	container: {
-		paddingVertical: 12,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 	},
 	content: {
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	leftIcon: {
-		marginRight: 16,
+		marginRight: SPACING_PX.lg,
 	},
 	textContainer: {
 		flex: 1,
 	},
 	title: {
-		marginBottom: 2,
+		marginBottom: SPACING_PX.xxs,
 	},
 	subtitle: {},
 	chevron: {
-		marginLeft: 8,
+		marginLeft: SPACING_PX.sm,
 	},
 });

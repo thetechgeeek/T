@@ -30,7 +30,7 @@ export function InvoiceListSkeleton() {
 						style={{
 							flexDirection: 'row',
 							justifyContent: 'space-between',
-							marginTop: 4,
+							marginTop: s.xs,
 						}}
 					>
 						<SkeletonBlock width={60} height={20} borderRadius={r.full} />

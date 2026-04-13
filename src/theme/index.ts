@@ -99,6 +99,7 @@ export interface Theme {
 	colors: ThemeColors;
 	typography: ThemeTypography;
 	spacing: {
+		xxs: number; // 2
 		xs: number; // 4
 		sm: number; // 8
 		md: number; // 12

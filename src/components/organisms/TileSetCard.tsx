@@ -5,10 +5,11 @@ import { Package, AlertCircle } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
-import { OPACITY_SKELETON_BASE, SIZE_TILE_IMAGE } from '@/theme/uiMetrics';
+import { OPACITY_SKELETON_BASE, SIZE_THUMBNAIL_MD, SIZE_TILE_IMAGE } from '@/theme/uiMetrics';
 import type { ViewStyle } from 'react-native';
 import type { TileSetGroup, InventoryItem } from '@/src/types/inventory';
 import { getThumbUrl } from '@/src/utils/imageTransform';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface TileSetCardProps {
 	group: TileSetGroup;
@@ -83,7 +84,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 										color: c.error,
 										fontSize: theme.typography.sizes.xs,
 										fontWeight: theme.typography.weights.bold,
-										marginLeft: 4,
+										marginLeft: s.xs,
 									},
 								]}
 							>
@@ -97,7 +98,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 						{
 							color: c.onSurfaceVariant,
 							fontSize: theme.typography.sizes.sm,
-							marginTop: 2,
+							marginTop: s.xxs,
 						},
 					]}
 				>
@@ -195,7 +196,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 												style={[
 													{
 														color: c.primary,
-														fontSize: 10,
+														fontSize: theme.typography.sizes.xs,
 														fontWeight: theme.typography.weights.bold,
 													},
 												]}
@@ -228,7 +229,7 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 											color: c.onSurface,
 											fontSize: theme.typography.sizes.xs,
 											fontWeight: theme.typography.weights.medium,
-											marginTop: 2,
+											marginTop: s.xxs,
 										},
 									]}
 								>
@@ -250,21 +251,25 @@ const styles = StyleSheet.create({
 	lowStockBadge: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 6,
-		paddingVertical: 2,
+		paddingHorizontal: SPACING_PX.xs + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xxs,
 	},
 	variantRow: { flexDirection: 'row', alignItems: 'center' },
 	thumbnail: {
-		width: 56,
-		height: 56,
+		width: SIZE_THUMBNAIL_MD,
+		height: SIZE_THUMBNAIL_MD,
 		alignItems: 'center',
 		justifyContent: 'center',
 		overflow: 'hidden',
-		marginRight: 12,
+		marginRight: SPACING_PX.md,
 	},
 	image: { width: '100%', height: '100%' },
 	variantInfo: { flex: 1, justifyContent: 'center' },
-	metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
-	catBadge: { paddingHorizontal: 6, paddingVertical: 2, marginLeft: 8 },
-	stockCol: { alignItems: 'flex-end', justifyContent: 'center', marginLeft: 12 },
+	metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: SPACING_PX.xs },
+	catBadge: {
+		paddingHorizontal: SPACING_PX.xs + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xxs,
+		marginLeft: SPACING_PX.sm,
+	},
+	stockCol: { alignItems: 'flex-end', justifyContent: 'center', marginLeft: SPACING_PX.md },
 });

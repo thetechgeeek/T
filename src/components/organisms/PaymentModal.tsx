@@ -3,7 +3,13 @@ import { Alert, Modal, View, StyleSheet, ScrollView, Platform } from 'react-nati
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
-import { OVERLAY_COLOR_STRONG, OPACITY_SEPARATOR } from '@/src/theme/uiMetrics';
+import {
+	OVERLAY_COLOR_STRONG,
+	OPACITY_SEPARATOR,
+	SIZE_MODAL_HANDLE_HEIGHT,
+	SIZE_MODAL_HANDLE_WIDTH,
+} from '@/src/theme/uiMetrics';
+import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/theme/layoutMetrics';
 import { withOpacity } from '@/src/utils/color';
 import { X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -98,13 +104,23 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 						styles.content,
 						{
 							backgroundColor: theme.colors.background,
-							paddingBottom: Math.max(insets.bottom, 16),
+							paddingBottom: Math.max(insets.bottom, theme.spacing.lg),
 						},
 					]}
 					accessibilityViewIsModal={true}
 					importantForAccessibility="yes"
 				>
-					<View style={styles.handle} />
+					<View
+						style={[
+							styles.handle,
+							{
+								backgroundColor: withOpacity(
+									theme.colors.onSurfaceVariant,
+									OPACITY_SEPARATOR,
+								),
+							},
+						]}
+					/>
 
 					<View style={styles.header}>
 						<ThemedText variant="h2">{t('invoice.recordPayment')}</ThemedText>
@@ -126,7 +142,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 						<ThemedText
 							variant="body"
 							color={theme.colors.onSurfaceVariant}
-							style={{ marginBottom: 20 }}
+							style={{ marginBottom: theme.spacing.xl }}
 						>
 							{invoiceNumber
 								? t('invoice.invoiceNumber') + `: ${invoiceNumber}`
@@ -149,8 +165,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 							color={theme.colors.onSurfaceVariant}
 							importantForAccessibility="no"
 							style={{
-								marginTop: 16,
-								marginBottom: 8,
+								marginTop: theme.spacing.lg,
+								marginBottom: theme.spacing.sm,
 								textTransform: 'uppercase',
 							}}
 						>
@@ -207,40 +223,39 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-end',
 	},
 	handle: {
-		width: 40,
-		height: 4,
-		borderRadius: 2,
-		backgroundColor: withOpacity('#808080', OPACITY_SEPARATOR),
+		width: SIZE_MODAL_HANDLE_WIDTH,
+		height: SIZE_MODAL_HANDLE_HEIGHT,
+		borderRadius: BORDER_RADIUS_PX.xs,
 		alignSelf: 'center',
-		marginBottom: 12,
+		marginBottom: SPACING_PX.md,
 	},
 	content: {
-		borderTopLeftRadius: 20,
-		borderTopRightRadius: 20,
-		paddingTop: 12,
-		paddingHorizontal: 20,
+		borderTopLeftRadius: BORDER_RADIUS_PX.xl,
+		borderTopRightRadius: BORDER_RADIUS_PX.xl,
+		paddingTop: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.xl,
 		maxHeight: '90%',
 	},
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: 16,
+		marginBottom: SPACING_PX.lg,
 	},
 	scroll: {
-		paddingBottom: 8,
+		paddingBottom: SPACING_PX.sm,
 	},
 	modeGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
-		marginBottom: 20,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.xl,
 	},
 	modeButton: {
 		flex: 1,
 		minWidth: '45%',
 	},
 	saveButton: {
-		marginTop: 12,
+		marginTop: SPACING_PX.md,
 	},
 });

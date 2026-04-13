@@ -5,6 +5,7 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { EmptyState } from '../molecules/EmptyState';
 import type { AppError } from '@/src/errors';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface QueryBoundaryProps {
 	loading: boolean;
@@ -32,8 +33,12 @@ export function QueryBoundary({
 		return (
 			loadingComponent ?? (
 				<View style={styles.loadingContainer}>
-					<SkeletonBlock height={14} style={{ marginBottom: 10 }} />
-					<SkeletonBlock width="75%" height={14} style={{ marginBottom: 10 }} />
+					<SkeletonBlock height={14} style={{ marginBottom: SPACING_PX.sm }} />
+					<SkeletonBlock
+						width="75%"
+						height={14}
+						style={{ marginBottom: SPACING_PX.sm }}
+					/>
 					<SkeletonBlock width="50%" height={14} />
 				</View>
 			)
@@ -67,8 +72,8 @@ export function QueryBoundary({
 }
 
 const styles = StyleSheet.create({
-	center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-	loadingContainer: { flex: 1, padding: 24 },
-	errorText: { textAlign: 'center', marginBottom: 12 },
-	retryButton: { paddingHorizontal: 16, paddingVertical: 8 },
+	center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: SPACING_PX.xl },
+	loadingContainer: { flex: 1, padding: SPACING_PX.xl },
+	errorText: { textAlign: 'center', marginBottom: SPACING_PX.md },
+	retryButton: { paddingHorizontal: SPACING_PX.lg, paddingVertical: SPACING_PX.sm },
 });

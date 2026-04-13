@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const SWIPE_ACTION_WIDTH = 72;
 
 export interface SwipeableRowProps {
 	children: React.ReactNode;
@@ -92,13 +95,13 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	action: {
-		width: 72,
+		width: SWIPE_ACTION_WIDTH,
 		minHeight: 48,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	actionText: {
-		fontSize: 13,
+		fontSize: FONT_SIZE.label,
 		fontWeight: '600',
 	},
 });

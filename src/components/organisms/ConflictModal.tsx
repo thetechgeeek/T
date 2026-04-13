@@ -6,9 +6,10 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
-import { palette } from '@/src/theme/palette';
 import { FLEX_AMT_WIDE, OVERLAY_COLOR_STRONG } from '@/theme/uiMetrics';
-import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/theme/layoutMetrics';
+
+const CONFLICT_ICON_SIZE = 20;
 
 export interface ConflictField {
 	label: string;
@@ -37,16 +38,22 @@ export function ConflictModal({
 	fields,
 	title,
 }: ConflictModalProps) {
-	const { c, s, r } = useThemeTokens();
+	const { c, s, r, shadows } = useThemeTokens();
 	const { t } = useLocale();
 
 	return (
 		<Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
 			<View style={[styles.overlay, { backgroundColor: OVERLAY_COLOR_STRONG }]}>
-				<View style={[styles.content, { backgroundColor: c.surface, borderRadius: r.lg }]}>
+				<View
+					style={[
+						styles.content,
+						shadows.lg,
+						{ backgroundColor: c.surface, borderRadius: r.lg },
+					]}
+				>
 					<View style={[layout.row, { marginBottom: s.md }]}>
 						<AlertTriangle size={24} color={c.warning} />
-						<ThemedText variant="h3" style={{ marginLeft: 12, flex: 1 }}>
+						<ThemedText variant="h3" style={{ marginLeft: s.md, flex: 1 }}>
 							{title || t('sync.conflictTitle') || 'Data Conflict Detected'}
 						</ThemedText>
 					</View>
@@ -61,7 +68,12 @@ export function ConflictModal({
 					</ThemedText>
 
 					<ScrollView style={{ maxHeight: 300, marginBottom: s.lg }}>
-						<View style={[layout.row, { marginBottom: s.sm, paddingHorizontal: 4 }]}>
+						<View
+							style={[
+								layout.row,
+								{ marginBottom: s.sm, paddingHorizontal: SPACING_PX.xs },
+							]}
+						>
 							<ThemedText variant="caption" weight="bold" style={{ flex: 1 }}>
 								{t('sync.field') || 'Field'}
 							</ThemedText>
@@ -72,7 +84,7 @@ export function ConflictModal({
 							>
 								{t('sync.yourVersion') || 'Your Version'}
 							</ThemedText>
-							<View style={{ width: 20 }} />
+							<View style={{ width: CONFLICT_ICON_SIZE }} />
 							<ThemedText
 								variant="caption"
 								weight="bold"
@@ -90,7 +102,7 @@ export function ConflictModal({
 									{
 										borderTopWidth: 1,
 										borderTopColor: c.border,
-										paddingVertical: 8,
+										paddingVertical: SPACING_PX.sm,
 									},
 								]}
 							>
@@ -138,7 +150,7 @@ export function ConflictModal({
 							onPress={onUseServer}
 							variant="outline"
 						/>
-						<TouchableOpacity onPress={onCancel} style={{ padding: 8 }}>
+						<TouchableOpacity onPress={onCancel} style={{ padding: SPACING_PX.sm }}>
 							<ThemedText variant="body" align="center" color={c.onSurfaceVariant}>
 								{t('common.cancel')}
 							</ThemedText>
@@ -154,23 +166,19 @@ const styles = StyleSheet.create({
 	overlay: {
 		flex: 1,
 		justifyContent: 'center',
-		padding: 20,
+		padding: SPACING_PX.xl,
 	},
 	content: {
-		padding: 24,
-		elevation: 5,
-		shadowColor: palette.shadow,
-		shadowOffset: { width: 0, height: 2 },
-		...FAB_SHADOW,
+		padding: SPACING_PX.xl,
 	},
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	valueBox: {
-		padding: 4,
-		borderRadius: 4,
-		minHeight: 24,
+		padding: SPACING_PX.xs,
+		borderRadius: BORDER_RADIUS_PX.sm,
+		minHeight: CONFLICT_ICON_SIZE,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

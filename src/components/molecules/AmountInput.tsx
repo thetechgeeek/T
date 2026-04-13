@@ -3,6 +3,8 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import { INDIAN_GROUPING_TAIL_DIGIT_COUNT } from '@/constants/money';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 /**
  * Format a number with Indian grouping: 100000 → "1,00,000"
@@ -81,7 +83,7 @@ export function AmountInput({
 					style={{
 						fontSize: theme.typography.sizes.sm,
 						color: c.onSurfaceVariant,
-						marginBottom: 4,
+						marginBottom: SPACING_PX.xs,
 						fontWeight: '600',
 					}}
 				>
@@ -101,10 +103,10 @@ export function AmountInput({
 			>
 				<Text
 					style={{
-						fontSize: 20,
+						fontSize: FONT_SIZE.amount,
 						fontWeight: '700',
 						color: c.primary,
-						paddingLeft: 12,
+						paddingLeft: SPACING_PX.md,
 						alignSelf: 'center',
 					}}
 				>
@@ -121,7 +123,7 @@ export function AmountInput({
 					style={[
 						styles.input,
 						{
-							fontSize: 20,
+							fontSize: FONT_SIZE.amount,
 							fontWeight: '700',
 							color: c.primary,
 						},
@@ -133,7 +135,7 @@ export function AmountInput({
 					style={{
 						fontSize: theme.typography.sizes.xs,
 						color: c.error,
-						marginTop: 4,
+						marginTop: SPACING_PX.xs,
 					}}
 				>
 					{errorMsg}
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		flex: 1,
-		paddingHorizontal: 8,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.md,
 	},
 });

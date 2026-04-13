@@ -1,6 +1,9 @@
 import React from 'react';
 import { Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
 
 export interface FilterOption {
 	label: string;
@@ -61,7 +64,7 @@ export function FilterBar({
 					>
 						<Text
 							style={{
-								fontSize: 13,
+								fontSize: FONT_SIZE.label,
 								color: isActive ? c.onPrimary : c.primary,
 								fontWeight: isActive ? '600' : '400',
 							}}
@@ -86,7 +89,9 @@ export function FilterBar({
 						},
 					]}
 				>
-					<Text style={{ fontSize: 13, color: c.error, fontWeight: '600' }}>Clear</Text>
+					<Text style={{ fontSize: FONT_SIZE.label, color: c.error, fontWeight: '600' }}>
+						Clear
+					</Text>
 				</Pressable>
 			) : null}
 		</ScrollView>
@@ -97,13 +102,13 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		height: 36,
-		paddingHorizontal: 12,
+		height: SIZE_CHIP_HEIGHT,
+		paddingHorizontal: SPACING_PX.md,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',

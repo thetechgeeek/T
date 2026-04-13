@@ -101,7 +101,7 @@ export const RecentInvoicesList: React.FC<RecentInvoicesListProps> = ({ invoices
 									<ThemedText weight="bold" color={c.primary}>
 										{formatCurrency(inv.grand_total)}
 									</ThemedText>
-									<View style={{ marginTop: 4 }}>
+									<View style={{ marginTop: s.xs }}>
 										<InvoiceStatusBadge
 											status={inv.payment_status as InvoiceStatus}
 											size="sm"

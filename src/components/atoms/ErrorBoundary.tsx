@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useLocale } from '@/src/hooks/useLocale';
 import { palette } from '@/src/theme/palette';
+import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 interface Props {
 	children: React.ReactNode;
@@ -18,9 +20,16 @@ function FallbackUI({ error, onReset }: { error: Error | null; onReset: () => vo
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>{t('error.boundaryTitle')}</Text>
-			<Text style={styles.message}>{error?.message || t('common.unexpectedError')}</Text>
-			<TouchableOpacity onPress={onReset} style={styles.button}>
-				<Text style={styles.buttonText}>{t('error.boundaryRetry')}</Text>
+			<Text style={[styles.message, { color: palette.errorBoundaryText }]}>
+				{error?.message || t('common.unexpectedError')}
+			</Text>
+			<TouchableOpacity
+				onPress={onReset}
+				style={[styles.button, { backgroundColor: palette.errorBoundaryButton }]}
+			>
+				<Text style={[styles.buttonText, { color: palette.white }]}>
+					{t('error.boundaryRetry')}
+				</Text>
 			</TouchableOpacity>
 		</View>
 	);
@@ -55,19 +64,22 @@ export class ErrorBoundary extends React.Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-	title: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
+	container: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: SPACING_PX['2xl'],
+	},
+	title: { fontSize: FONT_SIZE.h3, fontWeight: '700', marginBottom: SPACING_PX.sm },
 	message: {
-		fontSize: 14,
-		color: palette.errorBoundaryText,
+		fontSize: FONT_SIZE.caption,
 		textAlign: 'center',
-		marginBottom: 24,
+		marginBottom: SPACING_PX['2xl'],
 	},
 	button: {
-		backgroundColor: palette.errorBoundaryButton,
-		paddingHorizontal: 24,
-		paddingVertical: 12,
-		borderRadius: 8,
+		paddingHorizontal: SPACING_PX['2xl'],
+		paddingVertical: SPACING_PX.md,
+		borderRadius: BORDER_RADIUS_PX.md,
 	},
-	buttonText: { color: palette.white, fontWeight: '600' },
+	buttonText: { fontWeight: '600' },
 });

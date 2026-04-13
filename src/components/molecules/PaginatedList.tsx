@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SkeletonRow } from '@/src/components/molecules/SkeletonRow';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
 export interface PaginatedListProps<T> {
 	data: T[];
@@ -70,7 +71,7 @@ export function PaginatedList<T>({
 					style={{
 						color: c.error,
 						fontSize: theme.typography.sizes.md,
-						marginBottom: 16,
+						marginBottom: SPACING_PX.lg,
 					}}
 				>
 					Something went wrong. Please try again.
@@ -112,7 +113,7 @@ export function PaginatedList<T>({
 							fontSize: theme.typography.sizes.lg,
 							fontWeight: '700',
 							color: c.onSurface,
-							marginBottom: 8,
+							marginBottom: SPACING_PX.sm,
 							textAlign: 'center',
 						}}
 					>
@@ -136,7 +137,7 @@ export function PaginatedList<T>({
 					<ActivityIndicator
 						testID="load-more-indicator"
 						color={c.primary}
-						style={{ paddingVertical: 16 }}
+						style={{ paddingVertical: SPACING_PX.lg }}
 					/>
 				) : null
 			}
@@ -149,12 +150,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		padding: 24,
+		padding: SPACING_PX.xl,
 	},
 	retryBtn: {
-		paddingHorizontal: 24,
-		paddingVertical: 12,
-		minHeight: 48,
+		paddingHorizontal: SPACING_PX.xl,
+		paddingVertical: SPACING_PX.md,
+		minHeight: TOUCH_TARGET_MIN_PX,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

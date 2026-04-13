@@ -5,6 +5,7 @@
 import {
 	createTestSupabaseClient,
 	testPrefix,
+	testPhone,
 	cleanupByPrefix,
 	signInTestUser,
 } from '../utils/integrationHelpers';
@@ -27,15 +28,17 @@ afterAll(async () => {
 
 describe('Payment Recording Real DB', () => {
 	let customerId: string;
+	let customerPhone: string;
 	let invoiceId: string;
 
 	beforeAll(async () => {
 		// Seed a customer
 		const customer = await customerRepository.create({
 			name: `${prefix}Pay Customer`,
-			phone: '1234567890',
+			phone: testPhone(),
 		});
 		customerId = customer.id;
+		customerPhone = customer.phone;
 
 		// Seed an invoice with all required fields
 		const res = await invoiceRepository.createAtomic(
@@ -49,7 +52,7 @@ describe('Payment Recording Real DB', () => {
 				igst_total: 0,
 				discount_total: 0,
 				grand_total: 1000,
-				customer_phone: '1234567890',
+				customer_phone: customerPhone,
 				is_inter_state: false,
 				payment_status: 'unpaid' as const,
 				amount_paid: 0,
@@ -130,7 +133,7 @@ describe('Payment Recording Real DB', () => {
 				igst_total: 0,
 				discount_total: 0,
 				grand_total: 100,
-				customer_phone: '1234567890',
+				customer_phone: customerPhone,
 				is_inter_state: false,
 				payment_status: 'unpaid',
 				amount_paid: 0,

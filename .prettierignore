@@ -4,3 +4,5 @@ dist
 android
 ios
 supabase/functions
+.claire/worktrees
+lint_results.json

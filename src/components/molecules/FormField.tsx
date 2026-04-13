@@ -4,6 +4,7 @@ import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { TextInput as AtomTextInput } from '@/src/components/atoms/TextInput';
 import { layout } from '@/src/theme/layout';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export interface FormFieldProps extends TextInputProps {
 	label: string;
@@ -38,12 +39,15 @@ export const FormField: React.FC<FormFieldProps> = ({
 	return (
 		<View style={[styles.container, containerStyle]}>
 			{/* Visual label row — hidden from a11y tree; input carries the label */}
-			<View importantForAccessibility="no" style={[layout.row, { marginBottom: 4 }]}>
+			<View
+				importantForAccessibility="no"
+				style={[layout.row, { marginBottom: theme.spacing.xs }]}
+			>
 				<ThemedText variant="label" color={c.onSurfaceVariant}>
 					{label}
 				</ThemedText>
 				{required && (
-					<ThemedText color={c.error} style={{ marginLeft: 2 }}>
+					<ThemedText color={c.error} style={{ marginLeft: theme.spacing.xxs }}>
 						*
 					</ThemedText>
 				)}
@@ -62,7 +66,7 @@ export const FormField: React.FC<FormFieldProps> = ({
 					importantForAccessibility="no"
 					variant="caption"
 					color={error ? c.error : c.onSurfaceVariant}
-					style={{ marginTop: 4 }}
+					style={{ marginTop: theme.spacing.xs }}
 				>
 					{error || helperText}
 				</ThemedText>
@@ -73,6 +77,6 @@ export const FormField: React.FC<FormFieldProps> = ({
 
 const styles = StyleSheet.create({
 	container: {
-		marginBottom: 16,
+		marginBottom: SPACING_PX.lg,
 	},
 });

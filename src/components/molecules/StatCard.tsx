@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import type { LucideIcon } from 'lucide-react-native';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface StatCardProps {
 	label: string;
@@ -60,7 +61,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 						color: c.onSurface,
 						fontSize: theme.typography.sizes['2xl'],
 						fontWeight: theme.typography.weights.bold,
-						marginTop: Icon ? 6 : 0,
+						marginTop: Icon ? s.xs : 0,
 					},
 				]}
 			>
@@ -84,7 +85,10 @@ export const StatCard: React.FC<StatCardProps> = ({
 					<Text
 						style={[
 							styles.trend,
-							{ color: trend.startsWith('+') ? c.success : c.error },
+							{
+								color: trend.startsWith('+') ? c.success : c.error,
+								fontSize: theme.typography.sizes.xs,
+							},
 						]}
 					>
 						{trend}
@@ -108,21 +112,20 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	iconContainer: {
-		marginBottom: 2,
+		marginBottom: SPACING_PX.xxs,
 	},
 	label: {
-		marginTop: 2,
+		marginTop: SPACING_PX.xxs,
 	},
 	value: {},
 	trendRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginTop: 4,
+		marginTop: SPACING_PX.xs,
 	},
 	trend: {
-		fontSize: 10,
 		fontWeight: '700',
-		marginRight: 4,
+		marginRight: SPACING_PX.xs,
 	},
 	trendLabel: {},
 });

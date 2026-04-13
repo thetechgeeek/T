@@ -11,7 +11,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from './ThemedText';
-import { MS_SYNC_POLL, SYNC_BADGE_MAX, SIZE_BADGE_OFFSET } from '@/theme/uiMetrics';
+import { MS_SYNC_POLL, SYNC_BADGE_MAX, SIZE_BADGE_OFFSET, Z_INDEX } from '@/theme/uiMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export type SyncStatus = 'synced' | 'syncing' | 'offline';
 
@@ -94,11 +95,7 @@ export function SyncIndicator({ status, pendingCount = 0 }: SyncIndicatorProps) 
 						},
 					]}
 				>
-					<ThemedText
-						variant="label"
-						weight="bold"
-						style={{ color: c.onPrimary, fontSize: 9 }}
-					>
+					<ThemedText variant="captionSmall" weight="bold" style={{ color: c.onPrimary }}>
 						{pendingCount > SYNC_BADGE_MAX ? `${SYNC_BADGE_MAX}+` : pendingCount}
 					</ThemedText>
 				</View>
@@ -114,19 +111,19 @@ const styles = StyleSheet.create({
 		position: 'relative',
 	},
 	iconContainer: {
-		width: 24,
-		height: 24,
+		width: SPACING_PX.xl,
+		height: SPACING_PX.xl,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	badge: {
 		position: 'absolute',
-		minWidth: 14,
-		height: 14,
-		borderRadius: 7,
+		minWidth: SPACING_PX.lg,
+		height: SPACING_PX.lg,
+		borderRadius: BORDER_RADIUS_PX.full,
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingHorizontal: 2,
-		zIndex: 1,
+		paddingHorizontal: SPACING_PX.xxs,
+		zIndex: Z_INDEX.base,
 	},
 });

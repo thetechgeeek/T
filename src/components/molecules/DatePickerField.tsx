@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 const MONTHS_EN = [
 	'Jan',
@@ -77,7 +79,7 @@ export function DatePickerField({
 					fontSize: theme.typography.sizes.sm,
 					color: c.onSurfaceVariant,
 					fontWeight: '600',
-					marginBottom: 4,
+					marginBottom: SPACING_PX.xs,
 				}}
 			>
 				{label}
@@ -95,7 +97,7 @@ export function DatePickerField({
 							},
 						]}
 					>
-						<Text style={{ color: c.primary, fontSize: 13 }}>Today</Text>
+						<Text style={{ color: c.primary, fontSize: FONT_SIZE.label }}>Today</Text>
 					</Pressable>
 					<Pressable
 						onPress={() => onChange(yesterdayISO())}
@@ -107,7 +109,9 @@ export function DatePickerField({
 							},
 						]}
 					>
-						<Text style={{ color: c.primary, fontSize: 13 }}>Yesterday</Text>
+						<Text style={{ color: c.primary, fontSize: FONT_SIZE.label }}>
+							Yesterday
+						</Text>
 					</Pressable>
 				</View>
 			) : null}
@@ -121,7 +125,7 @@ export function DatePickerField({
 					{
 						borderColor: c.border,
 						borderRadius: theme.borderRadius.md,
-						minHeight: 48,
+						minHeight: TOUCH_TARGET_MIN_PX,
 					},
 				]}
 			>
@@ -130,15 +134,15 @@ export function DatePickerField({
 						flex: 1,
 						fontSize: theme.typography.sizes.md,
 						color: displayValue ? c.onSurface : c.placeholder,
-						paddingHorizontal: 12,
+						paddingHorizontal: SPACING_PX.md,
 					}}
 				>
 					{displayValue || 'DD MMM YYYY'}
 				</Text>
 				<Text
 					style={{
-						paddingRight: 12,
-						fontSize: 18,
+						paddingRight: SPACING_PX.md,
+						fontSize: FONT_SIZE.h3,
 						color: c.onSurfaceVariant,
 					}}
 					accessibilityElementsHidden
@@ -155,14 +159,14 @@ export function DatePickerField({
 const styles = StyleSheet.create({
 	shortcuts: {
 		flexDirection: 'row',
-		gap: 8,
-		marginBottom: 8,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.sm,
 	},
 	chip: {
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		paddingVertical: 4,
-		height: 32,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.xs,
+		height: SPACING_PX['2xl'],
 		justifyContent: 'center',
 	},
 	field: {

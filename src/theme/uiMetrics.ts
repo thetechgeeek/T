@@ -35,8 +35,26 @@ export const SIZE_AVATAR_MD = 60;
 /** Standard touch-input / button height (slightly above the 48 minimum) */
 export const SIZE_INPUT_HEIGHT = 52;
 
+/** Button heights (px) */
+export const SIZE_BUTTON_HEIGHT_SM = 44;
+export const SIZE_BUTTON_HEIGHT_LG = 56;
+
 /** Square icon-container (e.g. quick-action grid cells) */
 export const SIZE_ICON_CONTAINER = 34;
+
+/** Floating Action Button (FAB) */
+export const SIZE_FAB = 56;
+export const SIZE_FAB_ICON = 28;
+export const RADIUS_FAB = 28;
+
+/** Medium thumbnail / square image size */
+export const SIZE_THUMBNAIL_MD = 56;
+
+/** Standard chip / pill control height */
+export const SIZE_CHIP_HEIGHT = 36;
+
+/** Multiline text area minimum height */
+export const SIZE_TEXTAREA_MIN_HEIGHT = 80;
 
 /** Small tile image in TileSetCard */
 export const SIZE_TILE_IMAGE = 112;
@@ -64,6 +82,13 @@ export const SIZE_BADGE_OFFSET = -4;
 
 /** Offline banner slide-in from bottom (negative = above screen) */
 export const SIZE_OFFLINE_BANNER_OFFSET = -44;
+
+/** Bottom offset so Toast floats above the tab bar */
+export const SIZE_TOAST_BOTTOM_OFFSET = 90;
+
+/** Bottom-sheet / modal handle pill dimensions */
+export const SIZE_MODAL_HANDLE_WIDTH = 40;
+export const SIZE_MODAL_HANDLE_HEIGHT = 4;
 
 // ─── Opacities ────────────────────────────────────────────────────────────────
 

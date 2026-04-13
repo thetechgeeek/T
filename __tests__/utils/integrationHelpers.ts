@@ -28,6 +28,18 @@ export function testPrefix(): string {
 	return `it-${Date.now()}-`;
 }
 
+let phoneSeq = 0;
+
+/**
+ * Returns a unique 10-digit phone string for this test process.
+ * Useful because customers.phone is NOT NULL + UNIQUE in the DB.
+ */
+export function testPhone(): string {
+	phoneSeq += 1;
+	const seed = `${Date.now()}${phoneSeq}`;
+	return seed.slice(-10).padStart(10, '0');
+}
+
 /**
  * Delete all rows created during this test run across common tables.
  * Each table is filtered by a name/title/design_name column that starts with the prefix.

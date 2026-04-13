@@ -18,6 +18,7 @@ import {
 
 describe('Theme Tokens (P0.1)', () => {
 	it('should have correct spacing tokens', () => {
+		expect(lightTheme.spacing.xxs).toBe(2);
 		expect(lightTheme.spacing.xs).toBe(4);
 		expect(lightTheme.spacing.sm).toBe(8);
 		expect(lightTheme.spacing.md).toBe(12);

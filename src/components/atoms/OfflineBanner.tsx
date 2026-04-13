@@ -14,6 +14,7 @@ import { ThemedText } from './ThemedText';
 import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
 import { SPRING_PRESS, TIMING_NORMAL } from '@/src/theme/animations';
 import { SIZE_OFFLINE_BANNER_OFFSET } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export function OfflineBanner() {
 	const { isConnected } = useNetworkStatus();
@@ -75,8 +76,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 10,
-		paddingHorizontal: 16,
-		gap: 6,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
+		gap: SPACING_PX.xs,
 	},
 });

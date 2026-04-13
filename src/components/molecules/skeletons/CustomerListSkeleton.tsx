@@ -14,8 +14,8 @@ export function CustomerListSkeleton() {
 					style={{
 						flexDirection: 'row',
 						alignItems: 'center',
-						paddingVertical: 12,
-						paddingHorizontal: 16,
+						paddingVertical: s.md,
+						paddingHorizontal: s.lg,
 						gap: s.md,
 					}}
 				>

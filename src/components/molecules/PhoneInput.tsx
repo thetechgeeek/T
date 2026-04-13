@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const PHONE_DIGITS = 10;
 const PHONE_WITH_COUNTRY_CODE_DIGITS = 12;
@@ -63,7 +64,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 						fontSize: theme.typography.sizes.sm,
 						color: c.onSurfaceVariant,
 						fontWeight: '600',
-						marginBottom: 4,
+						marginBottom: SPACING_PX.xs,
 					}}
 				>
 					{label}
@@ -76,7 +77,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 						borderColor: error ? c.error : c.border,
 						borderRadius: theme.borderRadius.md,
 						borderWidth: error ? 2 : 1,
-						minHeight: 48,
+						minHeight: theme.touchTarget,
 					},
 				]}
 			>
@@ -84,7 +85,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 					style={{
 						fontSize: theme.typography.sizes.md,
 						color: c.onSurface,
-						paddingLeft: 12,
+						paddingLeft: SPACING_PX.md,
 						alignSelf: 'center',
 						fontWeight: '600',
 					}}
@@ -116,7 +117,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 					style={{
 						fontSize: theme.typography.sizes.xs,
 						color: c.error,
-						marginTop: 4,
+						marginTop: SPACING_PX.xs,
 					}}
 				>
 					{error}
@@ -132,13 +133,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	separator: {
-		width: 1,
-		height: 24,
-		marginHorizontal: 8,
+		width: StyleSheet.hairlineWidth,
+		height: SPACING_PX.xl,
+		marginHorizontal: SPACING_PX.sm,
 	},
 	input: {
 		flex: 1,
-		paddingRight: 12,
-		paddingVertical: 12,
+		paddingRight: SPACING_PX.md,
+		paddingVertical: SPACING_PX.md,
 	},
 });
