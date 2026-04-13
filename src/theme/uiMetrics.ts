@@ -10,6 +10,23 @@
  *   MS_*         — duration / interval in milliseconds
  */
 
+// ─── Z-index scale ───────────────────────────────────────────────────────────
+
+export const Z_INDEX = {
+	base: 0,
+	dropdown: 10,
+	sticky: 50,
+	overlay: 100,
+	modal: 200,
+	toast: 300,
+	max: 999,
+} as const;
+
+// ─── FAB positioning ──────────────────────────────────────────────────────────
+
+export const FAB_OFFSET_RIGHT = 20;
+export const FAB_OFFSET_BOTTOM = 20;
+
 // ─── Sizes ────────────────────────────────────────────────────────────────────
 
 /** Standard avatar / list-item icon diameter */
@@ -49,6 +66,36 @@ export const SIZE_BADGE_OFFSET = -4;
 export const SIZE_OFFLINE_BANNER_OFFSET = -44;
 
 // ─── Opacities ────────────────────────────────────────────────────────────────
+
+/** Modal/bottom-sheet overlay darkness (medium) */
+export const OVERLAY_COLOR_MEDIUM = 'rgba(0,0,0,0.4)';
+
+/** Modal/bottom-sheet overlay darkness (strong) */
+export const OVERLAY_COLOR_STRONG = 'rgba(0,0,0,0.5)';
+
+/** Scan-screen darkness overlay */
+export const OVERLAY_COLOR_DARK = 'rgba(0,0,0,0.6)';
+
+/** Subtle divider / border tint */
+export const OVERLAY_COLOR_DIVIDER = 'rgba(0,0,0,0.1)';
+
+/** Very subtle separator / skeleton border */
+export const OVERLAY_COLOR_SEPARATOR = 'rgba(0,0,0,0.05)';
+
+/** Glass white tint on coloured/image surfaces (light) */
+export const GLASS_WHITE_LIGHT = 'rgba(255,255,255,0.2)';
+
+/** Glass white tint on coloured surfaces (medium) */
+export const GLASS_WHITE_MEDIUM = 'rgba(255,255,255,0.4)';
+
+/** Light frosted overlay (e.g. search bar on image) */
+export const GLASS_WHITE_STRONG = 'rgba(255,255,255,0.7)';
+
+/** White text / icon on coloured surface (muted) */
+export const GLASS_WHITE_TEXT = 'rgba(255,255,255,0.8)';
+
+/** Near-opaque white card on coloured surface */
+export const GLASS_WHITE_CARD = 'rgba(255,255,255,0.95)';
 
 /** Lightly tinted card / icon background (e.g. category chip) */
 export const OPACITY_TINT_LIGHT = 0.12;

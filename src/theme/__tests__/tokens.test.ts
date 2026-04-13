@@ -1,4 +1,20 @@
 import { lightTheme } from '../colors';
+import { layout } from '../layout';
+import {
+	Z_INDEX,
+	FAB_OFFSET_RIGHT,
+	FAB_OFFSET_BOTTOM,
+	OVERLAY_COLOR_MEDIUM,
+	OVERLAY_COLOR_STRONG,
+	OVERLAY_COLOR_DARK,
+	OVERLAY_COLOR_DIVIDER,
+	OVERLAY_COLOR_SEPARATOR,
+	GLASS_WHITE_LIGHT,
+	GLASS_WHITE_MEDIUM,
+	GLASS_WHITE_STRONG,
+	GLASS_WHITE_TEXT,
+	GLASS_WHITE_CARD,
+} from '../uiMetrics';
 
 describe('Theme Tokens (P0.1)', () => {
 	it('should have correct spacing tokens', () => {
@@ -29,5 +45,78 @@ describe('Theme Tokens (P0.1)', () => {
 		expect(lightTheme.animation.springDamping).toBe(20);
 		expect(lightTheme.animation.springStiffness).toBe(200);
 		expect(lightTheme.animation.durationNormal).toBe(200);
+	});
+});
+
+describe('Layout gap helpers (Phase 0)', () => {
+	it('covers full spacing scale including new entries', () => {
+		expect(layout.gap2).toEqual({ gap: 2 });
+		expect(layout.gap4).toEqual({ gap: 4 });
+		expect(layout.gap8).toEqual({ gap: 8 });
+		expect(layout.gap12).toEqual({ gap: 12 });
+		expect(layout.gap16).toEqual({ gap: 16 });
+		expect(layout.gap24).toEqual({ gap: 24 });
+		expect(layout.gap32).toEqual({ gap: 32 });
+		expect(layout.gap48).toEqual({ gap: 48 });
+	});
+});
+
+describe('Z_INDEX scale (Phase 0)', () => {
+	it('defines all z-index levels in ascending order', () => {
+		expect(Z_INDEX.base).toBe(0);
+		expect(Z_INDEX.dropdown).toBe(10);
+		expect(Z_INDEX.sticky).toBe(50);
+		expect(Z_INDEX.overlay).toBe(100);
+		expect(Z_INDEX.modal).toBe(200);
+		expect(Z_INDEX.toast).toBe(300);
+		expect(Z_INDEX.max).toBe(999);
+	});
+
+	it('values are strictly ascending', () => {
+		const values = Object.values(Z_INDEX) as number[];
+		for (let i = 1; i < values.length; i++) {
+			expect(values[i]).toBeGreaterThan(values[i - 1]);
+		}
+	});
+});
+
+describe('FAB positioning constants (Phase 0)', () => {
+	it('exports numeric offsets', () => {
+		expect(typeof FAB_OFFSET_RIGHT).toBe('number');
+		expect(typeof FAB_OFFSET_BOTTOM).toBe('number');
+		expect(FAB_OFFSET_RIGHT).toBe(20);
+		expect(FAB_OFFSET_BOTTOM).toBe(20);
+	});
+});
+
+describe('Overlay / glass color tokens (Phase 0)', () => {
+	it('overlay tokens are valid rgba strings', () => {
+		const rgbaPattern = /^rgba\(\d+,\d+,\d+,[0-9.]+\)$/;
+		expect(OVERLAY_COLOR_MEDIUM).toMatch(rgbaPattern);
+		expect(OVERLAY_COLOR_STRONG).toMatch(rgbaPattern);
+		expect(OVERLAY_COLOR_DARK).toMatch(rgbaPattern);
+		expect(OVERLAY_COLOR_DIVIDER).toMatch(rgbaPattern);
+		expect(OVERLAY_COLOR_SEPARATOR).toMatch(rgbaPattern);
+		expect(GLASS_WHITE_LIGHT).toMatch(rgbaPattern);
+		expect(GLASS_WHITE_MEDIUM).toMatch(rgbaPattern);
+		expect(GLASS_WHITE_STRONG).toMatch(rgbaPattern);
+		expect(GLASS_WHITE_TEXT).toMatch(rgbaPattern);
+		expect(GLASS_WHITE_CARD).toMatch(rgbaPattern);
+	});
+
+	it('overlay alphas are in ascending darkness order', () => {
+		const alpha = (s: string) => parseFloat(s.split(',')[3]);
+		expect(alpha(OVERLAY_COLOR_SEPARATOR)).toBeLessThan(alpha(OVERLAY_COLOR_DIVIDER));
+		expect(alpha(OVERLAY_COLOR_DIVIDER)).toBeLessThan(alpha(OVERLAY_COLOR_MEDIUM));
+		expect(alpha(OVERLAY_COLOR_MEDIUM)).toBeLessThan(alpha(OVERLAY_COLOR_STRONG));
+		expect(alpha(OVERLAY_COLOR_STRONG)).toBeLessThan(alpha(OVERLAY_COLOR_DARK));
+	});
+
+	it('glass white alphas are in ascending opacity order', () => {
+		const alpha = (s: string) => parseFloat(s.split(',')[3]);
+		expect(alpha(GLASS_WHITE_LIGHT)).toBeLessThan(alpha(GLASS_WHITE_MEDIUM));
+		expect(alpha(GLASS_WHITE_MEDIUM)).toBeLessThan(alpha(GLASS_WHITE_STRONG));
+		expect(alpha(GLASS_WHITE_STRONG)).toBeLessThan(alpha(GLASS_WHITE_TEXT));
+		expect(alpha(GLASS_WHITE_TEXT)).toBeLessThan(alpha(GLASS_WHITE_CARD));
 	});
 });

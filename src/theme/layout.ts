@@ -13,8 +13,12 @@ export const layout = StyleSheet.create({
 	center: { alignItems: 'center', justifyContent: 'center' },
 	flex: { flex: 1 },
 	absoluteFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
+	gap2: { gap: 2 },
 	gap4: { gap: 4 },
 	gap8: { gap: 8 },
 	gap12: { gap: 12 },
 	gap16: { gap: 16 },
+	gap24: { gap: 24 },
+	gap32: { gap: 32 },
+	gap48: { gap: 48 },
 });
