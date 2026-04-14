@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
 	View,
+	FlatList,
 	ScrollView,
 	StyleSheet,
 	Alert,
@@ -120,6 +121,8 @@ export default function PurchaseCreateScreen() {
 		0,
 	);
 	const grandTotal = subtotal + gstTotal;
+	const supplierMatches = filteredSuppliers();
+	const itemMatches = filteredItems();
 
 	const addLineItem = () => {
 		if (!selectedItem) return;
@@ -230,36 +233,36 @@ export default function PurchaseCreateScreen() {
 						onChangeText={setSupplierSearch}
 						accessibilityLabel="supplier-search"
 					/>
-					{filteredSuppliers().length > 0 && (
+					{supplierMatches.length > 0 && (
 						<Card padding="none" style={styles.dropdown}>
-							<ScrollView
+							<FlatList
 								style={{ maxHeight: SIZE_DROPDOWN_MAX_HEIGHT - SPACING_PX.lg }}
 								keyboardShouldPersistTaps="handled"
-							>
-								{filteredSuppliers().map((sup) => (
+								data={supplierMatches}
+								keyExtractor={(supplier) => supplier.id}
+								renderItem={({ item: supplier }) => (
 									<Pressable
-										key={sup.id}
 										style={[
 											styles.dropdownRow,
 											{ borderBottomColor: c.border },
 										]}
 										onPress={() => {
-											setSelectedSupplier(sup);
+											setSelectedSupplier(supplier);
 											setSupplierSearch('');
 										}}
 									>
-										<ThemedText variant="body">{sup.name}</ThemedText>
-										{sup.city ? (
+										<ThemedText variant="body">{supplier.name}</ThemedText>
+										{supplier.city ? (
 											<ThemedText
 												variant="caption"
 												color={c.onSurfaceVariant}
 											>
-												{sup.city}
+												{supplier.city}
 											</ThemedText>
 										) : null}
 									</Pressable>
-								))}
-							</ScrollView>
+								)}
+							/>
 						</Card>
 					)}
 				</View>
@@ -365,31 +368,31 @@ export default function PurchaseCreateScreen() {
 							onChangeText={setItemSearch}
 							accessibilityLabel="item-search"
 						/>
-						{filteredItems().length > 0 && !selectedItem && (
-							<ScrollView
+						{itemMatches.length > 0 && !selectedItem && (
+							<FlatList
 								style={{ maxHeight: SIZE_DROPDOWN_MAX_HEIGHT - SPACING_PX['2xl'] }}
 								keyboardShouldPersistTaps="handled"
-							>
-								{filteredItems().map((itm) => (
+								data={itemMatches}
+								keyExtractor={(item) => item.id}
+								renderItem={({ item }) => (
 									<Pressable
-										key={itm.id}
 										style={[
 											styles.dropdownRow,
 											{ borderBottomColor: c.border },
 										]}
 										onPress={() => {
-											setSelectedItem(itm);
-											setItemSearch(itm.design_name);
-											setItemPrice(String(itm.cost_price));
+											setSelectedItem(item);
+											setItemSearch(item.design_name);
+											setItemPrice(String(item.cost_price));
 										}}
 									>
-										<ThemedText variant="body">{itm.design_name}</ThemedText>
+										<ThemedText variant="body">{item.design_name}</ThemedText>
 										<ThemedText variant="caption" color={c.onSurfaceVariant}>
-											{formatCurrency(itm.cost_price)}
+											{formatCurrency(item.cost_price)}
 										</ThemedText>
 									</Pressable>
-								))}
-							</ScrollView>
+								)}
+							/>
 						)}
 						{selectedItem && (
 							<View style={{ marginTop: s.sm, gap: s.sm }}>

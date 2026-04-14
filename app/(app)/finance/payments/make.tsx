@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState, useCallback } from 'react';
 import {
 	View,
+	FlatList,
 	ScrollView,
 	StyleSheet,
 	Alert,
@@ -87,6 +88,7 @@ export default function MakePaymentScreen() {
 		const q = supplierSearch.toLowerCase();
 		return suppliers.filter((s: Supplier) => s.name.toLowerCase().includes(q)).slice(0, 20);
 	}, [suppliers, supplierSearch]);
+	const supplierMatches = filteredSuppliers();
 
 	const handleSave = async () => {
 		if (!selectedSupplier) {
@@ -163,15 +165,15 @@ export default function MakePaymentScreen() {
 						onChangeText={setSupplierSearch}
 						accessibilityLabel="supplier-search"
 					/>
-					{filteredSuppliers().length > 0 && (
+					{supplierMatches.length > 0 && (
 						<Card padding="none" style={styles.dropdown}>
-							<ScrollView
+							<FlatList
 								style={{ maxHeight: SIZE_DROPDOWN_MAX_HEIGHT }}
 								keyboardShouldPersistTaps="handled"
-							>
-								{filteredSuppliers().map((sup) => (
+								data={supplierMatches}
+								keyExtractor={(supplier) => supplier.id}
+								renderItem={({ item: supplier }) => (
 									<Pressable
-										key={sup.id}
 										style={
 											[
 												styles.dropdownRow,
@@ -179,22 +181,22 @@ export default function MakePaymentScreen() {
 											] as StyleProp<ViewStyle>
 										}
 										onPress={() => {
-											setSelectedSupplier(sup);
+											setSelectedSupplier(supplier);
 											setSupplierSearch('');
 										}}
 									>
-										<ThemedText variant="body">{sup.name}</ThemedText>
-										{sup.city ? (
+										<ThemedText variant="body">{supplier.name}</ThemedText>
+										{supplier.city ? (
 											<ThemedText
 												variant="caption"
 												color={c.onSurfaceVariant}
 											>
-												{sup.city}
+												{supplier.city}
 											</ThemedText>
 										) : null}
 									</Pressable>
-								))}
-							</ScrollView>
+								)}
+							/>
 						</Card>
 					)}
 				</View>

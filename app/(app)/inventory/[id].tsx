@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {
 	View,
 	StyleSheet,
-	ScrollView,
+	FlatList,
 	TouchableOpacity,
 	Alert,
 	Modal,
@@ -62,6 +62,9 @@ export default function ItemDetailScreen() {
 	const [selectedParty, setSelectedParty] = useState<string | null>(null);
 	const [customRate, setCustomRate] = useState('');
 	const [partySearch, setPartySearch] = useState('');
+	const filteredParties = parties.filter((party) =>
+		party.name.toLowerCase().includes(partySearch.toLowerCase()),
+	);
 
 	// Re-fetch every time screen comes into focus so stock counts are fresh after stock ops.
 	// Only show full-screen loading on first load (item is null); subsequent focus re-fetches
@@ -504,39 +507,38 @@ export default function ItemDetailScreen() {
 							]}
 						/>
 
-						<ScrollView style={{ maxHeight: 200, marginBottom: s.md }}>
-							{parties
-								.filter((p) =>
-									p.name.toLowerCase().includes(partySearch.toLowerCase()),
-								)
-								.map((p) => (
-									<TouchableOpacity
-										key={p.id}
-										onPress={() => setSelectedParty(p.id)}
-										style={[
-											styles.partyItem,
-											{
-												padding: partyItemPadding,
-												marginVertical: s.xxs,
-												backgroundColor:
-													selectedParty === p.id
-														? c.primary
-														: 'transparent',
-												borderRadius: r.sm,
-											},
-										]}
+						<FlatList
+							style={{ maxHeight: 200, marginBottom: s.md }}
+							data={filteredParties}
+							keyExtractor={(party) => party.id}
+							keyboardShouldPersistTaps="handled"
+							renderItem={({ item: party }) => (
+								<TouchableOpacity
+									onPress={() => setSelectedParty(party.id)}
+									style={[
+										styles.partyItem,
+										{
+											padding: partyItemPadding,
+											marginVertical: s.xxs,
+											backgroundColor:
+												selectedParty === party.id
+													? c.primary
+													: 'transparent',
+											borderRadius: r.sm,
+										},
+									]}
+								>
+									<ThemedText
+										color={
+											selectedParty === party.id ? c.onPrimary : c.onSurface
+										}
 									>
-										<ThemedText
-											color={
-												selectedParty === p.id ? c.onPrimary : c.onSurface
-											}
-										>
-											{p.name} (
-											{p.type === 'customer' ? 'Customer' : 'Supplier'})
-										</ThemedText>
-									</TouchableOpacity>
-								))}
-						</ScrollView>
+										{party.name} (
+										{party.type === 'customer' ? 'Customer' : 'Supplier'})
+									</ThemedText>
+								</TouchableOpacity>
+							)}
+						/>
 
 						<ThemedText
 							variant="label"

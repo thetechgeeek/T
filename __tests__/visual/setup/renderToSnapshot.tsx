@@ -10,29 +10,36 @@ import { Appearance } from 'react-native';
 try {
 	const { toMatchImageSnapshot } = require('jest-image-snapshot');
 	expect.extend({ toMatchImageSnapshot });
-} catch (e) {
+} catch {
 	// jest-image-snapshot might not be configured for all environments
 }
 
 interface RenderOptions {
 	isDark?: boolean;
 	insets?: { top: number; bottom: number; left: number; right: number };
+	frame?: { x: number; y: number; width: number; height: number };
 }
+
+export const DEFAULT_SNAPSHOT_FRAME = { x: 0, y: 0, width: 390, height: 844 } as const;
+export const IPHONE_SE_FRAME = { x: 0, y: 0, width: 375, height: 667 } as const;
+export const IPHONE_15_PRO_MAX_FRAME = { x: 0, y: 0, width: 430, height: 932 } as const;
 
 /**
  * Renders a component wrapped in all necessary providers for visual testing.
  */
 export function renderToSnapshot(
 	component: React.ReactElement,
-	{ isDark = false, insets = { top: 0, bottom: 0, left: 0, right: 0 } }: RenderOptions = {},
+	{
+		isDark = false,
+		insets = { top: 0, bottom: 0, left: 0, right: 0 },
+		frame = DEFAULT_SNAPSHOT_FRAME,
+	}: RenderOptions = {},
 ) {
 	// Force Appearance to match the desired theme for the ThemeProvider
 	jest.spyOn(Appearance, 'getColorScheme').mockReturnValue(isDark ? 'dark' : 'light');
 
 	return render(
-		<SafeAreaProvider
-			initialMetrics={{ frame: { x: 0, y: 0, width: 390, height: 844 }, insets }}
-		>
+		<SafeAreaProvider initialMetrics={{ frame, insets }}>
 			<ThemeProvider>{component}</ThemeProvider>
 		</SafeAreaProvider>,
 	);

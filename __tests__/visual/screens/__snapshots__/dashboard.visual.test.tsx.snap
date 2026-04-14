@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Visual Regression: Dashboard Screen renders dark mode on iphone-15-pro-max 1`] = `
+{
+  "chrome": [
+    "DashboardHeader",
+    "QuickActionsGrid",
+    "RecentInvoicesList",
+  ],
+  "frame": {
+    "height": 932,
+    "width": 430,
+    "x": 0,
+    "y": 0,
+  },
+  "stats": [
+    "stat-today-sales",
+    "stat-outstanding",
+    "stat-low-stock",
+  ],
+}
+`;
+
+exports[`Visual Regression: Dashboard Screen renders dark mode on iphone-se 1`] = `
+{
+  "chrome": [
+    "DashboardHeader",
+    "QuickActionsGrid",
+    "RecentInvoicesList",
+  ],
+  "frame": {
+    "height": 667,
+    "width": 375,
+    "x": 0,
+    "y": 0,
+  },
+  "stats": [
+    "stat-today-sales",
+    "stat-outstanding",
+    "stat-low-stock",
+  ],
+}
+`;
+
+exports[`Visual Regression: Dashboard Screen renders light mode on iphone-15-pro-max 1`] = `
+{
+  "chrome": [
+    "DashboardHeader",
+    "QuickActionsGrid",
+    "RecentInvoicesList",
+  ],
+  "frame": {
+    "height": 932,
+    "width": 430,
+    "x": 0,
+    "y": 0,
+  },
+  "stats": [
+    "stat-today-sales",
+    "stat-outstanding",
+    "stat-low-stock",
+  ],
+}
+`;
+
+exports[`Visual Regression: Dashboard Screen renders light mode on iphone-se 1`] = `
+{
+  "chrome": [
+    "DashboardHeader",
+    "QuickActionsGrid",
+    "RecentInvoicesList",
+  ],
+  "frame": {
+    "height": 667,
+    "width": 375,
+    "x": 0,
+    "y": 0,
+  },
+  "stats": [
+    "stat-today-sales",
+    "stat-outstanding",
+    "stat-low-stock",
+  ],
+}
+`;

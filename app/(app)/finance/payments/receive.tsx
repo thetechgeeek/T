@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState, useCallback } from 'react';
 import {
 	View,
+	FlatList,
 	ScrollView,
 	StyleSheet,
 	Alert,
@@ -85,6 +86,7 @@ export default function ReceivePaymentScreen() {
 		const q = customerSearch.toLowerCase();
 		return customers.filter((c: Customer) => c.name.toLowerCase().includes(q)).slice(0, 20);
 	}, [customers, customerSearch]);
+	const customerMatches = filteredCustomers();
 
 	const outstandingBalance = selectedCustomer?.current_balance ?? 0;
 
@@ -161,15 +163,15 @@ export default function ReceivePaymentScreen() {
 						onChangeText={setCustomerSearch}
 						accessibilityLabel="customer-search"
 					/>
-					{filteredCustomers().length > 0 && (
+					{customerMatches.length > 0 && (
 						<Card padding="none" style={styles.dropdown}>
-							<ScrollView
+							<FlatList
 								style={{ maxHeight: SIZE_DROPDOWN_MAX_HEIGHT }}
 								keyboardShouldPersistTaps="handled"
-							>
-								{filteredCustomers().map((cust) => (
+								data={customerMatches}
+								keyExtractor={(customer) => customer.id}
+								renderItem={({ item: customer }) => (
 									<Pressable
-										key={cust.id}
 										style={
 											[
 												styles.dropdownRow,
@@ -177,17 +179,17 @@ export default function ReceivePaymentScreen() {
 											] as StyleProp<ViewStyle>
 										}
 										onPress={() => {
-											setSelectedCustomer(cust);
+											setSelectedCustomer(customer);
 											setCustomerSearch('');
 										}}
 									>
-										<ThemedText variant="body">{cust.name}</ThemedText>
+										<ThemedText variant="body">{customer.name}</ThemedText>
 										<ThemedText variant="caption" color={c.onSurfaceVariant}>
-											{formatCurrency(cust.current_balance ?? 0)}
+											{formatCurrency(customer.current_balance ?? 0)}
 										</ThemedText>
 									</Pressable>
-								))}
-							</ScrollView>
+								)}
+							/>
 						</Card>
 					)}
 				</View>
