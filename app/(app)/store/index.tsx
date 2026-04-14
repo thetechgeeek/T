@@ -28,6 +28,7 @@ import {
 } from 'lucide-react-native';
 
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
+import { Card } from '@/src/components/atoms/Card';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
@@ -231,7 +232,11 @@ export default function OnlineStoreScreen() {
 				<ThemedText variant="caption" style={[styles.sectionLabel, { color: c.primary }]}>
 					MANAGE
 				</ThemedText>
-				<View style={[styles.card, { backgroundColor: c.surface, borderRadius: r.md }]}>
+				<Card
+					padding="none"
+					variant="elevated"
+					style={{ overflow: 'hidden', backgroundColor: c.surface, borderRadius: r.md }}
+				>
 					<RowItem
 						label="Manage Products"
 						sub="Add, edit or remove store products"
@@ -245,13 +250,17 @@ export default function OnlineStoreScreen() {
 						onPress={handleComingSoon}
 						isLast
 					/>
-				</View>
+				</Card>
 
 				{/* Customisation actions */}
 				<ThemedText variant="caption" style={[styles.sectionLabel, { color: c.primary }]}>
 					CUSTOMISE
 				</ThemedText>
-				<View style={[styles.card, { backgroundColor: c.surface, borderRadius: r.md }]}>
+				<Card
+					padding="none"
+					variant="elevated"
+					style={{ overflow: 'hidden', backgroundColor: c.surface, borderRadius: r.md }}
+				>
 					<RowItem
 						label="Store Settings"
 						sub="Business name, logo, payment modes"
@@ -265,7 +274,7 @@ export default function OnlineStoreScreen() {
 						onPress={handleComingSoon}
 						isLast
 					/>
-				</View>
+				</Card>
 
 				{/* Share button */}
 				<Button
@@ -358,9 +367,6 @@ const styles = StyleSheet.create({
 		letterSpacing: LETTER_SPACING_SECTION,
 	},
 	/* Card + rows */
-	card: {
-		overflow: 'hidden',
-	},
 	rowItem: {
 		flexDirection: 'row',
 		alignItems: 'center',

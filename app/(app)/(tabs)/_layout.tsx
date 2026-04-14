@@ -9,17 +9,12 @@ import { Button } from '@/src/components/atoms/Button';
 import {
 	FAB_OFFSET_BOTTOM,
 	OPACITY_GLOW,
+	OPACITY_TINT_SOFT,
 	RADIUS_FAB,
 	SIZE_FAB,
 	SIZE_TAB_BAR_IOS,
 } from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-
-/** Glow ring opacity behind the scan button */
-const SCAN_GLOW_RING_OPACITY = 0.25;
-const TAB_BAR_HEIGHT_ANDROID = 64;
-const TAB_BAR_PADDING_BOTTOM_IOS = 28;
-const SCAN_GLOW_SIZE = 64;
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 	const { t } = useLocale();
@@ -51,7 +46,7 @@ function ScanTabIcon({ _focused }: { _focused: boolean }) {
 							backgroundColor: c.primary,
 							shadowColor: c.primary,
 							shadowOpacity: OPACITY_GLOW,
-							shadowRadius: 8,
+							shadowRadius: SPACING_PX.sm,
 							shadowOffset: { width: 0, height: 0 },
 						},
 					]}
@@ -85,9 +80,9 @@ export default function TabLayout() {
 					backgroundColor: c.tabBar,
 					borderTopColor: c.border,
 					borderTopWidth: StyleSheet.hairlineWidth,
-					height: Platform.OS === 'ios' ? SIZE_TAB_BAR_IOS : TAB_BAR_HEIGHT_ANDROID,
+					height: Platform.OS === 'ios' ? SIZE_TAB_BAR_IOS : SPACING_PX['4xl'],
 					paddingBottom:
-						Platform.OS === 'ios' ? TAB_BAR_PADDING_BOTTOM_IOS : SPACING_PX.sm,
+						Platform.OS === 'ios' ? SPACING_PX.lg + SPACING_PX.md : SPACING_PX.sm,
 					paddingTop: SPACING_PX.sm,
 				},
 				tabBarActiveTintColor: c.tabActive,
@@ -158,10 +153,10 @@ const styles = StyleSheet.create({
 	},
 	scanIconGlow: {
 		position: 'absolute',
-		width: SCAN_GLOW_SIZE,
-		height: SCAN_GLOW_SIZE,
-		borderRadius: SCAN_GLOW_SIZE / 2,
-		opacity: SCAN_GLOW_RING_OPACITY,
+		width: SPACING_PX['4xl'],
+		height: SPACING_PX['4xl'],
+		borderRadius: BORDER_RADIUS_PX.full,
+		opacity: OPACITY_TINT_SOFT,
 	},
 	scanIconOuter: {
 		width: SIZE_FAB,

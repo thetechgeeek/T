@@ -1,4 +1,11 @@
-import { OPACITY_HOVER } from '@/theme/uiMetrics';
+import {
+	BORDER_WIDTH_BASE,
+	BORDER_WIDTH_STRONG,
+	OPACITY_HOVER,
+	SIZE_THEME_CHECK,
+	SIZE_THEME_SWATCH_HEIGHT,
+	SIZE_THEME_SWATCH_WIDTH,
+} from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -19,11 +26,6 @@ const PAPER_TYPES: { key: PaperType; label: string }[] = [
 	{ key: 'a4', label: 'A4' },
 	{ key: 'a5', label: 'A5' },
 ];
-
-const THEME_RECT_WIDTH = 40;
-const THEME_RECT_HEIGHT = 56;
-const THEME_CHECK_SIZE = 18;
-const ZERO_SPACING = 0;
 
 function SwitchRow({
 	label,
@@ -133,7 +135,7 @@ export default function PrintSettingsScreen() {
 							>
 								{theme === t.key && (
 									<ThemedText
-										style={{ color: c.white, fontSize: THEME_CHECK_SIZE }}
+										style={{ color: c.white, fontSize: SIZE_THEME_CHECK }}
 									>
 										✓
 									</ThemedText>
@@ -157,7 +159,12 @@ export default function PrintSettingsScreen() {
 				<SectionHeader title="Company Header" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow label="Logo" value={logo} onChange={setLogo} c={c} />
 					<SwitchRow label="Business Name" value={bizName} onChange={setBizName} c={c} />
@@ -169,7 +176,12 @@ export default function PrintSettingsScreen() {
 				<SectionHeader title="Invoice Fields" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow label="Item Code" value={itemCode} onChange={setItemCode} c={c} />
 					<SwitchRow label="HSN Code" value={hsnCode} onChange={setHsnCode} c={c} />
@@ -185,7 +197,12 @@ export default function PrintSettingsScreen() {
 				<SectionHeader title="Totals" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="GST Breakup"
@@ -204,7 +221,12 @@ export default function PrintSettingsScreen() {
 
 				<SectionHeader title="Footer" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 					padding="md"
 				>
 					<ThemedText
@@ -248,7 +270,7 @@ export default function PrintSettingsScreen() {
 						style={[
 							styles.row,
 							{
-								paddingHorizontal: ZERO_SPACING,
+								paddingHorizontal: 0,
 								borderTopColor: c.border,
 								borderTopWidth: StyleSheet.hairlineWidth,
 							},
@@ -270,7 +292,6 @@ export default function PrintSettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -283,19 +304,19 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,
 		borderRadius: BORDER_RADIUS_PX.full,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	themeRow: { flexDirection: 'row', gap: SPACING_PX.md, flexWrap: 'wrap' },
 	themeRect: {
-		width: THEME_RECT_WIDTH,
-		height: THEME_RECT_HEIGHT,
+		width: SIZE_THEME_SWATCH_WIDTH,
+		height: SIZE_THEME_SWATCH_HEIGHT,
 		borderRadius: BORDER_RADIUS_PX.md,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	themeSelected: { borderWidth: 2, opacity: OPACITY_HOVER },
+	themeSelected: { borderWidth: BORDER_WIDTH_STRONG, opacity: OPACITY_HOVER },
 	textInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		borderRadius: BORDER_RADIUS_PX.md,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,

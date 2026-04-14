@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-
-/** Spacing multiplier for extra-wide gap below header text in verify screen */
-const VERIFY_SPACING_FACTOR = 1.5;
 import {
 	View,
 	StyleSheet,
@@ -22,13 +19,10 @@ import { Button } from '@/src/components/atoms/Button';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { SIZE_INPUT_HEIGHT } from '@/src/theme/uiMetrics';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const VERIFY_TOP_PADDING = 40;
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export default function VerifyOtpScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { theme, c, s, r, typo } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 	const { phone } = useLocalSearchParams<{ phone: string }>();
@@ -78,7 +72,7 @@ export default function VerifyOtpScreen() {
 		try {
 			await verifyOtp(phone!, otp);
 			// After successful login, check if business profile exists
-			const profile = await businessProfileService.fetch();
+			const profile = await businessProfileService.get();
 			if (profile && profile.business_name) {
 				router.replace('/inventory' as Href);
 			} else {
@@ -108,14 +102,11 @@ export default function VerifyOtpScreen() {
 
 	return (
 		<Screen safeAreaEdges={['top']}>
-			<View style={[styles.container, { padding: s.xl }]}>
+			<View style={[styles.container, { padding: s.xl, paddingTop: s['2xl'] + s.sm }]}>
 				<ThemedText variant="h1" style={{ marginBottom: s.sm }}>
 					{t('auth.verifyPhone')}
 				</ThemedText>
-				<ThemedText
-					color={c.onSurfaceVariant}
-					style={{ marginBottom: s.xl * VERIFY_SPACING_FACTOR }}
-				>
+				<ThemedText color={c.onSurfaceVariant} style={{ marginBottom: s['2xl'] + s.xs }}>
 					हमने {phone} पर 6 अंकों का कोड भेजा है
 				</ThemedText>
 
@@ -139,6 +130,9 @@ export default function VerifyOtpScreen() {
 									borderRadius: r.sm,
 									backgroundColor: c.surface,
 									color: c.onSurface,
+									width: theme.touchTarget,
+									height: SIZE_INPUT_HEIGHT,
+									fontSize: typo.sizes['3xl'],
 								},
 							]}
 						/>
@@ -153,7 +147,7 @@ export default function VerifyOtpScreen() {
 					disabled={loading || code.some((digit) => !digit)}
 					loading={loading}
 					size="lg"
-					style={{ marginTop: s.xl * VERIFY_SPACING_FACTOR }}
+					style={{ marginTop: s['2xl'] + s.xs }}
 				/>
 
 				<View style={styles.resendRow}>
@@ -177,18 +171,15 @@ export default function VerifyOtpScreen() {
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1, paddingTop: VERIFY_TOP_PADDING },
+	container: { flex: 1 },
 	otpRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		gap: SPACING_PX.sm,
 	},
 	otpInput: {
-		width: TOUCH_TARGET_MIN_PX,
-		height: SIZE_INPUT_HEIGHT,
 		borderWidth: 1,
 		textAlign: 'center',
-		fontSize: FONT_SIZE.h1,
 		fontWeight: 'bold',
 	},
 	resendRow: {

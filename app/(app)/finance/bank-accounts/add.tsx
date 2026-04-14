@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SIZE_INPUT_HEIGHT, LETTER_SPACING_ACCOUNT } from '@/theme/uiMetrics';
+import { BORDER_WIDTH_BASE, LETTER_SPACING_ACCOUNT, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -11,8 +11,6 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const FORM_BOTTOM_PADDING = 32;
 
 // TODO: connect to store — save to bank_accounts table via Supabase
 const BANKS = [
@@ -104,7 +102,7 @@ export default function AddBankAccountScreen() {
 			scrollable
 			contentContainerStyle={[
 				styles.content,
-				{ paddingBottom: FORM_BOTTOM_PADDING + insets.bottom },
+				{ paddingBottom: SPACING_PX['2xl'] + insets.bottom },
 			]}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
@@ -325,7 +323,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	textField: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm + SPACING_PX.xs / 2,
 		fontSize: FONT_SIZE.body,
@@ -334,12 +332,12 @@ const styles = StyleSheet.create({
 	amountRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		minHeight: SIZE_INPUT_HEIGHT,
 	},
 	currencyPrefix: {
 		paddingHorizontal: SPACING_PX.md,
-		borderRightWidth: 1,
+		borderRightWidth: BORDER_WIDTH_BASE,
 		fontSize: FONT_SIZE.h3,
 		fontWeight: '600',
 	},

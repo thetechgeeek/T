@@ -1,7 +1,4 @@
 import React from 'react';
-
-/** Min height for business KPI tiles in the dashboard grid */
-const BUSINESS_TILE_MIN_HEIGHT = 90;
 import { useShallow } from 'zustand/react/shallow';
 import { View, RefreshControl, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -34,15 +31,12 @@ import {
 	Wallet,
 } from 'lucide-react-native';
 import type { RecentTransaction } from '@/src/types/finance';
-import { OPACITY_TINT_LIGHT, SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-const ALERT_BORDER_WIDTH = 4;
-const BUSINESS_TILE_ICON_SIZE = 28;
-const BUSINESS_TILE_ICON_RADIUS = BUSINESS_TILE_ICON_SIZE / 2;
+import {
+	OPACITY_TINT_LIGHT,
+	SIZE_BUSINESS_TILE_MIN_HEIGHT,
+	SIZE_CHIP_HEIGHT,
+	SIZE_FAB_ICON,
+} from '@/theme/uiMetrics';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -227,6 +221,7 @@ export default function DashboardScreen() {
 									style={[
 										styles.tileIcon,
 										{
+											borderRadius: r.full,
 											backgroundColor: withOpacity(
 												c.success,
 												OPACITY_TINT_LIGHT,
@@ -265,6 +260,7 @@ export default function DashboardScreen() {
 									style={[
 										styles.tileIcon,
 										{
+											borderRadius: r.full,
 											backgroundColor: withOpacity(
 												c.info,
 												OPACITY_TINT_LIGHT,
@@ -302,7 +298,7 @@ export default function DashboardScreen() {
 								padding: s.md,
 								backgroundColor: c.warningLight,
 								borderRadius: r.md,
-								borderLeftWidth: ALERT_BORDER_WIDTH,
+								borderLeftWidth: s.xs,
 								borderLeftColor: c.warning,
 							}}
 						>
@@ -430,12 +426,11 @@ export default function DashboardScreen() {
 
 const styles = StyleSheet.create({
 	businessTile: {
-		minHeight: BUSINESS_TILE_MIN_HEIGHT,
+		minHeight: SIZE_BUSINESS_TILE_MIN_HEIGHT,
 	},
 	tileIcon: {
-		width: BUSINESS_TILE_ICON_SIZE,
-		height: BUSINESS_TILE_ICON_SIZE,
-		borderRadius: BUSINESS_TILE_ICON_RADIUS,
+		width: SIZE_FAB_ICON,
+		height: SIZE_FAB_ICON,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

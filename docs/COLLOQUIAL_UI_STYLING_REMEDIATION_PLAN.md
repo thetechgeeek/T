@@ -129,8 +129,8 @@
 
 ### Eliminate per-screen duplicate styles
 
-- [ ] Remove per-screen `sectionHeader` style definitions — **4 files still define their own** (`finance/payments/[id]`, `settings/business-profile`, `finance/purchases/[id]`, `orders/import`)
-- [ ] Remove per-screen `card` style definitions — **~20 files still define their own** (settings/\*, store, reports, orders, etc.)
+- [x] Remove per-screen `sectionHeader` style definitions — shared `SectionHeader` now covers the former one-off variants in `finance/payments/[id]`, `settings/business-profile`, `finance/purchases/[id]`, and `orders/import`
+- [x] Remove per-screen `card` style definitions — former per-screen card wrappers were consolidated into shared primitives / inline one-offs, with no remaining `card:` style definitions in `app/`
 
 ### Z-index migration (was 5 raw usages)
 
@@ -148,7 +148,7 @@
 
 ## Phase 4 — Screen-by-Screen Spacing Migration
 
-> This is the largest phase. ~1,200+ raw numeric violations across ~120 files. The per-slice checklist below tracks high-level completion. None of these slices are done yet.
+> This is the largest phase. ~1,200+ raw numeric violations across ~120 files. The per-slice checklist below tracks sequential slice completion. A slice is only considered complete when its file work and its slice-level follow-ups are finished.
 
 ### Per-slice checklist template (applies to each slice)
 
@@ -156,44 +156,44 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 
 ### S1. Auth screens (6 files — ~60 violations)
 
-- [ ] `login.tsx` — all magic numbers → tokens
-- [ ] `phone-login.tsx` — all magic numbers → tokens
-- [ ] `setup.tsx` — all magic numbers → tokens (~35 violations, worst offender)
-- [ ] `verify.tsx` — all magic numbers → tokens
-- [ ] `language-select.tsx` — all magic numbers → tokens
-- [ ] `(auth)/_layout.tsx` — all magic numbers → tokens
+- [x] `login.tsx` — all magic numbers → tokens
+- [x] `phone-login.tsx` — all magic numbers → tokens
+- [x] `setup.tsx` — all magic numbers → tokens (~35 violations, worst offender)
+- [x] `verify.tsx` — all magic numbers → tokens
+- [x] `language-select.tsx` — all magic numbers → tokens
+- [x] `(auth)/_layout.tsx` — all magic numbers → tokens
 - [ ] Light + dark visual check for auth slice
 
 ### S2. Tab screens (7 files — ~80 violations)
 
-- [ ] `(tabs)/_layout.tsx` — all magic numbers → tokens
-- [ ] `(tabs)/index.tsx` (dashboard) — all magic numbers → tokens
-- [ ] `(tabs)/inventory.tsx` — all magic numbers → tokens
-- [ ] `(tabs)/invoices.tsx` — all magic numbers → tokens
-- [ ] `(tabs)/customers.tsx` — all magic numbers → tokens
-- [ ] `(tabs)/more.tsx` — all magic numbers → tokens
-- [ ] `(tabs)/scan.tsx` — all magic numbers → tokens
+- [x] `(tabs)/_layout.tsx` — all magic numbers → tokens
+- [x] `(tabs)/index.tsx` (dashboard) — all magic numbers → tokens
+- [x] `(tabs)/inventory.tsx` — all magic numbers → tokens
+- [x] `(tabs)/invoices.tsx` — all magic numbers → tokens
+- [x] `(tabs)/customers.tsx` — all magic numbers → tokens
+- [x] `(tabs)/more.tsx` — all magic numbers → tokens
+- [x] `(tabs)/scan.tsx` — all magic numbers → tokens
 - [ ] Light + dark visual check for tabs slice
 
 ### S3. Settings screens (18 files — ~150 violations)
 
-- [ ] `settings/index.tsx` — magic numbers → tokens
-- [ ] `settings/preferences.tsx` — magic numbers → tokens (~22 violations)
-- [ ] `settings/users.tsx` — magic numbers → tokens (~28 violations)
-- [ ] `settings/reminders.tsx` — magic numbers → tokens (~20 violations)
-- [ ] `settings/business-profile.tsx` — magic numbers → tokens
-- [ ] `settings/gst.tsx` — magic numbers → tokens
-- [ ] `settings/items.tsx` — magic numbers → tokens
-- [ ] `settings/party.tsx` — magic numbers → tokens
-- [ ] `settings/transactions.tsx` — magic numbers → tokens
-- [ ] `settings/print.tsx` — magic numbers → tokens
-- [ ] `settings/backup.tsx` — magic numbers → tokens
-- [ ] `settings/expense-categories.tsx` — magic numbers → tokens
-- [ ] `settings/item-categories.tsx` — magic numbers → tokens
-- [ ] `settings/item-units.tsx` — magic numbers → tokens
-- [ ] `settings/security.tsx` — magic numbers → tokens
-- [ ] `settings/firms.tsx` — magic numbers → tokens
-- [ ] `settings/sync-log.tsx` — magic numbers → tokens
+- [x] `settings/index.tsx` — magic numbers → tokens
+- [x] `settings/preferences.tsx` — magic numbers → tokens (~22 violations)
+- [x] `settings/users.tsx` — magic numbers → tokens (~28 violations)
+- [x] `settings/reminders.tsx` — magic numbers → tokens (~20 violations)
+- [x] `settings/business-profile.tsx` — magic numbers → tokens
+- [x] `settings/gst.tsx` — magic numbers → tokens
+- [x] `settings/items.tsx` — magic numbers → tokens
+- [x] `settings/party.tsx` — magic numbers → tokens
+- [x] `settings/transactions.tsx` — magic numbers → tokens
+- [x] `settings/print.tsx` — magic numbers → tokens
+- [x] `settings/backup.tsx` — magic numbers → tokens
+- [x] `settings/expense-categories.tsx` — magic numbers → tokens
+- [x] `settings/item-categories.tsx` — magic numbers → tokens
+- [x] `settings/item-units.tsx` — magic numbers → tokens
+- [x] `settings/security.tsx` — magic numbers → tokens
+- [x] `settings/firms.tsx` — magic numbers → tokens
+- [x] `settings/sync-log.tsx` — magic numbers → tokens
 - [ ] Replace per-screen `card` / `sectionHeader` with shared primitives
 - [ ] Light + dark visual check for settings slice
 
@@ -310,9 +310,9 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 
 ### Migrate `ScrollView` direct usage (was 61 files → 44 remaining)
 
-- [x] ~17 files already migrated from `ScrollView` to `Screen scrollable`
+- [ ] ~17 files already migrated from `ScrollView` to `Screen scrollable`
 - [ ] `app/(app)/(tabs)/inventory.tsx` — ScrollView → Screen scrollable
-- [x] `app/(app)/customers/add.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/customers/add.tsx` — ScrollView → Screen scrollable
 - [ ] `app/(app)/finance/bank-accounts/add.tsx` — ScrollView → Screen scrollable
 - [ ] `app/(app)/finance/ewallets.tsx` — ScrollView → Screen scrollable
 - [ ] `app/(app)/finance/loans/[id].tsx` — ScrollView → Screen scrollable
@@ -351,7 +351,7 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 - [ ] `app/(app)/settings/transactions.tsx` — ScrollView → Screen scrollable
 - [ ] `app/(app)/store/index.tsx` — ScrollView → Screen scrollable
 - [ ] `app/(app)/suppliers/[id].tsx` — ScrollView → Screen scrollable
-- [x] `app/(app)/suppliers/add.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/suppliers/add.tsx` — ScrollView → Screen scrollable
 - [ ] `app/(app)/transactions/credit-notes/create.tsx` — ScrollView → Screen scrollable
 - [ ] `app/(app)/transactions/estimates/create.tsx` — ScrollView → Screen scrollable
 - [ ] `app/(app)/transactions/purchase-orders/create.tsx` — ScrollView → Screen scrollable
@@ -361,7 +361,7 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 
 ### Standardize `safeAreaEdges` (was 10 combos → now 4)
 
-- [x] Reduced from 10 unique combos to 4 (`['bottom']`, `['top']`, `['top','bottom']`, `[]`)
+- [ ] Reduced from 10 unique combos to 4 (`['bottom']`, `['top']`, `['top','bottom']`, `[]`)
 - [ ] Further reduce to 3 documented patterns (tab, form, modal) + documented exceptions
 
 ### Fix duplicate safe-area padding

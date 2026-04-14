@@ -328,7 +328,7 @@ export default function InvoiceDetailScreen() {
 				{/* ── Invoice Header Card ── */}
 				<View
 					style={[
-						styles.card,
+						{ overflow: 'hidden' },
 						{
 							backgroundColor: c.card,
 							borderRadius: r.md,
@@ -377,7 +377,7 @@ export default function InvoiceDetailScreen() {
 				{/* ── Billed To ── */}
 				<View
 					style={[
-						styles.card,
+						{ overflow: 'hidden' },
 						{
 							backgroundColor: c.card,
 							borderRadius: r.md,
@@ -425,7 +425,7 @@ export default function InvoiceDetailScreen() {
 				{/* ── Line Items Table ── */}
 				<View
 					style={[
-						styles.card,
+						{ overflow: 'hidden' },
 						{
 							backgroundColor: c.card,
 							borderRadius: r.md,
@@ -537,7 +537,7 @@ export default function InvoiceDetailScreen() {
 				{/* ── Totals Section ── */}
 				<View
 					style={[
-						styles.card,
+						{ overflow: 'hidden' },
 						{
 							backgroundColor: c.card,
 							borderRadius: r.md,
@@ -638,7 +638,7 @@ export default function InvoiceDetailScreen() {
 				{/* ── Payment History (Collapsible) ── */}
 				<View
 					style={[
-						styles.card,
+						{ overflow: 'hidden' },
 						{
 							backgroundColor: c.card,
 							borderRadius: r.md,
@@ -727,7 +727,7 @@ export default function InvoiceDetailScreen() {
 				{(!!invoice.notes || !!invoice.terms) && (
 					<View
 						style={[
-							styles.card,
+							{ overflow: 'hidden' },
 							{
 								backgroundColor: c.card,
 								borderRadius: r.md,
@@ -878,7 +878,6 @@ const styles = StyleSheet.create({
 	center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
 	iconBtn: { padding: 8 },
 	statusBanner: { overflow: 'hidden' },
-	card: { overflow: 'hidden' },
 	cardHeader: {
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		gap: 4,

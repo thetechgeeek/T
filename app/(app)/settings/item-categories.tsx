@@ -1,5 +1,9 @@
 import {
+	BORDER_WIDTH_BASE,
 	SIZE_AVATAR_MD,
+	SIZE_CATEGORY_DOT,
+	SIZE_COLOR_SWATCH,
+	SIZE_EMOJI_INPUT_WIDTH,
 	OVERLAY_COLOR_MEDIUM,
 	FAB_OFFSET_RIGHT,
 	FAB_OFFSET_BOTTOM,
@@ -37,14 +41,7 @@ import type { ItemCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const ZERO_SPACING = 0;
-const LIST_BOTTOM_PADDING = 100;
-const CATEGORY_DOT_SIZE = 12;
-const CATEGORY_DOT_RADIUS = 6;
-const COLOR_SWATCH_SIZE = 36;
-const COLOR_SWATCH_RADIUS = 18;
-const EMOJI_INPUT_WIDTH = 72;
+import { ELEVATION } from '@/theme/shadowMetrics';
 
 interface CategoryFormState {
 	name_en: string;
@@ -58,6 +55,7 @@ export default function ItemCategoriesScreen() {
 	const { t } = useLocale();
 	const insets = useSafeAreaInsets();
 	const presetColors = theme.collections.expenseCategoryPickColors;
+	const listBottomPadding = FAB_OFFSET_BOTTOM + SIZE_FAB + s.xl;
 	const defaultForm = React.useMemo<CategoryFormState>(
 		() => ({
 			name_en: '',
@@ -160,7 +158,7 @@ export default function ItemCategoriesScreen() {
 
 	function renderItem({ item }: { item: ItemCategory }) {
 		return (
-			<Card style={styles.card} padding="md">
+			<Card padding="md">
 				<View style={layout.rowBetween}>
 					<View style={[layout.row, { alignItems: 'center', flex: 1 }]}>
 						<View style={[styles.dot, { backgroundColor: item.color || c.primary }]} />
@@ -210,7 +208,7 @@ export default function ItemCategoriesScreen() {
 					renderItem={renderItem}
 					contentContainerStyle={[
 						styles.listContent,
-						{ paddingBottom: LIST_BOTTOM_PADDING + insets.bottom },
+						{ paddingBottom: listBottomPadding + insets.bottom },
 					]}
 					ItemSeparatorComponent={() => <View style={{ height: s.sm }} />}
 					ListEmptyComponent={
@@ -228,7 +226,7 @@ export default function ItemCategoriesScreen() {
 				]}
 				onPress={openAdd}
 			>
-				<Plus color="white" size={28} />
+				<Plus color={c.white} size={28} />
 			</Pressable>
 
 			<Modal
@@ -380,11 +378,10 @@ export default function ItemCategoriesScreen() {
 
 const styles = StyleSheet.create({
 	listContent: { padding: SPACING_PX.lg },
-	card: { marginBottom: ZERO_SPACING },
 	dot: {
-		width: CATEGORY_DOT_SIZE,
-		height: CATEGORY_DOT_SIZE,
-		borderRadius: CATEGORY_DOT_RADIUS,
+		width: SIZE_CATEGORY_DOT,
+		height: SIZE_CATEGORY_DOT,
+		borderRadius: SIZE_CATEGORY_DOT / 2,
 		marginRight: SPACING_PX.sm,
 	},
 	empty: { textAlign: 'center', marginTop: SIZE_AVATAR_MD },
@@ -396,7 +393,7 @@ const styles = StyleSheet.create({
 		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
+		elevation: ELEVATION.md,
 	},
 	modalOverlay: { flex: 1, justifyContent: 'flex-end' },
 	modalBackdrop: { flex: 1, backgroundColor: OVERLAY_COLOR_MEDIUM },
@@ -418,13 +415,13 @@ const styles = StyleSheet.create({
 	modalScroll: { paddingHorizontal: SPACING_PX.xl, paddingBottom: SPACING_PX.lg },
 	label: { fontWeight: '600', marginBottom: SPACING_PX.xs },
 	textInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,
 		fontSize: FONT_SIZE.body,
 		minHeight: TOUCH_TARGET_MIN_PX,
 	},
-	emojiInput: { width: EMOJI_INPUT_WIDTH, textAlign: 'center' },
+	emojiInput: { width: SIZE_EMOJI_INPUT_WIDTH, textAlign: 'center' },
 	colorGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
@@ -432,9 +429,9 @@ const styles = StyleSheet.create({
 		marginTop: SPACING_PX.xs,
 	},
 	colorCircle: {
-		width: COLOR_SWATCH_SIZE,
-		height: COLOR_SWATCH_SIZE,
-		borderRadius: COLOR_SWATCH_RADIUS,
+		width: SIZE_COLOR_SWATCH,
+		height: SIZE_COLOR_SWATCH,
+		borderRadius: SIZE_COLOR_SWATCH / 2,
 	},
 	modalActions: { flexDirection: 'row', paddingTop: SPACING_PX.md },
 });

@@ -1,4 +1,4 @@
-import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+import { BORDER_WIDTH_BASE, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -10,8 +10,6 @@ import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const PREFIX_INPUT_WIDTH = SIZE_AVATAR_MD;
 
 function SwitchRow({
 	label,
@@ -73,7 +71,12 @@ export default function TransactionSettingsScreen() {
 				<SectionHeader title="Invoice Number" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Auto-increment Invoice No."
@@ -122,7 +125,12 @@ export default function TransactionSettingsScreen() {
 				/>
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Default to Cash Sale"
@@ -141,7 +149,12 @@ export default function TransactionSettingsScreen() {
 				<SectionHeader title="Fields" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Show PO Number Field"
@@ -172,7 +185,12 @@ export default function TransactionSettingsScreen() {
 				<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Transaction-wise Discount"
@@ -199,7 +217,6 @@ export default function TransactionSettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -208,8 +225,8 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.lg,
 	},
 	prefixInput: {
-		width: PREFIX_INPUT_WIDTH,
-		borderWidth: 1,
+		width: SIZE_AVATAR_MD,
+		borderWidth: BORDER_WIDTH_BASE,
 		borderRadius: BORDER_RADIUS_PX.md,
 		paddingHorizontal: SPACING_PX.sm,
 		paddingVertical: SPACING_PX.xs,

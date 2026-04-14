@@ -10,17 +10,19 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BadgeVariant } from '@/src/components/atoms/Badge';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FAB_OFFSET_BOTTOM, FAB_OFFSET_RIGHT, SIZE_FAB } from '@/src/theme/uiMetrics';
-
-const SECS_PER_MIN = 60;
-const MS_PER_DAY = 1000 * SECS_PER_MIN * SECS_PER_MIN * 24;
+import {
+	BORDER_WIDTH_BASE,
+	BORDER_WIDTH_STRONG,
+	FAB_OFFSET_BOTTOM,
+	FAB_OFFSET_RIGHT,
+	SIZE_FAB,
+	SIZE_ICON_CIRCLE_MD,
+} from '@/src/theme/uiMetrics';
 import { MOCK_CHEQUES_RECEIVED, MOCK_CHEQUES_ISSUED } from '@/src/mocks/finance/cheques';
 import type { Cheque, ChequeStatus } from '@/src/mocks/finance/cheques';
 
-const CHEQUES_LIST_BOTTOM_PADDING = 80;
-const CHEQUE_TAB_BORDER_WIDTH = 2;
-const CHEQUE_ICON_SIZE = 40;
-const CHEQUE_ICON_RADIUS = 20;
+const SECS_PER_MIN = 60;
+const MS_PER_DAY = 1000 * SECS_PER_MIN * SECS_PER_MIN * 24;
 
 type ChequeTab = 'received' | 'issued';
 
@@ -160,7 +162,7 @@ export default function ChequesScreen() {
 							styles.tabBtn,
 							tab === t && {
 								borderBottomColor: c.primary,
-								borderBottomWidth: CHEQUE_TAB_BORDER_WIDTH,
+								borderBottomWidth: BORDER_WIDTH_STRONG,
 							},
 						]}
 					>
@@ -215,7 +217,7 @@ export default function ChequesScreen() {
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
 				contentContainerStyle={{
-					paddingBottom: CHEQUES_LIST_BOTTOM_PADDING + insets.bottom,
+					paddingBottom: FAB_OFFSET_BOTTOM + SIZE_FAB + SPACING_PX.xs + insets.bottom,
 				}}
 				ListEmptyComponent={
 					<View style={styles.empty}>
@@ -271,7 +273,7 @@ const styles = StyleSheet.create({
 	chip: {
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.xs + SPACING_PX.xxs,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	row: {
 		flexDirection: 'row',
@@ -282,9 +284,9 @@ const styles = StyleSheet.create({
 		gap: SPACING_PX.md,
 	},
 	iconCircle: {
-		width: CHEQUE_ICON_SIZE,
-		height: CHEQUE_ICON_SIZE,
-		borderRadius: CHEQUE_ICON_RADIUS,
+		width: SIZE_ICON_CIRCLE_MD,
+		height: SIZE_ICON_CIRCLE_MD,
+		borderRadius: SIZE_ICON_CIRCLE_MD / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

@@ -2,9 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { OPACITY_TINT_LIGHT, Z_INDEX } from '@/theme/uiMetrics';
-
-/** Minimum width of the kebab-menu dropdown */
-const KEBAB_MENU_MIN_WIDTH = 140;
 import type { Href } from 'expo-router';
 import {
 	Trash2,
@@ -26,12 +23,15 @@ import { Button } from '@/src/components/atoms/Button';
 import { Badge } from '@/src/components/atoms/Badge';
 import { Divider } from '@/src/components/atoms/Divider';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { Purchase, PurchaseLineItem, Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
 import type { ThemeColors } from '@/src/theme';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
+/** Minimum width of the kebab-menu dropdown */
+const KEBAB_MENU_MIN_WIDTH = 140;
 const PURCHASE_KEBAB_TOP_OFFSET = 56;
 const PURCHASE_KEBAB_ELEVATION = 8;
 
@@ -325,20 +325,16 @@ export default function PurchaseBillDetailScreen() {
 					},
 				]}
 			>
-				<View
-					style={[
-						styles.sectionHeader,
-						{
-							borderBottomColor: c.border,
-							paddingHorizontal: s.md,
-							paddingVertical: s.sm,
-						},
-					]}
-				>
-					<ThemedText variant="label" color={c.onSurfaceVariant}>
-						Purchase Info
-					</ThemedText>
-				</View>
+				<SectionHeader
+					title="Purchase Info"
+					titleColor={c.onSurfaceVariant}
+					style={{
+						borderBottomColor: c.border,
+						borderBottomWidth: StyleSheet.hairlineWidth,
+						paddingHorizontal: s.md,
+						paddingVertical: s.sm,
+					}}
+				/>
 				<View style={{ padding: s.md, gap: s.sm }}>
 					{!!purchase.purchase_number && (
 						<View style={styles.detailRow}>
@@ -423,14 +419,14 @@ export default function PurchaseBillDetailScreen() {
 					]}
 				>
 					<View
-						style={[
-							styles.sectionHeader,
-							{
-								borderBottomColor: c.border,
-								paddingHorizontal: s.md,
-								paddingVertical: s.sm,
-							},
-						]}
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+							paddingHorizontal: s.md,
+							paddingVertical: s.sm,
+						}}
 					>
 						<ThemedText variant="label" color={c.onSurfaceVariant} style={{ flex: 2 }}>
 							Item
@@ -524,20 +520,16 @@ export default function PurchaseBillDetailScreen() {
 						},
 					]}
 				>
-					<View
-						style={[
-							styles.sectionHeader,
-							{
-								borderBottomColor: c.border,
-								paddingHorizontal: s.md,
-								paddingVertical: s.sm,
-							},
-						]}
-					>
-						<ThemedText variant="label" color={c.onSurfaceVariant}>
-							Summary
-						</ThemedText>
-					</View>
+					<SectionHeader
+						title="Summary"
+						titleColor={c.onSurfaceVariant}
+						style={{
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+							paddingHorizontal: s.md,
+							paddingVertical: s.sm,
+						}}
+					/>
 					<View style={{ padding: s.md, gap: s.sm }}>
 						<View style={styles.detailRow}>
 							<ThemedText color={c.onSurfaceVariant}>Subtotal</ThemedText>
@@ -570,32 +562,30 @@ export default function PurchaseBillDetailScreen() {
 					},
 				]}
 			>
-				<View
-					style={[
-						styles.sectionHeader,
-						{
-							borderBottomColor: c.border,
-							paddingHorizontal: s.md,
-							paddingVertical: s.sm,
-						},
-					]}
-				>
-					<ThemedText variant="label" color={c.onSurfaceVariant} style={{ flex: 1 }}>
-						Payment History
-					</ThemedText>
-					{balanceDue > 0 && (
-						<Pressable onPress={handleRecordPayment} style={styles.addPayBtn}>
-							<Plus size={14} color={c.primary} />
-							<ThemedText
-								variant="caption"
-								color={c.primary}
-								style={{ marginLeft: SPACING_PX.xs }}
-							>
-								Record
-							</ThemedText>
-						</Pressable>
-					)}
-				</View>
+				<SectionHeader
+					title="Payment History"
+					titleColor={c.onSurfaceVariant}
+					action={
+						balanceDue > 0 ? (
+							<Pressable onPress={handleRecordPayment} style={styles.addPayBtn}>
+								<Plus size={14} color={c.primary} />
+								<ThemedText
+									variant="caption"
+									color={c.primary}
+									style={{ marginLeft: SPACING_PX.xs }}
+								>
+									Record
+								</ThemedText>
+							</Pressable>
+						) : null
+					}
+					style={{
+						borderBottomColor: c.border,
+						borderBottomWidth: StyleSheet.hairlineWidth,
+						paddingHorizontal: s.md,
+						paddingVertical: s.sm,
+					}}
+				/>
 				<View style={{ padding: s.md, gap: s.sm }}>
 					{payments.length === 0 ? (
 						<ThemedText color={c.onSurfaceVariant} style={styles.centered}>
@@ -663,11 +653,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	section: { overflow: 'hidden' },
-	sectionHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
 	detailRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',

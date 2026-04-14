@@ -1,6 +1,3 @@
-import { SIZE_ICON_CONTAINER } from '@/theme/uiMetrics';
-
-const ICON_WRAP_SIZE = SIZE_ICON_CONTAINER + 4;
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, RefreshControl, Pressable, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -25,7 +22,13 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
 import { withOpacity } from '@/src/utils/color';
-import { FAB_OFFSET_RIGHT, OPACITY_TINT_LIGHT, RADIUS_FAB, SIZE_FAB } from '@/theme/uiMetrics';
+import {
+	FAB_OFFSET_RIGHT,
+	OPACITY_TINT_LIGHT,
+	RADIUS_FAB,
+	SIZE_FAB,
+	SIZE_ICON_CONTAINER,
+} from '@/theme/uiMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 // ---------------------------------------------------------------------------
@@ -55,6 +58,7 @@ const CATEGORY_FILTERS = [
 	{ label: 'Other', value: 'miscellaneous' },
 ];
 const LIST_BOTTOM_PADDING = 100;
+const ICON_WRAP_SIZE = SIZE_ICON_CONTAINER + 4;
 
 function getCategoryIcon(category: string, color: string) {
 	const size = 18;
@@ -134,7 +138,7 @@ export default function OtherIncomeScreen() {
 
 	function renderItem({ item }: { item: IncomeEntry }) {
 		return (
-			<Card style={styles.card} padding="md">
+			<Card padding="md">
 				<View style={layout.rowBetween}>
 					<View style={[layout.row, { alignItems: 'center', flex: 1 }]}>
 						<View
@@ -272,7 +276,6 @@ const styles = StyleSheet.create({
 	listContent: {
 		padding: SPACING_PX.lg,
 	},
-	card: {},
 	iconWrap: {
 		width: ICON_WRAP_SIZE,
 		height: ICON_WRAP_SIZE,

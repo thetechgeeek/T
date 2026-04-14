@@ -73,7 +73,12 @@ export default function ItemSettingsScreen() {
 				<SectionHeader title="General" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Items Module"
@@ -106,7 +111,12 @@ export default function ItemSettingsScreen() {
 				<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Party-wise Item Rates"
@@ -128,7 +138,12 @@ export default function ItemSettingsScreen() {
 				<SectionHeader title="Display" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Show Item Description"
@@ -142,7 +157,12 @@ export default function ItemSettingsScreen() {
 				<SectionHeader title="Tracking" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Batch Number Tracking"
@@ -165,7 +185,6 @@ export default function ItemSettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',

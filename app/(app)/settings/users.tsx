@@ -1,4 +1,6 @@
 import {
+	BORDER_WIDTH_BASE,
+	RADIUS_MODAL_SHEET,
 	FLEX_AMT_WIDE,
 	OVERLAY_COLOR_STRONG,
 	OPACITY_TINT_LIGHT,
@@ -14,11 +16,6 @@ import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { withOpacity } from '@/src/utils/color';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const USER_CARD_AVATAR_SIZE = SIZE_AVATAR_MD;
-const USER_CARD_AVATAR_RADIUS = SIZE_AVATAR_MD / 2;
-const MODAL_RADIUS = 20;
 
 type Role = 'salesperson' | 'admin';
 
@@ -29,7 +26,7 @@ const ROLE_INFO: Record<Role, string> = {
 };
 
 export default function UsersScreen() {
-	const { c } = useThemeTokens();
+	const { c, typo } = useThemeTokens();
 
 	const [trackByUser, setTrackByUser] = useState(false);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -60,7 +57,7 @@ export default function UsersScreen() {
 						style={{
 							color: c.white,
 							fontWeight: '700',
-							fontSize: FONT_SIZE.h2,
+							fontSize: typo.variants.h2.fontSize,
 						}}
 					>
 						B
@@ -223,7 +220,7 @@ export default function UsersScreen() {
 									{
 										backgroundColor: c.background,
 										borderColor: c.border,
-										borderWidth: 1,
+										borderWidth: BORDER_WIDTH_BASE,
 									},
 								]}
 							>
@@ -264,9 +261,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	avatar: {
-		width: USER_CARD_AVATAR_SIZE,
-		height: USER_CARD_AVATAR_SIZE,
-		borderRadius: USER_CARD_AVATAR_RADIUS,
+		width: SIZE_AVATAR_MD,
+		height: SIZE_AVATAR_MD,
+		borderRadius: SIZE_AVATAR_MD / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -294,8 +291,8 @@ const styles = StyleSheet.create({
 	},
 	modalOverlay: { flex: 1, backgroundColor: OVERLAY_COLOR_STRONG, justifyContent: 'flex-end' },
 	modalContent: {
-		borderTopLeftRadius: MODAL_RADIUS,
-		borderTopRightRadius: MODAL_RADIUS,
+		borderTopLeftRadius: RADIUS_MODAL_SHEET,
+		borderTopRightRadius: RADIUS_MODAL_SHEET,
 		padding: SPACING_PX.xl,
 		paddingBottom: SPACING_PX['2xl'],
 	},
@@ -303,15 +300,15 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.lg,
 		paddingVertical: SPACING_PX.sm,
 		borderRadius: BORDER_RADIUS_PX.full,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	roleDesc: {
 		borderRadius: BORDER_RADIUS_PX.md,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		padding: SPACING_PX.md,
 	},
 	textInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		borderRadius: BORDER_RADIUS_PX.md,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,

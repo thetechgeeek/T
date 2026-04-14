@@ -1,6 +1,11 @@
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
 import {
+	BORDER_WIDTH_BASE,
+	OPACITY_SWATCH_SELECTED,
 	SIZE_AVATAR_MD,
+	SIZE_CATEGORY_DOT,
+	SIZE_COLOR_SWATCH,
+	SIZE_EMOJI_INPUT_WIDTH,
 	OVERLAY_COLOR_MEDIUM,
 	FAB_OFFSET_RIGHT,
 	FAB_OFFSET_BOTTOM,
@@ -9,12 +14,6 @@ import {
 	SIZE_MODAL_HANDLE_WIDTH,
 	SIZE_MODAL_HANDLE_HEIGHT,
 } from '@/theme/uiMetrics';
-
-const COLOR_SWATCH_SELECTED_SHADOW = 0.5;
-const COLOR_SWATCH_SELECTED_ELEVATION = 4;
-const ZERO_SPACING = 0;
-const SHADOW_OFFSET_Y = 2;
-const LIST_BOTTOM_PADDING = 100;
 import React, { useState } from 'react';
 import {
 	View,
@@ -40,16 +39,11 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
 import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { ELEVATION } from '@/theme/shadowMetrics';
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
-
-const CATEGORY_DOT_SIZE = 12;
-const CATEGORY_DOT_RADIUS = 6;
-const COLOR_SWATCH_SIZE = 36;
-const COLOR_SWATCH_RADIUS = 18;
-const EMOJI_INPUT_WIDTH = 72;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -80,6 +74,7 @@ export default function ExpenseCategoriesScreen() {
 	const { formatCurrency } = useLocale();
 	const insets = useSafeAreaInsets();
 	const presetColors = theme.collections.expenseCategoryPickColors;
+	const listBottomPadding = FAB_OFFSET_BOTTOM + SIZE_FAB + s.xl;
 	const fallbackCategories = React.useMemo<ExpenseCategory[]>(
 		() => [
 			{
@@ -222,7 +217,7 @@ export default function ExpenseCategoriesScreen() {
 
 	function renderItem({ item }: { item: ExpenseCategory }) {
 		return (
-			<Card style={styles.row} padding="md">
+			<Card padding="md">
 				<View style={layout.rowBetween}>
 					<View style={[layout.row, { alignItems: 'center', flex: 1 }]}>
 						{/* Colored dot */}
@@ -283,7 +278,7 @@ export default function ExpenseCategoriesScreen() {
 				renderItem={renderItem}
 				contentContainerStyle={[
 					styles.listContent,
-					{ paddingBottom: LIST_BOTTOM_PADDING + insets.bottom },
+					{ paddingBottom: listBottomPadding + insets.bottom },
 				]}
 				ItemSeparatorComponent={() => <View style={{ height: s.sm }} />}
 				ListEmptyComponent={
@@ -440,17 +435,14 @@ export default function ExpenseCategoriesScreen() {
 												shadowColor: col,
 												shadowOpacity:
 													form.color === col
-														? COLOR_SWATCH_SELECTED_SHADOW
+														? OPACITY_SWATCH_SELECTED
 														: 0,
-												shadowRadius: 4,
+												shadowRadius: SPACING_PX.xs,
 												shadowOffset: {
-													width: ZERO_SPACING,
-													height: ZERO_SPACING,
+													width: 0,
+													height: 0,
 												},
-												elevation:
-													form.color === col
-														? COLOR_SWATCH_SELECTED_ELEVATION
-														: 0,
+												elevation: form.color === col ? ELEVATION.md : 0,
 											},
 										]}
 										accessibilityRole="radio"
@@ -506,13 +498,10 @@ const styles = StyleSheet.create({
 	listContent: {
 		padding: SPACING_PX.lg,
 	},
-	row: {
-		marginBottom: ZERO_SPACING,
-	},
 	dot: {
-		width: CATEGORY_DOT_SIZE,
-		height: CATEGORY_DOT_SIZE,
-		borderRadius: CATEGORY_DOT_RADIUS,
+		width: SIZE_CATEGORY_DOT,
+		height: SIZE_CATEGORY_DOT,
+		borderRadius: SIZE_CATEGORY_DOT / 2,
 		marginRight: SPACING_PX.sm,
 	},
 	empty: {
@@ -527,8 +516,8 @@ const styles = StyleSheet.create({
 		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
-		shadowOffset: { width: ZERO_SPACING, height: SHADOW_OFFSET_Y },
+		elevation: ELEVATION.md,
+		shadowOffset: { width: 0, height: SPACING_PX.xxs },
 		...FAB_SHADOW,
 	},
 	modalOverlay: {
@@ -565,14 +554,14 @@ const styles = StyleSheet.create({
 		marginBottom: SPACING_PX.xs,
 	},
 	textInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,
 		fontSize: FONT_SIZE.body,
 		minHeight: TOUCH_TARGET_MIN_PX,
 	},
 	emojiInput: {
-		width: EMOJI_INPUT_WIDTH,
+		width: SIZE_EMOJI_INPUT_WIDTH,
 		textAlign: 'center',
 	},
 	colorGrid: {
@@ -582,9 +571,9 @@ const styles = StyleSheet.create({
 		marginTop: SPACING_PX.xs,
 	},
 	colorCircle: {
-		width: COLOR_SWATCH_SIZE,
-		height: COLOR_SWATCH_SIZE,
-		borderRadius: COLOR_SWATCH_RADIUS,
+		width: SIZE_COLOR_SWATCH,
+		height: SIZE_COLOR_SWATCH,
+		borderRadius: SIZE_COLOR_SWATCH / 2,
 	},
 	preview: {
 		padding: SPACING_PX.md,

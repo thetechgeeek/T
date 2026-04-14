@@ -3,23 +3,16 @@ import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { OPACITY_HOVER, GLASS_WHITE_LIGHT } from '@/theme/uiMetrics';
+import { GLASS_WHITE_LIGHT, OPACITY_HOVER, SIZE_AUTH_LOGO_LG } from '@/theme/uiMetrics';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@/src/components/atoms/Screen';
 import { Button } from '@/src/components/atoms/Button';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { PhoneInput } from '@/src/components/molecules/PhoneInput';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-
-/** Vertical padding at base of header to create visual depth */
-const HEADER_PADDING_BOTTOM = 50;
-/** Pull the form card up under the header for overlap effect */
-const FORM_MARGIN_TOP = -SPACING_PX['2xl'];
-const AUTH_LOGO_SIZE = 80;
 
 export default function LoginScreen() {
-	const { theme, c, s, r } = useThemeTokens();
+	const { c, s, r, typo } = useThemeTokens();
 	const { t } = useLocale();
 	const { sendOtp, loading } = useAuthStore(
 		useShallow((s) => ({ sendOtp: s.sendOtp, loading: s.loading })),
@@ -47,12 +40,22 @@ export default function LoginScreen() {
 		}
 	};
 
-	const typo = theme.typography;
-
 	return (
 		<Screen scrollable safeAreaEdges={['top']}>
 			{/* Header */}
-			<View style={[styles.header, { backgroundColor: c.primary, paddingTop: s.xl * 2 }]}>
+			<View
+				style={[
+					styles.header,
+					{
+						backgroundColor: c.primary,
+						paddingTop: s['3xl'],
+						paddingBottom: s['3xl'],
+						paddingHorizontal: s.xl,
+						borderBottomLeftRadius: r.xl,
+						borderBottomRightRadius: r.xl,
+					},
+				]}
+			>
 				<View
 					style={[
 						styles.logoMark,
@@ -88,7 +91,7 @@ export default function LoginScreen() {
 			</View>
 
 			{/* Form */}
-			<View style={[styles.form, { padding: s.xl }]}>
+			<View style={[styles.form, { marginTop: -s['2xl'], padding: s.xl }]}>
 				<ThemedText variant="h2" style={{ marginBottom: s.xs, textAlign: 'center' }}>
 					{t('auth.welcome')}
 				</ThemedText>
@@ -113,7 +116,7 @@ export default function LoginScreen() {
 				/>
 
 				{/* Help text */}
-				<View style={{ marginTop: s.xl * 2, alignItems: 'center' }}>
+				<View style={[styles.helpBlock, { marginTop: s['3xl'] }]}>
 					<ThemedText variant="caption" color={c.onSurfaceVariant}>
 						{t('auth.loginHelpText')}
 					</ThemedText>
@@ -131,18 +134,15 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
 	header: {
 		alignItems: 'center',
-		paddingBottom: HEADER_PADDING_BOTTOM,
-		paddingHorizontal: SPACING_PX.xl,
-		borderBottomLeftRadius: BORDER_RADIUS_PX.xl,
-		borderBottomRightRadius: BORDER_RADIUS_PX.xl,
 	},
 	logoMark: {
-		width: AUTH_LOGO_SIZE,
-		height: AUTH_LOGO_SIZE,
+		width: SIZE_AUTH_LOGO_LG,
+		height: SIZE_AUTH_LOGO_LG,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	appName: { fontWeight: '800' },
 	subtitle: { textAlign: 'center' },
-	form: { flex: 1, marginTop: FORM_MARGIN_TOP, backgroundColor: 'transparent' },
+	form: { flex: 1 },
+	helpBlock: { alignItems: 'center' },
 });

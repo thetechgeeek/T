@@ -1,24 +1,18 @@
 import React, { useState, useRef } from 'react';
 import {
+	BORDER_WIDTH_ACCENT,
 	GLASS_WHITE_MEDIUM,
 	GLASS_WHITE_TEXT,
 	MS_SYNC_POLL,
+	OPACITY_BUSY,
 	OPACITY_INACTIVE,
 	OVERLAY_COLOR_DARK,
+	RADIUS_FAB,
+	SIZE_BUTTON_HEIGHT_LG,
+	SIZE_SCAN_FRAME_HEIGHT,
+	SIZE_SCAN_FRAME_WIDTH,
+	SIZE_SCAN_MANUAL_BOX_MAX_WIDTH,
 } from '@/theme/uiMetrics';
-
-const CAMERA_QUALITY = 0.5;
-const OCR_PLACEHOLDER_DELAY_MS = MS_SYNC_POLL;
-const QR_FRAME_TOP_MARGIN = 62;
-const CAPTURE_BTN_OPACITY_IDLE = 1;
-const CAPTURE_BTN_OPACITY_BUSY = 0.5;
-const SCAN_FRAME_WIDTH = 300;
-const SCAN_FRAME_HEIGHT = 180;
-const SCAN_MANUAL_BOX_MAX_WIDTH = 400;
-const SCAN_MANUAL_BOX_MARGIN_BOTTOM = 40;
-const SCAN_CAPTURE_BUTTON_SIZE = 72;
-const SCAN_CAPTURE_BUTTON_RADIUS = 36;
-const SCAN_CAPTURE_BORDER_WIDTH = 4;
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -33,7 +27,10 @@ import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import logger from '@/src/utils/logger';
-import { BORDER_RADIUS_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+
+const CAMERA_QUALITY = 0.5;
+const OCR_PLACEHOLDER_DELAY_MS = MS_SYNC_POLL;
 
 export default function ScanTab() {
 	const { theme, c, s, r } = useThemeTokens();
@@ -162,10 +159,10 @@ export default function ScanTab() {
 					>
 						{capturing && (
 							<SkeletonBlock
-								width={56}
-								height={56}
-								borderRadius={28}
-								style={{ marginTop: QR_FRAME_TOP_MARGIN, alignSelf: 'center' }}
+								width={SIZE_BUTTON_HEIGHT_LG}
+								height={SIZE_BUTTON_HEIGHT_LG}
+								borderRadius={RADIUS_FAB}
+								style={{ marginTop: s['4xl'], alignSelf: 'center' }}
 							/>
 						)}
 					</View>
@@ -196,9 +193,7 @@ export default function ScanTab() {
 							styles.captureBtn,
 							{
 								backgroundColor: c.primary,
-								opacity: capturing
-									? CAPTURE_BTN_OPACITY_BUSY
-									: CAPTURE_BTN_OPACITY_IDLE,
+								opacity: capturing ? OPACITY_BUSY : 1,
 							},
 						]}
 					>
@@ -215,6 +210,7 @@ export default function ScanTab() {
 								backgroundColor: theme.colors.card,
 								borderRadius: r.lg,
 								padding: s.md,
+								marginBottom: s['4xl'] - s.xl,
 							},
 						]}
 					>
@@ -265,26 +261,25 @@ export default function ScanTab() {
 const styles = StyleSheet.create({
 	overlay: { flex: 1 },
 	darkness: { backgroundColor: OVERLAY_COLOR_DARK },
-	scanRow: { flexDirection: 'row', height: SCAN_FRAME_HEIGHT },
+	scanRow: { flexDirection: 'row', height: SIZE_SCAN_FRAME_HEIGHT },
 	scanFrame: {
-		width: SCAN_FRAME_WIDTH,
-		height: SCAN_FRAME_HEIGHT,
-		borderWidth: 2,
+		width: SIZE_SCAN_FRAME_WIDTH,
+		height: SIZE_SCAN_FRAME_HEIGHT,
+		borderWidth: SPACING_PX.xxs,
 		borderRadius: BORDER_RADIUS_PX.xl,
 		backgroundColor: 'transparent',
 	},
 	manualBox: {
 		width: '85%',
-		maxWidth: SCAN_MANUAL_BOX_MAX_WIDTH,
-		marginBottom: SCAN_MANUAL_BOX_MARGIN_BOTTOM,
+		maxWidth: SIZE_SCAN_MANUAL_BOX_MAX_WIDTH,
 	},
 	captureBtn: {
-		width: SCAN_CAPTURE_BUTTON_SIZE,
-		height: SCAN_CAPTURE_BUTTON_SIZE,
-		borderRadius: SCAN_CAPTURE_BUTTON_RADIUS,
+		width: SPACING_PX['4xl'] + SPACING_PX.sm,
+		height: SPACING_PX['4xl'] + SPACING_PX.sm,
+		borderRadius: BORDER_RADIUS_PX.full,
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderWidth: SCAN_CAPTURE_BORDER_WIDTH,
+		borderWidth: BORDER_WIDTH_ACCENT,
 		borderColor: GLASS_WHITE_MEDIUM,
 	},
 });

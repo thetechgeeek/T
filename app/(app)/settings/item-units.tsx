@@ -1,4 +1,5 @@
 import {
+	BORDER_WIDTH_BASE,
 	SIZE_AVATAR_MD,
 	OVERLAY_COLOR_MEDIUM,
 	FAB_OFFSET_RIGHT,
@@ -38,9 +39,7 @@ import type { ItemUnit } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const ZERO_SPACING = 0;
-const LIST_BOTTOM_PADDING = 100;
+import { ELEVATION } from '@/theme/shadowMetrics';
 
 interface UnitFormState {
 	name: string;
@@ -58,6 +57,7 @@ export default function ItemUnitsScreen() {
 	const { c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const insets = useSafeAreaInsets();
+	const listBottomPadding = FAB_OFFSET_BOTTOM + SIZE_FAB + s.xl;
 
 	const [units, setUnits] = useState<ItemUnit[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -150,7 +150,7 @@ export default function ItemUnitsScreen() {
 
 	function renderItem({ item }: { item: ItemUnit }) {
 		return (
-			<Card style={styles.card} padding="md">
+			<Card padding="md">
 				<View style={layout.rowBetween}>
 					<View style={{ flex: 1 }}>
 						<View style={layout.row}>
@@ -206,7 +206,7 @@ export default function ItemUnitsScreen() {
 					renderItem={renderItem}
 					contentContainerStyle={[
 						styles.listContent,
-						{ paddingBottom: LIST_BOTTOM_PADDING + insets.bottom },
+						{ paddingBottom: listBottomPadding + insets.bottom },
 					]}
 					ItemSeparatorComponent={() => <View style={{ height: s.sm }} />}
 					ListEmptyComponent={
@@ -224,7 +224,7 @@ export default function ItemUnitsScreen() {
 				]}
 				onPress={openAdd}
 			>
-				<Plus color="white" size={28} />
+				<Plus color={c.white} size={28} />
 			</Pressable>
 
 			<Modal
@@ -348,7 +348,6 @@ export default function ItemUnitsScreen() {
 
 const styles = StyleSheet.create({
 	listContent: { padding: SPACING_PX.lg },
-	card: { marginBottom: ZERO_SPACING },
 	empty: { textAlign: 'center', marginTop: SIZE_AVATAR_MD },
 	fab: {
 		position: 'absolute',
@@ -358,7 +357,7 @@ const styles = StyleSheet.create({
 		borderRadius: RADIUS_FAB,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
+		elevation: ELEVATION.md,
 	},
 	modalOverlay: { flex: 1, justifyContent: 'flex-end' },
 	modalBackdrop: { flex: 1, backgroundColor: OVERLAY_COLOR_MEDIUM },
@@ -380,7 +379,7 @@ const styles = StyleSheet.create({
 	modalScroll: { paddingHorizontal: SPACING_PX.xl, paddingBottom: SPACING_PX.lg },
 	label: { fontWeight: '600', marginBottom: SPACING_PX.xs },
 	textInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,
 		fontSize: FONT_SIZE.body,

@@ -1,5 +1,3 @@
-const STATUS_DOT_SIZE = 7;
-const STATUS_DOT_INLINE_SIZE = 8;
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
@@ -15,8 +13,7 @@ import { InvoiceStatusBadge } from '@/src/components/molecules/InvoiceStatusBadg
 import type { InvoiceStatus } from '@/src/components/molecules/InvoiceStatusBadge';
 import { InvoiceListSkeleton } from '@/src/components/molecules/skeletons/InvoiceListSkeleton';
 import type { Invoice, PaymentStatus } from '@/src/types/invoice';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
@@ -68,7 +65,7 @@ const STATUS_CHIPS: StatusChip[] = ['ALL', 'paid', 'partial', 'unpaid'];
 
 export default function InvoicesListScreen() {
 	const router = useRouter();
-	const { theme, c, s, r } = useThemeTokens();
+	const { theme, c, s, r, typo } = useThemeTokens();
 	const { t, formatCurrency, formatDate } = useLocale();
 
 	const { invoices, loading, fetchInvoices } = useInvoiceStore(
@@ -231,7 +228,10 @@ export default function InvoicesListScreen() {
 			>
 				<Search size={16} color={c.placeholder} style={{ marginRight: SPACING_PX.xs }} />
 				<TextInput
-					style={[styles.searchInput, { color: c.onSurface }]}
+					style={[
+						styles.searchInput,
+						{ color: c.onSurface, fontSize: typo.variants.caption.fontSize },
+					]}
 					placeholder="Search invoice no. or customer..."
 					placeholderTextColor={c.placeholder}
 					value={search}
@@ -391,6 +391,7 @@ export default function InvoicesListScreen() {
 								styles.invoiceCard,
 								{
 									backgroundColor: theme.colors.card,
+									borderRadius: r.lg,
 									...theme.shadows.sm,
 								},
 							]}
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		borderBottomWidth: 1,
+		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	summaryCard: {
 		padding: SPACING_PX.md,
@@ -465,20 +466,18 @@ const styles = StyleSheet.create({
 	},
 	searchInput: {
 		flex: 1,
-		fontSize: FONT_SIZE.caption,
 		paddingVertical: 0,
 	},
 	chip: {
 		// dynamic styles applied inline
 	},
 	statusDot: {
-		width: STATUS_DOT_SIZE,
-		height: STATUS_DOT_SIZE,
-		borderRadius: STATUS_DOT_SIZE / 2,
+		width: SPACING_PX.sm,
+		height: SPACING_PX.sm,
+		borderRadius: SPACING_PX.sm,
 	},
 	invoiceCard: {
 		padding: SPACING_PX.lg,
-		borderRadius: BORDER_RADIUS_PX.lg,
 		marginBottom: SPACING_PX.md,
 	},
 	cardHeader: {
@@ -488,9 +487,9 @@ const styles = StyleSheet.create({
 		gap: SPACING_PX.xs,
 	},
 	statusDotInline: {
-		width: STATUS_DOT_INLINE_SIZE,
-		height: STATUS_DOT_INLINE_SIZE,
-		borderRadius: BORDER_RADIUS_PX.sm,
+		width: SPACING_PX.sm,
+		height: SPACING_PX.sm,
+		borderRadius: SPACING_PX.sm,
 	},
 	cardFooter: {
 		flexDirection: 'row',

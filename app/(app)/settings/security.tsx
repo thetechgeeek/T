@@ -8,6 +8,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { BORDER_WIDTH_BASE } from '@/theme/uiMetrics';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 
 type AutoLock = 'never' | '1min' | '5min' | '15min';
@@ -81,7 +82,12 @@ export default function SecuritySettingsScreen() {
 			<SectionHeader title="PIN" variant="uppercase" titleColor={c.primary} />
 			<SettingsCard
 				padding="none"
-				style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
 			>
 				<Pressable
 					onPress={() => router.push('/(app)/settings/lock')}
@@ -146,7 +152,12 @@ export default function SecuritySettingsScreen() {
 			/>
 			<SettingsCard
 				padding="none"
-				style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
 			>
 				<SwitchRow
 					label="Require PIN to Edit Transactions"
@@ -167,7 +178,6 @@ export default function SecuritySettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -180,6 +190,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.lg,
 		paddingVertical: SPACING_PX.sm,
 		borderRadius: BORDER_RADIUS_PX.full,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 });

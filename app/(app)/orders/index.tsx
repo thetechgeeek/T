@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { Plus, ChevronRight, FileText } from 'lucide-react-native';
@@ -10,6 +10,7 @@ import { OPACITY_SKELETON_BASE } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { Button } from '@/src/components/atoms/Button';
+import { TouchableCard } from '@/src/components/atoms/TouchableCard';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -90,17 +91,19 @@ export default function OrdersListScreen() {
 						/>
 					}
 					renderItem={({ item }) => (
-						<TouchableOpacity
+						<TouchableCard
 							style={[
-								styles.card,
 								{
+									flexDirection: 'row',
+									padding: s.lg,
+									marginBottom: s.md,
+									borderWidth: 1,
 									backgroundColor: c.surface,
 									borderRadius: r.md,
 									borderColor: c.border,
 								},
 							]}
 							onPress={() => router.push(`/(app)/orders/${item.id}`)}
-							activeOpacity={0.7}
 							accessibilityRole="button"
 							accessibilityLabel={`order-${item.id}`}
 							accessibilityHint={`${item.party_name || t('supplier.title')}, ${t('order.doubleTapToOpen')}`}
@@ -145,7 +148,7 @@ export default function OrdersListScreen() {
 									importantForAccessibility="no"
 								/>
 							</View>
-						</TouchableOpacity>
+						</TouchableCard>
 					)}
 				/>
 			)}
@@ -154,12 +157,6 @@ export default function OrdersListScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: {
-		flexDirection: 'row',
-		padding: 16,
-		marginBottom: 12,
-		borderWidth: 1,
-	},
 	badge: {
 		paddingHorizontal: 8,
 		paddingVertical: 4,

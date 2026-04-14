@@ -7,12 +7,15 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import {
+	BORDER_WIDTH_BASE,
+	SIZE_FIELD_CHIP_HEIGHT,
+	SIZE_FIELD_CHIP_WIDTH,
+} from '@/theme/uiMetrics';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 type ExtraFields = 0 | 1 | 2 | 3;
-const EXTRA_FIELD_CHIP_WIDTH = 44;
-const EXTRA_FIELD_CHIP_HEIGHT = 40;
 
 function SwitchRow({
 	label,
@@ -85,7 +88,12 @@ export default function PartySettingsScreen() {
 				<SectionHeader title="Party Fields" variant="uppercase" titleColor={c.primary} />
 				<SettingsCard
 					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 				>
 					<SwitchRow
 						label="Show GSTIN Field"
@@ -128,7 +136,12 @@ export default function PartySettingsScreen() {
 					titleColor={c.primary}
 				/>
 				<SettingsCard
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					style={{
+						marginHorizontal: SPACING_PX.lg,
+						overflow: 'hidden',
+						backgroundColor: c.surface,
+						borderWidth: 0,
+					}}
 					padding="md"
 				>
 					<ThemedText
@@ -193,7 +206,6 @@ export default function PartySettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -202,15 +214,15 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.lg,
 	},
 	chip: {
-		width: EXTRA_FIELD_CHIP_WIDTH,
-		height: EXTRA_FIELD_CHIP_HEIGHT,
+		width: SIZE_FIELD_CHIP_WIDTH,
+		height: SIZE_FIELD_CHIP_HEIGHT,
 		borderRadius: BORDER_RADIUS_PX.md,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	textInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		borderRadius: BORDER_RADIUS_PX.md,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,

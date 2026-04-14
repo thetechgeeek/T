@@ -8,12 +8,14 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import {
+	BORDER_WIDTH_BASE,
+	OPACITY_TINT_LIGHT,
+	SIZE_DAYS_INPUT_WIDTH,
+	SIZE_TEXTAREA_HEIGHT,
+} from '@/theme/uiMetrics';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const MULTILINE_INPUT_MIN_HEIGHT = 90;
-const DAYS_INPUT_WIDTH = 44;
 
 type Channel = 'whatsapp' | 'sms' | 'both';
 
@@ -66,7 +68,12 @@ export default function RemindersScreen() {
 						/>
 						<SettingsCard
 							padding="none"
-							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+							style={{
+								marginHorizontal: SPACING_PX.lg,
+								overflow: 'hidden',
+								backgroundColor: c.surface,
+								borderWidth: 0,
+							}}
 						>
 							{[
 								{ label: 'First reminder after', value: first, setter: setFirst },
@@ -156,7 +163,12 @@ export default function RemindersScreen() {
 							titleColor={c.primary}
 						/>
 						<SettingsCard
-							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+							style={{
+								marginHorizontal: SPACING_PX.lg,
+								overflow: 'hidden',
+								backgroundColor: c.surface,
+								borderWidth: 0,
+							}}
 							padding="md"
 						>
 							<TextInput
@@ -225,7 +237,6 @@ const styles = StyleSheet.create({
 		marginTop: SPACING_PX.xl,
 	},
 	topRow: { flexDirection: 'row', alignItems: 'center' },
-	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -238,11 +249,11 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.lg,
 		paddingVertical: SPACING_PX.sm,
 		borderRadius: BORDER_RADIUS_PX.full,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	daysInput: {
-		width: DAYS_INPUT_WIDTH,
-		borderWidth: 1,
+		width: SIZE_DAYS_INPUT_WIDTH,
+		borderWidth: BORDER_WIDTH_BASE,
 		borderRadius: BORDER_RADIUS_PX.md,
 		paddingHorizontal: SPACING_PX.sm,
 		paddingVertical: SPACING_PX.xs,
@@ -250,18 +261,18 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 	templateInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		borderRadius: BORDER_RADIUS_PX.md,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,
 		fontSize: FONT_SIZE.caption,
-		minHeight: MULTILINE_INPUT_MIN_HEIGHT,
+		minHeight: SIZE_TEXTAREA_HEIGHT,
 		textAlignVertical: 'top',
 	},
 	varChip: {
 		paddingHorizontal: SPACING_PX.sm,
 		paddingVertical: SPACING_PX.xs,
 		borderRadius: BORDER_RADIUS_PX.lg,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 });

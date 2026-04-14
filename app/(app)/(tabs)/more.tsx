@@ -22,12 +22,10 @@ import { useAuthStore } from '@/src/stores/authStore';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Divider } from '@/src/components/atoms/Divider';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-
-const MENU_ICON_WRAP_SIZE = 40;
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export default function MoreTab() {
-	const { theme, c, s } = useThemeTokens();
+	const { theme, c, s, r } = useThemeTokens();
 	const { t, currentLanguage, toggleLanguage } = useLocale();
 	const { isDark, toggleTheme } = useTheme();
 	const { logout } = useAuthStore();
@@ -117,7 +115,7 @@ export default function MoreTab() {
 							styles.menuItem,
 							{
 								backgroundColor: c.card,
-								borderRadius: theme.borderRadius.md,
+								borderRadius: r.md,
 								marginBottom: s.sm,
 								...(theme.shadows.sm as object),
 							},
@@ -133,7 +131,9 @@ export default function MoreTab() {
 								styles.iconWrap,
 								{
 									backgroundColor: withOpacity(item.color, OPACITY_TINT_LIGHT),
-									borderRadius: BORDER_RADIUS_PX.lg,
+									borderRadius: r.lg,
+									width: s['2xl'] + s.sm,
+									height: s['2xl'] + s.sm,
 								},
 							]}
 						>
@@ -159,7 +159,7 @@ export default function MoreTab() {
 							styles.menuItem,
 							{
 								backgroundColor: c.card,
-								borderRadius: theme.borderRadius.md,
+								borderRadius: r.md,
 								marginBottom: s.sm,
 								...(theme.shadows.sm as object),
 							},
@@ -175,7 +175,9 @@ export default function MoreTab() {
 								styles.iconWrap,
 								{
 									backgroundColor: withOpacity(item.color, OPACITY_TINT_LIGHT),
-									borderRadius: BORDER_RADIUS_PX.lg,
+									borderRadius: r.lg,
+									width: s['2xl'] + s.sm,
+									height: s['2xl'] + s.sm,
 								},
 							]}
 						>
@@ -200,7 +202,7 @@ export default function MoreTab() {
 						styles.menuItem,
 						{
 							backgroundColor: c.card,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 							marginBottom: s.sm,
 							...(theme.shadows.sm as object),
 						},
@@ -218,7 +220,9 @@ export default function MoreTab() {
 							styles.iconWrap,
 							{
 								backgroundColor: withOpacity(c.primary, OPACITY_TINT_LIGHT),
-								borderRadius: BORDER_RADIUS_PX.lg,
+								borderRadius: r.lg,
+								width: s['2xl'] + s.sm,
+								height: s['2xl'] + s.sm,
 							},
 						]}
 					>
@@ -236,7 +240,7 @@ export default function MoreTab() {
 						styles.menuItem,
 						{
 							backgroundColor: c.card,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 							marginBottom: s.sm,
 							...(theme.shadows.sm as object),
 						},
@@ -258,7 +262,9 @@ export default function MoreTab() {
 									c.onSurfaceVariant,
 									OPACITY_TINT_LIGHT,
 								),
-								borderRadius: BORDER_RADIUS_PX.lg,
+								borderRadius: r.lg,
+								width: s['2xl'] + s.sm,
+								height: s['2xl'] + s.sm,
 							},
 						]}
 					>
@@ -285,7 +291,7 @@ export default function MoreTab() {
 						styles.menuItem,
 						{
 							backgroundColor: c.errorLight,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 						},
 					]}
 					onPress={handleLogout}
@@ -318,8 +324,6 @@ const styles = StyleSheet.create({
 	header: { paddingVertical: SPACING_PX.md },
 	menuItem: { flexDirection: 'row', alignItems: 'center', padding: SPACING_PX.md },
 	iconWrap: {
-		width: MENU_ICON_WRAP_SIZE,
-		height: MENU_ICON_WRAP_SIZE,
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginRight: SPACING_PX.md,

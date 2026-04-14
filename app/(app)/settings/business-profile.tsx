@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import {
+	BORDER_WIDTH_BASE,
+	SIZE_IMAGE_PICKER_BOX,
+	SIZE_IMAGE_PICKER_HELPER,
+	SIZE_INPUT_HEIGHT,
+	SIZE_QR_PREVIEW,
+	SIZE_REMOVE_BUTTON,
+	SIZE_TEXTAREA_COMPACT_HEIGHT,
+	SIZE_TEXTAREA_HEIGHT,
+} from '@/theme/uiMetrics';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const MS_SAVED_TOAST = 3000;
-const TEXTAREA_HEIGHT = 90;
-const TEXTAREA_COMPACT_HEIGHT = 60;
-const REMOVE_BTN_OFFSET = -8;
-const QR_PREVIEW_SIZE = 120;
-const IMAGE_PICKER_BOX_SIZE = 100;
-const REMOVE_BUTTON_SIZE = 24;
-const REMOVE_BUTTON_RADIUS = 12;
-const IMAGE_PICKER_HELPER_SIZE = 10;
-/** ImagePicker quality for business logo (medium – balances size vs clarity) */
-const LOGO_IMAGE_QUALITY = 0.7;
 import {
 	View,
 	TextInput,
@@ -26,11 +23,17 @@ import { useRouter } from 'expo-router';
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { storageService } from '@/src/services/storageService';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { Camera, X, ChevronDown, ChevronUp } from 'lucide-react-native';
 import QRCode from 'react-native-qrcode-svg';
+
+const MS_SAVED_TOAST = 3000;
+/** ImagePicker quality for business logo (medium – balances size vs clarity) */
+const LOGO_IMAGE_QUALITY = 0.7;
+
 interface ProfileForm {
 	business_name: string;
 	phone: string;
@@ -341,12 +344,18 @@ export default function BusinessProfileScreen() {
 				/>
 
 				{/* Additional Info Section */}
-				<Pressable
-					onPress={() => toggleSection('branding')}
-					style={[styles.sectionHeader, { borderBottomColor: c.border }]}
-				>
-					<ThemedText variant="h3">Branding & Additional Info</ThemedText>
-					{sections.branding ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+				<Pressable onPress={() => toggleSection('branding')}>
+					<SectionHeader
+						title="Branding & Additional Info"
+						action={
+							sections.branding ? <ChevronUp size={20} /> : <ChevronDown size={20} />
+						}
+						style={{
+							paddingHorizontal: 0,
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+						}}
+					/>
 				</Pressable>
 
 				{sections.branding && (
@@ -437,15 +446,17 @@ export default function BusinessProfileScreen() {
 				)}
 
 				{/* Bank Details & UPI Section */}
-				<Pressable
-					onPress={() => toggleSection('bank')}
-					style={[
-						styles.sectionHeader,
-						{ borderBottomColor: c.border, marginTop: SPACING_PX.xl },
-					]}
-				>
-					<ThemedText variant="h3">Bank Details & UPI</ThemedText>
-					{sections.bank ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+				<Pressable onPress={() => toggleSection('bank')}>
+					<SectionHeader
+						title="Bank Details & UPI"
+						action={sections.bank ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+						style={{
+							paddingHorizontal: 0,
+							marginTop: SPACING_PX.xl,
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+						}}
+					/>
 				</Pressable>
 
 				{sections.bank && (
@@ -462,10 +473,10 @@ export default function BusinessProfileScreen() {
 						/>
 
 						{form.upi_id ? (
-							<View style={styles.qrContainer}>
+							<View style={[styles.qrContainer, { backgroundColor: c.white }]}>
 								<QRCode
 									value={`upi://pay?pa=${form.upi_id}&pn=${form.business_name}`}
-									size={QR_PREVIEW_SIZE}
+									size={SIZE_QR_PREVIEW}
 								/>
 								<ThemedText variant="caption" style={{ marginTop: SPACING_PX.sm }}>
 									PREVIEW: This QR will appear on invoices
@@ -538,15 +549,19 @@ export default function BusinessProfileScreen() {
 				)}
 
 				{/* Invoice Sequence Section */}
-				<Pressable
-					onPress={() => toggleSection('sequence')}
-					style={[
-						styles.sectionHeader,
-						{ borderBottomColor: c.border, marginTop: SPACING_PX.xl },
-					]}
-				>
-					<ThemedText variant="h3">Invoice Settings</ThemedText>
-					{sections.sequence ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+				<Pressable onPress={() => toggleSection('sequence')}>
+					<SectionHeader
+						title="Invoice Settings"
+						action={
+							sections.sequence ? <ChevronUp size={20} /> : <ChevronDown size={20} />
+						}
+						style={{
+							paddingHorizontal: 0,
+							marginTop: SPACING_PX.xl,
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+						}}
+					/>
 				</Pressable>
 
 				{sections.sequence && (
@@ -661,12 +676,12 @@ const styles = StyleSheet.create({
 	label: { fontSize: FONT_SIZE.caption, fontWeight: '600', marginBottom: SPACING_PX.xs },
 	input: {
 		height: SIZE_INPUT_HEIGHT,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		paddingHorizontal: SPACING_PX.md,
 		fontSize: FONT_SIZE.body,
 	},
 	textarea: {
-		height: TEXTAREA_HEIGHT,
+		height: SIZE_TEXTAREA_HEIGHT,
 		textAlignVertical: 'top',
 		paddingTop: SPACING_PX.md,
 	},
@@ -680,15 +695,8 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.xl,
 		paddingVertical: SPACING_PX.md,
 	},
-	sectionHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		paddingVertical: SPACING_PX.md,
-		borderBottomWidth: 1,
-	},
 	textareaCompact: {
-		height: TEXTAREA_COMPACT_HEIGHT,
+		height: SIZE_TEXTAREA_COMPACT_HEIGHT,
 		textAlignVertical: 'top',
 		paddingTop: SPACING_PX.sm,
 	},
@@ -696,13 +704,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginTop: SPACING_PX.lg,
 		padding: SPACING_PX.lg,
-		backgroundColor: 'white',
 		borderRadius: BORDER_RADIUS_PX.md,
 	},
 	imageBox: {
-		width: IMAGE_PICKER_BOX_SIZE,
-		height: IMAGE_PICKER_BOX_SIZE,
-		borderWidth: 1,
+		width: SIZE_IMAGE_PICKER_BOX,
+		height: SIZE_IMAGE_PICKER_BOX,
+		borderWidth: BORDER_WIDTH_BASE,
 		borderStyle: 'dashed',
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -710,11 +717,11 @@ const styles = StyleSheet.create({
 	},
 	removeBtn: {
 		position: 'absolute',
-		top: REMOVE_BTN_OFFSET,
-		right: REMOVE_BTN_OFFSET,
-		width: REMOVE_BUTTON_SIZE,
-		height: REMOVE_BUTTON_SIZE,
-		borderRadius: REMOVE_BUTTON_RADIUS,
+		top: -SPACING_PX.sm,
+		right: -SPACING_PX.sm,
+		width: SIZE_REMOVE_BUTTON,
+		height: SIZE_REMOVE_BUTTON,
+		borderRadius: SIZE_REMOVE_BUTTON / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -789,7 +796,7 @@ function ImagePickerBox({
 						}}
 						style={[styles.removeBtn, { backgroundColor: c.error }]}
 					>
-						<X size={16} color="white" />
+						<X size={16} color={c.white} />
 					</Pressable>
 				</View>
 			) : (
@@ -798,7 +805,7 @@ function ImagePickerBox({
 					<ThemedText
 						style={{
 							color: c.placeholder,
-							fontSize: IMAGE_PICKER_HELPER_SIZE,
+							fontSize: SIZE_IMAGE_PICKER_HELPER,
 							marginTop: SPACING_PX.xs,
 						}}
 					>

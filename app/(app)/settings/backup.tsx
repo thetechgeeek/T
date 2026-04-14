@@ -6,6 +6,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { BORDER_WIDTH_BASE } from '@/theme/uiMetrics';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 
 type AutoBackup = 'off' | 'daily' | 'weekly';
@@ -25,7 +26,12 @@ export default function BackupScreen() {
 			<SectionHeader title="Google Drive" variant="uppercase" titleColor={c.primary} />
 			<SettingsCard
 				padding="none"
-				style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
 			>
 				<View
 					style={[
@@ -123,7 +129,12 @@ export default function BackupScreen() {
 			<SectionHeader title="Local Backup" variant="uppercase" titleColor={c.primary} />
 			<SettingsCard
 				padding="none"
-				style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
 			>
 				<View style={styles.row}>
 					<Pressable
@@ -158,7 +169,12 @@ export default function BackupScreen() {
 			</View>
 			<SettingsCard
 				padding="none"
-				style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
 			>
 				<View style={styles.row}>
 					<Pressable
@@ -183,7 +199,6 @@ export default function BackupScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -200,13 +215,13 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,
 		borderRadius: BORDER_RADIUS_PX.md,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	miniChip: {
 		paddingHorizontal: SPACING_PX.sm,
 		paddingVertical: SPACING_PX.xs,
 		borderRadius: BORDER_RADIUS_PX.lg,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	primaryBtn: {
 		paddingVertical: SPACING_PX.md,
@@ -216,7 +231,7 @@ const styles = StyleSheet.create({
 	warningCard: {
 		marginHorizontal: SPACING_PX.lg,
 		borderRadius: BORDER_RADIUS_PX.md,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		padding: SPACING_PX.md,
 		marginBottom: SPACING_PX.sm,
 	},

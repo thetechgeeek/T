@@ -140,7 +140,12 @@ export default function SettingsScreen() {
 					/>
 					<SettingsCard
 						padding="none"
-						style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+						style={{
+							marginHorizontal: SPACING_PX.lg,
+							overflow: 'hidden',
+							backgroundColor: c.surface,
+							borderWidth: 0,
+						}}
 					>
 						{section.rows.map((row, idx) => (
 							<Pressable
@@ -179,10 +184,6 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: {
-		marginHorizontal: SPACING_PX.lg,
-		overflow: 'hidden',
-	},
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',

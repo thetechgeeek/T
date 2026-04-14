@@ -1,4 +1,12 @@
-import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM, Z_INDEX } from '@/theme/uiMetrics';
+import {
+	BORDER_WIDTH_BASE,
+	OVERLAY_COLOR_MEDIUM,
+	SIZE_DROPDOWN_MAX_HEIGHT,
+	SIZE_FORM_MODAL_CARD_WIDTH,
+	SIZE_INPUT_HEIGHT,
+	SIZE_NOTES_MIN_HEIGHT,
+	Z_INDEX,
+} from '@/theme/uiMetrics';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
 	View,
@@ -29,9 +37,6 @@ import type { PaymentMode } from '@/src/types/invoice';
 import { buildMakePaymentRecordPayload } from '@/src/features/payments/buildPaymentRecordPayload';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const PAYMENT_FORM_BOTTOM_PADDING = 40;
-const PAYMENT_NOTES_MIN_HEIGHT = 72;
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Card'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
@@ -161,7 +166,7 @@ export default function MakePaymentScreen() {
 					{filteredSuppliers().length > 0 && (
 						<Card padding="none" style={styles.dropdown}>
 							<ScrollView
-								style={{ maxHeight: 200 }}
+								style={{ maxHeight: SIZE_DROPDOWN_MAX_HEIGHT }}
 								keyboardShouldPersistTaps="handled"
 							>
 								{filteredSuppliers().map((sup) => (
@@ -335,7 +340,7 @@ export default function MakePaymentScreen() {
 					numberOfLines={3}
 					placeholder="Optional notes..."
 					inputStyle={{
-						minHeight: PAYMENT_NOTES_MIN_HEIGHT,
+						minHeight: SIZE_NOTES_MIN_HEIGHT,
 						textAlignVertical: 'top',
 					}}
 				/>
@@ -354,7 +359,7 @@ export default function MakePaymentScreen() {
 }
 
 const styles = StyleSheet.create({
-	content: { paddingBottom: PAYMENT_FORM_BOTTOM_PADDING },
+	content: { paddingBottom: SPACING_PX['2xl'] + SPACING_PX.sm },
 	sectionLabel: { marginBottom: SPACING_PX.xs + SPACING_PX.xxs },
 	selectedCard: { marginBottom: SPACING_PX.xs },
 	selectedRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
@@ -365,7 +370,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm + SPACING_PX.xs / 2,
-		borderBottomWidth: 1,
+		borderBottomWidth: BORDER_WIDTH_BASE,
 	},
 	dateRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
 	dateRight: { flexDirection: 'row', alignItems: 'center', gap: SPACING_PX.sm },
@@ -377,7 +382,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	modalCard: {
-		width: SIZE_INPUT_HEIGHT * 6 + SPACING_PX.sm,
+		width: SIZE_FORM_MODAL_CARD_WIDTH,
 		padding: SPACING_PX.xl - SPACING_PX.xxs,
 	},
 	fullAmtChip: {
@@ -385,13 +390,13 @@ const styles = StyleSheet.create({
 		marginTop: SPACING_PX.sm,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.xs + SPACING_PX.xxs,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	chipsRow: { flexDirection: 'row', gap: SPACING_PX.sm },
 	modeChip: {
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	saveBtn: { height: SIZE_INPUT_HEIGHT },
 });

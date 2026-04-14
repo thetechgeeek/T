@@ -73,11 +73,59 @@ export const SIZE_IMPORT_ROW = 350;
 /** Empty-state illustration diameter */
 export const SIZE_EMPTY_STATE_ICON = 150;
 
+/** Dashboard business KPI card minimum height */
+export const SIZE_BUSINESS_TILE_MIN_HEIGHT = 90;
+
+/** Settings option-card minimum height */
+export const SIZE_OPTION_CARD_MIN_HEIGHT = 90;
+
+/** Radio-control diameters */
+export const SIZE_RADIO_OUTER = 20;
+export const SIZE_RADIO_INNER = 10;
+
+/** Scan frame overlay dimensions */
+export const SIZE_SCAN_FRAME_WIDTH = 300;
+export const SIZE_SCAN_FRAME_HEIGHT = 180;
+export const SIZE_SCAN_MANUAL_BOX_MAX_WIDTH = 400;
+
+/** Floating overflow menu width */
+export const SIZE_MENU_SHEET_WIDTH = 200;
+
+/** Modal sheet top-corner radius */
+export const RADIUS_MODAL_SHEET = 20;
+
+/** Settings input and picker dimensions */
+export const SIZE_DAYS_INPUT_WIDTH = 44;
+export const SIZE_THEME_SWATCH_WIDTH = 40;
+export const SIZE_THEME_SWATCH_HEIGHT = 56;
+export const SIZE_THEME_CHECK = 18;
+export const SIZE_FIELD_CHIP_WIDTH = 44;
+export const SIZE_FIELD_CHIP_HEIGHT = 40;
+export const SIZE_TEXTAREA_HEIGHT = 90;
+export const SIZE_TEXTAREA_COMPACT_HEIGHT = 60;
+export const SIZE_QR_PREVIEW = 120;
+export const SIZE_IMAGE_PICKER_BOX = 100;
+export const SIZE_REMOVE_BUTTON = 24;
+export const SIZE_IMAGE_PICKER_HELPER = 10;
+export const SIZE_COLOR_SWATCH = 36;
+export const SIZE_CATEGORY_DOT = 12;
+export const SIZE_EMOJI_INPUT_WIDTH = 72;
+export const SIZE_FORM_MODAL_CARD_WIDTH = 320;
+export const SIZE_DROPDOWN_MAX_HEIGHT = 200;
+export const SIZE_NOTES_MIN_HEIGHT = 72;
+
 /** Close-FY confirmation modal height */
 export const SIZE_CLOSE_FY_MODAL = 700;
 
 /** Language-picker flag/logo size */
 export const SIZE_LANGUAGE_FLAG = 120;
+
+/** Auth hero logo sizes */
+export const SIZE_AUTH_LOGO_MD = 64;
+export const SIZE_AUTH_LOGO_LG = 80;
+
+/** Slim progress indicator height */
+export const SIZE_PROGRESS_BAR = 4;
 
 /** iOS tab-bar total height (safe-area included) */
 export const SIZE_TAB_BAR_IOS = 88;
@@ -158,6 +206,12 @@ export const OPACITY_PANEL = 0.18;
 /** Border / outline tint */
 export const OPACITY_BORDER_TINT = 0.19;
 
+/** Busy/disabled overlay opacity */
+export const OPACITY_BUSY = 0.5;
+
+/** Selected color-swatch emphasis */
+export const OPACITY_SWATCH_SELECTED = 0.5;
+
 /** Dimmed surface (e.g. alternating table row) */
 export const OPACITY_DIM = 0.38;
 
@@ -202,6 +256,18 @@ export const OPACITY_LOGO_PLACEHOLDER = 0.7;
 
 /** Day-book row divider opacity */
 export const OPACITY_ROW_DIVIDER = 0.1;
+
+/** Accent border width for highlighted frames/buttons */
+export const BORDER_WIDTH_ACCENT = 4;
+
+/** Default control/card outline width */
+export const BORDER_WIDTH_BASE = 1;
+
+/** Strong selected-state outline width */
+export const BORDER_WIDTH_STRONG = 2;
+
+/** Medium outline width used on selected cards */
+export const BORDER_WIDTH_MEDIUM = 1.5;
 
 // ─── Flex weights (when 1 is taken) ──────────────────────────────────────────
 

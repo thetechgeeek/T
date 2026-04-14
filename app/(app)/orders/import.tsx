@@ -1,8 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { OPACITY_SKELETON_PEAK } from '@/theme/uiMetrics';
-
-const TEXTAREA_MIN_HEIGHT = 160;
-const UPLOAD_ZONE_BORDER_WIDTH = 1.5;
 import {
 	View,
 	StyleSheet,
@@ -29,10 +26,15 @@ import { pdfService } from '@/src/services/pdfService';
 import type { ParsedOrderItem } from '@/src/services/pdfService';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Button } from '@/src/components/atoms/Button';
+import { Card } from '@/src/components/atoms/Card';
 import { TextInput } from '@/src/components/atoms/TextInput';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+
+const TEXTAREA_MIN_HEIGHT = 160;
+const UPLOAD_ZONE_BORDER_WIDTH = 1.5;
 
 type InputMode = 'file' | 'text';
 
@@ -59,7 +61,17 @@ function EditableItemCard({
 	const [expanded, setExpanded] = useState(false);
 
 	return (
-		<View style={[styles.card, { backgroundColor: c.surface, borderLeftColor: c.primary }]}>
+		<Card
+			padding="none"
+			style={{
+				backgroundColor: c.surface,
+				borderLeftColor: c.primary,
+				borderLeftWidth: 4,
+				borderRadius: 12,
+				marginBottom: 12,
+				overflow: 'hidden',
+			}}
+		>
 			{/* Header row — always visible */}
 			<TouchableOpacity
 				style={styles.cardHeader}
@@ -161,7 +173,7 @@ function EditableItemCard({
 					</TouchableOpacity>
 				</View>
 			)}
-		</View>
+		</Card>
 	);
 }
 
@@ -340,18 +352,11 @@ export default function ImportOrderScreen() {
 							/>
 						</View>
 
-						<View style={styles.sectionHeader}>
-							<ThemedText variant="h3">
-								{t('order.extractedItems')} ({resolvedItems.length})
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={{ marginTop: 2 }}
-							>
-								{t('order.reviewExtracted')}
-							</ThemedText>
-						</View>
+						<SectionHeader
+							title={`${t('order.extractedItems')} (${resolvedItems.length})`}
+							subtitle={t('order.reviewExtracted')}
+							style={{ paddingHorizontal: 0, marginBottom: 12 }}
+						/>
 
 						{resolvedItems.map((item, index) => (
 							<EditableItemCard
@@ -600,15 +605,6 @@ const styles = StyleSheet.create({
 	},
 
 	// Review screen
-	sectionHeader: {
-		marginBottom: 12,
-	},
-	card: {
-		borderRadius: 12,
-		marginBottom: 12,
-		borderLeftWidth: 4,
-		overflow: 'hidden',
-	},
 	cardHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',

@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, Alert } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-const ADD_FIRM_BORDER_WIDTH = 1.5;
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { BORDER_WIDTH_BASE, BORDER_WIDTH_MEDIUM, OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { LINE_HEIGHT } from '@/src/theme/typographyMetrics';
 
@@ -105,7 +104,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: SPACING_PX.lg,
 		marginTop: SPACING_PX.lg,
 		borderRadius: BORDER_RADIUS_PX.lg,
-		borderWidth: ADD_FIRM_BORDER_WIDTH,
+		borderWidth: BORDER_WIDTH_MEDIUM,
 		borderStyle: 'dashed',
 		padding: SPACING_PX.lg,
 		alignItems: 'center',
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: SPACING_PX.lg,
 		marginTop: SPACING_PX.lg,
 		borderRadius: BORDER_RADIUS_PX.lg,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		padding: SPACING_PX.lg,
 	},
 });

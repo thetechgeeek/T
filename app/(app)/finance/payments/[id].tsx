@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-const ID_TAIL_DIGITS = 6;
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
@@ -23,12 +22,15 @@ import { Button } from '@/src/components/atoms/Button';
 import { Badge } from '@/src/components/atoms/Badge';
 import { Divider } from '@/src/components/atoms/Divider';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const ID_TAIL_DIGITS = 6;
 
 type PaymentWithParty = Payment & {
 	customer?: { name: string };
@@ -70,7 +72,7 @@ export default function PaymentDetailScreen() {
 	const [loading, setLoading] = useState(true);
 	const [, setDeleting] = useState(false);
 
-	const loadPayment = () => {
+	const loadPayment = useCallback(() => {
 		if (!id) return;
 		setLoading(true);
 		paymentService
@@ -81,11 +83,11 @@ export default function PaymentDetailScreen() {
 			})
 			.catch(() => setPayment(null))
 			.finally(() => setLoading(false));
-	};
+	}, [id]);
 
 	useEffect(() => {
 		loadPayment();
-	}, [id]);
+	}, [loadPayment]);
 
 	const handleDelete = () => {
 		Alert.alert(
@@ -259,20 +261,16 @@ export default function PaymentDetailScreen() {
 					},
 				]}
 			>
-				<View
-					style={[
-						styles.sectionHeader,
-						{
-							borderBottomColor: c.border,
-							paddingHorizontal: s.md,
-							paddingVertical: s.sm,
-						},
-					]}
-				>
-					<ThemedText variant="label" color={c.onSurfaceVariant}>
-						Details
-					</ThemedText>
-				</View>
+				<SectionHeader
+					title="Details"
+					titleColor={c.onSurfaceVariant}
+					style={{
+						borderBottomColor: c.border,
+						borderBottomWidth: StyleSheet.hairlineWidth,
+						paddingHorizontal: s.md,
+						paddingVertical: s.sm,
+					}}
+				/>
 				<View style={{ padding: s.md, gap: s.sm }}>
 					<View style={styles.detailRow}>
 						<ThemedText color={c.onSurfaceVariant}>
@@ -319,20 +317,16 @@ export default function PaymentDetailScreen() {
 					},
 				]}
 			>
-				<View
-					style={[
-						styles.sectionHeader,
-						{
-							borderBottomColor: c.border,
-							paddingHorizontal: s.md,
-							paddingVertical: s.sm,
-						},
-					]}
-				>
-					<ThemedText variant="label" color={c.onSurfaceVariant}>
-						Allocated to
-					</ThemedText>
-				</View>
+				<SectionHeader
+					title="Allocated to"
+					titleColor={c.onSurfaceVariant}
+					style={{
+						borderBottomColor: c.border,
+						borderBottomWidth: StyleSheet.hairlineWidth,
+						paddingHorizontal: s.md,
+						paddingVertical: s.sm,
+					}}
+				/>
 				<View style={{ padding: s.md }}>
 					{isAdvance ? (
 						<View style={styles.advanceRow}>
@@ -394,11 +388,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	section: { overflow: 'hidden' },
-	sectionHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
 	detailRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',

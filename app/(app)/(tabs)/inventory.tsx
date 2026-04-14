@@ -6,6 +6,7 @@ import {
 	RADIUS_FAB,
 	SIZE_BUTTON_HEIGHT_SM,
 	SIZE_FAB,
+	SIZE_MENU_SHEET_WIDTH,
 	Z_INDEX,
 } from '@/theme/uiMetrics';
 import React, { useEffect, useRef, useState, useMemo } from 'react';
@@ -50,15 +51,6 @@ import type { TileSetGroup, TileCategory, InventoryFilters } from '@/src/types/i
 import { layout } from '@/src/theme/layout';
 import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
-const FAB_SIZE = SIZE_FAB;
-const LIST_BOTTOM_PADDING = 100;
-const MENU_SHEET_WIDTH = 200;
-const MENU_SHEET_TOP_OFFSET = FAB_SIZE;
-const SORT_SHEET_HEADER_PADDING = 20;
-const SUMMARY_BAR_VERTICAL_PADDING = 6;
-const MENU_SHEET_ELEVATION = 5;
-const SORT_OPTION_VERTICAL_PADDING = 14;
-
 interface SortOption {
 	label: string;
 	sortBy: string;
@@ -90,6 +82,8 @@ export default function InventoryTab() {
 	const { theme, c, s, r } = useThemeTokens();
 	const { t, formatCurrency } = useLocale();
 	const router = useExpoRouter();
+	const listBottomPadding = FAB_OFFSET_BOTTOM + SIZE_FAB + s.xl;
+	const sortSheetHeaderPadding = s.lg + s.xs;
 
 	const { items, loading, hasMore, filters, fetchItems, setFilters } = useInventoryStore(
 		useShallow((s) => ({
@@ -181,14 +175,14 @@ export default function InventoryTab() {
 	const renderEmpty = () => {
 		if (loading && items.length === 0) {
 			return (
-				<View style={styles.centerFlex}>
+				<View style={[styles.centerFlex, { marginTop: listBottomPadding }]}>
 					<ActivityIndicator size="large" color={c.primary} />
 					<InventoryListSkeleton />
 				</View>
 			);
 		}
 		return (
-			<View style={styles.centerFlex}>
+			<View style={[styles.centerFlex, { marginTop: listBottomPadding }]}>
 				<Package size={64} color={c.placeholder} strokeWidth={1} />
 				<ThemedText variant="h3" style={{ marginTop: s.md }}>
 					{t('inventory.noItems')}
@@ -394,8 +388,8 @@ export default function InventoryTab() {
 					<ThemedText
 						variant="h3"
 						style={{
-							paddingHorizontal: SORT_SHEET_HEADER_PADDING,
-							paddingTop: SORT_SHEET_HEADER_PADDING,
+							paddingHorizontal: sortSheetHeaderPadding,
+							paddingTop: sortSheetHeaderPadding,
 							paddingBottom: s.md,
 						}}
 					>
@@ -446,7 +440,7 @@ export default function InventoryTab() {
 			<FlatList
 				data={groupedSets}
 				keyExtractor={(item) => item.baseItemNumber}
-				contentContainerStyle={{ padding: s.md, paddingBottom: LIST_BOTTOM_PADDING }}
+				contentContainerStyle={{ padding: s.md, paddingBottom: listBottomPadding }}
 				renderItem={({ item }) => (
 					<TileSetCard
 						group={item}
@@ -513,7 +507,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: SPACING_PX['2xl'],
-		marginTop: LIST_BOTTOM_PADDING,
 	},
 	fab: {
 		position: 'absolute',
@@ -527,7 +520,7 @@ const styles = StyleSheet.create({
 	},
 	summaryBar: {
 		paddingHorizontal: SPACING_PX.lg,
-		paddingVertical: SUMMARY_BAR_VERTICAL_PADDING,
+		paddingVertical: SPACING_PX.xs + SPACING_PX.xxs,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	sortBackdrop: {
@@ -547,10 +540,9 @@ const styles = StyleSheet.create({
 	},
 	menuSheet: {
 		position: 'absolute',
-		top: MENU_SHEET_TOP_OFFSET,
+		top: SIZE_FAB,
 		right: 0,
-		width: MENU_SHEET_WIDTH,
-		elevation: MENU_SHEET_ELEVATION,
+		width: SIZE_MENU_SHEET_WIDTH,
 	},
 	menuRow: {
 		flexDirection: 'row',
@@ -561,8 +553,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		paddingHorizontal: SORT_SHEET_HEADER_PADDING,
-		paddingVertical: SORT_OPTION_VERTICAL_PADDING,
+		paddingHorizontal: SPACING_PX.lg + SPACING_PX.xs,
+		paddingVertical: SPACING_PX.md + SPACING_PX.xxs,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		minHeight: TOUCH_TARGET_MIN_PX,
 	},

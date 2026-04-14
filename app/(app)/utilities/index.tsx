@@ -1,9 +1,10 @@
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 import { ShieldCheck, Calculator, Calendar, FileCode, ChevronRight } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
+import { TouchableCard } from '@/src/components/atoms/TouchableCard';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -65,11 +66,13 @@ export default function UtilitiesHubScreen() {
 			<ScreenHeader title="Utilities" />
 			<View style={{ padding: s.lg }}>
 				{utilityCards.map((card) => (
-					<TouchableOpacity
+					<TouchableCard
 						key={card.title}
 						style={[
-							styles.card,
 							{
+								flexDirection: 'row',
+								alignItems: 'center',
+								padding: s.md - s.xxs,
 								backgroundColor: c.card,
 								borderRadius: r.md,
 								marginBottom: s.sm,
@@ -77,7 +80,6 @@ export default function UtilitiesHubScreen() {
 							},
 						]}
 						onPress={() => handlePress(card)}
-						activeOpacity={0.8}
 						accessibilityRole="button"
 						accessibilityLabel={card.title}
 					>
@@ -108,7 +110,7 @@ export default function UtilitiesHubScreen() {
 							</ThemedText>
 						</View>
 						<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
-					</TouchableOpacity>
+					</TouchableCard>
 				))}
 			</View>
 		</AtomicScreen>
@@ -116,11 +118,6 @@ export default function UtilitiesHubScreen() {
 }
 
 const styles = StyleSheet.create({
-	card: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 14,
-	},
 	iconWrap: {
 		width: 40,
 		height: 40,

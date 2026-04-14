@@ -3,15 +3,16 @@ import { View, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import { useAuthStore } from '@/src/stores/authStore';
-import { OPACITY_HOVER, SIZE_INPUT_HEIGHT, GLASS_WHITE_LIGHT } from '@/theme/uiMetrics';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import {
+	GLASS_WHITE_LIGHT,
+	OPACITY_HOVER,
+	SIZE_AUTH_LOGO_MD,
+	SIZE_INPUT_HEIGHT,
+} from '@/theme/uiMetrics';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { PhoneInput } from '@/src/components/molecules/PhoneInput';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-
-const AUTH_HEADER_PADDING = 40;
-const AUTH_LOGO_SIZE = 64;
 
 /**
  * P1.2 — Phone OTP Login Screen
@@ -19,8 +20,7 @@ const AUTH_LOGO_SIZE = 64;
  * Uses Supabase signInWithOtp({ phone }) flow.
  */
 export default function PhoneLoginScreen() {
-	const { theme } = useTheme();
-	const c = theme.colors;
+	const { c, s, r } = useThemeTokens();
 	const router = useRouter();
 	const { sendOtp, loading } = useAuthStore(
 		useShallow((s) => ({ sendOtp: s.sendOtp, loading: s.loading })),
@@ -49,13 +49,23 @@ export default function PhoneLoginScreen() {
 	return (
 		<Screen safeAreaEdges={['top']} style={styles.root} backgroundColor={c.background}>
 			{/* Header */}
-			<View style={[styles.header, { backgroundColor: c.primary }]}>
+			<View
+				style={[
+					styles.header,
+					{
+						backgroundColor: c.primary,
+						paddingTop: s['2xl'],
+						paddingBottom: s['3xl'],
+						paddingHorizontal: s.xl,
+					},
+				]}
+			>
 				<View
 					style={[
 						styles.logo,
 						{
 							backgroundColor: GLASS_WHITE_LIGHT,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 						},
 					]}
 				>
@@ -63,7 +73,7 @@ export default function PhoneLoginScreen() {
 						T
 					</ThemedText>
 				</View>
-				<ThemedText variant="h1" style={{ color: c.onPrimary, marginTop: SPACING_PX.sm }}>
+				<ThemedText variant="h1" style={{ color: c.onPrimary, marginTop: s.sm }}>
 					TileMaster
 				</ThemedText>
 				<ThemedText
@@ -71,7 +81,7 @@ export default function PhoneLoginScreen() {
 					style={{
 						color: c.onPrimary,
 						opacity: OPACITY_HOVER,
-						marginTop: SPACING_PX.xs,
+						marginTop: s.xs,
 					}}
 				>
 					आपका डिजिटल बही-खाता
@@ -79,15 +89,15 @@ export default function PhoneLoginScreen() {
 			</View>
 
 			{/* Form */}
-			<View style={[styles.form, { padding: theme.spacing.lg }]}>
-				<ThemedText variant="h2" style={{ marginBottom: theme.spacing.md }}>
+			<View style={[styles.form, { padding: s.lg }]}>
+				<ThemedText variant="h2" style={{ marginBottom: s.md }}>
 					Vyapar में आपका स्वागत है
 				</ThemedText>
 				<ThemedText
 					variant="caption"
 					style={{
 						color: c.onSurfaceVariant,
-						marginBottom: theme.spacing.lg,
+						marginBottom: s.lg,
 					}}
 				>
 					अपना mobile number enter करें
@@ -101,10 +111,7 @@ export default function PhoneLoginScreen() {
 				/>
 
 				{error ? (
-					<ThemedText
-						variant="label"
-						style={{ color: c.error, marginTop: SPACING_PX.sm }}
-					>
+					<ThemedText variant="label" style={{ color: c.error, marginTop: s.sm }}>
 						{error}
 					</ThemedText>
 				) : null}
@@ -121,8 +128,8 @@ export default function PhoneLoginScreen() {
 						styles.btn,
 						{
 							backgroundColor: isValid && !loading ? c.primary : c.surfaceVariant,
-							borderRadius: theme.borderRadius.md,
-							marginTop: theme.spacing.lg,
+							borderRadius: r.md,
+							marginTop: s.lg,
 						},
 					]}
 				>
@@ -138,7 +145,7 @@ export default function PhoneLoginScreen() {
 				</Pressable>
 
 				{/* Support link */}
-				<View style={styles.supportRow}>
+				<View style={[styles.supportRow, { marginTop: s.xl }]}>
 					<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
 						Having trouble?{' '}
 					</ThemedText>
@@ -157,12 +164,10 @@ const styles = StyleSheet.create({
 	root: { flex: 1 },
 	header: {
 		alignItems: 'center',
-		paddingVertical: AUTH_HEADER_PADDING,
-		paddingHorizontal: SPACING_PX.xl,
 	},
 	logo: {
-		width: AUTH_LOGO_SIZE,
-		height: AUTH_LOGO_SIZE,
+		width: SIZE_AUTH_LOGO_MD,
+		height: SIZE_AUTH_LOGO_MD,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -176,6 +181,5 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: SPACING_PX.xl,
 	},
 });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert, RefreshControl } from 'react-native';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { OPACITY_ROW_DIVIDER } from '@/theme/uiMetrics';
+import { BORDER_WIDTH_BASE, OPACITY_ROW_DIVIDER } from '@/theme/uiMetrics';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -72,13 +72,12 @@ export default function SyncLogScreen() {
 		return (
 			<View
 				style={[
-					styles.card,
 					{
 						backgroundColor: c.surface,
 						borderColor: c.border,
 						padding: s.md,
 						borderRadius: r.lg,
-						borderWidth: 1,
+						borderWidth: BORDER_WIDTH_BASE,
 						marginBottom: s.md,
 					},
 				]}
@@ -215,7 +214,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
-	card: {},
 	empty: {
 		flex: 1,
 		alignItems: 'center',

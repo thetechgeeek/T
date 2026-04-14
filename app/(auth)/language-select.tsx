@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SIZE_LANGUAGE_FLAG, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import {
+	OPACITY_TINT_LIGHT,
+	SIZE_AUTH_LOGO_MD,
+	SIZE_INPUT_HEIGHT,
+	SIZE_LANGUAGE_FLAG,
+} from '@/theme/uiMetrics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-
-const LANGUAGE_SCREEN_PADDING_VERTICAL = 40;
-const LANGUAGE_LOGO_SIZE = 64;
+import { withOpacity } from '@/src/utils/color';
 
 const LANG_KEY = '@app/language';
 const LANG_SELECTED_KEY = '@app/languageSelected';
@@ -34,8 +36,7 @@ const LANGUAGES: LangCard[] = [
  * Shown once on first install. Flag @app/languageSelected in AsyncStorage.
  */
 export default function LanguageSelectScreen() {
-	const { theme } = useTheme();
-	const c = theme.colors;
+	const { c, s, r } = useThemeTokens();
 	const router = useRouter();
 	const [selected, setSelected] = useState<Lang | null>(null);
 
@@ -54,31 +55,26 @@ export default function LanguageSelectScreen() {
 	return (
 		<Screen
 			safeAreaEdges={['top', 'bottom']}
-			style={styles.root}
+			style={[styles.root, { paddingHorizontal: s.xl, paddingVertical: s['2xl'] + s.sm }]}
 			backgroundColor={c.background}
 		>
 			{/* Logo + Tagline */}
-			<View style={styles.header}>
-				<View
-					style={[
-						styles.logo,
-						{ backgroundColor: c.primary, borderRadius: theme.borderRadius.lg },
-					]}
-				>
+			<View style={[styles.header, { marginTop: s.xl }]}>
+				<View style={[styles.logo, { backgroundColor: c.primary, borderRadius: r.lg }]}>
 					<ThemedText variant="h1" style={{ color: c.onPrimary, fontWeight: '700' }}>
 						T
 					</ThemedText>
 				</View>
 				<ThemedText
 					variant="body"
-					style={[styles.tagline, { color: c.onSurface, marginTop: SPACING_PX.md }]}
+					style={[styles.tagline, { color: c.onSurface, marginTop: s.md }]}
 				>
 					आपका डिजिटल बही-खाता
 				</ThemedText>
 			</View>
 
 			{/* Language Cards */}
-			<View style={styles.cards}>
+			<View style={[styles.cards, { gap: s.md }]}>
 				{LANGUAGES.map(({ lang, title, subtitle }) => {
 					const isSelected = selected === lang;
 					return (
@@ -90,12 +86,20 @@ export default function LanguageSelectScreen() {
 							accessibilityLabel={title}
 							accessibilityState={{ selected: isSelected }}
 							style={[
-								styles.card,
 								{
+									flex: 1,
+									height: SIZE_LANGUAGE_FLAG,
+									alignItems: 'center',
+									justifyContent: 'center',
+								},
+								{
+									padding: s.md,
 									borderColor: isSelected ? c.primary : c.border,
 									borderWidth: isSelected ? 3 : 1,
-									backgroundColor: isSelected ? c.primaryLight : c.surface,
-									borderRadius: theme.borderRadius.lg,
+									backgroundColor: isSelected
+										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+										: c.surface,
+									borderRadius: r.lg,
 								},
 							]}
 						>
@@ -114,7 +118,7 @@ export default function LanguageSelectScreen() {
 								style={{
 									color: isSelected ? c.primary : c.onSurfaceVariant,
 									textAlign: 'center',
-									marginTop: SPACING_PX.xs,
+									marginTop: s.xs,
 								}}
 							>
 								{subtitle}
@@ -137,7 +141,7 @@ export default function LanguageSelectScreen() {
 						styles.continueBtn,
 						{
 							backgroundColor: selected ? c.primary : c.surfaceVariant,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 						},
 					]}
 				>
@@ -154,7 +158,7 @@ export default function LanguageSelectScreen() {
 
 				<ThemedText
 					variant="label"
-					style={[styles.hint, { color: c.onSurfaceVariant, marginTop: SPACING_PX.lg }]}
+					style={[styles.hint, { color: c.onSurfaceVariant, marginTop: s.lg }]}
 				>
 					आप बाद में Settings से भाषा बदल सकते हैं
 				</ThemedText>
@@ -168,16 +172,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		paddingHorizontal: SPACING_PX.xl,
-		paddingVertical: LANGUAGE_SCREEN_PADDING_VERTICAL,
 	},
 	header: {
 		alignItems: 'center',
-		marginTop: SPACING_PX.xl,
 	},
 	logo: {
-		width: LANGUAGE_LOGO_SIZE,
-		height: LANGUAGE_LOGO_SIZE,
+		width: SIZE_AUTH_LOGO_MD,
+		height: SIZE_AUTH_LOGO_MD,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -186,15 +187,7 @@ const styles = StyleSheet.create({
 	},
 	cards: {
 		flexDirection: 'row',
-		gap: SPACING_PX.md,
 		width: '100%',
-	},
-	card: {
-		flex: 1,
-		height: SIZE_LANGUAGE_FLAG,
-		alignItems: 'center',
-		justifyContent: 'center',
-		padding: SPACING_PX.md,
 	},
 	footer: {
 		width: '100%',

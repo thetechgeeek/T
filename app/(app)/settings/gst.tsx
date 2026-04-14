@@ -1,4 +1,4 @@
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { BORDER_WIDTH_BASE, BORDER_WIDTH_MEDIUM, OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
 import { View, Switch, ScrollView, StyleSheet, TextInput, Pressable } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -13,8 +13,6 @@ import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 type FilingPeriod = 'monthly' | 'quarterly';
-
-const GST_CARD_BORDER_WIDTH = 1.5;
 
 function SwitchRow({
 	label,
@@ -105,7 +103,12 @@ export default function GstSettingsScreen() {
 					<>
 						<SectionHeader title="GSTIN" variant="uppercase" titleColor={c.primary} />
 						<SettingsCard
-							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+							style={{
+								marginHorizontal: SPACING_PX.lg,
+								overflow: 'hidden',
+								backgroundColor: c.surface,
+								borderWidth: 0,
+							}}
 							padding="md"
 						>
 							<ThemedText
@@ -165,7 +168,12 @@ export default function GstSettingsScreen() {
 						/>
 						<SettingsCard
 							padding="none"
-							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+							style={{
+								marginHorizontal: SPACING_PX.lg,
+								overflow: 'hidden',
+								backgroundColor: c.surface,
+								borderWidth: 0,
+							}}
 						>
 							<SwitchRow
 								label="Composite Scheme"
@@ -201,12 +209,11 @@ const styles = StyleSheet.create({
 		marginHorizontal: SPACING_PX.lg,
 		marginTop: SPACING_PX.xl,
 		borderRadius: BORDER_RADIUS_PX.lg,
-		borderWidth: GST_CARD_BORDER_WIDTH,
+		borderWidth: BORDER_WIDTH_MEDIUM,
 		padding: SPACING_PX.lg,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
-	card: { marginHorizontal: SPACING_PX.lg, overflow: 'hidden' },
 	row: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -219,10 +226,10 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SPACING_PX.lg,
 		paddingVertical: SPACING_PX.sm,
 		borderRadius: BORDER_RADIUS_PX.full,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	textInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		borderRadius: BORDER_RADIUS_PX.md,
 		paddingHorizontal: SPACING_PX.md,
 		paddingVertical: SPACING_PX.sm,

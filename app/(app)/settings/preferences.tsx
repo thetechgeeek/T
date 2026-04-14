@@ -3,25 +3,26 @@ import { View, Pressable, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import type { ThemeMode } from '@/src/theme/index';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import {
+	BORDER_WIDTH_BASE,
+	BORDER_WIDTH_STRONG,
+	OPACITY_TINT_LIGHT,
+	SIZE_OPTION_CARD_MIN_HEIGHT,
+	SIZE_RADIO_INNER,
+	SIZE_RADIO_OUTER,
+} from '@/theme/uiMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const LANG_KEY = '@app/language';
 const DATE_FORMAT_KEY = '@app/dateFormat';
 const DECIMAL_KEY = '@app/decimalPlaces';
-const OPTION_CARD_MIN_HEIGHT = 90;
-const RADIO_OUTER_SIZE = 20;
-const RADIO_OUTER_RADIUS = 10;
-const RADIO_INNER_SIZE = 10;
-const RADIO_INNER_RADIUS = 5;
-const ZERO_SPACING = 0;
-const SECTION_HEADER_STYLE = { paddingHorizontal: ZERO_SPACING } as const;
 
 type Lang = 'hi' | 'en';
 type DateFormat = 'dmy' | 'dmy-dash' | 'iso';
@@ -33,7 +34,7 @@ type DecimalPlaces = 0 | 2;
  */
 export default function PreferencesScreen() {
 	const { theme, mode, setThemeMode } = useTheme();
-	const c = theme.colors;
+	const { c, r } = useThemeTokens();
 
 	const [selectedLang, setSelectedLang] = useState<Lang>(
 		(i18n.language as Lang) === 'en' ? 'en' : 'hi',
@@ -80,7 +81,7 @@ export default function PreferencesScreen() {
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
 			{/* Language Section */}
-			<SectionHeader title="भाषा / Language" style={SECTION_HEADER_STYLE} />
+			<SectionHeader title="भाषा / Language" style={{ paddingHorizontal: 0 }} />
 			<View style={styles.langRow}>
 				<Pressable
 					testID="lang-card-hi"
@@ -89,12 +90,13 @@ export default function PreferencesScreen() {
 						styles.langCard,
 						{
 							borderColor: selectedLang === 'hi' ? c.primary : c.border,
-							borderWidth: selectedLang === 'hi' ? 2 : 1,
+							borderWidth:
+								selectedLang === 'hi' ? BORDER_WIDTH_STRONG : BORDER_WIDTH_BASE,
 							backgroundColor:
 								selectedLang === 'hi'
 									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
 									: c.surface,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 							marginRight: SPACING_PX.sm,
 						},
 					]}
@@ -118,12 +120,13 @@ export default function PreferencesScreen() {
 						styles.langCard,
 						{
 							borderColor: selectedLang === 'en' ? c.primary : c.border,
-							borderWidth: selectedLang === 'en' ? 2 : 1,
+							borderWidth:
+								selectedLang === 'en' ? BORDER_WIDTH_STRONG : BORDER_WIDTH_BASE,
 							backgroundColor:
 								selectedLang === 'en'
 									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
 									: c.surface,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 						},
 					]}
 				>
@@ -141,7 +144,7 @@ export default function PreferencesScreen() {
 			</View>
 
 			{/* Theme Section */}
-			<SectionHeader title="थीम / Theme" style={SECTION_HEADER_STYLE} />
+			<SectionHeader title="थीम / Theme" style={{ paddingHorizontal: 0 }} />
 			<View style={styles.themeRow}>
 				{(
 					[
@@ -158,12 +161,13 @@ export default function PreferencesScreen() {
 							styles.themeCard,
 							{
 								borderColor: mode === opt.key ? c.primary : c.border,
-								borderWidth: mode === opt.key ? 2 : 1,
+								borderWidth:
+									mode === opt.key ? BORDER_WIDTH_STRONG : BORDER_WIDTH_BASE,
 								backgroundColor:
 									mode === opt.key
 										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
 										: c.surface,
-								borderRadius: theme.borderRadius.md,
+								borderRadius: r.md,
 							},
 						]}
 					>
@@ -182,7 +186,7 @@ export default function PreferencesScreen() {
 			</View>
 
 			{/* Date Format Section */}
-			<SectionHeader title="Date Format" style={SECTION_HEADER_STYLE} />
+			<SectionHeader title="Date Format" style={{ paddingHorizontal: 0 }} />
 			{(
 				[
 					{ key: 'dmy', label: 'DD/MM/YYYY' },
@@ -202,8 +206,9 @@ export default function PreferencesScreen() {
 									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
 									: c.surface,
 							borderColor: dateFormat === fmt.key ? c.primary : c.border,
-							borderWidth: dateFormat === fmt.key ? 2 : 1,
-							borderRadius: theme.borderRadius.md,
+							borderWidth:
+								dateFormat === fmt.key ? BORDER_WIDTH_STRONG : BORDER_WIDTH_BASE,
+							borderRadius: r.md,
 							marginBottom: SPACING_PX.sm,
 						},
 					]}
@@ -234,7 +239,7 @@ export default function PreferencesScreen() {
 			))}
 
 			{/* Decimal Places Section */}
-			<SectionHeader title="Decimal Places" style={SECTION_HEADER_STYLE} />
+			<SectionHeader title="Decimal Places" style={{ paddingHorizontal: 0 }} />
 			<ThemedText
 				variant="caption"
 				style={{
@@ -252,12 +257,13 @@ export default function PreferencesScreen() {
 						styles.decimalBtn,
 						{
 							borderColor: decimalPlaces === 0 ? c.primary : c.border,
-							borderWidth: decimalPlaces === 0 ? 2 : 1,
+							borderWidth:
+								decimalPlaces === 0 ? BORDER_WIDTH_STRONG : BORDER_WIDTH_BASE,
 							backgroundColor:
 								decimalPlaces === 0
 									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
 									: c.surface,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 							marginRight: SPACING_PX.sm,
 						},
 					]}
@@ -277,12 +283,13 @@ export default function PreferencesScreen() {
 						styles.decimalBtn,
 						{
 							borderColor: decimalPlaces === 2 ? c.primary : c.border,
-							borderWidth: decimalPlaces === 2 ? 2 : 1,
+							borderWidth:
+								decimalPlaces === 2 ? BORDER_WIDTH_STRONG : BORDER_WIDTH_BASE,
 							backgroundColor:
 								decimalPlaces === 2
 									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
 									: c.surface,
-							borderRadius: theme.borderRadius.md,
+							borderRadius: r.md,
 						},
 					]}
 				>
@@ -317,8 +324,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: SPACING_PX.lg,
 		alignItems: 'center',
-		borderWidth: 1,
-		minHeight: OPTION_CARD_MIN_HEIGHT,
+		borderWidth: BORDER_WIDTH_BASE,
+		minHeight: SIZE_OPTION_CARD_MIN_HEIGHT,
 		justifyContent: 'center',
 	},
 	themeRow: {
@@ -329,31 +336,31 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: SPACING_PX.md,
 		alignItems: 'center',
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	dateRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		padding: SPACING_PX.md,
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 	dateRadio: {
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	radioOuter: {
-		width: RADIO_OUTER_SIZE,
-		height: RADIO_OUTER_SIZE,
-		borderRadius: RADIO_OUTER_RADIUS,
-		borderWidth: 2,
+		width: SIZE_RADIO_OUTER,
+		height: SIZE_RADIO_OUTER,
+		borderRadius: SIZE_RADIO_OUTER / 2,
+		borderWidth: BORDER_WIDTH_STRONG,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	radioInner: {
-		width: RADIO_INNER_SIZE,
-		height: RADIO_INNER_SIZE,
-		borderRadius: RADIO_INNER_RADIUS,
+		width: SIZE_RADIO_INNER,
+		height: SIZE_RADIO_INNER,
+		borderRadius: SIZE_RADIO_INNER / 2,
 	},
 	decimalRow: {
 		flexDirection: 'row',
@@ -362,6 +369,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: SPACING_PX.md,
 		alignItems: 'center',
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 	},
 });

@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { GLASS_WHITE_TEXT, LETTER_SPACING_SECTION } from '@/src/theme/uiMetrics';
+import {
+	BORDER_WIDTH_ACCENT,
+	BORDER_WIDTH_BASE,
+	GLASS_WHITE_TEXT,
+	LETTER_SPACING_SECTION,
+	SIZE_VALUE_XXL,
+} from '@/src/theme/uiMetrics';
 import {
 	View,
 	StyleSheet,
@@ -22,10 +28,6 @@ import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 // TODO: connect to store — derive from invoices, expenses, purchases with cash payment
 const MOCK_OPENING_BALANCE = 0;
-const CASH_BALANCE_VALUE_SIZE = 40;
-const CASH_LEFT_BORDER_WIDTH = 4;
-const CASH_LIST_BOTTOM_PADDING = 40;
-
 type DateFilter = 'today' | 'week' | 'month' | 'fy';
 
 const DATE_FILTERS: { label: string; value: DateFilter }[] = [
@@ -317,7 +319,7 @@ export default function CashInHandScreen() {
 const styles = StyleSheet.create({
 	listContent: {
 		padding: SPACING_PX.lg,
-		paddingBottom: CASH_LIST_BOTTOM_PADDING,
+		paddingBottom: SPACING_PX.xl + SPACING_PX.lg,
 	},
 	balanceCard: {
 		alignItems: 'center',
@@ -326,7 +328,7 @@ const styles = StyleSheet.create({
 	},
 	balanceAmount: {
 		marginTop: SPACING_PX.xs,
-		fontSize: CASH_BALANCE_VALUE_SIZE,
+		fontSize: SIZE_VALUE_XXL,
 		fontWeight: '700',
 	},
 	openingBalanceCard: {
@@ -339,7 +341,7 @@ const styles = StyleSheet.create({
 	inputWrapper: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		height: TOUCH_TARGET_MIN_PX,
 	},
 	balanceInput: {
@@ -366,7 +368,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
-		borderLeftWidth: CASH_LEFT_BORDER_WIDTH,
+		borderLeftWidth: BORDER_WIDTH_ACCENT,
 	},
 	txLeft: {
 		flex: 1,

@@ -8,21 +8,19 @@ import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import {
+	BORDER_WIDTH_BASE,
 	OPACITY_SKELETON_BASE,
 	OPACITY_ROW_HIGHLIGHT,
 	OPACITY_BORDER_TINT,
+	SIZE_NOTES_MIN_HEIGHT,
+	SIZE_RADIO_INNER,
+	SIZE_THEME_SWATCH_WIDTH,
 } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { MOCK_TRANSFER_ACCOUNTS } from '@/src/mocks/finance/transfer';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const TRANSFER_FORM_BOTTOM_PADDING = 32;
-const TRANSFER_DOT_SIZE = 10;
-const TRANSFER_DOT_RADIUS = 5;
-const TRANSFER_ARROW_SIZE = 40;
-const TRANSFER_ARROW_RADIUS = 20;
 
 const ACCOUNTS = MOCK_TRANSFER_ACCOUNTS;
 
@@ -131,7 +129,7 @@ export default function FundTransferScreen() {
 			scrollable
 			contentContainerStyle={{
 				padding: s.lg,
-				paddingBottom: TRANSFER_FORM_BOTTOM_PADDING,
+				paddingBottom: s['2xl'],
 			}}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
@@ -193,7 +191,7 @@ export default function FundTransferScreen() {
 							backgroundColor: withOpacity(c.primary, OPACITY_ROW_HIGHLIGHT),
 							borderRadius: r.md,
 							borderColor: withOpacity(c.primary, OPACITY_BORDER_TINT),
-							borderWidth: 1,
+							borderWidth: BORDER_WIDTH_BASE,
 						},
 					]}
 				>
@@ -248,7 +246,7 @@ export default function FundTransferScreen() {
 
 const styles = StyleSheet.create({
 	pickerBox: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		overflow: 'hidden',
 	},
 	accountRow: {
@@ -259,9 +257,9 @@ const styles = StyleSheet.create({
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	dot: {
-		width: TRANSFER_DOT_SIZE,
-		height: TRANSFER_DOT_SIZE,
-		borderRadius: TRANSFER_DOT_RADIUS,
+		width: SIZE_RADIO_INNER,
+		height: SIZE_RADIO_INNER,
+		borderRadius: SIZE_RADIO_INNER / 2,
 	},
 	arrowRow: {
 		flexDirection: 'row',
@@ -273,9 +271,9 @@ const styles = StyleSheet.create({
 		height: StyleSheet.hairlineWidth,
 	},
 	arrowCircle: {
-		width: TRANSFER_ARROW_SIZE,
-		height: TRANSFER_ARROW_SIZE,
-		borderRadius: TRANSFER_ARROW_RADIUS,
+		width: SIZE_THEME_SWATCH_WIDTH,
+		height: SIZE_THEME_SWATCH_WIDTH,
+		borderRadius: SIZE_THEME_SWATCH_WIDTH / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginHorizontal: SPACING_PX.md,
@@ -283,7 +281,7 @@ const styles = StyleSheet.create({
 	amountInput: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		paddingHorizontal: SPACING_PX.lg,
 		paddingVertical: SPACING_PX.md,
 		marginBottom: SPACING_PX.md,
@@ -298,9 +296,10 @@ const styles = StyleSheet.create({
 		marginBottom: SPACING_PX.lg,
 	},
 	notesInput: {
-		borderWidth: 1,
+		borderWidth: BORDER_WIDTH_BASE,
 		padding: SPACING_PX.md,
 		textAlignVertical: 'top',
 		fontSize: FONT_SIZE.body,
+		minHeight: SIZE_NOTES_MIN_HEIGHT,
 	},
 });
