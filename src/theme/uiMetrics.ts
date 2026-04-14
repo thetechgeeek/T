@@ -47,6 +47,9 @@ export const SIZE_ICON_SM = 12;
 export const SIZE_ICON_MD = 20;
 export const SIZE_ICON_LG = 24;
 
+/** Circular icon container (e.g. list-row leading icon) */
+export const SIZE_ICON_CIRCLE_MD = 40;
+
 /** Floating Action Button (FAB) */
 export const SIZE_FAB = 56;
 export const SIZE_FAB_ICON = 28;

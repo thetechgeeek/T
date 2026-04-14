@@ -4,7 +4,6 @@ import {
 	BORDER_WIDTH_BASE,
 	GLASS_WHITE_TEXT,
 	LETTER_SPACING_SECTION,
-	SIZE_VALUE_XXL,
 } from '@/src/theme/uiMetrics';
 import {
 	View,
@@ -328,7 +327,7 @@ const styles = StyleSheet.create({
 	},
 	balanceAmount: {
 		marginTop: SPACING_PX.xs,
-		fontSize: SIZE_VALUE_XXL,
+		fontSize: FONT_SIZE.amountLarge,
 		fontWeight: '700',
 	},
 	openingBalanceCard: {

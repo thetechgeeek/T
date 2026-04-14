@@ -16,6 +16,7 @@ import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { withOpacity } from '@/src/utils/color';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 type Role = 'salesperson' | 'admin';
 
