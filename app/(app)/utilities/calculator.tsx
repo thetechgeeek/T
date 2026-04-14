@@ -6,13 +6,20 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
+import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import {
 	OVERLAY_COLOR_STRONG,
 	OPACITY_BADGE_BG,
 	OPACITY_SKELETON_BASE,
+	SIZE_TEXTAREA_MIN_HEIGHT,
 } from '@/src/theme/uiMetrics';
 
 const GST_RATES = [0, 5, 12, 18, 28];
+const CALCULATOR_EXPRESSION_MIN_HEIGHT = FONT_SIZE.h2;
+const CALCULATOR_DISPLAY_FONT_SIZE = FONT_SIZE.display + FONT_SIZE.caption + SPACING_PX.xs;
+const CALCULATOR_DISPLAY_MIN_HEIGHT = SIZE_TEXTAREA_MIN_HEIGHT + SPACING_PX.xl - SPACING_PX.xs;
+const EMI_RESULT_PADDING = SPACING_PX.md + SPACING_PX.xxs;
 
 export default function CalculatorScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -167,12 +174,16 @@ export default function CalculatorScreen() {
 
 			{/* Display */}
 			<View style={[styles.display, { backgroundColor: c.surface, borderColor: c.border }]}>
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ minHeight: 20 }}>
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					style={{ minHeight: CALCULATOR_EXPRESSION_MIN_HEIGHT }}
+				>
 					{expression}
 				</ThemedText>
 				<ThemedText
 					variant="display"
-					style={{ fontSize: 48, textAlign: 'right' }}
+					style={{ fontSize: CALCULATOR_DISPLAY_FONT_SIZE, textAlign: 'right' }}
 					numberOfLines={1}
 					adjustsFontSizeToFit
 				>
@@ -300,7 +311,7 @@ export default function CalculatorScreen() {
 										<ThemedText
 											variant="label"
 											color={c.onSurfaceVariant}
-											style={{ marginBottom: 4 }}
+											style={{ marginBottom: SPACING_PX.xs }}
 										>
 											{label}
 										</ThemedText>
@@ -369,26 +380,33 @@ export default function CalculatorScreen() {
 const styles = StyleSheet.create({
 	shortcuts: {
 		flexDirection: 'row',
-		gap: 8,
-		padding: 12,
+		gap: SPACING_PX.sm,
+		padding: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
-	shortcutBtn: { paddingHorizontal: 20, paddingVertical: 10 },
+	shortcutBtn: {
+		paddingHorizontal: SPACING_PX.lg + SPACING_PX.xs,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
+	},
 	display: {
-		padding: 16,
-		margin: 12,
-		borderRadius: 12,
+		padding: SPACING_PX.lg,
+		margin: SPACING_PX.md,
+		borderRadius: BORDER_RADIUS_PX.lg,
 		borderWidth: 1,
-		minHeight: 100,
+		minHeight: CALCULATOR_DISPLAY_MIN_HEIGHT,
 		justifyContent: 'flex-end',
 	},
-	pad: { flex: 1, padding: 12, gap: 8 },
-	row: { flexDirection: 'row', gap: 8 },
-	btn: { height: 64, alignItems: 'center', justifyContent: 'center' },
+	pad: { flex: 1, padding: SPACING_PX.md, gap: SPACING_PX.sm },
+	row: { flexDirection: 'row', gap: SPACING_PX.sm },
+	btn: {
+		height: SPACING_PX['4xl'],
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 	btnText: { fontWeight: '600' },
 	modalOverlay: { flex: 1, backgroundColor: OVERLAY_COLOR_STRONG, justifyContent: 'flex-end' },
-	modalBox: { padding: 24, gap: 8 },
-	gstRow: { padding: 12, borderWidth: 1, marginBottom: 8 },
-	emiInput: { borderWidth: 1, padding: 12, fontSize: 16 },
-	emiResult: { marginTop: 12, padding: 14, gap: 4 },
+	modalBox: { padding: SPACING_PX.xl, gap: SPACING_PX.sm },
+	gstRow: { padding: SPACING_PX.md, borderWidth: 1, marginBottom: SPACING_PX.sm },
+	emiInput: { borderWidth: 1, padding: SPACING_PX.md, fontSize: FONT_SIZE.body },
+	emiResult: { marginTop: SPACING_PX.md, padding: EMI_RESULT_PADDING, gap: SPACING_PX.xs },
 });

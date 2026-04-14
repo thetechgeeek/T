@@ -8,6 +8,8 @@ import { Button } from '@/src/components/atoms/Button';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useRouter } from 'expo-router';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 interface LineItem {
 	id: string;
@@ -87,7 +89,7 @@ export default function CreateEstimateScreen() {
 		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
 			<ScreenHeader title="New Estimate / Quotation" />
 			<ScrollView
-				contentContainerStyle={{ padding: s.lg, paddingBottom: 32 }}
+				contentContainerStyle={{ padding: s.lg, paddingBottom: s['2xl'] }}
 				keyboardShouldPersistTaps="handled"
 			>
 				<View style={[styles.row2]}>
@@ -255,7 +257,7 @@ export default function CreateEstimateScreen() {
 							<ThemedText
 								variant="caption"
 								color={c.onSurfaceVariant}
-								style={{ marginTop: 4 }}
+								style={{ marginTop: s.xs }}
 							>
 								Total:{' '}
 								{fmt(
@@ -299,8 +301,8 @@ export default function CreateEstimateScreen() {
 							{
 								borderTopWidth: 1,
 								borderTopColor: c.border,
-								marginTop: 4,
-								paddingTop: 8,
+								marginTop: s.xs,
+								paddingTop: s.sm,
 							},
 						]}
 					>
@@ -335,25 +337,54 @@ export default function CreateEstimateScreen() {
 }
 
 const styles = StyleSheet.create({
-	label: { marginBottom: 6, marginTop: 12 },
-	row2: { flexDirection: 'row', gap: 12 },
-	row3: { flexDirection: 'row', gap: 8, marginTop: 8 },
-	input: { borderWidth: 1, padding: 12, fontSize: 16 },
-	inputSm: { borderWidth: 1, padding: 10, fontSize: 15 },
-	textarea: { borderWidth: 1, padding: 12, fontSize: 15, textAlignVertical: 'top' },
-	chip: { paddingHorizontal: 12, paddingVertical: 6, borderWidth: 1 },
-	validityRow: { flexDirection: 'row', gap: 8, marginBottom: 8 },
-	itemCard: { borderWidth: 1, padding: 12, marginBottom: 10 },
-	itemHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
+	label: { marginBottom: SPACING_PX.sm - SPACING_PX.xxs, marginTop: SPACING_PX.md },
+	row2: { flexDirection: 'row', gap: SPACING_PX.md },
+	row3: { flexDirection: 'row', gap: SPACING_PX.sm, marginTop: SPACING_PX.sm },
+	input: { borderWidth: 1, padding: SPACING_PX.md, fontSize: FONT_SIZE.body },
+	inputSm: {
+		borderWidth: 1,
+		padding: SPACING_PX.sm + SPACING_PX.xxs,
+		fontSize: FONT_SIZE.caption,
+	},
+	textarea: {
+		borderWidth: 1,
+		padding: SPACING_PX.md,
+		fontSize: FONT_SIZE.caption,
+		textAlignVertical: 'top',
+	},
+	chip: {
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
+		borderWidth: 1,
+	},
+	validityRow: {
+		flexDirection: 'row',
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.sm,
+	},
+	itemCard: {
+		borderWidth: 1,
+		padding: SPACING_PX.md,
+		marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+	},
+	itemHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginBottom: SPACING_PX.sm,
+	},
 	addItemBtn: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderWidth: 1,
 		borderStyle: 'dashed',
-		padding: 12,
-		marginBottom: 16,
+		padding: SPACING_PX.md,
+		marginBottom: SPACING_PX.lg,
 	},
-	totalsCard: { borderWidth: 1, padding: 16, marginTop: 8 },
-	totalsRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
+	totalsCard: { borderWidth: 1, padding: SPACING_PX.lg, marginTop: SPACING_PX.sm },
+	totalsRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingVertical: SPACING_PX.xs,
+	},
 });

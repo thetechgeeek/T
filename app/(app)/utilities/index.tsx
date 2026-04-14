@@ -1,4 +1,4 @@
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { OPACITY_TINT_LIGHT, SIZE_ICON_CIRCLE_MD } from '@/theme/uiMetrics';
 import React from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
@@ -9,6 +9,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface UtilityCard {
 	title: string;
@@ -88,7 +89,7 @@ export default function UtilitiesHubScreen() {
 								styles.iconWrap,
 								{
 									backgroundColor: withOpacity(card.color, OPACITY_TINT_LIGHT),
-									borderRadius: 10,
+									borderRadius: r.lg,
 								},
 							]}
 						>
@@ -104,7 +105,7 @@ export default function UtilitiesHubScreen() {
 							<ThemedText
 								variant="caption"
 								color={c.onSurfaceVariant}
-								style={{ marginTop: 2 }}
+								style={{ marginTop: s.xxs }}
 							>
 								{card.description}
 							</ThemedText>
@@ -119,10 +120,10 @@ export default function UtilitiesHubScreen() {
 
 const styles = StyleSheet.create({
 	iconWrap: {
-		width: 40,
-		height: 40,
+		width: SIZE_ICON_CIRCLE_MD,
+		height: SIZE_ICON_CIRCLE_MD,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginRight: 12,
+		marginRight: SPACING_PX.md,
 	},
 });

@@ -8,6 +8,8 @@ import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_SUBTLE } from '@/src/theme/uiMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 type VerifyState = 'idle' | 'running' | 'complete';
 
@@ -20,6 +22,9 @@ const STEPS = [
 
 // Simulate finding a mock issue on step 4 (index 3)
 const MOCK_ISSUE_STEP = 3;
+const VERIFY_STEP_INDICATOR_SIZE = SPACING_PX['2xl'];
+const VERIFY_STEP_DOT_SIZE = SPACING_PX.sm;
+const VERIFY_RESULT_RADIUS = BORDER_RADIUS_PX.md + SPACING_PX.xxs;
 
 export default function DataVerificationScreen() {
 	const { c, s } = useThemeTokens();
@@ -77,7 +82,7 @@ export default function DataVerificationScreen() {
 							<ThemedText
 								variant="caption"
 								color={c.onSurfaceVariant}
-								style={{ marginTop: 4 }}
+								style={{ marginTop: SPACING_PX.xs }}
 							>
 								Checks ledger balances, stock counts, orphaned records, and GST data
 								for any issues.
@@ -124,7 +129,7 @@ export default function DataVerificationScreen() {
 											) : isDone ? (
 												<ThemedText
 													color={c.success}
-													style={{ fontSize: 16 }}
+													style={{ fontSize: FONT_SIZE.body }}
 												>
 													✓
 												</ThemedText>
@@ -183,7 +188,7 @@ export default function DataVerificationScreen() {
 										<ThemedText
 											variant="caption"
 											color={c.onSurfaceVariant}
-											style={{ marginTop: 4 }}
+											style={{ marginTop: SPACING_PX.xs }}
 										>
 											No issues found
 										</ThemedText>
@@ -208,11 +213,11 @@ export default function DataVerificationScreen() {
 										<ThemedText
 											variant="caption"
 											color={c.warning}
-											style={{ marginTop: 4 }}
+											style={{ marginTop: SPACING_PX.xs }}
 										>
 											Some items have no HSN code
 										</ThemedText>
-										<Pressable style={{ marginTop: 8 }}>
+										<Pressable style={{ marginTop: SPACING_PX.sm }}>
 											<ThemedText
 												variant="caption"
 												color={c.primary}
@@ -243,19 +248,19 @@ const styles = StyleSheet.create({
 	stepRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 10,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
 	},
 	stepIndicator: {
-		width: 32,
+		width: VERIFY_STEP_INDICATOR_SIZE,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	stepDot: {
-		width: 8,
-		height: 8,
-		borderRadius: 4,
+		width: VERIFY_STEP_DOT_SIZE,
+		height: VERIFY_STEP_DOT_SIZE,
+		borderRadius: BORDER_RADIUS_PX.sm,
 	},
 	resultCard: {
-		borderRadius: 10,
+		borderRadius: VERIFY_RESULT_RADIUS,
 	},
 });

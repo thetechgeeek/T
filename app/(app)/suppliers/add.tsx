@@ -16,6 +16,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { layout } from '@/src/theme/layout';
 import { useLocale } from '@/src/hooks/useLocale';
 import logger from '@/src/utils/logger';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 type GstType = 'regular' | 'composition' | 'unregistered';
 
@@ -174,7 +175,7 @@ export default function AddSupplierScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginBottom: 6 }}
+						style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
 					>
 						GST Type
 					</ThemedText>
@@ -227,7 +228,7 @@ export default function AddSupplierScreen() {
 
 			<FormSection title="Address">
 				<Card padding="md">
-					<View style={[layout.row, { gap: 16 }]}>
+					<View style={[layout.row, { gap: s.lg }]}>
 						<View style={{ flex: 1 }}>
 							<Controller
 								control={control}
@@ -327,16 +328,16 @@ export default function AddSupplierScreen() {
 
 const styles = StyleSheet.create({
 	gstToggleRow: {
-		gap: 8,
-		marginBottom: 12,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.md,
 	},
 	gstToggleBtn: {
 		flex: 1,
-		paddingVertical: 10,
-		paddingHorizontal: 8,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
+		paddingHorizontal: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		minHeight: 40,
+		minHeight: SPACING_PX['2xl'] + SPACING_PX.sm,
 	},
 });

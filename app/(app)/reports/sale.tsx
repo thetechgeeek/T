@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
-
-/** Number of days in a quarter (365/4 rounded down) */
-const QUARTER_DAYS = 89;
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -14,7 +11,11 @@ import { InvoiceStatusBadge } from '@/src/components/molecules/InvoiceStatusBadg
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import type { Invoice } from '@/src/types/invoice';
+
+/** Number of days in a quarter (365/4 rounded down) */
+const QUARTER_DAYS = 89;
 
 type DateFilter = 'today' | 'week' | 'month' | 'quarter' | 'custom';
 
@@ -124,7 +125,7 @@ export default function SaleReportScreen() {
 					{item.customer_name}
 				</ThemedText>
 			</View>
-			<View style={{ alignItems: 'flex-end', gap: 4 }}>
+			<View style={{ alignItems: 'flex-end', gap: SPACING_PX.xs }}>
 				<ThemedText weight="bold">{formatCurrency(item.grand_total)}</ThemedText>
 				<InvoiceStatusBadge status={item.payment_status} size="sm" />
 			</View>
@@ -234,7 +235,7 @@ export default function SaleReportScreen() {
 
 						{/* Loading skeleton */}
 						{loading ? (
-							<View style={{ gap: 12, marginTop: 8 }}>
+							<View style={{ gap: SPACING_PX.md, marginTop: SPACING_PX.sm }}>
 								<SkeletonBlock height={56} borderRadius={8} />
 								<SkeletonBlock height={56} borderRadius={8} />
 								<SkeletonBlock height={56} borderRadius={8} />
@@ -260,32 +261,32 @@ export default function SaleReportScreen() {
 const styles = StyleSheet.create({
 	filterRow: {
 		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	customDates: {
 		flexDirection: 'row',
-		gap: 12,
-		paddingHorizontal: 16,
-		paddingBottom: 8,
+		gap: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingBottom: SPACING_PX.sm,
 	},
 	listContent: {
-		padding: 16,
-		paddingBottom: 32,
+		padding: SPACING_PX.lg,
+		paddingBottom: SPACING_PX['2xl'],
 	},
 	summaryGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 12,
-		marginBottom: 16,
+		gap: SPACING_PX.md,
+		marginBottom: SPACING_PX.lg,
 	},
 	summaryCard: {
 		flex: 1,
@@ -293,15 +294,15 @@ const styles = StyleSheet.create({
 	},
 	tableHeader: {
 		flexDirection: 'row',
-		paddingVertical: 8,
-		marginBottom: 4,
+		paddingVertical: SPACING_PX.sm,
+		marginBottom: SPACING_PX.xs,
 	},
 	tableRow: {
 		flexDirection: 'row',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 		alignItems: 'center',
 	},
 	emptyState: {
-		paddingVertical: 32,
+		paddingVertical: SPACING_PX['2xl'],
 	},
 });

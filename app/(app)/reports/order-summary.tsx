@@ -10,6 +10,8 @@ import { withOpacity } from '@/src/utils/color';
 import { OPACITY_BADGE_BG } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import { MOCK_ORDER_SUMMARY_ROWS } from '@/src/mocks/reports/orderSummary';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import type { OrderRow, OrderStatus } from '@/src/mocks/reports/orderSummary';
 
 // TODO: Replace with real data — SELECT id, party_name, amount, status, date FROM sales_orders WHERE date BETWEEN ? AND ?
@@ -83,8 +85,14 @@ export default function OrderSummaryScreen() {
 					{ borderBottomColor: c.border, borderBottomWidth: StyleSheet.hairlineWidth },
 				]}
 			>
-				<View style={{ flex: 1, gap: 4 }}>
-					<View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+				<View style={{ flex: 1, gap: SPACING_PX.xs }}>
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							gap: SPACING_PX.sm - SPACING_PX.xxs,
+						}}
+					>
 						<ThemedText weight="bold" style={{ fontSize: theme.typography.sizes.sm }}>
 							{item.orderNo}
 						</ThemedText>
@@ -93,7 +101,11 @@ export default function OrderSummaryScreen() {
 							style={[styles.badge, { backgroundColor: bgColor, borderRadius: r.sm }]}
 						>
 							<StatusIcon size={10} color={fgColor} strokeWidth={2.5} />
-							<ThemedText variant="caption" color={fgColor} style={{ fontSize: 10 }}>
+							<ThemedText
+								variant="caption"
+								color={fgColor}
+								style={{ fontSize: FONT_SIZE.captionSmall }}
+							>
 								{cfg.label}
 							</ThemedText>
 						</View>
@@ -168,7 +180,7 @@ export default function OrderSummaryScreen() {
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ marginTop: 4 }}
+									style={{ marginTop: SPACING_PX.xs }}
 								>
 									Total
 								</ThemedText>
@@ -190,7 +202,7 @@ export default function OrderSummaryScreen() {
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ marginTop: 4 }}
+									style={{ marginTop: SPACING_PX.xs }}
 								>
 									Fulfilled
 								</ThemedText>
@@ -205,7 +217,7 @@ export default function OrderSummaryScreen() {
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ marginTop: 4 }}
+									style={{ marginTop: SPACING_PX.xs }}
 								>
 									Pending
 								</ThemedText>
@@ -220,7 +232,7 @@ export default function OrderSummaryScreen() {
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ marginTop: 4 }}
+									style={{ marginTop: SPACING_PX.xs }}
 								>
 									Cancelled
 								</ThemedText>
@@ -269,28 +281,28 @@ export default function OrderSummaryScreen() {
 const styles = StyleSheet.create({
 	filterRow: {
 		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 7,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	exportBtn: {
-		padding: 6,
+		padding: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	listContent: {
-		padding: 16,
-		paddingBottom: 32,
+		padding: SPACING_PX.lg,
+		paddingBottom: SPACING_PX['2xl'],
 	},
 	summaryRow: {
 		flexDirection: 'row',
-		gap: 8,
-		marginBottom: 16,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.lg,
 	},
 	summaryCard: {
 		flex: 1,
@@ -298,23 +310,23 @@ const styles = StyleSheet.create({
 	},
 	tableHeader: {
 		flexDirection: 'row',
-		paddingVertical: 8,
-		marginBottom: 4,
+		paddingVertical: SPACING_PX.sm,
+		marginBottom: SPACING_PX.xs,
 	},
 	row: {
 		flexDirection: 'row',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 		alignItems: 'center',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	badge: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 3,
-		paddingHorizontal: 6,
-		paddingVertical: 2,
+		gap: SPACING_PX.xs,
+		paddingHorizontal: SPACING_PX.sm - SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xxs,
 	},
 	emptyState: {
-		paddingVertical: 32,
+		paddingVertical: SPACING_PX['2xl'],
 	},
 });

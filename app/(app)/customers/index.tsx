@@ -1,4 +1,9 @@
-import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+import {
+	FAB_OFFSET_BOTTOM,
+	FAB_OFFSET_RIGHT,
+	SIZE_AVATAR_MD,
+	SIZE_ICON_CIRCLE_MD,
+} from '@/theme/uiMetrics';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
@@ -18,7 +23,11 @@ import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { Badge } from '@/src/components/atoms/Badge';
 import { CustomerListSkeleton } from '@/src/components/molecules/skeletons/CustomerListSkeleton';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import type { Customer } from '@/src/types/customer';
+
+const CUSTOMER_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs;
+const SUMMARY_BAR_RADIUS = SPACING_PX.sm - SPACING_PX.xxs;
 
 function getInitials(name: string): string {
 	return name
@@ -122,7 +131,11 @@ export default function CustomersScreen() {
 						},
 					]}
 				>
-					<ThemedText weight="bold" color={theme.colors.white} style={{ fontSize: 15 }}>
+					<ThemedText
+						weight="bold"
+						color={theme.colors.white}
+						style={{ fontSize: theme.typography.sizes.sm }}
+					>
 						{getInitials(item.name)}
 					</ThemedText>
 				</View>
@@ -217,37 +230,36 @@ export default function CustomersScreen() {
 
 const styles = StyleSheet.create({
 	header: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
 	searchBar: {
 		marginBottom: 0,
 	},
 	list: {
 		flexGrow: 1,
-		paddingBottom: 80,
+		paddingBottom: CUSTOMER_LIST_BOTTOM_PADDING,
 	},
 	avatar: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		width: SIZE_ICON_CIRCLE_MD,
+		height: SIZE_ICON_CIRCLE_MD,
+		borderRadius: SIZE_ICON_CIRCLE_MD / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	summaryBar: {
-		paddingHorizontal: 4,
-		paddingVertical: 6,
-		borderRadius: 6,
-		marginTop: 4,
+		paddingHorizontal: SPACING_PX.xs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
+		borderRadius: SUMMARY_BAR_RADIUS,
+		marginTop: SPACING_PX.xs,
 	},
 	fab: {
 		position: 'absolute',
-		right: 20,
-		bottom: 20,
+		right: FAB_OFFSET_RIGHT,
+		bottom: FAB_OFFSET_BOTTOM,
 		width: SIZE_AVATAR_MD,
 		height: SIZE_AVATAR_MD,
 		borderRadius: SIZE_AVATAR_MD / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
-		elevation: 8,
 	},
 });

@@ -7,6 +7,8 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useRouter } from 'expo-router';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 const CURRENT_FY = '2024-25';
 const NEXT_FY = '2025-26';
@@ -21,6 +23,10 @@ const PROCESSING_STEPS = [
 	'Resetting invoice sequence...',
 	'Archiving FY ' + CURRENT_FY + '...',
 ];
+const CLOSE_FY_STEP_SIZE = SPACING_PX['2xl'];
+const CLOSE_FY_ROW_PADDING = SPACING_PX.md + SPACING_PX.xxs;
+const CLOSE_FY_CARD_PADDING = SPACING_PX.lg + SPACING_PX.xs;
+const CLOSE_FY_CONFIRM_LABEL_MARGIN_BOTTOM = SPACING_PX.sm - SPACING_PX.xxs;
 
 export default function CloseFYScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -161,7 +167,7 @@ export default function CloseFYScreen() {
 							<ThemedText
 								variant="caption"
 								color={c.onSurfaceVariant}
-								style={{ marginTop: 4, textAlign: 'center' }}
+								style={{ marginTop: SPACING_PX.xs, textAlign: 'center' }}
 							>
 								{n === 1 ? 'Summary' : n === 2 ? 'Verify' : 'Confirm'}
 							</ThemedText>
@@ -274,7 +280,11 @@ export default function CloseFYScreen() {
 							<ThemedText variant="bodyBold" color={c.unpaid}>
 								⚠ This cannot be undone
 							</ThemedText>
-							<ThemedText variant="caption" color={c.unpaid} style={{ marginTop: 4 }}>
+							<ThemedText
+								variant="caption"
+								color={c.unpaid}
+								style={{ marginTop: SPACING_PX.xs }}
+							>
 								Closing FY {CURRENT_FY} will freeze all transactions before 1 Apr
 								2025. You cannot add or edit transactions in the closed FY.
 							</ThemedText>
@@ -283,7 +293,10 @@ export default function CloseFYScreen() {
 						<ThemedText
 							variant="label"
 							color={c.onSurfaceVariant}
-							style={{ marginTop: s.lg, marginBottom: 6 }}
+							style={{
+								marginTop: s.lg,
+								marginBottom: CLOSE_FY_CONFIRM_LABEL_MARGIN_BOTTOM,
+							}}
 						>
 							Type &quot;{CURRENT_FY}&quot; to confirm
 						</ThemedText>
@@ -315,12 +328,17 @@ export default function CloseFYScreen() {
 }
 
 const styles = StyleSheet.create({
-	center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
+	center: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: SPACING_PX['2xl'],
+	},
 	stepRow: { flexDirection: 'row', alignItems: 'flex-start' },
 	stepCircle: {
-		width: 32,
-		height: 32,
-		borderRadius: 16,
+		width: CLOSE_FY_STEP_SIZE,
+		height: CLOSE_FY_STEP_SIZE,
+		borderRadius: CLOSE_FY_STEP_SIZE / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -328,17 +346,26 @@ const styles = StyleSheet.create({
 	summaryRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		padding: 14,
+		padding: CLOSE_FY_ROW_PADDING,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
-	allClearCard: { flexDirection: 'row', alignItems: 'center', padding: 20 },
-	warningCard: { padding: 16 },
+	allClearCard: { flexDirection: 'row', alignItems: 'center', padding: CLOSE_FY_CARD_PADDING },
+	warningCard: { padding: SPACING_PX.lg },
 	switchRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 14,
+		paddingVertical: CLOSE_FY_ROW_PADDING,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
-	progressRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 32 },
-	confirmInput: { borderWidth: 1, padding: 14, fontSize: 18, letterSpacing: 2 },
+	progressRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingHorizontal: SPACING_PX['2xl'],
+	},
+	confirmInput: {
+		borderWidth: 1,
+		padding: CLOSE_FY_ROW_PADDING,
+		fontSize: FONT_SIZE.h3,
+		letterSpacing: 2,
+	},
 });

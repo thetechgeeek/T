@@ -10,6 +10,7 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { GSTR1_COL_AMT_FLEX } from '@/constants/reportLayout';
 import { GSTR1_PERIOD_CHIPS, MOCK_GSTR1_B2B, MOCK_GSTR1_B2C } from '@/src/mocks/reports/gstr1';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 function getCurrentPeriod() {
 	const d = new Date();
@@ -49,7 +50,9 @@ export default function GSTR1Screen() {
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader title="GSTR-1 Report" showBackButton />
 
-			<ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
+			<ScrollView
+				contentContainerStyle={[styles.content, { paddingBottom: s['2xl'] + s.sm }]}
+			>
 				{/* Period selector */}
 				<View style={styles.chipRow}>
 					{allPeriods.map((p) => (
@@ -356,61 +359,61 @@ export default function GSTR1Screen() {
 
 const styles = StyleSheet.create({
 	content: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		gap: 0,
 	},
 	chipRow: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
-		marginBottom: 16,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.lg,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		marginVertical: 8,
+		marginVertical: SPACING_PX.sm,
 	},
 	summaryGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 12,
+		gap: SPACING_PX.md,
 	},
 	summaryCell: {
 		width: '47%',
-		gap: 2,
+		gap: SPACING_PX.xxs,
 	},
 	tableHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 8,
-		paddingBottom: 6,
+		paddingHorizontal: SPACING_PX.sm,
+		paddingBottom: SPACING_PX.sm - SPACING_PX.xxs,
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		marginBottom: 4,
+		marginBottom: SPACING_PX.xs,
 	},
 	tableRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 8,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.sm,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	colInvoice: {
 		flex: 2,
-		paddingRight: 4,
+		paddingRight: SPACING_PX.xs,
 	},
 	colGstin: {
 		flex: 2,
-		paddingRight: 4,
+		paddingRight: SPACING_PX.xs,
 	},
 	colAmt: {
 		flex: GSTR1_COL_AMT_FLEX,
 	},
 	actionRow: {
 		flexDirection: 'row',
-		marginTop: 8,
+		marginTop: SPACING_PX.sm,
 	},
 });

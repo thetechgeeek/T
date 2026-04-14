@@ -15,6 +15,7 @@ import {
 	MOCK_GSTR3B_ITC,
 	MOCK_GSTR3B_OUTWARD_31,
 } from '@/src/mocks/reports/gstr3b';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 // TODO: Replace all mock values with aggregated Supabase queries for the selected period.
 
@@ -78,7 +79,9 @@ export default function GSTR3BScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader title="GSTR-3B Return" showBackButton />
 
-			<ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
+			<ScrollView
+				contentContainerStyle={[styles.content, { paddingBottom: s['2xl'] + s.sm }]}
+			>
 				{/* Period selector */}
 				<View style={styles.chipRow}>
 					{allPeriods.map((p) => (
@@ -348,7 +351,10 @@ export default function GSTR3BScreen() {
 					))}
 
 					<View
-						style={[styles.divider, { backgroundColor: c.border, marginVertical: 8 }]}
+						style={[
+							styles.divider,
+							{ backgroundColor: c.border, marginVertical: s.sm },
+						]}
 					/>
 
 					<View style={styles.payableRow}>
@@ -395,37 +401,37 @@ export default function GSTR3BScreen() {
 
 const styles = StyleSheet.create({
 	content: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		gap: 0,
 	},
 	chipRow: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
-		marginBottom: 16,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.lg,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		marginVertical: 6,
+		marginVertical: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	tableHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 4,
-		paddingBottom: 6,
+		paddingHorizontal: SPACING_PX.xs,
+		paddingBottom: SPACING_PX.sm - SPACING_PX.xxs,
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		marginBottom: 4,
+		marginBottom: SPACING_PX.xs,
 	},
 	tableRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 4,
-		paddingVertical: 7,
+		paddingHorizontal: SPACING_PX.xs,
+		paddingVertical: SPACING_PX.sm,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	numCell: {
@@ -435,10 +441,10 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 5,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	actionRow: {
 		flexDirection: 'row',
-		marginTop: 4,
+		marginTop: SPACING_PX.xs,
 	},
 });

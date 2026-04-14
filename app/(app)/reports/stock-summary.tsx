@@ -12,6 +12,8 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_BADGE_BG } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import type { InventoryItem, TileCategory } from '@/src/types/inventory';
 
 type CategoryFilter = 'ALL' | TileCategory;
@@ -96,12 +98,12 @@ export default function StockSummaryScreen() {
 					{ borderBottomColor: c.border, borderBottomWidth: StyleSheet.hairlineWidth },
 				]}
 			>
-				<View style={{ flex: 1, gap: 4 }}>
+				<View style={{ flex: 1, gap: SPACING_PX.xs }}>
 					<View
 						style={{
 							flexDirection: 'row',
 							alignItems: 'center',
-							gap: 6,
+							gap: SPACING_PX.sm - SPACING_PX.xxs,
 							flexWrap: 'wrap',
 						}}
 					>
@@ -120,7 +122,7 @@ export default function StockSummaryScreen() {
 							<ThemedText
 								variant="caption"
 								color={c.primary}
-								style={{ fontSize: 10 }}
+								style={{ fontSize: FONT_SIZE.captionSmall }}
 							>
 								{item.category}
 							</ThemedText>
@@ -137,7 +139,7 @@ export default function StockSummaryScreen() {
 					</ThemedText>
 				</View>
 
-				<View style={{ alignItems: 'flex-end', gap: 4 }}>
+				<View style={{ alignItems: 'flex-end', gap: SPACING_PX.xs }}>
 					{isOut ? (
 						<View
 							style={[
@@ -151,7 +153,7 @@ export default function StockSummaryScreen() {
 							<ThemedText
 								variant="caption"
 								color={c.onSurfaceVariant}
-								style={{ fontSize: 10 }}
+								style={{ fontSize: FONT_SIZE.captionSmall }}
 							>
 								Out of Stock
 							</ThemedText>
@@ -166,7 +168,11 @@ export default function StockSummaryScreen() {
 						</ThemedText>
 					)}
 					{isLow && !isOut ? (
-						<ThemedText variant="caption" color={c.error} style={{ fontSize: 10 }}>
+						<ThemedText
+							variant="caption"
+							color={c.error}
+							style={{ fontSize: FONT_SIZE.captionSmall }}
+						>
 							Low (threshold: {item.low_stock_threshold})
 						</ThemedText>
 					) : null}
@@ -257,7 +263,7 @@ export default function StockSummaryScreen() {
 				ListHeaderComponent={
 					<>
 						{/* Summary card */}
-						<Card padding="md" style={{ marginBottom: 16 }}>
+						<Card padding="md" style={{ marginBottom: SPACING_PX.lg }}>
 							<View style={styles.summaryRow}>
 								<View style={{ flex: 1 }}>
 									<ThemedText variant="caption" color={c.onSurfaceVariant}>
@@ -281,7 +287,7 @@ export default function StockSummaryScreen() {
 										style={{
 											flexDirection: 'row',
 											alignItems: 'center',
-											gap: 4,
+											gap: SPACING_PX.xs,
 										}}
 									>
 										<ThemedText variant="h2" color={c.error}>
@@ -302,7 +308,7 @@ export default function StockSummaryScreen() {
 												<ThemedText
 													variant="caption"
 													color={c.error}
-													style={{ fontSize: 9 }}
+													style={{ fontSize: FONT_SIZE.captionSmall }}
 												>
 													ALERT
 												</ThemedText>
@@ -336,7 +342,7 @@ export default function StockSummaryScreen() {
 						</View>
 
 						{loading ? (
-							<View style={{ gap: 12, marginTop: 8 }}>
+							<View style={{ gap: SPACING_PX.md, marginTop: SPACING_PX.sm }}>
 								<SkeletonBlock height={64} borderRadius={8} />
 								<SkeletonBlock height={64} borderRadius={8} />
 								<SkeletonBlock height={64} borderRadius={8} />
@@ -362,31 +368,31 @@ export default function StockSummaryScreen() {
 const styles = StyleSheet.create({
 	filterRow: {
 		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 7,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	catChip: {
-		paddingHorizontal: 6,
-		paddingVertical: 2,
+		paddingHorizontal: SPACING_PX.sm - SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xxs,
 	},
 	badge: {
-		paddingHorizontal: 6,
-		paddingVertical: 2,
+		paddingHorizontal: SPACING_PX.sm - SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xxs,
 	},
 	exportBtn: {
-		padding: 6,
+		padding: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	listContent: {
-		padding: 16,
-		paddingBottom: 32,
+		padding: SPACING_PX.lg,
+		paddingBottom: SPACING_PX['2xl'],
 	},
 	summaryRow: {
 		flexDirection: 'row',
@@ -394,15 +400,15 @@ const styles = StyleSheet.create({
 	},
 	tableHeader: {
 		flexDirection: 'row',
-		paddingVertical: 8,
-		marginBottom: 4,
+		paddingVertical: SPACING_PX.sm,
+		marginBottom: SPACING_PX.xs,
 	},
 	row: {
 		flexDirection: 'row',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 		alignItems: 'center',
 	},
 	emptyState: {
-		paddingVertical: 32,
+		paddingVertical: SPACING_PX['2xl'],
 	},
 });

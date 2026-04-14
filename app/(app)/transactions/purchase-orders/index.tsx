@@ -16,10 +16,19 @@ import {
 	type POStatus,
 } from '@/src/mocks/transactions/purchaseOrders';
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
-import { FAB_OFFSET_BOTTOM, FAB_OFFSET_RIGHT, OPACITY_BADGE_BG } from '@/theme/uiMetrics';
+import {
+	FAB_OFFSET_BOTTOM,
+	FAB_OFFSET_RIGHT,
+	OPACITY_BADGE_BG,
+	RADIUS_FAB,
+	SIZE_FAB,
+	SIZE_ICON_CIRCLE_MD,
+} from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { withOpacity } from '@/src/utils/color';
 
 const MOCK_POS = MOCK_PURCHASE_ORDERS;
+const PURCHASE_ORDER_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs;
 
 const STATUS_FILTERS: { label: string; value: POStatus | 'all' }[] = [
 	{ label: 'All', value: 'all' },
@@ -73,7 +82,7 @@ export default function PurchaseOrdersScreen() {
 				<ThemedText variant="caption" color={c.onSurfaceVariant}>
 					{item.supplier_name}
 				</ThemedText>
-				<View style={[styles.rowBottom, { marginTop: 4 }]}>
+				<View style={[styles.rowBottom, { marginTop: SPACING_PX.xs }]}>
 					<ThemedText variant="caption" color={c.onSurfaceVariant}>
 						Expected: {formatDate(item.expected_date)}
 					</ThemedText>
@@ -94,7 +103,11 @@ export default function PurchaseOrdersScreen() {
 					<View
 						style={[
 							styles.progressBar,
-							{ backgroundColor: c.surfaceVariant, borderRadius: 3, marginTop: 6 },
+							{
+								backgroundColor: c.surfaceVariant,
+								borderRadius: SPACING_PX.xs,
+								marginTop: SPACING_PX.sm - SPACING_PX.xxs,
+							},
 						]}
 					>
 						<View
@@ -103,7 +116,7 @@ export default function PurchaseOrdersScreen() {
 								{
 									width: `${item.received_pct}%` as `${number}%`,
 									backgroundColor: c.primary,
-									borderRadius: 3,
+									borderRadius: SPACING_PX.xs,
 								},
 							]}
 						/>
@@ -146,14 +159,16 @@ export default function PurchaseOrdersScreen() {
 				data={filtered}
 				keyExtractor={(i) => i.id}
 				renderItem={renderItem}
-				contentContainerStyle={{ paddingBottom: 80 + insets.bottom }}
+				contentContainerStyle={{
+					paddingBottom: PURCHASE_ORDER_LIST_BOTTOM_PADDING + insets.bottom,
+				}}
 				ListEmptyComponent={
 					<View style={styles.empty}>
 						<ShoppingCart size={48} color={c.border} />
 						<ThemedText
 							variant="body"
 							color={c.onSurfaceVariant}
-							style={{ marginTop: 12, textAlign: 'center' }}
+							style={{ marginTop: SPACING_PX.md, textAlign: 'center' }}
 						>
 							No purchase orders yet.{'\n'}Create a PO to send to your supplier.
 						</ThemedText>
@@ -182,40 +197,49 @@ export default function PurchaseOrdersScreen() {
 const styles = StyleSheet.create({
 	filterRow: {
 		flexDirection: 'row',
-		gap: 8,
-		padding: 12,
+		gap: SPACING_PX.sm,
+		padding: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
-	chip: { paddingHorizontal: 12, paddingVertical: 6, borderWidth: 1 },
+	chip: {
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
+		borderWidth: 1,
+	},
 	row: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
-		padding: 16,
+		padding: SPACING_PX.lg,
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		gap: 12,
+		gap: SPACING_PX.md,
 	},
 	iconCircle: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		width: SIZE_ICON_CIRCLE_MD,
+		height: SIZE_ICON_CIRCLE_MD,
+		borderRadius: SIZE_ICON_CIRCLE_MD / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 2,
+		marginTop: SPACING_PX.xxs,
 	},
 	rowTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
 	rowBottom: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-	progressBar: { height: 4, width: '100%' },
-	progressFill: { height: 4 },
-	empty: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 80 },
-	fab: {
-		position: 'absolute',
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+	progressBar: { height: SPACING_PX.xs, width: '100%' },
+	progressFill: { height: SPACING_PX.xs },
+	empty: {
+		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
-		shadowOffset: { width: 0, height: 2 },
+		paddingVertical: PURCHASE_ORDER_LIST_BOTTOM_PADDING,
+	},
+	fab: {
+		position: 'absolute',
+		width: SIZE_FAB,
+		height: SIZE_FAB,
+		borderRadius: RADIUS_FAB,
+		alignItems: 'center',
+		justifyContent: 'center',
+		elevation: SPACING_PX.xs,
+		shadowOffset: { width: 0, height: SPACING_PX.xxs },
 		...FAB_SHADOW,
 	},
 });

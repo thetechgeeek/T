@@ -16,6 +16,8 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { CustomerDetailSkeleton } from '@/src/components/molecules/skeletons/CustomerDetailSkeleton';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 import type { CustomerLedgerEntry } from '@/src/types/customer';
 
@@ -129,7 +131,7 @@ export default function CustomerDetailScreen() {
 							<ThemedText
 								variant="captionBold"
 								color={theme.colors.onSurfaceVariant}
-								style={{ marginBottom: 4 }}
+								style={{ marginBottom: SPACING_PX.xs }}
 							>
 								{t('common.outstandingBalance')}
 							</ThemedText>
@@ -144,7 +146,7 @@ export default function CustomerDetailScreen() {
 								{formatCurrency(summary?.outstanding_balance || 0)}
 							</ThemedText>
 
-							<Divider style={{ marginVertical: 12 }} />
+							<Divider style={{ marginVertical: SPACING_PX.md }} />
 
 							<View style={styles.statsRow}>
 								<View style={styles.stat}>
@@ -177,14 +179,14 @@ export default function CustomerDetailScreen() {
 								title={t('dashboard.recordPayment')}
 								variant="primary"
 								leftIcon={<Wallet size={18} color="white" />}
-								style={{ flex: 1, marginRight: 8 }}
+								style={{ flex: 1, marginRight: SPACING_PX.sm }}
 								onPress={() => setPaymentModalVisible(true)}
 							/>
 							<Button
 								title={t('invoice.newInvoice')}
 								variant="outline"
 								leftIcon={<Plus size={18} color={theme.colors.primary} />}
-								style={{ flex: 1, marginLeft: 8 }}
+								style={{ flex: 1, marginLeft: SPACING_PX.sm }}
 								onPress={() =>
 									router.push({
 										pathname: '/(app)/invoices/create',
@@ -196,7 +198,11 @@ export default function CustomerDetailScreen() {
 
 						<ThemedText
 							variant="h3"
-							style={{ marginTop: 16, marginBottom: 8, paddingHorizontal: 4 }}
+							style={{
+								marginTop: SPACING_PX.lg,
+								marginBottom: SPACING_PX.sm,
+								paddingHorizontal: SPACING_PX.xs,
+							}}
 						>
 							{t('common.customerInfo')}
 						</ThemedText>
@@ -228,7 +234,11 @@ export default function CustomerDetailScreen() {
 
 						<ThemedText
 							variant="h3"
-							style={{ marginTop: 16, marginBottom: 8, paddingHorizontal: 4 }}
+							style={{
+								marginTop: SPACING_PX.lg,
+								marginBottom: SPACING_PX.sm,
+								paddingHorizontal: SPACING_PX.xs,
+							}}
 						>
 							{t('common.ledgerHistory')}
 						</ThemedText>
@@ -265,22 +275,26 @@ export default function CustomerDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-	summaryContainer: { padding: 16, paddingTop: 0 },
+	summaryContainer: { padding: SPACING_PX.lg, paddingTop: 0 },
 	summaryCard: { alignItems: 'center' },
 	statsRow: { flexDirection: 'row', width: '100%' },
 	stat: { flex: 1, alignItems: 'center' },
-	actions: { flexDirection: 'row', marginTop: 16 },
+	actions: { flexDirection: 'row', marginTop: SPACING_PX.lg },
 	infoCard: { padding: 0 },
-	list: { flexGrow: 1, paddingBottom: 40 },
+	list: { flexGrow: 1, paddingBottom: SPACING_PX['3xl'] - SPACING_PX.sm },
 	ledgerItem: {
-		marginHorizontal: 16,
-		marginBottom: 12,
-		padding: 12,
-		borderRadius: 12,
-		borderLeftWidth: 4,
+		marginHorizontal: SPACING_PX.lg,
+		marginBottom: SPACING_PX.md,
+		padding: SPACING_PX.md,
+		borderRadius: BORDER_RADIUS_PX.lg,
+		borderLeftWidth: SPACING_PX.xs,
 	},
-	ledgerHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-	ledgerRef: { fontSize: 14 },
+	ledgerHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginBottom: SPACING_PX.sm,
+	},
+	ledgerRef: { fontSize: FONT_SIZE.caption },
 	ledgerRow: { flexDirection: 'row' },
 	ledgerCol: { flex: 1 },
 });

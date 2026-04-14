@@ -10,6 +10,8 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import logger from '@/src/utils/logger';
 
 export default function OrderDetailScreen() {
@@ -90,7 +92,6 @@ export default function OrderDetailScreen() {
 						<ThemedText variant="h3" style={{ marginBottom: s.md }}>
 							{t('invoice.stepReview')}
 						</ThemedText>
-						pre
 						<View style={styles.row}>
 							<ThemedText color={c.placeholder} style={{ flex: 1 }}>
 								{t('order.totalBoxes')}
@@ -103,7 +104,13 @@ export default function OrderDetailScreen() {
 							<ThemedText color={c.placeholder} style={{ flex: 1 }}>
 								{t('order.status')}
 							</ThemedText>
-							<View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+							<View
+								style={{
+									flexDirection: 'row',
+									alignItems: 'center',
+									gap: SPACING_PX.xs,
+								}}
+							>
 								<CheckCircle2 size={16} color={c.success} />
 								<ThemedText color={c.success} weight="semibold">
 									{t('order.importSuccess')}
@@ -129,13 +136,13 @@ export default function OrderDetailScreen() {
 							]}
 						>
 							<View style={{ flex: 1 }}>
-								<ThemedText weight="bold" style={{ fontSize: 16 }}>
+								<ThemedText weight="bold" style={{ fontSize: FONT_SIZE.body }}>
 									{item.design_name}
 								</ThemedText>
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ marginTop: 4 }}
+									style={{ marginTop: SPACING_PX.xs }}
 								>
 									{item.category} {item.size_name ? `• ${item.size_name}` : ''}
 								</ThemedText>
@@ -166,22 +173,22 @@ export default function OrderDetailScreen() {
 
 const styles = StyleSheet.create({
 	headerArea: {
-		padding: 32,
+		padding: SPACING_PX['2xl'],
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	section: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		borderWidth: 1,
 	},
 	row: {
 		flexDirection: 'row',
-		marginBottom: 12,
+		marginBottom: SPACING_PX.md,
 	},
 	itemCard: {
 		flexDirection: 'row',
-		padding: 16,
+		padding: SPACING_PX.lg,
 		borderWidth: 1,
-		marginBottom: 8,
+		marginBottom: SPACING_PX.sm,
 	},
 });

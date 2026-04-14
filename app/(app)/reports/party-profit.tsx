@@ -10,6 +10,7 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_ROW_HIGHLIGHT } from '@/src/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 const SEEDED_RAND_MODULUS = 90001;
 const SEEDED_RAND_MIN = 10000;
 const HASH_PRIME = 31;
@@ -224,7 +225,7 @@ export default function PartyProfitScreen() {
 						backgroundColor: c.surface,
 						borderRadius: r.md,
 						marginHorizontal: s.md,
-						marginTop: 8,
+						marginTop: s.sm,
 					},
 				]}
 			>
@@ -334,52 +335,52 @@ export default function PartyProfitScreen() {
 const styles = StyleSheet.create({
 	modeToggle: {
 		flexDirection: 'row',
-		padding: 3,
+		padding: SPACING_PX.xs,
 	},
 	modeTab: {
 		flex: 1,
 		alignItems: 'center',
-		paddingVertical: 9,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
 	},
 	filterRow: {
 		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	listContent: {
-		paddingHorizontal: 16,
-		paddingBottom: 8,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingBottom: SPACING_PX.sm,
 	},
 	tableHeader: {
 		flexDirection: 'row',
-		paddingVertical: 8,
-		paddingHorizontal: 12,
+		paddingVertical: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.md,
 		backgroundColor: 'transparent',
 	},
 	tableRow: {
 		flexDirection: 'row',
-		paddingVertical: 10,
-		paddingHorizontal: 12,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
+		paddingHorizontal: SPACING_PX.md,
 		alignItems: 'center',
 	},
 	numCol: {
-		width: 64,
+		width: SPACING_PX['4xl'],
 		textAlign: 'right',
 	},
 	pctCol: {
-		width: 36,
+		width: SPACING_PX.xl + SPACING_PX.md,
 		textAlign: 'right',
 	},
 	emptyState: {
 		flex: 1,
-		paddingVertical: 40,
+		paddingVertical: SPACING_PX['2xl'] + SPACING_PX.sm,
 	},
 });

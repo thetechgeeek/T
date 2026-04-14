@@ -25,6 +25,8 @@ import type { Supplier } from '@/src/types/supplier';
 import { layout } from '@/src/theme/layout';
 import { PARTY_PICKER_PREVIEW_LIMIT, PARTY_STMT_COL_WIDTH_PX } from '@/constants/reportLayout';
 import { MOCK_PARTY_STATEMENT_TXS } from '@/src/mocks/reports/partyStatement';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
 
 type Tab = 'customers' | 'suppliers';
 type DateRange = 'this-month' | 'this-fy' | 'custom';
@@ -415,8 +417,8 @@ export default function PartyStatementScreen() {
 							textColor={c.white}
 							style={{
 								backgroundColor: c.primary,
-								paddingHorizontal: 10,
-								paddingVertical: 8,
+								paddingHorizontal: SPACING_PX.sm + SPACING_PX.xxs,
+								paddingVertical: SPACING_PX.sm,
 							}}
 							columns={[
 								{ label: 'Date', width: PARTY_STMT_COL_WIDTH_PX.date },
@@ -443,8 +445,8 @@ export default function PartyStatementScreen() {
 							style={{
 								backgroundColor: c.background,
 								borderBottomColor: c.border,
-								paddingHorizontal: 10,
-								paddingVertical: 8,
+								paddingHorizontal: SPACING_PX.sm + SPACING_PX.xxs,
+								paddingVertical: SPACING_PX.sm,
 							}}
 							columns={[
 								{
@@ -497,8 +499,8 @@ export default function PartyStatementScreen() {
 								style={{
 									backgroundColor: idx % 2 === 0 ? c.card : c.surface,
 									borderBottomColor: c.border,
-									paddingHorizontal: 10,
-									paddingVertical: 8,
+									paddingHorizontal: SPACING_PX.sm + SPACING_PX.xxs,
+									paddingVertical: SPACING_PX.sm,
 								}}
 								columns={[
 									{
@@ -576,8 +578,8 @@ export default function PartyStatementScreen() {
 							style={{
 								backgroundColor: c.background,
 								borderBottomColor: c.border,
-								paddingHorizontal: 10,
-								paddingVertical: 8,
+								paddingHorizontal: SPACING_PX.sm + SPACING_PX.xxs,
+								paddingVertical: SPACING_PX.sm,
 							}}
 							columns={[
 								{
@@ -662,7 +664,7 @@ export default function PartyStatementScreen() {
 							<ThemedText
 								variant="captionBold"
 								color={c.onSuccess}
-								style={{ marginLeft: 6 }}
+								style={{ marginLeft: SPACING_PX.sm - SPACING_PX.xxs }}
 							>
 								WhatsApp
 							</ThemedText>
@@ -686,7 +688,7 @@ export default function PartyStatementScreen() {
 							<ThemedText
 								variant="captionBold"
 								color={c.onSurface}
-								style={{ marginLeft: 6 }}
+								style={{ marginLeft: SPACING_PX.sm - SPACING_PX.xxs }}
 							>
 								Print
 							</ThemedText>
@@ -710,7 +712,7 @@ export default function PartyStatementScreen() {
 							<ThemedText
 								variant="captionBold"
 								color={c.onSurface}
-								style={{ marginLeft: 6 }}
+								style={{ marginLeft: SPACING_PX.sm - SPACING_PX.xxs }}
 							>
 								Share PDF
 							</ThemedText>
@@ -744,56 +746,56 @@ const styles = StyleSheet.create({
 	tabBtn: {
 		flex: 1,
 		alignItems: 'center',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 	},
 	chip: {
-		paddingHorizontal: 12,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	selectedPartyRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 12,
+		padding: SPACING_PX.md,
 		borderWidth: 1,
 	},
 	partyAvatar: {
-		width: 36,
-		height: 36,
-		borderRadius: 18,
+		width: SIZE_CHIP_HEIGHT,
+		height: SIZE_CHIP_HEIGHT,
+		borderRadius: SIZE_CHIP_HEIGHT / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginRight: 10,
+		marginRight: SPACING_PX.sm + SPACING_PX.xxs,
 	},
 	pickerPrompt: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 12,
+		padding: SPACING_PX.md,
 		borderWidth: 1,
 	},
 	dropdownList: {
 		borderWidth: 1,
 		overflow: 'hidden',
-		marginTop: 4,
+		marginTop: SPACING_PX.xs,
 	},
 	dropdownItem: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingHorizontal: 14,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	periodRow: {
-		marginTop: 8,
-		paddingHorizontal: 10,
-		paddingVertical: 6,
+		marginTop: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.sm + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 		alignSelf: 'flex-start',
 	},
 	actionBtn: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 	},
 });

@@ -38,6 +38,8 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { InvoiceDetailSkeleton } from '@/src/components/molecules/skeletons/InvoiceDetailSkeleton';
 import { layout } from '@/src/theme/layout';
 import { PaymentModal } from '@/src/components/organisms/PaymentModal';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_BUTTON_HEIGHT_SM } from '@/theme/uiMetrics';
 import type { UUID } from '@/src/types/common';
 import type { BadgeVariant } from '@/src/components/atoms/Badge';
 import type { PaymentStatus } from '@/src/types/invoice';
@@ -405,7 +407,11 @@ export default function InvoiceDetailScreen() {
 								accessibilityRole="button"
 								accessibilityLabel={`Call ${invoice.customer_phone}`}
 							>
-								<Phone size={14} color={c.primary} style={{ marginRight: 4 }} />
+								<Phone
+									size={14}
+									color={c.primary}
+									style={{ marginRight: SPACING_PX.xs }}
+								/>
 								<ThemedText color={c.primary}>{invoice.customer_phone}</ThemedText>
 							</TouchableOpacity>
 						)}
@@ -875,16 +881,21 @@ export default function InvoiceDetailScreen() {
 // ─── styles ─────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
-	center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
-	iconBtn: { padding: 8 },
+	center: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: SPACING_PX.xl,
+	},
+	iconBtn: { padding: SPACING_PX.sm },
 	statusBanner: { overflow: 'hidden' },
 	cardHeader: {
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		gap: 4,
+		gap: SPACING_PX.xs,
 	},
 	// Table columns
 	tableRow: { flexDirection: 'row', alignItems: 'flex-start' },
-	colDesc: { flex: 3, paddingRight: 4 },
+	colDesc: { flex: 3, paddingRight: SPACING_PX.xs },
 	colQty: { flex: 1, textAlign: 'right' },
 	colRate: { flex: 2, textAlign: 'right' },
 	colGst: { flex: 1, textAlign: 'right' },
@@ -898,8 +909,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	iconActionBtn: {
-		width: 44,
-		height: 44,
+		width: SIZE_BUTTON_HEIGHT_SM,
+		height: SIZE_BUTTON_HEIGHT_SM,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

@@ -34,6 +34,10 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const ROW_ITEM_VERTICAL_PADDING = SPACING_PX.md + SPACING_PX.xxs / 2;
+const ROW_TEXT_GAP = SPACING_PX.xxs / 2;
 
 const STORE_URL = 'yourbiz.billapp.in';
 
@@ -310,14 +314,14 @@ export default function OnlineStoreScreen() {
 
 const styles = StyleSheet.create({
 	scroll: {
-		paddingHorizontal: 16,
-		paddingTop: 16,
-		gap: 12,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingTop: SPACING_PX.lg,
+		gap: SPACING_PX.md,
 	},
 	/* Hero */
 	heroCard: {
-		padding: 16,
-		gap: 12,
+		padding: SPACING_PX.lg,
+		gap: SPACING_PX.md,
 	},
 	heroTop: {
 		flexDirection: 'row',
@@ -327,7 +331,7 @@ const styles = StyleSheet.create({
 	heroTitleRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 8,
+		gap: SPACING_PX.sm,
 		flex: 1,
 	},
 	heroTitle: {
@@ -337,9 +341,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		gap: SPACING_PX.sm,
 	},
 	urlText: {
 		flex: 1,
@@ -348,54 +352,54 @@ const styles = StyleSheet.create({
 	/* Stats */
 	statsRow: {
 		flexDirection: 'row',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	statCard: {
 		flex: 1,
 		alignItems: 'center',
-		padding: 12,
-		gap: 4,
+		padding: SPACING_PX.md,
+		gap: SPACING_PX.xs,
 	},
 	statIcon: {
-		marginBottom: 2,
+		marginBottom: SPACING_PX.xxs,
 	},
 	/* Section label */
 	sectionLabel: {
-		marginTop: 4,
-		marginBottom: 2,
-		marginLeft: 4,
+		marginTop: SPACING_PX.xs,
+		marginBottom: SPACING_PX.xxs,
+		marginLeft: SPACING_PX.xs,
 		letterSpacing: LETTER_SPACING_SECTION,
 	},
 	/* Card + rows */
 	rowItem: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 14,
-		paddingVertical: 13,
-		gap: 12,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: ROW_ITEM_VERTICAL_PADDING,
+		gap: SPACING_PX.md,
 	},
 	rowIconWrap: {
 		width: SIZE_ICON_CONTAINER,
 		height: SIZE_ICON_CONTAINER,
-		borderRadius: 8,
+		borderRadius: BORDER_RADIUS_PX.md,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	rowText: {
 		flex: 1,
-		gap: 1,
+		gap: ROW_TEXT_GAP,
 	},
 	/* Share button */
 	shareBtn: {
-		marginTop: 4,
+		marginTop: SPACING_PX.xs,
 	},
 	/* Banner */
 	banner: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 12,
+		padding: SPACING_PX.md,
 		borderLeftWidth: 3,
-		marginTop: 4,
+		marginTop: SPACING_PX.xs,
 	},
 	bannerText: {
 		flex: 1,

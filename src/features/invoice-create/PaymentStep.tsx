@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -9,6 +9,7 @@ import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import type { CustomerDraft, PaymentMode } from './invoiceCreateTypes';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_BADGE_BG } from '@/src/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
 
@@ -65,7 +66,7 @@ export function PaymentStep({
 
 				<View style={{ marginTop: s.md }}>
 					{lineItems.map((item, idx) => (
-						<View key={idx} style={[layout.rowBetween, { marginTop: 4 }]}>
+						<View key={idx} style={[layout.rowBetween, { marginTop: SPACING_PX.xs }]}>
 							<ThemedText variant="body">
 								{item.quantity}x {item.design_name}
 							</ThemedText>
@@ -76,7 +77,13 @@ export function PaymentStep({
 					))}
 				</View>
 
-				<View style={{ height: 1, backgroundColor: c.border, marginVertical: s.md }} />
+				<View
+					style={{
+						height: StyleSheet.hairlineWidth,
+						backgroundColor: c.border,
+						marginVertical: s.md,
+					}}
+				/>
 
 				{/* GST breakdown */}
 				{(() => {
@@ -188,7 +195,7 @@ export function PaymentStep({
 				variant="caption"
 				color={c.onSurfaceVariant}
 				importantForAccessibility="no"
-				style={{ marginBottom: 4 }}
+				style={{ marginBottom: SPACING_PX.xs }}
 			>
 				{t('invoice.paymentMode')}
 			</ThemedText>

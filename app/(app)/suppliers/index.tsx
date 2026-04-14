@@ -1,4 +1,9 @@
-import { SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+import {
+	FAB_OFFSET_BOTTOM,
+	FAB_OFFSET_RIGHT,
+	SIZE_AVATAR_MD,
+	SIZE_ICON_CIRCLE_MD,
+} from '@/theme/uiMetrics';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -14,7 +19,11 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { CustomerListSkeleton } from '@/src/components/molecules/skeletons/CustomerListSkeleton';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import type { Supplier } from '@/src/types/supplier';
+
+const SUPPLIER_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs;
+const SUMMARY_BAR_RADIUS = SPACING_PX.sm - SPACING_PX.xxs;
 
 function getInitials(name: string): string {
 	return name
@@ -112,7 +121,11 @@ export default function SupplierListScreen() {
 						},
 					]}
 				>
-					<ThemedText weight="bold" color={theme.colors.white} style={{ fontSize: 15 }}>
+					<ThemedText
+						weight="bold"
+						color={theme.colors.white}
+						style={{ fontSize: theme.typography.sizes.sm }}
+					>
 						{getInitials(item.name)}
 					</ThemedText>
 				</View>
@@ -192,37 +205,36 @@ export default function SupplierListScreen() {
 
 const styles = StyleSheet.create({
 	header: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
 	searchBar: {
 		marginBottom: 0,
 	},
 	summaryBar: {
-		paddingHorizontal: 4,
-		paddingVertical: 6,
-		borderRadius: 6,
-		marginTop: 8,
+		paddingHorizontal: SPACING_PX.xs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
+		borderRadius: SUMMARY_BAR_RADIUS,
+		marginTop: SPACING_PX.sm,
 	},
 	list: {
 		flexGrow: 1,
-		paddingBottom: 80,
+		paddingBottom: SUPPLIER_LIST_BOTTOM_PADDING,
 	},
 	avatar: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		width: SIZE_ICON_CIRCLE_MD,
+		height: SIZE_ICON_CIRCLE_MD,
+		borderRadius: SIZE_ICON_CIRCLE_MD / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	fab: {
 		position: 'absolute',
-		right: 20,
-		bottom: 20,
+		right: FAB_OFFSET_RIGHT,
+		bottom: FAB_OFFSET_BOTTOM,
 		width: SIZE_AVATAR_MD,
 		height: SIZE_AVATAR_MD,
 		borderRadius: SIZE_AVATAR_MD / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
-		elevation: 8,
 	},
 });

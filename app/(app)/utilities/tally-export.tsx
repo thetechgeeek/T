@@ -8,7 +8,9 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
-import { OPACITY_SKELETON_BASE } from '@/src/theme/uiMetrics';
+import { OPACITY_SKELETON_BASE, SIZE_ICON_LG, SIZE_ICON_MD } from '@/src/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import type { ThemeColors } from '@/src/theme';
 
 const EXPORT_ITEMS = [
@@ -27,6 +29,7 @@ const INSTRUCTIONS = [
 	'Verify imported data in Tally',
 	'Contact your CA if any entries need adjustment',
 ];
+const TALLY_CHECKBOX_SIZE = SIZE_ICON_MD + SPACING_PX.xxs;
 
 interface ChipProps {
 	label: string;
@@ -90,7 +93,7 @@ export default function TallyExportScreen() {
 		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
 			<ScreenHeader title="Export to Tally" />
 			<ScrollView
-				contentContainerStyle={{ padding: s.lg, paddingBottom: 32 }}
+				contentContainerStyle={{ padding: s.lg, paddingBottom: SPACING_PX['2xl'] }}
 				keyboardShouldPersistTaps="handled"
 			>
 				<View
@@ -109,7 +112,7 @@ export default function TallyExportScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginTop: 4 }}
+						style={{ marginTop: SPACING_PX.xs }}
 					>
 						Generates a .xml file you can share with your CA or import directly into
 						Tally.
@@ -234,7 +237,7 @@ export default function TallyExportScreen() {
 						<ThemedText
 							variant="label"
 							color={c.onSurfaceVariant}
-							style={{ marginBottom: 4 }}
+							style={{ marginBottom: SPACING_PX.xs }}
 						>
 							{label}
 						</ThemedText>
@@ -309,33 +312,52 @@ export default function TallyExportScreen() {
 }
 
 const styles = StyleSheet.create({
-	infoCard: { padding: 16, marginBottom: 8 },
-	chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 4 },
-	chip: { paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1 },
+	infoCard: { padding: SPACING_PX.lg, marginBottom: SPACING_PX.sm },
+	chipRow: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.xs,
+	},
+	chip: {
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm,
+		borderWidth: 1,
+	},
 	checkList: { borderWidth: 1, overflow: 'hidden' },
-	checkRow: { flexDirection: 'row', alignItems: 'center', padding: 14, gap: 12 },
+	checkRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: SPACING_PX.md + SPACING_PX.xxs,
+		gap: SPACING_PX.md,
+	},
 	checkbox: {
-		width: 22,
-		height: 22,
+		width: TALLY_CHECKBOX_SIZE,
+		height: TALLY_CHECKBOX_SIZE,
 		borderWidth: 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	checkMark: { lineHeight: 16 },
-	input: { borderWidth: 1, padding: 12, fontSize: 16 },
+	input: { borderWidth: 1, padding: SPACING_PX.md, fontSize: FONT_SIZE.body },
 	instructionsHeader: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		padding: 14,
+		padding: SPACING_PX.md + SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	instructionsList: { borderWidth: 1, borderTopWidth: 0, overflow: 'hidden' },
-	instructionRow: { flexDirection: 'row', alignItems: 'center', padding: 14, gap: 12 },
+	instructionRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: SPACING_PX.md + SPACING_PX.xxs,
+		gap: SPACING_PX.md,
+	},
 	stepNum: {
-		width: 24,
-		height: 24,
-		borderRadius: 12,
+		width: SIZE_ICON_LG,
+		height: SIZE_ICON_LG,
+		borderRadius: SIZE_ICON_LG / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

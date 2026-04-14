@@ -15,9 +15,11 @@ import {
 	type EstimateStatus,
 } from '@/src/mocks/transactions/estimates';
 import { OPACITY_TINT_MEDIUM, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const EMPTY_SECTION_PADDING_VERTICAL = SIZE_AVATAR_MD;
 const FAB_SHADOW_OPACITY = OPACITY_TINT_MEDIUM;
+const ESTIMATES_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.xl + SPACING_PX.md;
 
 type FilterType = 'all' | EstimateStatus;
 
@@ -132,7 +134,7 @@ export default function EstimatesScreen() {
 										backgroundColor: active ? c.primary : c.surface,
 										borderColor: active ? c.primary : c.border,
 										borderRadius: r.full,
-										marginRight: 8,
+										marginRight: SPACING_PX.sm,
 									},
 								]}
 								accessibilityRole="button"
@@ -154,7 +156,7 @@ export default function EstimatesScreen() {
 				data={filtered}
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
-				contentContainerStyle={{ paddingBottom: 100 }}
+				contentContainerStyle={{ paddingBottom: ESTIMATES_LIST_BOTTOM_PADDING }}
 				ListEmptyComponent={
 					<View style={styles.empty}>
 						<FileText size={48} color={c.onSurfaceVariant} strokeWidth={1.5} />
@@ -162,7 +164,7 @@ export default function EstimatesScreen() {
 							variant="body"
 							color={c.onSurfaceVariant}
 							align="center"
-							style={{ marginTop: 12 }}
+							style={{ marginTop: SPACING_PX.md }}
 						>
 							No estimates found
 						</ThemedText>
@@ -186,7 +188,11 @@ export default function EstimatesScreen() {
 				accessibilityRole="button"
 			>
 				<Plus size={20} color={c.white} />
-				<ThemedText variant="caption" color={c.white} style={{ marginLeft: 6 }}>
+				<ThemedText
+					variant="caption"
+					color={c.white}
+					style={{ marginLeft: SPACING_PX.sm - SPACING_PX.xxs }}
+				>
 					New Estimate
 				</ThemedText>
 			</Pressable>
@@ -196,52 +202,52 @@ export default function EstimatesScreen() {
 
 const styles = StyleSheet.create({
 	filterBar: {
-		paddingHorizontal: 16,
-		paddingVertical: 10,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	row: {
-		paddingHorizontal: 16,
-		paddingVertical: 14,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md + SPACING_PX.xxs,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	rowTop: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: 2,
+		marginBottom: SPACING_PX.xxs,
 	},
 	rowBottom: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginTop: 4,
+		marginTop: SPACING_PX.xs,
 	},
 	rightMeta: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	badge: {
-		paddingHorizontal: 10,
-		paddingVertical: 3,
+		paddingHorizontal: SPACING_PX.sm + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xs,
 	},
 	fab: {
 		position: 'absolute',
-		bottom: 24,
-		right: 20,
+		bottom: SPACING_PX.xl,
+		right: SPACING_PX.lg + SPACING_PX.xs,
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 18,
-		paddingVertical: 14,
-		shadowOffset: { width: 0, height: 2 },
+		paddingHorizontal: SPACING_PX.lg + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.md + SPACING_PX.xxs,
+		shadowOffset: { width: 0, height: SPACING_PX.xxs },
 		shadowOpacity: FAB_SHADOW_OPACITY,
-		shadowRadius: 4,
+		shadowRadius: SPACING_PX.xs,
 	},
 	empty: {
 		paddingVertical: EMPTY_SECTION_PADDING_VERTICAL,

@@ -1,9 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, TextInput } from 'react-native';
 import { OPACITY_TINT_LIGHT, OPACITY_TOAST } from '@/theme/uiMetrics';
-
-const ICON_CIRCLE_SIZE = 38;
-const ICON_CIRCLE_RADIUS = ICON_CIRCLE_SIZE / 2;
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
@@ -23,6 +20,11 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const ICON_CIRCLE_SIZE = SPACING_PX['2xl'] + SPACING_PX.xs + SPACING_PX.xxs;
+const ICON_CIRCLE_RADIUS = ICON_CIRCLE_SIZE / 2;
 
 type TxType = 'all' | 'sale' | 'purchase' | 'payment_in' | 'payment_out' | 'expense';
 type DateRange = 'today' | 'week' | 'month' | 'fy';
@@ -301,7 +303,7 @@ export default function AllTransactionsScreen() {
 						borderColor: c.border,
 						borderRadius: r.md,
 						marginHorizontal: s.md,
-						marginBottom: 8,
+						marginBottom: s.sm,
 					},
 				]}
 			>
@@ -328,10 +330,10 @@ export default function AllTransactionsScreen() {
 					},
 				]}
 			>
-				<ThemedText variant="caption" color={c.success} style={{ marginRight: 12 }}>
+				<ThemedText variant="caption" color={c.success} style={{ marginRight: s.md }}>
 					In: {formatCurrency(totalIn)}
 				</ThemedText>
-				<ThemedText variant="caption" color={c.error} style={{ marginRight: 12 }}>
+				<ThemedText variant="caption" color={c.error} style={{ marginRight: s.md }}>
 					Out: {formatCurrency(totalOut)}
 				</ThemedText>
 				<ThemedText variant="caption" weight="bold" color={net >= 0 ? c.success : c.error}>
@@ -343,7 +345,7 @@ export default function AllTransactionsScreen() {
 				data={filtered}
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
-				contentContainerStyle={{ paddingBottom: 32 }}
+				contentContainerStyle={{ paddingBottom: s['2xl'] }}
 				ListEmptyComponent={
 					<View style={styles.emptyState}>
 						<ThemedText variant="caption" color={c.onSurfaceVariant} align="center">
@@ -359,13 +361,13 @@ export default function AllTransactionsScreen() {
 const styles = StyleSheet.create({
 	chipRow: {
 		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 6,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 7,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -373,28 +375,28 @@ const styles = StyleSheet.create({
 	searchBar: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 12,
-		paddingVertical: 10,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
 		borderWidth: 1,
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	searchInput: {
 		flex: 1,
-		fontSize: 14,
+		fontSize: FONT_SIZE.caption,
 		padding: 0,
 	},
 	summaryBar: {
 		flexDirection: 'row',
-		paddingHorizontal: 16,
-		paddingVertical: 10,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
 	},
 	txRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		minHeight: 64,
-		paddingHorizontal: 16,
-		paddingVertical: 10,
-		gap: 12,
+		minHeight: SPACING_PX['4xl'],
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
+		gap: SPACING_PX.md,
 	},
 	iconCircle: {
 		width: ICON_CIRCLE_SIZE,
@@ -404,6 +406,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	emptyState: {
-		paddingVertical: 40,
+		paddingVertical: SPACING_PX['2xl'] + SPACING_PX.sm,
 	},
 });

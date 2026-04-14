@@ -15,6 +15,9 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { OrderListSkeleton } from '@/src/components/molecules/skeletons/OrderListSkeleton';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const ORDER_BADGE_RADIUS = SPACING_PX.md;
 
 export default function OrdersListScreen() {
 	const { c, s, r } = useThemeTokens();
@@ -66,7 +69,7 @@ export default function OrdersListScreen() {
 					}}
 				>
 					<FileText size={64} color={c.placeholder} style={{ marginBottom: s.lg }} />
-					<ThemedText variant="h3" style={{ marginBottom: 8 }}>
+					<ThemedText variant="h3" style={{ marginBottom: s.sm }}>
 						{t('order.noOrders')}
 					</ThemedText>
 					<ThemedText color={c.placeholder} align="center" style={{ marginBottom: s.xl }}>
@@ -109,13 +112,13 @@ export default function OrdersListScreen() {
 							accessibilityHint={`${item.party_name || t('supplier.title')}, ${t('order.doubleTapToOpen')}`}
 						>
 							<View style={{ flex: 1 }}>
-								<ThemedText weight="bold" style={{ fontSize: 16 }}>
+								<ThemedText weight="bold">
 									{item.party_name || t('supplier.title')}
 								</ThemedText>
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ marginTop: 4 }}
+									style={{ marginTop: s.xs }}
 								>
 									{formatDateShort(item.created_at)} •{' '}
 									{t('order.itemsImportedCount', { count: item.total_quantity })}
@@ -133,18 +136,14 @@ export default function OrdersListScreen() {
 										},
 									]}
 								>
-									<ThemedText
-										color={c.success}
-										weight="semibold"
-										style={{ fontSize: 12 }}
-									>
+									<ThemedText color={c.success} weight="semibold">
 										{t('common.successTitle')}
 									</ThemedText>
 								</View>
 								<ChevronRight
 									size={20}
 									color={c.placeholder}
-									style={{ marginTop: 8 }}
+									style={{ marginTop: s.sm }}
 									importantForAccessibility="no"
 								/>
 							</View>
@@ -158,8 +157,8 @@ export default function OrdersListScreen() {
 
 const styles = StyleSheet.create({
 	badge: {
-		paddingHorizontal: 8,
-		paddingVertical: 4,
-		borderRadius: 12,
+		paddingHorizontal: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.xs,
+		borderRadius: ORDER_BADGE_RADIUS,
 	},
 });

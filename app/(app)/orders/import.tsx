@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { OPACITY_SKELETON_PEAK } from '@/theme/uiMetrics';
+import { OPACITY_SKELETON_PEAK, SIZE_TEXTAREA_MIN_HEIGHT } from '@/theme/uiMetrics';
 import {
 	View,
 	StyleSheet,
@@ -32,8 +32,14 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
-const TEXTAREA_MIN_HEIGHT = 160;
+const TEXTAREA_MIN_HEIGHT = SIZE_TEXTAREA_MIN_HEIGHT * 2;
+const TEXTAREA_WRAPPER_MIN_HEIGHT = TEXTAREA_MIN_HEIGHT + SPACING_PX.md + SPACING_PX.xxs * 4;
+const REVIEW_BOTTOM_SPACER_HEIGHT = TEXTAREA_MIN_HEIGHT / 2;
+const TAB_LABEL_MARGIN_LEFT = SPACING_PX.sm - SPACING_PX.xxs;
+const ITEM_CARD_TITLE_FONT_SIZE = FONT_SIZE.body - 1;
 const UPLOAD_ZONE_BORDER_WIDTH = 1.5;
 
 type InputMode = 'file' | 'text';
@@ -67,8 +73,8 @@ function EditableItemCard({
 				backgroundColor: c.surface,
 				borderLeftColor: c.primary,
 				borderLeftWidth: 4,
-				borderRadius: 12,
-				marginBottom: 12,
+				borderRadius: BORDER_RADIUS_PX.lg,
+				marginBottom: SPACING_PX.md,
 				overflow: 'hidden',
 			}}
 		>
@@ -80,19 +86,23 @@ function EditableItemCard({
 				accessibilityRole="button"
 			>
 				<View style={{ flex: 1 }}>
-					<ThemedText weight="bold" style={{ fontSize: 15 }}>
+					<ThemedText weight="bold" style={{ fontSize: ITEM_CARD_TITLE_FONT_SIZE }}>
 						{item.design_name || t('inventory.itemNotFound')}
 					</ThemedText>
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginTop: 2 }}
+						style={{ marginTop: SPACING_PX.xxs }}
 					>
 						{item.category || t('common.na')} • {item.size || t('common.na')}
 					</ThemedText>
 				</View>
-				<View style={{ alignItems: 'flex-end', marginLeft: 8 }}>
-					<ThemedText color={c.primary} weight="bold" style={{ fontSize: 16 }}>
+				<View style={{ alignItems: 'flex-end', marginLeft: SPACING_PX.sm }}>
+					<ThemedText
+						color={c.primary}
+						weight="bold"
+						style={{ fontSize: FONT_SIZE.body }}
+					>
 						{item.box_count ?? '—'} {t('order.boxesSuffix')}
 					</ThemedText>
 					{item.price_per_box ? (
@@ -103,7 +113,7 @@ function EditableItemCard({
 						</ThemedText>
 					) : null}
 				</View>
-				<View style={{ marginLeft: 8 }}>
+				<View style={{ marginLeft: SPACING_PX.sm }}>
 					{expanded ? (
 						<ChevronUp size={18} color={c.onSurfaceVariant} />
 					) : (
@@ -167,7 +177,10 @@ function EditableItemCard({
 						accessibilityRole="button"
 					>
 						<Trash2 size={14} color={c.error} />
-						<ThemedText color={c.error} style={{ marginLeft: 4, fontSize: 13 }}>
+						<ThemedText
+							color={c.error}
+							style={{ marginLeft: SPACING_PX.xs, fontSize: FONT_SIZE.label }}
+						>
 							{t('common.delete')}
 						</ThemedText>
 					</TouchableOpacity>
@@ -355,7 +368,7 @@ export default function ImportOrderScreen() {
 						<SectionHeader
 							title={`${t('order.extractedItems')} (${resolvedItems.length})`}
 							subtitle={t('order.reviewExtracted')}
-							style={{ paddingHorizontal: 0, marginBottom: 12 }}
+							style={{ paddingHorizontal: 0, marginBottom: SPACING_PX.md }}
 						/>
 
 						{resolvedItems.map((item, index) => (
@@ -379,13 +392,19 @@ export default function ImportOrderScreen() {
 							accessibilityLabel={t('order.addManually')}
 						>
 							<PlusCircle size={16} color={c.primary} />
-							<ThemedText color={c.primary} style={{ marginLeft: 6, fontSize: 14 }}>
+							<ThemedText
+								color={c.primary}
+								style={{
+									marginLeft: TAB_LABEL_MARGIN_LEFT,
+									fontSize: FONT_SIZE.caption,
+								}}
+							>
 								{t('order.addManually')}
 							</ThemedText>
 						</TouchableOpacity>
 
 						{/* Bottom padding so last card isn't hidden by footer */}
-						<View style={{ height: 80 }} />
+						<View style={{ height: REVIEW_BOTTOM_SPACER_HEIGHT }} />
 					</ScrollView>
 				</KeyboardAvoidingView>
 
@@ -438,7 +457,10 @@ export default function ImportOrderScreen() {
 								color={inputMode === 'file' ? c.onPrimary : c.onSurfaceVariant}
 							/>
 							<ThemedText
-								style={{ marginLeft: 6, fontSize: 14 }}
+								style={{
+									marginLeft: TAB_LABEL_MARGIN_LEFT,
+									fontSize: FONT_SIZE.caption,
+								}}
 								color={inputMode === 'file' ? c.onPrimary : c.onSurfaceVariant}
 								weight={inputMode === 'file' ? 'bold' : 'regular'}
 							>
@@ -460,7 +482,10 @@ export default function ImportOrderScreen() {
 								color={inputMode === 'text' ? c.onPrimary : c.onSurfaceVariant}
 							/>
 							<ThemedText
-								style={{ marginLeft: 6, fontSize: 14 }}
+								style={{
+									marginLeft: TAB_LABEL_MARGIN_LEFT,
+									fontSize: FONT_SIZE.caption,
+								}}
 								color={inputMode === 'text' ? c.onPrimary : c.onSurfaceVariant}
 								weight={inputMode === 'text' ? 'bold' : 'regular'}
 							>
@@ -478,7 +503,10 @@ export default function ImportOrderScreen() {
 							]}
 						>
 							<FileUp size={48} color={c.primary} style={{ marginBottom: s.md }} />
-							<ThemedText weight="bold" style={{ fontSize: 16, marginBottom: 4 }}>
+							<ThemedText
+								weight="bold"
+								style={{ fontSize: FONT_SIZE.body, marginBottom: SPACING_PX.xs }}
+							>
 								{t('order.uploadTitle')}
 							</ThemedText>
 							<ThemedText
@@ -507,7 +535,13 @@ export default function ImportOrderScreen() {
 						>
 							<View style={styles.textBoxHeader}>
 								<ClipboardList size={20} color={c.primary} />
-								<ThemedText weight="bold" style={{ marginLeft: 8, fontSize: 15 }}>
+								<ThemedText
+									weight="bold"
+									style={{
+										marginLeft: SPACING_PX.sm,
+										fontSize: ITEM_CARD_TITLE_FONT_SIZE,
+									}}
+								>
 									{t('order.actions.analyzeAi')}
 								</ThemedText>
 							</View>
@@ -556,27 +590,27 @@ const styles = StyleSheet.create({
 	// Tab switcher
 	tabBar: {
 		flexDirection: 'row',
-		borderRadius: 12,
+		borderRadius: BORDER_RADIUS_PX.lg,
 		borderWidth: 1,
 		overflow: 'hidden',
-		marginBottom: 20,
+		marginBottom: SPACING_PX.lg + SPACING_PX.xs,
 	},
 	tab: {
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 12,
-		paddingHorizontal: 8,
-		borderRadius: 11,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.sm,
+		borderRadius: BORDER_RADIUS_PX.lg,
 	},
 
 	// File upload
 	uploadBox: {
 		borderWidth: 2,
 		borderStyle: 'dashed',
-		borderRadius: 16,
-		padding: 32,
+		borderRadius: BORDER_RADIUS_PX.xl,
+		padding: SPACING_PX['2xl'],
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -584,22 +618,22 @@ const styles = StyleSheet.create({
 	// Text paste
 	textBox: {
 		borderWidth: 1,
-		borderRadius: 16,
-		padding: 20,
+		borderRadius: BORDER_RADIUS_PX.xl,
+		padding: SPACING_PX.lg + SPACING_PX.xs,
 	},
 	textBoxHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: 8,
+		marginBottom: SPACING_PX.sm,
 	},
 	textAreaWrapper: {
 		borderWidth: 1,
-		borderRadius: 10,
-		padding: 12,
-		minHeight: 180,
+		borderRadius: BORDER_RADIUS_PX.md + SPACING_PX.xxs,
+		padding: SPACING_PX.md,
+		minHeight: TEXTAREA_WRAPPER_MIN_HEIGHT,
 	},
 	textArea: {
-		fontSize: 14,
+		fontSize: FONT_SIZE.caption,
 		lineHeight: 22,
 		minHeight: TEXTAREA_MIN_HEIGHT,
 	},
@@ -608,21 +642,21 @@ const styles = StyleSheet.create({
 	cardHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 16,
+		padding: SPACING_PX.lg,
 	},
 	editFields: {
 		borderTopWidth: 1,
-		padding: 16,
-		paddingTop: 12,
+		padding: SPACING_PX.lg,
+		paddingTop: SPACING_PX.md,
 	},
 	removeBtn: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderWidth: 1,
-		borderRadius: 8,
-		paddingVertical: 8,
-		marginTop: 4,
+		borderRadius: BORDER_RADIUS_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		marginTop: SPACING_PX.xs,
 	},
 	addItemBtn: {
 		flexDirection: 'row',
@@ -630,9 +664,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		borderWidth: UPLOAD_ZONE_BORDER_WIDTH,
 		borderStyle: 'dashed',
-		borderRadius: 10,
-		paddingVertical: 12,
-		marginTop: 4,
+		borderRadius: BORDER_RADIUS_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.md,
+		marginTop: SPACING_PX.xs,
 	},
-	footer: { padding: 20, paddingBottom: 12, borderTopWidth: 1 },
+	footer: {
+		padding: SPACING_PX.lg + SPACING_PX.xs,
+		paddingBottom: SPACING_PX.md,
+		borderTopWidth: 1,
+	},
 });

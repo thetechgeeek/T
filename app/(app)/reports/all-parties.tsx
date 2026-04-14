@@ -14,6 +14,8 @@ import { supplierRepository } from '@/src/repositories/supplierRepository';
 import type { Customer } from '@/src/types/customer';
 import type { Supplier } from '@/src/types/supplier';
 import { layout } from '@/src/theme/layout';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_ICON_CIRCLE_MD } from '@/theme/uiMetrics';
 
 type Tab = 'customers' | 'suppliers';
 type Filter = 'all' | 'with-balance' | 'zero-balance';
@@ -127,7 +129,7 @@ export default function AllPartiesScreen() {
 							<Phone
 								size={12}
 								color={c.onSurfaceVariant}
-								style={{ marginRight: 4 }}
+								style={{ marginRight: SPACING_PX.xs }}
 							/>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
 								{item.phone}
@@ -193,7 +195,7 @@ export default function AllPartiesScreen() {
 							<Phone
 								size={12}
 								color={c.onSurfaceVariant}
-								style={{ marginRight: 4 }}
+								style={{ marginRight: SPACING_PX.xs }}
 							/>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
 								{item.phone}
@@ -328,7 +330,7 @@ export default function AllPartiesScreen() {
 					data={filteredCustomers}
 					keyExtractor={(item) => item.id}
 					renderItem={renderCustomer}
-					contentContainerStyle={{ paddingBottom: 32 }}
+					contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 					ListEmptyComponent={
 						<View style={styles.empty}>
 							<ThemedText variant="caption" color={c.onSurfaceVariant} align="center">
@@ -342,7 +344,7 @@ export default function AllPartiesScreen() {
 					data={filteredSuppliers}
 					keyExtractor={(item) => item.id}
 					renderItem={renderSupplier}
-					contentContainerStyle={{ paddingBottom: 32 }}
+					contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 					ListEmptyComponent={
 						<View style={styles.empty}>
 							<ThemedText variant="caption" color={c.onSurfaceVariant} align="center">
@@ -359,7 +361,7 @@ export default function AllPartiesScreen() {
 const styles = StyleSheet.create({
 	summaryRow: {
 		flexDirection: 'row',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	summaryItem: {
@@ -368,7 +370,7 @@ const styles = StyleSheet.create({
 	},
 	dividerV: {
 		width: StyleSheet.hairlineWidth,
-		marginVertical: 4,
+		marginVertical: SPACING_PX.xs,
 	},
 	tabBar: {
 		flexDirection: 'row',
@@ -377,30 +379,30 @@ const styles = StyleSheet.create({
 	tabBtn: {
 		flex: 1,
 		alignItems: 'center',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 	},
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 16,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	avatar: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		width: SIZE_ICON_CIRCLE_MD,
+		height: SIZE_ICON_CIRCLE_MD,
+		borderRadius: SIZE_ICON_CIRCLE_MD / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginRight: 12,
+		marginRight: SPACING_PX.md,
 	},
 	filterChip: {
-		paddingHorizontal: 12,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	empty: {
-		paddingVertical: 40,
+		paddingVertical: SPACING_PX['2xl'] + SPACING_PX.sm,
 		alignItems: 'center',
 	},
 });

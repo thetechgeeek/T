@@ -9,6 +9,7 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { REPORT_NUM_COLUMN_MIN_WIDTH_PX } from '@/constants/reportLayout';
 import { MOCK_ITEM_PROFIT_ROWS, type ItemProfitRow } from '@/src/mocks/reports/itemProfit';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 // TODO: Replace with real data from Supabase (sales + purchase cost joined on item_id)
 type Period = 'month' | 'quarter' | 'year' | 'fy';
@@ -67,7 +68,7 @@ export default function ItemProfitScreen() {
 				{ borderBottomColor: c.border, borderBottomWidth: StyleSheet.hairlineWidth },
 			]}
 		>
-			<View style={{ flex: 1, gap: 2 }}>
+			<View style={{ flex: 1, gap: SPACING_PX.xxs }}>
 				<ThemedText
 					weight="bold"
 					numberOfLines={1}
@@ -79,7 +80,7 @@ export default function ItemProfitScreen() {
 					{item.category} · {item.qtySold} boxes
 				</ThemedText>
 			</View>
-			<View style={{ alignItems: 'flex-end', gap: 2 }}>
+			<View style={{ alignItems: 'flex-end', gap: SPACING_PX.xxs }}>
 				<ThemedText variant="caption" style={styles.numCol}>
 					{formatCurrency(item.revenue)}
 				</ThemedText>
@@ -143,7 +144,11 @@ export default function ItemProfitScreen() {
 			{/* Sort chips */}
 			<View style={[styles.filterRow, { paddingTop: 0, alignItems: 'center' }]}>
 				<ArrowUpDown size={14} color={c.onSurfaceVariant} strokeWidth={2} />
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginRight: 4 }}>
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					style={{ marginRight: SPACING_PX.xs }}
+				>
 					Sort:
 				</ThemedText>
 				{SORT_CHIPS.map((chip) => (
@@ -182,7 +187,7 @@ export default function ItemProfitScreen() {
 				ListHeaderComponent={
 					<>
 						{/* Summary card */}
-						<Card padding="md" style={{ marginBottom: 16 }}>
+						<Card padding="md" style={{ marginBottom: SPACING_PX.lg }}>
 							<View style={styles.summaryGrid}>
 								<View style={styles.summaryCell}>
 									<ThemedText variant="caption" color={c.onSurfaceVariant}>
@@ -262,41 +267,41 @@ export default function ItemProfitScreen() {
 const styles = StyleSheet.create({
 	filterRow: {
 		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 7,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	exportBtn: {
-		padding: 6,
+		padding: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	listContent: {
-		padding: 16,
-		paddingBottom: 32,
+		padding: SPACING_PX.lg,
+		paddingBottom: SPACING_PX['2xl'],
 	},
 	summaryGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 12,
+		gap: SPACING_PX.md,
 	},
 	summaryCell: {
 		width: '45%',
-		gap: 2,
+		gap: SPACING_PX.xxs,
 	},
 	tableHeader: {
 		flexDirection: 'row',
-		paddingVertical: 8,
-		marginBottom: 4,
+		paddingVertical: SPACING_PX.sm,
+		marginBottom: SPACING_PX.xs,
 	},
 	row: {
 		flexDirection: 'row',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 		alignItems: 'flex-start',
 	},
 	numCol: {
@@ -304,6 +309,6 @@ const styles = StyleSheet.create({
 		minWidth: REPORT_NUM_COLUMN_MIN_WIDTH_PX,
 	},
 	emptyState: {
-		paddingVertical: 32,
+		paddingVertical: SPACING_PX['2xl'],
 	},
 });

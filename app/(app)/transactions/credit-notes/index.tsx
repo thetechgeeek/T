@@ -15,9 +15,11 @@ import {
 	type CreditNoteStatus,
 } from '@/src/mocks/transactions/creditNotes';
 import { OPACITY_TINT_MEDIUM, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const EMPTY_SECTION_PADDING_VERTICAL = SIZE_AVATAR_MD;
 const FAB_SHADOW_OPACITY = OPACITY_TINT_MEDIUM;
+const CREDIT_NOTES_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.xl + SPACING_PX.md;
 
 type FilterType = 'all' | CreditNoteStatus;
 
@@ -54,7 +56,13 @@ export default function CreditNotesScreen() {
 		const statusCfg = STATUS_CONFIG[item.status];
 		return (
 			<Pressable
-				style={[styles.row, { borderBottomColor: c.border, minHeight: 80 }]}
+				style={[
+					styles.row,
+					{
+						borderBottomColor: c.border,
+						minHeight: SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs,
+					},
+				]}
 				onPress={() => Alert.alert('Credit note detail coming soon')}
 				accessibilityRole="button"
 				accessibilityLabel={item.cn_number}
@@ -130,7 +138,7 @@ export default function CreditNotesScreen() {
 				data={filtered}
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
-				contentContainerStyle={{ paddingBottom: 100 }}
+				contentContainerStyle={{ paddingBottom: CREDIT_NOTES_LIST_BOTTOM_PADDING }}
 				ListEmptyComponent={
 					<View style={styles.empty}>
 						<FileX size={48} color={c.onSurfaceVariant} strokeWidth={1.5} />
@@ -138,7 +146,7 @@ export default function CreditNotesScreen() {
 							variant="body"
 							color={c.onSurfaceVariant}
 							align="center"
-							style={{ marginTop: 12 }}
+							style={{ marginTop: SPACING_PX.md }}
 						>
 							No credit notes found
 						</ThemedText>
@@ -162,7 +170,11 @@ export default function CreditNotesScreen() {
 				accessibilityRole="button"
 			>
 				<Plus size={20} color={c.white} />
-				<ThemedText variant="caption" color={c.white} style={{ marginLeft: 6 }}>
+				<ThemedText
+					variant="caption"
+					color={c.white}
+					style={{ marginLeft: SPACING_PX.sm - SPACING_PX.xxs }}
+				>
 					New Return
 				</ThemedText>
 			</Pressable>
@@ -173,49 +185,49 @@ export default function CreditNotesScreen() {
 const styles = StyleSheet.create({
 	filterBar: {
 		flexDirection: 'row',
-		gap: 8,
-		paddingHorizontal: 16,
-		paddingVertical: 10,
+		gap: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	row: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 16,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	rowTop: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: 2,
+		marginBottom: SPACING_PX.xxs,
 	},
 	rowRight: {
 		alignItems: 'flex-end',
-		gap: 6,
-		marginLeft: 12,
+		gap: SPACING_PX.sm - SPACING_PX.xxs,
+		marginLeft: SPACING_PX.md,
 	},
 	badge: {
-		paddingHorizontal: 10,
-		paddingVertical: 3,
+		paddingHorizontal: SPACING_PX.sm + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xs,
 	},
 	fab: {
 		position: 'absolute',
-		bottom: 24,
-		right: 20,
+		bottom: SPACING_PX.xl,
+		right: SPACING_PX.lg + SPACING_PX.xs,
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 18,
-		paddingVertical: 14,
-		shadowOffset: { width: 0, height: 2 },
+		paddingHorizontal: SPACING_PX.lg + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.md + SPACING_PX.xxs,
+		shadowOffset: { width: 0, height: SPACING_PX.xxs },
 		shadowOpacity: FAB_SHADOW_OPACITY,
-		shadowRadius: 4,
+		shadowRadius: SPACING_PX.xs,
 	},
 	empty: {
 		paddingVertical: EMPTY_SECTION_PADDING_VERTICAL,

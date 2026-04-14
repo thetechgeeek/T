@@ -194,107 +194,107 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 - [x] `settings/security.tsx` — magic numbers → tokens
 - [x] `settings/firms.tsx` — magic numbers → tokens
 - [x] `settings/sync-log.tsx` — magic numbers → tokens
-- [ ] Replace per-screen `card` / `sectionHeader` with shared primitives
+- [x] Replace per-screen `card` / `sectionHeader` with shared primitives
 - [ ] Light + dark visual check for settings slice
 
 ### S4. Finance screens (24 files — ~180 violations)
 
-- [ ] `finance/index.tsx` — magic numbers → tokens
-- [ ] `finance/cash.tsx` — magic numbers → tokens
-- [ ] `finance/transfer.tsx` — magic numbers → tokens
-- [ ] `finance/ewallets.tsx` — magic numbers → tokens (~20 violations)
-- [ ] `finance/cheques.tsx` — magic numbers → tokens
-- [ ] `finance/loans/index.tsx` — magic numbers → tokens
-- [ ] `finance/loans/[id].tsx` — magic numbers → tokens
-- [ ] `finance/payments/index.tsx` — magic numbers → tokens
-- [ ] `finance/payments/make.tsx` — magic numbers → tokens
-- [ ] `finance/payments/receive.tsx` — magic numbers → tokens
-- [ ] `finance/payments/[id].tsx` — magic numbers → tokens
-- [ ] `finance/purchases/index.tsx` — magic numbers → tokens
-- [ ] `finance/purchases/create.tsx` — magic numbers → tokens
-- [ ] `finance/purchases/[id].tsx` — magic numbers → tokens
-- [ ] `finance/bank-accounts/index.tsx` — magic numbers → tokens
-- [ ] `finance/bank-accounts/add.tsx` — magic numbers → tokens (~18 violations)
-- [ ] `finance/bank-accounts/[id].tsx` — magic numbers → tokens
-- [ ] `finance/expenses/index.tsx` — magic numbers → tokens
-- [ ] `finance/expenses/create.tsx` — magic numbers → tokens
-- [ ] `finance/other-income/index.tsx` — magic numbers → tokens
-- [ ] `finance/other-income/create.tsx` — magic numbers → tokens
+- [x] `finance/index.tsx` — magic numbers → tokens
+- [x] `finance/cash.tsx` — magic numbers → tokens
+- [x] `finance/transfer.tsx` — magic numbers → tokens
+- [x] `finance/ewallets.tsx` — magic numbers → tokens (~20 violations)
+- [x] `finance/cheques.tsx` — magic numbers → tokens
+- [x] `finance/loans/index.tsx` — magic numbers → tokens
+- [x] `finance/loans/[id].tsx` — magic numbers → tokens
+- [x] `finance/payments/index.tsx` — magic numbers → tokens
+- [x] `finance/payments/make.tsx` — magic numbers → tokens
+- [x] `finance/payments/receive.tsx` — magic numbers → tokens
+- [x] `finance/payments/[id].tsx` — magic numbers → tokens
+- [x] `finance/purchases/index.tsx` — magic numbers → tokens
+- [x] `finance/purchases/create.tsx` — magic numbers → tokens
+- [x] `finance/purchases/[id].tsx` — magic numbers → tokens
+- [x] `finance/bank-accounts/index.tsx` — magic numbers → tokens
+- [x] `finance/bank-accounts/add.tsx` — magic numbers → tokens (~18 violations)
+- [x] `finance/bank-accounts/[id].tsx` — no detail screen exists in the current app
+- [x] `finance/expenses/index.tsx` — magic numbers → tokens
+- [x] `finance/expenses/add.tsx` — magic numbers → tokens (current route; no `create.tsx` screen exists)
+- [x] `finance/other-income/index.tsx` — magic numbers → tokens
+- [x] `finance/other-income/add.tsx` — magic numbers → tokens (current route; no `create.tsx` screen exists)
 - [ ] Light + dark visual check for finance slice
 
 ### S5. Reports screens (18 files — ~200 violations)
 
-- [ ] `reports/index.tsx` — magic numbers → tokens
-- [ ] `reports/stock-summary.tsx` — magic numbers → tokens (~30 violations)
-- [ ] `reports/party-statement.tsx` — magic numbers → tokens (~28 violations)
-- [ ] `reports/party-profit.tsx` — magic numbers → tokens (~25 violations)
-- [ ] `reports/all-transactions.tsx` — magic numbers → tokens (~25 violations)
-- [ ] `reports/order-summary.tsx` — magic numbers → tokens (~24 violations)
-- [ ] `reports/gst-detail.tsx` — magic numbers → tokens (~24 violations)
-- [ ] `reports/sale.tsx` — magic numbers → tokens (~18 violations)
-- [ ] `reports/purchase.tsx` — magic numbers → tokens (~18 violations)
-- [ ] `reports/item-profit.tsx` — magic numbers → tokens (~18 violations)
-- [ ] `reports/all-parties.tsx` — magic numbers → tokens
-- [ ] `reports/expense-summary.tsx` — magic numbers → tokens
-- [ ] `reports/gstr1.tsx` — magic numbers → tokens
-- [ ] `reports/gstr3b.tsx` — magic numbers → tokens
-- [ ] `reports/balance-sheet.tsx` — magic numbers → tokens
-- [ ] `reports/cashflow.tsx` — magic numbers → tokens
-- [ ] `reports/day-book.tsx` — magic numbers → tokens
+- [x] `reports/index.tsx` — magic numbers → tokens
+- [x] `reports/stock-summary.tsx` — magic numbers → tokens (~30 violations)
+- [x] `reports/party-statement.tsx` — magic numbers → tokens (~28 violations)
+- [x] `reports/party-profit.tsx` — magic numbers → tokens (~25 violations)
+- [x] `reports/all-transactions.tsx` — magic numbers → tokens (~25 violations)
+- [x] `reports/order-summary.tsx` — magic numbers → tokens (~24 violations)
+- [x] `reports/gst-detail.tsx` — magic numbers → tokens (~24 violations)
+- [x] `reports/sale.tsx` — magic numbers → tokens (~18 violations)
+- [x] `reports/purchase.tsx` — magic numbers → tokens (~18 violations)
+- [x] `reports/item-profit.tsx` — magic numbers → tokens (~18 violations)
+- [x] `reports/all-parties.tsx` — magic numbers → tokens
+- [x] `reports/expense-summary.tsx` — magic numbers → tokens
+- [x] `reports/gstr1.tsx` — magic numbers → tokens
+- [x] `reports/gstr3b.tsx` — magic numbers → tokens
+- [x] `reports/balance-sheet.tsx` — magic numbers → tokens
+- [x] `reports/cashflow.tsx` — magic numbers → tokens
+- [x] `reports/day-book.tsx` — magic numbers → tokens
 - [ ] Light + dark visual check for reports slice
 
 ### S6. Transaction screens (9 files — ~70 violations)
 
-- [ ] `transactions/estimates/index.tsx` — magic numbers → tokens
-- [ ] `transactions/estimates/create.tsx` — magic numbers → tokens (~18 violations)
-- [ ] `transactions/purchase-orders/index.tsx` — magic numbers → tokens
-- [ ] `transactions/purchase-orders/create.tsx` — magic numbers → tokens
-- [ ] `transactions/credit-notes/index.tsx` — magic numbers → tokens
-- [ ] `transactions/credit-notes/create.tsx` — magic numbers → tokens
+- [x] `transactions/estimates/index.tsx` — magic numbers → tokens
+- [x] `transactions/estimates/create.tsx` — magic numbers → tokens (~18 violations)
+- [x] `transactions/purchase-orders/index.tsx` — magic numbers → tokens
+- [x] `transactions/purchase-orders/create.tsx` — magic numbers → tokens
+- [x] `transactions/credit-notes/index.tsx` — magic numbers → tokens
+- [x] `transactions/credit-notes/create.tsx` — magic numbers → tokens
 - [ ] Light + dark visual check for transactions slice
 
 ### S7. Customer/Supplier screens (7 files — ~50 violations)
 
-- [ ] `customers/index.tsx` — magic numbers → tokens
-- [ ] `customers/add.tsx` — magic numbers → tokens
-- [ ] `customers/[id].tsx` — magic numbers → tokens
-- [ ] `suppliers/index.tsx` — magic numbers → tokens
-- [ ] `suppliers/add.tsx` — magic numbers → tokens
-- [ ] `suppliers/[id].tsx` — magic numbers → tokens
+- [x] `customers/index.tsx` — magic numbers → tokens
+- [x] `customers/add.tsx` — magic numbers → tokens
+- [x] `customers/[id].tsx` — magic numbers → tokens
+- [x] `suppliers/index.tsx` — magic numbers → tokens
+- [x] `suppliers/add.tsx` — magic numbers → tokens
+- [x] `suppliers/[id].tsx` — magic numbers → tokens
 - [ ] Light + dark visual check for customer/supplier slice
 
 ### S8. Invoice screens (2 files — ~30 violations)
 
-- [ ] `invoices/[id].tsx` — magic numbers → tokens
-- [ ] `invoices/create.tsx` — magic numbers → tokens (if exists)
+- [x] `invoices/[id].tsx` — magic numbers → tokens
+- [x] `invoices/create.tsx` — magic numbers → tokens (if exists)
 - [ ] Light + dark visual check for invoice slice
 
 ### S9. Order screens (3 files — ~40 violations)
 
-- [ ] `orders/index.tsx` — magic numbers → tokens
-- [ ] `orders/[id].tsx` — magic numbers → tokens
-- [ ] `orders/import.tsx` — magic numbers → tokens (~20 violations)
+- [x] `orders/index.tsx` — magic numbers → tokens
+- [x] `orders/[id].tsx` — magic numbers → tokens
+- [x] `orders/import.tsx` — magic numbers → tokens (~20 violations)
 - [ ] Light + dark visual check for orders slice
 
 ### S10. Utility screens (5 files — ~40 violations)
 
-- [ ] `utilities/index.tsx` — magic numbers → tokens
-- [ ] `utilities/calculator.tsx` — magic numbers → tokens (~17 violations)
-- [ ] `utilities/tally-export.tsx` — magic numbers → tokens
-- [ ] `utilities/verify.tsx` — magic numbers → tokens
-- [ ] `utilities/close-fy.tsx` — magic numbers → tokens
+- [x] `utilities/index.tsx` — magic numbers → tokens
+- [x] `utilities/calculator.tsx` — magic numbers → tokens (~17 violations)
+- [x] `utilities/tally-export.tsx` — magic numbers → tokens
+- [x] `utilities/verify.tsx` — magic numbers → tokens
+- [x] `utilities/close-fy.tsx` — magic numbers → tokens
 - [ ] Light + dark visual check for utilities slice
 
 ### S11. Store screens (2 files — ~30 violations)
 
-- [ ] `store/index.tsx` — magic numbers → tokens (~22 violations)
-- [ ] `store/[id].tsx` — magic numbers → tokens (if exists)
+- [x] `store/index.tsx` — magic numbers → tokens (~22 violations)
+- [x] `store/[id].tsx` — no detail screen exists in the current app
 - [ ] Light + dark visual check for store slice
 
 ### S12. Feature modules (7 files — ~20 violations)
 
-- [ ] Audit `src/features/` for raw numeric styling values
-- [ ] Replace all magic numbers in feature modules with tokens
+- [x] Audit `src/features/` for raw numeric styling values
+- [x] Replace all magic numbers in feature modules with tokens
 - [ ] Light + dark visual check for feature modules
 
 ---
@@ -426,17 +426,17 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 
 ## Progress Summary
 
-| Phase | Description                | Status              | Done / Total |
-| ----- | -------------------------- | ------------------- | ------------ |
-| **0** | Theme infrastructure gaps  | **Complete**        | 14/14        |
-| **1** | Color derivation cleanup   | **Mostly complete** | 21/24        |
-| **2** | Component library cleanup  | **Complete**        | 12/12        |
-| **3** | Shared layout primitives   | **Mostly done**     | 12/14        |
-| **4** | Screen-by-screen spacing   | **Not started**     | 0/~115       |
-| **5** | Screen shell normalization | **In progress**     | 4/52         |
-| **6** | Enforcement & CI hardening | **Not started**     | 4/9          |
-| **7** | Final audit & sign-off     | **Not started**     | 0/14         |
-|       | **Overall**                |                     | **~67/~254** |
+| Phase | Description                | Status                                  | Done / Total |
+| ----- | -------------------------- | --------------------------------------- | ------------ |
+| **0** | Theme infrastructure gaps  | **Complete**                            | 19/19        |
+| **1** | Color derivation cleanup   | **Mostly complete**                     | 21/24        |
+| **2** | Component library cleanup  | **Complete**                            | 12/12        |
+| **3** | Shared layout primitives   | **Complete**                            | 16/16        |
+| **4** | Screen-by-screen spacing   | **Implementation complete; QA pending** | 95/107       |
+| **5** | Screen shell normalization | **Not started**                         | 0/55         |
+| **6** | Enforcement & CI hardening | **In progress**                         | 4/10         |
+| **7** | Final audit & sign-off     | **Not started**                         | 0/15         |
+|       | **Overall**                |                                         | **167/258**  |
 
 ---
 
@@ -450,14 +450,14 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 
 4. **Palette imports are fully removed from UI code** — screens, components, and features now use `theme.colors` or `theme.collections` instead of importing `@/src/theme/palette` directly.
 
-5. **Shared primitives are now used beyond the component library** — `TableRow` is live in `reports/party-statement` and `reports/gst-detail`, while `FormSection` now structures `customers/add` and `suppliers/add`. Broader rollout still remains.
+5. **Shared primitives are now rolled out through the high-churn settings/report/form surfaces** — `SectionHeader`, `SettingsCard`, `TableRow`, and `FormSection` replaced the former screen-local duplicates, and the remaining checklist work has moved on to shell normalization and enforcement.
 
-6. **Per-screen card/sectionHeader duplicates still widespread** — ~20 files still define inline `card` styles, and 4 files still define inline `sectionHeader` styles.
+6. **Per-screen card/sectionHeader duplicates are no longer a blocker** — the earlier `card:` / `sectionHeader:` audit hotspots were removed from `app/`, including the settings, finance-detail, purchase-detail, and order-import screens that originally anchored this cleanup.
 
-7. **Z-index fully migrated** — all 5 raw `zIndex` usages are replaced with `Z_INDEX.*` constants.
+7. **Phase 4 implementation is finished across the current route set** — finance, reports, transactions, customer/supplier, invoice, order, utility, store, and `src/features/` audits are now clean for raw spacing/typography/radius sizing values. The remaining Phase 4 checkboxes are manual light/dark verification passes.
 
-8. **ScrollView migration progressed again** — down from 61 to 44 files after moving `customers/add` and `suppliers/add` onto `Screen scrollable`.
+8. **The checklist now matches the real app structure** — `finance/expenses/add.tsx` and `finance/other-income/add.tsx` are the live routes (not `create.tsx`), while `finance/bank-accounts/[id].tsx` and `store/[id].tsx` do not exist in the current codebase.
 
-9. **Phase 4 (spacing) is untouched and is ~40% of the total work** — ~1,200+ magic number violations across 120 files.
+9. **ScrollView migration and safe-area normalization are the next large UI cleanup bucket** — those items remain intentionally parked in Phase 5 after the spacing/tokenization pass.
 
-10. **No enforcement automation exists** — `check-ui-tokens.mjs` script hasn't been created, and the ESLint `no-magic-numbers` ignore list is so broad it effectively allows all common spacing values.
+10. **No enforcement automation exists yet** — `check-ui-tokens.mjs` still hasn't been created, and the ESLint `no-magic-numbers` ignore list remains broad enough that CI is not yet enforcing the token discipline established by the remediation work.

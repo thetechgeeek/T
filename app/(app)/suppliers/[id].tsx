@@ -11,6 +11,9 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { CustomerDetailSkeleton } from '@/src/components/molecules/skeletons/CustomerDetailSkeleton';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SIZE_THUMBNAIL_MD } from '@/theme/uiMetrics';
 import type { Supplier } from '@/src/types/supplier';
 import type { UUID } from '@/src/types/common';
 
@@ -111,7 +114,11 @@ export default function SupplierDetailScreen() {
 								},
 							]}
 						>
-							<ThemedText weight="bold" color={c.white} style={{ fontSize: 22 }}>
+							<ThemedText
+								weight="bold"
+								color={c.white}
+								style={{ fontSize: FONT_SIZE.h2 }}
+							>
 								{getInitials(supplier.name)}
 							</ThemedText>
 						</View>
@@ -148,14 +155,14 @@ export default function SupplierDetailScreen() {
 						title="New Purchase"
 						variant="primary"
 						leftIcon={<ShoppingCart size={18} color={c.white} />}
-						style={{ flex: 1, marginRight: 4 }}
+						style={{ flex: 1, marginRight: SPACING_PX.xs }}
 						onPress={handleNewPurchase}
 					/>
 					<Button
 						title="Make Payment"
 						variant="outline"
 						leftIcon={<CreditCard size={18} color={c.primary} />}
-						style={{ flex: 1, marginLeft: 4 }}
+						style={{ flex: 1, marginLeft: SPACING_PX.xs }}
 						onPress={handleMakePayment}
 					/>
 				</View>
@@ -172,7 +179,11 @@ export default function SupplierDetailScreen() {
 						accessibilityLabel="whatsapp-supplier"
 					>
 						<MessageCircle size={18} color={c.onSuccess} />
-						<ThemedText variant="body" color={c.onSuccess} style={{ marginLeft: 8 }}>
+						<ThemedText
+							variant="body"
+							color={c.onSuccess}
+							style={{ marginLeft: SPACING_PX.sm }}
+						>
 							WhatsApp
 						</ThemedText>
 					</TouchableOpacity>
@@ -255,27 +266,27 @@ export default function SupplierDetailScreen() {
 
 const styles = StyleSheet.create({
 	scrollContent: {
-		padding: 16,
-		paddingBottom: 40,
+		padding: SPACING_PX.lg,
+		paddingBottom: SPACING_PX['3xl'] - SPACING_PX.sm,
 	},
 	headerCard: {
-		marginBottom: 16,
+		marginBottom: SPACING_PX.lg,
 	},
 	avatarRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 16,
+		gap: SPACING_PX.lg,
 	},
 	avatar: {
-		width: 56,
-		height: 56,
-		borderRadius: 28,
+		width: SIZE_THUMBNAIL_MD,
+		height: SIZE_THUMBNAIL_MD,
+		borderRadius: SIZE_THUMBNAIL_MD / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	headerInfo: {
 		flex: 1,
-		gap: 2,
+		gap: SPACING_PX.xxs,
 	},
 	infoRow: {
 		flexDirection: 'row',
@@ -283,14 +294,14 @@ const styles = StyleSheet.create({
 	},
 	actionsRow: {
 		flexDirection: 'row',
-		marginBottom: 12,
+		marginBottom: SPACING_PX.md,
 	},
 	whatsappBtn: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 12,
-		marginBottom: 16,
+		paddingVertical: SPACING_PX.md,
+		marginBottom: SPACING_PX.lg,
 	},
 	tabBar: {
 		flexDirection: 'row',
@@ -299,14 +310,14 @@ const styles = StyleSheet.create({
 	tab: {
 		flex: 1,
 		alignItems: 'center',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 	},
 	tabContent: {
-		paddingTop: 16,
+		paddingTop: SPACING_PX.lg,
 	},
 	emptyState: {
 		alignItems: 'center',
-		paddingVertical: 48,
-		paddingHorizontal: 32,
+		paddingVertical: SPACING_PX['3xl'],
+		paddingHorizontal: SPACING_PX['2xl'],
 	},
 });

@@ -11,7 +11,8 @@ import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { InventoryItem } from '@/src/types/inventory';
 import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_SOFT } from '@/src/theme/uiMetrics';
+import { OPACITY_TINT_SOFT, SIZE_DROPDOWN_MAX_HEIGHT } from '@/src/theme/uiMetrics';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface Props {
 	lineItems: InvoiceLineItemInput[];
@@ -110,7 +111,7 @@ export function LineItemsStep({
 						)}
 						<TouchableOpacity
 							onPress={() => removeLineItem(index)}
-							style={{ alignSelf: 'flex-end', marginTop: 8 }}
+							style={{ alignSelf: 'flex-end', marginTop: SPACING_PX.sm }}
 							accessibilityRole="button"
 							accessibilityLabel={`remove-line-item-${index}`}
 							accessibilityHint={t('invoice.removeHint', { name: item.design_name })}
@@ -187,7 +188,10 @@ export function LineItemsStep({
 								value={searchQuery}
 								onChangeText={setSearchQuery}
 							/>
-							<ScrollView accessibilityRole="list" style={{ maxHeight: 200 }}>
+							<ScrollView
+								accessibilityRole="list"
+								style={{ maxHeight: SIZE_DROPDOWN_MAX_HEIGHT }}
+							>
 								{inventoryItems.length === 0 && !inventoryLoading ? (
 									<ThemedText
 										variant="caption"

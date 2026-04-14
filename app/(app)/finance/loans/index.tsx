@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
 		padding: SPACING_PX.lg,
 	},
 	loanCard: {
-		minHeight: 100,
+		minHeight: SPACING_PX['4xl'] + SPACING_PX.xl + SPACING_PX.md,
 	},
 	loanHeader: {
 		flexDirection: 'row',

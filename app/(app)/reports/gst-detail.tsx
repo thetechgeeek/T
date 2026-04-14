@@ -15,6 +15,8 @@ import {
 	GST_DETAIL_DEFAULT_TO,
 	MOCK_GST_DETAIL_ROWS,
 } from '@/src/mocks/reports/gstDetail';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_ICON_MD } from '@/theme/uiMetrics';
 
 // TODO: Replace mock data with Supabase query filtered by fromDate/toDate across
 //       sale_invoices, purchase_bills, and expense records.
@@ -75,7 +77,9 @@ export default function GSTDetailScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
 			<ScreenHeader title="GST Detail Report" showBackButton />
 
-			<ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
+			<ScrollView
+				contentContainerStyle={[styles.content, { paddingBottom: s['2xl'] + s.sm }]}
+			>
 				{/* Period preset chips */}
 				<View style={styles.chipRow}>
 					{PRESETS.map((p) => (
@@ -112,7 +116,7 @@ export default function GSTDetailScreen() {
 							<ThemedText
 								variant="caption"
 								color={c.onSurfaceVariant}
-								style={{ marginLeft: 4 }}
+								style={{ marginLeft: s.xs }}
 							>
 								From
 							</ThemedText>
@@ -124,7 +128,7 @@ export default function GSTDetailScreen() {
 							<ThemedText
 								variant="caption"
 								color={c.onSurfaceVariant}
-								style={{ marginLeft: 4 }}
+								style={{ marginLeft: s.xs }}
 							>
 								To
 							</ThemedText>
@@ -167,7 +171,13 @@ export default function GSTDetailScreen() {
 					</View>
 
 					<View
-						style={[styles.divider, { backgroundColor: c.border, marginVertical: 10 }]}
+						style={[
+							styles.divider,
+							{
+								backgroundColor: c.border,
+								marginVertical: SPACING_PX.sm + SPACING_PX.xxs,
+							},
+						]}
 					/>
 
 					<View style={styles.liabilityRow}>
@@ -198,7 +208,11 @@ export default function GSTDetailScreen() {
 							{/* Header */}
 							<TableRow
 								variant="header"
-								style={{ paddingHorizontal: 4, paddingBottom: 6, marginBottom: 2 }}
+								style={{
+									paddingHorizontal: SPACING_PX.xs,
+									paddingBottom: SPACING_PX.sm - SPACING_PX.xxs,
+									marginBottom: SPACING_PX.xxs,
+								}}
 								columns={[
 									{ label: 'Date', width: GST_DETAIL_COL_WIDTH_PX.date },
 									{ label: 'Type', width: GST_DETAIL_COL_WIDTH_PX.type },
@@ -241,8 +255,8 @@ export default function GSTDetailScreen() {
 										key={row.id}
 										style={[
 											{
-												paddingHorizontal: 4,
-												paddingVertical: 8,
+												paddingHorizontal: SPACING_PX.xs,
+												paddingVertical: SPACING_PX.sm,
 												borderBottomColor: c.border,
 											},
 											isLast && { borderBottomWidth: 0 },
@@ -379,8 +393,8 @@ export default function GSTDetailScreen() {
 							<TableRow
 								variant="total"
 								style={{
-									paddingHorizontal: 4,
-									paddingVertical: 8,
+									paddingHorizontal: SPACING_PX.xs,
+									paddingVertical: SPACING_PX.sm,
 									borderBottomWidth: 0,
 								}}
 								columns={[
@@ -477,53 +491,53 @@ export default function GSTDetailScreen() {
 
 const styles = StyleSheet.create({
 	content: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		gap: 0,
 	},
 	chipRow: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 8,
-		marginBottom: 12,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.md,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 6,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 		borderWidth: 1,
 	},
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		marginVertical: 6,
+		marginVertical: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	dateRangeRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 4,
-		paddingVertical: 4,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.xs,
+		paddingVertical: SPACING_PX.xs,
+		gap: SPACING_PX.sm,
 	},
 	dateBox: {
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 4,
+		gap: SPACING_PX.xs,
 		flexWrap: 'wrap',
 	},
 	dateArrow: {
-		width: 20,
+		width: SIZE_ICON_MD,
 		height: StyleSheet.hairlineWidth,
 	},
 	summaryRow: {
 		flexDirection: 'row',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	summaryBlock: {
 		flex: 1,
-		gap: 3,
+		gap: SPACING_PX.xs,
 	},
 	summaryDivider: {
 		width: StyleSheet.hairlineWidth,
-		marginVertical: 2,
+		marginVertical: SPACING_PX.xxs,
 	},
 	liabilityRow: {
 		flexDirection: 'row',
@@ -531,8 +545,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	typeBadge: {
-		paddingHorizontal: 6,
-		paddingVertical: 2,
+		paddingHorizontal: SPACING_PX.sm - SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xxs,
 		alignSelf: 'flex-start',
 	},
 });

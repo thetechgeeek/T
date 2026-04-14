@@ -1,9 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Pressable, TextInput, Alert } from 'react-native';
 import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
-
-const DISABLED_NAV_OPACITY = OPACITY_TINT_STRONG;
-const BALANCE_CARD_BORDER_WIDTH = 1.5;
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -18,6 +15,11 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+
+const DISABLED_NAV_OPACITY = OPACITY_TINT_STRONG;
+const BALANCE_CARD_BORDER_WIDTH = 1.5;
 
 function toISO(d: Date) {
 	return d.toISOString().slice(0, 10);
@@ -179,7 +181,7 @@ export default function BalanceSheetScreen() {
 			<ScreenHeader title="Balance Sheet" showBackButton />
 
 			{/* Month navigation */}
-			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginVertical: 8 }]}>
+			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginVertical: s.sm }]}>
 				<Pressable
 					onPress={() => setOffset((o) => o - 1)}
 					style={styles.navBtn}
@@ -203,12 +205,21 @@ export default function BalanceSheetScreen() {
 				</Pressable>
 			</View>
 
-			<ScrollView contentContainerStyle={{ padding: s.md, paddingBottom: 40, gap: 12 }}>
+			<ScrollView
+				contentContainerStyle={{
+					padding: s.md,
+					paddingBottom: s['2xl'] + s.sm,
+					gap: s.md,
+				}}
+			>
 				{/* ASSETS */}
 				<Card padding="md">
 					<ThemedText
 						weight="bold"
-						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
+						style={{
+							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+							fontSize: theme.typography.sizes.md,
+						}}
 					>
 						Assets
 					</ThemedText>
@@ -216,7 +227,7 @@ export default function BalanceSheetScreen() {
 						variant="caption"
 						weight="bold"
 						color={c.onSurfaceVariant}
-						style={{ marginBottom: 6 }}
+						style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
 					>
 						Current Assets
 					</ThemedText>
@@ -259,7 +270,10 @@ export default function BalanceSheetScreen() {
 				<Card padding="md">
 					<ThemedText
 						weight="bold"
-						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
+						style={{
+							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+							fontSize: theme.typography.sizes.md,
+						}}
 					>
 						Liabilities
 					</ThemedText>
@@ -267,7 +281,7 @@ export default function BalanceSheetScreen() {
 						variant="caption"
 						weight="bold"
 						color={c.onSurfaceVariant}
-						style={{ marginBottom: 6 }}
+						style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
 					>
 						Current Liabilities
 					</ThemedText>
@@ -303,7 +317,10 @@ export default function BalanceSheetScreen() {
 				<Card padding="md">
 					<ThemedText
 						weight="bold"
-						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
+						style={{
+							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+							fontSize: theme.typography.sizes.md,
+						}}
 					>
 						Capital
 					</ThemedText>
@@ -361,7 +378,7 @@ export default function BalanceSheetScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ textAlign: 'center', marginBottom: 4 }}
+						style={{ textAlign: 'center', marginBottom: s.xs }}
 					>
 						Assets = Liabilities + Capital
 					</ThemedText>
@@ -394,8 +411,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	navBtn: {
-		width: 36,
-		height: 36,
+		width: SPACING_PX.xl + SPACING_PX.md,
+		height: SPACING_PX.xl + SPACING_PX.md,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -403,19 +420,19 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 5,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		marginVertical: 6,
+		marginVertical: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	capitalInput: {
 		borderWidth: 1,
-		borderRadius: 6,
-		paddingHorizontal: 10,
-		paddingVertical: 4,
-		minWidth: 100,
+		borderRadius: SPACING_PX.sm - SPACING_PX.xxs,
+		paddingHorizontal: SPACING_PX.sm + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.xs,
+		minWidth: SPACING_PX['4xl'] + SPACING_PX.xl + SPACING_PX.md,
 		textAlign: 'right',
-		fontSize: 14,
+		fontSize: FONT_SIZE.caption,
 	},
 });

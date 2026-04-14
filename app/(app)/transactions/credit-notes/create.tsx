@@ -19,6 +19,8 @@ import { TextInput } from '@/src/components/atoms/TextInput';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 type ReasonOption = 'Defective' | 'Wrong Item' | 'Price Difference' | 'Short Supply' | 'Other';
 
@@ -86,11 +88,11 @@ export default function CreateCreditNoteScreen() {
 		borderWidth: 1,
 		borderColor: c.border,
 		borderRadius: r.md,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
+		paddingHorizontal: s.md,
+		paddingVertical: s.sm + s.xxs,
 		color: c.onSurface,
 		backgroundColor: c.surface,
-		fontSize: 14,
+		fontSize: FONT_SIZE.caption,
 	};
 
 	return (
@@ -252,7 +254,11 @@ export default function CreateCreditNoteScreen() {
 						accessibilityLabel="add-item"
 					>
 						<Plus size={16} color={c.primary} />
-						<ThemedText variant="caption" color={c.primary} style={{ marginLeft: 4 }}>
+						<ThemedText
+							variant="caption"
+							color={c.primary}
+							style={{ marginLeft: s.xs }}
+						>
 							Add Item
 						</ThemedText>
 					</Pressable>
@@ -266,7 +272,7 @@ export default function CreateCreditNoteScreen() {
 					<ThemedText variant="label" color={c.onSurfaceVariant}>
 						Return Total
 					</ThemedText>
-					<ThemedText variant="amount" color={c.error} style={{ marginTop: 4 }}>
+					<ThemedText variant="amount" color={c.error} style={{ marginTop: s.xs }}>
 						Total Credit: {formatCurrency(returnTotal)}
 					</ThemedText>
 				</Card>
@@ -336,12 +342,12 @@ export default function CreateCreditNoteScreen() {
 }
 
 const styles = StyleSheet.create({
-	content: { paddingBottom: 40 },
-	label: { marginBottom: 6 },
-	chipRow: { flexDirection: 'row', gap: 8 },
+	content: { paddingBottom: SPACING_PX['2xl'] + SPACING_PX.sm },
+	label: { marginBottom: SPACING_PX.sm - SPACING_PX.xxs },
+	chipRow: { flexDirection: 'row', gap: SPACING_PX.sm },
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 7,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs + 1,
 		borderWidth: 1,
 	},
 	itemHeader: {
@@ -349,27 +355,27 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
-	twoCol: { flexDirection: 'row', gap: 8 },
+	twoCol: { flexDirection: 'row', gap: SPACING_PX.sm },
 	addBtn: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		borderStyle: 'dashed',
 		alignSelf: 'flex-start',
-		marginTop: 4,
+		marginTop: SPACING_PX.xs,
 	},
 	totalCard: {
-		borderRadius: 8,
+		borderRadius: SPACING_PX.sm,
 	},
 	applyRow: {
 		flexDirection: 'row',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	applyOption: {
-		paddingVertical: 12,
-		paddingHorizontal: 8,
+		paddingVertical: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 	},

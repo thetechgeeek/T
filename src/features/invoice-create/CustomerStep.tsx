@@ -8,9 +8,10 @@ import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { Card } from '@/src/components/atoms/Card';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import type { CustomerDraft } from './invoiceCreateTypes';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const TOGGLE_BORDER_WIDTH = 1.5;
-import type { CustomerDraft } from './invoiceCreateTypes';
 
 interface Props {
 	customer: CustomerDraft | null;
@@ -174,7 +175,7 @@ export function CustomerStep({
 							variant="caption"
 							color={c.onSurfaceVariant}
 							importantForAccessibility="no"
-							style={{ marginTop: 4 }}
+							style={{ marginTop: SPACING_PX.xs }}
 						>
 							{t('invoice.interStateHint')}
 						</ThemedText>

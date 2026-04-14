@@ -1,9 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
-
-const DISABLED_NAV_OPACITY = OPACITY_TINT_STRONG;
-const CASHFLOW_CARD_BORDER_WIDTH = 1.5;
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -16,6 +13,10 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+
+const DISABLED_NAV_OPACITY = OPACITY_TINT_STRONG;
+const CASHFLOW_CARD_BORDER_WIDTH = 1.5;
 
 function toISO(d: Date) {
 	return d.toISOString().slice(0, 10);
@@ -161,7 +162,7 @@ export default function CashflowScreen() {
 			<ScreenHeader title="Cashflow Report" showBackButton />
 
 			{/* Month navigation */}
-			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginVertical: 8 }]}>
+			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginVertical: s.sm }]}>
 				<Pressable
 					onPress={() => setOffset((o) => o - 1)}
 					style={styles.navBtn}
@@ -182,7 +183,13 @@ export default function CashflowScreen() {
 				</Pressable>
 			</View>
 
-			<ScrollView contentContainerStyle={{ padding: s.md, paddingBottom: 40, gap: 12 }}>
+			<ScrollView
+				contentContainerStyle={{
+					padding: s.md,
+					paddingBottom: s['2xl'] + s.sm,
+					gap: s.md,
+				}}
+			>
 				{/* Opening Balance */}
 				<View style={styles.sectionRow}>
 					<ThemedText color={c.onSurfaceVariant}>Opening Balance</ThemedText>
@@ -193,7 +200,10 @@ export default function CashflowScreen() {
 				<Card padding="md">
 					<ThemedText
 						weight="bold"
-						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
+						style={{
+							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+							fontSize: theme.typography.sizes.md,
+						}}
 					>
 						Inflows
 					</ThemedText>
@@ -224,7 +234,10 @@ export default function CashflowScreen() {
 				<Card padding="md">
 					<ThemedText
 						weight="bold"
-						style={{ marginBottom: 10, fontSize: theme.typography.sizes.md }}
+						style={{
+							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+							fontSize: theme.typography.sizes.md,
+						}}
 					>
 						Outflows
 					</ThemedText>
@@ -276,7 +289,9 @@ export default function CashflowScreen() {
 							{formatCurrency(Math.abs(netCashflow))}
 						</ThemedText>
 					</View>
-					<View style={[styles.sectionRow, { marginTop: 6 }]}>
+					<View
+						style={[styles.sectionRow, { marginTop: SPACING_PX.sm - SPACING_PX.xxs }]}
+					>
 						<ThemedText color={c.onSurfaceVariant}>Closing Balance</ThemedText>
 						<ThemedText weight="bold">{formatCurrency(closingBalance)}</ThemedText>
 					</View>
@@ -286,19 +301,31 @@ export default function CashflowScreen() {
 				<Card padding="md">
 					<ThemedText
 						weight="bold"
-						style={{ marginBottom: 12, fontSize: theme.typography.sizes.md }}
+						style={{ marginBottom: SPACING_PX.md, fontSize: theme.typography.sizes.md }}
 					>
 						Weekly Breakdown
 					</ThemedText>
 
 					{/* Legend */}
-					<View style={{ flexDirection: 'row', gap: 16, marginBottom: 12 }}>
-						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+					<View
+						style={{
+							flexDirection: 'row',
+							gap: SPACING_PX.lg,
+							marginBottom: SPACING_PX.md,
+						}}
+					>
+						<View
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								gap: SPACING_PX.sm - SPACING_PX.xxs,
+							}}
+						>
 							<View
 								style={{
-									width: 12,
-									height: 12,
-									borderRadius: 3,
+									width: SPACING_PX.md,
+									height: SPACING_PX.md,
+									borderRadius: SPACING_PX.xs,
 									backgroundColor: c.success,
 								}}
 							/>
@@ -306,12 +333,18 @@ export default function CashflowScreen() {
 								Inflow
 							</ThemedText>
 						</View>
-						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+						<View
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								gap: SPACING_PX.sm - SPACING_PX.xxs,
+							}}
+						>
 							<View
 								style={{
-									width: 12,
-									height: 12,
-									borderRadius: 3,
+									width: SPACING_PX.md,
+									height: SPACING_PX.md,
+									borderRadius: SPACING_PX.xs,
 									backgroundColor: c.error,
 								}}
 							/>
@@ -347,7 +380,7 @@ export default function CashflowScreen() {
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ textAlign: 'center', marginTop: 4 }}
+									style={{ textAlign: 'center', marginTop: SPACING_PX.xs }}
 								>
 									{wk.label}
 								</ThemedText>
@@ -366,19 +399,19 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	navBtn: {
-		width: 36,
-		height: 36,
+		width: SPACING_PX.xl + SPACING_PX.md,
+		height: SPACING_PX.xl + SPACING_PX.md,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	sectionRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingVertical: 5,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		marginVertical: 6,
+		marginVertical: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	chartRow: {
 		flexDirection: 'row',
@@ -392,10 +425,10 @@ const styles = StyleSheet.create({
 	barsContainer: {
 		flexDirection: 'row',
 		alignItems: 'flex-end',
-		gap: 4,
+		gap: SPACING_PX.xs,
 	},
 	bar: {
-		width: 14,
-		borderRadius: 3,
+		width: SPACING_PX.md + SPACING_PX.xxs,
+		borderRadius: SPACING_PX.xs,
 	},
 });

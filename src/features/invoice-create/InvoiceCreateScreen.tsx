@@ -5,13 +5,17 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { Screen } from '@/src/components/atoms/Screen';
+import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import { useInvoiceCreateFlow } from './useInvoiceCreateFlow';
-
-const STEP_BORDER_WIDTH = 1.5;
 import { CustomerStep } from './CustomerStep';
 import { LineItemsStep } from './LineItemsStep';
 import { PaymentStep } from './PaymentStep';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+
+const STEP_BORDER_WIDTH = 1.5;
+const STEP_ACTIVE_DOT_SIZE = SPACING_PX.md;
+const STEP_INACTIVE_DOT_SIZE = SPACING_PX.sm + SPACING_PX.xxs;
 
 export default function InvoiceCreateScreen() {
 	const { c, s } = useThemeTokens();
@@ -43,7 +47,7 @@ export default function InvoiceCreateScreen() {
 					const isActive = flow.step === stepNum;
 					const isCompleted = flow.step > stepNum;
 
-					const dotSize = isActive ? 12 : 10;
+					const dotSize = isActive ? STEP_ACTIVE_DOT_SIZE : STEP_INACTIVE_DOT_SIZE;
 					const dotStyle = isActive
 						? { backgroundColor: c.primary, borderWidth: 0 }
 						: isCompleted
@@ -64,10 +68,10 @@ export default function InvoiceCreateScreen() {
 								<View
 									style={{
 										flex: 1,
-										height: 1,
+										height: StyleSheet.hairlineWidth,
 										backgroundColor: c.borderStrong,
 										alignSelf: 'center',
-										marginBottom: 18,
+										marginBottom: FONT_SIZE.h3,
 									}}
 								/>
 							)}
@@ -86,7 +90,10 @@ export default function InvoiceCreateScreen() {
 								/>
 								<ThemedText
 									variant="caption"
-									style={{ fontSize: 11, marginTop: 4 }}
+									style={{
+										fontSize: FONT_SIZE.captionSmall,
+										marginTop: SPACING_PX.xs,
+									}}
 									color={isActive ? c.primary : c.onSurfaceVariant}
 								>
 									{label}
@@ -188,13 +195,13 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
-		paddingHorizontal: 32,
-		paddingVertical: 12,
+		paddingHorizontal: SPACING_PX['2xl'],
+		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: 1,
 	},
 	footer: {
 		flexDirection: 'row',
-		padding: 16,
+		padding: SPACING_PX.lg,
 		borderTopWidth: 1,
 	},
 });

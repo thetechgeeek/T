@@ -18,6 +18,7 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { layout } from '@/src/theme/layout';
 import { useLocale } from '@/src/hooks/useLocale';
 import logger from '@/src/utils/logger';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface CustomerFormData {
 	name: string;
@@ -144,7 +145,7 @@ export default function AddCustomerScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginBottom: 6 }}
+						style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
 					>
 						Customer Type
 					</ThemedText>
@@ -259,7 +260,7 @@ export default function AddCustomerScreen() {
 						)}
 					/>
 
-					<View style={[layout.row, { gap: 16 }]}>
+					<View style={[layout.row, { gap: s.lg }]}>
 						<View style={{ flex: 1 }}>
 							<Controller
 								control={control}
@@ -315,7 +316,7 @@ export default function AddCustomerScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginBottom: 4 }}
+						style={{ marginBottom: s.xs }}
 					>
 						{t('customer.creditLimit')}
 					</ThemedText>
@@ -332,7 +333,7 @@ export default function AddCustomerScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginTop: s.md, marginBottom: 4 }}
+						style={{ marginTop: s.md, marginBottom: s.xs }}
 					>
 						Opening Balance
 					</ThemedText>
@@ -349,7 +350,7 @@ export default function AddCustomerScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginTop: s.md, marginBottom: 6 }}
+						style={{ marginTop: s.md, marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
 					>
 						Balance Type
 					</ThemedText>
@@ -415,15 +416,15 @@ export default function AddCustomerScreen() {
 
 const styles = StyleSheet.create({
 	toggleRow: {
-		gap: 8,
-		marginBottom: 12,
+		gap: SPACING_PX.sm,
+		marginBottom: SPACING_PX.md,
 	},
 	toggleBtn: {
-		paddingVertical: 10,
-		paddingHorizontal: 16,
+		paddingVertical: SPACING_PX.sm + SPACING_PX.xxs,
+		paddingHorizontal: SPACING_PX.lg,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		minHeight: 40,
+		minHeight: SPACING_PX['2xl'] + SPACING_PX.sm,
 	},
 });

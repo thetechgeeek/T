@@ -1,9 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { SIZE_INPUT_HEIGHT, OVERLAY_COLOR_MEDIUM, Z_INDEX } from '@/theme/uiMetrics';
-
-const DROPDOWN_MAX_HEIGHT = 160;
-const MODAL_CARD_WIDTH = 320;
-const PURCHASE_CREATE_BOTTOM_PADDING = 40;
 import {
 	View,
 	ScrollView,
@@ -32,6 +27,15 @@ import type { Supplier } from '@/src/types/supplier';
 import type { InventoryItem } from '@/src/types/inventory';
 import type { PaymentStatus } from '@/src/types/invoice';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import {
+	OVERLAY_COLOR_MEDIUM,
+	SIZE_DROPDOWN_MAX_HEIGHT,
+	SIZE_INPUT_HEIGHT,
+	Z_INDEX,
+} from '@/theme/uiMetrics';
+
+const MODAL_CARD_WIDTH = 320;
+const PURCHASE_CREATE_BOTTOM_PADDING = 40;
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Credit / No Payment'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
@@ -229,7 +233,7 @@ export default function PurchaseCreateScreen() {
 					{filteredSuppliers().length > 0 && (
 						<Card padding="none" style={styles.dropdown}>
 							<ScrollView
-								style={{ maxHeight: 180 }}
+								style={{ maxHeight: SIZE_DROPDOWN_MAX_HEIGHT - SPACING_PX.lg }}
 								keyboardShouldPersistTaps="handled"
 							>
 								{filteredSuppliers().map((sup) => (
@@ -363,7 +367,7 @@ export default function PurchaseCreateScreen() {
 						/>
 						{filteredItems().length > 0 && !selectedItem && (
 							<ScrollView
-								style={{ maxHeight: DROPDOWN_MAX_HEIGHT }}
+								style={{ maxHeight: SIZE_DROPDOWN_MAX_HEIGHT - SPACING_PX['2xl'] }}
 								keyboardShouldPersistTaps="handled"
 							>
 								{filteredItems().map((itm) => (
@@ -487,7 +491,10 @@ export default function PurchaseCreateScreen() {
 					multiline
 					numberOfLines={3}
 					placeholder="Optional notes..."
-					inputStyle={{ minHeight: 72, textAlignVertical: 'top' }}
+					inputStyle={{
+						minHeight: SPACING_PX['3xl'] + SPACING_PX.xl,
+						textAlignVertical: 'top',
+					}}
 				/>
 			</View>
 

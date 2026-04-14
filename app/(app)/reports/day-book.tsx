@@ -13,6 +13,8 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_ICON_CIRCLE_MD } from '@/theme/uiMetrics';
 
 function todayISO(): string {
 	return new Date().toISOString().slice(0, 10);
@@ -110,7 +112,7 @@ export default function DayBookScreen() {
 			style={{
 				height: StyleSheet.hairlineWidth,
 				backgroundColor: c.border,
-				marginVertical: 4,
+				marginVertical: SPACING_PX.xs,
 			}}
 		/>
 	);
@@ -121,7 +123,7 @@ export default function DayBookScreen() {
 				<ThemedText
 					variant="caption"
 					color={c.onSurfaceVariant}
-					style={{ paddingVertical: 8, textAlign: 'center' }}
+					style={{ paddingVertical: SPACING_PX.sm, textAlign: 'center' }}
 				>
 					No entries
 				</ThemedText>
@@ -171,7 +173,9 @@ export default function DayBookScreen() {
 				</Pressable>
 			</View>
 
-			<ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
+			<ScrollView
+				contentContainerStyle={[styles.content, { paddingBottom: s['2xl'] + s.sm }]}
+			>
 				{/* Two-column header */}
 				<View style={styles.columnsRow}>
 					{/* Received column */}
@@ -182,7 +186,10 @@ export default function DayBookScreen() {
 						<ThemedText
 							weight="bold"
 							color={c.success}
-							style={{ marginBottom: 8, fontSize: theme.typography.sizes.md }}
+							style={{
+								marginBottom: SPACING_PX.sm,
+								fontSize: theme.typography.sizes.md,
+							}}
 						>
 							Received
 						</ThemedText>
@@ -227,7 +234,10 @@ export default function DayBookScreen() {
 						<ThemedText
 							weight="bold"
 							color={c.error}
-							style={{ marginBottom: 8, fontSize: theme.typography.sizes.md }}
+							style={{
+								marginBottom: SPACING_PX.sm,
+								fontSize: theme.typography.sizes.md,
+							}}
 						>
 							Paid
 						</ThemedText>
@@ -269,7 +279,7 @@ export default function DayBookScreen() {
 				<Card style={{ marginTop: s.md, borderRadius: r.md }} padding="md">
 					<ThemedText
 						weight="bold"
-						style={{ fontSize: theme.typography.sizes.md, marginBottom: 12 }}
+						style={{ fontSize: theme.typography.sizes.md, marginBottom: SPACING_PX.md }}
 					>
 						Cash Balance
 					</ThemedText>
@@ -295,7 +305,7 @@ export default function DayBookScreen() {
 						style={{
 							height: StyleSheet.hairlineWidth,
 							backgroundColor: c.border,
-							marginVertical: 8,
+							marginVertical: s.sm,
 						}}
 					/>
 
@@ -328,7 +338,11 @@ export default function DayBookScreen() {
 					accessibilityLabel="Export / Print Day Book"
 				>
 					<Printer size={18} color={c.primary} strokeWidth={2} />
-					<ThemedText color={c.primary} weight="medium" style={{ marginLeft: 8 }}>
+					<ThemedText
+						color={c.primary}
+						weight="medium"
+						style={{ marginLeft: SPACING_PX.sm }}
+					>
 						Export / Print
 					</ThemedText>
 				</Pressable>
@@ -341,52 +355,52 @@ const styles = StyleSheet.create({
 	dateRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 8,
-		paddingVertical: 8,
+		gap: SPACING_PX.sm,
+		paddingVertical: SPACING_PX.sm,
 	},
 	arrowBtn: {
-		width: 40,
-		height: 40,
+		width: SIZE_ICON_CIRCLE_MD,
+		height: SIZE_ICON_CIRCLE_MD,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	content: {
-		padding: 16,
+		padding: SPACING_PX.lg,
 		gap: 0,
 	},
 	columnsRow: {
 		flexDirection: 'row',
-		gap: 12,
+		gap: SPACING_PX.md,
 	},
 	column: {
 		flex: 1,
 	},
 	colHeader: {
 		flexDirection: 'row',
-		paddingBottom: 6,
-		marginBottom: 4,
+		paddingBottom: SPACING_PX.sm - SPACING_PX.xxs,
+		marginBottom: SPACING_PX.xs,
 	},
 	tableRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 6,
-		gap: 4,
+		paddingVertical: SPACING_PX.sm - SPACING_PX.xxs,
+		gap: SPACING_PX.xs,
 	},
 	totalRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingTop: 4,
+		paddingTop: SPACING_PX.xs,
 	},
 	balanceRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingVertical: 4,
+		paddingVertical: SPACING_PX.xs,
 	},
 	exportBtn: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 		borderWidth: 1,
 	},
 });

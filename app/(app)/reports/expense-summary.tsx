@@ -1,16 +1,18 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, Alert } from 'react-native';
 import { Download } from 'lucide-react-native';
-
-const CHART_PLACEHOLDER_HEIGHT = 160;
-/** Section label caps letter-spacing (narrower than LETTER_SPACING_SECTION) */
-const LETTER_SPACING_CAPS_LABEL = 0.6;
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
+
+const CHART_PLACEHOLDER_HEIGHT = SPACING_PX['4xl'] + SPACING_PX['4xl'] + SPACING_PX['2xl'];
+/** Section label caps letter-spacing (narrower than LETTER_SPACING_SECTION) */
+const LETTER_SPACING_CAPS_LABEL = 0.6;
 
 // TODO: Replace with real data — SELECT category, SUM(amount) FROM expenses WHERE date BETWEEN ? AND ? GROUP BY category
 type Period = 'month' | 'quarter' | 'year' | 'fy';
@@ -75,7 +77,7 @@ export default function ExpenseSummaryScreen() {
 			]}
 		>
 			<View style={[styles.colorDot, { backgroundColor: item.color }]} />
-			<View style={{ flex: 1, gap: 6 }}>
+			<View style={{ flex: 1, gap: SPACING_PX.sm - SPACING_PX.xxs }}>
 				<View style={styles.catRowTop}>
 					<ThemedText weight="bold" style={{ flex: 1 }}>
 						{item.name}
@@ -84,7 +86,7 @@ export default function ExpenseSummaryScreen() {
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ width: 36, textAlign: 'right' }}
+						style={{ width: SIZE_CHIP_HEIGHT, textAlign: 'right' }}
 					>
 						{item.pct}%
 					</ThemedText>
@@ -155,7 +157,10 @@ export default function ExpenseSummaryScreen() {
 				ListHeaderComponent={
 					<>
 						{/* Total expenses card */}
-						<Card padding="md" style={{ marginBottom: 16, alignItems: 'center' }}>
+						<Card
+							padding="md"
+							style={{ marginBottom: SPACING_PX.lg, alignItems: 'center' }}
+						>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
 								Total Expenses
 							</ThemedText>
@@ -163,7 +168,7 @@ export default function ExpenseSummaryScreen() {
 								variant="h1"
 								weight="bold"
 								color={c.error}
-								style={{ marginTop: 4, marginBottom: 2 }}
+								style={{ marginTop: SPACING_PX.xs, marginBottom: SPACING_PX.xxs }}
 							>
 								{formatCurrency(totalExpenses)}
 							</ThemedText>
@@ -173,7 +178,10 @@ export default function ExpenseSummaryScreen() {
 						</Card>
 
 						{/* Pie chart placeholder */}
-						<Card padding="none" style={{ marginBottom: 16, overflow: 'hidden' }}>
+						<Card
+							padding="none"
+							style={{ marginBottom: SPACING_PX.lg, overflow: 'hidden' }}
+						>
 							<View style={styles.chartPlaceholder}>
 								<ThemedText
 									variant="caption"
@@ -191,7 +199,7 @@ export default function ExpenseSummaryScreen() {
 							weight="bold"
 							color={c.onSurfaceVariant}
 							style={{
-								marginBottom: 8,
+								marginBottom: SPACING_PX.sm,
 								textTransform: 'uppercase',
 								letterSpacing: LETTER_SPACING_CAPS_LABEL,
 							}}
@@ -216,23 +224,23 @@ export default function ExpenseSummaryScreen() {
 const styles = StyleSheet.create({
 	filterRow: {
 		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		gap: 8,
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
+		gap: SPACING_PX.sm,
 	},
 	chip: {
-		paddingHorizontal: 14,
-		paddingVertical: 7,
+		paddingHorizontal: SPACING_PX.md + SPACING_PX.xxs,
+		paddingVertical: SPACING_PX.sm,
 		borderWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	exportBtn: {
-		padding: 6,
+		padding: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	listContent: {
-		padding: 16,
-		paddingBottom: 32,
+		padding: SPACING_PX.lg,
+		paddingBottom: SPACING_PX['2xl'],
 	},
 	chartPlaceholder: {
 		height: CHART_PLACEHOLDER_HEIGHT,
@@ -241,31 +249,31 @@ const styles = StyleSheet.create({
 	},
 	catRow: {
 		flexDirection: 'row',
-		paddingVertical: 12,
+		paddingVertical: SPACING_PX.md,
 		alignItems: 'center',
-		gap: 10,
+		gap: SPACING_PX.sm + SPACING_PX.xxs,
 	},
 	colorDot: {
-		width: 12,
-		height: 12,
-		borderRadius: 6,
-		marginTop: 2,
+		width: SPACING_PX.md,
+		height: SPACING_PX.md,
+		borderRadius: SPACING_PX.sm - SPACING_PX.xxs,
+		marginTop: SPACING_PX.xxs,
 		alignSelf: 'flex-start',
 	},
 	catRowTop: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 8,
+		gap: SPACING_PX.sm,
 	},
 	barTrack: {
-		height: 6,
-		borderRadius: 3,
+		height: SPACING_PX.sm - SPACING_PX.xxs,
+		borderRadius: SPACING_PX.xs,
 		overflow: 'hidden',
 	},
 	barFill: {
-		height: 6,
+		height: SPACING_PX.sm - SPACING_PX.xxs,
 	},
 	emptyState: {
-		paddingVertical: 32,
+		paddingVertical: SPACING_PX['2xl'],
 	},
 });
