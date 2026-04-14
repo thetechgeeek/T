@@ -1,6 +1,6 @@
 import { BORDER_WIDTH_BASE, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
-import { View, Switch, ScrollView, StyleSheet, TextInput } from 'react-native';
+import { View, Switch, StyleSheet, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -65,153 +65,131 @@ export default function TransactionSettingsScreen() {
 	const [roundOff, setRoundOff] = useState(true);
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Transaction Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
-				<SectionHeader title="Invoice Number" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
+		<Screen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Transaction Settings" />}
+			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
+		>
+			<SectionHeader title="Invoice Number" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow
+					label="Auto-increment Invoice No."
+					value={autoIncrement}
+					onChange={setAutoIncrement}
+					c={c}
+				/>
+				<View
+					style={[
+						styles.row,
+						{
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+						},
+					]}
 				>
-					<SwitchRow
-						label="Auto-increment Invoice No."
-						value={autoIncrement}
-						onChange={setAutoIncrement}
-						c={c}
-					/>
-					<View
+					<ThemedText variant="body" style={{ flex: 1 }}>
+						Invoice Prefix
+					</ThemedText>
+					<TextInput
+						value={prefix}
+						onChangeText={setPrefix}
 						style={[
-							styles.row,
+							styles.prefixInput,
 							{
-								borderBottomColor: c.border,
-								borderBottomWidth: StyleSheet.hairlineWidth,
+								borderColor: c.border,
+								color: c.onSurface,
+								backgroundColor: c.background,
 							},
 						]}
-					>
-						<ThemedText variant="body" style={{ flex: 1 }}>
-							Invoice Prefix
-						</ThemedText>
-						<TextInput
-							value={prefix}
-							onChangeText={setPrefix}
-							style={[
-								styles.prefixInput,
-								{
-									borderColor: c.border,
-									color: c.onSurface,
-									backgroundColor: c.background,
-								},
-							]}
-							autoCapitalize="characters"
-						/>
-					</View>
-					<SwitchRow
-						label="Reset sequence each FY"
-						value={resetFY}
-						onChange={setResetFY}
-						c={c}
+						autoCapitalize="characters"
 					/>
-				</SettingsCard>
-
-				<SectionHeader
-					title="Invoice Defaults"
-					variant="uppercase"
-					titleColor={c.primary}
+				</View>
+				<SwitchRow
+					label="Reset sequence each FY"
+					value={resetFY}
+					onChange={setResetFY}
+					c={c}
 				/>
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow
-						label="Default to Cash Sale"
-						value={cashSale}
-						onChange={setCashSale}
-						c={c}
-					/>
-					<SwitchRow
-						label="Invoice Preview Before Save"
-						value={previewBefore}
-						onChange={setPreviewBefore}
-						c={c}
-					/>
-				</SettingsCard>
+			</SettingsCard>
 
-				<SectionHeader title="Fields" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow
-						label="Show PO Number Field"
-						value={showPO}
-						onChange={setShowPO}
-						c={c}
-					/>
-					<SwitchRow
-						label="Show Transportation Details"
-						value={showTransport}
-						onChange={setShowTransport}
-						c={c}
-					/>
-					<SwitchRow
-						label="Show E-way Bill"
-						value={showEway}
-						onChange={setShowEway}
-						c={c}
-					/>
-					<SwitchRow
-						label="Show Reverse Charge"
-						value={showRC}
-						onChange={setShowRC}
-						c={c}
-					/>
-				</SettingsCard>
+			<SectionHeader title="Invoice Defaults" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow
+					label="Default to Cash Sale"
+					value={cashSale}
+					onChange={setCashSale}
+					c={c}
+				/>
+				<SwitchRow
+					label="Invoice Preview Before Save"
+					value={previewBefore}
+					onChange={setPreviewBefore}
+					c={c}
+				/>
+			</SettingsCard>
 
-				<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow
-						label="Transaction-wise Discount"
-						value={txnDiscount}
-						onChange={setTxnDiscount}
-						c={c}
-					/>
-					<SwitchRow
-						label="Additional Charges Section"
-						value={addCharges}
-						onChange={setAddCharges}
-						c={c}
-					/>
-					<SwitchRow
-						label="Round Off Amount"
-						value={roundOff}
-						onChange={setRoundOff}
-						c={c}
-					/>
-				</SettingsCard>
-			</ScrollView>
+			<SectionHeader title="Fields" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow label="Show PO Number Field" value={showPO} onChange={setShowPO} c={c} />
+				<SwitchRow
+					label="Show Transportation Details"
+					value={showTransport}
+					onChange={setShowTransport}
+					c={c}
+				/>
+				<SwitchRow label="Show E-way Bill" value={showEway} onChange={setShowEway} c={c} />
+				<SwitchRow label="Show Reverse Charge" value={showRC} onChange={setShowRC} c={c} />
+			</SettingsCard>
+
+			<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow
+					label="Transaction-wise Discount"
+					value={txnDiscount}
+					onChange={setTxnDiscount}
+					c={c}
+				/>
+				<SwitchRow
+					label="Additional Charges Section"
+					value={addCharges}
+					onChange={setAddCharges}
+					c={c}
+				/>
+				<SwitchRow label="Round Off Amount" value={roundOff} onChange={setRoundOff} c={c} />
+			</SettingsCard>
 		</Screen>
 	);
 }

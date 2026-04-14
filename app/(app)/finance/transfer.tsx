@@ -127,13 +127,13 @@ export default function FundTransferScreen() {
 			withKeyboard
 			safeAreaEdges={['bottom']}
 			scrollable
+			header={<ScreenHeader title="Fund Transfer" />}
 			contentContainerStyle={{
 				padding: s.lg,
 				paddingBottom: s['2xl'],
 			}}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
-			<ScreenHeader title="Fund Transfer" />
 			<AccountPicker
 				label="From Account *"
 				selectedId={fromId}

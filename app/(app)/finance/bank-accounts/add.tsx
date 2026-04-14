@@ -100,13 +100,13 @@ export default function AddBankAccountScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
+			header={<ScreenHeader title="Add Bank Account" showBackButton />}
 			contentContainerStyle={[
 				styles.content,
 				{ paddingBottom: SPACING_PX['2xl'] + insets.bottom },
 			]}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
-			<ScreenHeader title="Add Bank Account" showBackButton />
 			{/* Bank selection */}
 			<View style={styles.section}>
 				<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.fieldLabel}>

@@ -154,9 +154,11 @@ export default function PartyStatementScreen() {
 	const isLoading = tab === 'customers' ? customersLoading : suppliersLoading;
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} scrollable>
-			<ScreenHeader title="Party Statement" />
-
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Party Statement" />}
+		>
 			{/* Tab bar */}
 			<View style={[styles.tabBar, { borderBottomColor: c.border }]}>
 				{(['customers', 'suppliers'] as Tab[]).map((t) => (

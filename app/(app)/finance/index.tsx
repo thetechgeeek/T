@@ -76,6 +76,7 @@ export default function FinanceOverviewScreen() {
 		<AtomicScreen
 			scrollable
 			safeAreaEdges={['bottom']}
+			header={<ScreenHeader title={t('finance.title')} />}
 			scrollViewProps={{
 				refreshControl: (
 					<RefreshControl
@@ -87,7 +88,6 @@ export default function FinanceOverviewScreen() {
 			}}
 			contentContainerStyle={styles.scrollContent}
 		>
-			<ScreenHeader title={t('finance.title')} />
 			<View style={styles.metricsGrid}>
 				{metrics.map((m) => (
 					<StatCard

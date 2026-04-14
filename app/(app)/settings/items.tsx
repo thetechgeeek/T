@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Switch, ScrollView, StyleSheet } from 'react-native';
+import { View, Switch, StyleSheet } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -67,119 +67,116 @@ export default function ItemSettingsScreen() {
 	const [expiry, setExpiry] = useState(false);
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Item Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
-				<SectionHeader title="General" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow
-						label="Items Module"
-						sub="Master switch for all item features"
-						value={itemsModule}
-						onChange={setItemsModule}
-						c={c}
-					/>
-					<SwitchRow
-						label="Barcode Scanning"
-						value={barcode}
-						onChange={setBarcode}
-						c={c}
-					/>
-					<SwitchRow
-						label="Track Stock by Default"
-						value={trackStock}
-						onChange={setTrackStock}
-						c={c}
-					/>
-					<SwitchRow
-						label="Item Categories"
-						value={categories}
-						onChange={setCategories}
-						c={c}
-						last
-					/>
-				</SettingsCard>
+		<Screen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Item Settings" />}
+			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
+		>
+			<SectionHeader title="General" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow
+					label="Items Module"
+					sub="Master switch for all item features"
+					value={itemsModule}
+					onChange={setItemsModule}
+					c={c}
+				/>
+				<SwitchRow label="Barcode Scanning" value={barcode} onChange={setBarcode} c={c} />
+				<SwitchRow
+					label="Track Stock by Default"
+					value={trackStock}
+					onChange={setTrackStock}
+					c={c}
+				/>
+				<SwitchRow
+					label="Item Categories"
+					value={categories}
+					onChange={setCategories}
+					c={c}
+					last
+				/>
+			</SettingsCard>
 
-				<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow
-						label="Party-wise Item Rates"
-						sub="Different prices per party"
-						value={partyRates}
-						onChange={setPartyRates}
-						c={c}
-					/>
-					<SwitchRow label="Item-wise Tax" value={itemTax} onChange={setItemTax} c={c} />
-					<SwitchRow
-						label="Item-wise Discount"
-						value={itemDiscount}
-						onChange={setItemDiscount}
-						c={c}
-					/>
-					<SwitchRow label="Show MRP" value={showMrp} onChange={setShowMrp} c={c} last />
-				</SettingsCard>
+			<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow
+					label="Party-wise Item Rates"
+					sub="Different prices per party"
+					value={partyRates}
+					onChange={setPartyRates}
+					c={c}
+				/>
+				<SwitchRow label="Item-wise Tax" value={itemTax} onChange={setItemTax} c={c} />
+				<SwitchRow
+					label="Item-wise Discount"
+					value={itemDiscount}
+					onChange={setItemDiscount}
+					c={c}
+				/>
+				<SwitchRow label="Show MRP" value={showMrp} onChange={setShowMrp} c={c} last />
+			</SettingsCard>
 
-				<SectionHeader title="Display" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow
-						label="Show Item Description"
-						value={showDesc}
-						onChange={setShowDesc}
-						c={c}
-						last
-					/>
-				</SettingsCard>
+			<SectionHeader title="Display" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow
+					label="Show Item Description"
+					value={showDesc}
+					onChange={setShowDesc}
+					c={c}
+					last
+				/>
+			</SettingsCard>
 
-				<SectionHeader title="Tracking" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow
-						label="Batch Number Tracking"
-						sub="For manufacturing & pharma"
-						value={batchNo}
-						onChange={setBatchNo}
-						c={c}
-					/>
-					<SwitchRow
-						label="Expiry Date Tracking"
-						value={expiry}
-						onChange={setExpiry}
-						c={c}
-						last
-					/>
-				</SettingsCard>
-			</ScrollView>
+			<SectionHeader title="Tracking" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow
+					label="Batch Number Tracking"
+					sub="For manufacturing & pharma"
+					value={batchNo}
+					onChange={setBatchNo}
+					c={c}
+				/>
+				<SwitchRow
+					label="Expiry Date Tracking"
+					value={expiry}
+					onChange={setExpiry}
+					c={c}
+					last
+				/>
+			</SettingsCard>
 		</Screen>
 	);
 }

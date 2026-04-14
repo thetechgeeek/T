@@ -7,7 +7,6 @@ import {
 import {
 	View,
 	StyleSheet,
-	ScrollView,
 	Platform,
 	TouchableOpacity,
 	Linking,
@@ -200,8 +199,11 @@ export default function InvoiceDetailScreen() {
 	// ── loading ──
 	if (loading) {
 		return (
-			<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
-				<ScreenHeader title="" />
+			<Screen
+				safeAreaEdges={['bottom']}
+				withKeyboard={false}
+				header={<ScreenHeader title="" />}
+			>
 				<InvoiceDetailSkeleton />
 			</Screen>
 		);
@@ -210,8 +212,11 @@ export default function InvoiceDetailScreen() {
 	// ── error / not found ──
 	if (error || !currentInvoice) {
 		return (
-			<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
-				<ScreenHeader title="Invoice" />
+			<Screen
+				safeAreaEdges={['bottom']}
+				withKeyboard={false}
+				header={<ScreenHeader title="Invoice" />}
+			>
 				<View style={styles.center}>
 					<ThemedText color={c.error} style={{ marginBottom: s.md }}>
 						{error || t('invoice.loadError')}
@@ -260,388 +265,534 @@ export default function InvoiceDetailScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['top']} withKeyboard={false}>
-			{/* ── Header ── */}
-			<ScreenHeader
-				title={invoice.invoice_number}
-				rightElement={
-					<TouchableOpacity
-						onPress={handleKebab}
-						style={styles.iconBtn}
-						accessibilityLabel="more-options"
-						accessibilityRole="button"
-					>
-						<MoreVertical size={22} color={c.onSurface} />
-					</TouchableOpacity>
-				}
-			/>
-
-			<ScrollView
-				showsVerticalScrollIndicator={false}
-				contentContainerStyle={{
-					padding: s.md,
-					paddingBottom: balanceDue > 0 ? 96 : s.xl,
-				}}
-			>
-				{/* ── Status Banner ── */}
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={
+				<ScreenHeader
+					title={invoice.invoice_number}
+					rightElement={
+						<TouchableOpacity
+							onPress={handleKebab}
+							style={styles.iconBtn}
+							accessibilityLabel="more-options"
+							accessibilityRole="button"
+						>
+							<MoreVertical size={22} color={c.onSurface} />
+						</TouchableOpacity>
+					}
+				/>
+			}
+			contentContainerStyle={{ padding: s.md, paddingBottom: s.xl }}
+			footer={
 				<View
 					style={[
-						styles.statusBanner,
+						styles.actionBar,
 						{
-							backgroundColor: statusBannerColor[effectiveStatus],
-							borderRadius: r.md,
-							marginBottom: s.md,
-							padding: s.md,
+							backgroundColor: c.background,
+							borderTopColor: c.border,
+							paddingHorizontal: s.md,
+							paddingTop: s.sm,
+							paddingBottom: Platform.OS === 'ios' ? s.lg : s.md,
 						},
 					]}
 				>
-					<View style={layout.rowBetween}>
-						<Badge
-							label={STATUS_LABEL[effectiveStatus]}
-							variant={STATUS_BADGE_VARIANT[effectiveStatus]}
-							size="md"
-						/>
-						<ThemedText variant="h2" color={statusTextColor[effectiveStatus]}>
-							{formatCurrency(invoice.grand_total)}
-						</ThemedText>
-					</View>
-					{effectiveStatus !== 'paid' &&
-						effectiveStatus !== 'draft' &&
-						effectiveStatus !== 'void' && (
-							<View style={[layout.rowBetween, { marginTop: s.xs }]}>
+					{balanceDue > 0 ? (
+						<View style={styles.actionRow}>
+							<Button
+								title={t('invoice.recordPayment')}
+								accessibilityLabel="record-payment-button"
+								style={{ flex: 1, marginRight: s.sm }}
+								onPress={() => setPaymentModalVisible(true)}
+							/>
+							<TouchableOpacity
+								style={[
+									styles.iconActionBtn,
+									{ backgroundColor: c.success, borderRadius: r.md },
+								]}
+								onPress={handleShare}
+								accessibilityRole="button"
+								accessibilityLabel="share-whatsapp"
+							>
+								<Share2 size={20} color={c.onSuccess} />
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[
+									styles.iconActionBtn,
+									{
+										backgroundColor: c.surfaceVariant,
+										borderRadius: r.md,
+										marginLeft: s.xs,
+									},
+								]}
+								onPress={() => Alert.alert('Print', 'Print feature coming soon')}
+								accessibilityRole="button"
+								accessibilityLabel="print-invoice"
+							>
+								<Printer size={20} color={c.onSurfaceVariant} />
+							</TouchableOpacity>
+						</View>
+					) : (
+						<View style={styles.actionRow}>
+							<Button
+								title={t('invoice.sharePdf')}
+								leftIcon={<Share2 size={18} color={c.onSuccess} />}
+								style={{
+									flex: 1,
+									marginRight: s.sm,
+									backgroundColor: c.success,
+								}}
+								onPress={handleShare}
+								loading={sharing}
+								accessibilityLabel="share-pdf-button"
+							/>
+							<TouchableOpacity
+								style={[
+									styles.iconActionBtn,
+									{ backgroundColor: c.surfaceVariant, borderRadius: r.md },
+								]}
+								onPress={() => Alert.alert('Print', 'Print feature coming soon')}
+								accessibilityRole="button"
+								accessibilityLabel="print-invoice"
+							>
+								<Printer size={20} color={c.onSurfaceVariant} />
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[
+									styles.iconActionBtn,
+									{
+										backgroundColor: c.surfaceVariant,
+										borderRadius: r.md,
+										marginLeft: s.xs,
+									},
+								]}
+								onPress={() =>
+									router.push(`/(app)/invoices/create?edit=${invoice.id}`)
+								}
+								accessibilityRole="button"
+								accessibilityLabel="edit-invoice"
+							>
+								<Edit2 size={20} color={c.onSurfaceVariant} />
+							</TouchableOpacity>
+						</View>
+					)}
+				</View>
+			}
+		>
+			{/* ── Status Banner ── */}
+			<View
+				style={[
+					styles.statusBanner,
+					{
+						backgroundColor: statusBannerColor[effectiveStatus],
+						borderRadius: r.md,
+						marginBottom: s.md,
+						padding: s.md,
+					},
+				]}
+			>
+				<View style={layout.rowBetween}>
+					<Badge
+						label={STATUS_LABEL[effectiveStatus]}
+						variant={STATUS_BADGE_VARIANT[effectiveStatus]}
+						size="md"
+					/>
+					<ThemedText variant="h2" color={statusTextColor[effectiveStatus]}>
+						{formatCurrency(invoice.grand_total)}
+					</ThemedText>
+				</View>
+				{effectiveStatus !== 'paid' &&
+					effectiveStatus !== 'draft' &&
+					effectiveStatus !== 'void' && (
+						<View style={[layout.rowBetween, { marginTop: s.xs }]}>
+							<ThemedText variant="caption" color={statusTextColor[effectiveStatus]}>
+								{t('invoice.amountPaid')}: {formatCurrency(invoice.amount_paid)}
+							</ThemedText>
+							{balanceDue > 0 && (
 								<ThemedText
-									variant="caption"
+									variant="captionBold"
 									color={statusTextColor[effectiveStatus]}
 								>
-									{t('invoice.amountPaid')}: {formatCurrency(invoice.amount_paid)}
+									{t('invoice.balance')}: {formatCurrency(balanceDue)}
 								</ThemedText>
-								{balanceDue > 0 && (
-									<ThemedText
-										variant="captionBold"
-										color={statusTextColor[effectiveStatus]}
-									>
-										{t('invoice.balance')}: {formatCurrency(balanceDue)}
-									</ThemedText>
-								)}
-							</View>
-						)}
-				</View>
+							)}
+						</View>
+					)}
+			</View>
 
-				{/* ── Invoice Header Card ── */}
-				<View
-					style={[
-						{ overflow: 'hidden' },
-						{
-							backgroundColor: c.card,
-							borderRadius: r.md,
-							marginBottom: s.md,
-							...(theme.shadows.sm as object),
-						},
-					]}
-				>
-					<View
-						style={[styles.cardHeader, { borderBottomColor: c.border, padding: s.md }]}
-					>
-						<ThemedText variant="captionBold" color={c.onSurfaceVariant}>
-							TAX INVOICE
+			{/* ── Invoice Header Card ── */}
+			<View
+				style={[
+					{ overflow: 'hidden' },
+					{
+						backgroundColor: c.card,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
+				<View style={[styles.cardHeader, { borderBottomColor: c.border, padding: s.md }]}>
+					<ThemedText variant="captionBold" color={c.onSurfaceVariant}>
+						TAX INVOICE
+					</ThemedText>
+					<ThemedText variant="h3">{invoice.customer_name}</ThemedText>
+				</View>
+				<View style={{ padding: s.md, gap: s.xs }}>
+					<View style={layout.rowBetween}>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							{t('invoice.invoiceNumber')}
 						</ThemedText>
-						<ThemedText variant="h3">{invoice.customer_name}</ThemedText>
+						<ThemedText variant="bodyBold">{invoice.invoice_number}</ThemedText>
 					</View>
-					<View style={{ padding: s.md, gap: s.xs }}>
+					<View style={layout.rowBetween}>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							{t('invoice.invoiceDate')}
+						</ThemedText>
+						<ThemedText>{formatDate(invoice.invoice_date)}</ThemedText>
+					</View>
+					{!!dueDateStr && (
 						<View style={layout.rowBetween}>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{t('invoice.invoiceNumber')}
+								Due Date
 							</ThemedText>
-							<ThemedText variant="bodyBold">{invoice.invoice_number}</ThemedText>
-						</View>
-						<View style={layout.rowBetween}>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{t('invoice.invoiceDate')}
+							<ThemedText
+								color={isOverdue ? c.error : c.onSurface}
+								weight={isOverdue ? 'bold' : 'regular'}
+							>
+								{formatDate(dueDateStr)}
 							</ThemedText>
-							<ThemedText>{formatDate(invoice.invoice_date)}</ThemedText>
 						</View>
-						{!!dueDateStr && (
-							<View style={layout.rowBetween}>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									Due Date
-								</ThemedText>
-								<ThemedText
-									color={isOverdue ? c.error : c.onSurface}
-									weight={isOverdue ? 'bold' : 'regular'}
-								>
-									{formatDate(dueDateStr)}
-								</ThemedText>
-							</View>
-						)}
-					</View>
+					)}
 				</View>
+			</View>
 
-				{/* ── Billed To ── */}
+			{/* ── Billed To ── */}
+			<View
+				style={[
+					{ overflow: 'hidden' },
+					{
+						backgroundColor: c.card,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
+				<SectionHeader
+					title={t('invoice.billedTo')}
+					titleColor={c.onSurfaceVariant}
+					style={{
+						borderBottomColor: c.border,
+						borderBottomWidth: StyleSheet.hairlineWidth,
+						paddingHorizontal: s.md,
+						paddingVertical: s.md,
+					}}
+				/>
+				<View style={{ padding: s.md, gap: s.xs }}>
+					<ThemedText variant="h3">{invoice.customer_name}</ThemedText>
+					{!!invoice.customer_phone && (
+						<TouchableOpacity
+							onPress={() => handleCall(invoice.customer_phone)}
+							style={layout.row}
+							accessibilityRole="button"
+							accessibilityLabel={`Call ${invoice.customer_phone}`}
+						>
+							<Phone
+								size={14}
+								color={c.primary}
+								style={{ marginRight: SPACING_PX.xs }}
+							/>
+							<ThemedText color={c.primary}>{invoice.customer_phone}</ThemedText>
+						</TouchableOpacity>
+					)}
+					{!!invoice.customer_gstin && (
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							{t('customer.gstin')}: {invoice.customer_gstin}
+						</ThemedText>
+					)}
+					{!!invoice.customer_address && (
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							{invoice.customer_address}
+						</ThemedText>
+					)}
+				</View>
+			</View>
+
+			{/* ── Line Items Table ── */}
+			<View
+				style={[
+					{ overflow: 'hidden' },
+					{
+						backgroundColor: c.card,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
+				{/* Table Header */}
 				<View
 					style={[
-						{ overflow: 'hidden' },
+						styles.tableRow,
 						{
-							backgroundColor: c.card,
-							borderRadius: r.md,
-							marginBottom: s.md,
-							...(theme.shadows.sm as object),
-						},
-					]}
-				>
-					<SectionHeader
-						title={t('invoice.billedTo')}
-						titleColor={c.onSurfaceVariant}
-						style={{
 							borderBottomColor: c.border,
 							borderBottomWidth: StyleSheet.hairlineWidth,
+							backgroundColor: c.surfaceVariant,
+							borderTopLeftRadius: r.md,
+							borderTopRightRadius: r.md,
+							paddingVertical: s.xs,
 							paddingHorizontal: s.md,
-							paddingVertical: s.md,
-						}}
-					/>
-					<View style={{ padding: s.md, gap: s.xs }}>
-						<ThemedText variant="h3">{invoice.customer_name}</ThemedText>
-						{!!invoice.customer_phone && (
-							<TouchableOpacity
-								onPress={() => handleCall(invoice.customer_phone)}
-								style={layout.row}
-								accessibilityRole="button"
-								accessibilityLabel={`Call ${invoice.customer_phone}`}
-							>
-								<Phone
-									size={14}
-									color={c.primary}
-									style={{ marginRight: SPACING_PX.xs }}
-								/>
-								<ThemedText color={c.primary}>{invoice.customer_phone}</ThemedText>
-							</TouchableOpacity>
-						)}
-						{!!invoice.customer_gstin && (
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{t('customer.gstin')}: {invoice.customer_gstin}
-							</ThemedText>
-						)}
-						{!!invoice.customer_address && (
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{invoice.customer_address}
-							</ThemedText>
-						)}
-					</View>
-				</View>
-
-				{/* ── Line Items Table ── */}
-				<View
-					style={[
-						{ overflow: 'hidden' },
-						{
-							backgroundColor: c.card,
-							borderRadius: r.md,
-							marginBottom: s.md,
-							...(theme.shadows.sm as object),
 						},
 					]}
 				>
-					{/* Table Header */}
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.colDesc}>
+						ITEM
+					</ThemedText>
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.colQty}>
+						QTY
+					</ThemedText>
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.colRate}>
+						RATE
+					</ThemedText>
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.colGst}>
+						GST%
+					</ThemedText>
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.colAmt}>
+						AMT
+					</ThemedText>
+				</View>
+
+				{/* Table Rows */}
+				{invoice.line_items?.map((item, index) => (
 					<View
+						key={item.id}
 						style={[
 							styles.tableRow,
 							{
 								borderBottomColor: c.border,
-								borderBottomWidth: StyleSheet.hairlineWidth,
-								backgroundColor: c.surfaceVariant,
-								borderTopLeftRadius: r.md,
-								borderTopRightRadius: r.md,
-								paddingVertical: s.xs,
+								borderBottomWidth:
+									index === (invoice.line_items?.length ?? 0) - 1
+										? 0
+										: StyleSheet.hairlineWidth,
+								paddingVertical: s.sm,
 								paddingHorizontal: s.md,
 							},
 						]}
 					>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.colDesc}
-						>
-							ITEM
+						<View style={styles.colDesc}>
+							<ThemedText variant="body" weight="semibold" numberOfLines={2}>
+								{item.design_name}
+							</ThemedText>
+							{!!item.description && (
+								<ThemedText variant="caption" color={c.onSurfaceVariant}>
+									{item.description}
+								</ThemedText>
+							)}
+							{!!item.hsn_code && (
+								<ThemedText variant="caption" color={c.onSurfaceVariant}>
+									HSN: {item.hsn_code}
+								</ThemedText>
+							)}
+						</View>
+						<ThemedText variant="caption" style={styles.colQty}>
+							{item.quantity}
 						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.colQty}
-						>
-							QTY
+						<ThemedText variant="caption" style={styles.colRate}>
+							{formatCurrency(item.rate_per_unit, false)}
 						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.colRate}
-						>
-							RATE
+						<ThemedText variant="caption" style={styles.colGst}>
+							{item.gst_rate}%
 						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.colGst}
-						>
-							GST%
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.colAmt}
-						>
-							AMT
+						<ThemedText variant="caption" weight="semibold" style={styles.colAmt}>
+							{formatCurrency(item.line_total, false)}
 						</ThemedText>
 					</View>
+				))}
+			</View>
 
-					{/* Table Rows */}
-					{invoice.line_items?.map((item, index) => (
-						<View
-							key={item.id}
-							style={[
-								styles.tableRow,
-								{
-									borderBottomColor: c.border,
-									borderBottomWidth:
-										index === (invoice.line_items?.length ?? 0) - 1
-											? 0
-											: StyleSheet.hairlineWidth,
-									paddingVertical: s.sm,
-									paddingHorizontal: s.md,
-								},
-							]}
-						>
-							<View style={styles.colDesc}>
-								<ThemedText variant="body" weight="semibold" numberOfLines={2}>
-									{item.design_name}
-								</ThemedText>
-								{!!item.description && (
-									<ThemedText variant="caption" color={c.onSurfaceVariant}>
-										{item.description}
-									</ThemedText>
-								)}
-								{!!item.hsn_code && (
-									<ThemedText variant="caption" color={c.onSurfaceVariant}>
-										HSN: {item.hsn_code}
-									</ThemedText>
-								)}
-							</View>
-							<ThemedText variant="caption" style={styles.colQty}>
-								{item.quantity}
+			{/* ── Totals Section ── */}
+			<View
+				style={[
+					{ overflow: 'hidden' },
+					{
+						backgroundColor: c.card,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
+				<SectionHeader
+					title={t('invoice.summary')}
+					titleColor={c.onSurfaceVariant}
+					variant="uppercase"
+					style={{
+						borderBottomColor: c.border,
+						borderBottomWidth: StyleSheet.hairlineWidth,
+						paddingHorizontal: s.md,
+						paddingVertical: s.md,
+					}}
+				/>
+				<View style={{ padding: s.md, gap: s.sm }}>
+					<View style={layout.rowBetween}>
+						<ThemedText color={c.onSurfaceVariant}>{t('invoice.subtotal')}</ThemedText>
+						<ThemedText>{formatCurrency(invoice.subtotal)}</ThemedText>
+					</View>
+					{invoice.discount_total > 0 && (
+						<View style={layout.rowBetween}>
+							<ThemedText color={c.onSurfaceVariant}>
+								{t('invoice.discount')}
 							</ThemedText>
-							<ThemedText variant="caption" style={styles.colRate}>
-								{formatCurrency(item.rate_per_unit, false)}
-							</ThemedText>
-							<ThemedText variant="caption" style={styles.colGst}>
-								{item.gst_rate}%
-							</ThemedText>
-							<ThemedText variant="caption" weight="semibold" style={styles.colAmt}>
-								{formatCurrency(item.line_total, false)}
+							<ThemedText color={c.success}>
+								- {formatCurrency(invoice.discount_total)}
 							</ThemedText>
 						</View>
-					))}
-				</View>
+					)}
 
-				{/* ── Totals Section ── */}
-				<View
-					style={[
-						{ overflow: 'hidden' },
-						{
-							backgroundColor: c.card,
-							borderRadius: r.md,
-							marginBottom: s.md,
-							...(theme.shadows.sm as object),
-						},
-					]}
+					{/* GST Breakdown */}
+					{invoice.is_inter_state ? (
+						<View style={layout.rowBetween}>
+							<ThemedText color={c.onSurfaceVariant}>{t('invoice.igst')}</ThemedText>
+							<ThemedText>{formatCurrency(invoice.igst_total)}</ThemedText>
+						</View>
+					) : (
+						<>
+							{invoice.cgst_total > 0 && (
+								<View style={layout.rowBetween}>
+									<ThemedText color={c.onSurfaceVariant}>
+										{t('invoice.cgst')}
+									</ThemedText>
+									<ThemedText>{formatCurrency(invoice.cgst_total)}</ThemedText>
+								</View>
+							)}
+							{invoice.sgst_total > 0 && (
+								<View style={layout.rowBetween}>
+									<ThemedText color={c.onSurfaceVariant}>
+										{t('invoice.sgst')}
+									</ThemedText>
+									<ThemedText>{formatCurrency(invoice.sgst_total)}</ThemedText>
+								</View>
+							)}
+						</>
+					)}
+
+					<Divider style={{ marginVertical: s.xs }} />
+
+					<View style={layout.rowBetween}>
+						<ThemedText variant="bodyBold">{t('invoice.grandTotal')}</ThemedText>
+						<ThemedText variant="amountLarge" color={c.primary}>
+							{formatCurrency(invoice.grand_total)}
+						</ThemedText>
+					</View>
+				</View>
+			</View>
+
+			{/* ── Amount in Words ── */}
+			<View
+				style={[
+					{
+						backgroundColor: c.surfaceVariant,
+						borderRadius: r.sm,
+						padding: s.sm,
+						marginBottom: s.md,
+					},
+				]}
+			>
+				<ThemedText variant="caption" color={c.onSurfaceVariant}>
+					{numberToWords(invoice.grand_total)}
+				</ThemedText>
+			</View>
+
+			{/* ── Payment History (Collapsible) ── */}
+			<View
+				style={[
+					{ overflow: 'hidden' },
+					{
+						backgroundColor: c.card,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
+				<TouchableOpacity
+					onPress={() => setPaymentsExpanded((v) => !v)}
+					accessibilityRole="button"
+					accessibilityLabel="Toggle payment history"
 				>
 					<SectionHeader
-						title={t('invoice.summary')}
+						title={t('common.payments')}
 						titleColor={c.onSurfaceVariant}
 						variant="uppercase"
+						action={
+							paymentsExpanded ? (
+								<ChevronUp size={18} color={c.onSurfaceVariant} />
+							) : (
+								<ChevronDown size={18} color={c.onSurfaceVariant} />
+							)
+						}
 						style={{
 							borderBottomColor: c.border,
-							borderBottomWidth: StyleSheet.hairlineWidth,
+							borderBottomWidth: paymentsExpanded ? StyleSheet.hairlineWidth : 0,
 							paddingHorizontal: s.md,
 							paddingVertical: s.md,
 						}}
 					/>
-					<View style={{ padding: s.md, gap: s.sm }}>
-						<View style={layout.rowBetween}>
-							<ThemedText color={c.onSurfaceVariant}>
-								{t('invoice.subtotal')}
-							</ThemedText>
-							<ThemedText>{formatCurrency(invoice.subtotal)}</ThemedText>
-						</View>
-						{invoice.discount_total > 0 && (
-							<View style={layout.rowBetween}>
-								<ThemedText color={c.onSurfaceVariant}>
-									{t('invoice.discount')}
-								</ThemedText>
-								<ThemedText color={c.success}>
-									- {formatCurrency(invoice.discount_total)}
-								</ThemedText>
-							</View>
-						)}
+				</TouchableOpacity>
 
-						{/* GST Breakdown */}
-						{invoice.is_inter_state ? (
+				{paymentsExpanded && (
+					<View style={{ padding: s.md, gap: s.sm }}>
+						{invoice.amount_paid > 0 ? (
 							<View style={layout.rowBetween}>
-								<ThemedText color={c.onSurfaceVariant}>
-									{t('invoice.igst')}
+								<ThemedText color={c.onSurfaceVariant}>Amount Received</ThemedText>
+								<ThemedText weight="semibold" color={c.success}>
+									{formatCurrency(invoice.amount_paid)}
 								</ThemedText>
-								<ThemedText>{formatCurrency(invoice.igst_total)}</ThemedText>
 							</View>
 						) : (
-							<>
-								{invoice.cgst_total > 0 && (
-									<View style={layout.rowBetween}>
-										<ThemedText color={c.onSurfaceVariant}>
-											{t('invoice.cgst')}
-										</ThemedText>
-										<ThemedText>
-											{formatCurrency(invoice.cgst_total)}
-										</ThemedText>
-									</View>
-								)}
-								{invoice.sgst_total > 0 && (
-									<View style={layout.rowBetween}>
-										<ThemedText color={c.onSurfaceVariant}>
-											{t('invoice.sgst')}
-										</ThemedText>
-										<ThemedText>
-											{formatCurrency(invoice.sgst_total)}
-										</ThemedText>
-									</View>
-								)}
-							</>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								No payments recorded yet.
+							</ThemedText>
 						)}
 
 						<Divider style={{ marginVertical: s.xs }} />
 
 						<View style={layout.rowBetween}>
-							<ThemedText variant="bodyBold">{t('invoice.grandTotal')}</ThemedText>
-							<ThemedText variant="amountLarge" color={c.primary}>
-								{formatCurrency(invoice.grand_total)}
+							<ThemedText color={c.onSurfaceVariant}>Total Received</ThemedText>
+							<ThemedText weight="semibold" color={c.success}>
+								{formatCurrency(invoice.amount_paid)}
 							</ThemedText>
 						</View>
+						<View style={layout.rowBetween}>
+							<ThemedText color={balanceDue > 0 ? c.error : c.onSurfaceVariant}>
+								Balance Due
+							</ThemedText>
+							<ThemedText
+								weight="semibold"
+								color={balanceDue > 0 ? c.error : c.success}
+							>
+								{formatCurrency(balanceDue)}
+							</ThemedText>
+						</View>
+
+						{balanceDue > 0 && (
+							<Button
+								title="+ Record Payment"
+								variant="outline"
+								size="sm"
+								style={{ marginTop: s.xs }}
+								onPress={() => setPaymentModalVisible(true)}
+								accessibilityLabel="record-payment-inline"
+							/>
+						)}
 					</View>
-				</View>
+				)}
+			</View>
 
-				{/* ── Amount in Words ── */}
-				<View
-					style={[
-						{
-							backgroundColor: c.surfaceVariant,
-							borderRadius: r.sm,
-							padding: s.sm,
-							marginBottom: s.md,
-						},
-					]}
-				>
-					<ThemedText variant="caption" color={c.onSurfaceVariant}>
-						{numberToWords(invoice.grand_total)}
-					</ThemedText>
-				</View>
-
-				{/* ── Payment History (Collapsible) ── */}
+			{/* ── Notes / Terms ── */}
+			{(!!invoice.notes || !!invoice.terms) && (
 				<View
 					style={[
 						{ overflow: 'hidden' },
@@ -653,216 +804,33 @@ export default function InvoiceDetailScreen() {
 						},
 					]}
 				>
-					<TouchableOpacity
-						onPress={() => setPaymentsExpanded((v) => !v)}
-						accessibilityRole="button"
-						accessibilityLabel="Toggle payment history"
-					>
-						<SectionHeader
-							title={t('common.payments')}
-							titleColor={c.onSurfaceVariant}
-							variant="uppercase"
-							action={
-								paymentsExpanded ? (
-									<ChevronUp size={18} color={c.onSurfaceVariant} />
-								) : (
-									<ChevronDown size={18} color={c.onSurfaceVariant} />
-								)
-							}
-							style={{
-								borderBottomColor: c.border,
-								borderBottomWidth: paymentsExpanded ? StyleSheet.hairlineWidth : 0,
-								paddingHorizontal: s.md,
-								paddingVertical: s.md,
-							}}
-						/>
-					</TouchableOpacity>
-
-					{paymentsExpanded && (
-						<View style={{ padding: s.md, gap: s.sm }}>
-							{invoice.amount_paid > 0 ? (
-								<View style={layout.rowBetween}>
-									<ThemedText color={c.onSurfaceVariant}>
-										Amount Received
-									</ThemedText>
-									<ThemedText weight="semibold" color={c.success}>
-										{formatCurrency(invoice.amount_paid)}
-									</ThemedText>
-								</View>
-							) : (
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									No payments recorded yet.
-								</ThemedText>
-							)}
-
-							<Divider style={{ marginVertical: s.xs }} />
-
-							<View style={layout.rowBetween}>
-								<ThemedText color={c.onSurfaceVariant}>Total Received</ThemedText>
-								<ThemedText weight="semibold" color={c.success}>
-									{formatCurrency(invoice.amount_paid)}
-								</ThemedText>
-							</View>
-							<View style={layout.rowBetween}>
-								<ThemedText color={balanceDue > 0 ? c.error : c.onSurfaceVariant}>
-									Balance Due
-								</ThemedText>
-								<ThemedText
-									weight="semibold"
-									color={balanceDue > 0 ? c.error : c.success}
-								>
-									{formatCurrency(balanceDue)}
-								</ThemedText>
-							</View>
-
-							{balanceDue > 0 && (
-								<Button
-									title="+ Record Payment"
-									variant="outline"
-									size="sm"
-									style={{ marginTop: s.xs }}
-									onPress={() => setPaymentModalVisible(true)}
-									accessibilityLabel="record-payment-inline"
-								/>
-							)}
+					{!!invoice.notes && (
+						<View style={{ padding: s.md }}>
+							<ThemedText
+								variant="captionBold"
+								color={c.onSurfaceVariant}
+								style={{ marginBottom: s.xs }}
+							>
+								NOTES
+							</ThemedText>
+							<ThemedText variant="caption">{invoice.notes}</ThemedText>
+						</View>
+					)}
+					{!!invoice.notes && !!invoice.terms && <Divider />}
+					{!!invoice.terms && (
+						<View style={{ padding: s.md }}>
+							<ThemedText
+								variant="captionBold"
+								color={c.onSurfaceVariant}
+								style={{ marginBottom: s.xs }}
+							>
+								TERMS & CONDITIONS
+							</ThemedText>
+							<ThemedText variant="caption">{invoice.terms}</ThemedText>
 						</View>
 					)}
 				</View>
-
-				{/* ── Notes / Terms ── */}
-				{(!!invoice.notes || !!invoice.terms) && (
-					<View
-						style={[
-							{ overflow: 'hidden' },
-							{
-								backgroundColor: c.card,
-								borderRadius: r.md,
-								marginBottom: s.md,
-								...(theme.shadows.sm as object),
-							},
-						]}
-					>
-						{!!invoice.notes && (
-							<View style={{ padding: s.md }}>
-								<ThemedText
-									variant="captionBold"
-									color={c.onSurfaceVariant}
-									style={{ marginBottom: s.xs }}
-								>
-									NOTES
-								</ThemedText>
-								<ThemedText variant="caption">{invoice.notes}</ThemedText>
-							</View>
-						)}
-						{!!invoice.notes && !!invoice.terms && <Divider />}
-						{!!invoice.terms && (
-							<View style={{ padding: s.md }}>
-								<ThemedText
-									variant="captionBold"
-									color={c.onSurfaceVariant}
-									style={{ marginBottom: s.xs }}
-								>
-									TERMS & CONDITIONS
-								</ThemedText>
-								<ThemedText variant="caption">{invoice.terms}</ThemedText>
-							</View>
-						)}
-					</View>
-				)}
-			</ScrollView>
-
-			{/* ── Sticky Action Bar ── */}
-			<View
-				style={[
-					styles.actionBar,
-					{
-						backgroundColor: c.background,
-						borderTopColor: c.border,
-						paddingHorizontal: s.md,
-						paddingTop: s.sm,
-						paddingBottom: Platform.OS === 'ios' ? s.lg : s.md,
-					},
-				]}
-			>
-				{balanceDue > 0 ? (
-					<View style={styles.actionRow}>
-						<Button
-							title={t('invoice.recordPayment')}
-							accessibilityLabel="record-payment-button"
-							style={{ flex: 1, marginRight: s.sm }}
-							onPress={() => setPaymentModalVisible(true)}
-						/>
-						<TouchableOpacity
-							style={[
-								styles.iconActionBtn,
-								{ backgroundColor: c.success, borderRadius: r.md },
-							]}
-							onPress={handleShare}
-							accessibilityRole="button"
-							accessibilityLabel="share-whatsapp"
-						>
-							<Share2 size={20} color={c.onSuccess} />
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={[
-								styles.iconActionBtn,
-								{
-									backgroundColor: c.surfaceVariant,
-									borderRadius: r.md,
-									marginLeft: s.xs,
-								},
-							]}
-							onPress={() => Alert.alert('Print', 'Print feature coming soon')}
-							accessibilityRole="button"
-							accessibilityLabel="print-invoice"
-						>
-							<Printer size={20} color={c.onSurfaceVariant} />
-						</TouchableOpacity>
-					</View>
-				) : (
-					<View style={styles.actionRow}>
-						<Button
-							title={t('invoice.sharePdf')}
-							leftIcon={<Share2 size={18} color={c.onSuccess} />}
-							style={{
-								flex: 1,
-								marginRight: s.sm,
-								backgroundColor: c.success,
-							}}
-							onPress={handleShare}
-							loading={sharing}
-							accessibilityLabel="share-pdf-button"
-						/>
-						<TouchableOpacity
-							style={[
-								styles.iconActionBtn,
-								{ backgroundColor: c.surfaceVariant, borderRadius: r.md },
-							]}
-							onPress={() => Alert.alert('Print', 'Print feature coming soon')}
-							accessibilityRole="button"
-							accessibilityLabel="print-invoice"
-						>
-							<Printer size={20} color={c.onSurfaceVariant} />
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={[
-								styles.iconActionBtn,
-								{
-									backgroundColor: c.surfaceVariant,
-									borderRadius: r.md,
-									marginLeft: s.xs,
-								},
-							]}
-							onPress={() => router.push(`/(app)/invoices/create?edit=${invoice.id}`)}
-							accessibilityRole="button"
-							accessibilityLabel="edit-invoice"
-						>
-							<Edit2 size={20} color={c.onSurfaceVariant} />
-						</TouchableOpacity>
-					</View>
-				)}
-			</View>
-
+			)}
 			{/* ── Payment Modal ── */}
 			<PaymentModal
 				visible={paymentModalVisible}

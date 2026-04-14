@@ -1,6 +1,6 @@
 import { BORDER_WIDTH_BASE, BORDER_WIDTH_MEDIUM, OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
-import { View, Switch, ScrollView, StyleSheet, TextInput, Pressable } from 'react-native';
+import { View, Switch, StyleSheet, TextInput, Pressable } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -67,139 +67,137 @@ export default function GstSettingsScreen() {
 	const [additionalCess, setAdditionalCess] = useState(false);
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="GST Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
-				{/* GST Registered toggle card */}
-				<View
-					style={[
-						styles.gstCard,
-						{
-							backgroundColor: gstRegistered
-								? withOpacity(c.primary, OPACITY_TINT_LIGHT)
-								: c.surface,
-							borderColor: gstRegistered ? c.primary : c.border,
-						},
-					]}
-				>
-					<View style={{ flex: 1 }}>
-						<ThemedText variant="body" weight="bold">
-							GST Registered Business
-						</ThemedText>
-						<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
-							{gstRegistered
-								? 'GSTIN & GST fields active'
-								: 'Enable to configure GST settings'}
-						</ThemedText>
-					</View>
-					<Switch
-						trackColor={{ true: c.primary, false: c.border }}
-						value={gstRegistered}
-						onValueChange={setGstRegistered}
-					/>
+		<Screen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="GST Settings" />}
+			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
+		>
+			{/* GST Registered toggle card */}
+			<View
+				style={[
+					styles.gstCard,
+					{
+						backgroundColor: gstRegistered
+							? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+							: c.surface,
+						borderColor: gstRegistered ? c.primary : c.border,
+					},
+				]}
+			>
+				<View style={{ flex: 1 }}>
+					<ThemedText variant="body" weight="bold">
+						GST Registered Business
+					</ThemedText>
+					<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
+						{gstRegistered
+							? 'GSTIN & GST fields active'
+							: 'Enable to configure GST settings'}
+					</ThemedText>
 				</View>
+				<Switch
+					trackColor={{ true: c.primary, false: c.border }}
+					value={gstRegistered}
+					onValueChange={setGstRegistered}
+				/>
+			</View>
 
-				{gstRegistered && (
-					<>
-						<SectionHeader title="GSTIN" variant="uppercase" titleColor={c.primary} />
-						<SettingsCard
-							style={{
-								marginHorizontal: SPACING_PX.lg,
-								overflow: 'hidden',
-								backgroundColor: c.surface,
-								borderWidth: 0,
-							}}
-							padding="md"
+			{gstRegistered && (
+				<>
+					<SectionHeader title="GSTIN" variant="uppercase" titleColor={c.primary} />
+					<SettingsCard
+						style={{
+							marginHorizontal: SPACING_PX.lg,
+							overflow: 'hidden',
+							backgroundColor: c.surface,
+							borderWidth: 0,
+						}}
+						padding="md"
+					>
+						<ThemedText
+							variant="caption"
+							style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.xs }}
 						>
-							<ThemedText
-								variant="caption"
-								style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.xs }}
-							>
-								GSTIN Number
-							</ThemedText>
-							<TextInput
-								value={gstin}
-								onChangeText={(v) => setGstin(v.toUpperCase())}
-								placeholder="22AAAAA0000A1Z5"
-								placeholderTextColor={c.placeholder}
-								maxLength={15}
-								autoCapitalize="characters"
+							GSTIN Number
+						</ThemedText>
+						<TextInput
+							value={gstin}
+							onChangeText={(v) => setGstin(v.toUpperCase())}
+							placeholder="22AAAAA0000A1Z5"
+							placeholderTextColor={c.placeholder}
+							maxLength={15}
+							autoCapitalize="characters"
+							style={[
+								styles.textInput,
+								{ borderColor: c.border, color: c.onSurface },
+							]}
+						/>
+					</SettingsCard>
+
+					<SectionHeader
+						title="GST Filing Period"
+						variant="uppercase"
+						titleColor={c.primary}
+					/>
+					<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
+						{(['monthly', 'quarterly'] as FilingPeriod[]).map((p) => (
+							<Pressable
+								key={p}
+								onPress={() => setFilingPeriod(p)}
 								style={[
-									styles.textInput,
-									{ borderColor: c.border, color: c.onSurface },
+									styles.chip,
+									filingPeriod === p
+										? { backgroundColor: c.primary, borderColor: c.primary }
+										: { backgroundColor: c.surface, borderColor: c.border },
 								]}
-							/>
-						</SettingsCard>
-
-						<SectionHeader
-							title="GST Filing Period"
-							variant="uppercase"
-							titleColor={c.primary}
-						/>
-						<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
-							{(['monthly', 'quarterly'] as FilingPeriod[]).map((p) => (
-								<Pressable
-									key={p}
-									onPress={() => setFilingPeriod(p)}
-									style={[
-										styles.chip,
-										filingPeriod === p
-											? { backgroundColor: c.primary, borderColor: c.primary }
-											: { backgroundColor: c.surface, borderColor: c.border },
-									]}
+							>
+								<ThemedText
+									variant="label"
+									weight="semibold"
+									style={{
+										color: filingPeriod === p ? c.onPrimary : c.onSurface,
+									}}
 								>
-									<ThemedText
-										variant="label"
-										weight="semibold"
-										style={{
-											color: filingPeriod === p ? c.onPrimary : c.onSurface,
-										}}
-									>
-										{p === 'monthly' ? 'Monthly' : 'Quarterly'}
-									</ThemedText>
-								</Pressable>
-							))}
-						</View>
+									{p === 'monthly' ? 'Monthly' : 'Quarterly'}
+								</ThemedText>
+							</Pressable>
+						))}
+					</View>
 
-						<SectionHeader
-							title="GST Options"
-							variant="uppercase"
-							titleColor={c.primary}
+					<SectionHeader title="GST Options" variant="uppercase" titleColor={c.primary} />
+					<SettingsCard
+						padding="none"
+						style={{
+							marginHorizontal: SPACING_PX.lg,
+							overflow: 'hidden',
+							backgroundColor: c.surface,
+							borderWidth: 0,
+						}}
+					>
+						<SwitchRow
+							label="Composite Scheme"
+							sub="For turnover under ₹1.5 crore"
+							value={composite}
+							onChange={setComposite}
+							c={c}
 						/>
-						<SettingsCard
-							padding="none"
-							style={{
-								marginHorizontal: SPACING_PX.lg,
-								overflow: 'hidden',
-								backgroundColor: c.surface,
-								borderWidth: 0,
-							}}
-						>
-							<SwitchRow
-								label="Composite Scheme"
-								sub="For turnover under ₹1.5 crore"
-								value={composite}
-								onChange={setComposite}
-								c={c}
-							/>
-							<SwitchRow
-								label="Show HSN/SAC Code Fields"
-								value={showHsn}
-								onChange={setShowHsn}
-								c={c}
-							/>
-							<SwitchRow
-								label="Additional Cess"
-								sub="For tobacco, pan masala etc."
-								value={additionalCess}
-								onChange={setAdditionalCess}
-								c={c}
-								last
-							/>
-						</SettingsCard>
-					</>
-				)}
-			</ScrollView>
+						<SwitchRow
+							label="Show HSN/SAC Code Fields"
+							value={showHsn}
+							onChange={setShowHsn}
+							c={c}
+						/>
+						<SwitchRow
+							label="Additional Cess"
+							sub="For tobacco, pan masala etc."
+							value={additionalCess}
+							onChange={setAdditionalCess}
+							c={c}
+							last
+						/>
+					</SettingsCard>
+				</>
+			)}
 		</Screen>
 	);
 }

@@ -83,8 +83,11 @@ export default function ReportsHubScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']} scrollable>
-			<ScreenHeader title="Reports" />
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Reports" />}
+		>
 			<View style={{ padding: s.lg }}>
 				{reportCards.map((card) => (
 					<TouchableCard

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { View, TextInput, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,6 +8,7 @@ import { Camera, X } from 'lucide-react-native';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { businessProfileService } from '@/src/services/businessProfileService';
+import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { storageService } from '@/src/services/storageService';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
@@ -145,135 +146,140 @@ export default function SetupScreen() {
 	];
 
 	return (
-		<View style={[styles.root, { backgroundColor: c.background }]}>
-			{/* Progress Bar */}
-			<View style={[styles.progressTrack, { backgroundColor: c.border }]}>
+		<Screen
+			safeAreaEdges={['top', 'bottom']}
+			scrollable
+			backgroundColor={c.background}
+			header={
+				<>
+					<View style={[styles.progressTrack, { backgroundColor: c.border }]}>
+						<View
+							style={[
+								styles.progressFill,
+								{
+									backgroundColor: c.primary,
+									width: `${progressFraction * 100}%`,
+								},
+							]}
+						/>
+					</View>
+
+					<View style={styles.stepIndicatorRow}>
+						<ThemedText
+							testID="step-indicator"
+							variant="caption"
+							style={{ color: c.onSurfaceVariant }}
+						>
+							{`चरण ${step} / ${TOTAL_STEPS}`}
+						</ThemedText>
+					</View>
+
+					<View style={{ paddingHorizontal: s.lg }}>
+						<ThemedText variant="h2" style={{ color: c.onSurface, marginBottom: s.sm }}>
+							{stepTitles[step - 1]}
+						</ThemedText>
+					</View>
+				</>
+			}
+			contentContainerStyle={{ padding: s.lg, paddingTop: s.sm }}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+			footer={
 				<View
 					style={[
-						styles.progressFill,
-						{
-							backgroundColor: c.primary,
-							width: `${progressFraction * 100}%`,
-						},
+						styles.actionBar,
+						{ borderTopColor: c.border, backgroundColor: c.surface },
 					]}
-				/>
-			</View>
-
-			{/* Step Indicator */}
-			<View style={styles.stepIndicatorRow}>
-				<ThemedText
-					testID="step-indicator"
-					variant="caption"
-					style={{ color: c.onSurfaceVariant }}
 				>
-					{`चरण ${step} / ${TOTAL_STEPS}`}
-				</ThemedText>
-			</View>
-
-			{/* Step Title */}
-			<View style={{ paddingHorizontal: s.lg }}>
-				<ThemedText variant="h2" style={{ color: c.onSurface, marginBottom: s.sm }}>
-					{stepTitles[step - 1]}
-				</ThemedText>
-			</View>
-
-			{/* Content */}
-			<ScrollView
-				style={{ flex: 1 }}
-				contentContainerStyle={{ padding: s.lg, paddingTop: s.sm }}
-				keyboardShouldPersistTaps="handled"
-			>
-				{step === 1 && <Step1 data={data} update={update} c={c} s={s} r={r} typo={typo} />}
-				{step === 2 && <Step2 data={data} update={update} c={c} s={s} r={r} typo={typo} />}
-				{step === 3 && <Step3 data={data} update={update} c={c} s={s} r={r} />}
-				{step === 4 && <Step4 data={data} update={update} c={c} s={s} r={r} typo={typo} />}
-
-				{error ? (
-					<ThemedText
-						variant="label"
-						style={{ color: c.error, marginTop: s.md, textAlign: 'center' }}
-					>
-						{error}
-					</ThemedText>
-				) : null}
-			</ScrollView>
-
-			{/* Bottom Action Bar */}
-			<View
-				style={[styles.actionBar, { borderTopColor: c.border, backgroundColor: c.surface }]}
-			>
-				{step > 1 ? (
-					<Pressable
-						testID="back-button"
-						onPress={handleBack}
-						accessibilityRole="button"
-						style={[
-							styles.actionBtn,
-							styles.backBtn,
-							{ borderColor: c.primary, borderRadius: r.md },
-						]}
-					>
-						<ThemedText variant="body" style={{ color: c.primary, fontWeight: '600' }}>
-							← वापस
-						</ThemedText>
-					</Pressable>
-				) : (
-					<View style={styles.actionBtn} />
-				)}
-
-				{step < TOTAL_STEPS ? (
-					<Pressable
-						testID="next-button"
-						onPress={handleNext}
-						disabled={!canGoNext()}
-						accessibilityRole="button"
-						accessibilityState={{ disabled: !canGoNext() }}
-						style={[
-							styles.actionBtn,
-							{
-								backgroundColor: canGoNext() ? c.primary : c.surfaceVariant,
-								borderRadius: r.md,
-							},
-						]}
-					>
-						<ThemedText
-							variant="body"
-							style={{
-								color: canGoNext() ? c.onPrimary : c.placeholder,
-								fontWeight: '700',
-							}}
+					{step > 1 ? (
+						<Pressable
+							testID="back-button"
+							onPress={handleBack}
+							accessibilityRole="button"
+							style={[
+								styles.actionBtn,
+								styles.backBtn,
+								{ borderColor: c.primary, borderRadius: r.md },
+							]}
 						>
-							अगला →
-						</ThemedText>
-					</Pressable>
-				) : (
-					<Pressable
-						testID="finish-button"
-						onPress={handleFinish}
-						disabled={loading}
-						accessibilityRole="button"
-						accessibilityState={{ disabled: loading }}
-						style={[
-							styles.actionBtn,
-							{
-								backgroundColor: loading ? c.surfaceVariant : c.primary,
-								borderRadius: r.md,
-							},
-						]}
-					>
-						<ThemedText
-							variant="body"
-							style={{
-								color: loading ? c.placeholder : c.onPrimary,
-								fontWeight: '700',
-							}}
+							<ThemedText
+								variant="body"
+								style={{ color: c.primary, fontWeight: '600' }}
+							>
+								← वापस
+							</ThemedText>
+						</Pressable>
+					) : (
+						<View style={styles.actionBtn} />
+					)}
+
+					{step < TOTAL_STEPS ? (
+						<Pressable
+							testID="next-button"
+							onPress={handleNext}
+							disabled={!canGoNext()}
+							accessibilityRole="button"
+							accessibilityState={{ disabled: !canGoNext() }}
+							style={[
+								styles.actionBtn,
+								{
+									backgroundColor: canGoNext() ? c.primary : c.surfaceVariant,
+									borderRadius: r.md,
+								},
+							]}
 						>
-							{loading ? 'Save हो रहा है...' : 'Setup पूरी करें ✓'}
-						</ThemedText>
-					</Pressable>
-				)}
-			</View>
-		</View>
+							<ThemedText
+								variant="body"
+								style={{
+									color: canGoNext() ? c.onPrimary : c.placeholder,
+									fontWeight: '700',
+								}}
+							>
+								अगला →
+							</ThemedText>
+						</Pressable>
+					) : (
+						<Pressable
+							testID="finish-button"
+							onPress={handleFinish}
+							disabled={loading}
+							accessibilityRole="button"
+							accessibilityState={{ disabled: loading }}
+							style={[
+								styles.actionBtn,
+								{
+									backgroundColor: loading ? c.surfaceVariant : c.primary,
+									borderRadius: r.md,
+								},
+							]}
+						>
+							<ThemedText
+								variant="body"
+								style={{
+									color: loading ? c.placeholder : c.onPrimary,
+									fontWeight: '700',
+								}}
+							>
+								{loading ? 'Save हो रहा है...' : 'Setup पूरी करें ✓'}
+							</ThemedText>
+						</Pressable>
+					)}
+				</View>
+			}
+		>
+			{step === 1 && <Step1 data={data} update={update} c={c} s={s} r={r} typo={typo} />}
+			{step === 2 && <Step2 data={data} update={update} c={c} s={s} r={r} typo={typo} />}
+			{step === 3 && <Step3 data={data} update={update} c={c} s={s} r={r} />}
+			{step === 4 && <Step4 data={data} update={update} c={c} s={s} r={r} typo={typo} />}
+
+			{error ? (
+				<ThemedText
+					variant="label"
+					style={{ color: c.error, marginTop: s.md, textAlign: 'center' }}
+				>
+					{error}
+				</ThemedText>
+			) : null}
+		</Screen>
 	);
 }
 
@@ -815,7 +821,6 @@ function LogoPicker({
 }
 
 const styles = StyleSheet.create({
-	root: { flex: 1 },
 	progressTrack: { height: SIZE_PROGRESS_BAR, width: '100%' },
 	progressFill: { height: SIZE_PROGRESS_BAR },
 	stepIndicatorRow: {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { ChevronDown, ChevronUp, FileCode } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -90,223 +90,205 @@ export default function TallyExportScreen() {
 	};
 
 	return (
-		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Export to Tally" />
-			<ScrollView
-				contentContainerStyle={{ padding: s.lg, paddingBottom: SPACING_PX['2xl'] }}
-				keyboardShouldPersistTaps="handled"
+		<AtomicScreen
+			withKeyboard
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Export to Tally" />}
+			contentContainerStyle={{ padding: s.lg, paddingBottom: SPACING_PX['2xl'] }}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+		>
+			<View
+				style={[
+					styles.infoCard,
+					{
+						backgroundColor: withOpacity(c.primary, OPACITY_SKELETON_BASE),
+						borderRadius: r.lg,
+					},
+				]}
 			>
-				<View
-					style={[
-						styles.infoCard,
-						{
-							backgroundColor: withOpacity(c.primary, OPACITY_SKELETON_BASE),
-							borderRadius: r.lg,
-						},
-					]}
-				>
-					<FileCode size={24} color={c.primary} style={{ marginBottom: s.sm }} />
-					<ThemedText variant="bodyBold" color={c.primary}>
-						Export your data to TallyPrime or Tally ERP 9
-					</ThemedText>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={{ marginTop: SPACING_PX.xs }}
-					>
-						Generates a .xml file you can share with your CA or import directly into
-						Tally.
-					</ThemedText>
-				</View>
-
-				<SectionHeader
-					title="Period"
-					style={{ paddingHorizontal: 0, paddingVertical: 0 }}
-				/>
-				<View style={styles.chipRow}>
-					<Chip
-						label="Current Month"
-						active={period === 'month'}
-						onPress={() => setPeriod('month')}
-						colors={c}
-						borderRadius={r}
-					/>
-					<Chip
-						label="Current FY (2024-25)"
-						active={period === 'fy'}
-						onPress={() => setPeriod('fy')}
-						colors={c}
-						borderRadius={r}
-					/>
-					<Chip
-						label="Custom"
-						active={period === 'custom'}
-						onPress={() => setPeriod('custom')}
-						colors={c}
-						borderRadius={r}
-					/>
-				</View>
-
-				<SectionHeader
-					title="Tally Version"
-					style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
-				/>
-				<View style={styles.chipRow}>
-					<Chip
-						label="TallyPrime"
-						active={tallyVersion === 'prime'}
-						onPress={() => setTallyVersion('prime')}
-						colors={c}
-						borderRadius={r}
-					/>
-					<Chip
-						label="Tally ERP 9"
-						active={tallyVersion === 'erp9'}
-						onPress={() => setTallyVersion('erp9')}
-						colors={c}
-						borderRadius={r}
-					/>
-				</View>
-
-				<SectionHeader
-					title="What to Export"
-					style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
-				/>
-				<View style={[styles.checkList, { borderColor: c.border, borderRadius: r.lg }]}>
-					{EXPORT_ITEMS.map((item, i) => (
-						<Pressable
-							key={item.key}
-							onPress={() => toggle(item.key)}
-							style={[
-								styles.checkRow,
-								{
-									borderBottomColor: c.border,
-									borderBottomWidth:
-										i < EXPORT_ITEMS.length - 1 ? StyleSheet.hairlineWidth : 0,
-								},
-							]}
-						>
-							<View
-								style={[
-									styles.checkbox,
-									{
-										borderColor: selected[item.key] ? c.primary : c.border,
-										backgroundColor: selected[item.key]
-											? c.primary
-											: 'transparent',
-										borderRadius: r.sm,
-									},
-								]}
-							>
-								{selected[item.key] && (
-									<ThemedText
-										variant="caption"
-										color={c.white}
-										style={styles.checkMark}
-									>
-										✓
-									</ThemedText>
-								)}
-							</View>
-							<ThemedText variant="body">{item.label}</ThemedText>
-						</Pressable>
-					))}
-				</View>
-
-				<SectionHeader
-					title="Ledger Mapping"
-					style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
-				/>
+				<FileCode size={24} color={c.primary} style={{ marginBottom: s.sm }} />
+				<ThemedText variant="bodyBold" color={c.primary}>
+					Export your data to TallyPrime or Tally ERP 9
+				</ThemedText>
 				<ThemedText
 					variant="caption"
 					color={c.onSurfaceVariant}
-					style={{ marginBottom: s.md }}
+					style={{ marginTop: SPACING_PX.xs }}
 				>
-					Enter the ledger names as they appear in Tally
+					Generates a .xml file you can share with your CA or import directly into Tally.
 				</ThemedText>
-				{[
-					{ label: 'Sales Account', value: salesAccount, setter: setSalesAccount },
-					{
-						label: 'Purchase Account',
-						value: purchaseAccount,
-						setter: setPurchaseAccount,
-					},
-					{ label: 'Cash Account', value: cashAccount, setter: setCashAccount },
-				].map(({ label, value, setter }) => (
-					<View key={label} style={{ marginBottom: s.sm }}>
-						<ThemedText
-							variant="label"
-							color={c.onSurfaceVariant}
-							style={{ marginBottom: SPACING_PX.xs }}
-						>
-							{label}
-						</ThemedText>
-						<TextInput
-							value={value}
-							onChangeText={setter}
-							style={[
-								styles.input,
-								{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
-							]}
-						/>
-					</View>
-				))}
+			</View>
 
-				<Button
-					title="Generate XML File"
-					onPress={handleExport}
-					style={{ marginTop: s.lg }}
+			<SectionHeader title="Period" style={{ paddingHorizontal: 0, paddingVertical: 0 }} />
+			<View style={styles.chipRow}>
+				<Chip
+					label="Current Month"
+					active={period === 'month'}
+					onPress={() => setPeriod('month')}
+					colors={c}
+					borderRadius={r}
 				/>
+				<Chip
+					label="Current FY (2024-25)"
+					active={period === 'fy'}
+					onPress={() => setPeriod('fy')}
+					colors={c}
+					borderRadius={r}
+				/>
+				<Chip
+					label="Custom"
+					active={period === 'custom'}
+					onPress={() => setPeriod('custom')}
+					colors={c}
+					borderRadius={r}
+				/>
+			</View>
 
-				{/* Collapsible instructions */}
-				<Pressable
-					onPress={() => setShowInstructions(!showInstructions)}
-					style={[
-						styles.instructionsHeader,
-						{ borderColor: c.border, borderRadius: r.md, marginTop: s.lg },
-					]}
-				>
-					<ThemedText variant="bodyBold">How to import in TallyPrime</ThemedText>
-					{showInstructions ? (
-						<ChevronUp size={18} color={c.onSurfaceVariant} />
-					) : (
-						<ChevronDown size={18} color={c.onSurfaceVariant} />
-					)}
-				</Pressable>
-				{showInstructions && (
-					<View
+			<SectionHeader
+				title="Tally Version"
+				style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
+			/>
+			<View style={styles.chipRow}>
+				<Chip
+					label="TallyPrime"
+					active={tallyVersion === 'prime'}
+					onPress={() => setTallyVersion('prime')}
+					colors={c}
+					borderRadius={r}
+				/>
+				<Chip
+					label="Tally ERP 9"
+					active={tallyVersion === 'erp9'}
+					onPress={() => setTallyVersion('erp9')}
+					colors={c}
+					borderRadius={r}
+				/>
+			</View>
+
+			<SectionHeader
+				title="What to Export"
+				style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
+			/>
+			<View style={[styles.checkList, { borderColor: c.border, borderRadius: r.lg }]}>
+				{EXPORT_ITEMS.map((item, i) => (
+					<Pressable
+						key={item.key}
+						onPress={() => toggle(item.key)}
 						style={[
-							styles.instructionsList,
-							{ borderColor: c.border, borderRadius: r.md },
+							styles.checkRow,
+							{
+								borderBottomColor: c.border,
+								borderBottomWidth:
+									i < EXPORT_ITEMS.length - 1 ? StyleSheet.hairlineWidth : 0,
+							},
 						]}
 					>
-						{INSTRUCTIONS.map((step, i) => (
-							<View
-								key={i}
-								style={[
-									styles.instructionRow,
-									{
-										borderBottomColor: c.border,
-										borderBottomWidth:
-											i < INSTRUCTIONS.length - 1
-												? StyleSheet.hairlineWidth
-												: 0,
-									},
-								]}
-							>
-								<View style={[styles.stepNum, { backgroundColor: c.primary }]}>
-									<ThemedText variant="caption" color={c.white}>
-										{i + 1}
-									</ThemedText>
-								</View>
-								<ThemedText variant="body" style={{ flex: 1 }}>
-									{step}
+						<View
+							style={[
+								styles.checkbox,
+								{
+									borderColor: selected[item.key] ? c.primary : c.border,
+									backgroundColor: selected[item.key] ? c.primary : 'transparent',
+									borderRadius: r.sm,
+								},
+							]}
+						>
+							{selected[item.key] && (
+								<ThemedText
+									variant="caption"
+									color={c.white}
+									style={styles.checkMark}
+								>
+									✓
+								</ThemedText>
+							)}
+						</View>
+						<ThemedText variant="body">{item.label}</ThemedText>
+					</Pressable>
+				))}
+			</View>
+
+			<SectionHeader
+				title="Ledger Mapping"
+				style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
+			/>
+			<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginBottom: s.md }}>
+				Enter the ledger names as they appear in Tally
+			</ThemedText>
+			{[
+				{ label: 'Sales Account', value: salesAccount, setter: setSalesAccount },
+				{
+					label: 'Purchase Account',
+					value: purchaseAccount,
+					setter: setPurchaseAccount,
+				},
+				{ label: 'Cash Account', value: cashAccount, setter: setCashAccount },
+			].map(({ label, value, setter }) => (
+				<View key={label} style={{ marginBottom: s.sm }}>
+					<ThemedText
+						variant="label"
+						color={c.onSurfaceVariant}
+						style={{ marginBottom: SPACING_PX.xs }}
+					>
+						{label}
+					</ThemedText>
+					<TextInput
+						value={value}
+						onChangeText={setter}
+						style={[
+							styles.input,
+							{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
+						]}
+					/>
+				</View>
+			))}
+
+			<Button title="Generate XML File" onPress={handleExport} style={{ marginTop: s.lg }} />
+
+			{/* Collapsible instructions */}
+			<Pressable
+				onPress={() => setShowInstructions(!showInstructions)}
+				style={[
+					styles.instructionsHeader,
+					{ borderColor: c.border, borderRadius: r.md, marginTop: s.lg },
+				]}
+			>
+				<ThemedText variant="bodyBold">How to import in TallyPrime</ThemedText>
+				{showInstructions ? (
+					<ChevronUp size={18} color={c.onSurfaceVariant} />
+				) : (
+					<ChevronDown size={18} color={c.onSurfaceVariant} />
+				)}
+			</Pressable>
+			{showInstructions && (
+				<View
+					style={[styles.instructionsList, { borderColor: c.border, borderRadius: r.md }]}
+				>
+					{INSTRUCTIONS.map((step, i) => (
+						<View
+							key={i}
+							style={[
+								styles.instructionRow,
+								{
+									borderBottomColor: c.border,
+									borderBottomWidth:
+										i < INSTRUCTIONS.length - 1 ? StyleSheet.hairlineWidth : 0,
+								},
+							]}
+						>
+							<View style={[styles.stepNum, { backgroundColor: c.primary }]}>
+								<ThemedText variant="caption" color={c.white}>
+									{i + 1}
 								</ThemedText>
 							</View>
-						))}
-					</View>
-				)}
-			</ScrollView>
+							<ThemedText variant="body" style={{ flex: 1 }}>
+								{step}
+							</ThemedText>
+						</View>
+					))}
+				</View>
+			)}
 		</AtomicScreen>
 	);
 }

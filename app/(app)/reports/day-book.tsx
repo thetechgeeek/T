@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 import { OPACITY_ROW_DIVIDER } from '@/theme/uiMetrics';
 import { ChevronLeft, ChevronRight, Printer } from 'lucide-react-native';
@@ -147,206 +147,214 @@ export default function DayBookScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="Day Book" showBackButton />
-
-			{/* Date picker row with prev/next arrows */}
-			<View style={[styles.dateRow, { paddingHorizontal: s.md }]}>
-				<Pressable
-					onPress={() => setSelectedDate((d) => shiftDate(d, -1))}
-					style={[styles.arrowBtn, { backgroundColor: c.surface, borderRadius: r.md }]}
-					accessibilityLabel="Previous day"
-				>
-					<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
-				</Pressable>
-
-				<View style={{ flex: 1 }}>
-					<DatePickerField label="" value={selectedDate} onChange={setSelectedDate} />
-				</View>
-
-				<Pressable
-					onPress={() => setSelectedDate((d) => shiftDate(d, 1))}
-					style={[styles.arrowBtn, { backgroundColor: c.surface, borderRadius: r.md }]}
-					accessibilityLabel="Next day"
-				>
-					<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
-				</Pressable>
-			</View>
-
-			<ScrollView
-				contentContainerStyle={[styles.content, { paddingBottom: s['2xl'] + s.sm }]}
-			>
-				{/* Two-column header */}
-				<View style={styles.columnsRow}>
-					{/* Received column */}
-					<Card
-						style={[styles.column, { borderTopColor: c.success, borderTopWidth: 3 }]}
-						padding="sm"
-					>
-						<ThemedText
-							weight="bold"
-							color={c.success}
-							style={{
-								marginBottom: SPACING_PX.sm,
-								fontSize: theme.typography.sizes.md,
-							}}
-						>
-							Received
-						</ThemedText>
-						{divider}
-						<View
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={
+				<>
+					<ScreenHeader title="Day Book" showBackButton />
+					<View style={[styles.dateRow, { paddingHorizontal: s.md }]}>
+						<Pressable
+							onPress={() => setSelectedDate((d) => shiftDate(d, -1))}
 							style={[
-								styles.colHeader,
-								{
-									borderBottomColor: c.border,
-									borderBottomWidth: StyleSheet.hairlineWidth,
-								},
+								styles.arrowBtn,
+								{ backgroundColor: c.surface, borderRadius: r.md },
 							]}
+							accessibilityLabel="Previous day"
 						>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={{ flex: 1 }}
-							>
-								Description
-							</ThemedText>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Amount
-							</ThemedText>
-						</View>
-						{renderRows(receivedRows, c.success)}
-						{divider}
-						<View style={styles.totalRow}>
-							<ThemedText weight="bold" style={{ flex: 1 }}>
-								Total
-							</ThemedText>
-							<ThemedText weight="bold" color={c.success}>
-								{formatCurrency(totalReceived)}
-							</ThemedText>
-						</View>
-					</Card>
+							<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
+						</Pressable>
 
-					{/* Paid column */}
-					<Card
-						style={[styles.column, { borderTopColor: c.error, borderTopWidth: 3 }]}
-						padding="sm"
-					>
-						<ThemedText
-							weight="bold"
-							color={c.error}
-							style={{
-								marginBottom: SPACING_PX.sm,
-								fontSize: theme.typography.sizes.md,
-							}}
-						>
-							Paid
-						</ThemedText>
-						{divider}
-						<View
+						<View style={{ flex: 1 }}>
+							<DatePickerField
+								label=""
+								value={selectedDate}
+								onChange={setSelectedDate}
+							/>
+						</View>
+
+						<Pressable
+							onPress={() => setSelectedDate((d) => shiftDate(d, 1))}
 							style={[
-								styles.colHeader,
-								{
-									borderBottomColor: c.border,
-									borderBottomWidth: StyleSheet.hairlineWidth,
-								},
+								styles.arrowBtn,
+								{ backgroundColor: c.surface, borderRadius: r.md },
 							]}
+							accessibilityLabel="Next day"
 						>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={{ flex: 1 }}
-							>
-								Description
-							</ThemedText>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Amount
-							</ThemedText>
-						</View>
-						{renderRows(paidRows, c.error)}
-						{divider}
-						<View style={styles.totalRow}>
-							<ThemedText weight="bold" style={{ flex: 1 }}>
-								Total
-							</ThemedText>
-							<ThemedText weight="bold" color={c.error}>
-								{formatCurrency(totalPaid)}
-							</ThemedText>
-						</View>
-					</Card>
-				</View>
-
-				{/* Balance section */}
-				<Card style={{ marginTop: s.md, borderRadius: r.md }} padding="md">
+							<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
+						</Pressable>
+					</View>
+				</>
+			}
+			contentContainerStyle={[styles.content, { paddingBottom: s['2xl'] + s.sm }]}
+		>
+			{/* Two-column header */}
+			<View style={styles.columnsRow}>
+				{/* Received column */}
+				<Card
+					style={[styles.column, { borderTopColor: c.success, borderTopWidth: 3 }]}
+					padding="sm"
+				>
 					<ThemedText
 						weight="bold"
-						style={{ fontSize: theme.typography.sizes.md, marginBottom: SPACING_PX.md }}
-					>
-						Cash Balance
-					</ThemedText>
-
-					<View style={styles.balanceRow}>
-						<ThemedText color={c.onSurfaceVariant}>Opening Cash</ThemedText>
-						<ThemedText weight="medium">{formatCurrency(openingCash)}</ThemedText>
-					</View>
-					<View style={styles.balanceRow}>
-						<ThemedText color={c.success}>+ Received</ThemedText>
-						<ThemedText weight="medium" color={c.success}>
-							{formatCurrency(totalReceived)}
-						</ThemedText>
-					</View>
-					<View style={styles.balanceRow}>
-						<ThemedText color={c.error}>– Paid</ThemedText>
-						<ThemedText weight="medium" color={c.error}>
-							{formatCurrency(totalPaid)}
-						</ThemedText>
-					</View>
-
-					<View
+						color={c.success}
 						style={{
-							height: StyleSheet.hairlineWidth,
-							backgroundColor: c.border,
-							marginVertical: s.sm,
+							marginBottom: SPACING_PX.sm,
+							fontSize: theme.typography.sizes.md,
 						}}
-					/>
-
-					<View style={styles.balanceRow}>
-						<ThemedText weight="bold" style={{ fontSize: theme.typography.sizes.md }}>
-							Closing Cash
-						</ThemedText>
+					>
+						Received
+					</ThemedText>
+					{divider}
+					<View
+						style={[
+							styles.colHeader,
+							{
+								borderBottomColor: c.border,
+								borderBottomWidth: StyleSheet.hairlineWidth,
+							},
+						]}
+					>
 						<ThemedText
-							weight="bold"
-							color={closingCash >= 0 ? c.success : c.error}
-							style={{ fontSize: theme.typography.sizes.lg }}
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ flex: 1 }}
 						>
-							{formatCurrency(Math.abs(closingCash))}
+							Description
+						</ThemedText>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							Amount
+						</ThemedText>
+					</View>
+					{renderRows(receivedRows, c.success)}
+					{divider}
+					<View style={styles.totalRow}>
+						<ThemedText weight="bold" style={{ flex: 1 }}>
+							Total
+						</ThemedText>
+						<ThemedText weight="bold" color={c.success}>
+							{formatCurrency(totalReceived)}
 						</ThemedText>
 					</View>
 				</Card>
 
-				{/* Export / Print placeholder */}
-				<Pressable
-					style={[
-						styles.exportBtn,
-						{
-							backgroundColor: withOpacity(c.primary, OPACITY_ROW_DIVIDER),
-							borderRadius: r.md,
-							borderColor: c.primary,
-							marginTop: s.md,
-						},
-					]}
-					onPress={() => {}}
-					accessibilityLabel="Export / Print Day Book"
+				{/* Paid column */}
+				<Card
+					style={[styles.column, { borderTopColor: c.error, borderTopWidth: 3 }]}
+					padding="sm"
 				>
-					<Printer size={18} color={c.primary} strokeWidth={2} />
 					<ThemedText
-						color={c.primary}
-						weight="medium"
-						style={{ marginLeft: SPACING_PX.sm }}
+						weight="bold"
+						color={c.error}
+						style={{
+							marginBottom: SPACING_PX.sm,
+							fontSize: theme.typography.sizes.md,
+						}}
 					>
-						Export / Print
+						Paid
 					</ThemedText>
-				</Pressable>
-			</ScrollView>
+					{divider}
+					<View
+						style={[
+							styles.colHeader,
+							{
+								borderBottomColor: c.border,
+								borderBottomWidth: StyleSheet.hairlineWidth,
+							},
+						]}
+					>
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ flex: 1 }}
+						>
+							Description
+						</ThemedText>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							Amount
+						</ThemedText>
+					</View>
+					{renderRows(paidRows, c.error)}
+					{divider}
+					<View style={styles.totalRow}>
+						<ThemedText weight="bold" style={{ flex: 1 }}>
+							Total
+						</ThemedText>
+						<ThemedText weight="bold" color={c.error}>
+							{formatCurrency(totalPaid)}
+						</ThemedText>
+					</View>
+				</Card>
+			</View>
+
+			{/* Balance section */}
+			<Card style={{ marginTop: s.md, borderRadius: r.md }} padding="md">
+				<ThemedText
+					weight="bold"
+					style={{ fontSize: theme.typography.sizes.md, marginBottom: SPACING_PX.md }}
+				>
+					Cash Balance
+				</ThemedText>
+
+				<View style={styles.balanceRow}>
+					<ThemedText color={c.onSurfaceVariant}>Opening Cash</ThemedText>
+					<ThemedText weight="medium">{formatCurrency(openingCash)}</ThemedText>
+				</View>
+				<View style={styles.balanceRow}>
+					<ThemedText color={c.success}>+ Received</ThemedText>
+					<ThemedText weight="medium" color={c.success}>
+						{formatCurrency(totalReceived)}
+					</ThemedText>
+				</View>
+				<View style={styles.balanceRow}>
+					<ThemedText color={c.error}>– Paid</ThemedText>
+					<ThemedText weight="medium" color={c.error}>
+						{formatCurrency(totalPaid)}
+					</ThemedText>
+				</View>
+
+				<View
+					style={{
+						height: StyleSheet.hairlineWidth,
+						backgroundColor: c.border,
+						marginVertical: s.sm,
+					}}
+				/>
+
+				<View style={styles.balanceRow}>
+					<ThemedText weight="bold" style={{ fontSize: theme.typography.sizes.md }}>
+						Closing Cash
+					</ThemedText>
+					<ThemedText
+						weight="bold"
+						color={closingCash >= 0 ? c.success : c.error}
+						style={{ fontSize: theme.typography.sizes.lg }}
+					>
+						{formatCurrency(Math.abs(closingCash))}
+					</ThemedText>
+				</View>
+			</Card>
+
+			{/* Export / Print placeholder */}
+			<Pressable
+				style={[
+					styles.exportBtn,
+					{
+						backgroundColor: withOpacity(c.primary, OPACITY_ROW_DIVIDER),
+						borderRadius: r.md,
+						borderColor: c.primary,
+						marginTop: s.md,
+					},
+				]}
+				onPress={() => {}}
+				accessibilityLabel="Export / Print Day Book"
+			>
+				<Printer size={18} color={c.primary} strokeWidth={2} />
+				<ThemedText color={c.primary} weight="medium" style={{ marginLeft: SPACING_PX.sm }}>
+					Export / Print
+				</ThemedText>
+			</Pressable>
 		</AtomicScreen>
 	);
 }

@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import {
-	View,
-	StyleSheet,
-	ScrollView,
-	Alert,
-	TouchableOpacity,
-	Switch,
-	TextInput,
-} from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Switch, TextInput } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Save, RefreshCw } from 'lucide-react-native';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -392,490 +384,495 @@ export default function AddItemScreen() {
 	}
 
 	return (
-		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
-			<ScreenHeader title={isEditing ? t('inventory.editItem') : t('inventory.addItem')} />
-
-			<ScrollView
-				keyboardDismissMode="on-drag"
-				contentContainerStyle={{ padding: s.lg, paddingBottom: 40 }}
-				keyboardShouldPersistTaps="handled"
-			>
-				{/* ── Section 1: Basic Info ────────────────────────────── */}
-				<SectionHeader label="Basic Info" />
-
-				<Controller
-					control={control}
-					name="design_name"
-					render={({ field: { onChange, onBlur, value } }) => (
-						<FormField
-							label={t('inventory.designName')}
-							required
-							placeholder="जैसे: सफेद ग्लॉसी टाइल 60×60"
-							onBlur={onBlur}
-							onChangeText={onChange}
-							value={value}
-							error={errors.design_name?.message}
-						/>
-					)}
+		<AtomicScreen
+			withKeyboard
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={
+				<ScreenHeader
+					title={isEditing ? t('inventory.editItem') : t('inventory.addItem')}
 				/>
-
-				{/* Item Code with Auto-generate */}
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 4 }}>
-					Item Code / SKU
-				</ThemedText>
-				<View style={[layout.row, { gap: s.sm, marginBottom: s.md }]}>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="item_code"
-							render={({ field: { onChange, onBlur, value } }) => (
-								<TextInput
-									placeholder="e.g. WGT-6060"
-									placeholderTextColor={c.onSurfaceVariant}
-									autoCapitalize="characters"
-									onBlur={onBlur}
-									onChangeText={(v) => onChange(v.toUpperCase())}
-									value={value}
-									style={[
-										styles.codeInput,
-										{
-											borderColor: c.border,
-											backgroundColor: c.surface,
-											color: c.onSurface,
-											borderRadius: r.md,
-											paddingHorizontal: s.md,
-											paddingVertical: s.sm,
-										},
-									]}
-								/>
-							)}
-						/>
-					</View>
-					<TouchableOpacity
-						onPress={handleAutoGenerateCode}
-						style={[
-							styles.autoGenBtn,
-							{
-								borderColor: c.primary,
-								borderRadius: r.md,
-								paddingHorizontal: s.sm,
-							},
-						]}
-					>
-						<RefreshCw size={14} color={c.primary} />
-						<ThemedText variant="caption" color={c.primary} style={{ marginLeft: 4 }}>
-							Auto
-						</ThemedText>
-					</TouchableOpacity>
-				</View>
-
-				{/* Category chips */}
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
-					{t('inventory.category')} *
-				</ThemedText>
-				<Controller
-					control={control}
-					name="category"
-					render={({ field: { onChange, value } }) => (
-						<ChipGroup options={CATEGORIES} value={value} onChange={onChange} />
-					)}
-				/>
-
-				<Controller
-					control={control}
-					name="item_description"
-					render={({ field: { onChange, onBlur, value } }) => (
-						<FormField
-							label="Description"
-							placeholder="Optional product description (max 500 chars)"
-							onBlur={onBlur}
-							onChangeText={onChange}
-							value={value}
-							multiline
-							numberOfLines={3}
-							maxLength={500}
-						/>
-					)}
-				/>
-
-				{/* ── Section 2: Pricing ──────────────────────────────── */}
-				<SectionHeader label="Pricing" />
-
-				<View style={[layout.row, { gap: s.md }]}>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="selling_price"
-							render={({ field: { onChange, onBlur, value } }) => (
-								<FormField
-									label="Sale Price (₹)"
-									required
-									placeholder="0.00"
-									keyboardType="numeric"
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-									error={errors.selling_price?.message}
-								/>
-							)}
-						/>
-					</View>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="cost_price"
-							render={({ field: { onChange, onBlur, value } }) => (
-								<FormField
-									label="Cost Price (₹)"
-									placeholder="0.00"
-									keyboardType="numeric"
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-								/>
-							)}
-						/>
-					</View>
-				</View>
-
-				{/* Live margin */}
-				<MarginBanner sellingPrice={watchedSelling ?? ''} costPrice={watchedCost ?? ''} />
-
-				<View style={[layout.row, { gap: s.md }]}>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="mrp"
-							render={({ field: { onChange, onBlur, value } }) => (
-								<FormField
-									label="MRP (₹)"
-									placeholder="0.00"
-									keyboardType="numeric"
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-								/>
-							)}
-						/>
-					</View>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="default_discount_pct"
-							render={({ field: { onChange, onBlur, value } }) => (
-								<FormField
-									label="Default Discount %"
-									placeholder="0–100"
-									keyboardType="numeric"
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-								/>
-							)}
-						/>
-					</View>
-				</View>
-
-				{/* ── Section 3: Tax ──────────────────────────────────── */}
-				<SectionHeader label="Tax" />
-
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
-					GST Rate *
-				</ThemedText>
-				<Controller
-					control={control}
-					name="gst_rate"
-					render={({ field: { onChange, value } }) => (
-						<ChipGroup
-							options={GST_RATES as (typeof GST_RATES)[number][]}
-							value={value as (typeof GST_RATES)[number]}
-							onChange={onChange}
-							labelMap={{
-								'0': '0%',
-								'5': '5%',
-								'12': '12%',
-								'18': '18%',
-								'28': '28%',
-							}}
-						/>
-					)}
-				/>
-
-				{/* GST Preview */}
-				<GSTPreviewBanner
-					sellingPrice={watchedSelling ?? '1000'}
-					gstRate={watchedGst ?? '18'}
-				/>
-
-				<Controller
-					control={control}
-					name="hsn_code"
-					render={({ field: { onChange, onBlur, value } }) => (
-						<FormField
-							label={t('inventory.hsnCode')}
-							placeholder="e.g. 6908"
-							keyboardType="numeric"
-							onBlur={onBlur}
-							onChangeText={onChange}
-							value={value}
-						/>
-					)}
-				/>
-
-				{/* ── Section 4: Stock & Units ─────────────────────────── */}
-				<SectionHeader label="Stock & Units" />
-
-				{/* Track Stock toggle */}
+			}
+			contentContainerStyle={{ padding: s.lg, paddingBottom: 40 }}
+			scrollViewProps={{
+				keyboardDismissMode: 'on-drag',
+				keyboardShouldPersistTaps: 'handled',
+			}}
+			footer={
 				<View
 					style={[
-						styles.toggleRow,
-						{ borderColor: c.border, borderRadius: r.md, marginBottom: s.md },
+						styles.footer,
+						{
+							backgroundColor: c.surface,
+							borderTopColor: c.border,
+							padding: s.md,
+							paddingBottom: 32,
+						},
 					]}
 				>
-					<View style={{ flex: 1 }}>
-						<ThemedText variant="body" weight="medium">
-							Track Stock
-						</ThemedText>
-						<ThemedText variant="caption" color={c.onSurfaceVariant}>
-							Monitor quantity and get low-stock alerts
-						</ThemedText>
-					</View>
+					<Button
+						title={isEditing ? t('inventory.editItem') : t('inventory.saveItem')}
+						onPress={handleSubmit(onSubmit)}
+						loading={submitting}
+						leftIcon={!submitting && <Save size={20} color="white" />}
+					/>
+				</View>
+			}
+		>
+			{/* ── Section 1: Basic Info ────────────────────────────── */}
+			<SectionHeader label="Basic Info" />
+
+			<Controller
+				control={control}
+				name="design_name"
+				render={({ field: { onChange, onBlur, value } }) => (
+					<FormField
+						label={t('inventory.designName')}
+						required
+						placeholder="जैसे: सफेद ग्लॉसी टाइल 60×60"
+						onBlur={onBlur}
+						onChangeText={onChange}
+						value={value}
+						error={errors.design_name?.message}
+					/>
+				)}
+			/>
+
+			{/* Item Code with Auto-generate */}
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 4 }}>
+				Item Code / SKU
+			</ThemedText>
+			<View style={[layout.row, { gap: s.sm, marginBottom: s.md }]}>
+				<View style={{ flex: 1 }}>
 					<Controller
 						control={control}
-						name="track_stock"
-						render={({ field: { onChange, value } }) => (
-							<Switch
+						name="item_code"
+						render={({ field: { onChange, onBlur, value } }) => (
+							<TextInput
+								placeholder="e.g. WGT-6060"
+								placeholderTextColor={c.onSurfaceVariant}
+								autoCapitalize="characters"
+								onBlur={onBlur}
+								onChangeText={(v) => onChange(v.toUpperCase())}
 								value={value}
-								onValueChange={onChange}
-								trackColor={{ false: c.surfaceVariant, true: c.primary }}
+								style={[
+									styles.codeInput,
+									{
+										borderColor: c.border,
+										backgroundColor: c.surface,
+										color: c.onSurface,
+										borderRadius: r.md,
+										paddingHorizontal: s.md,
+										paddingVertical: s.sm,
+									},
+								]}
 							/>
 						)}
 					/>
 				</View>
+				<TouchableOpacity
+					onPress={handleAutoGenerateCode}
+					style={[
+						styles.autoGenBtn,
+						{
+							borderColor: c.primary,
+							borderRadius: r.md,
+							paddingHorizontal: s.sm,
+						},
+					]}
+				>
+					<RefreshCw size={14} color={c.primary} />
+					<ThemedText variant="caption" color={c.primary} style={{ marginLeft: 4 }}>
+						Auto
+					</ThemedText>
+				</TouchableOpacity>
+			</View>
 
-				{watchedTrackStock && (
-					<>
-						{/* Primary Unit chips */}
-						<ThemedText
-							variant="label"
-							color={c.onSurfaceVariant}
-							style={{ marginBottom: 6 }}
-						>
-							Primary Unit
-						</ThemedText>
-						<Controller
-							control={control}
-							name="primary_unit"
-							render={({ field: { onChange, value } }) => (
-								<ChipGroup
-									options={PRIMARY_UNITS as (typeof PRIMARY_UNITS)[number][]}
-									value={(value ?? 'Box') as (typeof PRIMARY_UNITS)[number]}
-									onChange={onChange}
-								/>
-							)}
+			{/* Category chips */}
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
+				{t('inventory.category')} *
+			</ThemedText>
+			<Controller
+				control={control}
+				name="category"
+				render={({ field: { onChange, value } }) => (
+					<ChipGroup options={CATEGORIES} value={value} onChange={onChange} />
+				)}
+			/>
+
+			<Controller
+				control={control}
+				name="item_description"
+				render={({ field: { onChange, onBlur, value } }) => (
+					<FormField
+						label="Description"
+						placeholder="Optional product description (max 500 chars)"
+						onBlur={onBlur}
+						onChangeText={onChange}
+						value={value}
+						multiline
+						numberOfLines={3}
+						maxLength={500}
+					/>
+				)}
+			/>
+
+			{/* ── Section 2: Pricing ──────────────────────────────── */}
+			<SectionHeader label="Pricing" />
+
+			<View style={[layout.row, { gap: s.md }]}>
+				<View style={{ flex: 1 }}>
+					<Controller
+						control={control}
+						name="selling_price"
+						render={({ field: { onChange, onBlur, value } }) => (
+							<FormField
+								label="Sale Price (₹)"
+								required
+								placeholder="0.00"
+								keyboardType="numeric"
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
+								error={errors.selling_price?.message}
+							/>
+						)}
+					/>
+				</View>
+				<View style={{ flex: 1 }}>
+					<Controller
+						control={control}
+						name="cost_price"
+						render={({ field: { onChange, onBlur, value } }) => (
+							<FormField
+								label="Cost Price (₹)"
+								placeholder="0.00"
+								keyboardType="numeric"
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
+							/>
+						)}
+					/>
+				</View>
+			</View>
+
+			{/* Live margin */}
+			<MarginBanner sellingPrice={watchedSelling ?? ''} costPrice={watchedCost ?? ''} />
+
+			<View style={[layout.row, { gap: s.md }]}>
+				<View style={{ flex: 1 }}>
+					<Controller
+						control={control}
+						name="mrp"
+						render={({ field: { onChange, onBlur, value } }) => (
+							<FormField
+								label="MRP (₹)"
+								placeholder="0.00"
+								keyboardType="numeric"
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
+							/>
+						)}
+					/>
+				</View>
+				<View style={{ flex: 1 }}>
+					<Controller
+						control={control}
+						name="default_discount_pct"
+						render={({ field: { onChange, onBlur, value } }) => (
+							<FormField
+								label="Default Discount %"
+								placeholder="0–100"
+								keyboardType="numeric"
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
+							/>
+						)}
+					/>
+				</View>
+			</View>
+
+			{/* ── Section 3: Tax ──────────────────────────────────── */}
+			<SectionHeader label="Tax" />
+
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
+				GST Rate *
+			</ThemedText>
+			<Controller
+				control={control}
+				name="gst_rate"
+				render={({ field: { onChange, value } }) => (
+					<ChipGroup
+						options={GST_RATES as (typeof GST_RATES)[number][]}
+						value={value as (typeof GST_RATES)[number]}
+						onChange={onChange}
+						labelMap={{
+							'0': '0%',
+							'5': '5%',
+							'12': '12%',
+							'18': '18%',
+							'28': '28%',
+						}}
+					/>
+				)}
+			/>
+
+			{/* GST Preview */}
+			<GSTPreviewBanner
+				sellingPrice={watchedSelling ?? '1000'}
+				gstRate={watchedGst ?? '18'}
+			/>
+
+			<Controller
+				control={control}
+				name="hsn_code"
+				render={({ field: { onChange, onBlur, value } }) => (
+					<FormField
+						label={t('inventory.hsnCode')}
+						placeholder="e.g. 6908"
+						keyboardType="numeric"
+						onBlur={onBlur}
+						onChangeText={onChange}
+						value={value}
+					/>
+				)}
+			/>
+
+			{/* ── Section 4: Stock & Units ─────────────────────────── */}
+			<SectionHeader label="Stock & Units" />
+
+			{/* Track Stock toggle */}
+			<View
+				style={[
+					styles.toggleRow,
+					{ borderColor: c.border, borderRadius: r.md, marginBottom: s.md },
+				]}
+			>
+				<View style={{ flex: 1 }}>
+					<ThemedText variant="body" weight="medium">
+						Track Stock
+					</ThemedText>
+					<ThemedText variant="caption" color={c.onSurfaceVariant}>
+						Monitor quantity and get low-stock alerts
+					</ThemedText>
+				</View>
+				<Controller
+					control={control}
+					name="track_stock"
+					render={({ field: { onChange, value } }) => (
+						<Switch
+							value={value}
+							onValueChange={onChange}
+							trackColor={{ false: c.surfaceVariant, true: c.primary }}
 						/>
+					)}
+				/>
+			</View>
 
-						<View style={[layout.row, { gap: s.md }]}>
-							<View style={{ flex: 1 }}>
-								<Controller
-									control={control}
-									name="box_count"
-									render={({ field: { onChange, onBlur, value } }) => (
-										<FormField
-											label={
-												isEditing
-													? t('inventory.currentStock')
-													: `Opening Stock (${watchedPrimaryUnit ?? 'Box'})`
-											}
-											placeholder="0"
-											keyboardType="numeric"
-											onBlur={onBlur}
-											onChangeText={onChange}
-											value={value}
-											editable={!isEditing}
-											helperText={
-												isEditing
-													? t('inventory.emptyFilterHint')
-													: undefined
-											}
-										/>
-									)}
-								/>
-							</View>
-							<View style={{ flex: 1 }}>
-								<Controller
-									control={control}
-									name="low_stock_threshold"
-									render={({ field: { onChange, onBlur, value } }) => (
-										<FormField
-											label="Low Stock Alert"
-											placeholder="5"
-											keyboardType="numeric"
-											onBlur={onBlur}
-											onChangeText={onChange}
-											value={value}
-										/>
-									)}
-								/>
-							</View>
-						</View>
+			{watchedTrackStock && (
+				<>
+					{/* Primary Unit chips */}
+					<ThemedText
+						variant="label"
+						color={c.onSurfaceVariant}
+						style={{ marginBottom: 6 }}
+					>
+						Primary Unit
+					</ThemedText>
+					<Controller
+						control={control}
+						name="primary_unit"
+						render={({ field: { onChange, value } }) => (
+							<ChipGroup
+								options={PRIMARY_UNITS as (typeof PRIMARY_UNITS)[number][]}
+								value={(value ?? 'Box') as (typeof PRIMARY_UNITS)[number]}
+								onChange={onChange}
+							/>
+						)}
+					/>
 
-						{/* Secondary Unit toggle */}
-						<View
-							style={[
-								styles.toggleRow,
-								{ borderColor: c.border, borderRadius: r.md, marginBottom: s.md },
-							]}
-						>
-							<View style={{ flex: 1 }}>
-								<ThemedText variant="body" weight="medium">
-									Secondary Unit
-								</ThemedText>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									e.g. sell in Pcs but stock in Box
-								</ThemedText>
-							</View>
+					<View style={[layout.row, { gap: s.md }]}>
+						<View style={{ flex: 1 }}>
 							<Controller
 								control={control}
-								name="use_secondary_unit"
-								render={({ field: { onChange, value } }) => (
-									<Switch
+								name="box_count"
+								render={({ field: { onChange, onBlur, value } }) => (
+									<FormField
+										label={
+											isEditing
+												? t('inventory.currentStock')
+												: `Opening Stock (${watchedPrimaryUnit ?? 'Box'})`
+										}
+										placeholder="0"
+										keyboardType="numeric"
+										onBlur={onBlur}
+										onChangeText={onChange}
 										value={value}
-										onValueChange={onChange}
-										trackColor={{ false: c.surfaceVariant, true: c.primary }}
+										editable={!isEditing}
+										helperText={
+											isEditing ? t('inventory.emptyFilterHint') : undefined
+										}
 									/>
 								)}
 							/>
 						</View>
+						<View style={{ flex: 1 }}>
+							<Controller
+								control={control}
+								name="low_stock_threshold"
+								render={({ field: { onChange, onBlur, value } }) => (
+									<FormField
+										label="Low Stock Alert"
+										placeholder="5"
+										keyboardType="numeric"
+										onBlur={onBlur}
+										onChangeText={onChange}
+										value={value}
+									/>
+								)}
+							/>
+						</View>
+					</View>
 
-						{watchedSecondaryUnit && (
-							<View style={[layout.row, { gap: s.md }]}>
-								<View style={{ flex: 1 }}>
-									<Controller
-										control={control}
-										name="secondary_unit_name"
-										render={({ field: { onChange, onBlur, value } }) => (
-											<FormField
-												label="Secondary Unit Name"
-												placeholder="e.g. Pcs"
-												onBlur={onBlur}
-												onChangeText={onChange}
-												value={value}
-											/>
-										)}
-									/>
-								</View>
-								<View style={{ flex: 1 }}>
-									<Controller
-										control={control}
-										name="secondary_unit_conversion"
-										render={({ field: { onChange, onBlur, value } }) => (
-											<FormField
-												label={`1 ${watchedPrimaryUnit ?? 'Box'} = ___ ${
-													watchedSecondaryUnitName || 'Pcs'
-												}`}
-												placeholder="e.g. 6"
-												keyboardType="numeric"
-												onBlur={onBlur}
-												onChangeText={onChange}
-												value={value}
-											/>
-										)}
-									/>
-								</View>
+					{/* Secondary Unit toggle */}
+					<View
+						style={[
+							styles.toggleRow,
+							{ borderColor: c.border, borderRadius: r.md, marginBottom: s.md },
+						]}
+					>
+						<View style={{ flex: 1 }}>
+							<ThemedText variant="body" weight="medium">
+								Secondary Unit
+							</ThemedText>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								e.g. sell in Pcs but stock in Box
+							</ThemedText>
+						</View>
+						<Controller
+							control={control}
+							name="use_secondary_unit"
+							render={({ field: { onChange, value } }) => (
+								<Switch
+									value={value}
+									onValueChange={onChange}
+									trackColor={{ false: c.surfaceVariant, true: c.primary }}
+								/>
+							)}
+						/>
+					</View>
+
+					{watchedSecondaryUnit && (
+						<View style={[layout.row, { gap: s.md }]}>
+							<View style={{ flex: 1 }}>
+								<Controller
+									control={control}
+									name="secondary_unit_name"
+									render={({ field: { onChange, onBlur, value } }) => (
+										<FormField
+											label="Secondary Unit Name"
+											placeholder="e.g. Pcs"
+											onBlur={onBlur}
+											onChangeText={onChange}
+											value={value}
+										/>
+									)}
+								/>
 							</View>
+							<View style={{ flex: 1 }}>
+								<Controller
+									control={control}
+									name="secondary_unit_conversion"
+									render={({ field: { onChange, onBlur, value } }) => (
+										<FormField
+											label={`1 ${watchedPrimaryUnit ?? 'Box'} = ___ ${
+												watchedSecondaryUnitName || 'Pcs'
+											}`}
+											placeholder="e.g. 6"
+											keyboardType="numeric"
+											onBlur={onBlur}
+											onChangeText={onChange}
+											value={value}
+										/>
+									)}
+								/>
+							</View>
+						</View>
+					)}
+				</>
+			)}
+
+			{/* ── Section 5: Tile-specific ─────────────────────────── */}
+			<SectionHeader label={t('inventory.tileSet')} />
+
+			<View style={[layout.row, { gap: s.md }]}>
+				<View style={{ flex: 1 }}>
+					<Controller
+						control={control}
+						name="size_name"
+						render={({ field: { onChange, onBlur, value } }) => (
+							<FormField
+								label={t('inventory.size')}
+								placeholder={t('inventory.placeholders.size')}
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
+							/>
 						)}
-					</>
-				)}
-
-				{/* ── Section 5: Tile-specific ─────────────────────────── */}
-				<SectionHeader label={t('inventory.tileSet')} />
-
-				<View style={[layout.row, { gap: s.md }]}>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="size_name"
-							render={({ field: { onChange, onBlur, value } }) => (
-								<FormField
-									label={t('inventory.size')}
-									placeholder={t('inventory.placeholders.size')}
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-								/>
-							)}
-						/>
-					</View>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="brand_name"
-							render={({ field: { onChange, onBlur, value } }) => (
-								<FormField
-									label={t('inventory.brandName')}
-									placeholder={t('inventory.placeholders.brand')}
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-								/>
-							)}
-						/>
-					</View>
+					/>
 				</View>
-
-				<View style={[layout.row, { gap: s.md }]}>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="pcs_per_box"
-							render={({ field: { onChange, value } }) => (
-								<FormField
-									label={t('inventory.pcsPerBox')}
-									keyboardType="numeric"
-									onChangeText={onChange}
-									value={value}
-								/>
-							)}
-						/>
-					</View>
-					<View style={{ flex: 1 }}>
-						<Controller
-							control={control}
-							name="sqft_per_box"
-							render={({ field: { onChange, value } }) => (
-								<FormField
-									label={t('inventory.sqftPerBox')}
-									keyboardType="numeric"
-									onChangeText={onChange}
-									value={value}
-								/>
-							)}
-						/>
-					</View>
+				<View style={{ flex: 1 }}>
+					<Controller
+						control={control}
+						name="brand_name"
+						render={({ field: { onChange, onBlur, value } }) => (
+							<FormField
+								label={t('inventory.brandName')}
+								placeholder={t('inventory.placeholders.brand')}
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
+							/>
+						)}
+					/>
 				</View>
-
-				<View style={{ height: 40 }} />
-			</ScrollView>
-
-			<View
-				style={[
-					styles.footer,
-					{
-						backgroundColor: c.surface,
-						borderTopColor: c.border,
-						padding: s.md,
-						paddingBottom: 32,
-					},
-				]}
-			>
-				<Button
-					title={isEditing ? t('inventory.editItem') : t('inventory.saveItem')}
-					onPress={handleSubmit(onSubmit)}
-					loading={submitting}
-					leftIcon={!submitting && <Save size={20} color="white" />}
-				/>
 			</View>
+
+			<View style={[layout.row, { gap: s.md }]}>
+				<View style={{ flex: 1 }}>
+					<Controller
+						control={control}
+						name="pcs_per_box"
+						render={({ field: { onChange, value } }) => (
+							<FormField
+								label={t('inventory.pcsPerBox')}
+								keyboardType="numeric"
+								onChangeText={onChange}
+								value={value}
+							/>
+						)}
+					/>
+				</View>
+				<View style={{ flex: 1 }}>
+					<Controller
+						control={control}
+						name="sqft_per_box"
+						render={({ field: { onChange, value } }) => (
+							<FormField
+								label={t('inventory.sqftPerBox')}
+								keyboardType="numeric"
+								onChangeText={onChange}
+								value={value}
+							/>
+						)}
+					/>
+				</View>
+			</View>
+
+			<View style={{ height: 40 }} />
 		</AtomicScreen>
 	);
 }

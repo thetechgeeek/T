@@ -303,73 +303,32 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 
 ### Document screen recipes
 
-- [ ] Create standalone screen-shell cookbook documenting the 3 patterns:
-    - Tab screen: `<Screen safeAreaEdges={['bottom']} withKeyboard={false} scrollable>`
-    - Form screen: `<Screen safeAreaEdges={['bottom']} withKeyboard scrollable>`
-    - Modal screen: `<Screen safeAreaEdges={['top', 'bottom']} scrollable>`
+- [x] Create standalone screen-shell cookbook in `docs/SCREEN_SHELL_COOKBOOK.md`
+- [x] Document the 3 supported shell patterns: tab/list, form/detail, and modal/page-sheet
+- [x] Document `ScreenHeader` safe-area ownership and the `header` / `footer` rule
 
-### Migrate `ScrollView` direct usage (was 61 files → 44 remaining)
+### Normalize route shells and direct `ScrollView` usage
 
-- [ ] ~17 files already migrated from `ScrollView` to `Screen scrollable`
-- [ ] `app/(app)/(tabs)/inventory.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/customers/add.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/finance/bank-accounts/add.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/finance/ewallets.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/finance/loans/[id].tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/finance/payments/make.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/finance/payments/receive.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/finance/purchases/create.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/inventory/[id].tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/inventory/add.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/inventory/import.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/invoices/[id].tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/orders/[id].tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/orders/import.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/all-transactions.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/balance-sheet.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/cashflow.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/day-book.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/expense-summary.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/gst-detail.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/gstr1.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/gstr3b.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/item-profit.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/order-summary.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/party-profit.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/purchase.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/sale.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/reports/stock-summary.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/business-profile.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/expense-categories.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/gst.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/item-categories.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/item-units.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/items.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/party.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/print.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/reminders.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/settings/transactions.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/store/index.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/suppliers/[id].tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/suppliers/add.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/transactions/credit-notes/create.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/transactions/estimates/create.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/transactions/purchase-orders/create.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/utilities/close-fy.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(app)/utilities/tally-export.tsx` — ScrollView → Screen scrollable
-- [ ] `app/(auth)/setup.tsx` — ScrollView → Screen scrollable
+- [x] Route-level screens that previously used outer `ScrollView` now use `Screen` / `AtomicScreen` shell primitives or a list-first shell
+- [x] Fixed headers and action bars were moved into `header` / `footer` where appropriate (`inventory/add`, `inventory/import`, `invoices/[id]`, `orders/import`, `reports/balance-sheet`, `reports/cashflow`, `reports/day-book`, `auth/setup`)
+- [x] List-first shells remain `FlatList`-driven without an extra route-level `ScrollView` (`reports/all-transactions`, `reports/expense-summary`, `reports/item-profit`, `reports/order-summary`, `reports/party-profit`, `reports/purchase`, `reports/sale`, `reports/stock-summary`, `(tabs)/inventory`)
+- [x] Remaining nested vertical `ScrollView` usage is limited to internal bottom-sheet editor bodies (`settings/expense-categories`, `settings/item-categories`, `settings/item-units`) and is documented in the cookbook
 
 ### Standardize `safeAreaEdges` (was 10 combos → now 4)
 
-- [ ] Reduced from 10 unique combos to 4 (`['bottom']`, `['top']`, `['top','bottom']`, `[]`)
-- [ ] Further reduce to 3 documented patterns (tab, form, modal) + documented exceptions
+- [x] Reduced from 10 unique combos to 4 (`['bottom']`, `['top']`, `['top','bottom']`, `[]`)
+- [x] Standardize to 3 documented shell patterns plus named exceptions in `docs/SCREEN_SHELL_COOKBOOK.md`
 
 ### Fix duplicate safe-area padding
 
-- [ ] `app/(app)/invoices/[id].tsx` — uses `['top']` + `ScreenHeader` (double top inset)
-- [ ] `app/(app)/reports/index.tsx` — uses `['top', 'bottom']` + `ScreenHeader` (double top inset)
-- [ ] `app/(app)/utilities/index.tsx` — uses `['top', 'bottom']` + `ScreenHeader` (double top inset)
-- [ ] `app/(app)/orders/[id].tsx` — loading branch: `['top', 'bottom']` + `ScreenHeader` (double top inset)
+- [x] `app/(app)/invoices/[id].tsx` no longer combines top safe area with `ScreenHeader`
+- [x] `app/(app)/reports/index.tsx` no longer combines top safe area with `ScreenHeader`
+- [x] `app/(app)/utilities/index.tsx` no longer combines top safe area with `ScreenHeader`
+- [x] `app/(app)/orders/[id].tsx` no longer combines top safe area with `ScreenHeader` in the loading branch
+
+### Phase 5 test coverage
+
+- [x] Add `Screen` tests covering bottom-only safe-area ownership, footer inset handoff, and `scrollViewProps` forwarding
 
 ---
 
@@ -433,10 +392,10 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 | **2** | Component library cleanup  | **Complete**                            | 12/12        |
 | **3** | Shared layout primitives   | **Complete**                            | 16/16        |
 | **4** | Screen-by-screen spacing   | **Implementation complete; QA pending** | 95/107       |
-| **5** | Screen shell normalization | **Not started**                         | 0/55         |
+| **5** | Screen shell normalization | **Complete**                            | 14/14        |
 | **6** | Enforcement & CI hardening | **In progress**                         | 4/10         |
 | **7** | Final audit & sign-off     | **Not started**                         | 0/15         |
-|       | **Overall**                |                                         | **167/258**  |
+|       | **Overall**                |                                         | **181/217**  |
 
 ---
 
@@ -458,6 +417,6 @@ For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borde
 
 8. **The checklist now matches the real app structure** — `finance/expenses/add.tsx` and `finance/other-income/add.tsx` are the live routes (not `create.tsx`), while `finance/bank-accounts/[id].tsx` and `store/[id].tsx` do not exist in the current codebase.
 
-9. **ScrollView migration and safe-area normalization are the next large UI cleanup bucket** — those items remain intentionally parked in Phase 5 after the spacing/tokenization pass.
+9. **Phase 5 is now complete** — route-level screen shells are normalized around `Screen` / `AtomicScreen`, fixed chrome lives in `header` / `footer`, and safe-area ownership is documented in `docs/SCREEN_SHELL_COOKBOOK.md`.
 
 10. **No enforcement automation exists yet** — `check-ui-tokens.mjs` still hasn't been created, and the ESLint `no-magic-numbers` ignore list remains broad enough that CI is not yet enforcing the token discipline established by the remediation work.

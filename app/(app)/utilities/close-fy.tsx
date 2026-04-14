@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TextInput, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import { CheckCircle2, Circle } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -141,188 +141,189 @@ export default function CloseFYScreen() {
 	}
 
 	return (
-		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Close Financial Year" />
-			<ScrollView
-				contentContainerStyle={{ padding: s.lg }}
-				keyboardShouldPersistTaps="handled"
-			>
-				{/* Step indicator */}
-				<View style={[styles.stepRow, { marginBottom: s.lg }]}>
-					{[1, 2, 3].map((n) => (
-						<View key={n} style={{ alignItems: 'center', flex: 1 }}>
+		<AtomicScreen
+			withKeyboard
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Close Financial Year" />}
+			contentContainerStyle={{ padding: s.lg }}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+		>
+			{/* Step indicator */}
+			<View style={[styles.stepRow, { marginBottom: s.lg }]}>
+				{[1, 2, 3].map((n) => (
+					<View key={n} style={{ alignItems: 'center', flex: 1 }}>
+						<View
+							style={[
+								styles.stepCircle,
+								{ backgroundColor: step >= n ? c.primary : c.surfaceVariant },
+							]}
+						>
+							<ThemedText
+								variant="caption"
+								color={step >= n ? c.onPrimary : c.onSurfaceVariant}
+							>
+								{n}
+							</ThemedText>
+						</View>
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: SPACING_PX.xs, textAlign: 'center' }}
+						>
+							{n === 1 ? 'Summary' : n === 2 ? 'Verify' : 'Confirm'}
+						</ThemedText>
+					</View>
+				))}
+			</View>
+
+			{/* Step 1 */}
+			{step === 1 && (
+				<>
+					<ThemedText variant="h2" style={{ marginBottom: s.sm }}>
+						Closing FY {CURRENT_FY}
+					</ThemedText>
+					<ThemedText
+						variant="body"
+						color={c.onSurfaceVariant}
+						style={{ marginBottom: s.lg }}
+					>
+						1 Apr 2024 – 31 Mar 2025
+					</ThemedText>
+					<View
+						style={[
+							styles.summaryCard,
+							{
+								backgroundColor: c.surface,
+								borderColor: c.border,
+								borderRadius: r.lg,
+							},
+						]}
+					>
+						{[
+							['Total Sale', '₹ 0'],
+							['Total Purchase', '₹ 0'],
+							['Net Profit', '₹ 0'],
+							['Outstanding Receivable', '₹ 0'],
+							['Outstanding Payable', '₹ 0'],
+							['Stock Value', '₹ 0'],
+						].map(([label, value]) => (
 							<View
-								style={[
-									styles.stepCircle,
-									{ backgroundColor: step >= n ? c.primary : c.surfaceVariant },
-								]}
+								key={label}
+								style={[styles.summaryRow, { borderBottomColor: c.border }]}
 							>
-								<ThemedText
-									variant="caption"
-									color={step >= n ? c.onPrimary : c.onSurfaceVariant}
-								>
-									{n}
-								</ThemedText>
+								<ThemedText variant="body">{label}</ThemedText>
+								<ThemedText variant="bodyBold">{value}</ThemedText>
 							</View>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={{ marginTop: SPACING_PX.xs, textAlign: 'center' }}
-							>
-								{n === 1 ? 'Summary' : n === 2 ? 'Verify' : 'Confirm'}
+						))}
+					</View>
+					<View style={{ marginTop: s.lg }}>
+						<Button title="Proceed to Verification" onPress={() => setStep(2)} />
+					</View>
+				</>
+			)}
+
+			{/* Step 2 */}
+			{step === 2 && (
+				<>
+					<ThemedText variant="h2" style={{ marginBottom: s.lg }}>
+						Data Verification
+					</ThemedText>
+					<View
+						style={[
+							styles.allClearCard,
+							{ backgroundColor: c.successLight, borderRadius: r.lg },
+						]}
+					>
+						<CheckCircle2 size={32} color={c.paid} />
+						<View style={{ marginLeft: s.md }}>
+							<ThemedText variant="h3" color={c.paid}>
+								All Clear ✓
+							</ThemedText>
+							<ThemedText variant="caption" color={c.paid}>
+								No issues found. Safe to close FY.
 							</ThemedText>
 						</View>
-					))}
-				</View>
+					</View>
+					<View style={{ marginTop: s.lg, gap: s.md }}>
+						<Button title="Continue to Configuration" onPress={() => setStep(3)} />
+						<Button title="Back" variant="secondary" onPress={() => setStep(1)} />
+					</View>
+				</>
+			)}
 
-				{/* Step 1 */}
-				{step === 1 && (
-					<>
-						<ThemedText variant="h2" style={{ marginBottom: s.sm }}>
-							Closing FY {CURRENT_FY}
-						</ThemedText>
-						<ThemedText
-							variant="body"
-							color={c.onSurfaceVariant}
-							style={{ marginBottom: s.lg }}
-						>
-							1 Apr 2024 – 31 Mar 2025
-						</ThemedText>
-						<View
-							style={[
-								styles.summaryCard,
-								{
-									backgroundColor: c.surface,
-									borderColor: c.border,
-									borderRadius: r.lg,
-								},
-							]}
-						>
-							{[
-								['Total Sale', '₹ 0'],
-								['Total Purchase', '₹ 0'],
-								['Net Profit', '₹ 0'],
-								['Outstanding Receivable', '₹ 0'],
-								['Outstanding Payable', '₹ 0'],
-								['Stock Value', '₹ 0'],
-							].map(([label, value]) => (
-								<View
-									key={label}
-									style={[styles.summaryRow, { borderBottomColor: c.border }]}
-								>
-									<ThemedText variant="body">{label}</ThemedText>
-									<ThemedText variant="bodyBold">{value}</ThemedText>
-								</View>
-							))}
-						</View>
-						<View style={{ marginTop: s.lg }}>
-							<Button title="Proceed to Verification" onPress={() => setStep(2)} />
-						</View>
-					</>
-				)}
+			{/* Step 3 */}
+			{step === 3 && (
+				<>
+					<ThemedText variant="h2" style={{ marginBottom: s.md }}>
+						Configuration
+					</ThemedText>
+					<SwitchRow
+						label="Reset invoice sequence to 1"
+						value={resetSequence}
+						onToggle={() => setResetSequence(!resetSequence)}
+					/>
+					<SwitchRow
+						label="Archive old FY (make read-only)"
+						value={archiveFY}
+						onToggle={() => setArchiveFY(!archiveFY)}
+					/>
 
-				{/* Step 2 */}
-				{step === 2 && (
-					<>
-						<ThemedText variant="h2" style={{ marginBottom: s.lg }}>
-							Data Verification
-						</ThemedText>
-						<View
-							style={[
-								styles.allClearCard,
-								{ backgroundColor: c.successLight, borderRadius: r.lg },
-							]}
-						>
-							<CheckCircle2 size={32} color={c.paid} />
-							<View style={{ marginLeft: s.md }}>
-								<ThemedText variant="h3" color={c.paid}>
-									All Clear ✓
-								</ThemedText>
-								<ThemedText variant="caption" color={c.paid}>
-									No issues found. Safe to close FY.
-								</ThemedText>
-							</View>
-						</View>
-						<View style={{ marginTop: s.lg, gap: s.md }}>
-							<Button title="Continue to Configuration" onPress={() => setStep(3)} />
-							<Button title="Back" variant="secondary" onPress={() => setStep(1)} />
-						</View>
-					</>
-				)}
-
-				{/* Step 3 */}
-				{step === 3 && (
-					<>
-						<ThemedText variant="h2" style={{ marginBottom: s.md }}>
-							Configuration
-						</ThemedText>
-						<SwitchRow
-							label="Reset invoice sequence to 1"
-							value={resetSequence}
-							onToggle={() => setResetSequence(!resetSequence)}
-						/>
-						<SwitchRow
-							label="Archive old FY (make read-only)"
-							value={archiveFY}
-							onToggle={() => setArchiveFY(!archiveFY)}
-						/>
-
-						<View
-							style={[
-								styles.warningCard,
-								{
-									backgroundColor: c.errorLight,
-									borderRadius: r.lg,
-									marginTop: s.lg,
-								},
-							]}
-						>
-							<ThemedText variant="bodyBold" color={c.unpaid}>
-								⚠ This cannot be undone
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								color={c.unpaid}
-								style={{ marginTop: SPACING_PX.xs }}
-							>
-								Closing FY {CURRENT_FY} will freeze all transactions before 1 Apr
-								2025. You cannot add or edit transactions in the closed FY.
-							</ThemedText>
-						</View>
-
-						<ThemedText
-							variant="label"
-							color={c.onSurfaceVariant}
-							style={{
+					<View
+						style={[
+							styles.warningCard,
+							{
+								backgroundColor: c.errorLight,
+								borderRadius: r.lg,
 								marginTop: s.lg,
-								marginBottom: CLOSE_FY_CONFIRM_LABEL_MARGIN_BOTTOM,
-							}}
-						>
-							Type &quot;{CURRENT_FY}&quot; to confirm
+							},
+						]}
+					>
+						<ThemedText variant="bodyBold" color={c.unpaid}>
+							⚠ This cannot be undone
 						</ThemedText>
-						<TextInput
-							value={confirmText}
-							onChangeText={setConfirmText}
-							placeholder={CURRENT_FY}
-							placeholderTextColor={c.placeholder}
-							style={[
-								styles.confirmInput,
-								{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
-							]}
-						/>
+						<ThemedText
+							variant="caption"
+							color={c.unpaid}
+							style={{ marginTop: SPACING_PX.xs }}
+						>
+							Closing FY {CURRENT_FY} will freeze all transactions before 1 Apr 2025.
+							You cannot add or edit transactions in the closed FY.
+						</ThemedText>
+					</View>
 
-						<View style={{ marginTop: s.lg, gap: s.md }}>
-							<Button
-								title={`Close FY ${CURRENT_FY}`}
-								onPress={handleClose}
-								disabled={confirmText !== CURRENT_FY}
-								variant="danger"
-							/>
-							<Button title="Back" variant="secondary" onPress={() => setStep(2)} />
-						</View>
-					</>
-				)}
-			</ScrollView>
+					<ThemedText
+						variant="label"
+						color={c.onSurfaceVariant}
+						style={{
+							marginTop: s.lg,
+							marginBottom: CLOSE_FY_CONFIRM_LABEL_MARGIN_BOTTOM,
+						}}
+					>
+						Type &quot;{CURRENT_FY}&quot; to confirm
+					</ThemedText>
+					<TextInput
+						value={confirmText}
+						onChangeText={setConfirmText}
+						placeholder={CURRENT_FY}
+						placeholderTextColor={c.placeholder}
+						style={[
+							styles.confirmInput,
+							{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
+						]}
+					/>
+
+					<View style={{ marginTop: s.lg, gap: s.md }}>
+						<Button
+							title={`Close FY ${CURRENT_FY}`}
+							onPress={handleClose}
+							disabled={confirmText !== CURRENT_FY}
+							variant="danger"
+						/>
+						<Button title="Back" variant="secondary" onPress={() => setStep(2)} />
+					</View>
+				</>
+			)}
 		</AtomicScreen>
 	);
 }

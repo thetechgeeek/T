@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -42,8 +42,7 @@ export default function OrderDetailScreen() {
 
 	if (loading || !order) {
 		return (
-			<AtomicScreen safeAreaEdges={['top', 'bottom']}>
-				<ScreenHeader title="" />
+			<AtomicScreen safeAreaEdges={['bottom']} header={<ScreenHeader title="" />}>
 				<View style={{ padding: s.lg, gap: s.md }}>
 					<SkeletonBlock width="60%" height={28} />
 					<SkeletonBlock width="40%" height={14} />
@@ -61,27 +60,71 @@ export default function OrderDetailScreen() {
 	}
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title={order.party_name || t('order.orderDetail')} />
-			<ScrollView>
-				<View style={styles.headerArea}>
-					<Package size={48} color={c.primary} style={{ marginBottom: s.md }} />
-					<ThemedText variant="h1" align="center">
-						{order.party_name || t('inventory.itemNotFound')}
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title={order.party_name || t('order.orderDetail')} />}
+		>
+			<View style={styles.headerArea}>
+				<Package size={48} color={c.primary} style={{ marginBottom: s.md }} />
+				<ThemedText variant="h1" align="center">
+					{order.party_name || t('inventory.itemNotFound')}
+				</ThemedText>
+				<ThemedText color={c.onSurfaceVariant} align="center" style={{ marginTop: s.xs }}>
+					{t('invoice.invoiceDate')}: {formatDateShort(order.created_at)}
+				</ThemedText>
+			</View>
+
+			<View style={{ padding: s.lg }}>
+				<View
+					style={[
+						styles.section,
+						{
+							backgroundColor: c.surface,
+							borderRadius: r.md,
+							borderColor: c.border,
+						},
+					]}
+				>
+					<ThemedText variant="h3" style={{ marginBottom: s.md }}>
+						{t('invoice.stepReview')}
 					</ThemedText>
-					<ThemedText
-						color={c.onSurfaceVariant}
-						align="center"
-						style={{ marginTop: s.xs }}
-					>
-						{t('invoice.invoiceDate')}: {formatDateShort(order.created_at)}
-					</ThemedText>
+					<View style={styles.row}>
+						<ThemedText color={c.placeholder} style={{ flex: 1 }}>
+							{t('order.totalBoxes')}
+						</ThemedText>
+						<ThemedText weight="semibold">
+							{t('inventory.stockStatus', { count: order.total_quantity })}
+						</ThemedText>
+					</View>
+					<View style={styles.row}>
+						<ThemedText color={c.placeholder} style={{ flex: 1 }}>
+							{t('order.status')}
+						</ThemedText>
+						<View
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								gap: SPACING_PX.xs,
+							}}
+						>
+							<CheckCircle2 size={16} color={c.success} />
+							<ThemedText color={c.success} weight="semibold">
+								{t('order.importSuccess')}
+							</ThemedText>
+						</View>
+					</View>
 				</View>
 
-				<View style={{ padding: s.lg }}>
+				<ThemedText variant="h3" style={{ marginTop: s.lg, marginBottom: s.md }}>
+					{t('order.extractedItems')} ({items.length})
+				</ThemedText>
+
+				{items.map((item: InventoryItem, index: number) => (
 					<View
+						key={item.id || index}
 						style={[
-							styles.section,
+							styles.itemCard,
 							{
 								backgroundColor: c.surface,
 								borderRadius: r.md,
@@ -89,84 +132,35 @@ export default function OrderDetailScreen() {
 							},
 						]}
 					>
-						<ThemedText variant="h3" style={{ marginBottom: s.md }}>
-							{t('invoice.stepReview')}
-						</ThemedText>
-						<View style={styles.row}>
-							<ThemedText color={c.placeholder} style={{ flex: 1 }}>
-								{t('order.totalBoxes')}
+						<View style={{ flex: 1 }}>
+							<ThemedText weight="bold" style={{ fontSize: FONT_SIZE.body }}>
+								{item.design_name}
 							</ThemedText>
-							<ThemedText weight="semibold">
-								{t('inventory.stockStatus', { count: order.total_quantity })}
+							<ThemedText
+								variant="caption"
+								color={c.onSurfaceVariant}
+								style={{ marginTop: SPACING_PX.xs }}
+							>
+								{item.category} {item.size_name ? `• ${item.size_name}` : ''}
 							</ThemedText>
 						</View>
-						<View style={styles.row}>
-							<ThemedText color={c.placeholder} style={{ flex: 1 }}>
-								{t('order.status')}
+						<View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
+							<ThemedText color={c.primary} variant="h3">
+								+{item.box_count}
 							</ThemedText>
-							<View
-								style={{
-									flexDirection: 'row',
-									alignItems: 'center',
-									gap: SPACING_PX.xs,
-								}}
-							>
-								<CheckCircle2 size={16} color={c.success} />
-								<ThemedText color={c.success} weight="semibold">
-									{t('order.importSuccess')}
-								</ThemedText>
-							</View>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{t('common.done')}
+							</ThemedText>
 						</View>
 					</View>
+				))}
 
-					<ThemedText variant="h3" style={{ marginTop: s.lg, marginBottom: s.md }}>
-						{t('order.extractedItems')} ({items.length})
-					</ThemedText>
-
-					{items.map((item: InventoryItem, index: number) => (
-						<View
-							key={item.id || index}
-							style={[
-								styles.itemCard,
-								{
-									backgroundColor: c.surface,
-									borderRadius: r.md,
-									borderColor: c.border,
-								},
-							]}
-						>
-							<View style={{ flex: 1 }}>
-								<ThemedText weight="bold" style={{ fontSize: FONT_SIZE.body }}>
-									{item.design_name}
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={{ marginTop: SPACING_PX.xs }}
-								>
-									{item.category} {item.size_name ? `• ${item.size_name}` : ''}
-								</ThemedText>
-							</View>
-							<View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-								<ThemedText color={c.primary} variant="h3">
-									+{item.box_count}
-								</ThemedText>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									{t('common.done')}
-								</ThemedText>
-							</View>
-						</View>
-					))}
-
-					{items.length === 0 && (
-						<View style={{ padding: s.lg, alignItems: 'center' }}>
-							<ThemedText color={c.placeholder}>
-								{t('order.noItemsMessage')}
-							</ThemedText>
-						</View>
-					)}
-				</View>
-			</ScrollView>
+				{items.length === 0 && (
+					<View style={{ padding: s.lg, alignItems: 'center' }}>
+						<ThemedText color={c.placeholder}>{t('order.noItemsMessage')}</ThemedText>
+					</View>
+				)}
+			</View>
 		</AtomicScreen>
 	);
 }

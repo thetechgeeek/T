@@ -11,3 +11,5 @@ This file is the **only** sanctioned place for temporary exceptions to the styli
 ## Current exceptions
 
 None.
+
+Phase 5 screen-shell exceptions are documented in `docs/SCREEN_SHELL_COOKBOOK.md` because they are intentional shell patterns, not temporary styling debt.

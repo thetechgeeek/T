@@ -125,10 +125,10 @@ export default function MakePaymentScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
+			header={<ScreenHeader title="Make Payment" />}
 			contentContainerStyle={[styles.content, { padding: s.md }]}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
-			<ScreenHeader title="Make Payment" />
 			{/* Supplier Section */}
 			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.sectionLabel}>
 				Select Supplier

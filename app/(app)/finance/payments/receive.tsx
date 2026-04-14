@@ -125,10 +125,10 @@ export default function ReceivePaymentScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
+			header={<ScreenHeader title="Receive Payment" />}
 			contentContainerStyle={[styles.content, { padding: s.md }]}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
-			<ScreenHeader title="Receive Payment" />
 			{/* Customer Section */}
 			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.sectionLabel}>
 				Select Customer

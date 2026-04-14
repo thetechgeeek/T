@@ -192,10 +192,10 @@ export default function PurchaseCreateScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
+			header={<ScreenHeader title="New Purchase Bill" />}
 			contentContainerStyle={[styles.content, { padding: s.md }]}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
-			<ScreenHeader title="New Purchase Bill" />
 			{/* Supplier Section */}
 			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
 				Supplier

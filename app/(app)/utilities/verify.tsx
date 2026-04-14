@@ -70,8 +70,11 @@ export default function DataVerificationScreen() {
 	}, []);
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} scrollable>
-			<ScreenHeader title="Data Verification" />
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Data Verification" />}
+		>
 			<View style={{ padding: s.lg }}>
 				{state === 'idle' && (
 					<>

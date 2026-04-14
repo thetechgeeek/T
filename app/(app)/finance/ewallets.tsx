@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-	View,
-	StyleSheet,
-	FlatList,
-	Pressable,
-	TextInput,
-	Alert,
-	Modal,
-	ScrollView,
-} from 'react-native';
+import { View, StyleSheet, FlatList, Pressable, TextInput, Alert, Modal } from 'react-native';
 import { Plus, X } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -231,167 +222,167 @@ export default function EWalletsScreen() {
 				presentationStyle="pageSheet"
 				onRequestClose={() => setShowAddModal(false)}
 			>
-				<View style={[styles.modal, { backgroundColor: theme.colors.background }]}>
-					<View style={styles.modalHeader}>
-						<ThemedText variant="h3">Add E-Wallet</ThemedText>
-						<Pressable
-							onPress={() => {
-								resetForm();
-								setShowAddModal(false);
-							}}
-							accessibilityLabel="close-modal"
+				<AtomicScreen
+					safeAreaEdges={['top', 'bottom']}
+					withKeyboard={false}
+					scrollable
+					backgroundColor={theme.colors.background}
+					header={
+						<View style={styles.modalHeader}>
+							<ThemedText variant="h3">Add E-Wallet</ThemedText>
+							<Pressable
+								onPress={() => {
+									resetForm();
+									setShowAddModal(false);
+								}}
+								accessibilityLabel="close-modal"
+							>
+								<X size={24} color={c.onSurface} />
+							</Pressable>
+						</View>
+					}
+					contentContainerStyle={{
+						padding: SPACING_PX.lg,
+						paddingBottom: EWALLET_MODAL_BOTTOM_PADDING,
+					}}
+					scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+				>
+					{/* Wallet type */}
+					<View style={styles.section}>
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={styles.fieldLabel}
 						>
-							<X size={24} color={c.onSurface} />
-						</Pressable>
+							Wallet Type *
+						</ThemedText>
+						<View style={styles.chipRow}>
+							{walletTypes.map((wt) => (
+								<Pressable
+									key={wt.value}
+									onPress={() => {
+										setSelectedType(wt.value);
+										if (!walletName) setWalletName(wt.label);
+									}}
+									style={chipStyle(selectedType === wt.value)}
+									accessibilityRole="button"
+									accessibilityState={{ selected: selectedType === wt.value }}
+								>
+									<ThemedText
+										variant="caption"
+										color={
+											selectedType === wt.value
+												? c.onPrimary
+												: c.onSurfaceVariant
+										}
+										style={{
+											fontWeight: selectedType === wt.value ? '700' : '400',
+											paddingHorizontal: SPACING_PX.md,
+											paddingVertical: SPACING_PX.sm,
+										}}
+									>
+										{wt.emoji} {wt.label}
+									</ThemedText>
+								</Pressable>
+							))}
+						</View>
 					</View>
 
-					<ScrollView
-						contentContainerStyle={{
-							padding: SPACING_PX.lg,
-							paddingBottom: EWALLET_MODAL_BOTTOM_PADDING,
-						}}
-						keyboardShouldPersistTaps="handled"
-					>
-						{/* Wallet type */}
-						<View style={styles.section}>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={styles.fieldLabel}
-							>
-								Wallet Type *
-							</ThemedText>
-							<View style={styles.chipRow}>
-								{walletTypes.map((wt) => (
-									<Pressable
-										key={wt.value}
-										onPress={() => {
-											setSelectedType(wt.value);
-											if (!walletName) setWalletName(wt.label);
-										}}
-										style={chipStyle(selectedType === wt.value)}
-										accessibilityRole="button"
-										accessibilityState={{ selected: selectedType === wt.value }}
-									>
-										<ThemedText
-											variant="caption"
-											color={
-												selectedType === wt.value
-													? c.onPrimary
-													: c.onSurfaceVariant
-											}
-											style={{
-												fontWeight:
-													selectedType === wt.value ? '700' : '400',
-												paddingHorizontal: SPACING_PX.md,
-												paddingVertical: SPACING_PX.sm,
-											}}
-										>
-											{wt.emoji} {wt.label}
-										</ThemedText>
-									</Pressable>
-								))}
-							</View>
-						</View>
-
-						{/* Wallet name */}
-						<View style={styles.section}>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={styles.fieldLabel}
-							>
-								Wallet Name
-							</ThemedText>
-							<TextInput
-								value={walletName}
-								onChangeText={setWalletName}
-								placeholder="e.g. PhonePe Business"
-								placeholderTextColor={c.placeholder}
-								style={[
-									styles.textField,
-									{
-										color: c.onSurface,
-										borderColor: c.border,
-										borderRadius: r.md,
-										backgroundColor: theme.colors.surface,
-									},
-								]}
-							/>
-						</View>
-
-						{/* Phone */}
-						<View style={styles.section}>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={styles.fieldLabel}
-							>
-								Linked Phone Number
-							</ThemedText>
-							<TextInput
-								value={phone}
-								onChangeText={(v) => setPhone(v.replace(/[^0-9]/g, ''))}
-								placeholder="10-digit mobile number"
-								placeholderTextColor={c.placeholder}
-								keyboardType="phone-pad"
-								maxLength={10}
-								style={[
-									styles.textField,
-									{
-										color: c.onSurface,
-										borderColor: c.border,
-										borderRadius: r.md,
-										backgroundColor: theme.colors.surface,
-									},
-								]}
-							/>
-						</View>
-
-						{/* Opening Balance */}
-						<View style={styles.section}>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={styles.fieldLabel}
-							>
-								Opening Balance
-							</ThemedText>
-							<View
-								style={[
-									styles.amountRow,
-									{ borderColor: c.border, borderRadius: r.md },
-								]}
-							>
-								<ThemedText
-									style={[
-										styles.currencyPrefix,
-										{ color: c.onSurface, borderRightColor: c.border },
-									]}
-								>
-									₹
-								</ThemedText>
-								<TextInput
-									value={openingBalance}
-									onChangeText={(v) =>
-										setOpeningBalance(v.replace(/[^0-9.]/g, ''))
-									}
-									placeholder="0"
-									placeholderTextColor={c.placeholder}
-									keyboardType="decimal-pad"
-									style={[styles.amountInput, { color: c.onSurface }]}
-								/>
-							</View>
-						</View>
-
-						<Button
-							title={saving ? 'Saving...' : 'Add Wallet'}
-							onPress={handleAdd}
-							loading={saving}
-							accessibilityLabel="save-wallet"
+					{/* Wallet name */}
+					<View style={styles.section}>
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={styles.fieldLabel}
+						>
+							Wallet Name
+						</ThemedText>
+						<TextInput
+							value={walletName}
+							onChangeText={setWalletName}
+							placeholder="e.g. PhonePe Business"
+							placeholderTextColor={c.placeholder}
+							style={[
+								styles.textField,
+								{
+									color: c.onSurface,
+									borderColor: c.border,
+									borderRadius: r.md,
+									backgroundColor: theme.colors.surface,
+								},
+							]}
 						/>
-					</ScrollView>
-				</View>
+					</View>
+
+					{/* Phone */}
+					<View style={styles.section}>
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={styles.fieldLabel}
+						>
+							Linked Phone Number
+						</ThemedText>
+						<TextInput
+							value={phone}
+							onChangeText={(v) => setPhone(v.replace(/[^0-9]/g, ''))}
+							placeholder="10-digit mobile number"
+							placeholderTextColor={c.placeholder}
+							keyboardType="phone-pad"
+							maxLength={10}
+							style={[
+								styles.textField,
+								{
+									color: c.onSurface,
+									borderColor: c.border,
+									borderRadius: r.md,
+									backgroundColor: theme.colors.surface,
+								},
+							]}
+						/>
+					</View>
+
+					{/* Opening Balance */}
+					<View style={styles.section}>
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={styles.fieldLabel}
+						>
+							Opening Balance
+						</ThemedText>
+						<View
+							style={[
+								styles.amountRow,
+								{ borderColor: c.border, borderRadius: r.md },
+							]}
+						>
+							<ThemedText
+								style={[
+									styles.currencyPrefix,
+									{ color: c.onSurface, borderRightColor: c.border },
+								]}
+							>
+								₹
+							</ThemedText>
+							<TextInput
+								value={openingBalance}
+								onChangeText={(v) => setOpeningBalance(v.replace(/[^0-9.]/g, ''))}
+								placeholder="0"
+								placeholderTextColor={c.placeholder}
+								keyboardType="decimal-pad"
+								style={[styles.amountInput, { color: c.onSurface }]}
+							/>
+						</View>
+					</View>
+
+					<Button
+						title={saving ? 'Saving...' : 'Add Wallet'}
+						onPress={handleAdd}
+						loading={saving}
+						accessibilityLabel="save-wallet"
+					/>
+				</AtomicScreen>
 			</Modal>
 		</AtomicScreen>
 	);
@@ -426,9 +417,6 @@ const styles = StyleSheet.create({
 		borderRadius: SIZE_FAB / 2,
 		alignItems: 'center',
 		justifyContent: 'center',
-	},
-	modal: {
-		flex: 1,
 	},
 	modalHeader: {
 		flexDirection: 'row',

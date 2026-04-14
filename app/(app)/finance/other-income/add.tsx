@@ -57,10 +57,10 @@ export default function AddOtherIncomeScreen() {
 			withKeyboard
 			safeAreaEdges={['bottom']}
 			scrollable
+			header={<ScreenHeader title="Add Other Income" />}
 			contentContainerStyle={{ padding: s.lg, paddingBottom: OTHER_INCOME_BOTTOM_PADDING }}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
-			<ScreenHeader title="Add Other Income" />
 			<DatePickerField label="Date" value={date} onChange={setDate} />
 
 			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>

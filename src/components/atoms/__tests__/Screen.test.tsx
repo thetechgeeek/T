@@ -1,12 +1,34 @@
 import React from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
 import { render } from '@testing-library/react-native';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { Screen } from '../Screen';
 
 const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);
+const flattenStyle = (style: StyleProp<ViewStyle> | undefined) =>
+	Array.isArray(style) ? Object.assign({}, ...style) : (style ?? {});
+interface RenderedRootNode {
+	props: {
+		style?: StyleProp<ViewStyle>;
+	};
+}
+
+const asSingleNode = (node: unknown): RenderedRootNode => {
+	if (!node || Array.isArray(node) || typeof node !== 'object' || !('props' in node)) {
+		throw new Error('Expected a single rendered root node.');
+	}
+
+	return node as RenderedRootNode;
+};
+const mockUseSafeAreaInsets = useSafeAreaInsets as jest.MockedFunction<typeof useSafeAreaInsets>;
 
 describe('Screen', () => {
+	beforeEach(() => {
+		mockUseSafeAreaInsets.mockReturnValue({ top: 0, bottom: 0, left: 0, right: 0 });
+	});
+
 	it('renders children', () => {
 		const { getByText } = renderWithTheme(
 			<Screen>
@@ -82,38 +104,101 @@ describe('Screen', () => {
 	});
 
 	it('applies padding based on safeAreaInsets', () => {
-		const { useSafeAreaInsets } = require('react-native-safe-area-context');
-		useSafeAreaInsets.mockReturnValue({ top: 50, bottom: 30, left: 0, right: 0 });
+		mockUseSafeAreaInsets.mockReturnValue({ top: 50, bottom: 30, left: 0, right: 0 });
 
 		const { toJSON } = renderWithTheme(
 			<Screen safeAreaEdges={['top', 'bottom']}>
 				<Text>Safe</Text>
 			</Screen>,
 		);
-		const json = toJSON() as any;
+		const json = asSingleNode(toJSON());
 		// The Screen component returns View or KeyboardAvoidingView.
 		// Both have the padding applied via style.
-		const style = json.props.style;
-		const flattened = Array.isArray(style) ? Object.assign({}, ...style) : style;
+		const flattened = flattenStyle(json.props.style);
 
 		expect(flattened.paddingTop).toBe(50);
 		expect(flattened.paddingBottom).toBe(30);
 	});
 
 	it('respects empty safeAreaEdges', () => {
-		const { useSafeAreaInsets } = require('react-native-safe-area-context');
-		useSafeAreaInsets.mockReturnValue({ top: 50, bottom: 30, left: 0, right: 0 });
+		mockUseSafeAreaInsets.mockReturnValue({ top: 50, bottom: 30, left: 0, right: 0 });
 
 		const { toJSON } = renderWithTheme(
 			<Screen safeAreaEdges={[]}>
 				<Text>No Safe</Text>
 			</Screen>,
 		);
-		const json = toJSON() as any;
-		const style = json.props.style;
-		const flattened = Array.isArray(style) ? Object.assign({}, ...style) : style;
+		const json = asSingleNode(toJSON());
+		const flattened = flattenStyle(json.props.style);
 
 		expect(flattened.paddingTop).toBe(0);
 		expect(flattened.paddingBottom).toBe(0);
+	});
+
+	it('keeps top padding at zero for bottom-only safe areas', () => {
+		mockUseSafeAreaInsets.mockReturnValue({ top: 48, bottom: 24, left: 0, right: 0 });
+
+		const { toJSON } = renderWithTheme(
+			<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
+				<Text>Bottom Only</Text>
+			</Screen>,
+		);
+
+		const json = asSingleNode(toJSON());
+		const flattened = flattenStyle(json.props.style);
+
+		expect(flattened.paddingTop).toBe(0);
+		expect(flattened.paddingBottom).toBe(24);
+	});
+
+	it('moves bottom inset padding to the footer wrapper when footer is present', () => {
+		mockUseSafeAreaInsets.mockReturnValue({ top: 0, bottom: 24, left: 0, right: 0 });
+
+		const { UNSAFE_getAllByType, toJSON } = renderWithTheme(
+			<Screen
+				safeAreaEdges={['bottom']}
+				withKeyboard={false}
+				footer={
+					<View testID="footer-shell">
+						<Text>Footer</Text>
+					</View>
+				}
+			>
+				<Text>Body</Text>
+			</Screen>,
+		);
+
+		const json = asSingleNode(toJSON());
+		const flattened = flattenStyle(json.props.style);
+		const footerPaddingWrapper = UNSAFE_getAllByType(View).find(
+			(node) =>
+				flattenStyle(node.props.style as StyleProp<ViewStyle> | undefined).paddingBottom ===
+				24,
+		);
+
+		expect(flattened.paddingBottom).toBe(0);
+		expect(footerPaddingWrapper).toBeTruthy();
+	});
+
+	it('forwards scrollViewProps to the internal scroll view', () => {
+		const { UNSAFE_getByType } = renderWithTheme(
+			<Screen
+				scrollable
+				withKeyboard={false}
+				scrollViewProps={{
+					testID: 'screen-scroll',
+					keyboardShouldPersistTaps: 'handled',
+					scrollEnabled: false,
+				}}
+			>
+				<Text>Body</Text>
+			</Screen>,
+		);
+
+		const scrollView = UNSAFE_getByType(ScrollView);
+
+		expect(scrollView.props.testID).toBe('screen-scroll');
+		expect(scrollView.props.keyboardShouldPersistTaps).toBe('handled');
+		expect(scrollView.props.scrollEnabled).toBe(false);
 	});
 });

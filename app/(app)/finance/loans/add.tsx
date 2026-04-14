@@ -75,13 +75,13 @@ export default function AddLoanScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
+			header={<ScreenHeader title="Add Loan" />}
 			contentContainerStyle={[styles.scrollContent, { padding: s.lg }]}
 			scrollViewProps={{
 				keyboardShouldPersistTaps: 'handled',
 				showsVerticalScrollIndicator: false,
 			}}
 		>
-			<ScreenHeader title="Add Loan" />
 			{/* Lender Name */}
 			<ThemedText variant="caption" color={c.onSurfaceVariant} style={styles.label}>
 				Lender Name

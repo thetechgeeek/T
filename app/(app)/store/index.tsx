@@ -5,15 +5,7 @@ import {
 	GLASS_WHITE_LIGHT,
 } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
-import {
-	View,
-	ScrollView,
-	StyleSheet,
-	Switch,
-	TouchableOpacity,
-	Alert,
-	Pressable,
-} from 'react-native';
+import { View, StyleSheet, Switch, TouchableOpacity, Alert, Pressable } from 'react-native';
 import {
 	ChevronRight,
 	Copy,
@@ -131,183 +123,173 @@ export default function OnlineStoreScreen() {
 	}
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Online Store" showBackButton />
-
-			<ScrollView
-				contentContainerStyle={[styles.scroll, { paddingBottom: s.xl * 2 }]}
-				showsVerticalScrollIndicator={false}
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Online Store" showBackButton />}
+			contentContainerStyle={[styles.scroll, { paddingBottom: s.xl * 2 }]}
+		>
+			{/* Hero card */}
+			<View
+				style={[
+					styles.heroCard,
+					{
+						backgroundColor: storeEnabled ? c.primary : c.surface,
+						borderRadius: r.lg,
+					},
+				]}
 			>
-				{/* Hero card */}
-				<View
-					style={[
-						styles.heroCard,
-						{
-							backgroundColor: storeEnabled ? c.primary : c.surface,
-							borderRadius: r.lg,
-						},
-					]}
-				>
-					<View style={styles.heroTop}>
-						<View style={styles.heroTitleRow}>
-							<Globe
-								size={20}
-								color={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
-								strokeWidth={2}
-							/>
-							<ThemedText
-								variant="h2"
-								style={[
-									styles.heroTitle,
-									{ color: storeEnabled ? c.onPrimary : c.onSurface },
-								]}
-							>
-								{storeEnabled ? 'Your Store is Live' : 'Store is Offline'}
-							</ThemedText>
-							<Badge
-								label={storeEnabled ? 'LIVE' : 'OFF'}
-								variant={storeEnabled ? 'success' : 'neutral'}
-								size="sm"
-							/>
-						</View>
-						<Switch
-							value={storeEnabled}
-							onValueChange={setStoreEnabled}
-							thumbColor={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
-							trackColor={{ false: c.border, true: GLASS_WHITE_MEDIUM }}
-							accessibilityLabel="Toggle store online status"
+				<View style={styles.heroTop}>
+					<View style={styles.heroTitleRow}>
+						<Globe
+							size={20}
+							color={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
+							strokeWidth={2}
+						/>
+						<ThemedText
+							variant="h2"
+							style={[
+								styles.heroTitle,
+								{ color: storeEnabled ? c.onPrimary : c.onSurface },
+							]}
+						>
+							{storeEnabled ? 'Your Store is Live' : 'Store is Offline'}
+						</ThemedText>
+						<Badge
+							label={storeEnabled ? 'LIVE' : 'OFF'}
+							variant={storeEnabled ? 'success' : 'neutral'}
+							size="sm"
 						/>
 					</View>
-
-					<View
-						style={[
-							styles.urlRow,
-							{
-								backgroundColor: storeEnabled
-									? GLASS_WHITE_LIGHT
-									: c.surfaceVariant,
-								borderRadius: r.sm,
-							},
-						]}
-					>
-						<ThemedText
-							variant="caption"
-							style={[
-								styles.urlText,
-								{ color: storeEnabled ? c.onPrimary : c.onSurfaceVariant },
-							]}
-							numberOfLines={1}
-						>
-							{STORE_URL}
-						</ThemedText>
-						<TouchableOpacity
-							onPress={handleCopyUrl}
-							accessibilityLabel="Copy store URL"
-							hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-						>
-							<Copy
-								size={16}
-								color={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
-							/>
-						</TouchableOpacity>
-					</View>
-				</View>
-
-				{/* Stats row */}
-				<View style={styles.statsRow}>
-					<StatCard
-						label="Total Products"
-						value={0}
-						icon={<Package size={20} color={c.primary} />}
-					/>
-					<StatCard
-						label="Orders Today"
-						value={0}
-						icon={<ShoppingCart size={20} color={c.primary} />}
-					/>
-					<StatCard
-						label="Pending Orders"
-						value={0}
-						icon={<Clock size={20} color={c.warning} />}
+					<Switch
+						value={storeEnabled}
+						onValueChange={setStoreEnabled}
+						thumbColor={storeEnabled ? c.onPrimary : c.onSurfaceVariant}
+						trackColor={{ false: c.border, true: GLASS_WHITE_MEDIUM }}
+						accessibilityLabel="Toggle store online status"
 					/>
 				</View>
 
-				{/* Management actions */}
-				<ThemedText variant="caption" style={[styles.sectionLabel, { color: c.primary }]}>
-					MANAGE
-				</ThemedText>
-				<Card
-					padding="none"
-					variant="elevated"
-					style={{ overflow: 'hidden', backgroundColor: c.surface, borderRadius: r.md }}
-				>
-					<RowItem
-						label="Manage Products"
-						sub="Add, edit or remove store products"
-						icon={<Package size={18} color={c.primary} />}
-						onPress={handleComingSoon}
-					/>
-					<RowItem
-						label="View Orders"
-						sub="Track and fulfil customer orders"
-						icon={<ShoppingCart size={18} color={c.primary} />}
-						onPress={handleComingSoon}
-						isLast
-					/>
-				</Card>
-
-				{/* Customisation actions */}
-				<ThemedText variant="caption" style={[styles.sectionLabel, { color: c.primary }]}>
-					CUSTOMISE
-				</ThemedText>
-				<Card
-					padding="none"
-					variant="elevated"
-					style={{ overflow: 'hidden', backgroundColor: c.surface, borderRadius: r.md }}
-				>
-					<RowItem
-						label="Store Settings"
-						sub="Business name, logo, payment modes"
-						icon={<Settings size={18} color={c.primary} />}
-						onPress={handleComingSoon}
-					/>
-					<RowItem
-						label="Customize Theme"
-						sub="Colours, fonts, banner image"
-						icon={<Palette size={18} color={c.primary} />}
-						onPress={handleComingSoon}
-						isLast
-					/>
-				</Card>
-
-				{/* Share button */}
-				<Button
-					title="Share Store Link"
-					onPress={handleShareStore}
-					leftIcon={<Share2 size={16} color={c.white} />}
-					style={styles.shareBtn}
-				/>
-
-				{/* Promo banner */}
 				<View
 					style={[
-						styles.banner,
+						styles.urlRow,
 						{
-							backgroundColor: c.infoLight,
-							borderRadius: r.md,
-							borderLeftColor: c.info ?? c.primary,
+							backgroundColor: storeEnabled ? GLASS_WHITE_LIGHT : c.surfaceVariant,
+							borderRadius: r.sm,
 						},
 					]}
 				>
-					<Zap size={16} color={c.info ?? c.primary} style={{ marginRight: s.sm }} />
 					<ThemedText
 						variant="caption"
-						style={[styles.bannerText, { color: c.onSurface }]}
+						style={[
+							styles.urlText,
+							{ color: storeEnabled ? c.onPrimary : c.onSurfaceVariant },
+						]}
+						numberOfLines={1}
 					>
-						Accept orders 24/7 from your own online store — no commission!
+						{STORE_URL}
 					</ThemedText>
+					<TouchableOpacity
+						onPress={handleCopyUrl}
+						accessibilityLabel="Copy store URL"
+						hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+					>
+						<Copy size={16} color={storeEnabled ? c.onPrimary : c.onSurfaceVariant} />
+					</TouchableOpacity>
 				</View>
-			</ScrollView>
+			</View>
+
+			{/* Stats row */}
+			<View style={styles.statsRow}>
+				<StatCard
+					label="Total Products"
+					value={0}
+					icon={<Package size={20} color={c.primary} />}
+				/>
+				<StatCard
+					label="Orders Today"
+					value={0}
+					icon={<ShoppingCart size={20} color={c.primary} />}
+				/>
+				<StatCard
+					label="Pending Orders"
+					value={0}
+					icon={<Clock size={20} color={c.warning} />}
+				/>
+			</View>
+
+			{/* Management actions */}
+			<ThemedText variant="caption" style={[styles.sectionLabel, { color: c.primary }]}>
+				MANAGE
+			</ThemedText>
+			<Card
+				padding="none"
+				variant="elevated"
+				style={{ overflow: 'hidden', backgroundColor: c.surface, borderRadius: r.md }}
+			>
+				<RowItem
+					label="Manage Products"
+					sub="Add, edit or remove store products"
+					icon={<Package size={18} color={c.primary} />}
+					onPress={handleComingSoon}
+				/>
+				<RowItem
+					label="View Orders"
+					sub="Track and fulfil customer orders"
+					icon={<ShoppingCart size={18} color={c.primary} />}
+					onPress={handleComingSoon}
+					isLast
+				/>
+			</Card>
+
+			{/* Customisation actions */}
+			<ThemedText variant="caption" style={[styles.sectionLabel, { color: c.primary }]}>
+				CUSTOMISE
+			</ThemedText>
+			<Card
+				padding="none"
+				variant="elevated"
+				style={{ overflow: 'hidden', backgroundColor: c.surface, borderRadius: r.md }}
+			>
+				<RowItem
+					label="Store Settings"
+					sub="Business name, logo, payment modes"
+					icon={<Settings size={18} color={c.primary} />}
+					onPress={handleComingSoon}
+				/>
+				<RowItem
+					label="Customize Theme"
+					sub="Colours, fonts, banner image"
+					icon={<Palette size={18} color={c.primary} />}
+					onPress={handleComingSoon}
+					isLast
+				/>
+			</Card>
+
+			{/* Share button */}
+			<Button
+				title="Share Store Link"
+				onPress={handleShareStore}
+				leftIcon={<Share2 size={16} color={c.white} />}
+				style={styles.shareBtn}
+			/>
+
+			{/* Promo banner */}
+			<View
+				style={[
+					styles.banner,
+					{
+						backgroundColor: c.infoLight,
+						borderRadius: r.md,
+						borderLeftColor: c.info ?? c.primary,
+					},
+				]}
+			>
+				<Zap size={16} color={c.info ?? c.primary} style={{ marginRight: s.sm }} />
+				<ThemedText variant="caption" style={[styles.bannerText, { color: c.onSurface }]}>
+					Accept orders 24/7 from your own online store — no commission!
+				</ThemedText>
+			</View>
 		</AtomicScreen>
 	);
 }

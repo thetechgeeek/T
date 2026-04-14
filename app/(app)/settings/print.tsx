@@ -7,7 +7,7 @@ import {
 	SIZE_THEME_SWATCH_WIDTH,
 } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
-import { View, Switch, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
+import { View, Switch, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -88,205 +88,187 @@ export default function PrintSettingsScreen() {
 	const [signature, setSignature] = useState(false);
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Invoice Print Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
-				<SectionHeader title="Paper Type" variant="uppercase" titleColor={c.primary} />
-				<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
-					{PAPER_TYPES.map((p) => (
-						<Pressable
-							key={p.key}
-							onPress={() => setPaper(p.key)}
+		<Screen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Invoice Print Settings" />}
+			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
+		>
+			<SectionHeader title="Paper Type" variant="uppercase" titleColor={c.primary} />
+			<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
+				{PAPER_TYPES.map((p) => (
+					<Pressable
+						key={p.key}
+						onPress={() => setPaper(p.key)}
+						style={[
+							styles.chip,
+							paper === p.key
+								? { backgroundColor: c.primary, borderColor: c.primary }
+								: { backgroundColor: c.surface, borderColor: c.border },
+						]}
+					>
+						<ThemedText
+							variant="caption"
+							color={paper === p.key ? c.onPrimary : c.onSurface}
+							weight="semibold"
+						>
+							{p.label}
+						</ThemedText>
+					</Pressable>
+				))}
+			</View>
+
+			<SectionHeader title="Invoice Theme" variant="uppercase" titleColor={c.primary} />
+			<View style={[styles.themeRow, { marginHorizontal: SPACING_PX.lg }]}>
+				{appTheme.collections.printThemeSwatches.map((t) => (
+					<Pressable
+						key={t.key}
+						onPress={() => setTheme(t.key)}
+						style={{ alignItems: 'center' }}
+					>
+						<View
 							style={[
-								styles.chip,
-								paper === p.key
-									? { backgroundColor: c.primary, borderColor: c.primary }
-									: { backgroundColor: c.surface, borderColor: c.border },
+								styles.themeRect,
+								{ backgroundColor: t.color },
+								theme === t.key && [styles.themeSelected, { borderColor: c.white }],
 							]}
 						>
-							<ThemedText
-								variant="caption"
-								color={paper === p.key ? c.onPrimary : c.onSurface}
-								weight="semibold"
-							>
-								{p.label}
-							</ThemedText>
-						</Pressable>
-					))}
-				</View>
-
-				<SectionHeader title="Invoice Theme" variant="uppercase" titleColor={c.primary} />
-				<View style={[styles.themeRow, { marginHorizontal: SPACING_PX.lg }]}>
-					{appTheme.collections.printThemeSwatches.map((t) => (
-						<Pressable
-							key={t.key}
-							onPress={() => setTheme(t.key)}
-							style={{ alignItems: 'center' }}
+							{theme === t.key && (
+								<ThemedText style={{ color: c.white, fontSize: SIZE_THEME_CHECK }}>
+									✓
+								</ThemedText>
+							)}
+						</View>
+						<ThemedText
+							variant="caption"
+							style={{
+								color: c.onSurfaceVariant,
+								marginTop: SPACING_PX.xs,
+								textAlign: 'center',
+							}}
+							numberOfLines={1}
 						>
-							<View
-								style={[
-									styles.themeRect,
-									{ backgroundColor: t.color },
-									theme === t.key && [
-										styles.themeSelected,
-										{ borderColor: c.white },
-									],
-								]}
-							>
-								{theme === t.key && (
-									<ThemedText
-										style={{ color: c.white, fontSize: SIZE_THEME_CHECK }}
-									>
-										✓
-									</ThemedText>
-								)}
-							</View>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: SPACING_PX.xs,
-									textAlign: 'center',
-								}}
-								numberOfLines={1}
-							>
-								{t.label}
-							</ThemedText>
-						</Pressable>
-					))}
-				</View>
-
-				<SectionHeader title="Company Header" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow label="Logo" value={logo} onChange={setLogo} c={c} />
-					<SwitchRow label="Business Name" value={bizName} onChange={setBizName} c={c} />
-					<SwitchRow label="Address" value={address} onChange={setAddress} c={c} />
-					<SwitchRow label="Phone" value={phone} onChange={setPhone} c={c} />
-					<SwitchRow label="GSTIN" value={gstin} onChange={setGstin} c={c} last />
-				</SettingsCard>
-
-				<SectionHeader title="Invoice Fields" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow label="Item Code" value={itemCode} onChange={setItemCode} c={c} />
-					<SwitchRow label="HSN Code" value={hsnCode} onChange={setHsnCode} c={c} />
-					<SwitchRow
-						label="Discount Column"
-						value={discount}
-						onChange={setDiscount}
-						c={c}
-					/>
-					<SwitchRow label="MRP" value={mrp} onChange={setMrp} c={c} last />
-				</SettingsCard>
-
-				<SectionHeader title="Totals" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-				>
-					<SwitchRow
-						label="GST Breakup"
-						value={gstBreakup}
-						onChange={setGstBreakup}
-						c={c}
-					/>
-					<SwitchRow
-						label="Amount in Words"
-						value={amtWords}
-						onChange={setAmtWords}
-						c={c}
-					/>
-					<SwitchRow label="UPI QR Code" value={upiQr} onChange={setUpiQr} c={c} last />
-				</SettingsCard>
-
-				<SectionHeader title="Footer" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					style={{
-						marginHorizontal: SPACING_PX.lg,
-						overflow: 'hidden',
-						backgroundColor: c.surface,
-						borderWidth: 0,
-					}}
-					padding="md"
-				>
-					<ThemedText
-						variant="caption"
-						style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.xs }}
-					>
-						Footer Line 1
-					</ThemedText>
-					<TextInput
-						value={footer1}
-						onChangeText={setFooter1}
-						placeholder="Thank you for your business!"
-						placeholderTextColor={c.placeholder}
-						style={[styles.textInput, { borderColor: c.border, color: c.onSurface }]}
-					/>
-					<ThemedText
-						variant="caption"
-						style={{
-							color: c.onSurfaceVariant,
-							marginBottom: SPACING_PX.xs,
-							marginTop: SPACING_PX.md,
-						}}
-					>
-						Footer Line 2
-					</ThemedText>
-					<TextInput
-						value={footer2}
-						onChangeText={setFooter2}
-						placeholder="Visit us again"
-						placeholderTextColor={c.placeholder}
-						style={[
-							styles.textInput,
-							{
-								borderColor: c.border,
-								color: c.onSurface,
-								marginBottom: SPACING_PX.md,
-							},
-						]}
-					/>
-					<View
-						style={[
-							styles.row,
-							{
-								paddingHorizontal: 0,
-								borderTopColor: c.border,
-								borderTopWidth: StyleSheet.hairlineWidth,
-							},
-						]}
-					>
-						<ThemedText variant="body" style={{ flex: 1 }}>
-							Show Signature Box
+							{t.label}
 						</ThemedText>
-						<Switch
-							trackColor={{ true: c.primary, false: c.border }}
-							value={signature}
-							onValueChange={setSignature}
-						/>
-					</View>
-				</SettingsCard>
-			</ScrollView>
+					</Pressable>
+				))}
+			</View>
+
+			<SectionHeader title="Company Header" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow label="Logo" value={logo} onChange={setLogo} c={c} />
+				<SwitchRow label="Business Name" value={bizName} onChange={setBizName} c={c} />
+				<SwitchRow label="Address" value={address} onChange={setAddress} c={c} />
+				<SwitchRow label="Phone" value={phone} onChange={setPhone} c={c} />
+				<SwitchRow label="GSTIN" value={gstin} onChange={setGstin} c={c} last />
+			</SettingsCard>
+
+			<SectionHeader title="Invoice Fields" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow label="Item Code" value={itemCode} onChange={setItemCode} c={c} />
+				<SwitchRow label="HSN Code" value={hsnCode} onChange={setHsnCode} c={c} />
+				<SwitchRow label="Discount Column" value={discount} onChange={setDiscount} c={c} />
+				<SwitchRow label="MRP" value={mrp} onChange={setMrp} c={c} last />
+			</SettingsCard>
+
+			<SectionHeader title="Totals" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+			>
+				<SwitchRow label="GST Breakup" value={gstBreakup} onChange={setGstBreakup} c={c} />
+				<SwitchRow label="Amount in Words" value={amtWords} onChange={setAmtWords} c={c} />
+				<SwitchRow label="UPI QR Code" value={upiQr} onChange={setUpiQr} c={c} last />
+			</SettingsCard>
+
+			<SectionHeader title="Footer" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				style={{
+					marginHorizontal: SPACING_PX.lg,
+					overflow: 'hidden',
+					backgroundColor: c.surface,
+					borderWidth: 0,
+				}}
+				padding="md"
+			>
+				<ThemedText
+					variant="caption"
+					style={{ color: c.onSurfaceVariant, marginBottom: SPACING_PX.xs }}
+				>
+					Footer Line 1
+				</ThemedText>
+				<TextInput
+					value={footer1}
+					onChangeText={setFooter1}
+					placeholder="Thank you for your business!"
+					placeholderTextColor={c.placeholder}
+					style={[styles.textInput, { borderColor: c.border, color: c.onSurface }]}
+				/>
+				<ThemedText
+					variant="caption"
+					style={{
+						color: c.onSurfaceVariant,
+						marginBottom: SPACING_PX.xs,
+						marginTop: SPACING_PX.md,
+					}}
+				>
+					Footer Line 2
+				</ThemedText>
+				<TextInput
+					value={footer2}
+					onChangeText={setFooter2}
+					placeholder="Visit us again"
+					placeholderTextColor={c.placeholder}
+					style={[
+						styles.textInput,
+						{
+							borderColor: c.border,
+							color: c.onSurface,
+							marginBottom: SPACING_PX.md,
+						},
+					]}
+				/>
+				<View
+					style={[
+						styles.row,
+						{
+							paddingHorizontal: 0,
+							borderTopColor: c.border,
+							borderTopWidth: StyleSheet.hairlineWidth,
+						},
+					]}
+				>
+					<ThemedText variant="body" style={{ flex: 1 }}>
+						Show Signature Box
+					</ThemedText>
+					<Switch
+						trackColor={{ true: c.primary, false: c.border }}
+						value={signature}
+						onValueChange={setSignature}
+					/>
+				</View>
+			</SettingsCard>
 		</Screen>
 	);
 }

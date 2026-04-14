@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Linking, Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MessageCircle, ShoppingCart, CreditCard } from 'lucide-react-native';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
@@ -96,170 +96,169 @@ export default function SupplierDetailScreen() {
 	}
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title={supplier.name} />
-
-			<ScrollView contentContainerStyle={styles.scrollContent}>
-				{/* Header Card */}
-				<Card style={styles.headerCard}>
-					<View style={styles.avatarRow}>
-						<View
-							style={[
-								styles.avatar,
-								{
-									backgroundColor: getAvatarColor(
-										supplier.name,
-										theme.collections.partyAvatarColors,
-									),
-								},
-							]}
-						>
-							<ThemedText
-								weight="bold"
-								color={c.white}
-								style={{ fontSize: FONT_SIZE.h2 }}
-							>
-								{getInitials(supplier.name)}
-							</ThemedText>
-						</View>
-						<View style={styles.headerInfo}>
-							<ThemedText variant="h2">{supplier.name}</ThemedText>
-							{supplier.phone ? (
-								<TouchableOpacity onPress={handleCall} accessibilityRole="button">
-									<ThemedText variant="body" color={c.primary}>
-										{supplier.phone}
-									</ThemedText>
-								</TouchableOpacity>
-							) : null}
-							{supplier.city ? (
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									{[supplier.city, supplier.state].filter(Boolean).join(', ')}
-								</ThemedText>
-							) : null}
-						</View>
-					</View>
-
-					{supplier.payment_terms ? (
-						<View style={[styles.infoRow, { marginTop: s.sm }]}>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Payment Terms:{' '}
-							</ThemedText>
-							<ThemedText variant="captionBold">{supplier.payment_terms}</ThemedText>
-						</View>
-					) : null}
-				</Card>
-
-				{/* Quick Actions */}
-				<View style={styles.actionsRow}>
-					<Button
-						title="New Purchase"
-						variant="primary"
-						leftIcon={<ShoppingCart size={18} color={c.white} />}
-						style={{ flex: 1, marginRight: SPACING_PX.xs }}
-						onPress={handleNewPurchase}
-					/>
-					<Button
-						title="Make Payment"
-						variant="outline"
-						leftIcon={<CreditCard size={18} color={c.primary} />}
-						style={{ flex: 1, marginLeft: SPACING_PX.xs }}
-						onPress={handleMakePayment}
-					/>
-				</View>
-
-				{/* WhatsApp */}
-				{supplier.phone ? (
-					<TouchableOpacity
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={<ScreenHeader title={supplier.name} />}
+			contentContainerStyle={styles.scrollContent}
+		>
+			{/* Header Card */}
+			<Card style={styles.headerCard}>
+				<View style={styles.avatarRow}>
+					<View
 						style={[
-							styles.whatsappBtn,
-							{ backgroundColor: c.success, borderRadius: r.md },
+							styles.avatar,
+							{
+								backgroundColor: getAvatarColor(
+									supplier.name,
+									theme.collections.partyAvatarColors,
+								),
+							},
 						]}
-						onPress={handleWhatsApp}
-						accessibilityRole="button"
-						accessibilityLabel="whatsapp-supplier"
 					>
-						<MessageCircle size={18} color={c.onSuccess} />
 						<ThemedText
-							variant="body"
-							color={c.onSuccess}
-							style={{ marginLeft: SPACING_PX.sm }}
+							weight="bold"
+							color={c.white}
+							style={{ fontSize: FONT_SIZE.h2 }}
 						>
-							WhatsApp
+							{getInitials(supplier.name)}
 						</ThemedText>
-					</TouchableOpacity>
-				) : null}
-
-				{/* Tab Bar */}
-				<View
-					style={[
-						styles.tabBar,
-						{
-							borderBottomColor: c.border,
-							borderBottomWidth: StyleSheet.hairlineWidth,
-						},
-					]}
-				>
-					{(['ledger', 'purchases'] as TabName[]).map((tab) => {
-						const isActive = activeTab === tab;
-						return (
-							<TouchableOpacity
-								key={tab}
-								style={[
-									styles.tab,
-									isActive
-										? {
-												borderBottomColor: c.primary,
-												borderBottomWidth: 2,
-											}
-										: undefined,
-								]}
-								onPress={() => setActiveTab(tab)}
-								accessibilityRole="tab"
-								accessibilityState={{ selected: isActive }}
-							>
-								<ThemedText
-									variant="body"
-									color={isActive ? c.primary : c.onSurfaceVariant}
-									style={isActive ? { fontWeight: '600' } : undefined}
-								>
-									{tab === 'ledger' ? 'Ledger' : 'Purchases'}
+					</View>
+					<View style={styles.headerInfo}>
+						<ThemedText variant="h2">{supplier.name}</ThemedText>
+						{supplier.phone ? (
+							<TouchableOpacity onPress={handleCall} accessibilityRole="button">
+								<ThemedText variant="body" color={c.primary}>
+									{supplier.phone}
 								</ThemedText>
 							</TouchableOpacity>
-						);
-					})}
+						) : null}
+						{supplier.city ? (
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{[supplier.city, supplier.state].filter(Boolean).join(', ')}
+							</ThemedText>
+						) : null}
+					</View>
 				</View>
 
-				{/* Tab Content */}
-				<View style={styles.tabContent}>
-					{activeTab === 'ledger' ? (
-						<View style={styles.emptyState}>
-							<ThemedText variant="h3" color={c.onSurfaceVariant}>
-								Ledger Coming Soon
-							</ThemedText>
+				{supplier.payment_terms ? (
+					<View style={[styles.infoRow, { marginTop: s.sm }]}>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							Payment Terms:{' '}
+						</ThemedText>
+						<ThemedText variant="captionBold">{supplier.payment_terms}</ThemedText>
+					</View>
+				) : null}
+			</Card>
+
+			{/* Quick Actions */}
+			<View style={styles.actionsRow}>
+				<Button
+					title="New Purchase"
+					variant="primary"
+					leftIcon={<ShoppingCart size={18} color={c.white} />}
+					style={{ flex: 1, marginRight: SPACING_PX.xs }}
+					onPress={handleNewPurchase}
+				/>
+				<Button
+					title="Make Payment"
+					variant="outline"
+					leftIcon={<CreditCard size={18} color={c.primary} />}
+					style={{ flex: 1, marginLeft: SPACING_PX.xs }}
+					onPress={handleMakePayment}
+				/>
+			</View>
+
+			{/* WhatsApp */}
+			{supplier.phone ? (
+				<TouchableOpacity
+					style={[styles.whatsappBtn, { backgroundColor: c.success, borderRadius: r.md }]}
+					onPress={handleWhatsApp}
+					accessibilityRole="button"
+					accessibilityLabel="whatsapp-supplier"
+				>
+					<MessageCircle size={18} color={c.onSuccess} />
+					<ThemedText
+						variant="body"
+						color={c.onSuccess}
+						style={{ marginLeft: SPACING_PX.sm }}
+					>
+						WhatsApp
+					</ThemedText>
+				</TouchableOpacity>
+			) : null}
+
+			{/* Tab Bar */}
+			<View
+				style={[
+					styles.tabBar,
+					{
+						borderBottomColor: c.border,
+						borderBottomWidth: StyleSheet.hairlineWidth,
+					},
+				]}
+			>
+				{(['ledger', 'purchases'] as TabName[]).map((tab) => {
+					const isActive = activeTab === tab;
+					return (
+						<TouchableOpacity
+							key={tab}
+							style={[
+								styles.tab,
+								isActive
+									? {
+											borderBottomColor: c.primary,
+											borderBottomWidth: 2,
+										}
+									: undefined,
+							]}
+							onPress={() => setActiveTab(tab)}
+							accessibilityRole="tab"
+							accessibilityState={{ selected: isActive }}
+						>
 							<ThemedText
 								variant="body"
-								color={c.placeholder}
-								style={{ marginTop: s.sm, textAlign: 'center' }}
+								color={isActive ? c.primary : c.onSurfaceVariant}
+								style={isActive ? { fontWeight: '600' } : undefined}
 							>
-								Supplier ledger history will appear here.
+								{tab === 'ledger' ? 'Ledger' : 'Purchases'}
 							</ThemedText>
-						</View>
-					) : (
-						<View style={styles.emptyState}>
-							<ThemedText variant="h3" color={c.onSurfaceVariant}>
-								No Purchases Yet
-							</ThemedText>
-							<ThemedText
-								variant="body"
-								color={c.placeholder}
-								style={{ marginTop: s.sm, textAlign: 'center' }}
-							>
-								Purchase orders from this supplier will appear here.
-							</ThemedText>
-						</View>
-					)}
-				</View>
-			</ScrollView>
+						</TouchableOpacity>
+					);
+				})}
+			</View>
+
+			{/* Tab Content */}
+			<View style={styles.tabContent}>
+				{activeTab === 'ledger' ? (
+					<View style={styles.emptyState}>
+						<ThemedText variant="h3" color={c.onSurfaceVariant}>
+							Ledger Coming Soon
+						</ThemedText>
+						<ThemedText
+							variant="body"
+							color={c.placeholder}
+							style={{ marginTop: s.sm, textAlign: 'center' }}
+						>
+							Supplier ledger history will appear here.
+						</ThemedText>
+					</View>
+				) : (
+					<View style={styles.emptyState}>
+						<ThemedText variant="h3" color={c.onSurfaceVariant}>
+							No Purchases Yet
+						</ThemedText>
+						<ThemedText
+							variant="body"
+							color={c.placeholder}
+							style={{ marginTop: s.sm, textAlign: 'center' }}
+						>
+							Purchase orders from this supplier will appear here.
+						</ThemedText>
+					</View>
+				)}
+			</View>
 		</AtomicScreen>
 	);
 }

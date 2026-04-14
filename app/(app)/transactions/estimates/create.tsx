@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { Plus, Trash2 } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -86,252 +86,253 @@ export default function CreateEstimateScreen() {
 	const VALIDITY_SHORTCUTS = [7, 15, 30];
 
 	return (
-		<AtomicScreen withKeyboard safeAreaEdges={['bottom']}>
-			<ScreenHeader title="New Estimate / Quotation" />
-			<ScrollView
-				contentContainerStyle={{ padding: s.lg, paddingBottom: s['2xl'] }}
-				keyboardShouldPersistTaps="handled"
-			>
-				<View style={[styles.row2]}>
-					<View style={{ flex: 1 }}>
-						<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
-							Estimate No.
-						</ThemedText>
-						<TextInput
-							value={estNumber}
-							editable={false}
-							style={[
-								styles.input,
-								{
-									borderColor: c.border,
-									color: c.onSurfaceVariant,
-									borderRadius: r.md,
-									backgroundColor: c.surfaceVariant,
-								},
-							]}
-						/>
-					</View>
-					<View style={{ flex: 1 }}>
-						<DatePickerField label="Date" value={date} onChange={setDate} />
-					</View>
-				</View>
-
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
-					Valid Until
-				</ThemedText>
-				<View style={styles.validityRow}>
-					{VALIDITY_SHORTCUTS.map((d) => (
-						<Pressable
-							key={d}
-							onPress={() => setValidUntil(addDays(d))}
-							style={[
-								styles.chip,
-								{
-									borderColor: c.border,
-									borderRadius: r.full,
-									backgroundColor: c.surfaceVariant,
-								},
-							]}
-						>
-							<ThemedText variant="caption">{d} days</ThemedText>
-						</Pressable>
-					))}
-				</View>
-				<DatePickerField label="" value={validUntil} onChange={setValidUntil} />
-
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
-					Customer *
-				</ThemedText>
-				<TextInput
-					value={customer}
-					onChangeText={setCustomer}
-					placeholder="Customer name"
-					placeholderTextColor={c.placeholder}
-					style={[
-						styles.input,
-						{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
-					]}
-				/>
-
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
-					Subject (optional)
-				</ThemedText>
-				<TextInput
-					value={subject}
-					onChangeText={setSubject}
-					placeholder="e.g. Quotation for Kitchen Tiles"
-					placeholderTextColor={c.placeholder}
-					style={[
-						styles.input,
-						{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
-					]}
-				/>
-
-				<ThemedText variant="h3" style={{ marginTop: s.lg, marginBottom: s.sm }}>
-					Line Items
-				</ThemedText>
-				{items.map((item, idx) => (
-					<View
-						key={item.id}
-						style={[styles.itemCard, { borderColor: c.border, borderRadius: r.md }]}
-					>
-						<View style={styles.itemHeader}>
-							<ThemedText variant="bodyBold" color={c.primary}>
-								Item {idx + 1}
-							</ThemedText>
-							{items.length > 1 && (
-								<Pressable onPress={() => removeItem(item.id)}>
-									<Trash2 size={18} color={c.error} />
-								</Pressable>
-							)}
-						</View>
-						<TextInput
-							value={item.name}
-							onChangeText={(v) => updateItem(item.id, 'name', v)}
-							placeholder="Item name"
-							placeholderTextColor={c.placeholder}
-							style={[
-								styles.input,
-								{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
-							]}
-						/>
-						<View style={styles.row3}>
-							<View style={{ flex: 1 }}>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									Qty
-								</ThemedText>
-								<TextInput
-									value={item.qty}
-									onChangeText={(v) => updateItem(item.id, 'qty', v)}
-									keyboardType="numeric"
-									style={[
-										styles.inputSm,
-										{
-											borderColor: c.border,
-											color: c.onSurface,
-											borderRadius: r.sm,
-										},
-									]}
-								/>
-							</View>
-							<View style={{ flex: 2 }}>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									Rate (₹)
-								</ThemedText>
-								<TextInput
-									value={item.rate}
-									onChangeText={(v) => updateItem(item.id, 'rate', v)}
-									keyboardType="numeric"
-									placeholder="0"
-									placeholderTextColor={c.placeholder}
-									style={[
-										styles.inputSm,
-										{
-											borderColor: c.border,
-											color: c.onSurface,
-											borderRadius: r.sm,
-										},
-									]}
-								/>
-							</View>
-							<View style={{ flex: 1 }}>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									GST %
-								</ThemedText>
-								<TextInput
-									value={item.gst}
-									onChangeText={(v) => updateItem(item.id, 'gst', v)}
-									keyboardType="numeric"
-									style={[
-										styles.inputSm,
-										{
-											borderColor: c.border,
-											color: c.onSurface,
-											borderRadius: r.sm,
-										},
-									]}
-								/>
-							</View>
-						</View>
-						{item.qty && item.rate && (
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={{ marginTop: s.xs }}
-							>
-								Total:{' '}
-								{fmt(
-									(parseFloat(item.qty) || 0) *
-										(parseFloat(item.rate) || 0) *
-										(1 + (parseFloat(item.gst) || 0) / 100),
-								)}
-							</ThemedText>
-						)}
-					</View>
-				))}
-				<Pressable
-					onPress={addItem}
-					style={[styles.addItemBtn, { borderColor: c.primary, borderRadius: r.md }]}
-				>
-					<Plus size={18} color={c.primary} />
-					<ThemedText variant="body" color={c.primary}>
-						{' '}
-						Add Item
+		<AtomicScreen
+			withKeyboard
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="New Estimate / Quotation" />}
+			contentContainerStyle={{ padding: s.lg, paddingBottom: s['2xl'] }}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+		>
+			<View style={[styles.row2]}>
+				<View style={{ flex: 1 }}>
+					<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
+						Estimate No.
 					</ThemedText>
-				</Pressable>
-
-				{/* Totals */}
-				<View
-					style={[
-						styles.totalsCard,
-						{ backgroundColor: c.surface, borderColor: c.border, borderRadius: r.lg },
-					]}
-				>
-					<View style={styles.totalsRow}>
-						<ThemedText variant="body">Subtotal</ThemedText>
-						<ThemedText variant="body">{fmt(subtotal)}</ThemedText>
-					</View>
-					<View style={styles.totalsRow}>
-						<ThemedText variant="body">GST</ThemedText>
-						<ThemedText variant="body">{fmt(totalGst)}</ThemedText>
-					</View>
-					<View
+					<TextInput
+						value={estNumber}
+						editable={false}
 						style={[
-							styles.totalsRow,
+							styles.input,
 							{
-								borderTopWidth: 1,
-								borderTopColor: c.border,
-								marginTop: s.xs,
-								paddingTop: s.sm,
+								borderColor: c.border,
+								color: c.onSurfaceVariant,
+								borderRadius: r.md,
+								backgroundColor: c.surfaceVariant,
+							},
+						]}
+					/>
+				</View>
+				<View style={{ flex: 1 }}>
+					<DatePickerField label="Date" value={date} onChange={setDate} />
+				</View>
+			</View>
+
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
+				Valid Until
+			</ThemedText>
+			<View style={styles.validityRow}>
+				{VALIDITY_SHORTCUTS.map((d) => (
+					<Pressable
+						key={d}
+						onPress={() => setValidUntil(addDays(d))}
+						style={[
+							styles.chip,
+							{
+								borderColor: c.border,
+								borderRadius: r.full,
+								backgroundColor: c.surfaceVariant,
 							},
 						]}
 					>
-						<ThemedText variant="bodyBold">Grand Total</ThemedText>
-						<ThemedText variant="amountLarge" color={c.primary}>
-							{fmt(grandTotal)}
+						<ThemedText variant="caption">{d} days</ThemedText>
+					</Pressable>
+				))}
+			</View>
+			<DatePickerField label="" value={validUntil} onChange={setValidUntil} />
+
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
+				Customer *
+			</ThemedText>
+			<TextInput
+				value={customer}
+				onChangeText={setCustomer}
+				placeholder="Customer name"
+				placeholderTextColor={c.placeholder}
+				style={[
+					styles.input,
+					{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
+				]}
+			/>
+
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
+				Subject (optional)
+			</ThemedText>
+			<TextInput
+				value={subject}
+				onChangeText={setSubject}
+				placeholder="e.g. Quotation for Kitchen Tiles"
+				placeholderTextColor={c.placeholder}
+				style={[
+					styles.input,
+					{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
+				]}
+			/>
+
+			<ThemedText variant="h3" style={{ marginTop: s.lg, marginBottom: s.sm }}>
+				Line Items
+			</ThemedText>
+			{items.map((item, idx) => (
+				<View
+					key={item.id}
+					style={[styles.itemCard, { borderColor: c.border, borderRadius: r.md }]}
+				>
+					<View style={styles.itemHeader}>
+						<ThemedText variant="bodyBold" color={c.primary}>
+							Item {idx + 1}
 						</ThemedText>
+						{items.length > 1 && (
+							<Pressable onPress={() => removeItem(item.id)}>
+								<Trash2 size={18} color={c.error} />
+							</Pressable>
+						)}
 					</View>
+					<TextInput
+						value={item.name}
+						onChangeText={(v) => updateItem(item.id, 'name', v)}
+						placeholder="Item name"
+						placeholderTextColor={c.placeholder}
+						style={[
+							styles.input,
+							{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
+						]}
+					/>
+					<View style={styles.row3}>
+						<View style={{ flex: 1 }}>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								Qty
+							</ThemedText>
+							<TextInput
+								value={item.qty}
+								onChangeText={(v) => updateItem(item.id, 'qty', v)}
+								keyboardType="numeric"
+								style={[
+									styles.inputSm,
+									{
+										borderColor: c.border,
+										color: c.onSurface,
+										borderRadius: r.sm,
+									},
+								]}
+							/>
+						</View>
+						<View style={{ flex: 2 }}>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								Rate (₹)
+							</ThemedText>
+							<TextInput
+								value={item.rate}
+								onChangeText={(v) => updateItem(item.id, 'rate', v)}
+								keyboardType="numeric"
+								placeholder="0"
+								placeholderTextColor={c.placeholder}
+								style={[
+									styles.inputSm,
+									{
+										borderColor: c.border,
+										color: c.onSurface,
+										borderRadius: r.sm,
+									},
+								]}
+							/>
+						</View>
+						<View style={{ flex: 1 }}>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								GST %
+							</ThemedText>
+							<TextInput
+								value={item.gst}
+								onChangeText={(v) => updateItem(item.id, 'gst', v)}
+								keyboardType="numeric"
+								style={[
+									styles.inputSm,
+									{
+										borderColor: c.border,
+										color: c.onSurface,
+										borderRadius: r.sm,
+									},
+								]}
+							/>
+						</View>
+					</View>
+					{item.qty && item.rate && (
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: s.xs }}
+						>
+							Total:{' '}
+							{fmt(
+								(parseFloat(item.qty) || 0) *
+									(parseFloat(item.rate) || 0) *
+									(1 + (parseFloat(item.gst) || 0) / 100),
+							)}
+						</ThemedText>
+					)}
 				</View>
-
-				<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
-					Terms & Conditions
+			))}
+			<Pressable
+				onPress={addItem}
+				style={[styles.addItemBtn, { borderColor: c.primary, borderRadius: r.md }]}
+			>
+				<Plus size={18} color={c.primary} />
+				<ThemedText variant="body" color={c.primary}>
+					{' '}
+					Add Item
 				</ThemedText>
-				<TextInput
-					value={terms}
-					onChangeText={setTerms}
-					multiline
-					numberOfLines={4}
-					style={[
-						styles.textarea,
-						{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
-					]}
-				/>
+			</Pressable>
 
-				<View style={{ marginTop: s.lg, gap: s.sm }}>
-					<Button title="Share on WhatsApp" onPress={handleSave} />
-					<Button title="Save" variant="secondary" onPress={handleSave} />
+			{/* Totals */}
+			<View
+				style={[
+					styles.totalsCard,
+					{ backgroundColor: c.surface, borderColor: c.border, borderRadius: r.lg },
+				]}
+			>
+				<View style={styles.totalsRow}>
+					<ThemedText variant="body">Subtotal</ThemedText>
+					<ThemedText variant="body">{fmt(subtotal)}</ThemedText>
 				</View>
-			</ScrollView>
+				<View style={styles.totalsRow}>
+					<ThemedText variant="body">GST</ThemedText>
+					<ThemedText variant="body">{fmt(totalGst)}</ThemedText>
+				</View>
+				<View
+					style={[
+						styles.totalsRow,
+						{
+							borderTopWidth: 1,
+							borderTopColor: c.border,
+							marginTop: s.xs,
+							paddingTop: s.sm,
+						},
+					]}
+				>
+					<ThemedText variant="bodyBold">Grand Total</ThemedText>
+					<ThemedText variant="amountLarge" color={c.primary}>
+						{fmt(grandTotal)}
+					</ThemedText>
+				</View>
+			</View>
+
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.label}>
+				Terms & Conditions
+			</ThemedText>
+			<TextInput
+				value={terms}
+				onChangeText={setTerms}
+				multiline
+				numberOfLines={4}
+				style={[
+					styles.textarea,
+					{ borderColor: c.border, color: c.onSurface, borderRadius: r.md },
+				]}
+			/>
+
+			<View style={{ marginTop: s.lg, gap: s.sm }}>
+				<Button title="Share on WhatsApp" onPress={handleSave} />
+				<Button title="Save" variant="secondary" onPress={handleSave} />
+			</View>
 		</AtomicScreen>
 	);
 }

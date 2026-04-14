@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native';
+import { View, StyleSheet, Pressable, Alert } from 'react-native';
 import { Save, Send } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
@@ -76,325 +76,310 @@ export default function GSTR3BScreen() {
 	}
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title="GSTR-3B Return" showBackButton />
-
-			<ScrollView
-				contentContainerStyle={[styles.content, { paddingBottom: s['2xl'] + s.sm }]}
-			>
-				{/* Period selector */}
-				<View style={styles.chipRow}>
-					{allPeriods.map((p) => (
-						<Pressable
-							key={p.value}
-							onPress={() => setPeriod(p.value)}
-							style={[
-								styles.chip,
-								{
-									borderColor: period === p.value ? c.primary : c.border,
-									backgroundColor: period === p.value ? c.primary : c.surface,
-									borderRadius: r.full,
-								},
-							]}
-							accessibilityRole="button"
-							accessibilityState={{ selected: period === p.value }}
-						>
-							<ThemedText
-								variant="caption"
-								color={period === p.value ? c.onPrimary : c.onSurface}
-							>
-								{p.label}
-							</ThemedText>
-						</Pressable>
-					))}
-				</View>
-
-				{/* Section 3.1 */}
-				<Card style={{ borderRadius: r.md, marginBottom: s.md }} padding="sm">
-					<ThemedText
-						variant="bodyBold"
-						style={{ marginBottom: s.xs, paddingHorizontal: s.xs }}
-					>
-						3.1 Outward Supplies & Tax
-					</ThemedText>
-					{divider}
-
-					{/* Column headers */}
-					<View style={[styles.tableHeader, { borderBottomColor: c.border }]}>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={{ flex: 3 }}
-						>
-							Nature of Supply
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.numCell}
-							align="right"
-						>
-							IGST
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.numCell}
-							align="right"
-						>
-							CGST
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.numCell}
-							align="right"
-						>
-							SGST
-						</ThemedText>
-					</View>
-
-					{MOCK_GSTR3B_OUTWARD_31.map((row) =>
-						renderAmtRow(row.label, row.igst, row.cgst, row.sgst),
-					)}
-
-					{/* Taxable value total row */}
-					{divider}
-					<View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
-						<ThemedText variant="captionBold" style={{ flex: 3 }}>
-							Taxable Value
-						</ThemedText>
-						<ThemedText variant="captionBold" style={styles.numCell} align="right">
-							{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.igst, 0))}
-						</ThemedText>
-						<ThemedText variant="captionBold" style={styles.numCell} align="right">
-							{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.cgst, 0))}
-						</ThemedText>
-						<ThemedText variant="captionBold" style={styles.numCell} align="right">
-							{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.sgst, 0))}
-						</ThemedText>
-					</View>
-				</Card>
-
-				{/* Section 3.2 */}
-				<Card style={{ borderRadius: r.md, marginBottom: s.md }} padding="sm">
-					<ThemedText
-						variant="bodyBold"
-						style={{ marginBottom: s.xs, paddingHorizontal: s.xs }}
-					>
-						3.2 Inter-State Supplies
-					</ThemedText>
-					{divider}
-
-					<View style={[styles.tableHeader, { borderBottomColor: c.border }]}>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={{ flex: 3 }}
-						>
-							Recipient Type
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.numCell}
-							align="right"
-						>
-							Taxable
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.numCell}
-							align="right"
-						>
-							IGST
-						</ThemedText>
-					</View>
-
-					{MOCK_GSTR3B_INTERSTATE_32.map((row, idx) => (
-						<View
-							key={row.label}
-							style={[
-								styles.tableRow,
-								{ borderBottomColor: c.border },
-								idx === MOCK_GSTR3B_INTERSTATE_32.length - 1 && {
-									borderBottomWidth: 0,
-								},
-							]}
-						>
-							<ThemedText
-								variant="caption"
-								color={c.onSurfaceVariant}
-								style={{ flex: 3 }}
-							>
-								{row.label}
-							</ThemedText>
-							<ThemedText variant="caption" style={styles.numCell} align="right">
-								{formatCurrency(row.taxable)}
-							</ThemedText>
-							<ThemedText variant="caption" style={styles.numCell} align="right">
-								{formatCurrency(row.igst)}
-							</ThemedText>
-						</View>
-					))}
-				</Card>
-
-				{/* Section 4: ITC */}
-				<Card style={{ borderRadius: r.md, marginBottom: s.md }} padding="sm">
-					<ThemedText
-						variant="bodyBold"
-						style={{ marginBottom: s.xs, paddingHorizontal: s.xs }}
-					>
-						4 Eligible ITC
-					</ThemedText>
-					{divider}
-
-					<View style={[styles.tableHeader, { borderBottomColor: c.border }]}>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={{ flex: 3 }}
-						>
-							Details
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.numCell}
-							align="right"
-						>
-							IGST
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.numCell}
-							align="right"
-						>
-							CGST
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							color={c.onSurfaceVariant}
-							style={styles.numCell}
-							align="right"
-						>
-							SGST
-						</ThemedText>
-					</View>
-
-					{MOCK_GSTR3B_ITC.map((row) =>
-						renderAmtRow(row.label, row.igst, row.cgst, row.sgst),
-					)}
-
-					{divider}
-					<View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
-						<ThemedText variant="captionBold" color={c.success} style={{ flex: 3 }}>
-							Net ITC Available
-						</ThemedText>
-						<ThemedText
-							variant="captionBold"
-							color={c.success}
-							style={styles.numCell}
-							align="right"
-						>
-							{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.igst, 0))}
-						</ThemedText>
-						<ThemedText
-							variant="captionBold"
-							color={c.success}
-							style={styles.numCell}
-							align="right"
-						>
-							{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.cgst, 0))}
-						</ThemedText>
-						<ThemedText
-							variant="captionBold"
-							color={c.success}
-							style={styles.numCell}
-							align="right"
-						>
-							{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.sgst, 0))}
-						</ThemedText>
-					</View>
-				</Card>
-
-				{/* Net Tax Payable */}
-				<Card
-					style={{
-						borderRadius: r.md,
-						marginBottom: s.md,
-						borderTopWidth: 3,
-						borderTopColor: c.error,
-					}}
-					padding="md"
-				>
-					<ThemedText variant="bodyBold" style={{ marginBottom: s.sm }}>
-						Net Tax Payable
-					</ThemedText>
-					{divider}
-
-					{[
-						{ label: 'CGST Payable', value: netCGST, color: c.warning },
-						{ label: 'SGST Payable', value: netSGST, color: c.warning },
-						{ label: 'IGST Payable', value: netIGST, color: c.primary },
-					].map((row) => (
-						<View key={row.label} style={styles.payableRow}>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{row.label}
-							</ThemedText>
-							<ThemedText variant="captionBold" color={row.color}>
-								{formatCurrency(row.value)}
-							</ThemedText>
-						</View>
-					))}
-
-					<View
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={<ScreenHeader title="GSTR-3B Return" showBackButton />}
+			contentContainerStyle={[styles.content, { paddingBottom: s['2xl'] + s.sm }]}
+		>
+			{/* Period selector */}
+			<View style={styles.chipRow}>
+				{allPeriods.map((p) => (
+					<Pressable
+						key={p.value}
+						onPress={() => setPeriod(p.value)}
 						style={[
-							styles.divider,
-							{ backgroundColor: c.border, marginVertical: s.sm },
+							styles.chip,
+							{
+								borderColor: period === p.value ? c.primary : c.border,
+								backgroundColor: period === p.value ? c.primary : c.surface,
+								borderRadius: r.full,
+							},
 						]}
-					/>
+						accessibilityRole="button"
+						accessibilityState={{ selected: period === p.value }}
+					>
+						<ThemedText
+							variant="caption"
+							color={period === p.value ? c.onPrimary : c.onSurface}
+						>
+							{p.label}
+						</ThemedText>
+					</Pressable>
+				))}
+			</View>
 
-					<View style={styles.payableRow}>
-						<ThemedText variant="bodyBold">Total Tax Payable</ThemedText>
-						<ThemedText variant="amount" color={c.error}>
-							{formatCurrency(netTotal)}
+			{/* Section 3.1 */}
+			<Card style={{ borderRadius: r.md, marginBottom: s.md }} padding="sm">
+				<ThemedText
+					variant="bodyBold"
+					style={{ marginBottom: s.xs, paddingHorizontal: s.xs }}
+				>
+					3.1 Outward Supplies & Tax
+				</ThemedText>
+				{divider}
+
+				{/* Column headers */}
+				<View style={[styles.tableHeader, { borderBottomColor: c.border }]}>
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ flex: 3 }}>
+						Nature of Supply
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.numCell}
+						align="right"
+					>
+						IGST
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.numCell}
+						align="right"
+					>
+						CGST
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.numCell}
+						align="right"
+					>
+						SGST
+					</ThemedText>
+				</View>
+
+				{MOCK_GSTR3B_OUTWARD_31.map((row) =>
+					renderAmtRow(row.label, row.igst, row.cgst, row.sgst),
+				)}
+
+				{/* Taxable value total row */}
+				{divider}
+				<View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
+					<ThemedText variant="captionBold" style={{ flex: 3 }}>
+						Taxable Value
+					</ThemedText>
+					<ThemedText variant="captionBold" style={styles.numCell} align="right">
+						{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.igst, 0))}
+					</ThemedText>
+					<ThemedText variant="captionBold" style={styles.numCell} align="right">
+						{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.cgst, 0))}
+					</ThemedText>
+					<ThemedText variant="captionBold" style={styles.numCell} align="right">
+						{formatCurrency(MOCK_GSTR3B_OUTWARD_31.reduce((a, r) => a + r.sgst, 0))}
+					</ThemedText>
+				</View>
+			</Card>
+
+			{/* Section 3.2 */}
+			<Card style={{ borderRadius: r.md, marginBottom: s.md }} padding="sm">
+				<ThemedText
+					variant="bodyBold"
+					style={{ marginBottom: s.xs, paddingHorizontal: s.xs }}
+				>
+					3.2 Inter-State Supplies
+				</ThemedText>
+				{divider}
+
+				<View style={[styles.tableHeader, { borderBottomColor: c.border }]}>
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ flex: 3 }}>
+						Recipient Type
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.numCell}
+						align="right"
+					>
+						Taxable
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.numCell}
+						align="right"
+					>
+						IGST
+					</ThemedText>
+				</View>
+
+				{MOCK_GSTR3B_INTERSTATE_32.map((row, idx) => (
+					<View
+						key={row.label}
+						style={[
+							styles.tableRow,
+							{ borderBottomColor: c.border },
+							idx === MOCK_GSTR3B_INTERSTATE_32.length - 1 && {
+								borderBottomWidth: 0,
+							},
+						]}
+					>
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ flex: 3 }}
+						>
+							{row.label}
+						</ThemedText>
+						<ThemedText variant="caption" style={styles.numCell} align="right">
+							{formatCurrency(row.taxable)}
+						</ThemedText>
+						<ThemedText variant="caption" style={styles.numCell} align="right">
+							{formatCurrency(row.igst)}
 						</ThemedText>
 					</View>
-				</Card>
+				))}
+			</Card>
 
-				{/* Action buttons */}
-				<View style={[styles.actionRow, { gap: s.sm }]}>
-					<Button
-						title="Save Draft"
-						variant="outline"
-						style={{ flex: 1 }}
-						leftIcon={<Save size={16} color={c.primary} />}
-						onPress={() =>
-							Alert.alert(
-								'Coming Soon',
-								'Draft saving will be available in a future update.',
-							)
-						}
-						accessibilityLabel="Save GSTR-3B draft"
-					/>
-					<Button
-						title="File Return"
-						variant="primary"
-						style={{ flex: 1 }}
-						leftIcon={<Send size={16} color={c.white} />}
-						onPress={() =>
-							Alert.alert(
-								'Coming Soon',
-								'Return filing will be available in a future update.',
-							)
-						}
-						accessibilityLabel="File GSTR-3B return"
-					/>
+			{/* Section 4: ITC */}
+			<Card style={{ borderRadius: r.md, marginBottom: s.md }} padding="sm">
+				<ThemedText
+					variant="bodyBold"
+					style={{ marginBottom: s.xs, paddingHorizontal: s.xs }}
+				>
+					4 Eligible ITC
+				</ThemedText>
+				{divider}
+
+				<View style={[styles.tableHeader, { borderBottomColor: c.border }]}>
+					<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ flex: 3 }}>
+						Details
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.numCell}
+						align="right"
+					>
+						IGST
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.numCell}
+						align="right"
+					>
+						CGST
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={styles.numCell}
+						align="right"
+					>
+						SGST
+					</ThemedText>
 				</View>
-			</ScrollView>
+
+				{MOCK_GSTR3B_ITC.map((row) =>
+					renderAmtRow(row.label, row.igst, row.cgst, row.sgst),
+				)}
+
+				{divider}
+				<View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
+					<ThemedText variant="captionBold" color={c.success} style={{ flex: 3 }}>
+						Net ITC Available
+					</ThemedText>
+					<ThemedText
+						variant="captionBold"
+						color={c.success}
+						style={styles.numCell}
+						align="right"
+					>
+						{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.igst, 0))}
+					</ThemedText>
+					<ThemedText
+						variant="captionBold"
+						color={c.success}
+						style={styles.numCell}
+						align="right"
+					>
+						{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.cgst, 0))}
+					</ThemedText>
+					<ThemedText
+						variant="captionBold"
+						color={c.success}
+						style={styles.numCell}
+						align="right"
+					>
+						{formatCurrency(MOCK_GSTR3B_ITC.reduce((a, r) => a + r.sgst, 0))}
+					</ThemedText>
+				</View>
+			</Card>
+
+			{/* Net Tax Payable */}
+			<Card
+				style={{
+					borderRadius: r.md,
+					marginBottom: s.md,
+					borderTopWidth: 3,
+					borderTopColor: c.error,
+				}}
+				padding="md"
+			>
+				<ThemedText variant="bodyBold" style={{ marginBottom: s.sm }}>
+					Net Tax Payable
+				</ThemedText>
+				{divider}
+
+				{[
+					{ label: 'CGST Payable', value: netCGST, color: c.warning },
+					{ label: 'SGST Payable', value: netSGST, color: c.warning },
+					{ label: 'IGST Payable', value: netIGST, color: c.primary },
+				].map((row) => (
+					<View key={row.label} style={styles.payableRow}>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							{row.label}
+						</ThemedText>
+						<ThemedText variant="captionBold" color={row.color}>
+							{formatCurrency(row.value)}
+						</ThemedText>
+					</View>
+				))}
+
+				<View
+					style={[styles.divider, { backgroundColor: c.border, marginVertical: s.sm }]}
+				/>
+
+				<View style={styles.payableRow}>
+					<ThemedText variant="bodyBold">Total Tax Payable</ThemedText>
+					<ThemedText variant="amount" color={c.error}>
+						{formatCurrency(netTotal)}
+					</ThemedText>
+				</View>
+			</Card>
+
+			{/* Action buttons */}
+			<View style={[styles.actionRow, { gap: s.sm }]}>
+				<Button
+					title="Save Draft"
+					variant="outline"
+					style={{ flex: 1 }}
+					leftIcon={<Save size={16} color={c.primary} />}
+					onPress={() =>
+						Alert.alert(
+							'Coming Soon',
+							'Draft saving will be available in a future update.',
+						)
+					}
+					accessibilityLabel="Save GSTR-3B draft"
+				/>
+				<Button
+					title="File Return"
+					variant="primary"
+					style={{ flex: 1 }}
+					leftIcon={<Send size={16} color={c.white} />}
+					onPress={() =>
+						Alert.alert(
+							'Coming Soon',
+							'Return filing will be available in a future update.',
+						)
+					}
+					accessibilityLabel="File GSTR-3B return"
+				/>
+			</View>
 		</AtomicScreen>
 	);
 }

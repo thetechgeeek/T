@@ -181,262 +181,255 @@ export default function ItemDetailScreen() {
 	const isLowStock = item.box_count <= item.low_stock_threshold;
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader
-				title={item.design_name}
-				rightElement={
-					<TouchableOpacity
-						style={{ padding: 4 }}
-						onPress={() => router.push(`/(app)/inventory/add?id=${item.id}`)}
-					>
-						<Edit size={22} color={c.primary} strokeWidth={2} />
-					</TouchableOpacity>
-				}
-			/>
-
-			<ScrollView contentContainerStyle={{ padding: s.lg }}>
-				{/* Image Card */}
-				<View
-					style={[
-						styles.imageCard,
-						{
-							backgroundColor: c.surface,
-							borderRadius: r.lg,
-							...(theme.shadows?.sm || {}),
-						},
-					]}
-				>
-					{item.tile_image_url ? (
-						<Image
-							source={{ uri: item.tile_image_url }}
-							style={{ width: '100%', aspectRatio: 1, borderRadius: r.lg }}
-							contentFit="cover"
-						/>
-					) : (
-						<View
-							style={{
-								width: '100%',
-								aspectRatio: 1,
-								alignItems: 'center',
-								justifyContent: 'center',
-								backgroundColor: c.surfaceVariant,
-								borderRadius: r.lg,
-							}}
-						>
-							<Package size={64} color={c.placeholder} strokeWidth={1} />
-						</View>
-					)}
-				</View>
-
-				{/* Specs Grid */}
-				<View
-					style={[
-						layout.row,
-						{ flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: SPECS_GRID_MARGIN },
-					]}
-				>
-					<SpecBox label={t('inventory.addItem')} value={item.base_item_number} />
-					<SpecBox
-						label={t('inventory.category')}
-						value={t(
-							`inventory.categories.${(item.category || 'OTHER').toLowerCase()}`,
-						)}
-					/>
-					<SpecBox label={t('inventory.size')} value={item.size_name || t('common.na')} />
-					<SpecBox label={t('inventory.grade')} value={item.grade || t('common.na')} />
-					<SpecBox
-						label={t('inventory.pcsPerBox')}
-						value={item.pcs_per_box?.toString() || t('common.na')}
-					/>
-					<SpecBox
-						label={t('inventory.sqftPerBox')}
-						value={item.sqft_per_box?.toString() || t('common.na')}
-					/>
-					<SpecBox
-						label={t('inventory.sellingPrice')}
-						value={formatCurrency(item.selling_price)}
-						highlight
-					/>
-				</View>
-
-				{/* Stock Status */}
-				<View
-					style={[
-						styles.stockBox,
-						{
-							backgroundColor: isLowStock
-								? c.errorLight
-								: withOpacity(c.success, OPACITY_SKELETON_BASE),
-							borderRadius: r.md,
-							marginTop: s.xl,
-							borderColor: isLowStock ? c.error : c.success,
-							borderWidth: 1,
-						},
-					]}
-				>
-					<ThemedText variant="h3" color={isLowStock ? c.error : c.success}>
-						{t('inventory.stockStatus', { count: item.box_count })}
-					</ThemedText>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={{ marginTop: 2 }}
-					>
-						{t('inventory.thresholdStatus', { count: item.low_stock_threshold })}
-					</ThemedText>
-				</View>
-
-				{/* Quick Actions */}
-				<View style={[layout.row, { marginTop: s.md, gap: s.md }]}>
-					<TouchableOpacity
-						style={[
-							styles.actionBtn,
-							layout.row,
-							{ flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md },
-						]}
-						onPress={() =>
-							router.push(`/(app)/inventory/stock-op?id=${item.id}&type=stock_in`)
-						}
-					>
-						<ArrowDownRight size={20} color={c.success} strokeWidth={2.5} />
-						<ThemedText weight="semibold" style={{ marginLeft: 8 }}>
-							{t('inventory.stockIn')}
-						</ThemedText>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={[
-							styles.actionBtn,
-							layout.row,
-							{ flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md },
-						]}
-						onPress={() =>
-							router.push(`/(app)/inventory/stock-op?id=${item.id}&type=stock_out`)
-						}
-					>
-						<ArrowUpRight size={20} color={c.error} strokeWidth={2.5} />
-						<ThemedText weight="semibold" style={{ marginLeft: 8 }}>
-							{t('inventory.stockOut')}
-						</ThemedText>
-					</TouchableOpacity>
-				</View>
-
-				{/* Party-wise Special Rates */}
-				<View style={{ marginTop: s.xl }}>
-					<View style={[layout.rowBetween, { marginBottom: s.md }]}>
-						<ThemedText variant="h3">Special Party Rates</ThemedText>
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={
+				<ScreenHeader
+					title={item.design_name}
+					rightElement={
 						<TouchableOpacity
-							onPress={async () => {
-								await fetchParties();
-								setIsModalVisible(true);
-							}}
 							style={{ padding: 4 }}
+							onPress={() => router.push(`/(app)/inventory/add?id=${item.id}`)}
 						>
-							<ThemedText color={c.primary} weight="semibold">
-								+ Add
-							</ThemedText>
+							<Edit size={22} color={c.primary} strokeWidth={2} />
 						</TouchableOpacity>
+					}
+				/>
+			}
+			contentContainerStyle={{ padding: s.lg }}
+		>
+			{/* Image Card */}
+			<View
+				style={[
+					styles.imageCard,
+					{
+						backgroundColor: c.surface,
+						borderRadius: r.lg,
+						...(theme.shadows?.sm || {}),
+					},
+				]}
+			>
+				{item.tile_image_url ? (
+					<Image
+						source={{ uri: item.tile_image_url }}
+						style={{ width: '100%', aspectRatio: 1, borderRadius: r.lg }}
+						contentFit="cover"
+					/>
+				) : (
+					<View
+						style={{
+							width: '100%',
+							aspectRatio: 1,
+							alignItems: 'center',
+							justifyContent: 'center',
+							backgroundColor: c.surfaceVariant,
+							borderRadius: r.lg,
+						}}
+					>
+						<Package size={64} color={c.placeholder} strokeWidth={1} />
 					</View>
+				)}
+			</View>
 
-					{partyRates.length === 0 ? (
+			{/* Specs Grid */}
+			<View
+				style={[
+					layout.row,
+					{ flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: SPECS_GRID_MARGIN },
+				]}
+			>
+				<SpecBox label={t('inventory.addItem')} value={item.base_item_number} />
+				<SpecBox
+					label={t('inventory.category')}
+					value={t(`inventory.categories.${(item.category || 'OTHER').toLowerCase()}`)}
+				/>
+				<SpecBox label={t('inventory.size')} value={item.size_name || t('common.na')} />
+				<SpecBox label={t('inventory.grade')} value={item.grade || t('common.na')} />
+				<SpecBox
+					label={t('inventory.pcsPerBox')}
+					value={item.pcs_per_box?.toString() || t('common.na')}
+				/>
+				<SpecBox
+					label={t('inventory.sqftPerBox')}
+					value={item.sqft_per_box?.toString() || t('common.na')}
+				/>
+				<SpecBox
+					label={t('inventory.sellingPrice')}
+					value={formatCurrency(item.selling_price)}
+					highlight
+				/>
+			</View>
+
+			{/* Stock Status */}
+			<View
+				style={[
+					styles.stockBox,
+					{
+						backgroundColor: isLowStock
+							? c.errorLight
+							: withOpacity(c.success, OPACITY_SKELETON_BASE),
+						borderRadius: r.md,
+						marginTop: s.xl,
+						borderColor: isLowStock ? c.error : c.success,
+						borderWidth: 1,
+					},
+				]}
+			>
+				<ThemedText variant="h3" color={isLowStock ? c.error : c.success}>
+					{t('inventory.stockStatus', { count: item.box_count })}
+				</ThemedText>
+				<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginTop: 2 }}>
+					{t('inventory.thresholdStatus', { count: item.low_stock_threshold })}
+				</ThemedText>
+			</View>
+
+			{/* Quick Actions */}
+			<View style={[layout.row, { marginTop: s.md, gap: s.md }]}>
+				<TouchableOpacity
+					style={[
+						styles.actionBtn,
+						layout.row,
+						{ flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md },
+					]}
+					onPress={() =>
+						router.push(`/(app)/inventory/stock-op?id=${item.id}&type=stock_in`)
+					}
+				>
+					<ArrowDownRight size={20} color={c.success} strokeWidth={2.5} />
+					<ThemedText weight="semibold" style={{ marginLeft: 8 }}>
+						{t('inventory.stockIn')}
+					</ThemedText>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={[
+						styles.actionBtn,
+						layout.row,
+						{ flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md },
+					]}
+					onPress={() =>
+						router.push(`/(app)/inventory/stock-op?id=${item.id}&type=stock_out`)
+					}
+				>
+					<ArrowUpRight size={20} color={c.error} strokeWidth={2.5} />
+					<ThemedText weight="semibold" style={{ marginLeft: 8 }}>
+						{t('inventory.stockOut')}
+					</ThemedText>
+				</TouchableOpacity>
+			</View>
+
+			{/* Party-wise Special Rates */}
+			<View style={{ marginTop: s.xl }}>
+				<View style={[layout.rowBetween, { marginBottom: s.md }]}>
+					<ThemedText variant="h3">Special Party Rates</ThemedText>
+					<TouchableOpacity
+						onPress={async () => {
+							await fetchParties();
+							setIsModalVisible(true);
+						}}
+						style={{ padding: 4 }}
+					>
+						<ThemedText color={c.primary} weight="semibold">
+							+ Add
+						</ThemedText>
+					</TouchableOpacity>
+				</View>
+
+				{partyRates.length === 0 ? (
+					<View
+						style={{
+							padding: s.md,
+							backgroundColor: c.surfaceVariant,
+							borderRadius: r.md,
+						}}
+					>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							No special rates configured for this item.
+						</ThemedText>
+					</View>
+				) : (
+					partyRates.map((rate) => (
 						<View
-							style={{
-								padding: s.md,
-								backgroundColor: c.surfaceVariant,
-								borderRadius: r.md,
-							}}
+							key={rate.id}
+							style={[
+								layout.rowBetween,
+								{
+									padding: s.md,
+									backgroundColor: c.surface,
+									borderRadius: r.md,
+									marginBottom: s.sm,
+									borderWidth: 1,
+									borderColor: c.border,
+								},
+							]}
 						>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								No special rates configured for this item.
+							<View>
+								<ThemedText weight="semibold">
+									{rate.customers?.name ||
+										rate.suppliers?.name ||
+										'Unknown Party'}
+								</ThemedText>
+								<ThemedText variant="caption" color={c.onSurfaceVariant}>
+									{rate.customer_id ? 'Customer' : 'Supplier'}
+								</ThemedText>
+							</View>
+							<ThemedText variant="bodyBold" color={c.primary}>
+								{formatCurrency(rate.custom_rate)}
 							</ThemedText>
 						</View>
-					) : (
-						partyRates.map((rate) => (
-							<View
-								key={rate.id}
-								style={[
-									layout.rowBetween,
-									{
-										padding: s.md,
-										backgroundColor: c.surface,
-										borderRadius: r.md,
-										marginBottom: s.sm,
-										borderWidth: 1,
-										borderColor: c.border,
-									},
-								]}
-							>
-								<View>
-									<ThemedText weight="semibold">
-										{rate.customers?.name ||
-											rate.suppliers?.name ||
-											'Unknown Party'}
-									</ThemedText>
-									<ThemedText variant="caption" color={c.onSurfaceVariant}>
-										{rate.customer_id ? 'Customer' : 'Supplier'}
-									</ThemedText>
-								</View>
-								<ThemedText variant="bodyBold" color={c.primary}>
-									{formatCurrency(rate.custom_rate)}
-								</ThemedText>
-							</View>
-						))
-					)}
-				</View>
+					))
+				)}
+			</View>
 
-				{/* Stock History */}
-				<View style={{ marginTop: s.xl }}>
-					<ThemedText variant="h3" style={{ marginBottom: s.md }}>
-						{t('inventory.stockHistory')}
-					</ThemedText>
-					{history.length === 0 ? (
-						<ThemedText color={c.placeholder}>
-							{t('inventory.emptyFilterHint')}
-						</ThemedText>
-					) : (
-						history.map((op, index) => (
-							<View
-								key={op.id}
-								style={[
-									styles.historyRow,
-									layout.row,
-									{
-										borderBottomColor: c.border,
-										borderBottomWidth:
-											index === history.length - 1
-												? 0
-												: StyleSheet.hairlineWidth,
-									},
-								]}
-							>
-								<View style={{ flex: 1 }}>
-									<ThemedText
-										weight="semibold"
-										style={{ textTransform: 'capitalize' }}
-									>
-										{t(`inventory.operations.${op.operation_type}`)}
-									</ThemedText>
-									<ThemedText
-										variant="caption"
-										color={c.onSurfaceVariant}
-										style={{ marginTop: 2 }}
-									>
-										{formatDateShort(op.created_at)}
-										{op.reason ? ` • ${op.reason}` : ''}
-									</ThemedText>
-								</View>
+			{/* Stock History */}
+			<View style={{ marginTop: s.xl }}>
+				<ThemedText variant="h3" style={{ marginBottom: s.md }}>
+					{t('inventory.stockHistory')}
+				</ThemedText>
+				{history.length === 0 ? (
+					<ThemedText color={c.placeholder}>{t('inventory.emptyFilterHint')}</ThemedText>
+				) : (
+					history.map((op, index) => (
+						<View
+							key={op.id}
+							style={[
+								styles.historyRow,
+								layout.row,
+								{
+									borderBottomColor: c.border,
+									borderBottomWidth:
+										index === history.length - 1 ? 0 : StyleSheet.hairlineWidth,
+								},
+							]}
+						>
+							<View style={{ flex: 1 }}>
 								<ThemedText
-									weight="bold"
-									color={op.quantity_change > 0 ? c.success : c.error}
+									weight="semibold"
+									style={{ textTransform: 'capitalize' }}
 								>
-									{op.quantity_change > 0 ? '+' : ''}
-									{op.quantity_change}
+									{t(`inventory.operations.${op.operation_type}`)}
+								</ThemedText>
+								<ThemedText
+									variant="caption"
+									color={c.onSurfaceVariant}
+									style={{ marginTop: 2 }}
+								>
+									{formatDateShort(op.created_at)}
+									{op.reason ? ` • ${op.reason}` : ''}
 								</ThemedText>
 							</View>
-						))
-					)}
-				</View>
-			</ScrollView>
-
+							<ThemedText
+								weight="bold"
+								color={op.quantity_change > 0 ? c.success : c.error}
+							>
+								{op.quantity_change > 0 ? '+' : ''}
+								{op.quantity_change}
+							</ThemedText>
+						</View>
+					))
+				)}
+			</View>
 			{/* Add Rate Modal */}
 			<Modal
 				visible={isModalVisible}

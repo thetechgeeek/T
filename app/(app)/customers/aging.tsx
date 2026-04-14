@@ -36,8 +36,8 @@ export default function AgingReportScreen() {
 			scrollable
 			contentContainerStyle={styles.scrollContent}
 			safeAreaEdges={['bottom']}
+			header={<ScreenHeader title={t('customer.agingReport')} />}
 		>
-			<ScreenHeader title={t('customer.agingReport')} />
 			<View style={styles.summaryCard}>
 				<Card padding="lg" variant="elevated">
 					<ThemedText

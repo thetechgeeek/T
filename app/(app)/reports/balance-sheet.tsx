@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, TextInput, Alert } from 'react-native';
+import { View, StyleSheet, Pressable, TextInput, Alert } from 'react-native';
 import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
@@ -177,230 +177,239 @@ export default function BalanceSheetScreen() {
 	const isBalanced = Math.abs(balanceCheck) < 1;
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Balance Sheet" showBackButton />
-
-			{/* Month navigation */}
-			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginVertical: s.sm }]}>
-				<Pressable
-					onPress={() => setOffset((o) => o - 1)}
-					style={styles.navBtn}
-					accessibilityLabel="Previous month"
-				>
-					<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
-				</Pressable>
-				<View style={{ flex: 1, alignItems: 'center' }}>
-					<ThemedText weight="bold">{label}</ThemedText>
-					<ThemedText variant="caption" color={c.onSurfaceVariant}>
-						As on {asOn}
-					</ThemedText>
-				</View>
-				<Pressable
-					onPress={() => offset < 0 && setOffset((o) => o + 1)}
-					disabled={offset >= 0}
-					style={[styles.navBtn, { opacity: offset < 0 ? 1 : DISABLED_NAV_OPACITY }]}
-					accessibilityLabel="Next month"
-				>
-					<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
-				</Pressable>
-			</View>
-
-			<ScrollView
-				contentContainerStyle={{
-					padding: s.md,
-					paddingBottom: s['2xl'] + s.sm,
-					gap: s.md,
-				}}
-			>
-				{/* ASSETS */}
-				<Card padding="md">
-					<ThemedText
-						weight="bold"
-						style={{
-							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
-							fontSize: theme.typography.sizes.md,
-						}}
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={
+				<>
+					<ScreenHeader title="Balance Sheet" showBackButton />
+					<View
+						style={[
+							styles.periodNav,
+							{ paddingHorizontal: s.md, marginVertical: s.sm },
+						]}
 					>
-						Assets
-					</ThemedText>
-					<ThemedText
-						variant="caption"
-						weight="bold"
-						color={c.onSurfaceVariant}
-						style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
-					>
-						Current Assets
-					</ThemedText>
-					<SectionRow
-						label="Cash in Hand"
-						value={cashInHand}
-						onPress={() => Alert.alert('Cash in Hand', 'Cash ledger coming soon.')}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="Bank Balances"
-						value={bankBalances}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="Trade Receivables"
-						value={tradeReceivables}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="Stock Value"
-						value={stockValue}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="Total Assets"
-						value={totalAssets}
-						bold
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-				</Card>
-
-				{/* LIABILITIES */}
-				<Card padding="md">
-					<ThemedText
-						weight="bold"
-						style={{
-							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
-							fontSize: theme.typography.sizes.md,
-						}}
-					>
-						Liabilities
-					</ThemedText>
-					<ThemedText
-						variant="caption"
-						weight="bold"
-						color={c.onSurfaceVariant}
-						style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
-					>
-						Current Liabilities
-					</ThemedText>
-					<SectionRow
-						label="Trade Payables"
-						value={tradePayables}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="GST Payable"
-						value={gstPayable}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="Loans Outstanding"
-						value={loansOutstanding}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="Total Liabilities"
-						value={totalLiabilities}
-						bold
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-				</Card>
-
-				{/* CAPITAL */}
-				<Card padding="md">
-					<ThemedText
-						weight="bold"
-						style={{
-							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
-							fontSize: theme.typography.sizes.md,
-						}}
-					>
-						Capital
-					</ThemedText>
-
-					{/* Opening Capital: editable */}
-					<View style={styles.sectionRow}>
-						<ThemedText style={{ flex: 1 }} color={c.onSurface}>
-							Opening Capital
-						</ThemedText>
-						<TextInput
-							value={openingCapital}
-							onChangeText={setOpeningCapital}
-							keyboardType="numeric"
+						<Pressable
+							onPress={() => setOffset((o) => o - 1)}
+							style={styles.navBtn}
+							accessibilityLabel="Previous month"
+						>
+							<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
+						</Pressable>
+						<View style={{ flex: 1, alignItems: 'center' }}>
+							<ThemedText weight="bold">{label}</ThemedText>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								As on {asOn}
+							</ThemedText>
+						</View>
+						<Pressable
+							onPress={() => offset < 0 && setOffset((o) => o + 1)}
+							disabled={offset >= 0}
 							style={[
-								styles.capitalInput,
-								{
-									color: c.onSurface,
-									borderColor: c.border,
-									backgroundColor: c.surface,
-								},
+								styles.navBtn,
+								{ opacity: offset < 0 ? 1 : DISABLED_NAV_OPACITY },
 							]}
-							accessibilityLabel="Opening Capital"
-						/>
+							accessibilityLabel="Next month"
+						>
+							<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
+						</Pressable>
 					</View>
-
-					<SectionRow
-						label="Net Profit"
-						value={netProfit}
-						color={netProfit >= 0 ? c.success : c.error}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="Total Capital"
-						value={totalCapital}
-						bold
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-				</Card>
-
-				{/* Balance Check */}
-				<Card
-					padding="md"
+				</>
+			}
+			contentContainerStyle={{
+				padding: s.md,
+				paddingBottom: s['2xl'] + s.sm,
+				gap: s.md,
+			}}
+		>
+			{/* ASSETS */}
+			<Card padding="md">
+				<ThemedText
+					weight="bold"
 					style={{
-						backgroundColor: withOpacity(
-							isBalanced ? c.success : c.error,
-							OPACITY_SKELETON_BASE,
-						),
-						borderWidth: BALANCE_CARD_BORDER_WIDTH,
-						borderColor: isBalanced ? c.success : c.error,
+						marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+						fontSize: theme.typography.sizes.md,
 					}}
 				>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={{ textAlign: 'center', marginBottom: s.xs }}
-					>
-						Assets = Liabilities + Capital
+					Assets
+				</ThemedText>
+				<ThemedText
+					variant="caption"
+					weight="bold"
+					color={c.onSurfaceVariant}
+					style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
+				>
+					Current Assets
+				</ThemedText>
+				<SectionRow
+					label="Cash in Hand"
+					value={cashInHand}
+					onPress={() => Alert.alert('Cash in Hand', 'Cash ledger coming soon.')}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="Bank Balances"
+					value={bankBalances}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="Trade Receivables"
+					value={tradeReceivables}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="Stock Value"
+					value={stockValue}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow
+					label="Total Assets"
+					value={totalAssets}
+					bold
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+			</Card>
+
+			{/* LIABILITIES */}
+			<Card padding="md">
+				<ThemedText
+					weight="bold"
+					style={{
+						marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+						fontSize: theme.typography.sizes.md,
+					}}
+				>
+					Liabilities
+				</ThemedText>
+				<ThemedText
+					variant="caption"
+					weight="bold"
+					color={c.onSurfaceVariant}
+					style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
+				>
+					Current Liabilities
+				</ThemedText>
+				<SectionRow
+					label="Trade Payables"
+					value={tradePayables}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="GST Payable"
+					value={gstPayable}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="Loans Outstanding"
+					value={loansOutstanding}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow
+					label="Total Liabilities"
+					value={totalLiabilities}
+					bold
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+			</Card>
+
+			{/* CAPITAL */}
+			<Card padding="md">
+				<ThemedText
+					weight="bold"
+					style={{
+						marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+						fontSize: theme.typography.sizes.md,
+					}}
+				>
+					Capital
+				</ThemedText>
+
+				{/* Opening Capital: editable */}
+				<View style={styles.sectionRow}>
+					<ThemedText style={{ flex: 1 }} color={c.onSurface}>
+						Opening Capital
 					</ThemedText>
-					{isBalanced ? (
-						<ThemedText
-							weight="bold"
-							color={c.success}
-							style={{ textAlign: 'center', fontSize: theme.typography.sizes.md }}
-						>
-							Balanced
-						</ThemedText>
-					) : (
-						<ThemedText
-							weight="bold"
-							color={c.error}
-							style={{ textAlign: 'center', fontSize: theme.typography.sizes.md }}
-						>
-							Difference: {formatCurrency(Math.abs(balanceCheck))}
-						</ThemedText>
-					)}
-				</Card>
-			</ScrollView>
+					<TextInput
+						value={openingCapital}
+						onChangeText={setOpeningCapital}
+						keyboardType="numeric"
+						style={[
+							styles.capitalInput,
+							{
+								color: c.onSurface,
+								borderColor: c.border,
+								backgroundColor: c.surface,
+							},
+						]}
+						accessibilityLabel="Opening Capital"
+					/>
+				</View>
+
+				<SectionRow
+					label="Net Profit"
+					value={netProfit}
+					color={netProfit >= 0 ? c.success : c.error}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow
+					label="Total Capital"
+					value={totalCapital}
+					bold
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+			</Card>
+
+			{/* Balance Check */}
+			<Card
+				padding="md"
+				style={{
+					backgroundColor: withOpacity(
+						isBalanced ? c.success : c.error,
+						OPACITY_SKELETON_BASE,
+					),
+					borderWidth: BALANCE_CARD_BORDER_WIDTH,
+					borderColor: isBalanced ? c.success : c.error,
+				}}
+			>
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					style={{ textAlign: 'center', marginBottom: s.xs }}
+				>
+					Assets = Liabilities + Capital
+				</ThemedText>
+				{isBalanced ? (
+					<ThemedText
+						weight="bold"
+						color={c.success}
+						style={{ textAlign: 'center', fontSize: theme.typography.sizes.md }}
+					>
+						Balanced
+					</ThemedText>
+				) : (
+					<ThemedText
+						weight="bold"
+						color={c.error}
+						style={{ textAlign: 'center', fontSize: theme.typography.sizes.md }}
+					>
+						Difference: {formatCurrency(Math.abs(balanceCheck))}
+					</ThemedText>
+				)}
+			</Card>
 		</AtomicScreen>
 	);
 }

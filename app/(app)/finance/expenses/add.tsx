@@ -101,13 +101,13 @@ export default function AddExpenseScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
+			header={<ScreenHeader title={t('finance.newExpense')} showBackButton />}
 			contentContainerStyle={[
 				styles.scrollContent,
 				{ paddingBottom: EXPENSE_FORM_BOTTOM_PADDING + insets.bottom },
 			]}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
-			<ScreenHeader title={t('finance.newExpense')} showBackButton />
 			{/* Date */}
 			<View style={styles.section}>
 				<DatePickerField

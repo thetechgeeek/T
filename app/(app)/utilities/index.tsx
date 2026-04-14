@@ -63,8 +63,11 @@ export default function UtilitiesHubScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']} scrollable>
-			<ScreenHeader title="Utilities" />
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title="Utilities" />}
+		>
 			<View style={{ padding: s.lg }}>
 				{utilityCards.map((card) => (
 					<TouchableCard

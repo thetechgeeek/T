@@ -206,14 +206,13 @@ export default function ProfitLossScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard={false}
 			scrollable
+			header={<ScreenHeader title="Profit & Loss" showBackButton />}
 			contentContainerStyle={{
 				padding: s.md,
 				paddingBottom: PROFIT_LOSS_SCROLL_BOTTOM_PADDING,
 				gap: SPACING_PX.md,
 			}}
 		>
-			<ScreenHeader title="Profit & Loss" showBackButton />
-
 			{/* Period mode tabs */}
 			<View
 				style={[

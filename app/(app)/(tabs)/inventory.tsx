@@ -21,7 +21,6 @@ import {
 	ActivityIndicator,
 	Modal,
 	Pressable,
-	ScrollView,
 } from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system/legacy';
@@ -395,7 +394,7 @@ export default function InventoryTab() {
 					>
 						Sort By
 					</ThemedText>
-					<ScrollView keyboardShouldPersistTaps="handled">
+					<View>
 						{SORT_OPTIONS.map((opt) => {
 							const isActive =
 								filters.sortBy === opt.sortBy && filters.sortDir === opt.sortDir;
@@ -432,7 +431,7 @@ export default function InventoryTab() {
 								</Pressable>
 							);
 						})}
-					</ScrollView>
+					</View>
 				</View>
 			</Modal>
 

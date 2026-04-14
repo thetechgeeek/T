@@ -1,15 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { OPACITY_SKELETON_PEAK, SIZE_TEXTAREA_MIN_HEIGHT } from '@/theme/uiMetrics';
-import {
-	View,
-	StyleSheet,
-	ScrollView,
-	TouchableOpacity,
-	Alert,
-	TextInput as RNTextInput,
-	KeyboardAvoidingView,
-	Platform,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, TextInput as RNTextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
 	FileUp,
@@ -340,248 +331,224 @@ export default function ImportOrderScreen() {
 	// ── Review / edit extracted items ───────────────────────────────────────────
 	if (resolvedItems) {
 		return (
-			<AtomicScreen safeAreaEdges={['bottom']}>
-				<ScreenHeader
-					title={t('order.reviewTitle')}
-					rightElement={
-						<TouchableOpacity onPress={handleDiscard}>
-							<ThemedText color={c.error}>{t('order.discard')}</ThemedText>
-						</TouchableOpacity>
-					}
-				/>
-
-				<KeyboardAvoidingView
-					style={{ flex: 1 }}
-					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-					keyboardVerticalOffset={100}
-				>
-					<ScrollView style={{ flex: 1, padding: s.lg }}>
-						<View style={{ marginBottom: s.xl }}>
-							<TextInput
-								label={t('order.partyName') + ' *'}
-								placeholder={t('order.exampleText')}
-								value={partyName}
-								onChangeText={setPartyName}
-							/>
-						</View>
-
-						<SectionHeader
-							title={`${t('order.extractedItems')} (${resolvedItems.length})`}
-							subtitle={t('order.reviewExtracted')}
-							style={{ paddingHorizontal: 0, marginBottom: SPACING_PX.md }}
+			<AtomicScreen
+				safeAreaEdges={['bottom']}
+				scrollable
+				header={
+					<ScreenHeader
+						title={t('order.reviewTitle')}
+						rightElement={
+							<TouchableOpacity onPress={handleDiscard}>
+								<ThemedText color={c.error}>{t('order.discard')}</ThemedText>
+							</TouchableOpacity>
+						}
+					/>
+				}
+				contentContainerStyle={{ padding: s.lg }}
+				footer={
+					<View style={[styles.footer, { borderTopColor: c.border }]}>
+						<Button
+							title={t('order.confirmImport')}
+							variant="primary"
+							onPress={handleSave}
+							loading={saving}
 						/>
-
-						{resolvedItems.map((item, index) => (
-							<EditableItemCard
-								key={`${item.design_name ?? item.base_item_number ?? ''}-${index}`}
-								item={item}
-								index={index}
-								onUpdate={handleUpdateItem}
-								onRemove={handleRemoveItem}
-								colors={c}
-								spacing={s}
-								t={t}
-							/>
-						))}
-
-						{/* Add item row */}
-						<TouchableOpacity
-							style={[styles.addItemBtn, { borderColor: c.primary }]}
-							onPress={handleAddItem}
-							accessibilityRole="button"
-							accessibilityLabel={t('order.addManually')}
-						>
-							<PlusCircle size={16} color={c.primary} />
-							<ThemedText
-								color={c.primary}
-								style={{
-									marginLeft: TAB_LABEL_MARGIN_LEFT,
-									fontSize: FONT_SIZE.caption,
-								}}
-							>
-								{t('order.addManually')}
-							</ThemedText>
-						</TouchableOpacity>
-
-						{/* Bottom padding so last card isn't hidden by footer */}
-						<View style={{ height: REVIEW_BOTTOM_SPACER_HEIGHT }} />
-					</ScrollView>
-				</KeyboardAvoidingView>
-
-				<View style={[styles.footer, { borderTopColor: c.border }]}>
-					<Button
-						title={t('order.confirmImport')}
-						variant="primary"
-						onPress={handleSave}
-						loading={saving}
+					</View>
+				}
+			>
+				<View style={{ marginBottom: s.xl }}>
+					<TextInput
+						label={t('order.partyName') + ' *'}
+						placeholder={t('order.exampleText')}
+						value={partyName}
+						onChangeText={setPartyName}
 					/>
 				</View>
+
+				<SectionHeader
+					title={`${t('order.extractedItems')} (${resolvedItems.length})`}
+					subtitle={t('order.reviewExtracted')}
+					style={{ paddingHorizontal: 0, marginBottom: SPACING_PX.md }}
+				/>
+
+				{resolvedItems.map((item, index) => (
+					<EditableItemCard
+						key={`${item.design_name ?? item.base_item_number ?? ''}-${index}`}
+						item={item}
+						index={index}
+						onUpdate={handleUpdateItem}
+						onRemove={handleRemoveItem}
+						colors={c}
+						spacing={s}
+						t={t}
+					/>
+				))}
+
+				<TouchableOpacity
+					style={[styles.addItemBtn, { borderColor: c.primary }]}
+					onPress={handleAddItem}
+					accessibilityRole="button"
+					accessibilityLabel={t('order.addManually')}
+				>
+					<PlusCircle size={16} color={c.primary} />
+					<ThemedText
+						color={c.primary}
+						style={{
+							marginLeft: TAB_LABEL_MARGIN_LEFT,
+							fontSize: FONT_SIZE.caption,
+						}}
+					>
+						{t('order.addManually')}
+					</ThemedText>
+				</TouchableOpacity>
+
+				<View style={{ height: REVIEW_BOTTOM_SPACER_HEIGHT }} />
 			</AtomicScreen>
 		);
 	}
 
 	// ── Upload / paste page ─────────────────────────────────────────────────────
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title={t('order.importBtn')} />
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={<ScreenHeader title={t('order.importBtn')} />}
+			contentContainerStyle={{ padding: s.lg }}
+		>
+			<ThemedText style={{ lineHeight: 22, marginBottom: s.xl }}>
+				{t('order.howItWorks')}
+			</ThemedText>
 
-			<KeyboardAvoidingView
-				style={{ flex: 1 }}
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				keyboardVerticalOffset={80}
+			<View
+				style={[
+					styles.tabBar,
+					{ backgroundColor: c.surfaceVariant, borderColor: c.border },
+				]}
 			>
-				<ScrollView contentContainerStyle={{ padding: s.lg }}>
-					<ThemedText style={{ lineHeight: 22, marginBottom: s.xl }}>
+				<TouchableOpacity
+					style={[styles.tab, inputMode === 'file' && { backgroundColor: c.primary }]}
+					onPress={() => setInputMode('file')}
+					accessibilityRole="tab"
+					accessibilityLabel={t('order.fileUploadTab')}
+					accessibilityState={{ selected: inputMode === 'file' }}
+				>
+					<FileUp
+						size={16}
+						color={inputMode === 'file' ? c.onPrimary : c.onSurfaceVariant}
+					/>
+					<ThemedText
+						style={{ marginLeft: TAB_LABEL_MARGIN_LEFT, fontSize: FONT_SIZE.caption }}
+						color={inputMode === 'file' ? c.onPrimary : c.onSurfaceVariant}
+						weight={inputMode === 'file' ? 'bold' : 'regular'}
+					>
+						{t('inventory.listView')} {t('common.and')} {t('scanner.title')}
+					</ThemedText>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={[styles.tab, inputMode === 'text' && { backgroundColor: c.primary }]}
+					onPress={() => setInputMode('text')}
+					accessibilityRole="tab"
+					accessibilityLabel={t('order.pasteTextTab')}
+					accessibilityState={{ selected: inputMode === 'text' }}
+				>
+					<ClipboardList
+						size={16}
+						color={inputMode === 'text' ? c.onPrimary : c.onSurfaceVariant}
+					/>
+					<ThemedText
+						style={{ marginLeft: TAB_LABEL_MARGIN_LEFT, fontSize: FONT_SIZE.caption }}
+						color={inputMode === 'text' ? c.onPrimary : c.onSurfaceVariant}
+						weight={inputMode === 'text' ? 'bold' : 'regular'}
+					>
+						{t('order.actions.analyzeAi')}
+					</ThemedText>
+				</TouchableOpacity>
+			</View>
+
+			{inputMode === 'file' && (
+				<View
+					style={[
+						styles.uploadBox,
+						{ backgroundColor: c.surfaceVariant, borderColor: c.border },
+					]}
+				>
+					<FileUp size={48} color={c.primary} style={{ marginBottom: s.md }} />
+					<ThemedText
+						weight="bold"
+						style={{ fontSize: FONT_SIZE.body, marginBottom: SPACING_PX.xs }}
+					>
+						{t('order.uploadTitle')}
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.placeholder}
+						align="center"
+						style={{ marginBottom: s.lg }}
+					>
+						{t('order.supportedFiles')}
+					</ThemedText>
+					<Button
+						title={t('order.browseFiles')}
+						onPress={handleUploadFile}
+						variant="outline"
+					/>
+				</View>
+			)}
+
+			{inputMode === 'text' && (
+				<View
+					style={[
+						styles.textBox,
+						{ backgroundColor: c.surfaceVariant, borderColor: c.border },
+					]}
+				>
+					<View style={styles.textBoxHeader}>
+						<ClipboardList size={20} color={c.primary} />
+						<ThemedText
+							weight="bold"
+							style={{
+								marginLeft: SPACING_PX.sm,
+								fontSize: ITEM_CARD_TITLE_FONT_SIZE,
+							}}
+						>
+							{t('order.actions.analyzeAi')}
+						</ThemedText>
+					</View>
+					<ThemedText
+						variant="caption"
+						color={c.placeholder}
+						style={{ marginBottom: s.md }}
+					>
 						{t('order.howItWorks')}
 					</ThemedText>
 
-					{/* Tab switcher */}
 					<View
 						style={[
-							styles.tabBar,
-							{ backgroundColor: c.surfaceVariant, borderColor: c.border },
+							styles.textAreaWrapper,
+							{ backgroundColor: c.surface, borderColor: c.border },
 						]}
 					>
-						<TouchableOpacity
-							style={[
-								styles.tab,
-								inputMode === 'file' && { backgroundColor: c.primary },
-							]}
-							onPress={() => setInputMode('file')}
-							accessibilityRole="tab"
-							accessibilityLabel={t('order.fileUploadTab')}
-							accessibilityState={{ selected: inputMode === 'file' }}
-						>
-							<FileUp
-								size={16}
-								color={inputMode === 'file' ? c.onPrimary : c.onSurfaceVariant}
-							/>
-							<ThemedText
-								style={{
-									marginLeft: TAB_LABEL_MARGIN_LEFT,
-									fontSize: FONT_SIZE.caption,
-								}}
-								color={inputMode === 'file' ? c.onPrimary : c.onSurfaceVariant}
-								weight={inputMode === 'file' ? 'bold' : 'regular'}
-							>
-								{t('inventory.listView')} {t('common.and')} {t('scanner.title')}
-							</ThemedText>
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={[
-								styles.tab,
-								inputMode === 'text' && { backgroundColor: c.primary },
-							]}
-							onPress={() => setInputMode('text')}
-							accessibilityRole="tab"
-							accessibilityLabel={t('order.pasteTextTab')}
-							accessibilityState={{ selected: inputMode === 'text' }}
-						>
-							<ClipboardList
-								size={16}
-								color={inputMode === 'text' ? c.onPrimary : c.onSurfaceVariant}
-							/>
-							<ThemedText
-								style={{
-									marginLeft: TAB_LABEL_MARGIN_LEFT,
-									fontSize: FONT_SIZE.caption,
-								}}
-								color={inputMode === 'text' ? c.onPrimary : c.onSurfaceVariant}
-								weight={inputMode === 'text' ? 'bold' : 'regular'}
-							>
-								{t('order.actions.analyzeAi')}
-							</ThemedText>
-						</TouchableOpacity>
+						<RNTextInput
+							multiline
+							numberOfLines={10}
+							textAlignVertical="top"
+							placeholder={`${t('order.placeholderText')}\n\n${t('common.selectAll')}\n${t('order.exampleText')}`}
+							placeholderTextColor={c.placeholder}
+							value={pastedText}
+							onChangeText={setPastedText}
+							style={[styles.textArea, { color: c.onSurface }]}
+							accessibilityLabel={t('order.textInputLabel')}
+						/>
 					</View>
 
-					{/* File upload panel */}
-					{inputMode === 'file' && (
-						<View
-							style={[
-								styles.uploadBox,
-								{ backgroundColor: c.surfaceVariant, borderColor: c.border },
-							]}
-						>
-							<FileUp size={48} color={c.primary} style={{ marginBottom: s.md }} />
-							<ThemedText
-								weight="bold"
-								style={{ fontSize: FONT_SIZE.body, marginBottom: SPACING_PX.xs }}
-							>
-								{t('order.uploadTitle')}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								color={c.placeholder}
-								align="center"
-								style={{ marginBottom: s.lg }}
-							>
-								{t('order.supportedFiles')}
-							</ThemedText>
-							<Button
-								title={t('order.browseFiles')}
-								onPress={handleUploadFile}
-								variant="outline"
-							/>
-						</View>
-					)}
-
-					{/* Text paste panel */}
-					{inputMode === 'text' && (
-						<View
-							style={[
-								styles.textBox,
-								{ backgroundColor: c.surfaceVariant, borderColor: c.border },
-							]}
-						>
-							<View style={styles.textBoxHeader}>
-								<ClipboardList size={20} color={c.primary} />
-								<ThemedText
-									weight="bold"
-									style={{
-										marginLeft: SPACING_PX.sm,
-										fontSize: ITEM_CARD_TITLE_FONT_SIZE,
-									}}
-								>
-									{t('order.actions.analyzeAi')}
-								</ThemedText>
-							</View>
-							<ThemedText
-								variant="caption"
-								color={c.placeholder}
-								style={{ marginBottom: s.md }}
-							>
-								{t('order.howItWorks')}
-							</ThemedText>
-
-							<View
-								style={[
-									styles.textAreaWrapper,
-									{ backgroundColor: c.surface, borderColor: c.border },
-								]}
-							>
-								<RNTextInput
-									multiline
-									numberOfLines={10}
-									textAlignVertical="top"
-									placeholder={`${t('order.placeholderText')}\n\n${t('common.selectAll')}\n${t('order.exampleText')}`}
-									placeholderTextColor={c.placeholder}
-									value={pastedText}
-									onChangeText={setPastedText}
-									style={[styles.textArea, { color: c.onSurface }]}
-									accessibilityLabel={t('order.textInputLabel')}
-								/>
-							</View>
-
-							<Button
-								title={t('order.actions.analyzeAi')}
-								onPress={handleParseText}
-								variant="primary"
-								style={{ marginTop: s.lg }}
-							/>
-						</View>
-					)}
-				</ScrollView>
-			</KeyboardAvoidingView>
+					<Button
+						title={t('order.actions.analyzeAi')}
+						onPress={handleParseText}
+						variant="primary"
+						style={{ marginTop: s.lg }}
+					/>
+				</View>
+			)}
 		</AtomicScreen>
 	);
 }

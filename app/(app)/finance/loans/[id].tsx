@@ -236,13 +236,13 @@ export default function LoanDetailScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard={false}
 			scrollable
+			header={<ScreenHeader title="Loan Detail" />}
 			contentContainerStyle={[
 				styles.scrollContent,
 				{ padding: s.lg, paddingBottom: LOAN_SCROLL_BOTTOM_PADDING },
 			]}
 			scrollViewProps={{ showsVerticalScrollIndicator: false }}
 		>
-			<ScreenHeader title="Loan Detail" />
 			{/* ── Summary card ─────────────────────────────────────────── */}
 			<View
 				style={[

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@/theme/uiMetrics';
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
@@ -158,237 +158,244 @@ export default function CashflowScreen() {
 	}
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Cashflow Report" showBackButton />
-
-			{/* Month navigation */}
-			<View style={[styles.periodNav, { paddingHorizontal: s.md, marginVertical: s.sm }]}>
-				<Pressable
-					onPress={() => setOffset((o) => o - 1)}
-					style={styles.navBtn}
-					accessibilityLabel="Previous month"
-				>
-					<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
-				</Pressable>
-				<ThemedText weight="bold" style={{ flex: 1, textAlign: 'center' }}>
-					{label}
-				</ThemedText>
-				<Pressable
-					onPress={() => offset < 0 && setOffset((o) => o + 1)}
-					disabled={offset >= 0}
-					style={[styles.navBtn, { opacity: offset < 0 ? 1 : DISABLED_NAV_OPACITY }]}
-					accessibilityLabel="Next month"
-				>
-					<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
-				</Pressable>
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={
+				<>
+					<ScreenHeader title="Cashflow Report" showBackButton />
+					<View
+						style={[
+							styles.periodNav,
+							{ paddingHorizontal: s.md, marginVertical: s.sm },
+						]}
+					>
+						<Pressable
+							onPress={() => setOffset((o) => o - 1)}
+							style={styles.navBtn}
+							accessibilityLabel="Previous month"
+						>
+							<ChevronLeft size={20} color={c.onSurface} strokeWidth={2} />
+						</Pressable>
+						<ThemedText weight="bold" style={{ flex: 1, textAlign: 'center' }}>
+							{label}
+						</ThemedText>
+						<Pressable
+							onPress={() => offset < 0 && setOffset((o) => o + 1)}
+							disabled={offset >= 0}
+							style={[
+								styles.navBtn,
+								{ opacity: offset < 0 ? 1 : DISABLED_NAV_OPACITY },
+							]}
+							accessibilityLabel="Next month"
+						>
+							<ChevronRight size={20} color={c.onSurface} strokeWidth={2} />
+						</Pressable>
+					</View>
+				</>
+			}
+			contentContainerStyle={{
+				padding: s.md,
+				paddingBottom: s['2xl'] + s.sm,
+				gap: s.md,
+			}}
+		>
+			{/* Opening Balance */}
+			<View style={styles.sectionRow}>
+				<ThemedText color={c.onSurfaceVariant}>Opening Balance</ThemedText>
+				<ThemedText weight="bold">{formatCurrency(openingBalance)}</ThemedText>
 			</View>
 
-			<ScrollView
-				contentContainerStyle={{
-					padding: s.md,
-					paddingBottom: s['2xl'] + s.sm,
-					gap: s.md,
-				}}
-			>
-				{/* Opening Balance */}
-				<View style={styles.sectionRow}>
-					<ThemedText color={c.onSurfaceVariant}>Opening Balance</ThemedText>
-					<ThemedText weight="bold">{formatCurrency(openingBalance)}</ThemedText>
-				</View>
-
-				{/* Inflows */}
-				<Card padding="md">
-					<ThemedText
-						weight="bold"
-						style={{
-							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
-							fontSize: theme.typography.sizes.md,
-						}}
-					>
-						Inflows
-					</ThemedText>
-					<SectionRow
-						label="Sale Collections"
-						value={saleCollections}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="Other Income"
-						value={otherIncome}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="Total Inflows"
-						value={totalInflows}
-						bold
-						color={c.success}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-				</Card>
-
-				{/* Outflows */}
-				<Card padding="md">
-					<ThemedText
-						weight="bold"
-						style={{
-							marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
-							fontSize: theme.typography.sizes.md,
-						}}
-					>
-						Outflows
-					</ThemedText>
-					<SectionRow
-						label="Payments to Suppliers"
-						value={suppliersPayments}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<SectionRow
-						label="Expenses"
-						value={expensesTotal}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-					<View style={[styles.divider, { backgroundColor: c.border }]} />
-					<SectionRow
-						label="Total Outflows"
-						value={totalOutflows}
-						bold
-						color={c.error}
-						c={c}
-						formatCurrency={formatCurrency}
-					/>
-				</Card>
-
-				{/* Net Cashflow */}
-				<Card
-					padding="md"
+			{/* Inflows */}
+			<Card padding="md">
+				<ThemedText
+					weight="bold"
 					style={{
-						backgroundColor: withOpacity(
-							isPositive ? c.success : c.error,
-							OPACITY_SKELETON_BASE,
-						),
-						borderWidth: CASHFLOW_CARD_BORDER_WIDTH,
-						borderColor: isPositive ? c.success : c.error,
+						marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+						fontSize: theme.typography.sizes.md,
 					}}
 				>
-					<View style={styles.sectionRow}>
-						<ThemedText weight="bold" style={{ fontSize: theme.typography.sizes.md }}>
-							Net Cashflow
-						</ThemedText>
-						<ThemedText
-							weight="bold"
-							color={isPositive ? c.success : c.error}
-							style={{ fontSize: theme.typography.sizes.lg }}
-						>
-							{isPositive ? '' : '– '}
-							{formatCurrency(Math.abs(netCashflow))}
-						</ThemedText>
-					</View>
-					<View
-						style={[styles.sectionRow, { marginTop: SPACING_PX.sm - SPACING_PX.xxs }]}
-					>
-						<ThemedText color={c.onSurfaceVariant}>Closing Balance</ThemedText>
-						<ThemedText weight="bold">{formatCurrency(closingBalance)}</ThemedText>
-					</View>
-				</Card>
+					Inflows
+				</ThemedText>
+				<SectionRow
+					label="Sale Collections"
+					value={saleCollections}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="Other Income"
+					value={otherIncome}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow
+					label="Total Inflows"
+					value={totalInflows}
+					bold
+					color={c.success}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+			</Card>
 
-				{/* 4-Week Bar Chart */}
-				<Card padding="md">
+			{/* Outflows */}
+			<Card padding="md">
+				<ThemedText
+					weight="bold"
+					style={{
+						marginBottom: SPACING_PX.sm + SPACING_PX.xxs,
+						fontSize: theme.typography.sizes.md,
+					}}
+				>
+					Outflows
+				</ThemedText>
+				<SectionRow
+					label="Payments to Suppliers"
+					value={suppliersPayments}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<SectionRow
+					label="Expenses"
+					value={expensesTotal}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+				<View style={[styles.divider, { backgroundColor: c.border }]} />
+				<SectionRow
+					label="Total Outflows"
+					value={totalOutflows}
+					bold
+					color={c.error}
+					c={c}
+					formatCurrency={formatCurrency}
+				/>
+			</Card>
+
+			{/* Net Cashflow */}
+			<Card
+				padding="md"
+				style={{
+					backgroundColor: withOpacity(
+						isPositive ? c.success : c.error,
+						OPACITY_SKELETON_BASE,
+					),
+					borderWidth: CASHFLOW_CARD_BORDER_WIDTH,
+					borderColor: isPositive ? c.success : c.error,
+				}}
+			>
+				<View style={styles.sectionRow}>
+					<ThemedText weight="bold" style={{ fontSize: theme.typography.sizes.md }}>
+						Net Cashflow
+					</ThemedText>
 					<ThemedText
 						weight="bold"
-						style={{ marginBottom: SPACING_PX.md, fontSize: theme.typography.sizes.md }}
+						color={isPositive ? c.success : c.error}
+						style={{ fontSize: theme.typography.sizes.lg }}
 					>
-						Weekly Breakdown
+						{isPositive ? '' : '– '}
+						{formatCurrency(Math.abs(netCashflow))}
 					</ThemedText>
+				</View>
+				<View style={[styles.sectionRow, { marginTop: SPACING_PX.sm - SPACING_PX.xxs }]}>
+					<ThemedText color={c.onSurfaceVariant}>Closing Balance</ThemedText>
+					<ThemedText weight="bold">{formatCurrency(closingBalance)}</ThemedText>
+				</View>
+			</Card>
 
-					{/* Legend */}
+			{/* 4-Week Bar Chart */}
+			<Card padding="md">
+				<ThemedText
+					weight="bold"
+					style={{ marginBottom: SPACING_PX.md, fontSize: theme.typography.sizes.md }}
+				>
+					Weekly Breakdown
+				</ThemedText>
+
+				{/* Legend */}
+				<View
+					style={{
+						flexDirection: 'row',
+						gap: SPACING_PX.lg,
+						marginBottom: SPACING_PX.md,
+					}}
+				>
 					<View
 						style={{
 							flexDirection: 'row',
-							gap: SPACING_PX.lg,
-							marginBottom: SPACING_PX.md,
+							alignItems: 'center',
+							gap: SPACING_PX.sm - SPACING_PX.xxs,
 						}}
 					>
 						<View
 							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								gap: SPACING_PX.sm - SPACING_PX.xxs,
+								width: SPACING_PX.md,
+								height: SPACING_PX.md,
+								borderRadius: SPACING_PX.xs,
+								backgroundColor: c.success,
 							}}
-						>
-							<View
-								style={{
-									width: SPACING_PX.md,
-									height: SPACING_PX.md,
-									borderRadius: SPACING_PX.xs,
-									backgroundColor: c.success,
-								}}
-							/>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Inflow
-							</ThemedText>
-						</View>
+						/>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							Inflow
+						</ThemedText>
+					</View>
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							gap: SPACING_PX.sm - SPACING_PX.xxs,
+						}}
+					>
 						<View
 							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								gap: SPACING_PX.sm - SPACING_PX.xxs,
+								width: SPACING_PX.md,
+								height: SPACING_PX.md,
+								borderRadius: SPACING_PX.xs,
+								backgroundColor: c.error,
 							}}
-						>
-							<View
-								style={{
-									width: SPACING_PX.md,
-									height: SPACING_PX.md,
-									borderRadius: SPACING_PX.xs,
-									backgroundColor: c.error,
-								}}
-							/>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Outflow
+						/>
+						<ThemedText variant="caption" color={c.onSurfaceVariant}>
+							Outflow
+						</ThemedText>
+					</View>
+				</View>
+
+				<View style={styles.chartRow}>
+					{weeklyData.map((wk) => (
+						<View key={wk.label} style={styles.weekCol}>
+							<View style={styles.barsContainer}>
+								<View
+									style={[
+										styles.bar,
+										{
+											height: barHeight(wk.inflow),
+											backgroundColor: c.success,
+										},
+									]}
+								/>
+								<View
+									style={[
+										styles.bar,
+										{
+											height: barHeight(wk.outflow),
+											backgroundColor: c.error,
+										},
+									]}
+								/>
+							</View>
+							<ThemedText
+								variant="caption"
+								color={c.onSurfaceVariant}
+								style={{ textAlign: 'center', marginTop: SPACING_PX.xs }}
+							>
+								{wk.label}
 							</ThemedText>
 						</View>
-					</View>
-
-					<View style={styles.chartRow}>
-						{weeklyData.map((wk) => (
-							<View key={wk.label} style={styles.weekCol}>
-								<View style={styles.barsContainer}>
-									<View
-										style={[
-											styles.bar,
-											{
-												height: barHeight(wk.inflow),
-												backgroundColor: c.success,
-											},
-										]}
-									/>
-									<View
-										style={[
-											styles.bar,
-											{
-												height: barHeight(wk.outflow),
-												backgroundColor: c.error,
-											},
-										]}
-									/>
-								</View>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={{ textAlign: 'center', marginTop: SPACING_PX.xs }}
-								>
-									{wk.label}
-								</ThemedText>
-							</View>
-						))}
-					</View>
-				</Card>
-			</ScrollView>
+					))}
+				</View>
+			</Card>
 		</AtomicScreen>
 	);
 }

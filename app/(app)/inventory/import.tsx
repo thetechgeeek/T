@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 
 /** Template preview: sample item cost price shown before user data is loaded */
@@ -358,43 +358,55 @@ export default function InventoryImportScreen() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']}>
-			<ScreenHeader title={t('inventory.importItems')} />
-
-			<View style={[styles.stepper, { paddingHorizontal: s.lg }]}>
-				{STEPS.map((s, idx) => (
-					<View key={s.id} style={styles.stepIndicator}>
-						<View
-							style={[
-								styles.stepCircle,
-								{
-									backgroundColor:
-										currentStep >= s.id ? c.primary : c.surfaceVariant,
-									borderColor: currentStep === s.id ? c.primary : 'transparent',
-									borderWidth: currentStep === s.id ? 2 : 0,
-								},
-							]}
-						>
-							<ThemedText
-								variant="captionSmall"
-								color={currentStep >= s.id ? c.onPrimary : c.onSurfaceVariant}
-							>
-								{s.id}
-							</ThemedText>
-						</View>
-						{idx < STEPS.length - 1 && (
-							<View
-								style={[
-									styles.stepLine,
-									{ backgroundColor: currentStep > s.id ? c.primary : c.border },
-								]}
-							/>
-						)}
+		<AtomicScreen
+			safeAreaEdges={['bottom']}
+			scrollable
+			header={
+				<>
+					<ScreenHeader title={t('inventory.importItems')} />
+					<View style={[styles.stepper, { paddingHorizontal: s.lg }]}>
+						{STEPS.map((s, idx) => (
+							<View key={s.id} style={styles.stepIndicator}>
+								<View
+									style={[
+										styles.stepCircle,
+										{
+											backgroundColor:
+												currentStep >= s.id ? c.primary : c.surfaceVariant,
+											borderColor:
+												currentStep === s.id ? c.primary : 'transparent',
+											borderWidth: currentStep === s.id ? 2 : 0,
+										},
+									]}
+								>
+									<ThemedText
+										variant="captionSmall"
+										color={
+											currentStep >= s.id ? c.onPrimary : c.onSurfaceVariant
+										}
+									>
+										{s.id}
+									</ThemedText>
+								</View>
+								{idx < STEPS.length - 1 && (
+									<View
+										style={[
+											styles.stepLine,
+											{
+												backgroundColor:
+													currentStep > s.id ? c.primary : c.border,
+											},
+										]}
+									/>
+								)}
+							</View>
+						))}
 					</View>
-				))}
-			</View>
-
-			<ScrollView contentContainerStyle={{ padding: s.lg }}>{renderStep()}</ScrollView>
+				</>
+			}
+			contentContainerStyle={{ padding: s.lg }}
+		>
+			{renderStep()}
 		</AtomicScreen>
 	);
 }

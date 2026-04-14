@@ -183,12 +183,12 @@ export default function PaymentReceiptScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard={false}
 			scrollable
+			header={<ScreenHeader title="Payment Receipt" />}
 			contentContainerStyle={[
 				styles.scroll,
 				{ padding: s.md, paddingBottom: RECEIPT_BOTTOM_PADDING },
 			]}
 		>
-			<ScreenHeader title="Payment Receipt" />
 			<View
 				style={[
 					styles.receiptCard,
