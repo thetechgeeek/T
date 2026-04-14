@@ -10,6 +10,8 @@ import { layout } from '@/src/theme/layout';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import type { InventoryItem } from '@/src/types/inventory';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_TINT_SOFT } from '@/src/theme/uiMetrics';
 
 interface Props {
 	lineItems: InvoiceLineItemInput[];
@@ -163,7 +165,7 @@ export function LineItemsStep({
 					style={{
 						marginTop: s.xl,
 						padding: s.lg,
-						backgroundColor: c.surfaceVariant + '40',
+						backgroundColor: withOpacity(c.surfaceVariant, OPACITY_TINT_SOFT),
 						borderRadius: r.md,
 						borderWidth: 1,
 						borderColor: c.border,

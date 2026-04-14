@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { ChevronDown, ChevronUp, FileCode } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -116,9 +116,10 @@ export default function TallyExportScreen() {
 					</ThemedText>
 				</View>
 
-				<ThemedText variant="h3" style={styles.sectionHeader}>
-					Period
-				</ThemedText>
+				<SectionHeader
+					title="Period"
+					style={{ paddingHorizontal: 0, paddingVertical: 0 }}
+				/>
 				<View style={styles.chipRow}>
 					<Chip
 						label="Current Month"
@@ -143,9 +144,10 @@ export default function TallyExportScreen() {
 					/>
 				</View>
 
-				<ThemedText variant="h3" style={styles.sectionHeader}>
-					Tally Version
-				</ThemedText>
+				<SectionHeader
+					title="Tally Version"
+					style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
+				/>
 				<View style={styles.chipRow}>
 					<Chip
 						label="TallyPrime"
@@ -163,9 +165,10 @@ export default function TallyExportScreen() {
 					/>
 				</View>
 
-				<ThemedText variant="h3" style={styles.sectionHeader}>
-					What to Export
-				</ThemedText>
+				<SectionHeader
+					title="What to Export"
+					style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
+				/>
 				<View style={[styles.checkList, { borderColor: c.border, borderRadius: r.lg }]}>
 					{EXPORT_ITEMS.map((item, i) => (
 						<Pressable
@@ -195,7 +198,7 @@ export default function TallyExportScreen() {
 								{selected[item.key] && (
 									<ThemedText
 										variant="caption"
-										color={palette.white}
+										color={c.white}
 										style={styles.checkMark}
 									>
 										✓
@@ -207,9 +210,10 @@ export default function TallyExportScreen() {
 					))}
 				</View>
 
-				<ThemedText variant="h3" style={styles.sectionHeader}>
-					Ledger Mapping
-				</ThemedText>
+				<SectionHeader
+					title="Ledger Mapping"
+					style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: s.xl }}
+				/>
 				<ThemedText
 					variant="caption"
 					color={c.onSurfaceVariant}
@@ -288,7 +292,7 @@ export default function TallyExportScreen() {
 								]}
 							>
 								<View style={[styles.stepNum, { backgroundColor: c.primary }]}>
-									<ThemedText variant="caption" color={palette.white}>
+									<ThemedText variant="caption" color={c.white}>
 										{i + 1}
 									</ThemedText>
 								</View>
@@ -306,7 +310,6 @@ export default function TallyExportScreen() {
 
 const styles = StyleSheet.create({
 	infoCard: { padding: 16, marginBottom: 8 },
-	sectionHeader: { marginTop: 20, marginBottom: 10 },
 	chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 4 },
 	chip: { paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1 },
 	checkList: { borderWidth: 1, overflow: 'hidden' },

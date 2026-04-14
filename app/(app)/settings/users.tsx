@@ -13,7 +13,6 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
 import { withOpacity } from '@/src/utils/color';
-import { palette } from '@/src/theme/palette';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
@@ -59,7 +58,7 @@ export default function UsersScreen() {
 				<View style={[styles.avatar, { backgroundColor: c.primary }]}>
 					<ThemedText
 						style={{
-							color: palette.white,
+							color: c.white,
 							fontWeight: '700',
 							fontSize: FONT_SIZE.h2,
 						}}
@@ -100,7 +99,7 @@ export default function UsersScreen() {
 				onPress={() => setModalVisible(true)}
 				style={[styles.inviteBtn, { backgroundColor: c.primary }]}
 			>
-				<ThemedText variant="body" style={{ color: palette.white, fontWeight: '700' }}>
+				<ThemedText variant="body" style={{ color: c.white, fontWeight: '700' }}>
 					+ Invite User
 				</ThemedText>
 			</Pressable>
@@ -244,7 +243,7 @@ export default function UsersScreen() {
 							>
 								<ThemedText
 									variant="body"
-									style={{ color: palette.white, fontWeight: '700' }}
+									style={{ color: c.white, fontWeight: '700' }}
 								>
 									Send Invite
 								</ThemedText>

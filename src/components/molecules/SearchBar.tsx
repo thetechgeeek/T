@@ -4,6 +4,7 @@ import { Search, X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_ICON_MD } from '@/src/theme/uiMetrics';
 
 interface SearchBarProps {
 	value: string;
@@ -37,7 +38,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 			]}
 		>
 			<Search
-				size={20}
+				size={SIZE_ICON_MD}
 				color={theme.colors.onSurfaceVariant}
 				style={styles.icon}
 				importantForAccessibility="no"
@@ -68,7 +69,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 					accessibilityLabel={t('common.clear')}
 				>
 					<X
-						size={20}
+						size={SIZE_ICON_MD}
 						color={theme.colors.onSurfaceVariant}
 						importantForAccessibility="no"
 					/>

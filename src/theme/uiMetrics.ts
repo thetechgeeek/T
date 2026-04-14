@@ -42,6 +42,11 @@ export const SIZE_BUTTON_HEIGHT_LG = 56;
 /** Square icon-container (e.g. quick-action grid cells) */
 export const SIZE_ICON_CONTAINER = 34;
 
+/** Common icon sizes */
+export const SIZE_ICON_SM = 12;
+export const SIZE_ICON_MD = 20;
+export const SIZE_ICON_LG = 24;
+
 /** Floating Action Button (FAB) */
 export const SIZE_FAB = 56;
 export const SIZE_FAB_ICON = 28;
@@ -55,6 +60,9 @@ export const SIZE_CHIP_HEIGHT = 36;
 
 /** Multiline text area minimum height */
 export const SIZE_TEXTAREA_MIN_HEIGHT = 80;
+
+/** Swipeable action rail width */
+export const SIZE_SWIPE_ACTION_WIDTH = 72;
 
 /** Small tile image in TileSetCard */
 export const SIZE_TILE_IMAGE = 112;
@@ -89,6 +97,16 @@ export const SIZE_TOAST_BOTTOM_OFFSET = 90;
 /** Bottom-sheet / modal handle pill dimensions */
 export const SIZE_MODAL_HANDLE_WIDTH = 40;
 export const SIZE_MODAL_HANDLE_HEIGHT = 4;
+
+/** Conflict resolution modal scroll area */
+export const SIZE_CONFLICT_MODAL_MAX_HEIGHT = 300;
+
+/** Reusable skeleton placeholder sizes */
+export const SIZE_SKELETON_AVATAR = 40;
+export const SIZE_SKELETON_BADGE_WIDTH = 48;
+export const SIZE_SKELETON_BADGE_HEIGHT = 20;
+export const SIZE_SKELETON_TEXT_MD = 14;
+export const SIZE_SKELETON_TEXT_SM = 12;
 
 // ─── Opacities ────────────────────────────────────────────────────────────────
 
@@ -148,6 +166,9 @@ export const OPACITY_SEPARATOR = 0.4;
 
 /** Medium tint for section backgrounds */
 export const OPACITY_TINT_MEDIUM = 0.2;
+
+/** Soft section surface tint */
+export const OPACITY_TINT_SOFT = 0.25;
 
 /** Stronger surface tint */
 export const OPACITY_TINT_STRONG = 0.3;

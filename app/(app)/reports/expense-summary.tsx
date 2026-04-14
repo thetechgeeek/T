@@ -11,7 +11,6 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { expenseReportDemoSlices } from '@/src/theme/palette';
 
 // TODO: Replace with real data — SELECT category, SUM(amount) FROM expenses WHERE date BETWEEN ? AND ? GROUP BY category
 type Period = 'month' | 'quarter' | 'year' | 'fy';
@@ -31,21 +30,19 @@ interface ExpenseCategory {
 }
 
 // TODO: Pull from expense_categories + expenses tables; amounts are period-filtered mock values
-const MOCK_CATEGORIES: ExpenseCategory[] = expenseReportDemoSlices.map((x) => ({
-	id: x.id,
-	name: x.name,
-	amount: x.amount,
-	color: x.color,
-}));
-
 export default function ExpenseSummaryScreen() {
-	const { c, r } = useThemeTokens();
+	const { c, r, theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 
 	const [period, setPeriod] = useState<Period>('month');
 
 	// TODO: re-fetch / re-filter data when period changes
-	const categories = MOCK_CATEGORIES;
+	const categories: ExpenseCategory[] = theme.collections.expenseReportDemoSlices.map((x) => ({
+		id: x.id,
+		name: x.name,
+		amount: x.amount,
+		color: x.color,
+	}));
 
 	const totalExpenses = useMemo(
 		() => categories.reduce((sum, cat) => sum + cat.amount, 0),
@@ -171,7 +168,7 @@ export default function ExpenseSummaryScreen() {
 								{formatCurrency(totalExpenses)}
 							</ThemedText>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{MOCK_CATEGORIES.length} categories · {period.toUpperCase()}
+								{categories.length} categories · {period.toUpperCase()}
 							</ThemedText>
 						</Card>
 

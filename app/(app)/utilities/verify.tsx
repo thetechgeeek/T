@@ -8,7 +8,6 @@ import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_SUBTLE } from '@/src/theme/uiMetrics';
-import { palette } from '@/src/theme/palette';
 
 type VerifyState = 'idle' | 'running' | 'complete';
 
@@ -196,19 +195,19 @@ export default function DataVerificationScreen() {
 											[
 												styles.resultCard,
 												{
-													backgroundColor: palette.verifyBannerBg,
-													borderColor: palette.verifyBannerBorder,
+													backgroundColor: c.warningLight,
+													borderColor: c.warning,
 													borderWidth: 1,
 												},
 											] as const
 										}
 									>
-										<ThemedText variant="h3" color={palette.verifyBannerText}>
+										<ThemedText variant="h3" color={c.warning}>
 											1 Issue Found
 										</ThemedText>
 										<ThemedText
 											variant="caption"
-											color={palette.verifyBannerText}
+											color={c.warning}
 											style={{ marginTop: 4 }}
 										>
 											Some items have no HSN code

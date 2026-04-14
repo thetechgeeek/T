@@ -33,7 +33,6 @@ import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
-import { palette } from '@/src/theme/palette';
 import { itemUnitService } from '@/src/services/itemCategoryService';
 import type { ItemUnit } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
@@ -249,7 +248,7 @@ export default function ItemUnitsScreen() {
 							},
 						]}
 					>
-						<View style={styles.sheetHandle} />
+						<View style={[styles.sheetHandle, { backgroundColor: c.borderStrong }]} />
 						<ThemedText variant="h3" style={styles.modalTitle}>
 							{editingId ? t('inventory.editUnit') : t('inventory.newUnit')}
 						</ThemedText>
@@ -368,7 +367,6 @@ const styles = StyleSheet.create({
 		width: SIZE_MODAL_HANDLE_WIDTH,
 		height: SIZE_MODAL_HANDLE_HEIGHT,
 		borderRadius: BORDER_RADIUS_PX.xs,
-		backgroundColor: palette.grayCCC,
 		alignSelf: 'center',
 		marginTop: SPACING_PX.md,
 		marginBottom: SPACING_PX.xs,

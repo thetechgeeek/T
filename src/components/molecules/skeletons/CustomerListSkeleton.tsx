@@ -2,6 +2,13 @@ import React from 'react';
 import { View } from 'react-native';
 import { SkeletonBlock } from '../SkeletonBlock';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import {
+	SIZE_SKELETON_AVATAR,
+	SIZE_SKELETON_BADGE_HEIGHT,
+	SIZE_SKELETON_BADGE_WIDTH,
+	SIZE_SKELETON_TEXT_MD,
+	SIZE_SKELETON_TEXT_SM,
+} from '@/src/theme/uiMetrics';
 
 export function CustomerListSkeleton() {
 	const { s, r } = useThemeTokens();
@@ -20,12 +27,20 @@ export function CustomerListSkeleton() {
 					}}
 				>
 					{/* circular avatar */}
-					<SkeletonBlock width={40} height={40} borderRadius={20} />
+					<SkeletonBlock
+						width={SIZE_SKELETON_AVATAR}
+						height={SIZE_SKELETON_AVATAR}
+						borderRadius={r.full}
+					/>
 					<View style={{ flex: 1, gap: s.xs }}>
-						<SkeletonBlock width="55%" height={14} />
-						<SkeletonBlock width="38%" height={12} />
+						<SkeletonBlock width="55%" height={SIZE_SKELETON_TEXT_MD} />
+						<SkeletonBlock width="38%" height={SIZE_SKELETON_TEXT_SM} />
 					</View>
-					<SkeletonBlock width={48} height={20} borderRadius={r.full} />
+					<SkeletonBlock
+						width={SIZE_SKELETON_BADGE_WIDTH}
+						height={SIZE_SKELETON_BADGE_HEIGHT}
+						borderRadius={r.full}
+					/>
 				</View>
 			))}
 		</View>

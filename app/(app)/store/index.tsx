@@ -5,7 +5,6 @@ import {
 	GLASS_WHITE_LIGHT,
 } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
-import { palette } from '@/src/theme/palette';
 import {
 	View,
 	ScrollView,
@@ -272,7 +271,7 @@ export default function OnlineStoreScreen() {
 				<Button
 					title="Share Store Link"
 					onPress={handleShareStore}
-					leftIcon={<Share2 size={16} color={palette.white} />}
+					leftIcon={<Share2 size={16} color={c.white} />}
 					style={styles.shareBtn}
 				/>
 

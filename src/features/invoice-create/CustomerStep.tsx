@@ -7,7 +7,6 @@ import { FormField } from '@/src/components/molecules/FormField';
 import { DatePickerField } from '@/src/components/molecules/DatePickerField';
 import { Card } from '@/src/components/atoms/Card';
 import { withOpacity } from '@/src/utils/color';
-import { palette } from '@/src/theme/palette';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 
 const TOGGLE_BORDER_WIDTH = 1.5;
@@ -186,7 +185,7 @@ export function CustomerStep({
 					style={{
 						padding: s.xl,
 						alignItems: 'center',
-						backgroundColor: palette.grayF5,
+						backgroundColor: c.surfaceVariant,
 					}}
 				>
 					<ThemedText variant="body" color={c.onSurfaceVariant} align="center">

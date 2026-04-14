@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle, StyleProp, Platform } from 'react-native';
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
 interface CardProps {
@@ -24,13 +24,7 @@ export const Card: React.FC<CardProps> = ({
 	const cardStyles = [
 		styles.base,
 		{ backgroundColor: theme.colors.card, borderRadius: theme.borderRadius.md },
-		variant === 'elevated' && {
-			...Platform.select({
-				ios: theme.shadows.sm,
-				android: { elevation: 2 },
-				default: {},
-			}),
-		},
+		variant === 'elevated' && theme.shadows.sm,
 		variant === 'outlined' && { borderWidth: 1, borderColor: theme.colors.border },
 		variant === 'flat' && { backgroundColor: theme.colors.surfaceVariant },
 		padding === 'sm' && { padding: theme.spacing.sm },

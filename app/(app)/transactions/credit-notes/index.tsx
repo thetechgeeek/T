@@ -9,7 +9,6 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ThemeColors } from '@/src/theme';
-import { palette } from '@/src/theme/palette';
 import {
 	MOCK_CREDIT_NOTES,
 	type CreditNote,
@@ -35,12 +34,12 @@ function creditNoteStatusConfig(
 	return {
 		open: { label: 'Open', bg: c.warningLight, color: c.partial },
 		adjusted: { label: 'Adjusted', bg: c.successLight, color: c.paid },
-		refunded: { label: 'Refunded', bg: c.infoLight, color: palette.statusInfoFg },
+		refunded: { label: 'Refunded', bg: c.infoLight, color: c.info },
 	};
 }
 
 export default function CreditNotesScreen() {
-	const { c, r } = useThemeTokens();
+	const { c, r, theme } = useThemeTokens();
 	const STATUS_CONFIG = creditNoteStatusConfig(c);
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
@@ -149,13 +148,21 @@ export default function CreditNotesScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
+				style={[
+					styles.fab,
+					{
+						backgroundColor: c.primary,
+						borderRadius: r.full,
+						shadowColor: c.shadow,
+						...(theme.shadows.md || {}),
+					},
+				]}
 				onPress={() => router.push('/(app)/transactions/credit-notes/create' as Href)}
 				accessibilityLabel="new-credit-note"
 				accessibilityRole="button"
 			>
-				<Plus size={20} color={palette.white} />
-				<ThemedText variant="caption" color={palette.white} style={{ marginLeft: 6 }}>
+				<Plus size={20} color={c.white} />
+				<ThemedText variant="caption" color={c.white} style={{ marginLeft: 6 }}>
 					New Return
 				</ThemedText>
 			</Pressable>
@@ -206,8 +213,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingHorizontal: 18,
 		paddingVertical: 14,
-		elevation: 4,
-		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: FAB_SHADOW_OPACITY,
 		shadowRadius: 4,

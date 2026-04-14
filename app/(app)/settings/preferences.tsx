@@ -21,6 +21,7 @@ const RADIO_OUTER_RADIUS = 10;
 const RADIO_INNER_SIZE = 10;
 const RADIO_INNER_RADIUS = 5;
 const ZERO_SPACING = 0;
+const SECTION_HEADER_STYLE = { paddingHorizontal: ZERO_SPACING } as const;
 
 type Lang = 'hi' | 'en';
 type DateFormat = 'dmy' | 'dmy-dash' | 'iso';
@@ -79,7 +80,7 @@ export default function PreferencesScreen() {
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
 			{/* Language Section */}
-			<SectionHeader title="भाषा / Language" style={styles.sectionHeader} />
+			<SectionHeader title="भाषा / Language" style={SECTION_HEADER_STYLE} />
 			<View style={styles.langRow}>
 				<Pressable
 					testID="lang-card-hi"
@@ -140,7 +141,7 @@ export default function PreferencesScreen() {
 			</View>
 
 			{/* Theme Section */}
-			<SectionHeader title="थीम / Theme" style={styles.sectionHeader} />
+			<SectionHeader title="थीम / Theme" style={SECTION_HEADER_STYLE} />
 			<View style={styles.themeRow}>
 				{(
 					[
@@ -181,7 +182,7 @@ export default function PreferencesScreen() {
 			</View>
 
 			{/* Date Format Section */}
-			<SectionHeader title="Date Format" style={styles.sectionHeader} />
+			<SectionHeader title="Date Format" style={SECTION_HEADER_STYLE} />
 			{(
 				[
 					{ key: 'dmy', label: 'DD/MM/YYYY' },
@@ -233,7 +234,7 @@ export default function PreferencesScreen() {
 			))}
 
 			{/* Decimal Places Section */}
-			<SectionHeader title="Decimal Places" style={styles.sectionHeader} />
+			<SectionHeader title="Decimal Places" style={SECTION_HEADER_STYLE} />
 			<ThemedText
 				variant="caption"
 				style={{
@@ -309,7 +310,6 @@ export default function PreferencesScreen() {
 }
 
 const styles = StyleSheet.create({
-	sectionHeader: { paddingHorizontal: ZERO_SPACING },
 	langRow: {
 		flexDirection: 'row',
 	},

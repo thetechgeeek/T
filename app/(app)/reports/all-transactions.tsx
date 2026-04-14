@@ -23,7 +23,6 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@/src/utils/color';
-import { allTransactionsTypeColors } from '@/src/theme/palette';
 
 type TxType = 'all' | 'sale' | 'purchase' | 'payment_in' | 'payment_out' | 'expense';
 type DateRange = 'today' | 'week' | 'month' | 'fy';
@@ -78,27 +77,19 @@ interface TxRow {
 	route?: string;
 }
 
-const TYPE_META: Record<TxType, { icon: React.ElementType; color: string; label: string }> = {
-	all: { icon: Receipt, color: allTransactionsTypeColors.all, label: 'All' },
-	sale: { icon: TrendingUp, color: allTransactionsTypeColors.sale, label: 'Sale' },
-	purchase: { icon: ShoppingCart, color: allTransactionsTypeColors.purchase, label: 'Purchase' },
-	payment_in: {
-		icon: ArrowDownCircle,
-		color: allTransactionsTypeColors.payment_in,
-		label: 'Payment In',
-	},
-	payment_out: {
-		icon: ArrowUpCircle,
-		color: allTransactionsTypeColors.payment_out,
-		label: 'Payment Out',
-	},
-	expense: { icon: Receipt, color: allTransactionsTypeColors.expense, label: 'Expense' },
-};
-
 export default function AllTransactionsScreen() {
 	const { c, s, r, theme } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
+	const typeColors = theme.collections.allTransactionsTypeColors;
+	const typeMeta: Record<TxType, { icon: React.ElementType; color: string; label: string }> = {
+		all: { icon: Receipt, color: typeColors.all, label: 'All' },
+		sale: { icon: TrendingUp, color: typeColors.sale, label: 'Sale' },
+		purchase: { icon: ShoppingCart, color: typeColors.purchase, label: 'Purchase' },
+		payment_in: { icon: ArrowDownCircle, color: typeColors.payment_in, label: 'Payment In' },
+		payment_out: { icon: ArrowUpCircle, color: typeColors.payment_out, label: 'Payment Out' },
+		expense: { icon: Receipt, color: typeColors.expense, label: 'Expense' },
+	};
 
 	const [txFilter, setTxFilter] = useState<TxType>('all');
 	const [dateFilter, setDateFilter] = useState<DateRange>('month');
@@ -204,7 +195,7 @@ export default function AllTransactionsScreen() {
 	];
 
 	const renderItem = ({ item }: { item: TxRow }) => {
-		const meta = TYPE_META[item.type];
+		const meta = typeMeta[item.type];
 		const IconComp = meta.icon;
 		return (
 			<Pressable

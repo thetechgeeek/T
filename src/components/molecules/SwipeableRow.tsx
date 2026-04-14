@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-
-const SWIPE_ACTION_WIDTH = 72;
+import { SIZE_SWIPE_ACTION_WIDTH } from '@/src/theme/uiMetrics';
 
 export interface SwipeableRowProps {
 	children: React.ReactNode;
@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	action: {
-		width: SWIPE_ACTION_WIDTH,
-		minHeight: 48,
+		width: SIZE_SWIPE_ACTION_WIDTH,
+		minHeight: TOUCH_TARGET_MIN_PX,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

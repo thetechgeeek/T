@@ -60,13 +60,13 @@ function AppShell() {
 
 export default function RootLayout() {
 	return (
-		<ErrorBoundary>
-			<ThemeProvider>
+		<ThemeProvider>
+			<ErrorBoundary>
 				<KeyboardProvider>
 					<AppShell />
 				</KeyboardProvider>
-			</ThemeProvider>
-		</ErrorBoundary>
+			</ErrorBoundary>
+		</ThemeProvider>
 	);
 }
 

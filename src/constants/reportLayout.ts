@@ -12,6 +12,7 @@ const GST_COL_TYPE = 62;
 const GST_COL_PARTY = 120;
 const GST_COL_INVOICE = 72;
 const GST_COL_NUM = 76;
+const GST_COL_RATE = 44;
 
 export const GST_DETAIL_COL_WIDTH_PX = {
 	date: GST_COL_DATE,
@@ -19,6 +20,7 @@ export const GST_DETAIL_COL_WIDTH_PX = {
 	party: GST_COL_PARTY,
 	invoice: GST_COL_INVOICE,
 	num: GST_COL_NUM,
+	rate: GST_COL_RATE,
 } as const;
 
 /** GSTR-1 B2B table — flex weight for amount column vs invoice/GSTIN */

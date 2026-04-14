@@ -25,6 +25,8 @@ describe('AddCustomerScreen', () => {
 		const { getByPlaceholderText, getByText } = renderWithTheme(<AddCustomerScreen />);
 
 		expect(getByPlaceholderText('e.g. Rahul Sharma')).toBeTruthy();
+		expect(getByText('Basic Info')).toBeTruthy();
+		expect(getByText('Credit & Balance')).toBeTruthy();
 		expect(getByText('Save Customer')).toBeTruthy();
 	});
 

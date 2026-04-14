@@ -6,10 +6,17 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
-import { FLEX_AMT_WIDE, OVERLAY_COLOR_STRONG } from '@/theme/uiMetrics';
+import {
+	FLEX_AMT_WIDE,
+	OVERLAY_COLOR_STRONG,
+	SIZE_CONFLICT_MODAL_MAX_HEIGHT,
+	SIZE_ICON_LG,
+	SIZE_ICON_MD,
+	SIZE_ICON_SM,
+} from '@/theme/uiMetrics';
 import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/theme/layoutMetrics';
 
-const CONFLICT_ICON_SIZE = 20;
+const CONFLICT_ICON_SIZE = SIZE_ICON_MD;
 
 export interface ConflictField {
 	label: string;
@@ -52,7 +59,7 @@ export function ConflictModal({
 					]}
 				>
 					<View style={[layout.row, { marginBottom: s.md }]}>
-						<AlertTriangle size={24} color={c.warning} />
+						<AlertTriangle size={SIZE_ICON_LG} color={c.warning} />
 						<ThemedText variant="h3" style={{ marginLeft: s.md, flex: 1 }}>
 							{title || t('sync.conflictTitle') || 'Data Conflict Detected'}
 						</ThemedText>
@@ -67,7 +74,9 @@ export function ConflictModal({
 							'Someone else updated this record while you were offline. Which version should we keep?'}
 					</ThemedText>
 
-					<ScrollView style={{ maxHeight: 300, marginBottom: s.lg }}>
+					<ScrollView
+						style={{ maxHeight: SIZE_CONFLICT_MODAL_MAX_HEIGHT, marginBottom: s.lg }}
+					>
 						<View
 							style={[
 								layout.row,
@@ -119,8 +128,8 @@ export function ConflictModal({
 										{field.localValue}
 									</ThemedText>
 								</View>
-								<View style={{ width: 20, alignItems: 'center' }}>
-									<ChevronRight size={12} color={c.onSurfaceVariant} />
+								<View style={{ width: CONFLICT_ICON_SIZE, alignItems: 'center' }}>
+									<ChevronRight size={SIZE_ICON_SM} color={c.onSurfaceVariant} />
 								</View>
 								<View
 									style={[

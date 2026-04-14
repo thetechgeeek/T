@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, Pressable, Alert, Share } from 'react-native';
 import {
 	Search,
@@ -14,6 +13,7 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Card } from '@/src/components/atoms/Card';
+import { TableRow } from '@/src/components/molecules/TableRow';
 import { SearchBar } from '@/src/components/molecules/SearchBar';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { useCustomerStore } from '@/src/stores/customerStore';
@@ -230,7 +230,7 @@ export default function PartyStatementScreen() {
 						onPress={() => setShowPicker(!showPicker)}
 					>
 						<View style={[styles.partyAvatar, { backgroundColor: c.primary }]}>
-							<User size={18} color={palette.white} />
+							<User size={18} color={c.white} />
 						</View>
 						<View style={{ flex: 1 }}>
 							<ThemedText variant="bodyBold">{partyName}</ThemedText>
@@ -410,187 +410,241 @@ export default function PartyStatementScreen() {
 
 					{/* Transaction table */}
 					<Card style={{ padding: 0, overflow: 'hidden', marginBottom: s.sm }}>
-						{/* Table header */}
-						<View style={[styles.tableHeader, { backgroundColor: c.primary }]}>
-							<ThemedText
-								style={[styles.colDate, styles.headerText]}
-								color={palette.white}
-								variant="captionBold"
-							>
-								Date
-							</ThemedText>
-							<ThemedText
-								style={[styles.colDesc, styles.headerText]}
-								color={palette.white}
-								variant="captionBold"
-							>
-								Description
-							</ThemedText>
-							<ThemedText
-								style={[styles.colAmt, styles.headerText]}
-								color={palette.white}
-								variant="captionBold"
-								align="right"
-							>
-								Debit
-							</ThemedText>
-							<ThemedText
-								style={[styles.colAmt, styles.headerText]}
-								color={palette.white}
-								variant="captionBold"
-								align="right"
-							>
-								Credit
-							</ThemedText>
-							<ThemedText
-								style={[styles.colAmt, styles.headerText]}
-								color={palette.white}
-								variant="captionBold"
-								align="right"
-							>
-								Balance
-							</ThemedText>
-						</View>
-
-						{/* Opening balance row */}
-						<View
-							style={[
-								styles.tableRow,
-								{ backgroundColor: c.background, borderBottomColor: c.border },
+						<TableRow
+							variant="header"
+							textColor={c.white}
+							style={{
+								backgroundColor: c.primary,
+								paddingHorizontal: 10,
+								paddingVertical: 8,
+							}}
+							columns={[
+								{ label: 'Date', width: PARTY_STMT_COL_WIDTH_PX.date },
+								{ label: 'Description', flex: 1 },
+								{
+									label: 'Debit',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									align: 'right',
+								},
+								{
+									label: 'Credit',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									align: 'right',
+								},
+								{
+									label: 'Balance',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									align: 'right',
+								},
 							]}
-						>
-							<ThemedText
-								style={styles.colDate}
-								variant="caption"
-								color={c.onSurfaceVariant}
-							>
-								–
-							</ThemedText>
-							<ThemedText
-								style={styles.colDesc}
-								variant="captionBold"
-								color={c.onSurface}
-							>
-								Opening Balance
-							</ThemedText>
-							<ThemedText style={styles.colAmt} variant="caption" align="right" />
-							<ThemedText style={styles.colAmt} variant="caption" align="right" />
-							<ThemedText
-								style={styles.colAmt}
-								variant="captionBold"
-								color={c.onSurface}
-								align="right"
-							>
-								{formatCurrency(openingBal)}
-							</ThemedText>
-						</View>
+						/>
 
-						{/* Transaction rows */}
+						<TableRow
+							style={{
+								backgroundColor: c.background,
+								borderBottomColor: c.border,
+								paddingHorizontal: 10,
+								paddingVertical: 8,
+							}}
+							columns={[
+								{
+									label: 'Date',
+									width: PARTY_STMT_COL_WIDTH_PX.date,
+									value: (
+										<ThemedText variant="caption" color={c.onSurfaceVariant}>
+											–
+										</ThemedText>
+									),
+								},
+								{
+									label: 'Description',
+									flex: 1,
+									value: (
+										<ThemedText variant="captionBold" color={c.onSurface}>
+											Opening Balance
+										</ThemedText>
+									),
+								},
+								{
+									label: 'Debit',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									value: <ThemedText variant="caption" align="right" />,
+								},
+								{
+									label: 'Credit',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									value: <ThemedText variant="caption" align="right" />,
+								},
+								{
+									label: 'Balance',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									value: (
+										<ThemedText
+											variant="captionBold"
+											color={c.onSurface}
+											align="right"
+										>
+											{formatCurrency(openingBal)}
+										</ThemedText>
+									),
+								},
+							]}
+						/>
+
 						{txs.slice(1).map((tx, idx) => (
-							<View
+							<TableRow
 								key={tx.id}
-								style={[
-									styles.tableRow,
+								style={{
+									backgroundColor: idx % 2 === 0 ? c.card : c.surface,
+									borderBottomColor: c.border,
+									paddingHorizontal: 10,
+									paddingVertical: 8,
+								}}
+								columns={[
 									{
-										borderBottomColor: c.border,
-										backgroundColor: idx % 2 === 0 ? c.card : c.surface,
+										label: 'Date',
+										width: PARTY_STMT_COL_WIDTH_PX.date,
+										value: (
+											<ThemedText
+												variant="caption"
+												color={c.onSurfaceVariant}
+											>
+												{tx.date.slice(5).replace('-', '/')}
+											</ThemedText>
+										),
+									},
+									{
+										label: 'Description',
+										flex: 1,
+										value: (
+											<ThemedText
+												variant="caption"
+												color={c.onSurface}
+												numberOfLines={2}
+											>
+												{tx.description}
+											</ThemedText>
+										),
+									},
+									{
+										label: 'Debit',
+										width: PARTY_STMT_COL_WIDTH_PX.amount,
+										value: (
+											<ThemedText
+												variant="caption"
+												color={tx.debit > 0 ? c.error : c.onSurfaceVariant}
+												align="right"
+											>
+												{tx.debit > 0 ? formatCurrency(tx.debit) : '–'}
+											</ThemedText>
+										),
+									},
+									{
+										label: 'Credit',
+										width: PARTY_STMT_COL_WIDTH_PX.amount,
+										value: (
+											<ThemedText
+												variant="caption"
+												color={
+													tx.credit > 0 ? c.success : c.onSurfaceVariant
+												}
+												align="right"
+											>
+												{tx.credit > 0 ? formatCurrency(tx.credit) : '–'}
+											</ThemedText>
+										),
+									},
+									{
+										label: 'Balance',
+										width: PARTY_STMT_COL_WIDTH_PX.amount,
+										value: (
+											<ThemedText
+												variant="caption"
+												color={c.onSurface}
+												align="right"
+											>
+												{formatCurrency(tx.balance)}
+											</ThemedText>
+										),
 									},
 								]}
-							>
-								<ThemedText
-									style={styles.colDate}
-									variant="caption"
-									color={c.onSurfaceVariant}
-								>
-									{tx.date.slice(5).replace('-', '/')}
-								</ThemedText>
-								<ThemedText
-									style={styles.colDesc}
-									variant="caption"
-									color={c.onSurface}
-									numberOfLines={2}
-								>
-									{tx.description}
-								</ThemedText>
-								<ThemedText
-									style={styles.colAmt}
-									variant="caption"
-									color={tx.debit > 0 ? c.error : c.onSurfaceVariant}
-									align="right"
-								>
-									{tx.debit > 0 ? formatCurrency(tx.debit) : '–'}
-								</ThemedText>
-								<ThemedText
-									style={styles.colAmt}
-									variant="caption"
-									color={tx.credit > 0 ? c.success : c.onSurfaceVariant}
-									align="right"
-								>
-									{tx.credit > 0 ? formatCurrency(tx.credit) : '–'}
-								</ThemedText>
-								<ThemedText
-									style={styles.colAmt}
-									variant="caption"
-									color={c.onSurface}
-									align="right"
-								>
-									{formatCurrency(tx.balance)}
-								</ThemedText>
-							</View>
+							/>
 						))}
 
-						{/* Closing balance row */}
-						<View
-							style={[
-								styles.tableRow,
-								{ backgroundColor: c.background, borderBottomColor: c.border },
+						<TableRow
+							variant="total"
+							style={{
+								backgroundColor: c.background,
+								borderBottomColor: c.border,
+								paddingHorizontal: 10,
+								paddingVertical: 8,
+							}}
+							columns={[
+								{
+									label: 'Date',
+									width: PARTY_STMT_COL_WIDTH_PX.date,
+									value: (
+										<ThemedText variant="captionBold" color={c.onSurface}>
+											–
+										</ThemedText>
+									),
+								},
+								{
+									label: 'Description',
+									flex: 1,
+									value: (
+										<ThemedText variant="bodyBold" color={c.onSurface}>
+											Closing Balance
+										</ThemedText>
+									),
+								},
+								{
+									label: 'Debit',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									value: (
+										<ThemedText
+											variant="captionBold"
+											color={c.error}
+											align="right"
+										>
+											{formatCurrency(totalDebit)}
+										</ThemedText>
+									),
+								},
+								{
+									label: 'Credit',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									value: (
+										<ThemedText
+											variant="captionBold"
+											color={c.success}
+											align="right"
+										>
+											{formatCurrency(totalCredit)}
+										</ThemedText>
+									),
+								},
+								{
+									label: 'Balance',
+									width: PARTY_STMT_COL_WIDTH_PX.amount,
+									value: (
+										<ThemedText
+											variant="bodyBold"
+											color={
+												closingBal > 0
+													? c.error
+													: closingBal < 0
+														? c.success
+														: c.onSurface
+											}
+											align="right"
+										>
+											{formatCurrency(Math.abs(closingBal))}
+										</ThemedText>
+									),
+								},
 							]}
-						>
-							<ThemedText
-								style={styles.colDate}
-								variant="captionBold"
-								color={c.onSurface}
-							>
-								–
-							</ThemedText>
-							<ThemedText
-								style={styles.colDesc}
-								variant="bodyBold"
-								color={c.onSurface}
-							>
-								Closing Balance
-							</ThemedText>
-							<ThemedText
-								style={styles.colAmt}
-								variant="captionBold"
-								color={c.error}
-								align="right"
-							>
-								{formatCurrency(totalDebit)}
-							</ThemedText>
-							<ThemedText
-								style={styles.colAmt}
-								variant="captionBold"
-								color={c.success}
-								align="right"
-							>
-								{formatCurrency(totalCredit)}
-							</ThemedText>
-							<ThemedText
-								style={styles.colAmt}
-								variant="bodyBold"
-								color={
-									closingBal > 0
-										? c.error
-										: closingBal < 0
-											? c.success
-											: c.onSurface
-								}
-								align="right"
-							>
-								{formatCurrency(Math.abs(closingBal))}
-							</ThemedText>
-						</View>
+						/>
 					</Card>
 
 					{/* Action buttons */}
@@ -598,16 +652,16 @@ export default function PartyStatementScreen() {
 						<Pressable
 							style={[
 								styles.actionBtn,
-								{ backgroundColor: palette.whatsapp, borderRadius: r.md, flex: 1 },
+								{ backgroundColor: c.success, borderRadius: r.md, flex: 1 },
 							]}
 							onPress={handleWhatsApp}
 							accessibilityRole="button"
 							accessibilityLabel="Share on WhatsApp"
 						>
-							<MessageCircle size={16} color={palette.white} />
+							<MessageCircle size={16} color={c.onSuccess} />
 							<ThemedText
 								variant="captionBold"
-								color={palette.white}
+								color={c.onSuccess}
 								style={{ marginLeft: 6 }}
 							>
 								WhatsApp
@@ -735,31 +789,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		paddingVertical: 6,
 		alignSelf: 'flex-start',
-	},
-	tableHeader: {
-		flexDirection: 'row',
-		paddingHorizontal: 10,
-		paddingVertical: 8,
-	},
-	headerText: {
-		fontWeight: '700',
-	},
-	tableRow: {
-		flexDirection: 'row',
-		paddingHorizontal: 10,
-		paddingVertical: 8,
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
-	colDate: {
-		width: PARTY_STMT_COL_WIDTH_PX.date,
-		marginRight: 4,
-	},
-	colDesc: {
-		flex: 1,
-		marginRight: 4,
-	},
-	colAmt: {
-		width: PARTY_STMT_COL_WIDTH_PX.amount,
 	},
 	actionBtn: {
 		flexDirection: 'row',

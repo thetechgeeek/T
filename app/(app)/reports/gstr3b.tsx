@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native';
 import { Save, Send } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -379,7 +378,7 @@ export default function GSTR3BScreen() {
 						title="File Return"
 						variant="primary"
 						style={{ flex: 1 }}
-						leftIcon={<Send size={16} color={palette.white} />}
+						leftIcon={<Send size={16} color={c.white} />}
 						onPress={() =>
 							Alert.alert(
 								'Coming Soon',

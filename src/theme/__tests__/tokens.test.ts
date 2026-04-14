@@ -1,4 +1,4 @@
-import { lightTheme } from '../colors';
+import { darkTheme, lightTheme } from '../colors';
 import { layout } from '../layout';
 import {
 	Z_INDEX,
@@ -46,6 +46,28 @@ describe('Theme Tokens (P0.1)', () => {
 		expect(lightTheme.animation.springDamping).toBe(20);
 		expect(lightTheme.animation.springStiffness).toBe(200);
 		expect(lightTheme.animation.durationNormal).toBe(200);
+	});
+
+	it('should expose shared utility colors through the theme', () => {
+		expect(lightTheme.colors.white).toBe('#FFFFFF');
+		expect(lightTheme.colors.shadow).toBe('#4A3828');
+		expect(darkTheme.colors.shadow).toBe('#000000');
+	});
+
+	it('should expose palette-backed collections through the theme', () => {
+		expect(lightTheme.collections.partyAvatarColors).toHaveLength(8);
+		expect(lightTheme.collections.expenseCategoryPickColors[0]).toBe('#C1440E');
+		expect(lightTheme.collections.printThemeSwatches).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ key: 'professional', color: '#1D4ED8' }),
+			]),
+		);
+		expect(lightTheme.collections.expenseReportDemoSlices).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ name: 'Purchase', color: '#4A90E2' }),
+			]),
+		);
+		expect(lightTheme.collections.allTransactionsTypeColors.sale).toBe('#22c55e');
 	});
 });
 

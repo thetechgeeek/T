@@ -6,7 +6,11 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
-import { OVERLAY_COLOR_STRONG, OPACITY_SKELETON_BASE } from '@/src/theme/uiMetrics';
+import {
+	OVERLAY_COLOR_STRONG,
+	OPACITY_BADGE_BG,
+	OPACITY_SKELETON_BASE,
+} from '@/src/theme/uiMetrics';
 
 const GST_RATES = [0, 5, 12, 18, 28];
 
@@ -135,7 +139,10 @@ export default function CalculatorScreen() {
 					onPress={() => setGstModal(true)}
 					style={[
 						styles.shortcutBtn,
-						{ backgroundColor: c.primary + '20', borderRadius: r.md },
+						{
+							backgroundColor: withOpacity(c.primary, OPACITY_BADGE_BG),
+							borderRadius: r.md,
+						},
 					]}
 				>
 					<ThemedText variant="bodyBold" color={c.primary}>
@@ -146,7 +153,10 @@ export default function CalculatorScreen() {
 					onPress={() => setEmiModal(true)}
 					style={[
 						styles.shortcutBtn,
-						{ backgroundColor: c.primary + '20', borderRadius: r.md },
+						{
+							backgroundColor: withOpacity(c.primary, OPACITY_BADGE_BG),
+							borderRadius: r.md,
+						},
 					]}
 				>
 					<ThemedText variant="bodyBold" color={c.primary}>

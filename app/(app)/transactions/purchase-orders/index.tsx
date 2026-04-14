@@ -7,7 +7,6 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,6 +16,8 @@ import {
 	type POStatus,
 } from '@/src/mocks/transactions/purchaseOrders';
 import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { FAB_OFFSET_BOTTOM, FAB_OFFSET_RIGHT, OPACITY_BADGE_BG } from '@/theme/uiMetrics';
+import { withOpacity } from '@/src/utils/color';
 
 const MOCK_POS = MOCK_PURCHASE_ORDERS;
 
@@ -54,7 +55,12 @@ export default function PurchaseOrdersScreen() {
 				)
 			}
 		>
-			<View style={[styles.iconCircle, { backgroundColor: c.primary + '20' }]}>
+			<View
+				style={[
+					styles.iconCircle,
+					{ backgroundColor: withOpacity(c.primary, OPACITY_BADGE_BG) },
+				]}
+			>
 				<ShoppingCart size={20} color={c.primary} />
 			</View>
 			<View style={{ flex: 1 }}>
@@ -156,7 +162,15 @@ export default function PurchaseOrdersScreen() {
 			/>
 
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, bottom: 32 + insets.bottom }]}
+				style={[
+					styles.fab,
+					{
+						backgroundColor: c.primary,
+						bottom: FAB_OFFSET_BOTTOM + insets.bottom,
+						right: FAB_OFFSET_RIGHT,
+						shadowColor: c.shadow,
+					},
+				]}
 				onPress={() => router.push('/(app)/transactions/purchase-orders/create' as Href)}
 			>
 				<Plus color="white" size={28} />
@@ -195,14 +209,12 @@ const styles = StyleSheet.create({
 	empty: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 80 },
 	fab: {
 		position: 'absolute',
-		right: 24,
 		width: 56,
 		height: 56,
 		borderRadius: 28,
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
-		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		...FAB_SHADOW,
 	},

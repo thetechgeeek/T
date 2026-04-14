@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { expenseCategoryPickColors, palette } from '@/src/theme/palette';
 import { View, StyleSheet, FlatList, Pressable, Linking, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Phone, ChevronRight } from 'lucide-react-native';
@@ -19,8 +18,6 @@ import { layout } from '@/src/theme/layout';
 type Tab = 'customers' | 'suppliers';
 type Filter = 'all' | 'with-balance' | 'zero-balance';
 
-const AVATAR_COLORS = expenseCategoryPickColors.slice(0, 8);
-
 function initials(name: string): string {
 	return name
 		.trim()
@@ -30,13 +27,13 @@ function initials(name: string): string {
 		.join('');
 }
 
-function avatarColor(name: string): string {
-	const idx = name.charCodeAt(0) % AVATAR_COLORS.length;
-	return AVATAR_COLORS[idx];
+function avatarColor(name: string, colors: readonly string[]): string {
+	const idx = name.charCodeAt(0) % colors.length;
+	return colors[idx] ?? colors[0];
 }
 
 export default function AllPartiesScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, s, r, theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 	const router = useRouter();
 
@@ -103,7 +100,7 @@ export default function AllPartiesScreen() {
 
 	const renderCustomer = ({ item }: { item: Customer }) => {
 		const balance = item.current_balance ?? 0;
-		const color = avatarColor(item.name);
+		const color = avatarColor(item.name, theme.collections.partyAvatarColors);
 		return (
 			<Pressable
 				style={[styles.row, { borderBottomColor: c.border }]}
@@ -112,7 +109,7 @@ export default function AllPartiesScreen() {
 				accessibilityLabel={item.name}
 			>
 				<View style={[styles.avatar, { backgroundColor: color }]}>
-					<ThemedText variant="captionBold" color={palette.white}>
+					<ThemedText variant="captionBold" color={c.white}>
 						{initials(item.name)}
 					</ThemedText>
 				</View>
@@ -169,7 +166,7 @@ export default function AllPartiesScreen() {
 	};
 
 	const renderSupplier = ({ item }: { item: Supplier }) => {
-		const color = avatarColor(item.name);
+		const color = avatarColor(item.name, theme.collections.partyAvatarColors);
 		return (
 			<Pressable
 				style={[styles.row, { borderBottomColor: c.border }]}
@@ -178,7 +175,7 @@ export default function AllPartiesScreen() {
 				accessibilityLabel={item.name}
 			>
 				<View style={[styles.avatar, { backgroundColor: color }]}>
-					<ThemedText variant="captionBold" color={palette.white}>
+					<ThemedText variant="captionBold" color={c.white}>
 						{initials(item.name)}
 					</ThemedText>
 				</View>

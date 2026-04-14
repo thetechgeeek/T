@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { palette } from '@/src/theme/palette';
 import {
 	AMOUNT_SHORT_FORMAT_ONE_CRORE,
 	AMOUNT_SHORT_FORMAT_ONE_LAKH,
@@ -34,6 +33,7 @@ import { Button } from '@/src/components/atoms/Button';
 import { Divider } from '@/src/components/atoms/Divider';
 import { Badge } from '@/src/components/atoms/Badge';
 import { useLocale } from '@/src/hooks/useLocale';
+import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { InvoiceDetailSkeleton } from '@/src/components/molecules/skeletons/InvoiceDetailSkeleton';
 import { layout } from '@/src/theme/layout';
@@ -386,16 +386,16 @@ export default function InvoiceDetailScreen() {
 						},
 					]}
 				>
-					<View
-						style={[
-							styles.sectionHeader,
-							{ borderBottomColor: c.border, padding: s.md },
-						]}
-					>
-						<ThemedText variant="captionBold" color={c.onSurfaceVariant}>
-							{t('invoice.billedTo')}
-						</ThemedText>
-					</View>
+					<SectionHeader
+						title={t('invoice.billedTo')}
+						titleColor={c.onSurfaceVariant}
+						style={{
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+							paddingHorizontal: s.md,
+							paddingVertical: s.md,
+						}}
+					/>
 					<View style={{ padding: s.md, gap: s.xs }}>
 						<ThemedText variant="h3">{invoice.customer_name}</ThemedText>
 						{!!invoice.customer_phone && (
@@ -546,16 +546,17 @@ export default function InvoiceDetailScreen() {
 						},
 					]}
 				>
-					<View
-						style={[
-							styles.sectionHeader,
-							{ borderBottomColor: c.border, padding: s.md },
-						]}
-					>
-						<ThemedText variant="captionBold" color={c.onSurfaceVariant}>
-							{t('invoice.summary').toUpperCase()}
-						</ThemedText>
-					</View>
+					<SectionHeader
+						title={t('invoice.summary')}
+						titleColor={c.onSurfaceVariant}
+						variant="uppercase"
+						style={{
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+							paddingHorizontal: s.md,
+							paddingVertical: s.md,
+						}}
+					/>
 					<View style={{ padding: s.md, gap: s.sm }}>
 						<View style={layout.rowBetween}>
 							<ThemedText color={c.onSurfaceVariant}>
@@ -647,30 +648,28 @@ export default function InvoiceDetailScreen() {
 					]}
 				>
 					<TouchableOpacity
-						style={[
-							styles.sectionHeader,
-							{
-								borderBottomColor: c.border,
-								borderBottomWidth: paymentsExpanded ? StyleSheet.hairlineWidth : 0,
-								padding: s.md,
-							},
-						]}
 						onPress={() => setPaymentsExpanded((v) => !v)}
 						accessibilityRole="button"
 						accessibilityLabel="Toggle payment history"
 					>
-						<ThemedText
-							variant="captionBold"
-							color={c.onSurfaceVariant}
-							style={{ flex: 1 }}
-						>
-							{t('common.payments').toUpperCase()}
-						</ThemedText>
-						{paymentsExpanded ? (
-							<ChevronUp size={18} color={c.onSurfaceVariant} />
-						) : (
-							<ChevronDown size={18} color={c.onSurfaceVariant} />
-						)}
+						<SectionHeader
+							title={t('common.payments')}
+							titleColor={c.onSurfaceVariant}
+							variant="uppercase"
+							action={
+								paymentsExpanded ? (
+									<ChevronUp size={18} color={c.onSurfaceVariant} />
+								) : (
+									<ChevronDown size={18} color={c.onSurfaceVariant} />
+								)
+							}
+							style={{
+								borderBottomColor: c.border,
+								borderBottomWidth: paymentsExpanded ? StyleSheet.hairlineWidth : 0,
+								paddingHorizontal: s.md,
+								paddingVertical: s.md,
+							}}
+						/>
 					</TouchableOpacity>
 
 					{paymentsExpanded && (
@@ -790,13 +789,13 @@ export default function InvoiceDetailScreen() {
 						<TouchableOpacity
 							style={[
 								styles.iconActionBtn,
-								{ backgroundColor: palette.whatsapp, borderRadius: r.md },
+								{ backgroundColor: c.success, borderRadius: r.md },
 							]}
 							onPress={handleShare}
 							accessibilityRole="button"
 							accessibilityLabel="share-whatsapp"
 						>
-							<Share2 size={20} color={palette.white} />
+							<Share2 size={20} color={c.onSuccess} />
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={[
@@ -818,11 +817,11 @@ export default function InvoiceDetailScreen() {
 					<View style={styles.actionRow}>
 						<Button
 							title={t('invoice.sharePdf')}
-							leftIcon={<Share2 size={18} color={palette.white} />}
+							leftIcon={<Share2 size={18} color={c.onSuccess} />}
 							style={{
 								flex: 1,
 								marginRight: s.sm,
-								backgroundColor: palette.whatsapp,
+								backgroundColor: c.success,
 							}}
 							onPress={handleShare}
 							loading={sharing}
@@ -883,11 +882,6 @@ const styles = StyleSheet.create({
 	cardHeader: {
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		gap: 4,
-	},
-	sectionHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	// Table columns
 	tableRow: { flexDirection: 'row', alignItems: 'flex-start' },

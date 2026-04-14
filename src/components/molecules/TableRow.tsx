@@ -10,6 +10,7 @@ export interface TableColumn {
 	label: string;
 	value?: React.ReactNode;
 	flex?: number;
+	width?: number;
 	align?: 'left' | 'center' | 'right';
 }
 
@@ -17,10 +18,17 @@ export interface TableRowProps {
 	columns: TableColumn[];
 	variant?: TableRowVariant;
 	style?: StyleProp<ViewStyle>;
+	textColor?: string;
 	testID?: string;
 }
 
-export function TableRow({ columns, variant = 'default', style, testID }: TableRowProps) {
+export function TableRow({
+	columns,
+	variant = 'default',
+	style,
+	textColor,
+	testID,
+}: TableRowProps) {
 	const { c, s } = useThemeTokens();
 
 	const isHeader = variant === 'header';
@@ -28,7 +36,7 @@ export function TableRow({ columns, variant = 'default', style, testID }: TableR
 
 	const textVariant = isHeader ? 'caption' : 'body';
 	const weight = isHeader ? 'semibold' : isTotal ? 'bold' : undefined;
-	const color = isHeader ? c.onSurfaceVariant : c.onSurface;
+	const color = textColor ?? (isHeader ? c.onSurfaceVariant : c.onSurface);
 
 	return (
 		<View
@@ -46,7 +54,10 @@ export function TableRow({ columns, variant = 'default', style, testID }: TableR
 			]}
 		>
 			{columns.map((col, idx) => (
-				<View key={`${col.label}-${idx}`} style={{ flex: col.flex ?? 1 }}>
+				<View
+					key={`${col.label}-${idx}`}
+					style={col.width ? { width: col.width } : { flex: col.flex ?? 1 }}
+				>
 					{typeof (isHeader ? col.label : col.value) === 'string' ? (
 						<ThemedText
 							variant={textVariant}

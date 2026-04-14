@@ -12,7 +12,6 @@ import { CustomerStep } from './CustomerStep';
 import { LineItemsStep } from './LineItemsStep';
 import { PaymentStep } from './PaymentStep';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { palette } from '@/src/theme/palette';
 
 export default function InvoiceCreateScreen() {
 	const { c, s } = useThemeTokens();
@@ -54,9 +53,9 @@ export default function InvoiceCreateScreen() {
 									borderColor: c.primary,
 								}
 							: {
-									backgroundColor: palette.segmentTrack,
+									backgroundColor: c.surfaceVariant,
 									borderWidth: STEP_BORDER_WIDTH,
-									borderColor: palette.segmentBorder,
+									borderColor: c.borderStrong,
 								};
 
 					return (
@@ -66,7 +65,7 @@ export default function InvoiceCreateScreen() {
 									style={{
 										flex: 1,
 										height: 1,
-										backgroundColor: palette.segmentThumbOff,
+										backgroundColor: c.borderStrong,
 										alignSelf: 'center',
 										marginBottom: 18,
 									}}

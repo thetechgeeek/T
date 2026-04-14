@@ -28,7 +28,7 @@ export const Divider: React.FC<DividerProps> = ({ style, inset }) => {
 
 const styles = StyleSheet.create({
 	divider: {
-		height: 1,
+		height: StyleSheet.hairlineWidth,
 		width: '100%',
 	},
 });

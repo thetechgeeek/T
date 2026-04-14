@@ -35,13 +35,11 @@ import { layout } from '@/src/theme/layout';
 import { itemCategoryService } from '@/src/services/itemCategoryService';
 import type { ItemCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
-import { expenseCategoryPickColors, palette } from '@/src/theme/palette';
 import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
 const ZERO_SPACING = 0;
 const LIST_BOTTOM_PADDING = 100;
-const PRESET_COLORS = [...expenseCategoryPickColors];
 const CATEGORY_DOT_SIZE = 12;
 const CATEGORY_DOT_RADIUS = 6;
 const COLOR_SWATCH_SIZE = 36;
@@ -55,24 +53,27 @@ interface CategoryFormState {
 	icon: string;
 }
 
-const DEFAULT_FORM: CategoryFormState = {
-	name_en: '',
-	name_hi: '',
-	color: PRESET_COLORS[0],
-	icon: '📁',
-};
-
 export default function ItemCategoriesScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, s, r, theme } = useThemeTokens();
 	const { t } = useLocale();
 	const insets = useSafeAreaInsets();
+	const presetColors = theme.collections.expenseCategoryPickColors;
+	const defaultForm = React.useMemo<CategoryFormState>(
+		() => ({
+			name_en: '',
+			name_hi: '',
+			color: presetColors[0] ?? c.primary,
+			icon: '📁',
+		}),
+		[c.primary, presetColors],
+	);
 
 	const [categories, setCategories] = useState<ItemCategory[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 	const [editingId, setEditingId] = useState<UUID | null>(null);
-	const [form, setForm] = useState<CategoryFormState>(DEFAULT_FORM);
+	const [form, setForm] = useState<CategoryFormState>(defaultForm);
 
 	const loadCategories = React.useCallback(async () => {
 		try {
@@ -92,7 +93,7 @@ export default function ItemCategoriesScreen() {
 
 	function openAdd() {
 		setEditingId(null);
-		setForm(DEFAULT_FORM);
+		setForm(defaultForm);
 		setModalVisible(true);
 	}
 
@@ -101,7 +102,7 @@ export default function ItemCategoriesScreen() {
 		setForm({
 			name_en: cat.name_en,
 			name_hi: cat.name_hi,
-			color: cat.color || PRESET_COLORS[0],
+			color: cat.color || presetColors[0] || c.primary,
 			icon: cat.icon || '📁',
 		});
 		setModalVisible(true);
@@ -110,7 +111,7 @@ export default function ItemCategoriesScreen() {
 	function closeModal() {
 		setModalVisible(false);
 		setEditingId(null);
-		setForm(DEFAULT_FORM);
+		setForm(defaultForm);
 	}
 
 	async function handleSave() {
@@ -251,7 +252,7 @@ export default function ItemCategoriesScreen() {
 							},
 						]}
 					>
-						<View style={styles.sheetHandle} />
+						<View style={[styles.sheetHandle, { backgroundColor: c.borderStrong }]} />
 						<ThemedText variant="h3" style={styles.modalTitle}>
 							{editingId ? t('inventory.editCategory') : t('inventory.newCategory')}
 						</ThemedText>
@@ -339,7 +340,7 @@ export default function ItemCategoriesScreen() {
 								{t('inventory.color')}
 							</ThemedText>
 							<View style={styles.colorGrid}>
-								{PRESET_COLORS.map((col) => (
+								{presetColors.map((col) => (
 									<Pressable
 										key={col}
 										onPress={() => setForm((f) => ({ ...f, color: col }))}
@@ -404,7 +405,6 @@ const styles = StyleSheet.create({
 		width: SIZE_MODAL_HANDLE_WIDTH,
 		height: SIZE_MODAL_HANDLE_HEIGHT,
 		borderRadius: BORDER_RADIUS_PX.xs,
-		backgroundColor: palette.grayCCC,
 		alignSelf: 'center',
 		marginTop: SPACING_PX.md,
 		marginBottom: SPACING_PX.xs,

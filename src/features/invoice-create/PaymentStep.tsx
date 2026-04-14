@@ -7,6 +7,8 @@ import { FormField } from '@/src/components/molecules/FormField';
 import { layout } from '@/src/theme/layout';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import type { CustomerDraft, PaymentMode } from './invoiceCreateTypes';
+import { withOpacity } from '@/src/utils/color';
+import { OPACITY_BADGE_BG } from '@/src/theme/uiMetrics';
 
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
 
@@ -232,7 +234,9 @@ export function PaymentStep({
 				}}
 				style={{
 					padding: s.md,
-					backgroundColor: isPaid ? c.success + '20' : c.warning + '20',
+					backgroundColor: isPaid
+						? withOpacity(c.success, OPACITY_BADGE_BG)
+						: withOpacity(c.warning, OPACITY_BADGE_BG),
 					borderRadius: r.md,
 				}}
 			>

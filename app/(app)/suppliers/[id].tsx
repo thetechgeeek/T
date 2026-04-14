@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { partyAvatarColors, palette } from '@/src/theme/palette';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MessageCircle, ShoppingCart, CreditCard } from 'lucide-react-native';
@@ -23,15 +22,15 @@ function getInitials(name: string): string {
 		.join('');
 }
 
-function getAvatarColor(name: string): string {
-	return partyAvatarColors[name.charCodeAt(0) % 8] ?? partyAvatarColors[0];
+function getAvatarColor(name: string, colors: readonly string[]): string {
+	return colors[name.charCodeAt(0) % colors.length] ?? colors[0];
 }
 
 type TabName = 'ledger' | 'purchases';
 
 export default function SupplierDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: UUID }>();
-	const { c, s, r } = useThemeTokens();
+	const { c, s, r, theme } = useThemeTokens();
 	const { t } = useLocale();
 
 	const [supplier, setSupplier] = useState<Supplier | null>(null);
@@ -104,14 +103,15 @@ export default function SupplierDetailScreen() {
 						<View
 							style={[
 								styles.avatar,
-								{ backgroundColor: getAvatarColor(supplier.name) },
+								{
+									backgroundColor: getAvatarColor(
+										supplier.name,
+										theme.collections.partyAvatarColors,
+									),
+								},
 							]}
 						>
-							<ThemedText
-								weight="bold"
-								color={palette.white}
-								style={{ fontSize: 22 }}
-							>
+							<ThemedText weight="bold" color={c.white} style={{ fontSize: 22 }}>
 								{getInitials(supplier.name)}
 							</ThemedText>
 						</View>
@@ -147,7 +147,7 @@ export default function SupplierDetailScreen() {
 					<Button
 						title="New Purchase"
 						variant="primary"
-						leftIcon={<ShoppingCart size={18} color="white" />}
+						leftIcon={<ShoppingCart size={18} color={c.white} />}
 						style={{ flex: 1, marginRight: 4 }}
 						onPress={handleNewPurchase}
 					/>
@@ -165,14 +165,14 @@ export default function SupplierDetailScreen() {
 					<TouchableOpacity
 						style={[
 							styles.whatsappBtn,
-							{ backgroundColor: palette.whatsapp, borderRadius: r.md },
+							{ backgroundColor: c.success, borderRadius: r.md },
 						]}
 						onPress={handleWhatsApp}
 						accessibilityRole="button"
 						accessibilityLabel="whatsapp-supplier"
 					>
-						<MessageCircle size={18} color="white" />
-						<ThemedText variant="body" color={palette.white} style={{ marginLeft: 8 }}>
+						<MessageCircle size={18} color={c.onSuccess} />
+						<ThemedText variant="body" color={c.onSuccess} style={{ marginLeft: 8 }}>
 							WhatsApp
 						</ThemedText>
 					</TouchableOpacity>

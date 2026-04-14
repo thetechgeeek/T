@@ -38,7 +38,6 @@ import { Card } from '@/src/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';
-import { expenseCategoryPickColors, palette } from '@/src/theme/palette';
 import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
@@ -46,79 +45,11 @@ import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 // Constants
 // ---------------------------------------------------------------------------
 
-const PRESET_COLORS = [...expenseCategoryPickColors];
 const CATEGORY_DOT_SIZE = 12;
 const CATEGORY_DOT_RADIUS = 6;
 const COLOR_SWATCH_SIZE = 36;
 const COLOR_SWATCH_RADIUS = 18;
 const EMOJI_INPUT_WIDTH = 72;
-
-const FALLBACK_CATEGORIES: ExpenseCategory[] = [
-	{
-		id: '1',
-		nameEn: 'Rent',
-		nameHi: 'किराया',
-		color: expenseCategoryPickColors[0],
-		emoji: '🏠',
-		monthTotal: 0,
-	},
-	{
-		id: '2',
-		nameEn: 'Transport',
-		nameHi: 'परिवहन',
-		color: expenseCategoryPickColors[2],
-		emoji: '🚛',
-		monthTotal: 0,
-	},
-	{
-		id: '3',
-		nameEn: 'Labour',
-		nameHi: 'मजदूरी',
-		color: expenseCategoryPickColors[1],
-		emoji: '👷',
-		monthTotal: 0,
-	},
-	{
-		id: '4',
-		nameEn: 'Utilities',
-		nameHi: 'उपयोगिता',
-		color: expenseCategoryPickColors[5],
-		emoji: '💡',
-		monthTotal: 0,
-	},
-	{
-		id: '5',
-		nameEn: 'Packaging',
-		nameHi: 'पैकेजिंग',
-		color: expenseCategoryPickColors[3],
-		emoji: '📦',
-		monthTotal: 0,
-	},
-	{
-		id: '6',
-		nameEn: 'Maintenance',
-		nameHi: 'रखरखाव',
-		color: expenseCategoryPickColors[4],
-		emoji: '🔧',
-		monthTotal: 0,
-	},
-	{
-		id: '7',
-		nameEn: 'Advertisement',
-		nameHi: 'विज्ञापन',
-		color: expenseCategoryPickColors[6],
-		emoji: '📢',
-		monthTotal: 0,
-	},
-	{
-		id: '8',
-		nameEn: 'Miscellaneous',
-		nameHi: 'विविध',
-		color: expenseCategoryPickColors[8],
-		emoji: '🗂️',
-		monthTotal: 0,
-	},
-];
 
 // ---------------------------------------------------------------------------
 // Types
@@ -140,32 +71,104 @@ interface CategoryFormState {
 	emoji: string;
 }
 
-const DEFAULT_FORM: CategoryFormState = {
-	nameEn: '',
-	nameHi: '',
-	color: PRESET_COLORS[0],
-	emoji: '📁',
-};
-
 // ---------------------------------------------------------------------------
 // Screen
 // ---------------------------------------------------------------------------
 
 export default function ExpenseCategoriesScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, s, r, theme } = useThemeTokens();
 	const { formatCurrency } = useLocale();
 	const insets = useSafeAreaInsets();
+	const presetColors = theme.collections.expenseCategoryPickColors;
+	const fallbackCategories = React.useMemo<ExpenseCategory[]>(
+		() => [
+			{
+				id: '1',
+				nameEn: 'Rent',
+				nameHi: 'किराया',
+				color: presetColors[0] ?? c.primary,
+				emoji: '🏠',
+				monthTotal: 0,
+			},
+			{
+				id: '2',
+				nameEn: 'Transport',
+				nameHi: 'परिवहन',
+				color: presetColors[2] ?? presetColors[0] ?? c.primary,
+				emoji: '🚛',
+				monthTotal: 0,
+			},
+			{
+				id: '3',
+				nameEn: 'Labour',
+				nameHi: 'मजदूरी',
+				color: presetColors[1] ?? presetColors[0] ?? c.primary,
+				emoji: '👷',
+				monthTotal: 0,
+			},
+			{
+				id: '4',
+				nameEn: 'Utilities',
+				nameHi: 'उपयोगिता',
+				color: presetColors[5] ?? presetColors[0] ?? c.primary,
+				emoji: '💡',
+				monthTotal: 0,
+			},
+			{
+				id: '5',
+				nameEn: 'Packaging',
+				nameHi: 'पैकेजिंग',
+				color: presetColors[3] ?? presetColors[0] ?? c.primary,
+				emoji: '📦',
+				monthTotal: 0,
+			},
+			{
+				id: '6',
+				nameEn: 'Maintenance',
+				nameHi: 'रखरखाव',
+				color: presetColors[4] ?? presetColors[0] ?? c.primary,
+				emoji: '🔧',
+				monthTotal: 0,
+			},
+			{
+				id: '7',
+				nameEn: 'Advertisement',
+				nameHi: 'विज्ञापन',
+				color: presetColors[6] ?? presetColors[0] ?? c.primary,
+				emoji: '📢',
+				monthTotal: 0,
+			},
+			{
+				id: '8',
+				nameEn: 'Miscellaneous',
+				nameHi: 'विविध',
+				color: presetColors[8] ?? presetColors[0] ?? c.primary,
+				emoji: '🗂️',
+				monthTotal: 0,
+			},
+		],
+		[c.primary, presetColors],
+	);
+	const defaultForm = React.useMemo<CategoryFormState>(
+		() => ({
+			nameEn: '',
+			nameHi: '',
+			color: presetColors[0] ?? c.primary,
+			emoji: '📁',
+		}),
+		[c.primary, presetColors],
+	);
 
-	const [categories, setCategories] = useState<ExpenseCategory[]>(FALLBACK_CATEGORIES);
+	const [categories, setCategories] = useState<ExpenseCategory[]>(() => fallbackCategories);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [editingId, setEditingId] = useState<string | null>(null);
-	const [form, setForm] = useState<CategoryFormState>(DEFAULT_FORM);
+	const [form, setForm] = useState<CategoryFormState>(defaultForm);
 
 	// ── Modal helpers ──────────────────────────────────────────────────────
 
 	function openAdd() {
 		setEditingId(null);
-		setForm(DEFAULT_FORM);
+		setForm(defaultForm);
 		setModalVisible(true);
 	}
 
@@ -297,13 +300,14 @@ export default function ExpenseCategoriesScreen() {
 					{
 						backgroundColor: c.primary,
 						bottom: FAB_OFFSET_BOTTOM + insets.bottom,
+						shadowColor: c.shadow,
 					},
 				]}
 				onPress={openAdd}
 				accessibilityRole="button"
 				accessibilityLabel="add-expense-category"
 			>
-				<Plus color="white" size={28} />
+				<Plus color={c.white} size={28} />
 			</Pressable>
 
 			{/* Add / Edit Modal */}
@@ -328,7 +332,7 @@ export default function ExpenseCategoriesScreen() {
 							},
 						]}
 					>
-						<View style={styles.sheetHandle} />
+						<View style={[styles.sheetHandle, { backgroundColor: c.borderStrong }]} />
 						<ThemedText variant="h3" style={styles.modalTitle}>
 							{editingId ? 'Edit Category' : 'New Category'}
 						</ThemedText>
@@ -423,7 +427,7 @@ export default function ExpenseCategoriesScreen() {
 								Color
 							</ThemedText>
 							<View style={styles.colorGrid}>
-								{PRESET_COLORS.map((col) => (
+								{presetColors.map((col) => (
 									<Pressable
 										key={col}
 										onPress={() => setForm((f) => ({ ...f, color: col }))}
@@ -524,7 +528,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		elevation: 4,
-		shadowColor: palette.shadow,
 		shadowOffset: { width: ZERO_SPACING, height: SHADOW_OFFSET_Y },
 		...FAB_SHADOW,
 	},
@@ -543,7 +546,6 @@ const styles = StyleSheet.create({
 		width: SIZE_MODAL_HANDLE_WIDTH,
 		height: SIZE_MODAL_HANDLE_HEIGHT,
 		borderRadius: BORDER_RADIUS_PX.xs,
-		backgroundColor: palette.grayCCC,
 		alignSelf: 'center',
 		marginTop: SPACING_PX.md,
 		marginBottom: SPACING_PX.xs,

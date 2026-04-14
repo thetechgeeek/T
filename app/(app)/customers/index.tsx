@@ -19,7 +19,6 @@ import { Badge } from '@/src/components/atoms/Badge';
 import { CustomerListSkeleton } from '@/src/components/molecules/skeletons/CustomerListSkeleton';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { Customer } from '@/src/types/customer';
-import { partyAvatarColors, palette } from '@/src/theme/palette';
 
 function getInitials(name: string): string {
 	return name
@@ -29,8 +28,8 @@ function getInitials(name: string): string {
 		.join('');
 }
 
-function getAvatarColor(name: string): string {
-	return partyAvatarColors[name.charCodeAt(0) % 8] ?? partyAvatarColors[0];
+function getAvatarColor(name: string, colors: readonly string[]): string {
+	return colors[name.charCodeAt(0) % colors.length] ?? colors[0];
 }
 
 const CUSTOMER_FILTERS = [
@@ -112,8 +111,18 @@ export default function CustomersScreen() {
 			subtitle={item.phone || item.city || t('customer.noContactInfo')}
 			onPress={() => router.push(`/(app)/customers/${item.id}`)}
 			leftIcon={
-				<View style={[styles.avatar, { backgroundColor: getAvatarColor(item.name) }]}>
-					<ThemedText weight="bold" color={palette.white} style={{ fontSize: 15 }}>
+				<View
+					style={[
+						styles.avatar,
+						{
+							backgroundColor: getAvatarColor(
+								item.name,
+								theme.collections.partyAvatarColors,
+							),
+						},
+					]}
+				>
+					<ThemedText weight="bold" color={theme.colors.white} style={{ fontSize: 15 }}>
 						{getInitials(item.name)}
 					</ThemedText>
 				</View>

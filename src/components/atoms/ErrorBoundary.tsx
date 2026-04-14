@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useLocale } from '@/src/hooks/useLocale';
-import { palette } from '@/src/theme/palette';
+import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
@@ -17,17 +17,18 @@ interface State {
 
 function FallbackUI({ error, onReset }: { error: Error | null; onReset: () => void }) {
 	const { t } = useLocale();
+	const { theme } = useTheme();
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>{t('error.boundaryTitle')}</Text>
-			<Text style={[styles.message, { color: palette.errorBoundaryText }]}>
+			<Text style={[styles.message, { color: theme.colors.onSurfaceVariant }]}>
 				{error?.message || t('common.unexpectedError')}
 			</Text>
 			<TouchableOpacity
 				onPress={onReset}
-				style={[styles.button, { backgroundColor: palette.errorBoundaryButton }]}
+				style={[styles.button, { backgroundColor: theme.colors.primary }]}
 			>
-				<Text style={[styles.buttonText, { color: palette.white }]}>
+				<Text style={[styles.buttonText, { color: theme.colors.onPrimary }]}>
 					{t('error.boundaryRetry')}
 				</Text>
 			</TouchableOpacity>

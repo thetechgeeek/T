@@ -8,7 +8,6 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
-import { printThemeSwatches, palette } from '@/src/theme/palette';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 
@@ -21,7 +20,6 @@ const PAPER_TYPES: { key: PaperType; label: string }[] = [
 	{ key: 'a5', label: 'A5' },
 ];
 
-const THEMES = [...printThemeSwatches];
 const THEME_RECT_WIDTH = 40;
 const THEME_RECT_HEIGHT = 56;
 const THEME_CHECK_SIZE = 18;
@@ -63,7 +61,7 @@ function SwitchRow({
 }
 
 export default function PrintSettingsScreen() {
-	const { c } = useThemeTokens();
+	const { c, theme: appTheme } = useThemeTokens();
 
 	const [paper, setPaper] = useState<PaperType>('a4');
 	const [theme, setTheme] = useState('professional');
@@ -117,7 +115,7 @@ export default function PrintSettingsScreen() {
 
 				<SectionHeader title="Invoice Theme" variant="uppercase" titleColor={c.primary} />
 				<View style={[styles.themeRow, { marginHorizontal: SPACING_PX.lg }]}>
-					{THEMES.map((t) => (
+					{appTheme.collections.printThemeSwatches.map((t) => (
 						<Pressable
 							key={t.key}
 							onPress={() => setTheme(t.key)}
@@ -127,12 +125,15 @@ export default function PrintSettingsScreen() {
 								style={[
 									styles.themeRect,
 									{ backgroundColor: t.color },
-									theme === t.key && styles.themeSelected,
+									theme === t.key && [
+										styles.themeSelected,
+										{ borderColor: c.white },
+									],
 								]}
 							>
 								{theme === t.key && (
 									<ThemedText
-										style={{ color: palette.white, fontSize: THEME_CHECK_SIZE }}
+										style={{ color: c.white, fontSize: THEME_CHECK_SIZE }}
 									>
 										✓
 									</ThemedText>
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	themeSelected: { borderWidth: 2, borderColor: palette.white, opacity: OPACITY_HOVER },
+	themeSelected: { borderWidth: 2, opacity: OPACITY_HOVER },
 	textInput: {
 		borderWidth: 1,
 		borderRadius: BORDER_RADIUS_PX.md,

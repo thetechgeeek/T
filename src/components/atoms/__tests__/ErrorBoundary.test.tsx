@@ -2,6 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
 import { ErrorBoundary } from '../ErrorBoundary';
+import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 // Component that throws on demand
 function BrokenComponent({ shouldThrow }: { shouldThrow: boolean }) {
@@ -21,18 +22,22 @@ afterEach(() => {
 describe('ErrorBoundary', () => {
 	it('renders children when no error', () => {
 		const { getByText } = render(
-			<ErrorBoundary>
-				<Text>Normal content</Text>
-			</ErrorBoundary>,
+			<ThemeProvider>
+				<ErrorBoundary>
+					<Text>Normal content</Text>
+				</ErrorBoundary>
+			</ThemeProvider>,
 		);
 		expect(getByText('Normal content')).toBeTruthy();
 	});
 
 	it('renders fallback UI when child throws', () => {
 		const { getByText } = render(
-			<ErrorBoundary>
-				<BrokenComponent shouldThrow />
-			</ErrorBoundary>,
+			<ThemeProvider>
+				<ErrorBoundary>
+					<BrokenComponent shouldThrow />
+				</ErrorBoundary>
+			</ThemeProvider>,
 		);
 		expect(getByText('Something went wrong')).toBeTruthy();
 		expect(getByText('Test crash')).toBeTruthy();
@@ -40,18 +45,22 @@ describe('ErrorBoundary', () => {
 
 	it('renders custom fallback when provided', () => {
 		const { getByText } = render(
-			<ErrorBoundary fallback={<Text>Custom fallback</Text>}>
-				<BrokenComponent shouldThrow />
-			</ErrorBoundary>,
+			<ThemeProvider>
+				<ErrorBoundary fallback={<Text>Custom fallback</Text>}>
+					<BrokenComponent shouldThrow />
+				</ErrorBoundary>
+			</ThemeProvider>,
 		);
 		expect(getByText('Custom fallback')).toBeTruthy();
 	});
 
 	it('resets error state when Try Again is pressed', () => {
 		const { getByText } = render(
-			<ErrorBoundary>
-				<BrokenComponent shouldThrow />
-			</ErrorBoundary>,
+			<ThemeProvider>
+				<ErrorBoundary>
+					<BrokenComponent shouldThrow />
+				</ErrorBoundary>
+			</ThemeProvider>,
 		);
 		expect(getByText('Something went wrong')).toBeTruthy();
 

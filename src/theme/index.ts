@@ -41,6 +41,8 @@ export interface ThemeColors {
 	separator: string;
 	overlay: string;
 	scrim: string;
+	white: string;
+	shadow: string;
 	// Tabs & Nav
 	tabBar: string;
 	tabActive: string;
@@ -52,6 +54,27 @@ export interface ThemeColors {
 	unpaid: string;
 	lowStock: string;
 	overdue: string;
+}
+
+export interface PrintThemeSwatch {
+	key: string;
+	label: string;
+	color: string;
+}
+
+export interface ExpenseReportDemoSlice {
+	id: string;
+	name: string;
+	amount: number;
+	color: string;
+}
+
+export interface ThemeCollections {
+	partyAvatarColors: readonly string[];
+	expenseCategoryPickColors: readonly string[];
+	printThemeSwatches: readonly PrintThemeSwatch[];
+	expenseReportDemoSlices: readonly ExpenseReportDemoSlice[];
+	allTransactionsTypeColors: Readonly<Record<string, string>>;
 }
 
 export interface ThemeTypography {
@@ -131,6 +154,7 @@ export interface Theme {
 		springDamping: number;
 		springStiffness: number;
 	};
+	collections: ThemeCollections;
 	touchTarget: number; // minimum 48
 }
 

@@ -6,7 +6,6 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { SectionHeader } from '@/src/components/molecules/SectionHeader';
 import { SettingsCard } from '@/src/components/molecules/SettingsCard';
-import { palette } from '@/src/theme/palette';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 
 type AutoBackup = 'off' | 'daily' | 'weekly';
@@ -114,7 +113,7 @@ export default function BackupScreen() {
 						onPress={() => Alert.alert('Backup', 'Backup feature coming soon')}
 						style={[styles.primaryBtn, { backgroundColor: c.primary, flex: 1 }]}
 					>
-						<ThemedText style={{ color: palette.white, fontWeight: '700' }}>
+						<ThemedText style={{ color: c.white, fontWeight: '700' }}>
 							Backup Now
 						</ThemedText>
 					</Pressable>
@@ -148,8 +147,8 @@ export default function BackupScreen() {
 				style={[
 					styles.warningCard,
 					{
-						backgroundColor: palette.backupDangerBg,
-						borderColor: palette.backupDangerBorder,
+						backgroundColor: c.errorLight,
+						borderColor: c.error,
 					},
 				]}
 			>
@@ -167,7 +166,7 @@ export default function BackupScreen() {
 						style={[
 							styles.outlineBtn,
 							{
-								borderColor: palette.backupDangerBorderStrong,
+								borderColor: c.error,
 								flex: 1,
 								justifyContent: 'center',
 							},

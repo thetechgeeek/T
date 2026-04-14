@@ -9,7 +9,6 @@ import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ThemeColors } from '@/src/theme';
-import { palette } from '@/src/theme/palette';
 import {
 	MOCK_ESTIMATES,
 	type Estimate,
@@ -37,7 +36,7 @@ function estimateStatusConfig(
 		open: { label: 'Open', bg: c.warningLight, color: c.partial },
 		accepted: { label: 'Accepted', bg: c.successLight, color: c.paid },
 		expired: { label: 'Expired', bg: c.errorLight, color: c.unpaid },
-		converted: { label: 'Converted', bg: c.infoLight, color: palette.statusInfoFg },
+		converted: { label: 'Converted', bg: c.infoLight, color: c.info },
 	};
 }
 
@@ -46,7 +45,7 @@ function isExpired(validUntil: string): boolean {
 }
 
 export default function EstimatesScreen() {
-	const { c, r } = useThemeTokens();
+	const { c, r, theme } = useThemeTokens();
 	const STATUS_CONFIG = estimateStatusConfig(c);
 	const { formatCurrency, formatDate } = useLocale();
 	const router = useRouter();
@@ -173,13 +172,21 @@ export default function EstimatesScreen() {
 
 			{/* FAB */}
 			<Pressable
-				style={[styles.fab, { backgroundColor: c.primary, borderRadius: r.full }]}
+				style={[
+					styles.fab,
+					{
+						backgroundColor: c.primary,
+						borderRadius: r.full,
+						shadowColor: c.shadow,
+						...(theme.shadows.md || {}),
+					},
+				]}
 				onPress={() => router.push('/(app)/transactions/estimates/create' as Href)}
 				accessibilityLabel="new-estimate"
 				accessibilityRole="button"
 			>
-				<Plus size={20} color={palette.white} />
-				<ThemedText variant="caption" color={palette.white} style={{ marginLeft: 6 }}>
+				<Plus size={20} color={c.white} />
+				<ThemedText variant="caption" color={c.white} style={{ marginLeft: 6 }}>
 					New Estimate
 				</ThemedText>
 			</Pressable>
@@ -232,8 +239,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingHorizontal: 18,
 		paddingVertical: 14,
-		elevation: 4,
-		shadowColor: palette.shadow,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: FAB_SHADOW_OPACITY,
 		shadowRadius: 4,

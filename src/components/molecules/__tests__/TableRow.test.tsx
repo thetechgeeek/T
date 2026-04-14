@@ -30,4 +30,28 @@ describe('TableRow', () => {
 		expect(getByText('1')).toBeTruthy();
 		expect(getByText('2')).toBeTruthy();
 	});
+
+	it('supports width-based columns and text color overrides', () => {
+		const { toJSON, getByText } = renderWithTheme(
+			<TableRow
+				variant="header"
+				textColor="#ffffff"
+				columns={[
+					{ label: 'Date', width: 42 },
+					{ label: 'Amount', width: 68, align: 'right' },
+				]}
+			/>,
+		);
+
+		expect(getByText('Date')).toBeTruthy();
+		const json = toJSON() as {
+			children: Array<{
+				props: { style: Record<string, unknown> | Record<string, unknown>[] };
+			}>;
+		};
+		const firstCellStyle = Array.isArray(json.children[0].props.style)
+			? Object.assign({}, ...json.children[0].props.style)
+			: json.children[0].props.style;
+		expect(firstCellStyle.width).toBe(42);
+	});
 });

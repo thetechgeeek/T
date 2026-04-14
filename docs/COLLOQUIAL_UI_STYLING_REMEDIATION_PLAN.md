@@ -1,600 +1,463 @@
-# Colloquial UI Styling — Full Remediation Plan
+# Colloquial UI Styling — Remediation Checklist
 
 **TileMaster — eliminate ad-hoc visual styling ("colloquial" issues)**
 
-This document defines scope, a **100% completion bar**, phased work, enforcement, and QA so the codebase stops accruing one-off spacing, mixed color sources, and screen-local layout hacks. It complements (and does not replace) [`UI_UX_REMEDIATION_PLAN.md`](./UI_UX_REMEDIATION_PLAN.md), which tracks broader product/UI initiatives; **this plan is strictly about systemic styling discipline.**
+> Granular checklist derived from the original remediation plan. Each item verified against the live codebase on 2026-04-14.
 
 ---
 
-## 0. Current Baseline (audited 2026-04-13)
+## Phase 0 — Theme Infrastructure Gaps
 
-> This section is the single source of truth for "where we are." Update counts as work lands.
+### Gap helpers in `src/theme/layout.ts`
 
-| Category                                          | Metric                      | Count        | Files |
-| ------------------------------------------------- | --------------------------- | ------------ | ----- |
-| **A. Color: `rgba(` in app/+components/**         | raw rgba calls              | **30**       | 21    |
-| **A. Color: hex concatenation** (`c.X + '15'`)    | string hacks                | **16**       | 8     |
-| **A. Color: `palette` import outside theme/**     | direct palette              | **0**        | 0     |
-| **B. Spacing: raw `gap: N`**                      | magic gap                   | **168+**     | 86+   |
-| **B. Spacing: raw `padding*: N`**                 | magic padding               | **300+**     | 89+   |
-| **B. Spacing: raw `margin*: N`**                  | magic margin                | **400+**     | 120   |
-| **B. Spacing: raw `fontSize: N`**                 | magic font size             | **150+**     | 72+   |
-| **B. Spacing: raw `borderRadius: N`**             | magic radius                | **100+**     | 73+   |
-| **B. Sizing: raw `width`/`height: N`**            | magic sizing                | **120+**     | 68+   |
-| **C. Composition: duplicate `card` style**        | repeated patterns           | **22**       | 22    |
-| **C. Composition: duplicate `sectionHeader`**     | repeated patterns           | **7**        | 7     |
-| **D. Overlay: `zIndex` magic**                    | ad-hoc z-index              | **5**        | 4     |
-| **D. Overlay: `position: 'absolute'`**            | ad-hoc absolute             | ~26          | ~22   |
-| **E. Screen shell: `ScrollView` direct**          | bypassing Screen.scrollable | **212** uses | 61    |
-| **E. Screen shell: inconsistent `safeAreaEdges`** | 10 unique combos            | varies       | ~50   |
+- [x] Add `gap2: { gap: 2 }` (micro — dividers, tight icon rows)
+- [x] Add `gap4: { gap: 4 }`
+- [x] Add `gap8: { gap: 8 }`
+- [x] Add `gap12: { gap: 12 }`
+- [x] Add `gap16: { gap: 16 }`
+- [x] Add `gap24: { gap: 24 }` (xl)
+- [x] Add `gap32: { gap: 32 }` (2xl)
+- [x] Add `gap48: { gap: 48 }` (3xl)
 
-**Total screens:** 110 (104 app + 6 auth). **Total component files:** 47 (14 atoms, 27 molecules, 6 organisms).
+### Z-index scale in `src/theme/uiMetrics.ts`
 
-**Estimated total magic-number violations:** ~1,300+ across app/ and src/components/.
+- [x] Define `Z_INDEX.base` (0)
+- [x] Define `Z_INDEX.dropdown` (10)
+- [x] Define `Z_INDEX.sticky` (50)
+- [x] Define `Z_INDEX.overlay` (100)
+- [x] Define `Z_INDEX.modal` (200)
+- [x] Define `Z_INDEX.toast` (300)
+- [x] Define `Z_INDEX.max` (999)
 
----
+### FAB positioning constants in `src/theme/uiMetrics.ts`
 
-## 1. What "colloquial issues" means
+- [x] Define `FAB_OFFSET_RIGHT` (20)
+- [x] Define `FAB_OFFSET_BOTTOM` (20)
 
-| Category                             | Description                                                                                                                              | Current Status                                                                                                                                                                                             |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **A. Mixed color pipelines**         | Same semantic need satisfied via `theme.colors`, `useThemeTokens().c`, `palette` imports, raw `rgba()`, or string hacks (`color + '15'`) | `palette` imports are **clean** (0 outside theme/). `rgba(` in 21 files and hex concatenation in 8 files remain.                                                                                           |
-| **B. Magic layout numbers**          | Spacing, radius, width, height, `gap`, `fontSize` as raw numbers not tied to `theme.spacing`, `theme.borderRadius`, `theme.typography`   | **Critical.** 1,200+ violations across ~120 files. Theme tokens exist (`s.xs`..`s.4xl`, `r.xs`..`r.full`, typography variants) but screens overwhelmingly use raw numbers.                                 |
-| **C. One-off composition**           | Repeated row/column/section/header patterns reimplemented per screen instead of shared primitives                                        | **High.** 22 files define their own `card` style, 7 define their own `sectionHeader`. Missing: RadioCard, SectionRow, FilterChip primitives.                                                               |
-| **D. Stacking / overlay ad-hocness** | `position: 'absolute'`, `zIndex`, negative margins, or fixed heights without shared rules                                                | **Medium.** 5 zIndex values (all `100` or `999`), ~26 absolute positions. No z-index scale defined. No negative margins (good).                                                                            |
-| **E. Inconsistent screen shells**    | Different combinations of `Screen`, `ScrollView`, safe-area padding, `KeyboardAvoidingView`, headers                                     | **Medium.** 61 files use `ScrollView` directly instead of `Screen`'s `scrollable` prop. 10 different `safeAreaEdges` combos with no documented default. `withKeyboard` prop used correctly in most places. |
+### Opacity tokens in `src/theme/uiMetrics.ts`
 
-**Out of scope:** copy/i18n, navigation IA, feature behavior, animation polish except where it duplicates magic numbers already covered by theme tokens.
+- [x] Audit all 30 rgba calls and add needed `OPACITY_*` / `OVERLAY_COLOR_*` / `GLASS_*` tokens
+
+### Allowlist file
+
+- [x] Create `docs/COLLOQUIAL_UI_ALLOWLIST.md` with process description
 
 ---
 
-## 2. Definition of done — "100%"
+## Phase 1 — Color Derivation Cleanup
 
-Remediation is **complete** when **all** of the following are true.
+### A1. Raw `rgba(` elimination (was 30 instances in 21 files)
 
-### 2.1 Color pipeline (single source of truth)
+- [x] Eliminate all `rgba(` in `app/` — **0 remaining**
+- [x] Eliminate all `rgba(` in `src/components/` — **0 remaining**
 
-- [x] **No app/feature TSX** imports `palette` (or other parallel color modules) **except** files under `src/theme/` (and tests that stub colors if needed).
-- [ ] **No raw `rgba(` in `app/` or `src/components/`** except inside `src/theme/` (semantic tokens may wrap rgba in one place). **Current: 30 instances in 21 files.**
-- [ ] **No hex-concatenation hacks** (`color + '15'`, `color + 'CC'`) anywhere in `app/` or `src/components/`. All use `withOpacity()` from `src/utils/color.ts`. **Current: 16 instances in 8 files.**
-- [ ] **Semantic intent** uses `theme.colors` / `useThemeTokens().c` only; derived colors use `withOpacity`/`darken` from `src/utils/color.ts`, not string concatenation.
+### A2. Hex-concatenation hacks (was 16 instances in 8 files → 0 remaining)
 
-### 2.2 Spacing, radius, typography
+- [x] `utilities/tally-export.tsx` — `c.primary + '15'` → `withOpacity()`
+- [x] `utilities/verify.tsx` — `c.success + '18'` → `withOpacity()`
+- [x] `transactions/purchase-orders/create.tsx` — `c.primary + '10'` → `withOpacity()`
+- [x] `finance/loans/index.tsx` — `badgeColor + '22'` → `withOpacity()`
+- [x] `finance/loans/[id].tsx` — various `+ '18'` / `+ '60'` → `withOpacity()`
+- [x] `finance/transfer.tsx` — `c.primary + '15'` / `'10'` / `'30'` → `withOpacity()`
+- [x] `finance/ewallets.tsx` — `item.color + '22'` → `withOpacity()`
+- [x] `orders/index.tsx` — `c.success + '15'` → `withOpacity()`
+- [x] `reports/order-summary.tsx` — `c.primary + '22'` → `withOpacity()`
+- [x] `reports/stock-summary.tsx` — `c.error + '22'` → `withOpacity()`
+- [x] `utilities/calculator.tsx` — 2 instances of `c.primary + '20'` → `withOpacity()`
+- [x] `transactions/purchase-orders/index.tsx` — 1 instance of `c.primary + '20'` → `withOpacity()`
 
-- [ ] **No raw numeric `margin*`, `padding*`, `gap` in `app/` and `src/components/`** except:
-    - `0` where explicitly meaning "none"
-    - Values defined **once** as named constants in `src/theme/` (e.g. `layoutMetrics`, `uiMetrics`) and re-exported through theme or `layout.*`
-    - **Current: ~870+ violations (168 gap + 300 padding + 400 margin) across 120 files.**
-- [ ] **No raw `fontSize`/`lineHeight`** in `app/` and `src/components/`. All text uses `ThemedText` with `variant` prop, or `theme.typography.sizes.*` for the rare exception. **Current: 150+ violations in 72 files.**
-- [ ] **No raw `borderRadius`** — all use `theme.borderRadius` (`r.*`). **Current: 100+ violations in 73 files.**
-- [ ] **No raw `width`/`height`** for recurring UI elements — use named constants from `uiMetrics.ts`. One-off layout dimensions (e.g. modal max-height) defined once as named constants. **Current: 120+ violations in 68 files.**
-- [ ] **All** spacing uses `theme.spacing` (`s.*`), `layout.gap*` helpers, or named `uiMetrics` constants.
+### A3. Palette imports outside `src/theme/` (was claimed 0 — actually 27 files including features)
 
-### 2.3 Layout primitives
+> The original baseline was wrong: it said 0 palette imports outside theme. Audit found imports across `app/`, `src/components/`, and `src/features`; all have now been removed from UI code.
 
-- [ ] **Shared primitives exist and are used** for recurring patterns (minimum set):
-    - `SectionHeader` — replaces 7+ per-screen sectionHeader style definitions
-    - `SettingsCard` / `OptionCard` — replaces 22+ per-screen card definitions (especially preferences/settings screens)
-    - Standard list row wrapper (padding + separator from tokens)
-    - Report / dense table row (uniform column sizing from tokens)
-    - Stacked form section (title + body gap from tokens)
-- [ ] **`src/theme/layout.ts`** expanded to cover **all** recurring gap sizes: currently only `gap4`, `gap8`, `gap12`, `gap16` — add `gap2` (xs), `gap24` (xl), `gap32` (2xl) to match the `SPACING_PX` scale.
-- [ ] **No free `gap: N`** in screens — all use `layout.gap*` or `{ gap: s.xx }`.
+- [x] Remove all direct `palette` imports from `app/` screens
+- [x] Remove all direct `palette` imports from `src/components/`
+- [x] Remove all direct `palette` imports from `src/features/`
+- [x] Route shared swatch/data collections through `theme.collections`
+- [x] Route one-off UI colors through `theme.colors`
 
-### 2.4 Screen shells
+### A4. Semantic color discipline
 
-- [ ] **Documented default recipe**: `<Screen safeAreaEdges={['bottom']} withKeyboard={false}>` for tab screens, `<Screen safeAreaEdges={['bottom']} withKeyboard>` for form screens, `<Screen safeAreaEdges={['top', 'bottom']}>` for modal screens.
-- [ ] **All 61 files** that currently use `ScrollView` directly migrate to `Screen`'s `scrollable` prop (or are documented in allowlist with rationale).
-- [ ] **Standardized `safeAreaEdges`**: reduce from 10 unique combos to **3 documented patterns** (tab, form, modal). Exceptions in allowlist.
-- [ ] **No duplicate safe-area padding** (`Screen` + manual `paddingTop` for the same edge) unless allowlisted.
+- [x] All color usage goes through `theme.colors` / `useThemeTokens().c` only
+- [x] All derived colors use `withOpacity()` / `darken()` from `src/utils/color.ts`
 
-### 2.5 Overlay & z-index discipline
+### A5. Light + dark verification on pilot screens
 
-- [ ] **Z-index scale defined** in `src/theme/uiMetrics.ts`: `Z_BASE: 0`, `Z_DROPDOWN: 10`, `Z_STICKY: 50`, `Z_OVERLAY: 100`, `Z_MODAL: 200`, `Z_TOAST: 300`, `Z_MAX: 999`.
-- [ ] **All 5 current zIndex usages** replaced with named constants.
-- [ ] **FAB / overlay positioning** uses shared constants from `uiMetrics.ts` (e.g. `FAB_OFFSET_RIGHT`, `FAB_OFFSET_BOTTOM`).
-
-### 2.6 Enforcement automation
-
-- [ ] **ESLint custom rules or `check:ui-tokens` script** in CI that fails on:
-    - `rgba(` in `app/` or `src/components/` (outside allowlist)
-    - String concatenation on color values (`+ '` pattern after color variable)
-    - Raw numeric values for `gap`, `padding*`, `margin*`, `fontSize`, `borderRadius` in `app/` and `src/components/` (extend existing `no-magic-numbers` rule or add custom script)
-- [ ] **`check:hex`** script (already exists in `package.json`) continues to block raw hex.
-- [ ] **`validate`** script in `package.json` includes all token checks.
-- [ ] **Husky pre-commit** runs token checks on staged files.
-
-### 2.7 Verification
-
-- [ ] **Spot checklist** (manual): representative screens per area — Dashboard, Finance index, Reports index, Customers list, Invoice create/detail, Settings, Auth flow — on **light + dark** + **small (iPhone SE) + large (iPhone 15 Pro Max)**.
-- [ ] **No visual regressions** — existing snapshot/visual tests pass; new snapshots for any new primitives.
-- [ ] All `ThemedText` variants render correctly in both themes.
+- [ ] Verify login screen in both themes after color changes
+- [ ] Verify store screen in both themes after color changes
+- [ ] Verify inventory screen in both themes after color changes
 
 ---
 
-## 3. Guiding principles
+## Phase 2 — Component Library Cleanup
 
-1. **Tokens first** — extend `Theme` / `layout` / `uiMetrics` before adding a new magic number.
-2. **Bottom-up migration** — atoms -> molecules -> organisms -> features -> `app/` screens; **never** copy-paste token maps into a screen.
-3. **One PR, one vertical slice** — e.g. "all reports screens" or "all settings screens" — reduces merge pain and makes review deterministic.
-4. **Allowlists over exceptions** — if something must break a rule temporarily, it lives in `docs/COLLOQUIAL_UI_ALLOWLIST.md` with a ticket reference.
-5. **Measure -> migrate -> enforce** — never turn on a lint rule before the codebase passes it.
+### Shared component cleanup
 
----
+- [x] `Card.tsx` — remove raw Android `elevation: 2`; use `theme.shadows.sm`
+- [x] `ErrorBoundary.tsx` — stop bypassing theme with `lightTheme`; use live `ThemeProvider` context
+- [x] `Divider.tsx` — replace `height: 1` with `StyleSheet.hairlineWidth`
+- [x] `SearchBar.tsx` — replace raw icon sizes with shared `uiMetrics` constants
+- [x] `SwipeableRow.tsx` — replace raw action width/height with `uiMetrics` + touch-target tokens
+- [x] `ConflictModal.tsx` — replace raw icon/modal sizing with shared `uiMetrics` constants
+- [x] `CustomerListSkeleton.tsx` — replace raw skeleton dimensions with shared `uiMetrics` constants
+- [x] `SyncIndicator.tsx` — zIndex uses `Z_INDEX.toast`
+- [x] `Toast.tsx` / skeletons / organisms — no raw `rgba(` remain in `src/components/`
 
-## 4. Phase plan
+### Component-wide exit criteria
 
-### Phase 0 — Theme infrastructure gaps (1-2 days)
-
-**Goal:** Fill gaps in the token system so migration has somewhere to land.
-
-**Tasks:**
-
-1. **Extend `layout.ts` gap helpers** to match full `SPACING_PX` scale:
-
-    ```typescript
-    // Add to layout.ts:
-    gap2: { gap: 2 },    // micro (dividers, tight icon rows)
-    gap24: { gap: 24 },  // xl
-    gap32: { gap: 32 },  // 2xl
-    gap48: { gap: 48 },  // 3xl
-    ```
-
-2. **Add z-index scale** to `uiMetrics.ts`:
-
-    ```typescript
-    export const Z_INDEX = {
-    	base: 0,
-    	dropdown: 10,
-    	sticky: 50,
-    	overlay: 100,
-    	modal: 200,
-    	toast: 300,
-    	max: 999,
-    } as const;
-    ```
-
-3. **Add FAB positioning constants** to `uiMetrics.ts`:
-
-    ```typescript
-    export const FAB_OFFSET_RIGHT = 20;
-    export const FAB_OFFSET_BOTTOM = 20;
-    ```
-
-4. **Add missing opacity tokens** if any `rgba()` in screens express opacity not covered by existing `OPACITY_*` constants in `uiMetrics.ts`. Audit the 30 rgba calls and add needed tokens.
-
-5. **Create `docs/COLLOQUIAL_UI_ALLOWLIST.md`** — empty except for process description. Only place for temporary exceptions.
-
-**Exit criteria:** `layout.ts` has gap helpers for all spacing scale values. `uiMetrics.ts` has z-index scale and FAB constants. Allowlist file exists.
+- [x] `rgba(` in `src/components/` → **0**
+- [x] No non-zero raw numeric `gap`, `padding*`, `margin*`, `fontSize`, `borderRadius`, `width`/`height`, `elevation`, or `maxHeight` remain in `src/components/` style declarations
+- [x] Explicit `0` resets remain only where they intentionally mean “none”
 
 ---
 
-### Phase 1 — Color derivation cleanup (1-2 days)
+## Phase 3 — Shared Layout Primitives
 
-**Goal:** Category A at zero outside `src/theme/`.
+### Create shared components
 
-**Scope:** 30 `rgba(` instances in 21 files + 16 hex-concatenation hacks in 8 files = **46 total fixes**.
+- [x] Create `SectionHeader` molecule (`src/components/molecules/SectionHeader.tsx`)
+- [x] Create `SettingsCard` molecule (`src/components/molecules/SettingsCard.tsx`)
+- [x] Create `TableRow` molecule (`src/components/molecules/TableRow.tsx`)
+- [x] Create `FormSection` molecule (`src/components/molecules/FormSection.tsx`)
 
-**Tasks:**
+### Adopt shared components (replace per-screen duplicates)
 
-1. **Audit all 30 `rgba(` calls.** For each:
-    - If it expresses a semantic color (e.g. `rgba(255,255,255,0.2)` for a glass effect), add a named token to `lightColors`/`darkColors` (e.g. `colors.glassWhite`) or use `withOpacity(c.surface, 0.2)`.
-    - If it expresses a shadow color, keep in `shadowMetrics.ts`.
+- [x] `SectionHeader` adopted in screens — **12 imports** in `app/`
+- [x] `SettingsCard` adopted in screens — **11 imports** in `app/`
+- [x] `TableRow` adopted in screens — **2 imports** in `app/` (`reports/party-statement`, `reports/gst-detail`)
+- [x] `FormSection` adopted in screens — **2 imports** in `app/` (`customers/add`, `suppliers/add`)
 
-2. **Replace all 16 hex-concatenation hacks** with `withOpacity()`:
-   | File | Current | Replacement |
-   |---|---|---|
-   | `utilities/tally-export.tsx:97` | `c.primary + '15'` | `withOpacity(c.primary, 0.08)` |
-   | `utilities/calculator.tsx:319` | `c.primary + '15'` | `withOpacity(c.primary, 0.08)` |
-   | `utilities/verify.tsx:169` | `c.success + '18'` | `withOpacity(c.success, 0.09)` |
-   | `transactions/purchase-orders/create.tsx:264` | `c.primary + '10'` | `withOpacity(c.primary, 0.06)` |
-   | `finance/loans/index.tsx:55` | `badgeColor + '22'` | `withOpacity(badgeColor, 0.13)` |
-   | `finance/loans/[id].tsx:86,200,269` | various `+ '18'`/`+ '60'` | `withOpacity(...)` |
-   | `finance/transfer.tsx:43,164,166` | `c.primary + '15'`/`'10'`/`'30'` | `withOpacity(c.primary, ...)` |
-   | `finance/ewallets.tsx:157` | `item.color + '22'` | `withOpacity(item.color, 0.13)` |
-   | `orders/index.tsx:120` | `c.success + '15'` | `withOpacity(c.success, 0.08)` |
-   | `reports/order-summary.tsx:67` | `c.primary + '22'` | `withOpacity(c.primary, 0.13)` |
-   | `reports/stock-summary.tsx:294` | `c.error + '22'` | `withOpacity(c.error, 0.13)` |
+### Eliminate per-screen duplicate styles
 
-3. **Verify light + dark** on 3 pilot screens (login, store, inventory) after all changes.
+- [ ] Remove per-screen `sectionHeader` style definitions — **4 files still define their own** (`finance/payments/[id]`, `settings/business-profile`, `finance/purchases/[id]`, `orders/import`)
+- [ ] Remove per-screen `card` style definitions — **~20 files still define their own** (settings/\*, store, reports, orders, etc.)
 
-**Exit criteria:** `grep -r "rgba(" app/ src/components/` returns 0. `grep -rP "\+\s*'" app/ src/components/` on color variables returns 0. Both themes render correctly.
+### Z-index migration (was 5 raw usages)
 
----
+- [x] `finance/payments/make.tsx` — `zIndex: 100` → `Z_INDEX.overlay`
+- [x] `finance/payments/receive.tsx` — `zIndex: 100` → `Z_INDEX.overlay`
+- [x] `finance/purchases/create.tsx` — `zIndex: 100` → `Z_INDEX.overlay`
+- [x] `finance/purchases/[id].tsx` — `zIndex: 100` → `Z_INDEX.overlay`
+- [x] `atoms/SyncIndicator.tsx` — `zIndex: 1` → `Z_INDEX.base`
 
-### Phase 2 — Component library cleanup (2-3 days)
+### FAB positioning consolidation
 
-**Goal:** All atoms, molecules, and organisms use tokens exclusively. No raw numbers in `src/components/`.
-
-**Scope:** ~50 violations across 20+ component files.
-
-**Tasks by file (prioritized by impact):**
-
-1. **Atoms (14 files):** Audit and fix:
-    - `Button.tsx` — raw width/height -> `uiMetrics` constants
-    - `IconButton.tsx` — raw margin -> `s.*`
-    - `TextInput.tsx` — raw margin/padding -> `s.*`
-    - `ErrorBoundary.tsx` — raw margin -> `s.*`
-    - `SyncIndicator.tsx` — zIndex -> `Z_INDEX.toast`
-
-2. **Molecules (27 files):** Audit and fix:
-    - `Toast.tsx` — raw `rgba(` in shadow -> `shadowMetrics`, palette import -> `c.shadow`
-    - `ScreenHeader.tsx` — raw margin -> `s.*`
-    - `DatePickerField.tsx` — raw fontSize -> typography variant
-    - `BottomSheetPicker.tsx` — raw width/height -> `uiMetrics`
-    - `AmountInput.tsx`, `FormField.tsx`, `ListItem.tsx`, `PhoneInput.tsx`, `SearchBar.tsx`, `StatCard.tsx`, `TextAreaField.tsx` — raw margins -> `s.*`
-    - `ConfirmationModal.tsx` — card style -> tokens
-    - `EmptyState.tsx`, `PaginatedList.tsx` — raw margins -> `s.*`
-    - All skeleton components — raw rgba -> tokens
-
-3. **Organisms (6 files):** Audit and fix:
-    - `DashboardHeader.tsx` — 2 raw `rgba(` + raw width/height
-    - `PaymentModal.tsx` — 2 raw `rgba(`
-    - `ConflictModal.tsx` — 1 raw `rgba(`
-    - `TileSetCard.tsx` — card style -> tokens
-    - `RecentInvoicesList.tsx` — margins -> `s.*`
-
-**Exit criteria:** `grep -rP "(gap|padding|margin|fontSize|borderRadius):\s*\d" src/components/` returns 0 (or only allowlisted). `grep -r "rgba(" src/components/` returns 0.
+- [x] FAB uses `FAB_OFFSET_*` constants — **13 files** using `FAB_OFFSET` in `app/`
 
 ---
 
-### Phase 3 — Shared layout primitives (2-3 days)
+## Phase 4 — Screen-by-Screen Spacing Migration
 
-**Goal:** Categories C and D — create shared primitives and z-index discipline.
+> This is the largest phase. ~1,200+ raw numeric violations across ~120 files. The per-slice checklist below tracks high-level completion. None of these slices are done yet.
 
-**Tasks:**
+### Per-slice checklist template (applies to each slice)
 
-1. **Create `SectionHeader` molecule** (`src/components/molecules/SectionHeader.tsx`):
-    - Props: `title`, `subtitle?`, `action?` (button/link), `variant` ('default' | 'uppercase')
-    - Uses `ThemedText` variant `label` or `caption`, `s.lg` horizontal padding, `s.md` vertical
-    - Replaces 7+ per-screen `sectionHeader` style definitions
+For each slice: replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borderRadius`, and recurring `width`/`height` with theme tokens.
 
-2. **Create `SettingsCard` molecule** (`src/components/molecules/SettingsCard.tsx`):
-    - Props: `children`, `selected?`, `onPress`, `title?`, `subtitle?`
-    - Wraps `Card` atom with standardized padding, border, selection state
-    - Replaces 22+ per-screen `card` style definitions in settings/preferences
+### S1. Auth screens (6 files — ~60 violations)
 
-3. **Create `TableRow` molecule** (`src/components/molecules/TableRow.tsx`):
-    - Props: `columns: { label, value, flex? }[]`, `variant` ('default' | 'header' | 'total')
-    - Fixed column sizing from theme, consistent padding
-    - For report screens (stock-summary, all-transactions, party-statement, etc.)
+- [ ] `login.tsx` — all magic numbers → tokens
+- [ ] `phone-login.tsx` — all magic numbers → tokens
+- [ ] `setup.tsx` — all magic numbers → tokens (~35 violations, worst offender)
+- [ ] `verify.tsx` — all magic numbers → tokens
+- [ ] `language-select.tsx` — all magic numbers → tokens
+- [ ] `(auth)/_layout.tsx` — all magic numbers → tokens
+- [ ] Light + dark visual check for auth slice
 
-4. **Create `FormSection` molecule** (`src/components/molecules/FormSection.tsx`):
-    - Props: `title`, `children`
-    - `SectionHeader` + vertical gap from tokens + optional divider
-    - For create/edit screens (invoice, purchase, payment, etc.)
+### S2. Tab screens (7 files — ~80 violations)
 
-5. **Replace all 5 zIndex usages** with `Z_INDEX.*` constants:
-    - `finance/payments/make.tsx:360` — `zIndex: 100` -> `Z_INDEX.overlay`
-    - `finance/payments/receive.tsx:356` — `zIndex: 100` -> `Z_INDEX.overlay`
-    - `finance/purchases/create.tsx:529` — `zIndex: 100` -> `Z_INDEX.overlay`
-    - `finance/purchases/[id].tsx:694` — `zIndex: 100` -> `Z_INDEX.overlay`
-    - `atoms/SyncIndicator.tsx:130` — `zIndex: 1` -> `Z_INDEX.base` or remove
+- [ ] `(tabs)/_layout.tsx` — all magic numbers → tokens
+- [ ] `(tabs)/index.tsx` (dashboard) — all magic numbers → tokens
+- [ ] `(tabs)/inventory.tsx` — all magic numbers → tokens
+- [ ] `(tabs)/invoices.tsx` — all magic numbers → tokens
+- [ ] `(tabs)/customers.tsx` — all magic numbers → tokens
+- [ ] `(tabs)/more.tsx` — all magic numbers → tokens
+- [ ] `(tabs)/scan.tsx` — all magic numbers → tokens
+- [ ] Light + dark visual check for tabs slice
 
-6. **Consolidate FAB positioning** across `inventory.tsx` and any other FAB users to use `FAB_OFFSET_*` constants.
+### S3. Settings screens (18 files — ~150 violations)
 
-**Exit criteria:** New primitives exist with tests. At least 3 screens each migrated to `SectionHeader` and `SettingsCard` as proof-of-concept. All zIndex magic numbers eliminated.
+- [ ] `settings/index.tsx` — magic numbers → tokens
+- [ ] `settings/preferences.tsx` — magic numbers → tokens (~22 violations)
+- [ ] `settings/users.tsx` — magic numbers → tokens (~28 violations)
+- [ ] `settings/reminders.tsx` — magic numbers → tokens (~20 violations)
+- [ ] `settings/business-profile.tsx` — magic numbers → tokens
+- [ ] `settings/gst.tsx` — magic numbers → tokens
+- [ ] `settings/items.tsx` — magic numbers → tokens
+- [ ] `settings/party.tsx` — magic numbers → tokens
+- [ ] `settings/transactions.tsx` — magic numbers → tokens
+- [ ] `settings/print.tsx` — magic numbers → tokens
+- [ ] `settings/backup.tsx` — magic numbers → tokens
+- [ ] `settings/expense-categories.tsx` — magic numbers → tokens
+- [ ] `settings/item-categories.tsx` — magic numbers → tokens
+- [ ] `settings/item-units.tsx` — magic numbers → tokens
+- [ ] `settings/security.tsx` — magic numbers → tokens
+- [ ] `settings/firms.tsx` — magic numbers → tokens
+- [ ] `settings/sync-log.tsx` — magic numbers → tokens
+- [ ] Replace per-screen `card` / `sectionHeader` with shared primitives
+- [ ] Light + dark visual check for settings slice
+
+### S4. Finance screens (24 files — ~180 violations)
+
+- [ ] `finance/index.tsx` — magic numbers → tokens
+- [ ] `finance/cash.tsx` — magic numbers → tokens
+- [ ] `finance/transfer.tsx` — magic numbers → tokens
+- [ ] `finance/ewallets.tsx` — magic numbers → tokens (~20 violations)
+- [ ] `finance/cheques.tsx` — magic numbers → tokens
+- [ ] `finance/loans/index.tsx` — magic numbers → tokens
+- [ ] `finance/loans/[id].tsx` — magic numbers → tokens
+- [ ] `finance/payments/index.tsx` — magic numbers → tokens
+- [ ] `finance/payments/make.tsx` — magic numbers → tokens
+- [ ] `finance/payments/receive.tsx` — magic numbers → tokens
+- [ ] `finance/payments/[id].tsx` — magic numbers → tokens
+- [ ] `finance/purchases/index.tsx` — magic numbers → tokens
+- [ ] `finance/purchases/create.tsx` — magic numbers → tokens
+- [ ] `finance/purchases/[id].tsx` — magic numbers → tokens
+- [ ] `finance/bank-accounts/index.tsx` — magic numbers → tokens
+- [ ] `finance/bank-accounts/add.tsx` — magic numbers → tokens (~18 violations)
+- [ ] `finance/bank-accounts/[id].tsx` — magic numbers → tokens
+- [ ] `finance/expenses/index.tsx` — magic numbers → tokens
+- [ ] `finance/expenses/create.tsx` — magic numbers → tokens
+- [ ] `finance/other-income/index.tsx` — magic numbers → tokens
+- [ ] `finance/other-income/create.tsx` — magic numbers → tokens
+- [ ] Light + dark visual check for finance slice
+
+### S5. Reports screens (18 files — ~200 violations)
+
+- [ ] `reports/index.tsx` — magic numbers → tokens
+- [ ] `reports/stock-summary.tsx` — magic numbers → tokens (~30 violations)
+- [ ] `reports/party-statement.tsx` — magic numbers → tokens (~28 violations)
+- [ ] `reports/party-profit.tsx` — magic numbers → tokens (~25 violations)
+- [ ] `reports/all-transactions.tsx` — magic numbers → tokens (~25 violations)
+- [ ] `reports/order-summary.tsx` — magic numbers → tokens (~24 violations)
+- [ ] `reports/gst-detail.tsx` — magic numbers → tokens (~24 violations)
+- [ ] `reports/sale.tsx` — magic numbers → tokens (~18 violations)
+- [ ] `reports/purchase.tsx` — magic numbers → tokens (~18 violations)
+- [ ] `reports/item-profit.tsx` — magic numbers → tokens (~18 violations)
+- [ ] `reports/all-parties.tsx` — magic numbers → tokens
+- [ ] `reports/expense-summary.tsx` — magic numbers → tokens
+- [ ] `reports/gstr1.tsx` — magic numbers → tokens
+- [ ] `reports/gstr3b.tsx` — magic numbers → tokens
+- [ ] `reports/balance-sheet.tsx` — magic numbers → tokens
+- [ ] `reports/cashflow.tsx` — magic numbers → tokens
+- [ ] `reports/day-book.tsx` — magic numbers → tokens
+- [ ] Light + dark visual check for reports slice
+
+### S6. Transaction screens (9 files — ~70 violations)
+
+- [ ] `transactions/estimates/index.tsx` — magic numbers → tokens
+- [ ] `transactions/estimates/create.tsx` — magic numbers → tokens (~18 violations)
+- [ ] `transactions/purchase-orders/index.tsx` — magic numbers → tokens
+- [ ] `transactions/purchase-orders/create.tsx` — magic numbers → tokens
+- [ ] `transactions/credit-notes/index.tsx` — magic numbers → tokens
+- [ ] `transactions/credit-notes/create.tsx` — magic numbers → tokens
+- [ ] Light + dark visual check for transactions slice
+
+### S7. Customer/Supplier screens (7 files — ~50 violations)
+
+- [ ] `customers/index.tsx` — magic numbers → tokens
+- [ ] `customers/add.tsx` — magic numbers → tokens
+- [ ] `customers/[id].tsx` — magic numbers → tokens
+- [ ] `suppliers/index.tsx` — magic numbers → tokens
+- [ ] `suppliers/add.tsx` — magic numbers → tokens
+- [ ] `suppliers/[id].tsx` — magic numbers → tokens
+- [ ] Light + dark visual check for customer/supplier slice
+
+### S8. Invoice screens (2 files — ~30 violations)
+
+- [ ] `invoices/[id].tsx` — magic numbers → tokens
+- [ ] `invoices/create.tsx` — magic numbers → tokens (if exists)
+- [ ] Light + dark visual check for invoice slice
+
+### S9. Order screens (3 files — ~40 violations)
+
+- [ ] `orders/index.tsx` — magic numbers → tokens
+- [ ] `orders/[id].tsx` — magic numbers → tokens
+- [ ] `orders/import.tsx` — magic numbers → tokens (~20 violations)
+- [ ] Light + dark visual check for orders slice
+
+### S10. Utility screens (5 files — ~40 violations)
+
+- [ ] `utilities/index.tsx` — magic numbers → tokens
+- [ ] `utilities/calculator.tsx` — magic numbers → tokens (~17 violations)
+- [ ] `utilities/tally-export.tsx` — magic numbers → tokens
+- [ ] `utilities/verify.tsx` — magic numbers → tokens
+- [ ] `utilities/close-fy.tsx` — magic numbers → tokens
+- [ ] Light + dark visual check for utilities slice
+
+### S11. Store screens (2 files — ~30 violations)
+
+- [ ] `store/index.tsx` — magic numbers → tokens (~22 violations)
+- [ ] `store/[id].tsx` — magic numbers → tokens (if exists)
+- [ ] Light + dark visual check for store slice
+
+### S12. Feature modules (7 files — ~20 violations)
+
+- [ ] Audit `src/features/` for raw numeric styling values
+- [ ] Replace all magic numbers in feature modules with tokens
+- [ ] Light + dark visual check for feature modules
 
 ---
 
-### Phase 4 — Screen-by-screen spacing migration (2-4 weeks wall-clock)
+## Phase 5 — Screen Shell Normalization
 
-**Goal:** Category B at zero across all 110 screens. This is the largest phase.
+### Document screen recipes
 
-**Approach:** Migrate in vertical slices, one PR per slice. Within each slice, replace all raw `gap`, `padding*`, `margin*`, `fontSize`, `borderRadius`, and `width`/`height` values with theme tokens.
+- [ ] Create standalone screen-shell cookbook documenting the 3 patterns:
+    - Tab screen: `<Screen safeAreaEdges={['bottom']} withKeyboard={false} scrollable>`
+    - Form screen: `<Screen safeAreaEdges={['bottom']} withKeyboard scrollable>`
+    - Modal screen: `<Screen safeAreaEdges={['top', 'bottom']} scrollable>`
 
-**Token mapping cheat sheet:**
-| Raw value | Token | Shorthand |
-|---|---|---|
-| `2` | `SPACING_PX.xs / 2` or add `xxs: 2` | — |
-| `4` | `theme.spacing.xs` | `s.xs` |
-| `6` | `(s.xs + s.sm) / 2` -> add `s.xsm: 6` or use `s.xs` | Round to nearest |
-| `8` | `theme.spacing.sm` | `s.sm` |
-| `10` | Use `s.sm` (8) or `s.md` (12) | Round to nearest |
-| `12` | `theme.spacing.md` | `s.md` |
-| `14` | Use `s.md` (12) or `s.lg` (16) | Round to nearest |
-| `16` | `theme.spacing.lg` | `s.lg` |
-| `20` | Use `s.lg` (16) or `s.xl` (24) | Round to nearest |
-| `24` | `theme.spacing.xl` | `s.xl` |
-| `32` | `theme.spacing['2xl']` | `s['2xl']` |
-| `48` | `theme.spacing['3xl']` | `s['3xl']` |
-| `64` | `theme.spacing['4xl']` | `s['4xl']` |
+### Migrate `ScrollView` direct usage (was 61 files → 44 remaining)
 
-**fontSize mapping:**
-| Raw value | Typography variant or token |
-|---|---|
-| `11` | `ThemedText variant="captionSmall"` or `FONT_SIZE.captionSmall` |
-| `12-13` | `ThemedText variant="label"` or `FONT_SIZE.label` |
-| `14` | `ThemedText variant="caption"` or `FONT_SIZE.caption` |
-| `16` | `ThemedText variant="body"` or `FONT_SIZE.body` |
-| `18` | `ThemedText variant="h3"` or `FONT_SIZE.h3` |
-| `20` | `ThemedText variant="h2"` or `FONT_SIZE.h2` |
-| `22-24` | `ThemedText variant="h1"` or `FONT_SIZE.h1` |
-| `28-30` | `ThemedText variant="display"` or `FONT_SIZE.display` |
+- [x] ~17 files already migrated from `ScrollView` to `Screen scrollable`
+- [ ] `app/(app)/(tabs)/inventory.tsx` — ScrollView → Screen scrollable
+- [x] `app/(app)/customers/add.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/finance/bank-accounts/add.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/finance/ewallets.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/finance/loans/[id].tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/finance/payments/make.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/finance/payments/receive.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/finance/purchases/create.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/inventory/[id].tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/inventory/add.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/inventory/import.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/invoices/[id].tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/orders/[id].tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/orders/import.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/all-transactions.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/balance-sheet.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/cashflow.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/day-book.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/expense-summary.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/gst-detail.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/gstr1.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/gstr3b.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/item-profit.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/order-summary.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/party-profit.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/purchase.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/sale.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/reports/stock-summary.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/business-profile.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/expense-categories.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/gst.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/item-categories.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/item-units.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/items.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/party.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/print.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/reminders.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/settings/transactions.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/store/index.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/suppliers/[id].tsx` — ScrollView → Screen scrollable
+- [x] `app/(app)/suppliers/add.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/transactions/credit-notes/create.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/transactions/estimates/create.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/transactions/purchase-orders/create.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/utilities/close-fy.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(app)/utilities/tally-export.tsx` — ScrollView → Screen scrollable
+- [ ] `app/(auth)/setup.tsx` — ScrollView → Screen scrollable
 
-**borderRadius mapping:**
-| Raw value | Token |
-|---|---|
-| `2` | `r.xs` |
-| `4` | `r.sm` |
-| `6` | Use `r.sm` (4) or `r.md` (8) |
-| `8` | `r.md` |
-| `10` | Use `r.md` (8) or `r.lg` (12) |
-| `12` | `r.lg` |
-| `16` | `r.xl` |
-| `20+` | `r.xl` or `r.full` |
-| `9999` / `999` | `r.full` |
+### Standardize `safeAreaEdges` (was 10 combos → now 4)
 
-**Migration order (by slice):**
+- [x] Reduced from 10 unique combos to 4 (`['bottom']`, `['top']`, `['top','bottom']`, `[]`)
+- [ ] Further reduce to 3 documented patterns (tab, form, modal) + documented exceptions
 
-| Slice                             | Files                                                                              | Est. violations | Priority                     |
-| --------------------------------- | ---------------------------------------------------------------------------------- | --------------- | ---------------------------- |
-| **S1. Auth screens**              | 6 files (`login`, `phone-login`, `setup`, `verify`, `language-select`, `_layout`)  | ~60             | High (first impression)      |
-| **S2. Tab screens**               | 7 files (`_layout`, `index`, `inventory`, `invoices`, `customers`, `more`, `scan`) | ~80             | High (most used)             |
-| **S3. Settings screens**          | 18 files                                                                           | ~150            | High (most card duplicates)  |
-| **S4. Finance screens**           | 24 files                                                                           | ~180            | Medium                       |
-| **S5. Reports screens**           | 18 files                                                                           | ~200            | Medium (most table patterns) |
-| **S6. Transaction screens**       | 9 files                                                                            | ~70             | Medium                       |
-| **S7. Customer/Supplier screens** | 7 files                                                                            | ~50             | Medium                       |
-| **S8. Invoice screens**           | 2 files                                                                            | ~30             | Medium                       |
-| **S9. Order screens**             | 3 files                                                                            | ~40             | Medium                       |
-| **S10. Utility screens**          | 5 files                                                                            | ~40             | Low                          |
-| **S11. Store screens**            | 2 files                                                                            | ~30             | Low                          |
-| **S12. Feature modules**          | 7 files (`src/features/`)                                                          | ~20             | Low                          |
+### Fix duplicate safe-area padding
 
-**Per-slice checklist:**
-
-- [ ] All `gap: N` -> `layout.gap*` or `{ gap: s.* }`
-- [ ] All `padding*: N` -> `s.*`
-- [ ] All `margin*: N` -> `s.*`
-- [ ] All `fontSize: N` -> `ThemedText variant=*` or `FONT_SIZE.*`
-- [ ] All `borderRadius: N` -> `r.*`
-- [ ] All `width/height: N` (recurring) -> `uiMetrics` constant or `s.*`
-- [ ] Replace per-screen `card` / `sectionHeader` styles with shared primitives from Phase 3
-- [ ] Light + dark visual check
-- [ ] No `Text` component used where `ThemedText` should be
-
-**Exit criteria:** Scripted search for raw numeric styling values in `app/` and `src/features/` returns 0 (or only allowlisted lines).
+- [ ] `app/(app)/invoices/[id].tsx` — uses `['top']` + `ScreenHeader` (double top inset)
+- [ ] `app/(app)/reports/index.tsx` — uses `['top', 'bottom']` + `ScreenHeader` (double top inset)
+- [ ] `app/(app)/utilities/index.tsx` — uses `['top', 'bottom']` + `ScreenHeader` (double top inset)
+- [ ] `app/(app)/orders/[id].tsx` — loading branch: `['top', 'bottom']` + `ScreenHeader` (double top inset)
 
 ---
 
-### Phase 5 — Screen shell normalization (3-5 days)
+## Phase 6 — Enforcement & CI Hardening
 
-**Goal:** Category E — consistent screen shell usage.
+### Token-check script
 
-**Tasks:**
-
-1. **Document the 3 screen recipes:**
-    - **Tab screen:** `<Screen safeAreaEdges={['bottom']} withKeyboard={false} scrollable>` — for list/browse screens under tab bar
-    - **Form screen:** `<Screen safeAreaEdges={['bottom']} withKeyboard scrollable>` — for create/edit screens with text inputs
-    - **Modal screen:** `<Screen safeAreaEdges={['top', 'bottom']} scrollable>` — for modal presentations
-
-2. **Migrate 61 files** that use `ScrollView` directly:
-    - Replace `<ScrollView>...</ScrollView>` with `<Screen scrollable>` and move `contentContainerStyle` to Screen's prop.
-    - Remove redundant `import { ScrollView }`.
-    - If a screen has both `Screen` + nested `ScrollView`, consolidate to `Screen scrollable`.
-
-3. **Standardize `safeAreaEdges`:**
-    - Audit all 50 Screen usages and align to the 3 recipes.
-    - Exceptions go in `docs/COLLOQUIAL_UI_ALLOWLIST.md`.
-
-4. **Fix duplicate safe-area padding** — any screen that does `Screen safeAreaEdges={['top']}` + manual `paddingTop: insets.top`.
-
-**Exit criteria:** `grep -r "ScrollView" app/` returns only allowlisted files. All screens conform to one of 3 documented recipes.
-
----
-
-### Phase 6 — Enforcement & CI hardening (2-3 days)
-
-**Goal:** Colloquial regressions cannot merge silently.
-
-**Tasks:**
-
-1. **Create `scripts/check-ui-tokens.mjs`** that scans `app/` and `src/components/` for:
+- [ ] Create `scripts/check-ui-tokens.mjs` that scans for:
     - `rgba(` outside `src/theme/`
-    - Color string concatenation patterns (`+ '` after color variable)
-    - Raw numeric `gap`, `padding*`, `margin*`, `fontSize`, `borderRadius` (configurable allowlist)
+    - Color string concatenation patterns
+    - Raw numeric `gap`, `padding*`, `margin*`, `fontSize`, `borderRadius`
     - `ScrollView` import in `app/` (outside allowlist)
-    - `zIndex` with raw numeric value (outside allowlist)
+    - `zIndex` with raw numeric value
+- [ ] Add `"check:ui-tokens"` script to `package.json`
 
-2. **Add to `package.json`:**
+### Existing checks
 
-    ```json
-    "check:ui-tokens": "node scripts/check-ui-tokens.mjs"
-    ```
+- [x] `check:hex` script exists in `package.json`
+- [x] `validate` script exists in `package.json`
 
-3. **Add to `validate` script** chain (alongside existing `check:hex`, `check:routes`).
+### CI integration
 
-4. **Husky pre-commit**: add `check:ui-tokens` to staged-file checks.
+- [ ] Add `check:ui-tokens` to `validate` script chain
+- [x] Husky pre-commit hook exists (runs `lint-staged` with prettier + eslint)
+- [x] Husky pre-push hook exists (runs `validate`)
+- [ ] Pre-commit runs token checks on staged files
 
-5. **Extend existing ESLint `no-magic-numbers` config**: tighten the ignore list in `eslint.config.js` to remove styling-related values (currently the ignore list is very broad with values 0-1000+). After Phase 4, the codebase should pass with a stricter config.
+### ESLint tightening
 
-**Exit criteria:** `pnpm run validate` fails on any new colloquial violation. CI blocks PRs with violations.
-
----
-
-### Phase 7 — Final audit & sign-off (1-2 days)
-
-**Goal:** Close the project.
-
-**Tasks:**
-
-1. **Re-run baseline audit** — update the table in §0 with final counts (all should be 0 or allowlisted).
-2. **Mark all §2 checkboxes** as `[x]`.
-3. **Design QA session:** Walk through these screens in light + dark, on iPhone SE + iPhone 15 Pro Max:
-    - Dashboard (index tab)
-    - Invoice list + create + detail
-    - Customer list + detail
-    - Inventory list + detail
-    - Finance index + cash + payments
-    - Reports index + stock-summary + all-transactions
-    - Settings index + preferences + business-profile
-    - Auth flow (login + setup)
-    - Store
-4. **Confirm no visual regressions** in snapshot tests.
-5. **Archive `docs/COLLOQUIAL_UI_ALLOWLIST.md`** — should be empty or near-empty.
-
-**Exit criteria:** Stakeholder sign-off. Optional git tag `ui-tokens-v1`.
+- [ ] Tighten `@typescript-eslint/no-magic-numbers` ignore list (currently allows 0–1000+, far too broad)
+- [ ] Add custom ESLint rules or config for UI-token patterns
 
 ---
 
-## 5. Existing theme API reference
+## Phase 7 — Final Audit & Sign-off
 
-Quick reference for migration work. This is what the codebase already provides.
-
-### Hooks
-
-| Hook               | Location                      | Returns                                              | Use when                                   |
-| ------------------ | ----------------------------- | ---------------------------------------------------- | ------------------------------------------ |
-| `useTheme()`       | `src/theme/ThemeProvider.tsx` | `{ theme, isDark, mode, setThemeMode, toggleTheme }` | Need full theme object or mode controls    |
-| `useThemeTokens()` | `src/hooks/useThemeTokens.ts` | `{ theme, isDark, c, s, r, typo, shadows }`          | Screens/components — preferred for brevity |
-
-### Spacing tokens (`s.*` via `useThemeTokens`)
-
-| Token      | Value | Use for                                               |
-| ---------- | ----- | ----------------------------------------------------- |
-| `s.xs`     | 4     | Tight gaps (icon-to-label, divider margins)           |
-| `s.sm`     | 8     | Small gaps (chip spacing, compact lists)              |
-| `s.md`     | 12    | Medium gaps (form field spacing)                      |
-| `s.lg`     | 16    | Standard content padding (screen edges, card padding) |
-| `s.xl`     | 24    | Section spacing                                       |
-| `s['2xl']` | 32    | Large section breaks                                  |
-| `s['3xl']` | 48    | Hero/header spacing                                   |
-| `s['4xl']` | 64    | Page-level top/bottom                                 |
-
-### Border radius tokens (`r.*`)
-
-| Token    | Value | Use for             |
-| -------- | ----- | ------------------- |
-| `r.none` | 0     | Square corners      |
-| `r.xs`   | 2     | Subtle rounding     |
-| `r.sm`   | 4     | Chips, small badges |
-| `r.md`   | 8     | Cards, inputs       |
-| `r.lg`   | 12    | Modals, sheets      |
-| `r.xl`   | 16    | Large cards         |
-| `r.full` | 9999  | Pills, circles      |
-
-### Typography variants (via `ThemedText variant=*`)
-
-| Variant          | Size | Use for                      |
-| ---------------- | ---- | ---------------------------- |
-| `display`        | 30   | Hero numbers                 |
-| `h1`             | 24   | Screen titles                |
-| `h2`             | 20   | Section titles               |
-| `h3`             | 18   | Card titles                  |
-| `body`           | 16   | Body text                    |
-| `bodyBold`       | 16   | Emphasized body              |
-| `caption`        | 14   | Secondary text               |
-| `captionBold`    | 14   | Emphasized secondary         |
-| `label`          | 13   | Form labels, section headers |
-| `captionSmall`   | 11   | Tertiary text, timestamps    |
-| `amount`         | 20   | Currency amounts             |
-| `amountLarge`    | 28   | Hero amounts                 |
-| `amountNegative` | 20   | Negative amounts (red)       |
-
-### Layout utilities (`layout.*`)
-
-| Utility                    | Description                                  |
-| -------------------------- | -------------------------------------------- |
-| `layout.row`               | `flexDirection: 'row', alignItems: 'center'` |
-| `layout.rowBetween`        | `row` + `justifyContent: 'space-between'`    |
-| `layout.rowEnd`            | `row` + `justifyContent: 'flex-end'`         |
-| `layout.rowStart`          | `row` + `justifyContent: 'flex-start'`       |
-| `layout.colCenter`         | Column centered both axes                    |
-| `layout.center`            | Center both axes                             |
-| `layout.flex`              | `flex: 1`                                    |
-| `layout.absoluteFill`      | Full absolute positioning                    |
-| `layout.gap4` thru `gap16` | Gap helpers (expand in Phase 0)              |
-
-### Color utilities (`src/utils/color.ts`)
-
-| Function                      | Use for                                                       |
-| ----------------------------- | ------------------------------------------------------------- |
-| `withOpacity(color, opacity)` | Replace `rgba()` calls and hex concatenation (`color + '15'`) |
-| `darken(hexColor, factor)`    | Darken a color by factor (0-1)                                |
+- [ ] Re-run baseline audit — update all counts to 0 or allowlisted
+- [ ] Mark all §2 checkboxes as `[x]`
+- [ ] Design QA: Dashboard on light + dark, iPhone SE + iPhone 15 Pro Max
+- [ ] Design QA: Invoice list + create + detail
+- [ ] Design QA: Customer list + detail
+- [ ] Design QA: Inventory list + detail
+- [ ] Design QA: Finance index + cash + payments
+- [ ] Design QA: Reports index + stock-summary + all-transactions
+- [ ] Design QA: Settings index + preferences + business-profile
+- [ ] Design QA: Auth flow (login + setup)
+- [ ] Design QA: Store
+- [ ] Confirm no visual regressions in snapshot tests
+- [ ] All `ThemedText` variants render correctly in both themes
+- [ ] Archive `docs/COLLOQUIAL_UI_ALLOWLIST.md` (should be empty or near-empty)
+- [ ] Optional: git tag `ui-tokens-v1`
 
 ---
 
-## 6. Migration order (recommended)
+## Progress Summary
 
-1. `src/components/atoms/*` (Phase 2)
-2. `src/components/molecules/*` (Phase 2)
-3. `src/components/organisms/*` (Phase 2)
-4. `src/features/*` (Phase 4, Slice S12)
-5. `app/(auth)/*` (Phase 4, Slice S1)
-6. `app/(app)/(tabs)/*` (Phase 4, Slice S2)
-7. `app/(app)/settings/*` (Phase 4, Slice S3)
-8. `app/(app)/finance/*` (Phase 4, Slice S4)
-9. `app/(app)/reports/*` (Phase 4, Slice S5)
-10. `app/(app)/transactions/*` (Phase 4, Slice S6)
-11. `app/(app)/customers/*` + `suppliers/*` (Phase 4, Slice S7)
-12. `app/(app)/invoices/*` (Phase 4, Slice S8)
-13. `app/(app)/orders/*` (Phase 4, Slice S9)
-14. `app/(app)/utilities/*` (Phase 4, Slice S10)
-15. `app/(app)/store/*` (Phase 4, Slice S11)
-
-Within each folder: **files with most violations first** (see §0 baseline for top offenders).
+| Phase | Description                | Status              | Done / Total |
+| ----- | -------------------------- | ------------------- | ------------ |
+| **0** | Theme infrastructure gaps  | **Complete**        | 14/14        |
+| **1** | Color derivation cleanup   | **Mostly complete** | 21/24        |
+| **2** | Component library cleanup  | **Complete**        | 12/12        |
+| **3** | Shared layout primitives   | **Mostly done**     | 12/14        |
+| **4** | Screen-by-screen spacing   | **Not started**     | 0/~115       |
+| **5** | Screen shell normalization | **In progress**     | 4/52         |
+| **6** | Enforcement & CI hardening | **Not started**     | 4/9          |
+| **7** | Final audit & sign-off     | **Not started**     | 0/14         |
+|       | **Overall**                |                     | **~67/~254** |
 
 ---
 
-## 7. Top 20 worst offenders (by total violations)
+## Key Findings from Codebase Audit (2026-04-14)
 
-Files to prioritize within each slice:
+1. **Phase 0 is fully done** — all gap helpers, Z_INDEX scale, FAB constants, opacity tokens, and allowlist file are in place.
 
-| Rank | File                                          | Est. violations                                  |
-| ---- | --------------------------------------------- | ------------------------------------------------ |
-| 1    | `app/(auth)/setup.tsx`                        | ~35 (19 fontSize + 11 padding + 5 sizing)        |
-| 2    | `app/(app)/reports/stock-summary.tsx`         | ~30 (15 padding + 6 gap + 4 fontSize + 4 sizing) |
-| 3    | `app/(app)/reports/party-statement.tsx`       | ~28 (15 padding + margin + fontSize)             |
-| 4    | `app/(app)/settings/users.tsx`                | ~28 (13 padding + 10 radius + 3 fontSize)        |
-| 5    | `app/(app)/reports/party-profit.tsx`          | ~25                                              |
-| 6    | `app/(app)/reports/all-transactions.tsx`      | ~25 (13 padding + 3 gap + fontSize)              |
-| 7    | `app/(app)/reports/order-summary.tsx`         | ~24 (12 padding + 6 gap + sizing)                |
-| 8    | `app/(app)/reports/gst-detail.tsx`            | ~24 (12 padding + 6 gap + sizing)                |
-| 9    | `app/(app)/settings/preferences.tsx`          | ~22 (14 fontSize + padding + radius)             |
-| 10   | `app/(app)/inventory/[id].tsx`                | ~22 (12 padding + rgba + sizing)                 |
-| 11   | `app/(app)/store/index.tsx`                   | ~22 (8 gap + padding + rgba + sizing)            |
-| 12   | `app/(app)/orders/import.tsx`                 | ~20 (11 padding + 9 fontSize + 8 radius)         |
-| 13   | `app/(app)/finance/ewallets.tsx`              | ~20 (11 padding + 6 fontSize + rgba)             |
-| 14   | `app/(app)/settings/reminders.tsx`            | ~20 (11 padding + 6 radius + 3 gap)              |
-| 15   | `app/(app)/finance/bank-accounts/add.tsx`     | ~18 (11 padding + 3 fontSize + sizing)           |
-| 16   | `app/(app)/reports/sale.tsx`                  | ~18 (11 padding + 5 gap)                         |
-| 17   | `app/(app)/reports/purchase.tsx`              | ~18 (11 padding + 4 gap)                         |
-| 18   | `app/(app)/reports/item-profit.tsx`           | ~18 (11 padding + 5 gap)                         |
-| 19   | `app/(app)/transactions/estimates/create.tsx` | ~18 (10 padding + 3 gap + 3 fontSize)            |
-| 20   | `app/(app)/utilities/calculator.tsx`          | ~17 (5 gap + 7 fontSize + rgba)                  |
+2. **rgba() is fully eliminated** — the biggest Phase 1 win. All 30 instances in 21 files are gone from both `app/` and `src/components/`.
 
----
+3. **Hex concatenation is fully eliminated** — there are now **0** `color + 'XX'` hacks left in UI code.
 
-## 8. Risk & mitigation
+4. **Palette imports are fully removed from UI code** — screens, components, and features now use `theme.colors` or `theme.collections` instead of importing `@/src/theme/palette` directly.
 
-| Risk                                        | Mitigation                                                                                                                                           |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Huge blast radius (120 files)               | Phase per vertical slice; one PR per slice; feature flags only if needed for risky screens                                                           |
-| Dark mode breaks                            | Phase 1 pilot on 3 screens before mass replace; every slice PR tested in both themes                                                                 |
-| Non-standard spacing values (6, 10, 14, 20) | Round to nearest token; document the mapping in §4 Phase 4 cheat sheet. If a value is genuinely unique, add it to `uiMetrics.ts` as a named constant |
-| Performance (`useThemeTokens` every render) | Already optimized; memoized style arrays where profiling shows need                                                                                  |
-| Designer churn                              | Lock tokens in `src/theme/`; product changes go through token updates, not screen edits                                                              |
-| Merge conflicts during migration            | One slice at a time; keep PRs under 10 files; rebase before merge                                                                                    |
-| ScrollView migration breaks scroll behavior | Test each screen individually; some screens may need `keyboardShouldPersistTaps` or `nestedScrollEnabled` — add to Screen props if missing           |
+5. **Shared primitives are now used beyond the component library** — `TableRow` is live in `reports/party-statement` and `reports/gst-detail`, while `FormSection` now structures `customers/add` and `suppliers/add`. Broader rollout still remains.
 
----
+6. **Per-screen card/sectionHeader duplicates still widespread** — ~20 files still define inline `card` styles, and 4 files still define inline `sectionHeader` styles.
 
-## 9. Relationship to other docs
+7. **Z-index fully migrated** — all 5 raw `zIndex` usages are replaced with `Z_INDEX.*` constants.
 
-- **[`UI_UX_REMEDIATION_PLAN.md`](./UI_UX_REMEDIATION_PLAN.md)** — product-facing UI work, components, animations; may assume tokens from **this** plan.
-- **`layoutMetrics.ts` / `shadowMetrics.ts` / `uiMetrics.ts`** — numeric constants belong in these modules, not in screens.
-- **`src/theme/layout.ts`** — static layout utilities (row/column/gap helpers).
+8. **ScrollView migration progressed again** — down from 61 to 44 files after moving `customers/add` and `suppliers/add` onto `Screen scrollable`.
 
----
+9. **Phase 4 (spacing) is untouched and is ~40% of the total work** — ~1,200+ magic number violations across 120 files.
 
-## 10. Maintenance after 100%
-
-- **New feature checklist:** (1) No new `rgba(` or hex concatenation in app code. (2) No new raw color/spacing/sizing numbers — add token first. (3) Use `Screen` + shared primitives. (4) Use `ThemedText` with variant, never raw `Text` + `fontSize`.
-- **PR review rule:** Any new file in `app/` or `src/components/` must pass `check:ui-tokens`.
-- **Quarterly:** 30-minute grep audit + remove stale allowlist entries.
-- **If adding a new spacing value:** Add to `SPACING_PX` in `layoutMetrics.ts`, corresponding gap helper in `layout.ts`, update §5 reference table in this doc.
-
----
-
-_Last updated: 2026-04-13 — living document; update Phase completion, §0 baseline counts, and §2 checkboxes as work lands._
+10. **No enforcement automation exists** — `check-ui-tokens.mjs` script hasn't been created, and the ESLint `no-magic-numbers` ignore list is so broad it effectively allows all common spacing values.

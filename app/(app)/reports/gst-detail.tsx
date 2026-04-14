@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { palette } from '@/src/theme/palette';
 import { View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native';
 import { Download, Calendar } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
@@ -7,6 +6,7 @@ import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
 import { Card } from '@/src/components/atoms/Card';
+import { TableRow } from '@/src/components/molecules/TableRow';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { GST_DETAIL_COL_WIDTH_PX } from '@/constants/reportLayout';
@@ -196,218 +196,266 @@ export default function GSTDetailScreen() {
 					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
 						<View>
 							{/* Header */}
-							<View style={[styles.tableHeader, { borderBottomColor: c.border }]}>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colDate}
-								>
-									Date
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colType}
-								>
-									Type
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colParty}
-								>
-									Party
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colInvoice}
-								>
-									Inv #
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colNum}
-									align="right"
-								>
-									Taxable
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colRateCell}
-									align="right"
-								>
-									Rate
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colNum}
-									align="right"
-								>
-									CGST
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colNum}
-									align="right"
-								>
-									SGST
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={styles.colNum}
-									align="right"
-								>
-									IGST
-								</ThemedText>
-							</View>
+							<TableRow
+								variant="header"
+								style={{ paddingHorizontal: 4, paddingBottom: 6, marginBottom: 2 }}
+								columns={[
+									{ label: 'Date', width: GST_DETAIL_COL_WIDTH_PX.date },
+									{ label: 'Type', width: GST_DETAIL_COL_WIDTH_PX.type },
+									{ label: 'Party', width: GST_DETAIL_COL_WIDTH_PX.party },
+									{ label: 'Inv #', width: GST_DETAIL_COL_WIDTH_PX.invoice },
+									{
+										label: 'Taxable',
+										width: GST_DETAIL_COL_WIDTH_PX.num,
+										align: 'right',
+									},
+									{
+										label: 'Rate',
+										width: GST_DETAIL_COL_WIDTH_PX.rate,
+										align: 'right',
+									},
+									{
+										label: 'CGST',
+										width: GST_DETAIL_COL_WIDTH_PX.num,
+										align: 'right',
+									},
+									{
+										label: 'SGST',
+										width: GST_DETAIL_COL_WIDTH_PX.num,
+										align: 'right',
+									},
+									{
+										label: 'IGST',
+										width: GST_DETAIL_COL_WIDTH_PX.num,
+										align: 'right',
+									},
+								]}
+							/>
 
 							{/* Rows */}
 							{rows.map((row, idx) => {
 								const isLast = idx === rows.length - 1;
 								const isSale = row.type === 'Sale';
 								return (
-									<View
+									<TableRow
 										key={row.id}
 										style={[
-											styles.tableRow,
-											{ borderBottomColor: c.border },
+											{
+												paddingHorizontal: 4,
+												paddingVertical: 8,
+												borderBottomColor: c.border,
+											},
 											isLast && { borderBottomWidth: 0 },
 										]}
-									>
-										<ThemedText variant="caption" style={styles.colDate}>
-											{formatDate(row.date)}
-										</ThemedText>
-										<View style={styles.colType}>
-											<View
-												style={[
-													styles.typeBadge,
-													{
-														backgroundColor: isSale
-															? c.success
-															: c.primary,
-														borderRadius: r.sm,
-													},
-												]}
-											>
-												<ThemedText variant="caption" color={palette.white}>
-													{row.type}
-												</ThemedText>
-											</View>
-										</View>
-										<ThemedText
-											variant="caption"
-											style={styles.colParty}
-											numberOfLines={1}
-										>
-											{row.party}
-										</ThemedText>
-										<ThemedText
-											variant="caption"
-											color={c.onSurfaceVariant}
-											style={styles.colInvoice}
-										>
-											{row.invoiceNo}
-										</ThemedText>
-										<ThemedText
-											variant="caption"
-											style={styles.colNum}
-											align="right"
-										>
-											{formatCurrency(row.taxable)}
-										</ThemedText>
-										<ThemedText
-											variant="caption"
-											color={c.onSurfaceVariant}
-											style={styles.colRateCell}
-											align="right"
-										>
-											{row.rate}%
-										</ThemedText>
-										<ThemedText
-											variant="caption"
-											color={c.warning}
-											style={styles.colNum}
-											align="right"
-										>
-											{row.cgst > 0 ? formatCurrency(row.cgst) : '—'}
-										</ThemedText>
-										<ThemedText
-											variant="caption"
-											color={c.warning}
-											style={styles.colNum}
-											align="right"
-										>
-											{row.sgst > 0 ? formatCurrency(row.sgst) : '—'}
-										</ThemedText>
-										<ThemedText
-											variant="caption"
-											color={c.primary}
-											style={styles.colNum}
-											align="right"
-										>
-											{row.igst > 0 ? formatCurrency(row.igst) : '—'}
-										</ThemedText>
-									</View>
+										columns={[
+											{
+												label: 'Date',
+												width: GST_DETAIL_COL_WIDTH_PX.date,
+												value: (
+													<ThemedText variant="caption">
+														{formatDate(row.date)}
+													</ThemedText>
+												),
+											},
+											{
+												label: 'Type',
+												width: GST_DETAIL_COL_WIDTH_PX.type,
+												value: (
+													<View
+														style={[
+															styles.typeBadge,
+															{
+																backgroundColor: isSale
+																	? c.success
+																	: c.primary,
+																borderRadius: r.sm,
+															},
+														]}
+													>
+														<ThemedText
+															variant="caption"
+															color={c.white}
+														>
+															{row.type}
+														</ThemedText>
+													</View>
+												),
+											},
+											{
+												label: 'Party',
+												width: GST_DETAIL_COL_WIDTH_PX.party,
+												value: (
+													<ThemedText variant="caption" numberOfLines={1}>
+														{row.party}
+													</ThemedText>
+												),
+											},
+											{
+												label: 'Inv #',
+												width: GST_DETAIL_COL_WIDTH_PX.invoice,
+												value: (
+													<ThemedText
+														variant="caption"
+														color={c.onSurfaceVariant}
+													>
+														{row.invoiceNo}
+													</ThemedText>
+												),
+											},
+											{
+												label: 'Taxable',
+												width: GST_DETAIL_COL_WIDTH_PX.num,
+												value: (
+													<ThemedText variant="caption" align="right">
+														{formatCurrency(row.taxable)}
+													</ThemedText>
+												),
+											},
+											{
+												label: 'Rate',
+												width: GST_DETAIL_COL_WIDTH_PX.rate,
+												value: (
+													<ThemedText
+														variant="caption"
+														color={c.onSurfaceVariant}
+														align="right"
+													>
+														{row.rate}%
+													</ThemedText>
+												),
+											},
+											{
+												label: 'CGST',
+												width: GST_DETAIL_COL_WIDTH_PX.num,
+												value: (
+													<ThemedText
+														variant="caption"
+														color={c.warning}
+														align="right"
+													>
+														{row.cgst > 0
+															? formatCurrency(row.cgst)
+															: '—'}
+													</ThemedText>
+												),
+											},
+											{
+												label: 'SGST',
+												width: GST_DETAIL_COL_WIDTH_PX.num,
+												value: (
+													<ThemedText
+														variant="caption"
+														color={c.warning}
+														align="right"
+													>
+														{row.sgst > 0
+															? formatCurrency(row.sgst)
+															: '—'}
+													</ThemedText>
+												),
+											},
+											{
+												label: 'IGST',
+												width: GST_DETAIL_COL_WIDTH_PX.num,
+												value: (
+													<ThemedText
+														variant="caption"
+														color={c.primary}
+														align="right"
+													>
+														{row.igst > 0
+															? formatCurrency(row.igst)
+															: '—'}
+													</ThemedText>
+												),
+											},
+										]}
+									/>
 								);
 							})}
 
 							{/* Totals row */}
 							{divider}
-							<View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
-								<ThemedText
-									variant="captionBold"
-									style={[
-										styles.colDate,
-										{
-											width:
-												styles.colDate.width +
-												styles.colType.width +
-												styles.colParty.width +
-												styles.colInvoice.width,
-										},
-									]}
-								>
-									Total
-								</ThemedText>
-								<ThemedText
-									variant="captionBold"
-									style={styles.colNum}
-									align="right"
-								>
-									{formatCurrency(rows.reduce((a, r) => a + r.taxable, 0))}
-								</ThemedText>
-								<ThemedText variant="captionBold" style={styles.colRateCell} />
-								<ThemedText
-									variant="captionBold"
-									color={c.warning}
-									style={styles.colNum}
-									align="right"
-								>
-									{formatCurrency(rows.reduce((a, r) => a + r.cgst, 0))}
-								</ThemedText>
-								<ThemedText
-									variant="captionBold"
-									color={c.warning}
-									style={styles.colNum}
-									align="right"
-								>
-									{formatCurrency(rows.reduce((a, r) => a + r.sgst, 0))}
-								</ThemedText>
-								<ThemedText
-									variant="captionBold"
-									color={c.primary}
-									style={styles.colNum}
-									align="right"
-								>
-									{formatCurrency(rows.reduce((a, r) => a + r.igst, 0))}
-								</ThemedText>
-							</View>
+							<TableRow
+								variant="total"
+								style={{
+									paddingHorizontal: 4,
+									paddingVertical: 8,
+									borderBottomWidth: 0,
+								}}
+								columns={[
+									{
+										label: 'Total',
+										width:
+											GST_DETAIL_COL_WIDTH_PX.date +
+											GST_DETAIL_COL_WIDTH_PX.type +
+											GST_DETAIL_COL_WIDTH_PX.party +
+											GST_DETAIL_COL_WIDTH_PX.invoice,
+										value: <ThemedText variant="captionBold">Total</ThemedText>,
+									},
+									{
+										label: 'Taxable',
+										width: GST_DETAIL_COL_WIDTH_PX.num,
+										value: (
+											<ThemedText variant="captionBold" align="right">
+												{formatCurrency(
+													rows.reduce((a, r) => a + r.taxable, 0),
+												)}
+											</ThemedText>
+										),
+									},
+									{
+										label: 'Rate',
+										width: GST_DETAIL_COL_WIDTH_PX.rate,
+										value: <ThemedText variant="captionBold" />,
+									},
+									{
+										label: 'CGST',
+										width: GST_DETAIL_COL_WIDTH_PX.num,
+										value: (
+											<ThemedText
+												variant="captionBold"
+												color={c.warning}
+												align="right"
+											>
+												{formatCurrency(
+													rows.reduce((a, r) => a + r.cgst, 0),
+												)}
+											</ThemedText>
+										),
+									},
+									{
+										label: 'SGST',
+										width: GST_DETAIL_COL_WIDTH_PX.num,
+										value: (
+											<ThemedText
+												variant="captionBold"
+												color={c.warning}
+												align="right"
+											>
+												{formatCurrency(
+													rows.reduce((a, r) => a + r.sgst, 0),
+												)}
+											</ThemedText>
+										),
+									},
+									{
+										label: 'IGST',
+										width: GST_DETAIL_COL_WIDTH_PX.num,
+										value: (
+											<ThemedText
+												variant="captionBold"
+												color={c.primary}
+												align="right"
+											>
+												{formatCurrency(
+													rows.reduce((a, r) => a + r.igst, 0),
+												)}
+											</ThemedText>
+										),
+									},
+								]}
+							/>
 						</View>
 					</ScrollView>
 				</Card>
@@ -482,27 +530,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
-	tableHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 4,
-		paddingBottom: 6,
-		borderBottomWidth: StyleSheet.hairlineWidth,
-		marginBottom: 2,
-	},
-	tableRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 4,
-		paddingVertical: 8,
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
-	colDate: { width: GST_DETAIL_COL_WIDTH_PX.date },
-	colType: { width: GST_DETAIL_COL_WIDTH_PX.type },
-	colParty: { width: GST_DETAIL_COL_WIDTH_PX.party },
-	colInvoice: { width: GST_DETAIL_COL_WIDTH_PX.invoice },
-	colNum: { width: GST_DETAIL_COL_WIDTH_PX.num },
-	colRateCell: { width: 44 },
 	typeBadge: {
 		paddingHorizontal: 6,
 		paddingVertical: 2,

@@ -1,6 +1,14 @@
 import type { Theme } from './index';
 import { Platform } from 'react-native';
-import { darkColors, lightColors, palette } from './palette';
+import {
+	darkColors,
+	lightColors,
+	partyAvatarColors,
+	expenseCategoryPickColors,
+	printThemeSwatches,
+	expenseReportDemoSlices,
+	allTransactionsTypeColors,
+} from './palette';
 import {
 	ANIMATION_MS,
 	BORDER_RADIUS_PX,
@@ -83,8 +91,16 @@ const SPACING: Theme['spacing'] = SPACING_PX;
 
 const BORDER_RADIUS: Theme['borderRadius'] = BORDER_RADIUS_PX;
 
+const COLLECTIONS: Theme['collections'] = {
+	partyAvatarColors,
+	expenseCategoryPickColors,
+	printThemeSwatches,
+	expenseReportDemoSlices,
+	allTransactionsTypeColors,
+};
+
 const makeShadows = (isDark: boolean): Theme['shadows'] => {
-	const iosShadow = isDark ? palette.shadow : palette.shadowWarm;
+	const iosShadow = isDark ? darkColors.shadow : lightColors.shadow;
 	return {
 		xs:
 			Platform?.select({
@@ -148,6 +164,7 @@ export function buildTheme(isDark: boolean): Theme {
 			springDamping: SPRING_PHYSICS.damping,
 			springStiffness: SPRING_PHYSICS.stiffness,
 		},
+		collections: COLLECTIONS,
 		touchTarget: TOUCH_TARGET_MIN_PX,
 	};
 }
