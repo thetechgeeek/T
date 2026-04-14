@@ -4,6 +4,7 @@ import { Switch } from 'react-native';
 import BackupScreen from '@/app/(app)/settings/backup';
 import RemindersScreen from '@/app/(app)/settings/reminders';
 import SecuritySettingsScreen from '@/app/(app)/settings/security';
+import UsersScreen from '@/app/(app)/settings/users';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
 
@@ -43,5 +44,16 @@ describe('Additional settings screens', () => {
 		expect(getByText('Set 4-digit PIN')).toBeTruthy();
 		expect(getByText('1 min')).toBeTruthy();
 		expect(getByText('Require PIN to Delete Transactions')).toBeTruthy();
+	});
+
+	it('opens the invite modal on the users screen', () => {
+		const { getByText, queryByText } = renderWithTheme(<UsersScreen />);
+
+		expect(queryByText('Send Invite')).toBeNull();
+
+		fireEvent.press(getByText('+ Invite User'));
+
+		expect(getByText('Send Invite')).toBeTruthy();
+		expect(getByText('Role')).toBeTruthy();
 	});
 });

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -67,244 +67,243 @@ export default function PreferencesScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Preferences / प्राथमिकताएं" />
-			<ScrollView
-				contentContainerStyle={{
-					padding: theme.spacing.lg,
-					paddingBottom: SPACING_PX['2xl'],
-				}}
-				keyboardShouldPersistTaps="handled"
-			>
-				{/* Language Section */}
-				<SectionHeader title="भाषा / Language" style={styles.sectionHeader} />
-				<View style={styles.langRow}>
-					<Pressable
-						testID="lang-card-hi"
-						onPress={() => handleLangSelect('hi')}
-						style={[
-							styles.langCard,
-							{
-								borderColor: selectedLang === 'hi' ? c.primary : c.border,
-								borderWidth: selectedLang === 'hi' ? 2 : 1,
-								backgroundColor:
-									selectedLang === 'hi'
-										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
-										: c.surface,
-								borderRadius: theme.borderRadius.md,
-								marginRight: SPACING_PX.sm,
-							},
-						]}
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={<ScreenHeader title="Preferences / प्राथमिकताएं" />}
+			contentContainerStyle={{
+				padding: theme.spacing.lg,
+				paddingBottom: SPACING_PX['2xl'],
+			}}
+			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+		>
+			{/* Language Section */}
+			<SectionHeader title="भाषा / Language" style={styles.sectionHeader} />
+			<View style={styles.langRow}>
+				<Pressable
+					testID="lang-card-hi"
+					onPress={() => handleLangSelect('hi')}
+					style={[
+						styles.langCard,
+						{
+							borderColor: selectedLang === 'hi' ? c.primary : c.border,
+							borderWidth: selectedLang === 'hi' ? 2 : 1,
+							backgroundColor:
+								selectedLang === 'hi'
+									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+									: c.surface,
+							borderRadius: theme.borderRadius.md,
+							marginRight: SPACING_PX.sm,
+						},
+					]}
+				>
+					<ThemedText variant="h1" weight="bold" color={c.onSurface}>
+						हिंदी
+					</ThemedText>
+					<ThemedText
+						variant="label"
+						color={c.onSurfaceVariant}
+						style={{ marginTop: SPACING_PX.xs }}
 					>
-						<ThemedText variant="h1" weight="bold" color={c.onSurface}>
-							हिंदी
-						</ThemedText>
-						<ThemedText
-							variant="label"
-							color={c.onSurfaceVariant}
-							style={{ marginTop: SPACING_PX.xs }}
-						>
-							हिंदी में चलाएं
-						</ThemedText>
-					</Pressable>
+						हिंदी में चलाएं
+					</ThemedText>
+				</Pressable>
 
-					<Pressable
-						testID="lang-card-en"
-						onPress={() => handleLangSelect('en')}
-						style={[
-							styles.langCard,
-							{
-								borderColor: selectedLang === 'en' ? c.primary : c.border,
-								borderWidth: selectedLang === 'en' ? 2 : 1,
-								backgroundColor:
-									selectedLang === 'en'
-										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
-										: c.surface,
-								borderRadius: theme.borderRadius.md,
-							},
-						]}
+				<Pressable
+					testID="lang-card-en"
+					onPress={() => handleLangSelect('en')}
+					style={[
+						styles.langCard,
+						{
+							borderColor: selectedLang === 'en' ? c.primary : c.border,
+							borderWidth: selectedLang === 'en' ? 2 : 1,
+							backgroundColor:
+								selectedLang === 'en'
+									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+									: c.surface,
+							borderRadius: theme.borderRadius.md,
+						},
+					]}
+				>
+					<ThemedText variant="h1" weight="bold" color={c.onSurface}>
+						English
+					</ThemedText>
+					<ThemedText
+						variant="label"
+						color={c.onSurfaceVariant}
+						style={{ marginTop: SPACING_PX.xs }}
 					>
-						<ThemedText variant="h1" weight="bold" color={c.onSurface}>
-							English
-						</ThemedText>
-						<ThemedText
-							variant="label"
-							color={c.onSurfaceVariant}
-							style={{ marginTop: SPACING_PX.xs }}
-						>
-							Use in English
-						</ThemedText>
-					</Pressable>
-				</View>
+						Use in English
+					</ThemedText>
+				</Pressable>
+			</View>
 
-				{/* Theme Section */}
-				<SectionHeader title="थीम / Theme" style={styles.sectionHeader} />
-				<View style={styles.themeRow}>
-					{(
-						[
-							{ key: 'light', label: 'Light', subLabel: 'दिन' },
-							{ key: 'dark', label: 'Dark', subLabel: 'रात' },
-							{ key: 'system', label: 'System', subLabel: 'Auto' },
-						] as { key: ThemeMode; label: string; subLabel: string }[]
-					).map((opt) => (
-						<Pressable
-							key={opt.key}
-							testID={`theme-option-${opt.key}`}
-							onPress={() => handleThemeSelect(opt.key)}
-							style={[
-								styles.themeCard,
-								{
-									borderColor: mode === opt.key ? c.primary : c.border,
-									borderWidth: mode === opt.key ? 2 : 1,
-									backgroundColor:
-										mode === opt.key
-											? withOpacity(c.primary, OPACITY_TINT_LIGHT)
-											: c.surface,
-									borderRadius: theme.borderRadius.md,
-								},
-							]}
-						>
-							<ThemedText variant="body" weight="semibold" color={c.onSurface}>
-								{opt.label}
-							</ThemedText>
-							<ThemedText
-								variant="captionSmall"
-								color={c.onSurfaceVariant}
-								style={{ marginTop: SPACING_PX.xxs }}
-							>
-								{opt.subLabel}
-							</ThemedText>
-						</Pressable>
-					))}
-				</View>
-
-				{/* Date Format Section */}
-				<SectionHeader title="Date Format" style={styles.sectionHeader} />
+			{/* Theme Section */}
+			<SectionHeader title="थीम / Theme" style={styles.sectionHeader} />
+			<View style={styles.themeRow}>
 				{(
 					[
-						{ key: 'dmy', label: 'DD/MM/YYYY' },
-						{ key: 'dmy-dash', label: 'DD-MMM-YYYY' },
-						{ key: 'iso', label: 'YYYY-MM-DD (ISO)' },
-					] as { key: DateFormat; label: string }[]
-				).map((fmt) => (
+						{ key: 'light', label: 'Light', subLabel: 'दिन' },
+						{ key: 'dark', label: 'Dark', subLabel: 'रात' },
+						{ key: 'system', label: 'System', subLabel: 'Auto' },
+					] as { key: ThemeMode; label: string; subLabel: string }[]
+				).map((opt) => (
 					<Pressable
-						key={fmt.key}
-						testID={`date-format-${fmt.key}`}
-						onPress={() => handleDateFormat(fmt.key)}
+						key={opt.key}
+						testID={`theme-option-${opt.key}`}
+						onPress={() => handleThemeSelect(opt.key)}
 						style={[
-							styles.dateRow,
+							styles.themeCard,
 							{
+								borderColor: mode === opt.key ? c.primary : c.border,
+								borderWidth: mode === opt.key ? 2 : 1,
 								backgroundColor:
-									dateFormat === fmt.key
+									mode === opt.key
 										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
 										: c.surface,
-								borderColor: dateFormat === fmt.key ? c.primary : c.border,
-								borderWidth: dateFormat === fmt.key ? 2 : 1,
 								borderRadius: theme.borderRadius.md,
-								marginBottom: SPACING_PX.sm,
 							},
 						]}
 					>
-						<View style={styles.dateRadio}>
-							<View
-								style={[
-									styles.radioOuter,
-									{ borderColor: dateFormat === fmt.key ? c.primary : c.border },
-								]}
-							>
-								{dateFormat === fmt.key && (
-									<View
-										style={[styles.radioInner, { backgroundColor: c.primary }]}
-									/>
-								)}
-							</View>
-							<ThemedText
-								variant="body"
-								color={c.onSurface}
-								style={{ marginLeft: SPACING_PX.md }}
-							>
-								{fmt.label}
-							</ThemedText>
-						</View>
-						<ThemedText variant="label" color={c.onSurfaceVariant}>
-							{dateFormatExamples[fmt.key]}
+						<ThemedText variant="body" weight="semibold" color={c.onSurface}>
+							{opt.label}
+						</ThemedText>
+						<ThemedText
+							variant="captionSmall"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: SPACING_PX.xxs }}
+						>
+							{opt.subLabel}
 						</ThemedText>
 					</Pressable>
 				))}
+			</View>
 
-				{/* Decimal Places Section */}
-				<SectionHeader title="Decimal Places" style={styles.sectionHeader} />
-				<ThemedText
-					variant="caption"
-					style={{
-						color: c.onSurfaceVariant,
-						marginBottom: SPACING_PX.md,
-					}}
+			{/* Date Format Section */}
+			<SectionHeader title="Date Format" style={styles.sectionHeader} />
+			{(
+				[
+					{ key: 'dmy', label: 'DD/MM/YYYY' },
+					{ key: 'dmy-dash', label: 'DD-MMM-YYYY' },
+					{ key: 'iso', label: 'YYYY-MM-DD (ISO)' },
+				] as { key: DateFormat; label: string }[]
+			).map((fmt) => (
+				<Pressable
+					key={fmt.key}
+					testID={`date-format-${fmt.key}`}
+					onPress={() => handleDateFormat(fmt.key)}
+					style={[
+						styles.dateRow,
+						{
+							backgroundColor:
+								dateFormat === fmt.key
+									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+									: c.surface,
+							borderColor: dateFormat === fmt.key ? c.primary : c.border,
+							borderWidth: dateFormat === fmt.key ? 2 : 1,
+							borderRadius: theme.borderRadius.md,
+							marginBottom: SPACING_PX.sm,
+						},
+					]}
 				>
-					Currency: INR (₹) — Only INR supported currently
-				</ThemedText>
-				<View style={styles.decimalRow}>
-					<Pressable
-						testID="decimal-0"
-						onPress={() => handleDecimal(0)}
-						style={[
-							styles.decimalBtn,
-							{
-								borderColor: decimalPlaces === 0 ? c.primary : c.border,
-								borderWidth: decimalPlaces === 0 ? 2 : 1,
-								backgroundColor:
-									decimalPlaces === 0
-										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
-										: c.surface,
-								borderRadius: theme.borderRadius.md,
-								marginRight: SPACING_PX.sm,
-							},
-						]}
-					>
-						<ThemedText variant="body" weight="semibold" color={c.onSurface}>
-							0
+					<View style={styles.dateRadio}>
+						<View
+							style={[
+								styles.radioOuter,
+								{ borderColor: dateFormat === fmt.key ? c.primary : c.border },
+							]}
+						>
+							{dateFormat === fmt.key && (
+								<View style={[styles.radioInner, { backgroundColor: c.primary }]} />
+							)}
+						</View>
+						<ThemedText
+							variant="body"
+							color={c.onSurface}
+							style={{ marginLeft: SPACING_PX.md }}
+						>
+							{fmt.label}
 						</ThemedText>
-						<ThemedText variant="captionSmall" color={c.onSurfaceVariant}>
-							₹ 1,00,000
-						</ThemedText>
-					</Pressable>
+					</View>
+					<ThemedText variant="label" color={c.onSurfaceVariant}>
+						{dateFormatExamples[fmt.key]}
+					</ThemedText>
+				</Pressable>
+			))}
 
-					<Pressable
-						testID="decimal-2"
-						onPress={() => handleDecimal(2)}
-						style={[
-							styles.decimalBtn,
-							{
-								borderColor: decimalPlaces === 2 ? c.primary : c.border,
-								borderWidth: decimalPlaces === 2 ? 2 : 1,
-								backgroundColor:
-									decimalPlaces === 2
-										? withOpacity(c.primary, OPACITY_TINT_LIGHT)
-										: c.surface,
-								borderRadius: theme.borderRadius.md,
-							},
-						]}
-					>
-						<ThemedText variant="body" weight="semibold" color={c.onSurface}>
-							2
-						</ThemedText>
-						<ThemedText variant="captionSmall" color={c.onSurfaceVariant}>
-							₹ 1,00,000.00
-						</ThemedText>
-					</Pressable>
-				</View>
-
-				<ThemedText
-					variant="label"
-					style={{
-						color: c.onSurfaceVariant,
-						marginTop: SPACING_PX.xl,
-						textAlign: 'center',
-					}}
+			{/* Decimal Places Section */}
+			<SectionHeader title="Decimal Places" style={styles.sectionHeader} />
+			<ThemedText
+				variant="caption"
+				style={{
+					color: c.onSurfaceVariant,
+					marginBottom: SPACING_PX.md,
+				}}
+			>
+				Currency: INR (₹) — Only INR supported currently
+			</ThemedText>
+			<View style={styles.decimalRow}>
+				<Pressable
+					testID="decimal-0"
+					onPress={() => handleDecimal(0)}
+					style={[
+						styles.decimalBtn,
+						{
+							borderColor: decimalPlaces === 0 ? c.primary : c.border,
+							borderWidth: decimalPlaces === 0 ? 2 : 1,
+							backgroundColor:
+								decimalPlaces === 0
+									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+									: c.surface,
+							borderRadius: theme.borderRadius.md,
+							marginRight: SPACING_PX.sm,
+						},
+					]}
 				>
-					आप बाद में Settings से भाषा बदल सकते हैं
-				</ThemedText>
-			</ScrollView>
+					<ThemedText variant="body" weight="semibold" color={c.onSurface}>
+						0
+					</ThemedText>
+					<ThemedText variant="captionSmall" color={c.onSurfaceVariant}>
+						₹ 1,00,000
+					</ThemedText>
+				</Pressable>
+
+				<Pressable
+					testID="decimal-2"
+					onPress={() => handleDecimal(2)}
+					style={[
+						styles.decimalBtn,
+						{
+							borderColor: decimalPlaces === 2 ? c.primary : c.border,
+							borderWidth: decimalPlaces === 2 ? 2 : 1,
+							backgroundColor:
+								decimalPlaces === 2
+									? withOpacity(c.primary, OPACITY_TINT_LIGHT)
+									: c.surface,
+							borderRadius: theme.borderRadius.md,
+						},
+					]}
+				>
+					<ThemedText variant="body" weight="semibold" color={c.onSurface}>
+						2
+					</ThemedText>
+					<ThemedText variant="captionSmall" color={c.onSurfaceVariant}>
+						₹ 1,00,000.00
+					</ThemedText>
+				</Pressable>
+			</View>
+
+			<ThemedText
+				variant="label"
+				style={{
+					color: c.onSurfaceVariant,
+					marginTop: SPACING_PX.xl,
+					textAlign: 'center',
+				}}
+			>
+				आप बाद में Settings से भाषा बदल सकते हैं
+			</ThemedText>
 		</Screen>
 	);
 }

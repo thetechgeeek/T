@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, StyleSheet, Pressable, Alert } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 const ADD_FIRM_BORDER_WIDTH = 1.5;
 import { Screen } from '@/src/components/atoms/Screen';
@@ -23,69 +23,70 @@ export default function FirmsScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Manage Businesses" />
-			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
-				{/* Active firm card */}
-				<SettingsCard style={[styles.firmCard, { backgroundColor: c.surface }]}>
-					<View style={{ flex: 1 }}>
-						<View
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								gap: SPACING_PX.md,
-							}}
-						>
-							<ThemedText variant="body" weight="bold" style={{ flex: 1 }}>
-								My Business
-							</ThemedText>
-							<View style={[styles.badge, { backgroundColor: c.successLight }]}>
-								<ThemedText variant="caption" color={c.paid} weight="bold">
-									Active
-								</ThemedText>
-							</View>
-						</View>
-						<ThemedText
-							variant="caption"
-							style={{ color: c.onSurfaceVariant, marginTop: SPACING_PX.xxs }}
-						>
-							22AAAAA0000A1Z5
-						</ThemedText>
-					</View>
-				</SettingsCard>
-
-				{/* Add business button */}
-				<Pressable
-					onPress={handleAddBusiness}
-					style={[
-						styles.addBtn,
-						{
-							borderColor: c.primary,
-							backgroundColor: withOpacity(c.primary, OPACITY_TINT_LIGHT),
-						},
-					]}
-				>
-					<ThemedText variant="body" color={c.primary} weight="bold">
-						+ Add Another Business
-					</ThemedText>
-				</Pressable>
-
-				{/* Info text */}
-				<View
-					style={[styles.infoBox, { backgroundColor: c.surface, borderColor: c.border }]}
-				>
-					<ThemedText
-						variant="caption"
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={<ScreenHeader title="Manage Businesses" />}
+			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
+		>
+			{/* Active firm card */}
+			<SettingsCard style={[styles.firmCard, { backgroundColor: c.surface }]}>
+				<View style={{ flex: 1 }}>
+					<View
 						style={{
-							color: c.onSurfaceVariant,
-							textAlign: 'center',
-							lineHeight: LINE_HEIGHT.caption,
+							flexDirection: 'row',
+							alignItems: 'center',
+							gap: SPACING_PX.md,
 						}}
 					>
-						Each business has completely separate data and settings
+						<ThemedText variant="body" weight="bold" style={{ flex: 1 }}>
+							My Business
+						</ThemedText>
+						<View style={[styles.badge, { backgroundColor: c.successLight }]}>
+							<ThemedText variant="caption" color={c.paid} weight="bold">
+								Active
+							</ThemedText>
+						</View>
+					</View>
+					<ThemedText
+						variant="caption"
+						style={{ color: c.onSurfaceVariant, marginTop: SPACING_PX.xxs }}
+					>
+						22AAAAA0000A1Z5
 					</ThemedText>
 				</View>
-			</ScrollView>
+			</SettingsCard>
+
+			{/* Add business button */}
+			<Pressable
+				onPress={handleAddBusiness}
+				style={[
+					styles.addBtn,
+					{
+						borderColor: c.primary,
+						backgroundColor: withOpacity(c.primary, OPACITY_TINT_LIGHT),
+					},
+				]}
+			>
+				<ThemedText variant="body" color={c.primary} weight="bold">
+					+ Add Another Business
+				</ThemedText>
+			</Pressable>
+
+			{/* Info text */}
+			<View style={[styles.infoBox, { backgroundColor: c.surface, borderColor: c.border }]}>
+				<ThemedText
+					variant="caption"
+					style={{
+						color: c.onSurfaceVariant,
+						textAlign: 'center',
+						lineHeight: LINE_HEIGHT.caption,
+					}}
+				>
+					Each business has completely separate data and settings
+				</ThemedText>
+			</View>
 		</Screen>
 	);
 }

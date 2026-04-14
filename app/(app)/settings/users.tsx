@@ -5,16 +5,7 @@ import {
 	SIZE_AVATAR_MD,
 } from '@/theme/uiMetrics';
 import React, { useState } from 'react';
-import {
-	View,
-	Switch,
-	ScrollView,
-	StyleSheet,
-	Pressable,
-	TextInput,
-	Modal,
-	Alert,
-} from 'react-native';
+import { View, Switch, StyleSheet, Pressable, TextInput, Modal, Alert } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
@@ -53,84 +44,81 @@ export default function UsersScreen() {
 	};
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="User Management" />
-			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
-				{/* Current user card */}
-				<SettingsCard
-					style={[styles.userCard, { backgroundColor: c.surface, borderColor: c.border }]}
-					padding="md"
-				>
-					<View style={[styles.avatar, { backgroundColor: c.primary }]}>
-						<ThemedText
-							style={{
-								color: palette.white,
-								fontWeight: '700',
-								fontSize: FONT_SIZE.h2,
-							}}
-						>
-							B
-						</ThemedText>
-					</View>
-					<View style={{ flex: 1, marginLeft: SPACING_PX.md }}>
-						<ThemedText variant="body" weight="bold">
-							Business Owner
-						</ThemedText>
-						<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
-							Current account
-						</ThemedText>
-					</View>
-					<View style={[styles.badge, { backgroundColor: c.successLight }]}>
-						<ThemedText variant="caption" style={{ color: c.paid, fontWeight: '700' }}>
-							Owner
-						</ThemedText>
-					</View>
-				</SettingsCard>
-
-				{/* Users section */}
-				<SectionHeader title="Users" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					style={[
-						styles.emptyState,
-						{ backgroundColor: c.surface, borderColor: c.border },
-					]}
-					padding="lg"
-				>
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={<ScreenHeader title="User Management" />}
+			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
+		>
+			{/* Current user card */}
+			<SettingsCard
+				style={[styles.userCard, { backgroundColor: c.surface, borderColor: c.border }]}
+				padding="md"
+			>
+				<View style={[styles.avatar, { backgroundColor: c.primary }]}>
 					<ThemedText
-						variant="body"
-						style={{ color: c.onSurfaceVariant, textAlign: 'center' }}
+						style={{
+							color: palette.white,
+							fontWeight: '700',
+							fontSize: FONT_SIZE.h2,
+						}}
 					>
-						No additional users.{'\n'}Invite staff to help manage the business.
+						B
 					</ThemedText>
-				</SettingsCard>
+				</View>
+				<View style={{ flex: 1, marginLeft: SPACING_PX.md }}>
+					<ThemedText variant="body" weight="bold">
+						Business Owner
+					</ThemedText>
+					<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
+						Current account
+					</ThemedText>
+				</View>
+				<View style={[styles.badge, { backgroundColor: c.successLight }]}>
+					<ThemedText variant="caption" style={{ color: c.paid, fontWeight: '700' }}>
+						Owner
+					</ThemedText>
+				</View>
+			</SettingsCard>
 
-				<Pressable
-					onPress={() => setModalVisible(true)}
-					style={[styles.inviteBtn, { backgroundColor: c.primary }]}
+			{/* Users section */}
+			<SectionHeader title="Users" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				style={[styles.emptyState, { backgroundColor: c.surface, borderColor: c.border }]}
+				padding="lg"
+			>
+				<ThemedText
+					variant="body"
+					style={{ color: c.onSurfaceVariant, textAlign: 'center' }}
 				>
-					<ThemedText variant="body" style={{ color: palette.white, fontWeight: '700' }}>
-						+ Invite User
-					</ThemedText>
-				</Pressable>
+					No additional users.{'\n'}Invite staff to help manage the business.
+				</ThemedText>
+			</SettingsCard>
 
-				{/* Track sales switch */}
-				<SettingsCard
-					style={[
-						styles.switchCard,
-						{ backgroundColor: c.surface, borderColor: c.border },
-					]}
-					padding="md"
-				>
-					<ThemedText variant="body" style={{ flex: 1 }}>
-						Track Sales by User
-					</ThemedText>
-					<Switch
-						trackColor={{ true: c.primary, false: c.border }}
-						value={trackByUser}
-						onValueChange={setTrackByUser}
-					/>
-				</SettingsCard>
-			</ScrollView>
+			<Pressable
+				onPress={() => setModalVisible(true)}
+				style={[styles.inviteBtn, { backgroundColor: c.primary }]}
+			>
+				<ThemedText variant="body" style={{ color: palette.white, fontWeight: '700' }}>
+					+ Invite User
+				</ThemedText>
+			</Pressable>
+
+			{/* Track sales switch */}
+			<SettingsCard
+				style={[styles.switchCard, { backgroundColor: c.surface, borderColor: c.border }]}
+				padding="md"
+			>
+				<ThemedText variant="body" style={{ flex: 1 }}>
+					Track Sales by User
+				</ThemedText>
+				<Switch
+					trackColor={{ true: c.primary, false: c.border }}
+					value={trackByUser}
+					onValueChange={setTrackByUser}
+				/>
+			</SettingsCard>
 
 			{/* Invite Modal */}
 			<Modal

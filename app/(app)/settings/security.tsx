@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Switch, ScrollView, StyleSheet, Pressable } from 'react-native';
+import { View, Switch, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
@@ -71,94 +71,97 @@ export default function SecuritySettingsScreen() {
 	const [pinToDelete, setPinToDelete] = useState(false);
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Security Settings" />
-			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
-				<SectionHeader title="PIN" variant="uppercase" titleColor={c.primary} />
-				<SettingsCard
-					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={<ScreenHeader title="Security Settings" />}
+			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
+		>
+			<SectionHeader title="PIN" variant="uppercase" titleColor={c.primary} />
+			<SettingsCard
+				padding="none"
+				style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+			>
+				<Pressable
+					onPress={() => router.push('/(app)/settings/lock')}
+					style={[
+						styles.row,
+						{
+							borderBottomColor: c.border,
+							borderBottomWidth: StyleSheet.hairlineWidth,
+						},
+					]}
 				>
+					<View style={{ flex: 1 }}>
+						<ThemedText variant="body">Set 4-digit PIN</ThemedText>
+						<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
+							Protect app with a PIN code
+						</ThemedText>
+					</View>
+					<ThemedText variant="h3" color={c.onSurfaceVariant}>
+						›
+					</ThemedText>
+				</Pressable>
+				<SwitchRow
+					label="Use Biometric Authentication"
+					sub="Fingerprint or Face ID"
+					value={biometric}
+					onChange={setBiometric}
+					c={c}
+					last
+				/>
+			</SettingsCard>
+
+			<SectionHeader title="Auto-lock" variant="uppercase" titleColor={c.primary} />
+			<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
+				{AUTO_LOCK_OPTIONS.map((opt) => (
 					<Pressable
-						onPress={() => router.push('/(app)/settings/lock')}
+						key={opt.key}
+						onPress={() => setAutoLock(opt.key)}
 						style={[
-							styles.row,
-							{
-								borderBottomColor: c.border,
-								borderBottomWidth: StyleSheet.hairlineWidth,
-							},
+							styles.chip,
+							autoLock === opt.key
+								? { backgroundColor: c.primary, borderColor: c.primary }
+								: { backgroundColor: c.surface, borderColor: c.border },
 						]}
 					>
-						<View style={{ flex: 1 }}>
-							<ThemedText variant="body">Set 4-digit PIN</ThemedText>
-							<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
-								Protect app with a PIN code
-							</ThemedText>
-						</View>
-						<ThemedText variant="h3" color={c.onSurfaceVariant}>
-							›
+						<ThemedText
+							variant="label"
+							weight="semibold"
+							style={{
+								color: autoLock === opt.key ? c.onPrimary : c.onSurface,
+							}}
+						>
+							{opt.label}
 						</ThemedText>
 					</Pressable>
-					<SwitchRow
-						label="Use Biometric Authentication"
-						sub="Fingerprint or Face ID"
-						value={biometric}
-						onChange={setBiometric}
-						c={c}
-						last
-					/>
-				</SettingsCard>
+				))}
+			</View>
 
-				<SectionHeader title="Auto-lock" variant="uppercase" titleColor={c.primary} />
-				<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
-					{AUTO_LOCK_OPTIONS.map((opt) => (
-						<Pressable
-							key={opt.key}
-							onPress={() => setAutoLock(opt.key)}
-							style={[
-								styles.chip,
-								autoLock === opt.key
-									? { backgroundColor: c.primary, borderColor: c.primary }
-									: { backgroundColor: c.surface, borderColor: c.border },
-							]}
-						>
-							<ThemedText
-								variant="label"
-								weight="semibold"
-								style={{
-									color: autoLock === opt.key ? c.onPrimary : c.onSurface,
-								}}
-							>
-								{opt.label}
-							</ThemedText>
-						</Pressable>
-					))}
-				</View>
-
-				<SectionHeader
-					title="Transaction Protection"
-					variant="uppercase"
-					titleColor={c.primary}
+			<SectionHeader
+				title="Transaction Protection"
+				variant="uppercase"
+				titleColor={c.primary}
+			/>
+			<SettingsCard
+				padding="none"
+				style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+			>
+				<SwitchRow
+					label="Require PIN to Edit Transactions"
+					value={pinToEdit}
+					onChange={setPinToEdit}
+					c={c}
 				/>
-				<SettingsCard
-					padding="none"
-					style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
-				>
-					<SwitchRow
-						label="Require PIN to Edit Transactions"
-						value={pinToEdit}
-						onChange={setPinToEdit}
-						c={c}
-					/>
-					<SwitchRow
-						label="Require PIN to Delete Transactions"
-						value={pinToDelete}
-						onChange={setPinToDelete}
-						c={c}
-						last
-					/>
-				</SettingsCard>
-			</ScrollView>
+				<SwitchRow
+					label="Require PIN to Delete Transactions"
+					value={pinToDelete}
+					onChange={setPinToDelete}
+					c={c}
+					last
+				/>
+			</SettingsCard>
 		</Screen>
 	);
 }

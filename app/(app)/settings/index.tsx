@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -124,53 +124,56 @@ export default function SettingsScreen() {
 	const router = useRouter();
 
 	return (
-		<Screen safeAreaEdges={['bottom']}>
-			<ScreenHeader title="Settings" showBackButton={false} />
-			<ScrollView contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}>
-				{SECTIONS.map((section) => (
-					<React.Fragment key={section.title}>
-						<SectionHeader
-							title={section.title}
-							variant="uppercase"
-							titleColor={c.primary}
-						/>
-						<SettingsCard
-							padding="none"
-							style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
-						>
-							{section.rows.map((row, idx) => (
-								<Pressable
-									key={row.route}
-									onPress={() => router.push(row.route as Href)}
-									style={({ pressed }) => [
-										styles.row,
-										idx < section.rows.length - 1 && {
-											borderBottomColor: c.border,
-											borderBottomWidth: StyleSheet.hairlineWidth,
-										},
-										pressed && { backgroundColor: c.border },
-									]}
-								>
-									<View style={{ flex: 1 }}>
-										<ThemedText variant="body">{row.label}</ThemedText>
-										{row.sub ? (
-											<ThemedText
-												variant="caption"
-												style={{ color: c.onSurfaceVariant }}
-											>
-												{row.sub}
-											</ThemedText>
-										) : null}
-									</View>
-									<ThemedText variant="h2" color={c.onSurfaceVariant}>
-										›
-									</ThemedText>
-								</Pressable>
-							))}
-						</SettingsCard>
-					</React.Fragment>
-				))}
-			</ScrollView>
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={<ScreenHeader title="Settings" showBackButton={false} />}
+			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
+		>
+			{SECTIONS.map((section) => (
+				<React.Fragment key={section.title}>
+					<SectionHeader
+						title={section.title}
+						variant="uppercase"
+						titleColor={c.primary}
+					/>
+					<SettingsCard
+						padding="none"
+						style={[styles.card, { backgroundColor: c.surface, borderWidth: 0 }]}
+					>
+						{section.rows.map((row, idx) => (
+							<Pressable
+								key={row.route}
+								onPress={() => router.push(row.route as Href)}
+								style={({ pressed }) => [
+									styles.row,
+									idx < section.rows.length - 1 && {
+										borderBottomColor: c.border,
+										borderBottomWidth: StyleSheet.hairlineWidth,
+									},
+									pressed && { backgroundColor: c.border },
+								]}
+							>
+								<View style={{ flex: 1 }}>
+									<ThemedText variant="body">{row.label}</ThemedText>
+									{row.sub ? (
+										<ThemedText
+											variant="caption"
+											style={{ color: c.onSurfaceVariant }}
+										>
+											{row.sub}
+										</ThemedText>
+									) : null}
+								</View>
+								<ThemedText variant="h2" color={c.onSurfaceVariant}>
+									›
+								</ThemedText>
+							</Pressable>
+						))}
+					</SettingsCard>
+				</React.Fragment>
+			))}
 		</Screen>
 	);
 }
