@@ -1,14 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import {
-	OPACITY_SKELETON_BASE,
-	OPACITY_ROW_HIGHLIGHT,
-	OVERLAY_COLOR_STRONG,
-} from '@/theme/uiMetrics';
-
-const SPEC_BOX_HALF_WIDTH = '50%' as const;
-const SPEC_BOX_PADDING = 6;
-const SPECS_GRID_MARGIN = -6;
-import {
 	View,
 	StyleSheet,
 	ScrollView,
@@ -34,18 +25,29 @@ import { layout } from '@/src/theme/layout';
 import { itemPartyRateService } from '@/src/services/itemPartyRateService';
 import type { UUID } from '@/src/types/common';
 import type { InventoryItem, StockOperation, ItemPartyRate } from '@/src/types/inventory';
+import {
+	OPACITY_ROW_HIGHLIGHT,
+	OPACITY_SKELETON_BASE,
+	OVERLAY_COLOR_STRONG,
+} from '@/theme/uiMetrics';
+import logger from '@/src/utils/logger';
 
 type ItemPartyRateRow = ItemPartyRate & {
 	customers?: { name: string };
 	suppliers?: { name: string };
 };
-import logger from '@/src/utils/logger';
+
+const SPEC_BOX_HALF_WIDTH = '50%' as const;
 
 export default function ItemDetailScreen() {
-	const { theme, c, s, r } = useThemeTokens();
+	const { theme, c, s, r, typo } = useThemeTokens();
 	const { formatCurrency, formatDateShort, t } = useLocale();
 	const router = useRouter();
 	const { id } = useLocalSearchParams<{ id: UUID }>();
+	const actionPaddingVertical = s.md + s.xxs;
+	const modalOverlayPadding = s.lg + s.xs;
+	const partyItemPadding = s.sm + s.xxs;
+	const specBoxPadding = s.sm - s.xxs;
 
 	const [item, setItem] = useState<InventoryItem | null>(null);
 	const [history, setHistory] = useState<StockOperation[]>([]);
@@ -172,7 +174,9 @@ export default function ItemDetailScreen() {
 				<ScreenHeader title="" />
 				<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 					<HelpCircle size={48} color={c.placeholder} strokeWidth={1} />
-					<ThemedText style={{ marginTop: 16 }}>{t('inventory.itemNotFound')}</ThemedText>
+					<ThemedText style={{ marginTop: s.lg }}>
+						{t('inventory.itemNotFound')}
+					</ThemedText>
 				</View>
 			</AtomicScreen>
 		);
@@ -190,7 +194,7 @@ export default function ItemDetailScreen() {
 					title={item.design_name}
 					rightElement={
 						<TouchableOpacity
-							style={{ padding: 4 }}
+							style={{ padding: s.xs }}
 							onPress={() => router.push(`/(app)/inventory/add?id=${item.id}`)}
 						>
 							<Edit size={22} color={c.primary} strokeWidth={2} />
@@ -203,8 +207,8 @@ export default function ItemDetailScreen() {
 			{/* Image Card */}
 			<View
 				style={[
-					styles.imageCard,
 					{
+						padding: s.xs,
 						backgroundColor: c.surface,
 						borderRadius: r.lg,
 						...(theme.shadows?.sm || {}),
@@ -237,7 +241,11 @@ export default function ItemDetailScreen() {
 			<View
 				style={[
 					layout.row,
-					{ flexWrap: 'wrap', marginTop: s.lg, marginHorizontal: SPECS_GRID_MARGIN },
+					{
+						flexWrap: 'wrap',
+						marginTop: s.lg,
+						marginHorizontal: -specBoxPadding,
+					},
 				]}
 			>
 				<SpecBox label={t('inventory.addItem')} value={item.base_item_number} />
@@ -265,8 +273,8 @@ export default function ItemDetailScreen() {
 			{/* Stock Status */}
 			<View
 				style={[
-					styles.stockBox,
 					{
+						padding: s.lg,
 						backgroundColor: isLowStock
 							? c.errorLight
 							: withOpacity(c.success, OPACITY_SKELETON_BASE),
@@ -280,7 +288,11 @@ export default function ItemDetailScreen() {
 				<ThemedText variant="h3" color={isLowStock ? c.error : c.success}>
 					{t('inventory.stockStatus', { count: item.box_count })}
 				</ThemedText>
-				<ThemedText variant="caption" color={c.onSurfaceVariant} style={{ marginTop: 2 }}>
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					style={{ marginTop: s.xxs }}
+				>
 					{t('inventory.thresholdStatus', { count: item.low_stock_threshold })}
 				</ThemedText>
 			</View>
@@ -289,31 +301,39 @@ export default function ItemDetailScreen() {
 			<View style={[layout.row, { marginTop: s.md, gap: s.md }]}>
 				<TouchableOpacity
 					style={[
-						styles.actionBtn,
 						layout.row,
-						{ flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md },
+						{
+							flex: 1,
+							paddingVertical: actionPaddingVertical,
+							backgroundColor: c.surfaceVariant,
+							borderRadius: r.md,
+						},
 					]}
 					onPress={() =>
 						router.push(`/(app)/inventory/stock-op?id=${item.id}&type=stock_in`)
 					}
 				>
 					<ArrowDownRight size={20} color={c.success} strokeWidth={2.5} />
-					<ThemedText weight="semibold" style={{ marginLeft: 8 }}>
+					<ThemedText weight="semibold" style={{ marginLeft: s.sm }}>
 						{t('inventory.stockIn')}
 					</ThemedText>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={[
-						styles.actionBtn,
 						layout.row,
-						{ flex: 1, backgroundColor: c.surfaceVariant, borderRadius: r.md },
+						{
+							flex: 1,
+							paddingVertical: actionPaddingVertical,
+							backgroundColor: c.surfaceVariant,
+							borderRadius: r.md,
+						},
 					]}
 					onPress={() =>
 						router.push(`/(app)/inventory/stock-op?id=${item.id}&type=stock_out`)
 					}
 				>
 					<ArrowUpRight size={20} color={c.error} strokeWidth={2.5} />
-					<ThemedText weight="semibold" style={{ marginLeft: 8 }}>
+					<ThemedText weight="semibold" style={{ marginLeft: s.sm }}>
 						{t('inventory.stockOut')}
 					</ThemedText>
 				</TouchableOpacity>
@@ -328,7 +348,7 @@ export default function ItemDetailScreen() {
 							await fetchParties();
 							setIsModalVisible(true);
 						}}
-						style={{ padding: 4 }}
+						style={{ padding: s.xs }}
 					>
 						<ThemedText color={c.primary} weight="semibold">
 							+ Add
@@ -394,9 +414,9 @@ export default function ItemDetailScreen() {
 						<View
 							key={op.id}
 							style={[
-								styles.historyRow,
 								layout.row,
 								{
+									paddingVertical: s.md,
 									borderBottomColor: c.border,
 									borderBottomWidth:
 										index === history.length - 1 ? 0 : StyleSheet.hairlineWidth,
@@ -413,7 +433,7 @@ export default function ItemDetailScreen() {
 								<ThemedText
 									variant="caption"
 									color={c.onSurfaceVariant}
-									style={{ marginTop: 2 }}
+									style={{ marginTop: s.xxs }}
 								>
 									{formatDateShort(op.created_at)}
 									{op.reason ? ` • ${op.reason}` : ''}
@@ -437,11 +457,23 @@ export default function ItemDetailScreen() {
 				animationType="slide"
 				onRequestClose={() => setIsModalVisible(false)}
 			>
-				<View style={[styles.modalOverlay, { backgroundColor: OVERLAY_COLOR_STRONG }]}>
+				<View
+					style={[
+						styles.modalOverlay,
+						{
+							padding: modalOverlayPadding,
+							backgroundColor: OVERLAY_COLOR_STRONG,
+						},
+					]}
+				>
 					<View
 						style={[
 							styles.modalContent,
-							{ backgroundColor: c.surface, borderRadius: r.lg },
+							{
+								padding: s.xl,
+								backgroundColor: c.surface,
+								borderRadius: r.lg,
+							},
 						]}
 					>
 						<ThemedText variant="h3" style={{ marginBottom: s.md }}>
@@ -451,7 +483,7 @@ export default function ItemDetailScreen() {
 						<ThemedText
 							variant="label"
 							color={c.onSurfaceVariant}
-							style={{ marginBottom: 4 }}
+							style={{ marginBottom: s.xs }}
 						>
 							Select Customer or Supplier
 						</ThemedText>
@@ -459,7 +491,17 @@ export default function ItemDetailScreen() {
 							placeholder="Search party..."
 							value={partySearch}
 							onChangeText={setPartySearch}
-							style={[styles.input, { borderColor: c.border, color: c.onSurface }]}
+							style={[
+								styles.input,
+								{
+									padding: s.md,
+									borderColor: c.border,
+									borderRadius: r.md,
+									color: c.onSurface,
+									fontSize: typo.sizes.lg,
+									marginBottom: s.md,
+								},
+							]}
 						/>
 
 						<ScrollView style={{ maxHeight: 200, marginBottom: s.md }}>
@@ -474,6 +516,8 @@ export default function ItemDetailScreen() {
 										style={[
 											styles.partyItem,
 											{
+												padding: partyItemPadding,
+												marginVertical: s.xxs,
 												backgroundColor:
 													selectedParty === p.id
 														? c.primary
@@ -497,7 +541,7 @@ export default function ItemDetailScreen() {
 						<ThemedText
 							variant="label"
 							color={c.onSurfaceVariant}
-							style={{ marginBottom: 4 }}
+							style={{ marginBottom: s.xs }}
 						>
 							Special Rate (₹)
 						</ThemedText>
@@ -508,7 +552,14 @@ export default function ItemDetailScreen() {
 							onChangeText={setCustomRate}
 							style={[
 								styles.input,
-								{ borderColor: c.border, color: c.onSurface, marginBottom: s.lg },
+								{
+									padding: s.md,
+									borderColor: c.border,
+									borderRadius: r.md,
+									color: c.onSurface,
+									fontSize: typo.sizes.lg,
+									marginBottom: s.lg,
+								},
 							]}
 						/>
 
@@ -518,6 +569,7 @@ export default function ItemDetailScreen() {
 								style={[
 									styles.modalBtn,
 									{
+										padding: actionPaddingVertical,
 										backgroundColor: c.surfaceVariant,
 										flex: 1,
 										borderRadius: r.md,
@@ -532,7 +584,12 @@ export default function ItemDetailScreen() {
 								onPress={handleAddRate}
 								style={[
 									styles.modalBtn,
-									{ backgroundColor: c.primary, flex: 1, borderRadius: r.md },
+									{
+										padding: actionPaddingVertical,
+										backgroundColor: c.primary,
+										flex: 1,
+										borderRadius: r.md,
+									},
 								]}
 							>
 								<ThemedText color={c.onPrimary} weight="semibold">
@@ -548,21 +605,13 @@ export default function ItemDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-	imageCard: { padding: 4 },
-	stockBox: { padding: 16 },
-	actionBtn: { paddingVertical: 14 },
-	historyRow: { paddingVertical: 12 },
-	modalOverlay: { flex: 1, justifyContent: 'center', padding: 20 },
-	modalContent: { padding: 24, elevation: 5 },
+	modalOverlay: { flex: 1, justifyContent: 'center' },
+	modalContent: { elevation: 5 },
 	input: {
 		borderWidth: 1,
-		padding: 12,
-		borderRadius: 8,
-		fontSize: 16,
-		marginBottom: 12,
 	},
-	partyItem: { padding: 10, marginVertical: 2 },
-	modalBtn: { padding: 14, alignItems: 'center' },
+	partyItem: {},
+	modalBtn: { alignItems: 'center' },
 });
 
 function SpecBox({
@@ -574,22 +623,23 @@ function SpecBox({
 	value: string;
 	highlight?: boolean;
 }) {
-	const { c, r } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
+	const specBoxPadding = s.sm - s.xxs;
 	return (
-		<View style={{ width: SPEC_BOX_HALF_WIDTH, padding: SPEC_BOX_PADDING }}>
+		<View style={{ width: SPEC_BOX_HALF_WIDTH, padding: specBoxPadding }}>
 			<View
 				style={{
 					backgroundColor: highlight
 						? withOpacity(c.primary, OPACITY_ROW_HIGHLIGHT)
 						: c.surfaceVariant,
-					padding: 12,
+					padding: s.md,
 					borderRadius: r.md,
 				}}
 			>
 				<ThemedText
 					variant="caption"
 					color={c.onSurfaceVariant}
-					style={{ marginBottom: 4 }}
+					style={{ marginBottom: s.xs }}
 				>
 					{label}
 				</ThemedText>

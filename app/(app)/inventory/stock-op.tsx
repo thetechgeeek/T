@@ -156,8 +156,8 @@ export default function StockOpScreen() {
 			<View style={{ padding: s.lg }}>
 				<View
 					style={[
-						styles.infoBox,
 						{
+							padding: s.lg,
 							backgroundColor: c.surfaceVariant,
 							borderRadius: r.md,
 							marginBottom: s.xl,
@@ -167,10 +167,10 @@ export default function StockOpScreen() {
 					<ThemedText variant="caption" color={c.onSurfaceVariant}>
 						{t('invoice.addItem')}
 					</ThemedText>
-					<ThemedText weight="bold" style={{ marginTop: 4 }}>
+					<ThemedText weight="bold" style={{ marginTop: s.xs }}>
 						{item.design_name}
 					</ThemedText>
-					<ThemedText variant="body" style={{ marginTop: 4 }}>
+					<ThemedText variant="body" style={{ marginTop: s.xs }}>
 						{t('inventory.currentStock')}:{' '}
 						<ThemedText weight="bold">
 							{item.box_count} {t('common.boxes')}
@@ -195,11 +195,11 @@ export default function StockOpScreen() {
 				/>
 
 				{/* Reason Selector */}
-				<View style={styles.reasonRow}>
+				<View style={[styles.reasonRow, { marginBottom: s.md }]}>
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginBottom: 4 }}
+						style={{ marginBottom: s.xs }}
 					>
 						{t('inventory.reason')}
 					</ThemedText>
@@ -207,6 +207,8 @@ export default function StockOpScreen() {
 						style={[
 							styles.reasonPicker,
 							{
+								paddingHorizontal: s.md,
+								paddingVertical: s.md,
 								backgroundColor: c.surfaceVariant,
 								borderRadius: r.md,
 								borderColor: c.border,
@@ -259,13 +261,10 @@ export default function StockOpScreen() {
 }
 
 const styles = StyleSheet.create({
-	infoBox: { padding: 16 },
-	reasonRow: { marginBottom: 12 },
+	reasonRow: {},
 	reasonPicker: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 12,
-		paddingVertical: 12,
 		borderWidth: StyleSheet.hairlineWidth,
 		minHeight: 48,
 	},

@@ -13,7 +13,7 @@ import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 export default function AgingReportScreen() {
-	const { theme } = useThemeTokens();
+	const { c: colors, s } = useThemeTokens();
 	const { formatCurrency, t } = useLocale();
 	const { customers, fetchCustomers } = useCustomerStore(
 		useShallow((s) => ({
@@ -34,20 +34,20 @@ export default function AgingReportScreen() {
 	return (
 		<AtomicScreen
 			scrollable
-			contentContainerStyle={styles.scrollContent}
+			contentContainerStyle={{ padding: s.lg }}
 			safeAreaEdges={['bottom']}
 			header={<ScreenHeader title={t('customer.agingReport')} />}
 		>
-			<View style={styles.summaryCard}>
+			<View style={{ marginBottom: s.xl }}>
 				<Card padding="lg" variant="elevated">
 					<ThemedText
 						variant="caption"
-						color={theme.colors.onSurfaceVariant}
-						style={{ marginBottom: 4 }}
+						color={colors.onSurfaceVariant}
+						style={{ marginBottom: s.xs }}
 					>
 						{t('customer.totalOutstanding')}
 					</ThemedText>
-					<ThemedText variant="h1" color={theme.colors.error} style={{ fontSize: 32 }}>
+					<ThemedText variant="display" color={colors.error}>
 						{formatCurrency(
 							agingData.reduce((acc, curr) => acc + (curr.current_balance || 0), 0),
 						)}
@@ -55,40 +55,36 @@ export default function AgingReportScreen() {
 				</Card>
 			</View>
 
-			<ThemedText variant="h3" style={{ marginBottom: 16 }}>
+			<ThemedText variant="h3" style={{ marginBottom: s.lg }}>
 				{t('customer.customerBreakup')}
 			</ThemedText>
 
 			{agingData.length === 0 ? (
 				<EmptyState title={t('customer.noOutstandingBalances')} />
 			) : (
-				agingData.map((c) => (
-					<Card key={c.id} style={styles.customerCard} padding="md">
+				agingData.map((customer) => (
+					<Card key={customer.id} style={{ marginBottom: s.md }} padding="md">
 						<View style={styles.row}>
 							<View style={{ flex: 1 }}>
-								<ThemedText weight="semibold" style={{ fontSize: 16 }}>
-									{c.name}
+								<ThemedText variant="body" weight="semibold">
+									{customer.name}
 								</ThemedText>
 								<ThemedText
 									variant="caption"
-									color={theme.colors.onSurfaceVariant}
-									style={{ marginTop: 2 }}
+									color={colors.onSurfaceVariant}
+									style={{ marginTop: s.xxs }}
 								>
-									{c.type.toUpperCase()}
+									{customer.type.toUpperCase()}
 								</ThemedText>
 							</View>
 							<View style={{ alignItems: 'flex-end' }}>
-								<ThemedText
-									weight="bold"
-									color={theme.colors.error}
-									style={{ fontSize: 16 }}
-								>
-									{formatCurrency(c.current_balance || 0)}
+								<ThemedText variant="bodyBold" color={colors.error}>
+									{formatCurrency(customer.current_balance || 0)}
 								</ThemedText>
 								<Badge
 									label={t('invoice.balance')}
 									variant="error"
-									style={{ marginTop: 4 }}
+									style={{ marginTop: s.xs }}
 								/>
 							</View>
 						</View>
@@ -100,8 +96,5 @@ export default function AgingReportScreen() {
 }
 
 const styles = StyleSheet.create({
-	scrollContent: { padding: 16 },
-	summaryCard: { marginBottom: 24 },
-	customerCard: { marginBottom: 12 },
 	row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
 });

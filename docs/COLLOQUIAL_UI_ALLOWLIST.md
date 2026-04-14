@@ -10,6 +10,14 @@ This file is the **only** sanctioned place for temporary exceptions to the styli
 
 ## Current exceptions
 
-None.
+### `check-ui-tokens` staged exceptions
+
+- `app/(app)/settings/expense-categories.tsx:335` — `vertical-scrollview` — internal modal editor body; documented in `docs/SCREEN_SHELL_COOKBOOK.md`; ref: phase-6-enforcement
+- `app/(app)/settings/item-categories.tsx:258` — `vertical-scrollview` — internal modal editor body; documented in `docs/SCREEN_SHELL_COOKBOOK.md`; ref: phase-6-enforcement
+- `app/(app)/settings/item-units.tsx:256` — `vertical-scrollview` — internal modal editor body; documented in `docs/SCREEN_SHELL_COOKBOOK.md`; ref: phase-6-enforcement
+- `app/(app)/inventory/[id].tsx:501` — `vertical-scrollview` — internal special-rate picker inside a modal; ref: phase-6-enforcement
+- `app/(app)/finance/payments/make.tsx:168` — `vertical-scrollview` — internal supplier dropdown; ref: phase-6-enforcement
+- `app/(app)/finance/payments/receive.tsx:166` — `vertical-scrollview` — internal supplier dropdown; ref: phase-6-enforcement
+- `app/(app)/finance/purchases/create.tsx:235` — `vertical-scrollview` — internal supplier and item dropdown bodies; ref: phase-6-enforcement
 
 Phase 5 screen-shell exceptions are documented in `docs/SCREEN_SHELL_COOKBOOK.md` because they are intentional shell patterns, not temporary styling debt.

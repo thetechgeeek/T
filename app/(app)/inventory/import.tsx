@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 
@@ -41,9 +41,11 @@ function mappedCell(
 }
 
 export default function InventoryImportScreen() {
-	const { c, s } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
+	const stepperTopMargin = s.lg + s.xs;
+	const stepCardPaddingVertical = s['2xl'] + s.sm;
 
 	const [currentStep, setCurrentStep] = useState(1);
 	const [loading, setLoading] = useState(false);
@@ -55,11 +57,7 @@ export default function InventoryImportScreen() {
 		null,
 	);
 
-	useEffect(() => {
-		loadMasterData();
-	}, []);
-
-	const loadMasterData = async () => {
+	const loadMasterData = useCallback(async () => {
 		try {
 			const [cats, uns] = await Promise.all([
 				itemCategoryService.fetchAll(),
@@ -70,7 +68,11 @@ export default function InventoryImportScreen() {
 		} catch {
 			Alert.alert(t('common.error'), 'Failed to load master data');
 		}
-	};
+	}, [t]);
+
+	useEffect(() => {
+		loadMasterData();
+	}, [loadMasterData]);
 
 	const downloadTemplate = async () => {
 		try {
@@ -208,7 +210,7 @@ export default function InventoryImportScreen() {
 		switch (currentStep) {
 			case 1:
 				return (
-					<Card style={styles.stepCard}>
+					<Card style={[styles.stepCard, { paddingVertical: stepCardPaddingVertical }]}>
 						<Download
 							size={48}
 							color={c.primary}
@@ -241,7 +243,7 @@ export default function InventoryImportScreen() {
 				);
 			case 2:
 				return (
-					<Card style={styles.stepCard}>
+					<Card style={[styles.stepCard, { paddingVertical: stepCardPaddingVertical }]}>
 						<Upload
 							size={48}
 							color={c.primary}
@@ -265,7 +267,7 @@ export default function InventoryImportScreen() {
 				);
 			case 3:
 				return (
-					<Card style={styles.stepCard}>
+					<Card style={[styles.stepCard, { paddingVertical: stepCardPaddingVertical }]}>
 						<RefreshCw
 							size={48}
 							color={c.primary}
@@ -298,7 +300,7 @@ export default function InventoryImportScreen() {
 				);
 			case 4:
 				return (
-					<Card style={styles.stepCard}>
+					<Card style={[styles.stepCard, { paddingVertical: stepCardPaddingVertical }]}>
 						<CheckCircle2
 							size={48}
 							color={c.success}
@@ -326,7 +328,7 @@ export default function InventoryImportScreen() {
 				);
 			case 5:
 				return (
-					<Card style={styles.stepCard}>
+					<Card style={[styles.stepCard, { paddingVertical: stepCardPaddingVertical }]}>
 						<CheckCircle2
 							size={64}
 							color={c.success}
@@ -364,28 +366,42 @@ export default function InventoryImportScreen() {
 			header={
 				<>
 					<ScreenHeader title={t('inventory.importItems')} />
-					<View style={[styles.stepper, { paddingHorizontal: s.lg }]}>
-						{STEPS.map((s, idx) => (
-							<View key={s.id} style={styles.stepIndicator}>
+					<View
+						style={[
+							styles.stepper,
+							{
+								paddingHorizontal: s.lg,
+								marginTop: stepperTopMargin,
+								marginBottom: s['2xl'],
+							},
+						]}
+					>
+						{STEPS.map((step, idx) => (
+							<View key={step.id} style={styles.stepIndicator}>
 								<View
 									style={[
 										styles.stepCircle,
 										{
+											borderRadius: r.lg,
 											backgroundColor:
-												currentStep >= s.id ? c.primary : c.surfaceVariant,
+												currentStep >= step.id
+													? c.primary
+													: c.surfaceVariant,
 											borderColor:
-												currentStep === s.id ? c.primary : 'transparent',
-											borderWidth: currentStep === s.id ? 2 : 0,
+												currentStep === step.id ? c.primary : 'transparent',
+											borderWidth: currentStep === step.id ? 2 : 0,
 										},
 									]}
 								>
 									<ThemedText
 										variant="captionSmall"
 										color={
-											currentStep >= s.id ? c.onPrimary : c.onSurfaceVariant
+											currentStep >= step.id
+												? c.onPrimary
+												: c.onSurfaceVariant
 										}
 									>
-										{s.id}
+										{step.id}
 									</ThemedText>
 								</View>
 								{idx < STEPS.length - 1 && (
@@ -393,8 +409,9 @@ export default function InventoryImportScreen() {
 										style={[
 											styles.stepLine,
 											{
+												marginHorizontal: s.xs,
 												backgroundColor:
-													currentStep > s.id ? c.primary : c.border,
+													currentStep > step.id ? c.primary : c.border,
 											},
 										]}
 									/>
@@ -415,8 +432,6 @@ const styles = StyleSheet.create({
 	stepper: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginTop: 20,
-		marginBottom: 32,
 	},
 	stepIndicator: {
 		flexDirection: 'row',
@@ -426,17 +441,14 @@ const styles = StyleSheet.create({
 	stepCircle: {
 		width: 24,
 		height: 24,
-		borderRadius: 12,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	stepLine: {
 		flex: 1,
 		height: 2,
-		marginHorizontal: 4,
 	},
 	stepCard: {
-		paddingVertical: 40,
 		alignItems: 'stretch',
 	},
 });

@@ -104,14 +104,14 @@ function ChipGroup<T extends string>({
 }) {
 	const { c, s, r } = useThemeTokens();
 	return (
-		<View style={[layout.row, { flexWrap: 'wrap', gap: 8, marginBottom: s.md }]}>
+		<View style={[layout.row, { flexWrap: 'wrap', gap: s.sm, marginBottom: s.md }]}>
 			{options.map((opt) => (
 				<TouchableOpacity
 					key={opt}
 					onPress={() => onChange(opt)}
 					style={{
-						paddingVertical: 8,
-						paddingHorizontal: 12,
+						paddingVertical: s.sm,
+						paddingHorizontal: s.md,
 						backgroundColor: value === opt ? c.primary : c.surfaceVariant,
 						borderRadius: r.md,
 					}}
@@ -185,11 +185,15 @@ function GSTPreviewBanner({ sellingPrice, gstRate }: { sellingPrice: string; gst
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function AddItemScreen() {
-	const { c, s, r } = useThemeTokens();
+	const { c, s, r, typo } = useThemeTokens();
 	const { t } = useLocale();
 	const router = useRouter();
 	const { id } = useLocalSearchParams<{ id?: UUID }>();
 	const isEditing = !!id;
+	const fieldLabelSpacing = s.xs + s.xxs;
+	const footerPaddingBottom = s['2xl'];
+	const formPaddingBottom = footerPaddingBottom + s.sm;
+	const compactControlPadding = s.sm + s.xxs;
 
 	const { createItem, updateItem } = useInventoryStore(
 		useShallow((st) => ({ createItem: st.createItem, updateItem: st.updateItem })),
@@ -393,7 +397,7 @@ export default function AddItemScreen() {
 					title={isEditing ? t('inventory.editItem') : t('inventory.addItem')}
 				/>
 			}
-			contentContainerStyle={{ padding: s.lg, paddingBottom: 40 }}
+			contentContainerStyle={{ padding: s.lg, paddingBottom: formPaddingBottom }}
 			scrollViewProps={{
 				keyboardDismissMode: 'on-drag',
 				keyboardShouldPersistTaps: 'handled',
@@ -406,7 +410,7 @@ export default function AddItemScreen() {
 							backgroundColor: c.surface,
 							borderTopColor: c.border,
 							padding: s.md,
-							paddingBottom: 32,
+							paddingBottom: footerPaddingBottom,
 						},
 					]}
 				>
@@ -439,7 +443,7 @@ export default function AddItemScreen() {
 			/>
 
 			{/* Item Code with Auto-generate */}
-			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 4 }}>
+			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: s.xs }}>
 				Item Code / SKU
 			</ThemedText>
 			<View style={[layout.row, { gap: s.sm, marginBottom: s.md }]}>
@@ -462,6 +466,7 @@ export default function AddItemScreen() {
 										backgroundColor: c.surface,
 										color: c.onSurface,
 										borderRadius: r.md,
+										fontSize: typo.sizes.md,
 										paddingHorizontal: s.md,
 										paddingVertical: s.sm,
 									},
@@ -478,18 +483,23 @@ export default function AddItemScreen() {
 							borderColor: c.primary,
 							borderRadius: r.md,
 							paddingHorizontal: s.sm,
+							paddingVertical: s.sm,
 						},
 					]}
 				>
 					<RefreshCw size={14} color={c.primary} />
-					<ThemedText variant="caption" color={c.primary} style={{ marginLeft: 4 }}>
+					<ThemedText variant="caption" color={c.primary} style={{ marginLeft: s.xs }}>
 						Auto
 					</ThemedText>
 				</TouchableOpacity>
 			</View>
 
 			{/* Category chips */}
-			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
+			<ThemedText
+				variant="label"
+				color={c.onSurfaceVariant}
+				style={{ marginBottom: fieldLabelSpacing }}
+			>
 				{t('inventory.category')} *
 			</ThemedText>
 			<Controller
@@ -598,7 +608,11 @@ export default function AddItemScreen() {
 			{/* ── Section 3: Tax ──────────────────────────────────── */}
 			<SectionHeader label="Tax" />
 
-			<ThemedText variant="label" color={c.onSurfaceVariant} style={{ marginBottom: 6 }}>
+			<ThemedText
+				variant="label"
+				color={c.onSurfaceVariant}
+				style={{ marginBottom: fieldLabelSpacing }}
+			>
 				GST Rate *
 			</ThemedText>
 			<Controller
@@ -648,7 +662,14 @@ export default function AddItemScreen() {
 			<View
 				style={[
 					styles.toggleRow,
-					{ borderColor: c.border, borderRadius: r.md, marginBottom: s.md },
+					{
+						borderColor: c.border,
+						borderRadius: r.md,
+						paddingHorizontal: s.md,
+						paddingVertical: compactControlPadding,
+						gap: s.md,
+						marginBottom: s.md,
+					},
 				]}
 			>
 				<View style={{ flex: 1 }}>
@@ -678,7 +699,7 @@ export default function AddItemScreen() {
 					<ThemedText
 						variant="label"
 						color={c.onSurfaceVariant}
-						style={{ marginBottom: 6 }}
+						style={{ marginBottom: fieldLabelSpacing }}
 					>
 						Primary Unit
 					</ThemedText>
@@ -741,7 +762,14 @@ export default function AddItemScreen() {
 					<View
 						style={[
 							styles.toggleRow,
-							{ borderColor: c.border, borderRadius: r.md, marginBottom: s.md },
+							{
+								borderColor: c.border,
+								borderRadius: r.md,
+								paddingHorizontal: s.md,
+								paddingVertical: compactControlPadding,
+								gap: s.md,
+								marginBottom: s.md,
+							},
 						]}
 					>
 						<View style={{ flex: 1 }}>
@@ -883,21 +911,15 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		gap: 12,
 	},
 	codeInput: {
 		height: 44,
 		borderWidth: 1,
-		fontSize: 14,
 	},
 	autoGenBtn: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		paddingVertical: 8,
-		paddingHorizontal: 10,
 		height: 44,
 	},
 });
