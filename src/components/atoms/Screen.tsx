@@ -18,6 +18,9 @@ export interface ScreenProps {
 	withKeyboard?: boolean;
 	style?: StyleProp<ViewStyle>;
 	contentContainerStyle?: StyleProp<ViewStyle>;
+	header?: React.ReactNode;
+	footer?: React.ReactNode;
+	overlay?: React.ReactNode;
 	safeAreaEdges?: ('top' | 'bottom' | 'left' | 'right')[];
 	scrollViewProps?: ScrollViewProps;
 	backgroundColor?: string;
@@ -30,6 +33,9 @@ export const Screen: React.FC<ScreenProps> = ({
 	withKeyboard = true,
 	style,
 	contentContainerStyle,
+	header,
+	footer,
+	overlay,
 	safeAreaEdges = ['top'],
 	scrollViewProps,
 	backgroundColor,
@@ -39,28 +45,45 @@ export const Screen: React.FC<ScreenProps> = ({
 	const insets = useSafeAreaInsets();
 
 	const bg = backgroundColor || theme.colors.background;
+	const topInset = safeAreaEdges.includes('top') ? insets.top : 0;
+	const bottomInset = safeAreaEdges.includes('bottom') ? insets.bottom : 0;
+	const { style: scrollStyle, ...restScrollViewProps } = scrollViewProps ?? {};
 
 	const containerStyle = [
 		styles.container,
 		{
 			backgroundColor: bg,
 			// Default to 0 if edge is not in safeAreaEdges, but most screens should include 'top'
-			paddingTop: safeAreaEdges.includes('top') ? insets.top : 0,
-			paddingBottom: safeAreaEdges.includes('bottom') ? insets.bottom : 0,
+			paddingTop: topInset,
+			paddingBottom: footer ? 0 : bottomInset,
 		},
 		style,
 	];
 
 	const inner = scrollable ? (
 		<ScrollView
+			style={[styles.flex, scrollStyle]}
 			showsVerticalScrollIndicator={false}
-			{...scrollViewProps}
+			{...restScrollViewProps}
 			contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
 		>
 			{children}
 		</ScrollView>
 	) : (
 		<View style={[styles.flex, contentContainerStyle]}>{children}</View>
+	);
+
+	const content = (
+		<>
+			{header}
+			{inner}
+			{footer ? (
+				<View style={bottomInset ? { paddingBottom: bottomInset } : undefined}>
+					{footer}
+				</View>
+			) : null}
+			{overlay}
+		</>
 	);
 
 	if (withKeyboard) {
@@ -70,14 +93,14 @@ export const Screen: React.FC<ScreenProps> = ({
 				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
 				accessibilityLabel={accessibilityLabel}
 			>
-				{inner}
+				{content}
 			</KeyboardAvoidingView>
 		);
 	}
 
 	return (
 		<View style={containerStyle} accessibilityLabel={accessibilityLabel}>
-			{inner}
+			{content}
 		</View>
 	);
 };

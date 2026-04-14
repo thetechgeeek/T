@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
+import { View, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { OPACITY_TINT_LIGHT, Z_INDEX } from '@/theme/uiMetrics';
 
@@ -32,7 +32,6 @@ import type { UUID } from '@/src/types/common';
 import type { ThemeColors } from '@/src/theme';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
-const PURCHASE_DETAIL_SCROLL_BOTTOM_PADDING = 100;
 const PURCHASE_KEBAB_TOP_OFFSET = 56;
 const PURCHASE_KEBAB_ELEVATION = 8;
 
@@ -192,110 +191,328 @@ export default function PurchaseBillDetailScreen() {
 	const supplierPhone = purchase.suppliers?.phone;
 
 	return (
-		<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader
-				title={purchase.purchase_number ?? 'Purchase Bill'}
-				rightElement={
-					<View style={styles.headerActions}>
-						<Pressable
-							onPress={handleShare}
-							style={{ padding: SPACING_PX.sm }}
-							accessibilityLabel="Share purchase"
-						>
-							<Share2 size={20} color={c.onSurfaceVariant} />
-						</Pressable>
-						<Pressable
-							onPress={() => setShowKebab((v) => !v)}
-							style={{ padding: SPACING_PX.sm }}
-							accessibilityLabel="More options"
-						>
-							<MoreVertical size={20} color={c.onSurfaceVariant} />
-						</Pressable>
-					</View>
-				}
-			/>
-
-			{/* Kebab menu */}
-			{showKebab && (
-				<View
-					style={[
-						styles.kebabMenu,
-						{
-							backgroundColor: c.card ?? c.surface,
-							borderColor: c.border,
-							borderRadius: r.md,
-							right: s.md,
-							top: 0,
-							...(theme.shadows.lg as object),
-						},
-					]}
-				>
-					<Pressable
-						style={[styles.kebabItem, { borderBottomColor: c.border }]}
-						onPress={() => {
-							setShowKebab(false);
-							Alert.alert('Edit', 'Edit functionality coming soon.');
-						}}
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={
+				<ScreenHeader
+					title={purchase.purchase_number ?? 'Purchase Bill'}
+					rightElement={
+						<View style={styles.headerActions}>
+							<Pressable
+								onPress={handleShare}
+								style={{ padding: SPACING_PX.sm }}
+								accessibilityLabel="Share purchase"
+							>
+								<Share2 size={20} color={c.onSurfaceVariant} />
+							</Pressable>
+							<Pressable
+								onPress={() => setShowKebab((v) => !v)}
+								style={{ padding: SPACING_PX.sm }}
+								accessibilityLabel="More options"
+							>
+								<MoreVertical size={20} color={c.onSurfaceVariant} />
+							</Pressable>
+						</View>
+					}
+				/>
+			}
+			contentContainerStyle={{ padding: s.md }}
+			footer={
+				balanceDue > 0 ? (
+					<View
+						style={[
+							styles.actionBar,
+							{
+								backgroundColor: c.background,
+								borderTopColor: c.border,
+								paddingHorizontal: s.md,
+								paddingTop: s.sm,
+								paddingBottom: Platform.OS === 'ios' ? s.lg : s.md,
+							},
+						]}
 					>
-						<Pencil size={16} color={c.onSurface} />
-						<ThemedText style={{ marginLeft: SPACING_PX.sm }}>Edit</ThemedText>
-					</Pressable>
-					<Pressable style={styles.kebabItem} onPress={handleDelete}>
-						<Trash2 size={16} color={c.error} />
-						<ThemedText style={{ marginLeft: SPACING_PX.sm }} color={c.error}>
-							Delete
-						</ThemedText>
-					</Pressable>
-				</View>
-			)}
-
-			{/* Tap outside to close kebab */}
-			{showKebab && (
-				<Pressable style={StyleSheet.absoluteFill} onPress={() => setShowKebab(false)} />
-			)}
-
-			<ScrollView
-				contentContainerStyle={[
-					styles.scroll,
-					{ padding: s.md, paddingBottom: PURCHASE_DETAIL_SCROLL_BOTTOM_PADDING },
+						<Button
+							title="Record Payment"
+							onPress={handleRecordPayment}
+							accessibilityLabel="record-payment"
+						/>
+					</View>
+				) : null
+			}
+			overlay={
+				showKebab ? (
+					<>
+						<Pressable
+							style={StyleSheet.absoluteFill}
+							onPress={() => setShowKebab(false)}
+						/>
+						<View
+							style={[
+								styles.kebabMenu,
+								{
+									backgroundColor: c.card ?? c.surface,
+									borderColor: c.border,
+									borderRadius: r.md,
+									right: s.md,
+									...(theme.shadows.lg as object),
+								},
+							]}
+						>
+							<Pressable
+								style={[styles.kebabItem, { borderBottomColor: c.border }]}
+								onPress={() => {
+									setShowKebab(false);
+									Alert.alert('Edit', 'Edit functionality coming soon.');
+								}}
+							>
+								<Pencil size={16} color={c.onSurface} />
+								<ThemedText style={{ marginLeft: SPACING_PX.sm }}>Edit</ThemedText>
+							</Pressable>
+							<Pressable style={styles.kebabItem} onPress={handleDelete}>
+								<Trash2 size={16} color={c.error} />
+								<ThemedText style={{ marginLeft: SPACING_PX.sm }} color={c.error}>
+									Delete
+								</ThemedText>
+							</Pressable>
+						</View>
+					</>
+				) : null
+			}
+		>
+			{/* Status Banner */}
+			<View
+				style={[
+					styles.statusBanner,
+					{
+						backgroundColor: statusBannerColor(purchase.payment_status, c),
+						borderRadius: r.md,
+						marginBottom: s.md,
+						padding: s.md,
+					},
 				]}
 			>
-				{/* Status Banner */}
+				<View style={styles.statusRow}>
+					<Badge
+						label={statusLabel(purchase.payment_status)}
+						variant={statusVariant(purchase.payment_status)}
+					/>
+					<ThemedText variant="h2" color={statusTextColor(purchase.payment_status, c)}>
+						{formatCurrency(purchase.grand_total ?? 0)}
+					</ThemedText>
+				</View>
+				{balanceDue > 0 && (
+					<ThemedText
+						variant="caption"
+						color={c.error}
+						style={{ marginTop: SPACING_PX.xs }}
+					>
+						Balance Due: {formatCurrency(balanceDue)}
+					</ThemedText>
+				)}
+			</View>
+
+			{/* Purchase Header */}
+			<View
+				style={[
+					styles.section,
+					{
+						backgroundColor: c.card ?? c.surface,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
 				<View
 					style={[
-						styles.statusBanner,
+						styles.sectionHeader,
 						{
-							backgroundColor: statusBannerColor(purchase.payment_status, c),
-							borderRadius: r.md,
-							marginBottom: s.md,
-							padding: s.md,
+							borderBottomColor: c.border,
+							paddingHorizontal: s.md,
+							paddingVertical: s.sm,
 						},
 					]}
 				>
-					<View style={styles.statusRow}>
-						<Badge
-							label={statusLabel(purchase.payment_status)}
-							variant={statusVariant(purchase.payment_status)}
-						/>
-						<ThemedText
-							variant="h2"
-							color={statusTextColor(purchase.payment_status, c)}
-						>
-							{formatCurrency(purchase.grand_total ?? 0)}
-						</ThemedText>
+					<ThemedText variant="label" color={c.onSurfaceVariant}>
+						Purchase Info
+					</ThemedText>
+				</View>
+				<View style={{ padding: s.md, gap: s.sm }}>
+					{!!purchase.purchase_number && (
+						<View style={styles.detailRow}>
+							<ThemedText color={c.onSurfaceVariant}>Bill No.</ThemedText>
+							<ThemedText variant="bodyBold">{purchase.purchase_number}</ThemedText>
+						</View>
+					)}
+					<Divider />
+					<View style={styles.detailRow}>
+						<View style={styles.iconRow}>
+							<Calendar size={14} color={c.onSurfaceVariant} />
+							<ThemedText
+								color={c.onSurfaceVariant}
+								style={{ marginLeft: SPACING_PX.xs }}
+							>
+								Date
+							</ThemedText>
+						</View>
+						<ThemedText>{formatDate(purchase.purchase_date)}</ThemedText>
 					</View>
-					{balanceDue > 0 && (
-						<ThemedText
-							variant="caption"
-							color={c.error}
-							style={{ marginTop: SPACING_PX.xs }}
-						>
-							Balance Due: {formatCurrency(balanceDue)}
-						</ThemedText>
+					<Divider />
+					<View style={styles.detailRow}>
+						<View style={styles.iconRow}>
+							<User size={14} color={c.onSurfaceVariant} />
+							<ThemedText
+								color={c.onSurfaceVariant}
+								style={{ marginLeft: SPACING_PX.xs }}
+							>
+								Supplier
+							</ThemedText>
+						</View>
+						<ThemedText variant="bodyBold">{supplierName}</ThemedText>
+					</View>
+					{!!supplierPhone && (
+						<>
+							<Divider />
+							<View style={styles.detailRow}>
+								<View style={styles.iconRow}>
+									<Phone size={14} color={c.onSurfaceVariant} />
+									<ThemedText
+										color={c.onSurfaceVariant}
+										style={{ marginLeft: SPACING_PX.xs }}
+									>
+										Phone
+									</ThemedText>
+								</View>
+								<ThemedText>{supplierPhone}</ThemedText>
+							</View>
+						</>
+					)}
+					{!!purchase.notes && (
+						<>
+							<Divider />
+							<View style={styles.detailRow}>
+								<ThemedText color={c.onSurfaceVariant}>Notes</ThemedText>
+								<ThemedText
+									style={{
+										flex: 1,
+										textAlign: 'right',
+										marginLeft: SPACING_PX.sm,
+									}}
+								>
+									{purchase.notes}
+								</ThemedText>
+							</View>
+						</>
 					)}
 				</View>
+			</View>
 
-				{/* Purchase Header */}
+			{/* Line Items */}
+			{lineItems.length > 0 && (
+				<View
+					style={[
+						styles.section,
+						{
+							backgroundColor: c.card ?? c.surface,
+							borderRadius: r.md,
+							marginBottom: s.md,
+							...(theme.shadows.sm as object),
+						},
+					]}
+				>
+					<View
+						style={[
+							styles.sectionHeader,
+							{
+								borderBottomColor: c.border,
+								paddingHorizontal: s.md,
+								paddingVertical: s.sm,
+							},
+						]}
+					>
+						<ThemedText variant="label" color={c.onSurfaceVariant} style={{ flex: 2 }}>
+							Item
+						</ThemedText>
+						<ThemedText
+							variant="label"
+							color={c.onSurfaceVariant}
+							style={styles.colCenter}
+						>
+							Qty
+						</ThemedText>
+						<ThemedText
+							variant="label"
+							color={c.onSurfaceVariant}
+							style={styles.colCenter}
+						>
+							Rate
+						</ThemedText>
+						<ThemedText
+							variant="label"
+							color={c.onSurfaceVariant}
+							style={styles.colRight}
+						>
+							Amount
+						</ThemedText>
+					</View>
+					{lineItems.map((li, idx) => (
+						<View
+							key={li.id}
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								paddingHorizontal: s.md,
+								paddingVertical: s.sm,
+								borderBottomWidth:
+									idx === lineItems.length - 1 ? 0 : StyleSheet.hairlineWidth,
+								borderBottomColor: c.border,
+							}}
+						>
+							<ThemedText style={{ flex: 2 }}>{li.design_name}</ThemedText>
+							<ThemedText style={styles.colCenter}>{li.quantity}</ThemedText>
+							<ThemedText style={styles.colCenter}>
+								{formatCurrency(li.rate_per_unit)}
+							</ThemedText>
+							<ThemedText weight="semibold" style={styles.colRight}>
+								{formatCurrency(li.amount)}
+							</ThemedText>
+						</View>
+					))}
+
+					{/* Totals */}
+					<View
+						style={[
+							styles.totalsBlock,
+							{
+								borderTopColor: c.border,
+								padding: s.md,
+								gap: s.sm,
+							},
+						]}
+					>
+						<View style={styles.detailRow}>
+							<ThemedText color={c.onSurfaceVariant}>Subtotal</ThemedText>
+							<ThemedText>{formatCurrency(purchase.subtotal ?? 0)}</ThemedText>
+						</View>
+						<View style={styles.detailRow}>
+							<ThemedText color={c.onSurfaceVariant}>GST</ThemedText>
+							<ThemedText>{formatCurrency(purchase.tax_total ?? 0)}</ThemedText>
+						</View>
+						<Divider />
+						<View style={styles.detailRow}>
+							<ThemedText weight="bold">Grand Total</ThemedText>
+							<ThemedText variant="h3" color={c.primary}>
+								{formatCurrency(purchase.grand_total ?? 0)}
+							</ThemedText>
+						</View>
+					</View>
+				</View>
+			)}
+
+			{/* No line items — still show totals */}
+			{lineItems.length === 0 && (
 				<View
 					style={[
 						styles.section,
@@ -318,352 +535,120 @@ export default function PurchaseBillDetailScreen() {
 						]}
 					>
 						<ThemedText variant="label" color={c.onSurfaceVariant}>
-							Purchase Info
+							Summary
 						</ThemedText>
 					</View>
 					<View style={{ padding: s.md, gap: s.sm }}>
-						{!!purchase.purchase_number && (
-							<View style={styles.detailRow}>
-								<ThemedText color={c.onSurfaceVariant}>Bill No.</ThemedText>
-								<ThemedText variant="bodyBold">
-									{purchase.purchase_number}
-								</ThemedText>
-							</View>
-						)}
-						<Divider />
 						<View style={styles.detailRow}>
-							<View style={styles.iconRow}>
-								<Calendar size={14} color={c.onSurfaceVariant} />
-								<ThemedText
-									color={c.onSurfaceVariant}
-									style={{ marginLeft: SPACING_PX.xs }}
-								>
-									Date
-								</ThemedText>
-							</View>
-							<ThemedText>{formatDate(purchase.purchase_date)}</ThemedText>
+							<ThemedText color={c.onSurfaceVariant}>Subtotal</ThemedText>
+							<ThemedText>{formatCurrency(purchase.subtotal ?? 0)}</ThemedText>
+						</View>
+						<View style={styles.detailRow}>
+							<ThemedText color={c.onSurfaceVariant}>GST</ThemedText>
+							<ThemedText>{formatCurrency(purchase.tax_total ?? 0)}</ThemedText>
 						</View>
 						<Divider />
 						<View style={styles.detailRow}>
-							<View style={styles.iconRow}>
-								<User size={14} color={c.onSurfaceVariant} />
-								<ThemedText
-									color={c.onSurfaceVariant}
-									style={{ marginLeft: SPACING_PX.xs }}
-								>
-									Supplier
-								</ThemedText>
-							</View>
-							<ThemedText variant="bodyBold">{supplierName}</ThemedText>
-						</View>
-						{!!supplierPhone && (
-							<>
-								<Divider />
-								<View style={styles.detailRow}>
-									<View style={styles.iconRow}>
-										<Phone size={14} color={c.onSurfaceVariant} />
-										<ThemedText
-											color={c.onSurfaceVariant}
-											style={{ marginLeft: SPACING_PX.xs }}
-										>
-											Phone
-										</ThemedText>
-									</View>
-									<ThemedText>{supplierPhone}</ThemedText>
-								</View>
-							</>
-						)}
-						{!!purchase.notes && (
-							<>
-								<Divider />
-								<View style={styles.detailRow}>
-									<ThemedText color={c.onSurfaceVariant}>Notes</ThemedText>
-									<ThemedText
-										style={{
-											flex: 1,
-											textAlign: 'right',
-											marginLeft: SPACING_PX.sm,
-										}}
-									>
-										{purchase.notes}
-									</ThemedText>
-								</View>
-							</>
-						)}
-					</View>
-				</View>
-
-				{/* Line Items */}
-				{lineItems.length > 0 && (
-					<View
-						style={[
-							styles.section,
-							{
-								backgroundColor: c.card ?? c.surface,
-								borderRadius: r.md,
-								marginBottom: s.md,
-								...(theme.shadows.sm as object),
-							},
-						]}
-					>
-						<View
-							style={[
-								styles.sectionHeader,
-								{
-									borderBottomColor: c.border,
-									paddingHorizontal: s.md,
-									paddingVertical: s.sm,
-								},
-							]}
-						>
-							<ThemedText
-								variant="label"
-								color={c.onSurfaceVariant}
-								style={{ flex: 2 }}
-							>
-								Item
-							</ThemedText>
-							<ThemedText
-								variant="label"
-								color={c.onSurfaceVariant}
-								style={styles.colCenter}
-							>
-								Qty
-							</ThemedText>
-							<ThemedText
-								variant="label"
-								color={c.onSurfaceVariant}
-								style={styles.colCenter}
-							>
-								Rate
-							</ThemedText>
-							<ThemedText
-								variant="label"
-								color={c.onSurfaceVariant}
-								style={styles.colRight}
-							>
-								Amount
+							<ThemedText weight="bold">Grand Total</ThemedText>
+							<ThemedText variant="h3" color={c.primary}>
+								{formatCurrency(purchase.grand_total ?? 0)}
 							</ThemedText>
 						</View>
-						{lineItems.map((li, idx) => (
-							<View
-								key={li.id}
-								style={{
-									flexDirection: 'row',
-									alignItems: 'center',
-									paddingHorizontal: s.md,
-									paddingVertical: s.sm,
-									borderBottomWidth:
-										idx === lineItems.length - 1 ? 0 : StyleSheet.hairlineWidth,
-									borderBottomColor: c.border,
-								}}
-							>
-								<ThemedText style={{ flex: 2 }}>{li.design_name}</ThemedText>
-								<ThemedText style={styles.colCenter}>{li.quantity}</ThemedText>
-								<ThemedText style={styles.colCenter}>
-									{formatCurrency(li.rate_per_unit)}
-								</ThemedText>
-								<ThemedText weight="semibold" style={styles.colRight}>
-									{formatCurrency(li.amount)}
-								</ThemedText>
-							</View>
-						))}
-
-						{/* Totals */}
-						<View
-							style={[
-								styles.totalsBlock,
-								{
-									borderTopColor: c.border,
-									padding: s.md,
-									gap: s.sm,
-								},
-							]}
-						>
-							<View style={styles.detailRow}>
-								<ThemedText color={c.onSurfaceVariant}>Subtotal</ThemedText>
-								<ThemedText>{formatCurrency(purchase.subtotal ?? 0)}</ThemedText>
-							</View>
-							<View style={styles.detailRow}>
-								<ThemedText color={c.onSurfaceVariant}>GST</ThemedText>
-								<ThemedText>{formatCurrency(purchase.tax_total ?? 0)}</ThemedText>
-							</View>
-							<Divider />
-							<View style={styles.detailRow}>
-								<ThemedText weight="bold">Grand Total</ThemedText>
-								<ThemedText variant="h3" color={c.primary}>
-									{formatCurrency(purchase.grand_total ?? 0)}
-								</ThemedText>
-							</View>
-						</View>
 					</View>
-				)}
-
-				{/* No line items — still show totals */}
-				{lineItems.length === 0 && (
-					<View
-						style={[
-							styles.section,
-							{
-								backgroundColor: c.card ?? c.surface,
-								borderRadius: r.md,
-								marginBottom: s.md,
-								...(theme.shadows.sm as object),
-							},
-						]}
-					>
-						<View
-							style={[
-								styles.sectionHeader,
-								{
-									borderBottomColor: c.border,
-									paddingHorizontal: s.md,
-									paddingVertical: s.sm,
-								},
-							]}
-						>
-							<ThemedText variant="label" color={c.onSurfaceVariant}>
-								Summary
-							</ThemedText>
-						</View>
-						<View style={{ padding: s.md, gap: s.sm }}>
-							<View style={styles.detailRow}>
-								<ThemedText color={c.onSurfaceVariant}>Subtotal</ThemedText>
-								<ThemedText>{formatCurrency(purchase.subtotal ?? 0)}</ThemedText>
-							</View>
-							<View style={styles.detailRow}>
-								<ThemedText color={c.onSurfaceVariant}>GST</ThemedText>
-								<ThemedText>{formatCurrency(purchase.tax_total ?? 0)}</ThemedText>
-							</View>
-							<Divider />
-							<View style={styles.detailRow}>
-								<ThemedText weight="bold">Grand Total</ThemedText>
-								<ThemedText variant="h3" color={c.primary}>
-									{formatCurrency(purchase.grand_total ?? 0)}
-								</ThemedText>
-							</View>
-						</View>
-					</View>
-				)}
-
-				{/* Payment History */}
-				<View
-					style={[
-						styles.section,
-						{
-							backgroundColor: c.card ?? c.surface,
-							borderRadius: r.md,
-							marginBottom: s.md,
-							...(theme.shadows.sm as object),
-						},
-					]}
-				>
-					<View
-						style={[
-							styles.sectionHeader,
-							{
-								borderBottomColor: c.border,
-								paddingHorizontal: s.md,
-								paddingVertical: s.sm,
-							},
-						]}
-					>
-						<ThemedText variant="label" color={c.onSurfaceVariant} style={{ flex: 1 }}>
-							Payment History
-						</ThemedText>
-						{balanceDue > 0 && (
-							<Pressable onPress={handleRecordPayment} style={styles.addPayBtn}>
-								<Plus size={14} color={c.primary} />
-								<ThemedText
-									variant="caption"
-									color={c.primary}
-									style={{ marginLeft: SPACING_PX.xs }}
-								>
-									Record
-								</ThemedText>
-							</Pressable>
-						)}
-					</View>
-					<View style={{ padding: s.md, gap: s.sm }}>
-						{payments.length === 0 ? (
-							<ThemedText color={c.onSurfaceVariant} style={styles.centered}>
-								No payments recorded yet.
-							</ThemedText>
-						) : (
-							payments.map((p, idx) => (
-								<View key={p.id}>
-									<View style={styles.detailRow}>
-										<View>
-											<ThemedText variant="bodyBold">
-												{formatCurrency(p.amount)}
-											</ThemedText>
-											<ThemedText
-												variant="caption"
-												color={c.onSurfaceVariant}
-											>
-												{formatDate(p.payment_date)} ·{' '}
-												{p.payment_mode.replace('_', ' ')}
-											</ThemedText>
-										</View>
-										<Badge label="PAID" variant="success" />
-									</View>
-									{idx < payments.length - 1 && (
-										<Divider style={{ marginTop: s.sm }} />
-									)}
-								</View>
-							))
-						)}
-
-						{payments.length > 0 && (
-							<>
-								<Divider />
-								<View style={styles.detailRow}>
-									<ThemedText color={c.onSurfaceVariant}>Total Paid</ThemedText>
-									<ThemedText color={c.success} weight="semibold">
-										{formatCurrency(purchase.amount_paid ?? 0)}
-									</ThemedText>
-								</View>
-								{balanceDue > 0 && (
-									<View style={styles.detailRow}>
-										<ThemedText color={c.error}>Balance Due</ThemedText>
-										<ThemedText color={c.error} weight="semibold">
-											{formatCurrency(balanceDue)}
-										</ThemedText>
-									</View>
-								)}
-							</>
-						)}
-					</View>
-				</View>
-			</ScrollView>
-
-			{/* Sticky bottom bar */}
-			{balanceDue > 0 && (
-				<View
-					style={[
-						styles.actionBar,
-						{
-							backgroundColor: c.background,
-							borderTopColor: c.border,
-							paddingHorizontal: s.md,
-							paddingTop: s.sm,
-							paddingBottom: Platform.OS === 'ios' ? s.lg : s.md,
-						},
-					]}
-				>
-					<Button
-						title="Record Payment"
-						onPress={handleRecordPayment}
-						accessibilityLabel="record-payment"
-					/>
 				</View>
 			)}
+
+			{/* Payment History */}
+			<View
+				style={[
+					styles.section,
+					{
+						backgroundColor: c.card ?? c.surface,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
+				<View
+					style={[
+						styles.sectionHeader,
+						{
+							borderBottomColor: c.border,
+							paddingHorizontal: s.md,
+							paddingVertical: s.sm,
+						},
+					]}
+				>
+					<ThemedText variant="label" color={c.onSurfaceVariant} style={{ flex: 1 }}>
+						Payment History
+					</ThemedText>
+					{balanceDue > 0 && (
+						<Pressable onPress={handleRecordPayment} style={styles.addPayBtn}>
+							<Plus size={14} color={c.primary} />
+							<ThemedText
+								variant="caption"
+								color={c.primary}
+								style={{ marginLeft: SPACING_PX.xs }}
+							>
+								Record
+							</ThemedText>
+						</Pressable>
+					)}
+				</View>
+				<View style={{ padding: s.md, gap: s.sm }}>
+					{payments.length === 0 ? (
+						<ThemedText color={c.onSurfaceVariant} style={styles.centered}>
+							No payments recorded yet.
+						</ThemedText>
+					) : (
+						payments.map((p, idx) => (
+							<View key={p.id}>
+								<View style={styles.detailRow}>
+									<View>
+										<ThemedText variant="bodyBold">
+											{formatCurrency(p.amount)}
+										</ThemedText>
+										<ThemedText variant="caption" color={c.onSurfaceVariant}>
+											{formatDate(p.payment_date)} ·{' '}
+											{p.payment_mode.replace('_', ' ')}
+										</ThemedText>
+									</View>
+									<Badge label="PAID" variant="success" />
+								</View>
+								{idx < payments.length - 1 && (
+									<Divider style={{ marginTop: s.sm }} />
+								)}
+							</View>
+						))
+					)}
+
+					{payments.length > 0 && (
+						<>
+							<Divider />
+							<View style={styles.detailRow}>
+								<ThemedText color={c.onSurfaceVariant}>Total Paid</ThemedText>
+								<ThemedText color={c.success} weight="semibold">
+									{formatCurrency(purchase.amount_paid ?? 0)}
+								</ThemedText>
+							</View>
+							{balanceDue > 0 && (
+								<View style={styles.detailRow}>
+									<ThemedText color={c.error}>Balance Due</ThemedText>
+									<ThemedText color={c.error} weight="semibold">
+										{formatCurrency(balanceDue)}
+									</ThemedText>
+								</View>
+							)}
+						</>
+					)}
+				</View>
+			</View>
 		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	scroll: {},
 	center: {
 		flex: 1,
 		justifyContent: 'center',
@@ -702,10 +687,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	actionBar: {
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
 		borderTopWidth: StyleSheet.hairlineWidth,
 	},
 	headerActions: {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 const ID_TAIL_DIGITS = 6;
-import { View, ScrollView, StyleSheet, Alert, Pressable, Platform } from 'react-native';
+import { View, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import {
@@ -29,8 +29,6 @@ import type { UUID } from '@/src/types/common';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
-
-const PAYMENT_DETAIL_SCROLL_BOTTOM_PADDING = 100;
 
 type PaymentWithParty = Payment & {
 	customer?: { name: string };
@@ -164,228 +162,226 @@ export default function PaymentDetailScreen() {
 	const isAdvance = !hasLinkedInvoice && !hasLinkedPurchase;
 
 	return (
-		<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader
-				title={receiptNumber}
-				rightElement={
-					<Pressable
-						onPress={handleDelete}
-						style={{ padding: SPACING_PX.sm }}
-						accessibilityLabel="Delete payment"
-					>
-						<Trash2 size={20} color={c.error} />
-					</Pressable>
-				}
-			/>
-
-			<ScrollView
-				contentContainerStyle={[
-					styles.scroll,
-					{ padding: s.md, paddingBottom: PAYMENT_DETAIL_SCROLL_BOTTOM_PADDING },
-				]}
-			>
-				{/* Direction badge */}
-				<View style={styles.directionRow}>
-					{isReceived ? (
-						<ArrowDownLeft size={20} color={c.success} />
-					) : (
-						<ArrowUpRight size={20} color={c.error} />
-					)}
-					<ThemedText
-						variant="captionBold"
-						color={amountColor}
-						style={{ marginLeft: SPACING_PX.xs }}
-					>
-						{directionLabel}
-					</ThemedText>
-				</View>
-
-				{/* Amount Hero */}
+		<Screen
+			safeAreaEdges={['bottom']}
+			withKeyboard={false}
+			scrollable
+			header={
+				<ScreenHeader
+					title={receiptNumber}
+					rightElement={
+						<Pressable
+							onPress={handleDelete}
+							style={{ padding: SPACING_PX.sm }}
+							accessibilityLabel="Delete payment"
+						>
+							<Trash2 size={20} color={c.error} />
+						</Pressable>
+					}
+				/>
+			}
+			contentContainerStyle={{ padding: s.md }}
+			footer={
 				<View
 					style={[
-						styles.amountCard,
+						styles.actionBar,
 						{
-							backgroundColor: isReceived
-								? (c.successLight ?? withOpacity(c.success, OPACITY_TINT_LIGHT))
-								: (c.errorLight ?? withOpacity(c.error, OPACITY_TINT_LIGHT)),
-							borderRadius: r.lg,
-							marginBottom: s.md,
+							backgroundColor: c.background,
+							borderTopColor: c.border,
+							paddingHorizontal: s.md,
+							paddingTop: s.sm,
+							paddingBottom: Platform.OS === 'ios' ? s.lg : s.md,
 						},
 					]}
 				>
-					<ThemedText variant="display" color={amountColor} style={styles.centered}>
-						{isReceived ? '+' : '-'}
-						{formatCurrency(payment.amount)}
-					</ThemedText>
-					<ThemedText
-						variant="caption"
-						color={c.onSurfaceVariant}
-						style={[styles.centered, { marginTop: SPACING_PX.xs }]}
-					>
-						{formatDate(payment.payment_date)}
-					</ThemedText>
+					<Button
+						title="View Receipt"
+						variant="outline"
+						leftIcon={<ReceiptText size={18} color={c.primary} />}
+						onPress={handleViewReceipt}
+						style={{ flex: 1 }}
+						accessibilityLabel="view-receipt"
+					/>
 				</View>
-
-				{/* Details Card */}
-				<View
-					style={[
-						styles.section,
-						{
-							backgroundColor: c.card ?? c.surface,
-							borderRadius: r.md,
-							marginBottom: s.md,
-							...(theme.shadows.sm as object),
-						},
-					]}
+			}
+		>
+			{/* Direction badge */}
+			<View style={styles.directionRow}>
+				{isReceived ? (
+					<ArrowDownLeft size={20} color={c.success} />
+				) : (
+					<ArrowUpRight size={20} color={c.error} />
+				)}
+				<ThemedText
+					variant="captionBold"
+					color={amountColor}
+					style={{ marginLeft: SPACING_PX.xs }}
 				>
-					<View
-						style={[
-							styles.sectionHeader,
-							{
-								borderBottomColor: c.border,
-								paddingHorizontal: s.md,
-								paddingVertical: s.sm,
-							},
-						]}
-					>
-						<ThemedText variant="label" color={c.onSurfaceVariant}>
-							Details
-						</ThemedText>
-					</View>
-					<View style={{ padding: s.md, gap: s.sm }}>
-						<View style={styles.detailRow}>
-							<ThemedText color={c.onSurfaceVariant}>
-								{isReceived ? 'Received from' : 'Paid to'}
-							</ThemedText>
-							<ThemedText variant="bodyBold">{partyName}</ThemedText>
-						</View>
-						<Divider />
-						<View style={styles.detailRow}>
-							<ThemedText color={c.onSurfaceVariant}>Date</ThemedText>
-							<ThemedText>{formatDate(payment.payment_date)}</ThemedText>
-						</View>
-						<Divider />
-						<View style={styles.detailRow}>
-							<ThemedText color={c.onSurfaceVariant}>Mode</ThemedText>
-							<View style={styles.modeRow}>
-								{getModeIcon(payment.payment_mode, c.onSurfaceVariant)}
-								<ThemedText style={{ marginLeft: SPACING_PX.xs + SPACING_PX.xxs }}>
-									{formatMode(payment.payment_mode)}
-								</ThemedText>
-							</View>
-						</View>
-						{!!payment.notes && (
-							<>
-								<Divider />
-								<View style={styles.detailRow}>
-									<ThemedText color={c.onSurfaceVariant}>Reference</ThemedText>
-									<ThemedText>{payment.notes}</ThemedText>
-								</View>
-							</>
-						)}
-					</View>
-				</View>
+					{directionLabel}
+				</ThemedText>
+			</View>
 
-				{/* Allocation Section */}
-				<View
-					style={[
-						styles.section,
-						{
-							backgroundColor: c.card ?? c.surface,
-							borderRadius: r.md,
-							marginBottom: s.md,
-							...(theme.shadows.sm as object),
-						},
-					]}
-				>
-					<View
-						style={[
-							styles.sectionHeader,
-							{
-								borderBottomColor: c.border,
-								paddingHorizontal: s.md,
-								paddingVertical: s.sm,
-							},
-						]}
-					>
-						<ThemedText variant="label" color={c.onSurfaceVariant}>
-							Allocated to
-						</ThemedText>
-					</View>
-					<View style={{ padding: s.md }}>
-						{isAdvance ? (
-							<View style={styles.advanceRow}>
-								<Badge label="ADVANCE" variant="warning" />
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={{ marginTop: SPACING_PX.xs + SPACING_PX.xxs }}
-								>
-									This payment is not linked to any invoice. It will be applied as
-									advance credit.
-								</ThemedText>
-							</View>
-						) : hasLinkedInvoice ? (
-							<View style={styles.detailRow}>
-								<ThemedText color={c.onSurfaceVariant}>Invoice</ThemedText>
-								<Pressable
-									onPress={() =>
-										router.push(`/(app)/invoices/${payment.invoice_id}` as Href)
-									}
-								>
-									<ThemedText color={c.primary} variant="bodyBold">
-										View Invoice →
-									</ThemedText>
-								</Pressable>
-							</View>
-						) : hasLinkedPurchase ? (
-							<View style={styles.detailRow}>
-								<ThemedText color={c.onSurfaceVariant}>Purchase Bill</ThemedText>
-								<Pressable
-									onPress={() =>
-										router.push(
-											`/(app)/finance/purchases/${payment.purchase_id}` as Href,
-										)
-									}
-								>
-									<ThemedText color={c.primary} variant="bodyBold">
-										View Purchase →
-									</ThemedText>
-								</Pressable>
-							</View>
-						) : null}
-					</View>
-				</View>
-			</ScrollView>
-
-			{/* Sticky action bar */}
+			{/* Amount Hero */}
 			<View
 				style={[
-					styles.actionBar,
+					styles.amountCard,
 					{
-						backgroundColor: c.background,
-						borderTopColor: c.border,
-						paddingHorizontal: s.md,
-						paddingTop: s.sm,
-						paddingBottom: Platform.OS === 'ios' ? s.lg : s.md,
+						backgroundColor: isReceived
+							? (c.successLight ?? withOpacity(c.success, OPACITY_TINT_LIGHT))
+							: (c.errorLight ?? withOpacity(c.error, OPACITY_TINT_LIGHT)),
+						borderRadius: r.lg,
+						marginBottom: s.md,
 					},
 				]}
 			>
-				<Button
-					title="View Receipt"
-					variant="outline"
-					leftIcon={<ReceiptText size={18} color={c.primary} />}
-					onPress={handleViewReceipt}
-					style={{ flex: 1 }}
-					accessibilityLabel="view-receipt"
-				/>
+				<ThemedText variant="display" color={amountColor} style={styles.centered}>
+					{isReceived ? '+' : '-'}
+					{formatCurrency(payment.amount)}
+				</ThemedText>
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					style={[styles.centered, { marginTop: SPACING_PX.xs }]}
+				>
+					{formatDate(payment.payment_date)}
+				</ThemedText>
+			</View>
+
+			{/* Details Card */}
+			<View
+				style={[
+					styles.section,
+					{
+						backgroundColor: c.card ?? c.surface,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
+				<View
+					style={[
+						styles.sectionHeader,
+						{
+							borderBottomColor: c.border,
+							paddingHorizontal: s.md,
+							paddingVertical: s.sm,
+						},
+					]}
+				>
+					<ThemedText variant="label" color={c.onSurfaceVariant}>
+						Details
+					</ThemedText>
+				</View>
+				<View style={{ padding: s.md, gap: s.sm }}>
+					<View style={styles.detailRow}>
+						<ThemedText color={c.onSurfaceVariant}>
+							{isReceived ? 'Received from' : 'Paid to'}
+						</ThemedText>
+						<ThemedText variant="bodyBold">{partyName}</ThemedText>
+					</View>
+					<Divider />
+					<View style={styles.detailRow}>
+						<ThemedText color={c.onSurfaceVariant}>Date</ThemedText>
+						<ThemedText>{formatDate(payment.payment_date)}</ThemedText>
+					</View>
+					<Divider />
+					<View style={styles.detailRow}>
+						<ThemedText color={c.onSurfaceVariant}>Mode</ThemedText>
+						<View style={styles.modeRow}>
+							{getModeIcon(payment.payment_mode, c.onSurfaceVariant)}
+							<ThemedText style={{ marginLeft: SPACING_PX.xs + SPACING_PX.xxs }}>
+								{formatMode(payment.payment_mode)}
+							</ThemedText>
+						</View>
+					</View>
+					{!!payment.notes && (
+						<>
+							<Divider />
+							<View style={styles.detailRow}>
+								<ThemedText color={c.onSurfaceVariant}>Reference</ThemedText>
+								<ThemedText>{payment.notes}</ThemedText>
+							</View>
+						</>
+					)}
+				</View>
+			</View>
+
+			{/* Allocation Section */}
+			<View
+				style={[
+					styles.section,
+					{
+						backgroundColor: c.card ?? c.surface,
+						borderRadius: r.md,
+						marginBottom: s.md,
+						...(theme.shadows.sm as object),
+					},
+				]}
+			>
+				<View
+					style={[
+						styles.sectionHeader,
+						{
+							borderBottomColor: c.border,
+							paddingHorizontal: s.md,
+							paddingVertical: s.sm,
+						},
+					]}
+				>
+					<ThemedText variant="label" color={c.onSurfaceVariant}>
+						Allocated to
+					</ThemedText>
+				</View>
+				<View style={{ padding: s.md }}>
+					{isAdvance ? (
+						<View style={styles.advanceRow}>
+							<Badge label="ADVANCE" variant="warning" />
+							<ThemedText
+								variant="caption"
+								color={c.onSurfaceVariant}
+								style={{ marginTop: SPACING_PX.xs + SPACING_PX.xxs }}
+							>
+								This payment is not linked to any invoice. It will be applied as
+								advance credit.
+							</ThemedText>
+						</View>
+					) : hasLinkedInvoice ? (
+						<View style={styles.detailRow}>
+							<ThemedText color={c.onSurfaceVariant}>Invoice</ThemedText>
+							<Pressable
+								onPress={() =>
+									router.push(`/(app)/invoices/${payment.invoice_id}` as Href)
+								}
+							>
+								<ThemedText color={c.primary} variant="bodyBold">
+									View Invoice →
+								</ThemedText>
+							</Pressable>
+						</View>
+					) : hasLinkedPurchase ? (
+						<View style={styles.detailRow}>
+							<ThemedText color={c.onSurfaceVariant}>Purchase Bill</ThemedText>
+							<Pressable
+								onPress={() =>
+									router.push(
+										`/(app)/finance/purchases/${payment.purchase_id}` as Href,
+									)
+								}
+							>
+								<ThemedText color={c.primary} variant="bodyBold">
+									View Purchase →
+								</ThemedText>
+							</Pressable>
+						</View>
+					) : null}
+				</View>
 			</View>
 		</Screen>
 	);
 }
 
 const styles = StyleSheet.create({
-	scroll: {},
 	center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 	centered: { textAlign: 'center' },
 	directionRow: {
@@ -416,10 +412,6 @@ const styles = StyleSheet.create({
 		gap: SPACING_PX.xs + SPACING_PX.xxs,
 	},
 	actionBar: {
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
 		flexDirection: 'row',
 		gap: SPACING_PX.sm,
 		borderTopWidth: StyleSheet.hairlineWidth,

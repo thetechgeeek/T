@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { Screen } from '../Screen';
 
@@ -33,6 +33,31 @@ describe('Screen', () => {
 		);
 		const json = JSON.stringify(toJSON());
 		expect(json).toContain('ScrollView');
+	});
+
+	it('keeps header and footer outside the scroll view', () => {
+		const { UNSAFE_getByType, toJSON } = renderWithTheme(
+			<Screen
+				scrollable
+				withKeyboard={false}
+				header={<Text>Fixed Header</Text>}
+				footer={<Text>Fixed Footer</Text>}
+				overlay={<Text>Floating Overlay</Text>}
+			>
+				<Text>Scrollable body</Text>
+			</Screen>,
+		);
+
+		const scrollView = UNSAFE_getByType(ScrollView);
+		const scrollJson = JSON.stringify(scrollView.props.children);
+		const rootJson = JSON.stringify(toJSON());
+
+		expect(scrollJson).toContain('Scrollable body');
+		expect(scrollJson).not.toContain('Fixed Header');
+		expect(scrollJson).not.toContain('Fixed Footer');
+		expect(rootJson).toContain('Fixed Header');
+		expect(rootJson).toContain('Fixed Footer');
+		expect(rootJson).toContain('Floating Overlay');
 	});
 
 	it('applies custom backgroundColor via withKeyboard=false path', () => {
