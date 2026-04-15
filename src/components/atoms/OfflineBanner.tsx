@@ -9,17 +9,21 @@ import Animated, {
 import { WifiOff, ChevronRight } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
-import { SPRING_PRESS, TIMING_NORMAL } from '@/src/theme/animations';
+import { createTimingConfig } from '@/src/theme/animations';
 import { SIZE_OFFLINE_BANNER_OFFSET } from '@/theme/uiMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export function OfflineBanner() {
 	const { isConnected } = useNetworkStatus();
-	const { theme } = useTheme();
+	const { theme, runtime } = useTheme();
+	const reduceMotionEnabled =
+		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
 	const router = useRouter();
+	const bannerMotion = theme.animation.profiles.bannerEnter;
 
 	const translateY = useSharedValue(SIZE_OFFLINE_BANNER_OFFSET);
 	const opacity = useSharedValue(0);
@@ -28,10 +32,27 @@ export function OfflineBanner() {
 		if (!isConnected) {
 			translateY.value = SIZE_OFFLINE_BANNER_OFFSET;
 			opacity.value = 0;
-			translateY.value = withSpring(0, SPRING_PRESS);
-			opacity.value = withTiming(1, TIMING_NORMAL);
+			if (reduceMotionEnabled) {
+				translateY.value = 0;
+				opacity.value = 1;
+				return;
+			}
+
+			translateY.value = withSpring(0, bannerMotion.spring);
+			opacity.value = withTiming(
+				1,
+				createTimingConfig(bannerMotion.duration, bannerMotion.easing),
+			);
 		}
-	}, [isConnected, opacity, translateY]);
+	}, [
+		bannerMotion.duration,
+		bannerMotion.easing,
+		bannerMotion.spring,
+		isConnected,
+		opacity,
+		reduceMotionEnabled,
+		translateY,
+	]);
 
 	const animStyle = useAnimatedStyle(() => ({
 		transform: [{ translateY: translateY.value }],

@@ -1,0 +1,70 @@
+import {
+	DESIGN_LIBRARY_COMPONENT_OVERVIEW,
+	DESIGN_LIBRARY_OVERVIEW,
+	filterCatalogComponents,
+	filterLibraryItems,
+	isLivePreviewComponent,
+	isPreviewableItem,
+} from '../catalog';
+
+describe('design system catalog', () => {
+	it('tracks total and Common + Mobile checklist scope', () => {
+		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1239);
+		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(909);
+		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(559);
+		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(350);
+		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBeGreaterThan(0);
+		expect(DESIGN_LIBRARY_OVERVIEW.completed + DESIGN_LIBRARY_OVERVIEW.open).toBe(
+			DESIGN_LIBRARY_OVERVIEW.total,
+		);
+	});
+
+	it('tracks the generated component inventory and live demo coverage', () => {
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(51);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(40);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.atoms).toBe(14);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.molecules).toBe(23);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.organisms).toBe(6);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.skeletons).toBe(8);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.livePreviewCount).toBeGreaterThan(10);
+	});
+
+	it('filters checklist items by query and platform', () => {
+		const commonMobileMatches = filterLibraryItems('Date Picker', 'common-mobile');
+		const mobileOnlyMatches = filterLibraryItems('Voice search integration', 'mobile');
+		const webOnlyMatches = filterLibraryItems('Cmd+K', 'web');
+		const completedMatches = filterLibraryItems('ThemeProvider', 'mobile', 'completed');
+
+		expect(commonMobileMatches.some((item) => item.title === 'Date Picker')).toBe(true);
+		expect(
+			mobileOnlyMatches.some((item) =>
+				item.title.includes('Voice search integration (native speech-to-text)'),
+			),
+		).toBe(true);
+		expect(
+			webOnlyMatches.some((item) => item.title.includes('Command Palette (`Cmd+K`)')),
+		).toBe(true);
+		expect(completedMatches.some((item) => item.completed)).toBe(true);
+	});
+
+	it('marks preview-backed checklist rows', () => {
+		const [firstPreviewable] = filterLibraryItems('Date Picker', 'common-mobile').filter(
+			isPreviewableItem,
+		);
+
+		expect(firstPreviewable).toBeDefined();
+		expect(firstPreviewable?.title).toBe('Date Picker');
+	});
+
+	it('filters component inventory and identifies live demos', () => {
+		const [button] = filterCatalogComponents('Button', 'atoms');
+		const livePreviewComponents = filterCatalogComponents('', 'all').filter(
+			isLivePreviewComponent,
+		);
+
+		expect(button).toBeDefined();
+		expect(button?.name).toBe('Button');
+		expect(isLivePreviewComponent(button!)).toBe(true);
+		expect(livePreviewComponents.every((component) => component.hasTests)).toBe(true);
+	});
+});

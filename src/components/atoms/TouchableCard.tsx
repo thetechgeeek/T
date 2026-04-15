@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, type PressableProps, type ViewStyle, type StyleProp } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { PRESS_OPACITY, PRESS_SCALE, SPRING_PRESS } from '@/src/theme/animations';
 
 export interface TouchableCardProps extends Omit<PressableProps, 'style'> {
 	children: React.ReactNode;
@@ -25,7 +25,10 @@ export function TouchableCard({
 	testID,
 	...props
 }: TouchableCardProps) {
-	const { theme } = useTheme();
+	const { theme, runtime } = useTheme();
+	const reduceMotionEnabled =
+		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
+	const cardMotion = theme.animation.profiles.cardPress;
 
 	const scale = useSharedValue(1);
 	const opacity = useSharedValue(1);
@@ -42,19 +45,28 @@ export function TouchableCard({
 
 	const handlePressIn = (e: Parameters<NonNullable<PressableProps['onPressIn']>>[0]) => {
 		if (disabled) return;
-		// eslint-disable-next-line react-hooks/immutability
-		scale.value = withSpring(PRESS_SCALE.pressed, SPRING_PRESS);
-		// eslint-disable-next-line react-hooks/immutability
-		opacity.value = withSpring(PRESS_OPACITY.pressed, SPRING_PRESS);
+		if (!reduceMotionEnabled) {
+			// eslint-disable-next-line react-hooks/immutability
+			scale.value = withSpring(cardMotion.scalePressed, cardMotion.spring);
+			// eslint-disable-next-line react-hooks/immutability
+			opacity.value = withSpring(cardMotion.opacityPressed, cardMotion.spring);
+		}
 		onPressIn?.(e);
 	};
 
 	const handlePressOut = (e: Parameters<NonNullable<PressableProps['onPressOut']>>[0]) => {
 		if (disabled) return;
-		// eslint-disable-next-line react-hooks/immutability
-		scale.value = withSpring(1, SPRING_PRESS);
-		// eslint-disable-next-line react-hooks/immutability
-		opacity.value = withSpring(1, SPRING_PRESS);
+		if (!reduceMotionEnabled) {
+			// eslint-disable-next-line react-hooks/immutability
+			scale.value = withSpring(1, cardMotion.spring);
+			// eslint-disable-next-line react-hooks/immutability
+			opacity.value = withSpring(1, cardMotion.spring);
+		} else {
+			// eslint-disable-next-line react-hooks/immutability
+			scale.value = 1;
+			// eslint-disable-next-line react-hooks/immutability
+			opacity.value = 1;
+		}
 		onPressOut?.(e);
 	};
 

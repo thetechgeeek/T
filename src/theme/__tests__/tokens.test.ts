@@ -43,9 +43,32 @@ describe('Theme Tokens (P0.1)', () => {
 	});
 
 	it('should have correct animation tokens', () => {
-		expect(lightTheme.animation.springDamping).toBe(20);
-		expect(lightTheme.animation.springStiffness).toBe(200);
-		expect(lightTheme.animation.durationNormal).toBe(200);
+		expect(lightTheme.animation.durationInstant).toBe(0);
+		expect(lightTheme.animation.durationMicro).toBe(100);
+		expect(lightTheme.animation.durationNormal).toBe(300);
+		expect(lightTheme.animation.curves.easeOut).toEqual([0, 0, 0.2, 1]);
+		expect(lightTheme.animation.spring.default.damping).toBe(20);
+		expect(lightTheme.animation.spring.press.stiffness).toBe(180);
+		expect(lightTheme.animation.profiles.cardPress.opacityPressed).toBe(0.85);
+	});
+
+	it('should expose density-aware spacing and letter-spacing tokens', () => {
+		expect(lightTheme.densitySpacing.compact.lg).toBeLessThan(
+			lightTheme.densitySpacing.comfortable.lg,
+		);
+		expect(lightTheme.densitySpacing.spacious.lg).toBeGreaterThan(
+			lightTheme.densitySpacing.comfortable.lg,
+		);
+		expect(lightTheme.letterSpacing.section).toBe(0.8);
+		expect(lightTheme.letterSpacing.account).toBe(1.5);
+	});
+
+	it('should expose semantic elevation levels', () => {
+		expect(lightTheme.elevation.flat).toEqual({});
+		expect(lightTheme.elevation.raised).toEqual(lightTheme.shadows.sm);
+		expect(lightTheme.elevation.overlay).toEqual(lightTheme.shadows.md);
+		expect(lightTheme.elevation.modal).toEqual(lightTheme.shadows.lg);
+		expect(lightTheme.elevation.tooltip).toEqual(lightTheme.shadows.xl);
 	});
 
 	it('should expose shared utility colors through the theme', () => {

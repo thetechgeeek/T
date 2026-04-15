@@ -20,16 +20,20 @@ export const Card: React.FC<CardProps> = ({
 	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
+	const cardTokens = theme.components.card;
 
 	const cardStyles = [
 		styles.base,
-		{ backgroundColor: theme.colors.card, borderRadius: theme.borderRadius.md },
-		variant === 'elevated' && theme.shadows.sm,
-		variant === 'outlined' && { borderWidth: 1, borderColor: theme.colors.border },
+		{ backgroundColor: theme.colors.card, borderRadius: cardTokens.radius },
+		variant === 'elevated' && theme.elevation.raised,
+		variant === 'outlined' && {
+			borderWidth: theme.borderWidth.sm,
+			borderColor: theme.colors.border,
+		},
 		variant === 'flat' && { backgroundColor: theme.colors.surfaceVariant },
-		padding === 'sm' && { padding: theme.spacing.sm },
-		padding === 'md' && { padding: theme.spacing.md },
-		padding === 'lg' && { padding: theme.spacing.lg },
+		padding === 'sm' && { padding: cardTokens.padding.sm },
+		padding === 'md' && { padding: cardTokens.padding.md },
+		padding === 'lg' && { padding: cardTokens.padding.lg },
 		style,
 	];
 

@@ -1,11 +1,20 @@
 import React from 'react';
 import { View } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
+import * as Reanimated from 'react-native-reanimated';
 import { Button } from '../Button';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
 
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
+const renderWithTheme = (
+	component: React.ReactElement,
+	runtimeOverrides?: Partial<RuntimeQualitySignals>,
+) => {
+	return render(
+		<ThemeProvider persist={false} runtimeOverrides={runtimeOverrides}>
+			{component}
+		</ThemeProvider>,
+	);
 };
 
 describe('Button', () => {
@@ -43,5 +52,17 @@ describe('Button', () => {
 		const { getByText: getLg } = renderWithTheme(<Button title="Large" size="lg" />);
 		expect(getSm('Small')).toBeTruthy();
 		expect(getLg('Large')).toBeTruthy();
+	});
+
+	it('skips press animations when reduced motion is enabled', () => {
+		const springSpy = jest.spyOn(Reanimated, 'withSpring');
+		const { getByLabelText } = renderWithTheme(<Button title="Accessible Tap" />, {
+			reduceMotionEnabled: true,
+		});
+
+		fireEvent(getByLabelText('Accessible Tap'), 'pressIn');
+		fireEvent(getByLabelText('Accessible Tap'), 'pressOut');
+
+		expect(springSpy).not.toHaveBeenCalled();
 	});
 });

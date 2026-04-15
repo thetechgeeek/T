@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, type TextProps, type TextStyle, type AccessibilityRole } from 'react-native';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import type { ThemeTypography } from '@/src/theme/index';
 
@@ -13,6 +14,23 @@ export interface ThemedTextProps extends TextProps {
 
 // h1/h2/h3 variants map to the 'header' role so VoiceOver/TalkBack announces them as headings
 const HEADING_VARIANTS = new Set(['h1', 'h2', 'h3']);
+const ACCESSIBLE_WEIGHT_PROMOTION_MAP: Record<string, TextStyle['fontWeight']> = {
+	'400': '500',
+	'500': '600',
+	'600': '700',
+	normal: '500',
+};
+
+export function resolveAccessibleFontWeight(
+	weight: TextStyle['fontWeight'] | undefined,
+	boldTextEnabled: boolean,
+) {
+	if (!boldTextEnabled || weight == null) {
+		return weight;
+	}
+
+	return ACCESSIBLE_WEIGHT_PROMOTION_MAP[String(weight)] ?? weight;
+}
 
 export const ThemedText: React.FC<ThemedTextProps> = ({
 	variant = 'body',
@@ -23,20 +41,25 @@ export const ThemedText: React.FC<ThemedTextProps> = ({
 	style,
 	children,
 	accessibilityRole,
+	allowFontScaling,
 	...rest
 }) => {
-	const { theme } = useTheme();
+	const { theme, runtime } = useTheme();
+	const resolvedRuntime = runtime ?? DEFAULT_RUNTIME_QUALITY_SIGNALS;
+	const variantStyle = theme.typography.variants[variant];
+	const baseFontWeight = weight ? theme.typography.weights[weight] : variantStyle.fontWeight;
+	const resolvedFontWeight = resolveAccessibleFontWeight(
+		baseFontWeight,
+		resolvedRuntime.boldTextEnabled,
+	);
 
 	const textStyle: TextStyle = {
-		...theme.typography.variants[variant],
-		color: color || theme.typography.variants[variant].color || theme.colors.onSurface,
+		...variantStyle,
+		color: color || variantStyle.color || theme.colors.onSurface,
 		textAlign: align,
 		opacity,
+		fontWeight: resolvedFontWeight,
 	};
-
-	if (weight) {
-		textStyle.fontWeight = theme.typography.weights[weight];
-	}
 
 	const resolvedRole: AccessibilityRole | undefined =
 		accessibilityRole ?? (HEADING_VARIANTS.has(variant) ? 'header' : undefined);
@@ -45,6 +68,7 @@ export const ThemedText: React.FC<ThemedTextProps> = ({
 		<Text
 			style={[textStyle, style]}
 			accessibilityRole={resolvedRole}
+			allowFontScaling={allowFontScaling ?? true}
 			maxFontSizeMultiplier={1.3}
 			{...rest}
 		>

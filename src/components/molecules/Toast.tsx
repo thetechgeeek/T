@@ -56,7 +56,7 @@ export function Toast({
 			testID={testID}
 			style={[
 				styles.container,
-				theme.shadows.md,
+				theme.elevation.modal,
 				{
 					backgroundColor: c.surface,
 					borderLeftColor: borderColor,

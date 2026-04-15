@@ -10,7 +10,6 @@ import {
 	type TextStyle,
 } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
 export interface TextInputProps extends RNTextInputProps {
 	label?: string;
@@ -43,7 +42,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 	) => {
 		const { theme } = useTheme();
 		const c = theme.colors;
-		const r = theme.borderRadius;
+		const inputTokens = theme.components.input;
 
 		const [isFocused, setIsFocused] = useState(false);
 		const borderColor = error ? c.error : isFocused ? c.primary : c.border;
@@ -63,6 +62,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 								color: c.onSurfaceVariant,
 								fontSize: theme.typography.sizes.sm,
 								fontWeight: theme.typography.weights.medium,
+								marginBottom: inputTokens.labelGap,
 							},
 						]}
 					>
@@ -75,13 +75,20 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 						{
 							backgroundColor: c.surface,
 							borderColor,
-							borderRadius: r.md,
-							borderWidth: 1,
+							borderRadius: inputTokens.radius,
+							borderWidth: error
+								? inputTokens.errorBorderWidth
+								: inputTokens.borderWidth,
+							minHeight: inputTokens.minHeight,
+							paddingHorizontal: inputTokens.paddingX,
 						},
 					]}
 				>
 					{leftIcon && (
-						<View style={styles.leftIcon} importantForAccessibility="no">
+						<View
+							style={{ marginRight: inputTokens.iconGap }}
+							importantForAccessibility="no"
+						>
 							{leftIcon}
 						</View>
 					)}
@@ -93,7 +100,11 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 						placeholderTextColor={c.placeholder}
 						style={[
 							styles.input,
-							{ color: c.onSurface, fontSize: theme.typography.sizes.md },
+							{
+								color: c.onSurface,
+								fontSize: theme.typography.sizes.md,
+								paddingVertical: inputTokens.paddingY,
+							},
 							inputStyle,
 						]}
 						onFocus={(e) => {
@@ -107,7 +118,10 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 						{...props}
 					/>
 					{rightIcon && (
-						<View style={styles.rightIcon} importantForAccessibility="no">
+						<View
+							style={{ marginLeft: inputTokens.iconGap }}
+							importantForAccessibility="no"
+						>
 							{rightIcon}
 						</View>
 					)}
@@ -121,6 +135,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 							{
 								color: error ? c.error : c.onSurfaceVariant,
 								fontSize: theme.typography.sizes.xs,
+								marginTop: inputTokens.helperGap,
 							},
 						]}
 					>
@@ -136,15 +151,11 @@ TextInput.displayName = 'TextInput';
 
 const styles = StyleSheet.create({
 	container: {},
-	label: { marginBottom: SPACING_PX.xs },
+	label: {},
 	inputContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		minHeight: TOUCH_TARGET_MIN_PX,
-		paddingHorizontal: SPACING_PX.md,
 	},
-	input: { flex: 1, height: '100%', paddingVertical: SPACING_PX.sm },
-	leftIcon: { marginRight: SPACING_PX.sm },
-	rightIcon: { marginLeft: SPACING_PX.sm },
-	helper: { marginTop: SPACING_PX.xs },
+	input: { flex: 1, height: '100%' },
+	helper: {},
 });

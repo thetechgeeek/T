@@ -1,10 +1,20 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
+import * as Reanimated from 'react-native-reanimated';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { ListItem } from '../ListItem';
+import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
 
-const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);
+const renderWithTheme = (
+	ui: React.ReactElement,
+	runtimeOverrides?: Partial<RuntimeQualitySignals>,
+) =>
+	render(
+		<ThemeProvider persist={false} runtimeOverrides={runtimeOverrides}>
+			{ui}
+		</ThemeProvider>,
+	);
 
 describe('ListItem', () => {
 	it('renders title text', () => {
@@ -84,5 +94,18 @@ describe('ListItem', () => {
 			<ListItem title="My Label" onPress={jest.fn()} />,
 		);
 		expect(getByLabelText('My Label')).toBeTruthy();
+	});
+
+	it('skips press animation when reduced motion is enabled', () => {
+		const springSpy = jest.spyOn(Reanimated, 'withSpring');
+		const { getByLabelText } = renderWithTheme(
+			<ListItem title="Accessible Item" onPress={jest.fn()} />,
+			{ reduceMotionEnabled: true },
+		);
+
+		fireEvent(getByLabelText('Accessible Item'), 'pressIn');
+		fireEvent(getByLabelText('Accessible Item'), 'pressOut');
+
+		expect(springSpy).not.toHaveBeenCalled();
 	});
 });

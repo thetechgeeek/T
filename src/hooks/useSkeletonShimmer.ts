@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
-import { useSharedValue, withRepeat, withTiming, Easing } from 'react-native-reanimated';
+import { useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { createTimingConfig } from '@/src/theme/animations';
 
 /**
  * Returns a shared value that oscillates 0 → 1 → 0 in a loop.
@@ -8,22 +10,33 @@ import { useTheme } from '@/src/theme/ThemeProvider';
  * Fully wired in Phase 8 — exported here for API stability.
  */
 export function useSkeletonShimmer() {
-	const { theme } = useTheme();
+	const { theme, runtime } = useTheme();
+	const reduceMotionEnabled =
+		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
 	const progress = useSharedValue(0);
+	const shimmerMotion = theme.animation.profiles.shimmerLoop;
 
 	useEffect(() => {
+		if (reduceMotionEnabled) {
+			progress.value = 0;
+			return;
+		}
+
 		progress.value = withRepeat(
-			withTiming(1, {
-				duration: theme.animation.durationSlow * 2,
-				easing: Easing.inOut(Easing.ease),
-			}),
+			withTiming(1, createTimingConfig(shimmerMotion.duration, shimmerMotion.easing)),
 			-1, // infinite
-			true, // reverse
+			shimmerMotion.reverse,
 		);
 		return () => {
 			progress.value = 0;
 		};
-	}, [progress, theme.animation.durationSlow]);
+	}, [
+		progress,
+		reduceMotionEnabled,
+		shimmerMotion.duration,
+		shimmerMotion.easing,
+		shimmerMotion.reverse,
+	]);
 
 	return progress;
 }

@@ -36,6 +36,7 @@ export interface PhoneInputProps {
 export function PhoneInput({ value, onChange, label, testID, editable = true }: PhoneInputProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
+	const inputTokens = theme.components.input;
 	const [error, setError] = useState('');
 	const [internalValue, setInternalValue] = useState(value);
 
@@ -64,7 +65,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 						fontSize: theme.typography.sizes.sm,
 						color: c.onSurfaceVariant,
 						fontWeight: '600',
-						marginBottom: SPACING_PX.xs,
+						marginBottom: inputTokens.labelGap,
 					}}
 				>
 					{label}
@@ -75,9 +76,9 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 					styles.row,
 					{
 						borderColor: error ? c.error : c.border,
-						borderRadius: theme.borderRadius.md,
-						borderWidth: error ? 2 : 1,
-						minHeight: theme.touchTarget,
+						borderRadius: inputTokens.radius,
+						borderWidth: error ? inputTokens.errorBorderWidth : inputTokens.borderWidth,
+						minHeight: inputTokens.minHeight,
 					},
 				]}
 			>
@@ -85,7 +86,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 					style={{
 						fontSize: theme.typography.sizes.md,
 						color: c.onSurface,
-						paddingLeft: SPACING_PX.md,
+						paddingLeft: inputTokens.paddingX,
 						alignSelf: 'center',
 						fontWeight: '600',
 					}}
@@ -117,7 +118,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 					style={{
 						fontSize: theme.typography.sizes.xs,
 						color: c.error,
-						marginTop: SPACING_PX.xs,
+						marginTop: inputTokens.helperGap,
 					}}
 				>
 					{error}
@@ -140,6 +141,6 @@ const styles = StyleSheet.create({
 	input: {
 		flex: 1,
 		paddingRight: SPACING_PX.md,
-		paddingVertical: SPACING_PX.md,
+		paddingVertical: SPACING_PX.sm,
 	},
 });

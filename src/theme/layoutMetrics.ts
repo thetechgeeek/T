@@ -1,3 +1,5 @@
+import { StyleSheet } from 'react-native';
+
 /** Spacing scale (px) — use via `theme.spacing` */
 export const SPACING_PX = {
 	xxs: 2,
@@ -25,17 +27,39 @@ export const BORDER_RADIUS_PX = {
 	full: BORDER_RADIUS_FULL_ROUND_PX,
 } as const;
 
-const ANIMATION_DURATION_FAST_MS = 150;
+/** Border widths (px) */
+export const BORDER_WIDTH_PX = {
+	none: 0,
+	hairline: StyleSheet.hairlineWidth,
+	sm: 1,
+	md: 2,
+	lg: 3,
+} as const;
 
 export const ANIMATION_MS = {
-	fast: ANIMATION_DURATION_FAST_MS,
-	normal: 200,
-	slow: 400,
+	instant: 0,
+	micro: 100,
+	fast: 200,
+	normal: 300,
+	slow: 500,
 } as const;
+
+const SPRING_BOUNCE_MASS = 0.8;
 
 export const SPRING_PHYSICS = {
 	damping: 20,
 	stiffness: 200,
+	mass: 1,
+	press: {
+		damping: 15,
+		stiffness: 180,
+		mass: 1,
+	},
+	bounce: {
+		damping: 10,
+		stiffness: 200,
+		mass: SPRING_BOUNCE_MASS,
+	},
 } as const;
 
 /** Minimum tap target (accessibility) */

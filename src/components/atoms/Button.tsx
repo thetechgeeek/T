@@ -1,7 +1,6 @@
 import React from 'react';
 import {
 	Pressable,
-	Text,
 	StyleSheet,
 	ActivityIndicator,
 	type PressableProps,
@@ -10,10 +9,9 @@ import {
 	type GestureResponderEvent,
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPRING_PRESS, PRESS_SCALE } from '@/src/theme/animations';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { SIZE_BUTTON_HEIGHT_SM, SIZE_BUTTON_HEIGHT_LG } from '@/src/theme/uiMetrics';
+import { ThemedText } from './ThemedText';
 
 export interface ButtonProps extends Omit<PressableProps, 'style'> {
 	title?: string;
@@ -42,9 +40,12 @@ export function Button({
 	onPressOut,
 	...props
 }: ButtonProps) {
-	const { theme } = useTheme();
+	const { theme, runtime } = useTheme();
+	const reduceMotionEnabled =
+		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
 	const c = theme.colors;
-	const r = theme.borderRadius;
+	const buttonTokens = theme.components.button;
+	const buttonMotion = theme.animation.profiles.buttonPress;
 
 	const scale = useSharedValue(1);
 	const animStyle = useAnimatedStyle(() => ({
@@ -70,23 +71,22 @@ export function Button({
 	const getSizeStyles = () => {
 		switch (size) {
 			case 'sm':
-				// 44pt minimum touch target (Apple HIG / Material)
 				return {
-					height: SIZE_BUTTON_HEIGHT_SM,
-					px: SPACING_PX.lg,
+					height: buttonTokens.heights.sm,
+					px: buttonTokens.paddingX.sm,
 					fontSize: theme.typography.sizes.sm,
 				};
 			case 'lg':
 				return {
-					height: SIZE_BUTTON_HEIGHT_LG,
-					px: SPACING_PX['2xl'],
+					height: buttonTokens.heights.lg,
+					px: buttonTokens.paddingX.lg,
 					fontSize: theme.typography.sizes.lg,
 				};
 			case 'md':
 			default:
 				return {
-					height: theme.touchTarget,
-					px: SPACING_PX.xl,
+					height: buttonTokens.heights.md,
+					px: buttonTokens.paddingX.md,
 					fontSize: theme.typography.sizes.md,
 				};
 		}
@@ -114,14 +114,21 @@ export function Button({
 				accessibilityHint={loading ? 'Loading, please wait' : undefined}
 				onPressIn={(e: GestureResponderEvent) => {
 					if (isDisabled) return;
-					// eslint-disable-next-line react-hooks/immutability
-					scale.value = withSpring(PRESS_SCALE.pressed, SPRING_PRESS);
+					if (!reduceMotionEnabled) {
+						// eslint-disable-next-line react-hooks/immutability
+						scale.value = withSpring(buttonMotion.scalePressed, buttonMotion.spring);
+					}
 					onPressIn?.(e);
 				}}
 				onPressOut={(e: GestureResponderEvent) => {
 					if (isDisabled) return;
-					// eslint-disable-next-line react-hooks/immutability
-					scale.value = withSpring(PRESS_SCALE.released, SPRING_PRESS);
+					if (!reduceMotionEnabled) {
+						// eslint-disable-next-line react-hooks/immutability
+						scale.value = withSpring(1, buttonMotion.spring);
+					} else {
+						// eslint-disable-next-line react-hooks/immutability
+						scale.value = 1;
+					}
 					onPressOut?.(e);
 				}}
 				style={[
@@ -132,8 +139,8 @@ export function Button({
 								? c.surfaceVariant
 								: v.bg,
 						borderColor: isDisabled && isOutline ? c.border : v.border,
-						borderWidth: isOutline ? 1 : 0,
-						borderRadius: r.md,
+						borderWidth: isOutline ? buttonTokens.outlineWidth : 0,
+						borderRadius: buttonTokens.radius,
 						height: s.height,
 						paddingHorizontal: s.px,
 					},
@@ -148,20 +155,22 @@ export function Button({
 				) : (
 					<>
 						{leftIcon}
-						<Text
+						<ThemedText
+							allowFontScaling
+							variant="label"
+							weight="semibold"
 							style={[
 								styles.label,
 								{
 									color: isDisabled ? c.placeholder : v.text,
 									fontSize: s.fontSize,
-									fontWeight: theme.typography.weights.semibold,
-									marginLeft: leftIcon ? SPACING_PX.sm : 0,
-									marginRight: rightIcon ? SPACING_PX.sm : 0,
+									marginStart: leftIcon ? buttonTokens.iconGap : 0,
+									marginEnd: rightIcon ? buttonTokens.iconGap : 0,
 								},
 							]}
 						>
 							{title}
-						</Text>
+						</ThemedText>
 						{rightIcon}
 					</>
 				)}

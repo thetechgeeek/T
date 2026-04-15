@@ -34,7 +34,7 @@ export function Chip({
 }: ChipProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
-	const r = theme.borderRadius;
+	const chipTokens = theme.components.chip;
 
 	const bgColor = selected ? c.primary : c.surfaceVariant;
 	const textColor = selected ? c.onPrimary : c.onSurfaceVariant;
@@ -56,10 +56,11 @@ export function Chip({
 				styles.chip,
 				{
 					backgroundColor: bgColor,
-					borderRadius: r.full,
-					paddingHorizontal: isSm ? 10 : 16,
-					paddingVertical: isSm ? 4 : 8,
-					gap: leftIcon ? 4 : 0,
+					borderRadius: chipTokens.radius,
+					height: isSm ? chipTokens.heights.sm : chipTokens.heights.md,
+					paddingHorizontal: isSm ? chipTokens.paddingX.sm : chipTokens.paddingX.md,
+					paddingVertical: isSm ? chipTokens.paddingY.sm : chipTokens.paddingY.md,
+					gap: leftIcon ? chipTokens.gap : 0,
 				},
 				style,
 			]}

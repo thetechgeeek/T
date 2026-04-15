@@ -576,6 +576,7 @@ const mockUseFinanceStore = useFinanceStore as unknown as jest.Mock;
 const mockUseInventoryStore = useInventoryStore as unknown as jest.Mock;
 const mockUseInvoiceStore = useInvoiceStore as unknown as jest.Mock;
 const mockUseOrderStore = useOrderStore as unknown as jest.Mock;
+const SNAPSHOT_INVOICE_CREATE_NOW = new Date('2026-04-14T00:00:00.000Z');
 
 async function expectSnapshotMatch(
 	element: React.ReactElement,
@@ -728,7 +729,14 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 		});
 
 		it('captures invoice create flow', async () => {
-			await expectSnapshotMatch(<CreateInvoiceScreen />, { isDark });
+			jest.useFakeTimers();
+			jest.setSystemTime(SNAPSHOT_INVOICE_CREATE_NOW);
+
+			try {
+				await expectSnapshotMatch(<CreateInvoiceScreen />, { isDark });
+			} finally {
+				jest.useRealTimers();
+			}
 		});
 
 		it('captures invoice detail', async () => {

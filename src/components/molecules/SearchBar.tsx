@@ -3,8 +3,6 @@ import { View, TextInput, StyleSheet, ViewStyle, Pressable } from 'react-native'
 import { Search, X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { SIZE_ICON_MD } from '@/src/theme/uiMetrics';
 
 interface SearchBarProps {
 	value: string;
@@ -24,6 +22,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
 	const { theme } = useTheme();
 	const { t } = useLocale();
+	const searchTokens = theme.components.searchBar;
 
 	return (
 		<View
@@ -31,16 +30,17 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 				styles.container,
 				{
 					backgroundColor: theme.colors.surfaceVariant,
-					borderRadius: theme.borderRadius.md,
-					paddingHorizontal: theme.spacing.md,
+					borderRadius: searchTokens.radius,
+					paddingHorizontal: searchTokens.paddingX,
+					height: searchTokens.height,
 				},
 				style,
 			]}
 		>
 			<Search
-				size={SIZE_ICON_MD}
+				size={searchTokens.iconSize}
 				color={theme.colors.onSurfaceVariant}
-				style={styles.icon}
+				style={{ marginRight: searchTokens.iconGap }}
 				importantForAccessibility="no"
 			/>
 			<TextInput
@@ -69,7 +69,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 					accessibilityLabel={t('common.clear')}
 				>
 					<X
-						size={SIZE_ICON_MD}
+						size={searchTokens.iconSize}
 						color={theme.colors.onSurfaceVariant}
 						importantForAccessibility="no"
 					/>
@@ -83,10 +83,6 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		height: SPACING_PX['3xl'],
-	},
-	icon: {
-		marginRight: SPACING_PX.sm,
 	},
 	input: {
 		flex: 1,

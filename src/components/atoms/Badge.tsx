@@ -35,6 +35,7 @@ export const Badge: React.FC<BadgeProps> = ({
 	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
+	const badgeTokens = theme.components.badge;
 
 	const getVariantStyles = () => {
 		switch (variant) {
@@ -70,9 +71,11 @@ export const Badge: React.FC<BadgeProps> = ({
 				styles.container,
 				{
 					backgroundColor: bg,
-					borderRadius: theme.borderRadius.full,
-					paddingHorizontal: size === 'sm' ? 6 : 10,
-					paddingVertical: size === 'sm' ? 2 : 4,
+					borderRadius: badgeTokens.radius,
+					paddingHorizontal:
+						size === 'sm' ? badgeTokens.paddingX.sm : badgeTokens.paddingX.md,
+					paddingVertical:
+						size === 'sm' ? badgeTokens.paddingY.sm : badgeTokens.paddingY.md,
 				},
 				style,
 			]}

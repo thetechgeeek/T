@@ -1,10 +1,11 @@
 import React from 'react';
-import { Pressable, View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { Pressable, View, StyleSheet, ViewStyle } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { ChevronRight } from 'lucide-react-native';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPRING_PRESS, PRESS_SCALE } from '@/src/theme/animations';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { ThemedText } from '../atoms/ThemedText';
 
 interface ListItemProps {
 	title: string;
@@ -30,7 +31,10 @@ export const ListItem: React.FC<ListItemProps> = ({
 	accessibilityLabel,
 	accessibilityHint,
 }) => {
-	const { theme } = useTheme();
+	const { theme, runtime } = useTheme();
+	const reduceMotionEnabled =
+		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
+	const listItemMotion = theme.animation.profiles.listItemPress;
 
 	const scale = useSharedValue(1);
 	const animStyle = useAnimatedStyle(() => ({
@@ -44,12 +48,23 @@ export const ListItem: React.FC<ListItemProps> = ({
 			<Pressable
 				onPress={onPress}
 				onPressIn={() => {
-					// eslint-disable-next-line react-hooks/immutability
-					if (onPress) scale.value = withSpring(PRESS_SCALE.pressed, SPRING_PRESS);
+					if (onPress && !reduceMotionEnabled) {
+						// eslint-disable-next-line react-hooks/immutability
+						scale.value = withSpring(
+							listItemMotion.scalePressed,
+							listItemMotion.spring,
+						);
+					}
 				}}
 				onPressOut={() => {
-					// eslint-disable-next-line react-hooks/immutability
-					if (onPress) scale.value = withSpring(PRESS_SCALE.released, SPRING_PRESS);
+					if (onPress) {
+						if (!reduceMotionEnabled) {
+							// eslint-disable-next-line react-hooks/immutability
+							scale.value = withSpring(1, listItemMotion.spring);
+						} else {
+							scale.value = 1;
+						}
+					}
 				}}
 				accessibilityRole={onPress ? 'button' : 'none'}
 				accessibilityLabel={composedLabel}
@@ -59,37 +74,42 @@ export const ListItem: React.FC<ListItemProps> = ({
 				style={({ pressed }) => [
 					styles.container,
 					{ borderBottomWidth: 1, borderBottomColor: theme.colors.separator },
-					pressed && { backgroundColor: theme.colors.surfaceVariant },
+					pressed &&
+						!reduceMotionEnabled && {
+							backgroundColor: theme.colors.surfaceVariant,
+						},
 				]}
 			>
 				<View style={styles.content}>
 					{leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
 					<View style={styles.textContainer}>
-						<Text
+						<ThemedText
+							allowFontScaling
+							weight="bold"
 							style={[
 								styles.title,
 								{
 									color: theme.colors.onSurface,
 									fontSize: theme.typography.sizes.md,
-									fontFamily: theme.typography.fontFamilyBold,
 								},
 							]}
 						>
 							{title}
-						</Text>
+						</ThemedText>
 						{!!subtitle && (
-							<Text
+							<ThemedText
+								allowFontScaling
+								variant="caption"
 								style={[
 									styles.subtitle,
 									{
 										color: theme.colors.onSurfaceVariant,
 										fontSize: theme.typography.sizes.sm,
-										fontFamily: theme.typography.fontFamily,
 									},
 								]}
 							>
 								{subtitle}
-							</Text>
+							</ThemedText>
 						)}
 					</View>
 					{rightElement}
@@ -117,7 +137,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	leftIcon: {
-		marginRight: SPACING_PX.lg,
+		marginEnd: SPACING_PX.lg,
 	},
 	textContainer: {
 		flex: 1,
@@ -127,6 +147,6 @@ const styles = StyleSheet.create({
 	},
 	subtitle: {},
 	chevron: {
-		marginLeft: SPACING_PX.sm,
+		marginStart: SPACING_PX.sm,
 	},
 });

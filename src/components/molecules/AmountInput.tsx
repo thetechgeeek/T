@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import { INDIAN_GROUPING_TAIL_DIGIT_COUNT } from '@/constants/money';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
@@ -48,6 +47,7 @@ export function AmountInput({
 }: AmountInputProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
+	const inputTokens = theme.components.input;
 
 	const [localText, setLocalText] = useState('');
 	const [exceeded, setExceeded] = useState(false);
@@ -83,7 +83,7 @@ export function AmountInput({
 					style={{
 						fontSize: theme.typography.sizes.sm,
 						color: c.onSurfaceVariant,
-						marginBottom: SPACING_PX.xs,
+						marginBottom: inputTokens.labelGap,
 						fontWeight: '600',
 					}}
 				>
@@ -95,9 +95,11 @@ export function AmountInput({
 					styles.row,
 					{
 						borderColor: exceeded ? c.error : c.border,
-						borderRadius: theme.borderRadius.md,
-						minHeight: SIZE_INPUT_HEIGHT,
-						borderWidth: exceeded ? 2 : 1,
+						borderRadius: inputTokens.radius,
+						minHeight: inputTokens.minHeight,
+						borderWidth: exceeded
+							? inputTokens.errorBorderWidth
+							: inputTokens.borderWidth,
 					},
 				]}
 			>
@@ -135,7 +137,7 @@ export function AmountInput({
 					style={{
 						fontSize: theme.typography.sizes.xs,
 						color: c.error,
-						marginTop: SPACING_PX.xs,
+						marginTop: inputTokens.helperGap,
 					}}
 				>
 					{errorMsg}

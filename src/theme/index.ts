@@ -56,6 +56,15 @@ export interface ThemeColors {
 	overdue: string;
 }
 
+export type ThemeDensity = 'compact' | 'comfortable' | 'spacious';
+export type ThemePresetId = 'tilemaster' | 'executive' | 'studio' | 'mono';
+
+export interface ThemeMeta {
+	presetId: ThemePresetId;
+	presetLabel: string;
+	density: ThemeDensity;
+}
+
 export interface PrintThemeSwatch {
 	key: string;
 	label: string;
@@ -117,43 +126,250 @@ export interface ThemeTypography {
 	};
 }
 
+export interface ThemeSpacing {
+	xxs: number; // 2
+	xs: number; // 4
+	sm: number; // 8
+	md: number; // 12
+	lg: number; // 16
+	xl: number; // 24
+	'2xl': number; // 32
+	'3xl': number; // 48
+	'4xl': number; // 64
+}
+
+export interface ThemeBorderRadius {
+	none: number; // 0
+	xs: number; // 2
+	sm: number; // 4
+	md: number; // 8
+	lg: number; // 12
+	xl: number; // 16
+	full: number; // 9999
+}
+
+export interface ThemeBorderWidth {
+	none: number;
+	hairline: number;
+	sm: number;
+	md: number;
+	lg: number;
+}
+
+export interface ThemeSemanticSpacing {
+	screenPadding: number;
+	sectionGap: number;
+	cardPadding: number;
+	itemGap: number;
+	fieldGap: number;
+	inlineGap: number;
+	clusterGap: number;
+}
+
+export interface ThemeDensitySpacing {
+	compact: ThemeSpacing;
+	comfortable: ThemeSpacing;
+	spacious: ThemeSpacing;
+}
+
+export interface ThemeLetterSpacing {
+	tight: number;
+	normal: number;
+	wide: number;
+	section: number;
+	account: number;
+}
+
+export interface ThemeOpacity {
+	pressed: number;
+	disabled: number;
+	inactive: number;
+	subtle: number;
+	soft: number;
+	medium: number;
+	strong: number;
+	overlay: number;
+	scrim: number;
+}
+
+export interface ThemeComponentTokens {
+	button: {
+		heights: {
+			sm: number;
+			md: number;
+			lg: number;
+		};
+		paddingX: {
+			sm: number;
+			md: number;
+			lg: number;
+		};
+		radius: number;
+		outlineWidth: number;
+		iconGap: number;
+	};
+	badge: {
+		paddingX: {
+			sm: number;
+			md: number;
+		};
+		paddingY: {
+			sm: number;
+			md: number;
+		};
+		radius: number;
+	};
+	chip: {
+		heights: {
+			sm: number;
+			md: number;
+		};
+		paddingX: {
+			sm: number;
+			md: number;
+		};
+		paddingY: {
+			sm: number;
+			md: number;
+		};
+		radius: number;
+		gap: number;
+	};
+	card: {
+		padding: {
+			sm: number;
+			md: number;
+			lg: number;
+		};
+		radius: number;
+	};
+	input: {
+		minHeight: number;
+		radius: number;
+		borderWidth: number;
+		errorBorderWidth: number;
+		paddingX: number;
+		paddingY: number;
+		labelGap: number;
+		helperGap: number;
+		iconGap: number;
+	};
+	searchBar: {
+		height: number;
+		radius: number;
+		paddingX: number;
+		iconGap: number;
+		iconSize: number;
+	};
+	iconButton: {
+		minSize: number;
+		labelGap: number;
+	};
+	fab: {
+		size: number;
+		radius: number;
+		iconSize: number;
+	};
+}
+
 export interface Theme {
 	isDark: boolean;
+	meta: ThemeMeta;
 	colors: ThemeColors;
 	typography: ThemeTypography;
-	spacing: {
-		xxs: number; // 2
-		xs: number; // 4
-		sm: number; // 8
-		md: number; // 12
-		lg: number; // 16
-		xl: number; // 24
-		'2xl': number; // 32
-		'3xl': number; // 48
-		'4xl': number; // 64
-	};
-	borderRadius: {
-		none: number; // 0
-		xs: number; // 2
-		sm: number; // 4
-		md: number; // 8
-		lg: number; // 12
-		xl: number; // 16
-		full: number; // 9999
-	};
+	spacing: ThemeSpacing;
+	semanticSpacing: ThemeSemanticSpacing;
+	densitySpacing: ThemeDensitySpacing;
+	letterSpacing: ThemeLetterSpacing;
+	borderRadius: ThemeBorderRadius;
+	borderWidth: ThemeBorderWidth;
 	shadows: {
 		xs: ViewStyle;
 		sm: ViewStyle;
 		md: ViewStyle;
 		lg: ViewStyle;
+		xl: ViewStyle;
+	};
+	elevation: {
+		flat: ViewStyle;
+		raised: ViewStyle;
+		overlay: ViewStyle;
+		modal: ViewStyle;
+		tooltip: ViewStyle;
 	};
 	animation: {
+		durationInstant: number;
+		durationMicro: number;
 		durationFast: number;
 		durationNormal: number;
 		durationSlow: number;
-		springDamping: number;
-		springStiffness: number;
+		curves: {
+			easeIn: readonly [number, number, number, number];
+			easeOut: readonly [number, number, number, number];
+			easeInOut: readonly [number, number, number, number];
+			linear: readonly [number, number, number, number];
+		};
+		spring: {
+			default: {
+				damping: number;
+				stiffness: number;
+				mass: number;
+			};
+			press: {
+				damping: number;
+				stiffness: number;
+				mass: number;
+			};
+			bounce: {
+				damping: number;
+				stiffness: number;
+				mass: number;
+			};
+		};
+		profiles: {
+			buttonPress: {
+				scalePressed: number;
+				spring: {
+					damping: number;
+					stiffness: number;
+					mass: number;
+				};
+			};
+			cardPress: {
+				scalePressed: number;
+				opacityPressed: number;
+				spring: {
+					damping: number;
+					stiffness: number;
+					mass: number;
+				};
+			};
+			listItemPress: {
+				scalePressed: number;
+				spring: {
+					damping: number;
+					stiffness: number;
+					mass: number;
+				};
+			};
+			bannerEnter: {
+				duration: number;
+				easing: 'easeOut';
+				spring: {
+					damping: number;
+					stiffness: number;
+					mass: number;
+				};
+			};
+			shimmerLoop: {
+				duration: number;
+				easing: 'easeInOut';
+				reverse: boolean;
+			};
+		};
 	};
+	opacity: ThemeOpacity;
+	components: ThemeComponentTokens;
 	collections: ThemeCollections;
 	touchTarget: number; // minimum 48
 }

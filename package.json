@@ -21,8 +21,11 @@
 		"typecheck": "tsc --noEmit",
 		"check:hex": "node scripts/check-no-hex.mjs",
 		"check:ui-tokens": "node scripts/check-ui-tokens.mjs",
+		"check:design-system": "node scripts/check-design-system-guardrails.mjs",
 		"check:routes": "node scripts/check-expo-route-collisions.mjs",
-		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run check:ui-tokens && npm run lint && npm run test && npm run test:integration",
+		"generate:ui-library": "node scripts/generate-ui-library-catalog.mjs",
+		"generate:design-system": "npm run generate:ui-library && node scripts/generate-component-catalog.mjs",
+		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run check:ui-tokens && npm run check:design-system && npm run lint && npm run test && npm run test:integration",
 		"prepare": "husky"
 	},
 	"dependencies": {

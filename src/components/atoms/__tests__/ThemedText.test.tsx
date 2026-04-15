@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import { Appearance, View } from 'react-native';
-import { ThemedText } from '../ThemedText';
+import { ThemedText, resolveAccessibleFontWeight } from '../ThemedText';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { buildTheme } from '@/src/theme/colors';
 import { FONT_SIZE, LINE_HEIGHT } from '@/src/theme/typographyMetrics';
@@ -59,6 +59,18 @@ describe('ThemedText (P0.2)', () => {
 		const { getByText } = renderWithColorScheme(<ThemedText>Hello</ThemedText>, 'light');
 		const text = getByText('Hello');
 		expect(text.props.maxFontSizeMultiplier).toBe(1.3);
+	});
+
+	it('promotes regular weight when bold text accessibility is enabled', () => {
+		const { getByText } = render(
+			<ThemeProvider persist={false} runtimeOverrides={{ boldTextEnabled: true }}>
+				<ThemedText variant="body">Readable</ThemedText>
+			</ThemeProvider>,
+		);
+		const text = getByText('Readable');
+
+		expect(resolveAccessibleFontWeight('400', true)).toBe('500');
+		expect(text.props.style).toContainEqual(expect.objectContaining({ fontWeight: '500' }));
 	});
 
 	it('supports amount variants', () => {

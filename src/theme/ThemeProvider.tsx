@@ -1,62 +1,224 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { Appearance } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { Theme, ThemeMode } from './index';
-import { buildTheme } from './colors';
+import {
+	useRuntimeQualitySignals,
+	type RuntimeQualitySignals,
+} from '@/src/design-system/runtimeSignals';
+import type { Theme, ThemeMode, ThemePresetId } from './index';
+import { buildTheme, DEFAULT_THEME_PRESET_ID, themePresetOptions } from './colors';
 
-const STORAGE_KEY = '@tilemaster/theme';
+export const THEME_STORAGE_KEY = '@tilemaster/theme-settings';
+export const LEGACY_THEME_STORAGE_KEY = '@tilemaster/theme';
+
+interface PersistedThemeSettings {
+	mode: ThemeMode;
+	presetId: ThemePresetId;
+}
 
 interface ThemeContextValue {
 	theme: Theme;
 	isDark: boolean;
 	mode: ThemeMode;
+	presetId: ThemePresetId;
+	runtime: RuntimeQualitySignals;
+	availablePresets: typeof themePresetOptions;
 	setThemeMode: (mode: ThemeMode) => void;
+	setThemePreset: (presetId: ThemePresetId) => void;
+	cycleThemePreset: () => void;
 	toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-	const [mode, setMode] = useState<ThemeMode>('system');
-	const [isDark, setIsDark] = useState(Appearance.getColorScheme() === 'dark');
+export interface ThemeProviderProps {
+	children: React.ReactNode;
+	initialMode?: ThemeMode;
+	initialPresetId?: ThemePresetId;
+	persist?: boolean;
+	storageKey?: string | null;
+	runtimeOverrides?: Partial<RuntimeQualitySignals>;
+}
 
-	// Load persisted preference
+function isValidThemeMode(value: unknown): value is ThemeMode {
+	return value === 'light' || value === 'dark' || value === 'system';
+}
+
+function isValidThemePresetId(value: unknown): value is ThemePresetId {
+	return themePresetOptions.some((preset) => preset.presetId === value);
+}
+
+function resolveIsDark(mode: ThemeMode, inheritedIsDark?: boolean) {
+	if (mode === 'light') return false;
+	if (mode === 'dark') return true;
+	return inheritedIsDark ?? Appearance.getColorScheme() === 'dark';
+}
+
+export function ThemeProvider({
+	children,
+	initialMode,
+	initialPresetId,
+	persist,
+	storageKey = THEME_STORAGE_KEY,
+	runtimeOverrides,
+}: ThemeProviderProps) {
+	const parentThemeContext = useContext(ThemeContext);
+	const ownedRuntime = useRuntimeQualitySignals(parentThemeContext == null);
+	const persistenceEnabled = persist ?? parentThemeContext == null;
+	const shouldLoadPersistedSettings =
+		persistenceEnabled && initialMode === undefined && initialPresetId === undefined;
+	const baseMode = initialMode ?? parentThemeContext?.mode ?? 'system';
+	const basePresetId = initialPresetId ?? parentThemeContext?.presetId ?? DEFAULT_THEME_PRESET_ID;
+
+	const [mode, setMode] = useState<ThemeMode>(baseMode);
+	const [isDark, setIsDark] = useState(resolveIsDark(baseMode, parentThemeContext?.isDark));
+	const [presetId, setPresetId] = useState<ThemePresetId>(basePresetId);
+	const modeRef = useRef(mode);
+	const presetIdRef = useRef(presetId);
+	const inheritedMode = initialMode ?? parentThemeContext?.mode;
+	const inheritedPresetId = initialPresetId ?? parentThemeContext?.presetId;
+	const resolvedMode = shouldLoadPersistedSettings ? mode : (inheritedMode ?? mode);
+	const resolvedPresetId = shouldLoadPersistedSettings
+		? presetId
+		: (inheritedPresetId ?? presetId);
+	const resolvedIsDark =
+		resolvedMode === 'system'
+			? (parentThemeContext?.isDark ?? isDark)
+			: resolveIsDark(resolvedMode, parentThemeContext?.isDark);
+	const runtime = useMemo(
+		() => ({
+			...(parentThemeContext?.runtime ?? ownedRuntime),
+			...runtimeOverrides,
+		}),
+		[parentThemeContext?.runtime, ownedRuntime, runtimeOverrides],
+	);
+
+	const persistThemeSettings = useCallback(
+		(nextMode: ThemeMode, nextPresetId: ThemePresetId) => {
+			if (!persistenceEnabled || !storageKey) {
+				return;
+			}
+			const payload: PersistedThemeSettings = { mode: nextMode, presetId: nextPresetId };
+			void AsyncStorage.setItem(storageKey, JSON.stringify(payload));
+		},
+		[persistenceEnabled, storageKey],
+	);
+
 	useEffect(() => {
-		AsyncStorage.getItem(STORAGE_KEY).then((saved) => {
-			if (saved === 'light' || saved === 'dark' || saved === 'system') {
-				setMode(saved);
-				if (saved === 'light') setIsDark(false);
-				else if (saved === 'dark') setIsDark(true);
-				else setIsDark(Appearance.getColorScheme() === 'dark');
+		if (!shouldLoadPersistedSettings || !storageKey) {
+			return;
+		}
+
+		let isActive = true;
+
+		Promise.all([
+			AsyncStorage.getItem(storageKey),
+			AsyncStorage.getItem(LEGACY_THEME_STORAGE_KEY),
+		]).then(([saved, legacyMode]) => {
+			if (!isActive) {
+				return;
+			}
+
+			if (saved) {
+				try {
+					const parsed = JSON.parse(saved) as Partial<PersistedThemeSettings>;
+					if (isValidThemeMode(parsed.mode) && isValidThemePresetId(parsed.presetId)) {
+						setMode(parsed.mode);
+						setPresetId(parsed.presetId);
+						setIsDark(resolveIsDark(parsed.mode));
+						return;
+					}
+				} catch {
+					// Fall through to the legacy key or current defaults.
+				}
+			}
+
+			if (isValidThemeMode(legacyMode)) {
+				setMode(legacyMode);
+				setIsDark(resolveIsDark(legacyMode));
 			}
 		});
-	}, []);
 
-	// Listen for system theme changes when in 'system' mode
+		return () => {
+			isActive = false;
+		};
+	}, [shouldLoadPersistedSettings, storageKey]);
+
 	useEffect(() => {
-		if (mode !== 'system') return;
+		modeRef.current = resolvedMode;
+		presetIdRef.current = resolvedPresetId;
+	}, [resolvedMode, resolvedPresetId]);
+
+	useEffect(() => {
+		if (resolvedMode !== 'system') return;
 		const sub = Appearance.addChangeListener(({ colorScheme }) => {
 			setIsDark(colorScheme === 'dark');
 		});
 		return () => sub.remove();
-	}, [mode]);
+	}, [resolvedMode]);
 
-	const setThemeMode = useCallback((newMode: ThemeMode) => {
-		setMode(newMode);
-		if (newMode === 'light') setIsDark(false);
-		else if (newMode === 'dark') setIsDark(true);
-		else setIsDark(Appearance.getColorScheme() === 'dark');
-		AsyncStorage.setItem(STORAGE_KEY, newMode);
-	}, []);
+	const setThemeMode = useCallback(
+		(newMode: ThemeMode) => {
+			setMode(newMode);
+			modeRef.current = newMode;
+			setIsDark(resolveIsDark(newMode, parentThemeContext?.isDark));
+			persistThemeSettings(newMode, presetIdRef.current);
+		},
+		[parentThemeContext?.isDark, persistThemeSettings],
+	);
+
+	const setThemePreset = useCallback(
+		(nextPresetId: ThemePresetId) => {
+			setPresetId(nextPresetId);
+			presetIdRef.current = nextPresetId;
+			persistThemeSettings(modeRef.current, nextPresetId);
+		},
+		[persistThemeSettings],
+	);
+
+	const cycleThemePreset = useCallback(() => {
+		const nextIndex =
+			(themePresetOptions.findIndex((preset) => preset.presetId === presetIdRef.current) +
+				1) %
+			themePresetOptions.length;
+		const nextPresetId = themePresetOptions[nextIndex]?.presetId ?? DEFAULT_THEME_PRESET_ID;
+		setPresetId(nextPresetId);
+		presetIdRef.current = nextPresetId;
+		persistThemeSettings(modeRef.current, nextPresetId);
+	}, [persistThemeSettings]);
 
 	const toggleTheme = useCallback(() => {
-		setThemeMode(isDark ? 'light' : 'dark');
-	}, [isDark, setThemeMode]);
+		setThemeMode(resolvedIsDark ? 'light' : 'dark');
+	}, [resolvedIsDark, setThemeMode]);
 
-	const theme = useMemo(() => buildTheme(isDark), [isDark]);
+	const theme = useMemo(
+		() => buildTheme(resolvedIsDark, resolvedPresetId),
+		[resolvedIsDark, resolvedPresetId],
+	);
 
 	return (
-		<ThemeContext.Provider value={{ theme, isDark, mode, setThemeMode, toggleTheme }}>
+		<ThemeContext.Provider
+			value={{
+				theme,
+				isDark: resolvedIsDark,
+				mode: resolvedMode,
+				presetId: resolvedPresetId,
+				runtime,
+				availablePresets: themePresetOptions,
+				setThemeMode,
+				setThemePreset,
+				cycleThemePreset,
+				toggleTheme,
+			}}
+		>
 			{children}
 		</ThemeContext.Provider>
 	);

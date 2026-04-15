@@ -1,48 +1,93 @@
-import type { WithSpringConfig, WithTimingConfig } from 'react-native-reanimated';
+import { Easing, type WithSpringConfig, type WithTimingConfig } from 'react-native-reanimated';
+import { ANIMATION_MS, SPRING_PHYSICS } from './layoutMetrics';
 
 /**
  * Shared animation presets for consistent motion across the app.
  * Use these with Reanimated's withSpring / withTiming.
  */
 
-const SPRING_PRESS_DAMPING = 15;
-const SPRING_PRESS_STIFFNESS = 180;
-const SPRING_PRESS_MASS = 1;
-
-const SPRING_BOUNCE_DAMPING = 10;
-const SPRING_BOUNCE_STIFFNESS = 200;
-const SPRING_BOUNCE_MASS = 0.8;
-
-const TIMING_FAST_MS = 150;
-const TIMING_NORMAL_MS = 250;
-const TIMING_SLOW_MS = 400;
-
 const PRESS_SCALE_PRESSED = 0.97;
 const PRESS_SCALE_RELEASED = 1;
+const LIST_ITEM_PRESS_SCALE = 0.985;
+const CARD_PRESS_OPACITY = 0.85;
+const CURVE_ZERO = 0;
+const CURVE_ONE = 1;
+const CURVE_MATERIAL_EASE_IN = 0.4;
+const CURVE_MATERIAL_EASE_OUT = 0.2;
 
 export const SPRING_PRESS: WithSpringConfig = {
-	damping: SPRING_PRESS_DAMPING,
-	stiffness: SPRING_PRESS_STIFFNESS,
-	mass: SPRING_PRESS_MASS,
+	damping: SPRING_PHYSICS.press.damping,
+	stiffness: SPRING_PHYSICS.press.stiffness,
+	mass: SPRING_PHYSICS.press.mass,
 };
 
 export const SPRING_BOUNCE: WithSpringConfig = {
-	damping: SPRING_BOUNCE_DAMPING,
-	stiffness: SPRING_BOUNCE_STIFFNESS,
-	mass: SPRING_BOUNCE_MASS,
+	damping: SPRING_PHYSICS.bounce.damping,
+	stiffness: SPRING_PHYSICS.bounce.stiffness,
+	mass: SPRING_PHYSICS.bounce.mass,
 };
 
 export const TIMING_FAST: WithTimingConfig = {
-	duration: TIMING_FAST_MS,
+	duration: ANIMATION_MS.fast,
 };
 
 export const TIMING_NORMAL: WithTimingConfig = {
-	duration: TIMING_NORMAL_MS,
+	duration: ANIMATION_MS.normal,
 };
 
 export const TIMING_SLOW: WithTimingConfig = {
-	duration: TIMING_SLOW_MS,
+	duration: ANIMATION_MS.slow,
 };
+
+export const EASING_CURVES = {
+	easeIn: [CURVE_MATERIAL_EASE_IN, CURVE_ZERO, CURVE_ONE, CURVE_ONE],
+	easeOut: [CURVE_ZERO, CURVE_ZERO, CURVE_MATERIAL_EASE_OUT, CURVE_ONE],
+	easeInOut: [CURVE_MATERIAL_EASE_IN, CURVE_ZERO, CURVE_MATERIAL_EASE_OUT, CURVE_ONE],
+	linear: [CURVE_ZERO, CURVE_ZERO, CURVE_ONE, CURVE_ONE],
+} as const;
+
+export type EasingCurveName = keyof typeof EASING_CURVES;
+
+export const MOTION_PROFILES = {
+	buttonPress: {
+		scalePressed: PRESS_SCALE_PRESSED,
+		spring: SPRING_PRESS,
+	},
+	cardPress: {
+		scalePressed: PRESS_SCALE_PRESSED,
+		opacityPressed: CARD_PRESS_OPACITY,
+		spring: SPRING_PRESS,
+	},
+	listItemPress: {
+		scalePressed: LIST_ITEM_PRESS_SCALE,
+		spring: SPRING_PRESS,
+	},
+	bannerEnter: {
+		duration: ANIMATION_MS.fast,
+		easing: 'easeOut' as const,
+		spring: SPRING_PRESS,
+	},
+	shimmerLoop: {
+		duration: ANIMATION_MS.slow * 2,
+		easing: 'easeInOut' as const,
+		reverse: true,
+	},
+} as const;
+
+export function getEasingFunction(name: EasingCurveName): NonNullable<WithTimingConfig['easing']> {
+	const curve = EASING_CURVES[name] ?? EASING_CURVES.linear;
+	return Easing.bezier(curve[0], curve[1], curve[2], curve[3]);
+}
+
+export function createTimingConfig(
+	duration: number,
+	easingName: EasingCurveName = 'easeOut',
+): WithTimingConfig {
+	return {
+		duration,
+		easing: getEasingFunction(easingName),
+	};
+}
 
 /** Scale values for press animations */
 export const PRESS_SCALE = {
@@ -50,7 +95,7 @@ export const PRESS_SCALE = {
 	released: PRESS_SCALE_RELEASED,
 } as const;
 
-const PRESS_OPACITY_PRESSED_VALUE = 0.85;
+const PRESS_OPACITY_PRESSED_VALUE = CARD_PRESS_OPACITY;
 const PRESS_OPACITY_RELEASED_VALUE = 1;
 
 /** Opacity values for press animations (use alongside PRESS_SCALE) */

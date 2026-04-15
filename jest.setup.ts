@@ -83,6 +83,11 @@ jest.mock('react-native', () => {
 		Version: 1,
 		select: (obj: Record<string, unknown>) => obj[Platform.OS] ?? obj.default,
 	};
+	const PixelRatio = {
+		get: jest.fn(() => 3),
+		getFontScale: jest.fn(() => 1),
+		roundToNearestPixel: (value: number) => value,
+	};
 	const StyleSheet = {
 		create: (s: Record<string, unknown>) => s,
 		flatten: (s: Record<string, unknown>) => s,
@@ -93,6 +98,19 @@ jest.mock('react-native', () => {
 		addChangeListener: jest.fn(() => ({ remove: jest.fn() })),
 	};
 	const Alert = { alert: jest.fn() };
+	const AccessibilityInfo = {
+		isReduceMotionEnabled: jest.fn().mockResolvedValue(false),
+		isBoldTextEnabled: jest.fn().mockResolvedValue(false),
+		addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+		announceForAccessibility: jest.fn(),
+		setAccessibilityFocus: jest.fn(),
+	};
+	const I18nManager = {
+		isRTL: false,
+		allowRTL: jest.fn(),
+		forceRTL: jest.fn(),
+		swapLeftAndRightInRTL: jest.fn(),
+	};
 	const KeyboardAvoidingView = ({
 		children,
 		...props
@@ -241,9 +259,12 @@ jest.mock('react-native', () => {
 		RNTextInput: TextInput,
 		ActivityIndicator,
 		Platform,
+		PixelRatio,
 		StyleSheet,
 		Appearance,
 		Alert,
+		AccessibilityInfo,
+		I18nManager,
 		KeyboardAvoidingView,
 		Touchable,
 		Pressable,
