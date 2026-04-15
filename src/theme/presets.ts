@@ -264,10 +264,10 @@ function scaleTypography(fontScale: number, lineHeightScale: number): ThemeTypog
 }
 
 const THEME_PRESET_DEFINITIONS: Record<ThemePresetId, ThemePresetDefinition> = {
-	tilemaster: {
-		presetId: 'tilemaster',
-		presetLabel: 'TileMaster',
-		description: 'Balanced warm surfaces with comfortable spacing.',
+	baseline: {
+		presetId: 'baseline',
+		presetLabel: 'Baseline',
+		description: 'Balanced neutral surfaces with comfortable spacing.',
 		density: 'comfortable',
 		lightOverrides: {},
 		darkOverrides: {},
@@ -344,7 +344,7 @@ export const THEME_PRESET_OPTIONS = Object.values(THEME_PRESET_DEFINITIONS).map(
 ) as readonly ThemePresetOption[];
 
 export function resolveThemePreset(presetId: ThemePresetId, isDark: boolean): ResolvedThemePreset {
-	const preset = THEME_PRESET_DEFINITIONS[presetId] ?? THEME_PRESET_DEFINITIONS.tilemaster;
+	const preset = THEME_PRESET_DEFINITIONS[presetId] ?? THEME_PRESET_DEFINITIONS.baseline;
 	const colors: ThemeColors = {
 		...(isDark ? baseDarkColors : baseLightColors),
 		...(isDark ? preset.darkOverrides : preset.lightOverrides),

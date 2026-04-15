@@ -42,11 +42,11 @@ describe('design-system locale formatters', () => {
 		expect(formatLocaleRelativeTime('en-US', -3, 'day')).toBe(
 			new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' }).format(-3, 'day'),
 		);
-		expect(formatLocaleList('en-US', ['Tiles', 'Invoices', 'Reports'])).toBe(
+		expect(formatLocaleList('en-US', ['Tokens', 'Patterns', 'Accessibility'])).toBe(
 			new Intl.ListFormat('en-US', { style: 'long', type: 'conjunction' }).format([
-				'Tiles',
-				'Invoices',
-				'Reports',
+				'Tokens',
+				'Patterns',
+				'Accessibility',
 			]),
 		);
 		expect(formatLocalePlural('en-US', 1)).toBe('1 component');

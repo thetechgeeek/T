@@ -1,17 +1,17 @@
 import { buildTheme, DEFAULT_THEME_PRESET_ID } from '../colors';
 
 describe('theme presets', () => {
-	it('keeps the default preset aligned with tilemaster', () => {
+	it('keeps the default preset aligned with baseline', () => {
 		const theme = buildTheme(false, DEFAULT_THEME_PRESET_ID);
 
-		expect(theme.meta.presetId).toBe('tilemaster');
-		expect(theme.meta.presetLabel).toBe('TileMaster');
+		expect(theme.meta.presetId).toBe('baseline');
+		expect(theme.meta.presetLabel).toBe('Baseline');
 		expect(theme.spacing.lg).toBe(16);
 		expect(theme.borderRadius.md).toBe(8);
 	});
 
 	it('applies executive density and chrome changes', () => {
-		const defaultTheme = buildTheme(false, 'tilemaster');
+		const defaultTheme = buildTheme(false, 'baseline');
 		const executiveTheme = buildTheme(false, 'executive');
 
 		expect(executiveTheme.meta.presetId).toBe('executive');
@@ -25,7 +25,7 @@ describe('theme presets', () => {
 	});
 
 	it('applies spacious touch targets for studio', () => {
-		const defaultTheme = buildTheme(false, 'tilemaster');
+		const defaultTheme = buildTheme(false, 'baseline');
 		const studioTheme = buildTheme(false, 'studio');
 		const monoTheme = buildTheme(true, 'mono');
 
@@ -37,7 +37,7 @@ describe('theme presets', () => {
 		);
 		expect(monoTheme.meta.presetId).toBe('mono');
 		expect(monoTheme.colors.background).not.toBe(
-			buildTheme(true, 'tilemaster').colors.background,
+			buildTheme(true, 'baseline').colors.background,
 		);
 	});
 });

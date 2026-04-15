@@ -20,12 +20,12 @@ describe('design system catalog', () => {
 	});
 
 	it('tracks the generated component inventory and live demo coverage', () => {
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(51);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(40);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.atoms).toBe(14);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.molecules).toBe(23);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.organisms).toBe(6);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.skeletons).toBe(8);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(31);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(31);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.atoms).toBe(10);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.molecules).toBe(19);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.organisms).toBe(0);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.skeletons).toBe(2);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.livePreviewCount).toBeGreaterThan(10);
 	});
 

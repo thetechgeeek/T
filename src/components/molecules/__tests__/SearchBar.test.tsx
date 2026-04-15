@@ -7,18 +7,31 @@ import { SearchBar } from '../SearchBar';
 describe('SearchBar', () => {
 	it('renders with placeholder text', () => {
 		const { getByPlaceholderText } = renderWithTheme(
-			<SearchBar placeholder="Search invoices..." value="" onChangeText={jest.fn()} />,
+			<SearchBar placeholder="Search patterns..." value="" onChangeText={jest.fn()} />,
 		);
-		expect(getByPlaceholderText('Search invoices...')).toBeTruthy();
+		expect(getByPlaceholderText('Search patterns...')).toBeTruthy();
 	});
 
 	it('calls onChangeText with typed value', () => {
 		const onChangeText = jest.fn();
 		const { getByPlaceholderText } = renderWithTheme(
-			<SearchBar placeholder="Search invoices..." value="" onChangeText={onChangeText} />,
+			<SearchBar placeholder="Search patterns..." value="" onChangeText={onChangeText} />,
 		);
-		fireEvent.changeText(getByPlaceholderText('Search invoices...'), 'marble');
+		fireEvent.changeText(getByPlaceholderText('Search patterns...'), 'marble');
 		expect(onChangeText).toHaveBeenCalledWith('marble');
+	});
+
+	it('forwards accessibility metadata without product-specific defaults', () => {
+		const { getByLabelText } = renderWithTheme(
+			<SearchBar
+				value=""
+				onChangeText={jest.fn()}
+				accessibilityLabel="Pattern search"
+				accessibilityHint="Filters the workbench registry"
+			/>,
+		);
+
+		expect(getByLabelText('Pattern search')).toBeTruthy();
 	});
 
 	it('clear button NOT visible when value is empty', () => {
@@ -42,7 +55,11 @@ describe('SearchBar', () => {
 	it('pressing clear button calls onChangeText with empty string', () => {
 		const onChangeText = jest.fn();
 		const { UNSAFE_getAllByType } = renderWithTheme(
-			<SearchBar value="marble" onChangeText={onChangeText} />,
+			<SearchBar
+				value="marble"
+				onChangeText={onChangeText}
+				clearAccessibilityLabel="Clear registry search"
+			/>,
 		);
 		const clearButton = UNSAFE_getAllByType(Pressable)[0];
 		fireEvent.press(clearButton);

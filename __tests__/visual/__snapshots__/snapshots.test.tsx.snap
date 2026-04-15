@@ -5150,7 +5150,6 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           }
         />
         <TextInput
-          accessibilityHint="emptyFilterHint"
           accessibilityLabel="Search customers..."
           accessible={true}
           autoCorrect={false}
@@ -21339,7 +21338,6 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           }
         />
         <TextInput
-          accessibilityHint="emptyFilterHint"
           accessibilityLabel="Search suppliers..."
           accessible={true}
           autoCorrect={false}
@@ -27469,7 +27467,6 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           }
         />
         <TextInput
-          accessibilityHint="emptyFilterHint"
           accessibilityLabel="Search customers..."
           accessible={true}
           autoCorrect={false}
@@ -43658,7 +43655,6 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           }
         />
         <TextInput
-          accessibilityHint="emptyFilterHint"
           accessibilityLabel="Search suppliers..."
           accessible={true}
           autoCorrect={false}

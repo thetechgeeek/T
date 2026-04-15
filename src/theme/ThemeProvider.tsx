@@ -16,7 +16,8 @@ import {
 import type { Theme, ThemeMode, ThemePresetId } from './index';
 import { buildTheme, DEFAULT_THEME_PRESET_ID, themePresetOptions } from './colors';
 
-export const THEME_STORAGE_KEY = '@tilemaster/theme-settings';
+export const THEME_STORAGE_KEY = '@ui/theme-settings';
+export const LEGACY_THEME_SETTINGS_STORAGE_KEY = '@tilemaster/theme-settings';
 export const LEGACY_THEME_STORAGE_KEY = '@tilemaster/theme';
 
 interface PersistedThemeSettings {
@@ -52,8 +53,14 @@ function isValidThemeMode(value: unknown): value is ThemeMode {
 	return value === 'light' || value === 'dark' || value === 'system';
 }
 
-function isValidThemePresetId(value: unknown): value is ThemePresetId {
-	return themePresetOptions.some((preset) => preset.presetId === value);
+function normalizeThemePresetId(value: unknown): ThemePresetId | null {
+	if (value === 'tilemaster') {
+		return DEFAULT_THEME_PRESET_ID;
+	}
+
+	return themePresetOptions.some((preset) => preset.presetId === value)
+		? (value as ThemePresetId)
+		: null;
 }
 
 function resolveIsDark(mode: ThemeMode, inheritedIsDark?: boolean) {
@@ -121,18 +128,25 @@ export function ThemeProvider({
 
 		Promise.all([
 			AsyncStorage.getItem(storageKey),
+			AsyncStorage.getItem(LEGACY_THEME_SETTINGS_STORAGE_KEY),
 			AsyncStorage.getItem(LEGACY_THEME_STORAGE_KEY),
-		]).then(([saved, legacyMode]) => {
+		]).then(([saved, legacySaved, legacyMode]) => {
 			if (!isActive) {
 				return;
 			}
 
-			if (saved) {
+			const persistedPayload = saved ?? legacySaved;
+			if (persistedPayload) {
 				try {
-					const parsed = JSON.parse(saved) as Partial<PersistedThemeSettings>;
-					if (isValidThemeMode(parsed.mode) && isValidThemePresetId(parsed.presetId)) {
+					const parsed = JSON.parse(
+						persistedPayload,
+					) as Partial<PersistedThemeSettings> & {
+						presetId?: unknown;
+					};
+					const normalizedPresetId = normalizeThemePresetId(parsed.presetId);
+					if (isValidThemeMode(parsed.mode) && normalizedPresetId) {
 						setMode(parsed.mode);
-						setPresetId(parsed.presetId);
+						setPresetId(normalizedPresetId);
 						setIsDark(resolveIsDark(parsed.mode));
 						return;
 					}

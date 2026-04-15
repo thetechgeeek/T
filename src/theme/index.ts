@@ -57,7 +57,7 @@ export interface ThemeColors {
 }
 
 export type ThemeDensity = 'compact' | 'comfortable' | 'spacious';
-export type ThemePresetId = 'tilemaster' | 'executive' | 'studio' | 'mono';
+export type ThemePresetId = 'baseline' | 'executive' | 'studio' | 'mono';
 
 export interface ThemeMeta {
 	presetId: ThemePresetId;

@@ -6,16 +6,22 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
-const TARGET_DIRS = ['src/design-system', 'app/(app)/design-system'];
+const TARGET_DIRS = ['src/design-system', 'app/design-system'];
 const SKIP_SEGMENTS = new Set(['generated', '__tests__']);
 const SKIP_FILES = new Set(['src/design-system/copy.ts']);
 const RUNTIME_SIGNAL_SOURCE = 'src/design-system/runtimeSignals.ts';
+const COMPONENT_REGISTRY_PATH = 'src/design-system/componentRegistry.json';
+const COMPONENT_CATALOG_PATH = 'src/design-system/generated/componentCatalog.ts';
 const REQUIRED_TEST_FILES = [
+	'src/design-system/__tests__/boundary.test.ts',
 	'src/design-system/__tests__/qualityMatrix.test.tsx',
 	'src/design-system/__tests__/themeMatrix.test.tsx',
 ];
+const DESIGN_SYSTEM_ROUTE_PATH = 'app/design-system/index.tsx';
+const LEGACY_DESIGN_SYSTEM_ROUTE_DIR = 'app/(app)/design-system';
+const PRODUCT_MORE_TAB_PATH = 'app/(app)/(tabs)/more.tsx';
 
-const RULES = [
+const FILE_TEXT_RULES = [
 	{
 		name: 'logical-direction',
 		pattern: /\b(paddingLeft|paddingRight|marginLeft|marginRight)\s*:/g,
@@ -44,6 +50,56 @@ const RULES = [
 	},
 ];
 
+const DISALLOWED_IMPORT_RULES = [
+	{
+		name: 'app-locale-hook',
+		pattern: /from\s*['"]@\/src\/hooks\/useLocale['"]/g,
+		message:
+			'Design-system code must use src/design-system/copy.ts instead of product i18n hooks.',
+	},
+	{
+		name: 'product-store-import',
+		pattern: /from\s*['"]@\/src\/stores\//g,
+		message: 'Design-system code must not import product stores.',
+	},
+	{
+		name: 'product-service-import',
+		pattern: /from\s*['"]@\/src\/services\//g,
+		message: 'Design-system code must not import product services.',
+	},
+	{
+		name: 'product-feature-import',
+		pattern: /from\s*['"]@\/src\/features\//g,
+		message: 'Design-system code must not import product feature modules.',
+	},
+	{
+		name: 'product-organism-import',
+		pattern: /from\s*['"]@\/src\/components\/organisms\//g,
+		message: 'Design-system code must not depend on product organisms.',
+	},
+	{
+		name: 'legacy-header-import',
+		pattern: /from\s*['"]@\/src\/components\/molecules\/ScreenHeader['"]/g,
+		message:
+			'Use a design-system-local header inside src/design-system instead of the app-aware ScreenHeader.',
+	},
+	{
+		name: 'legacy-invoice-badge-import',
+		pattern: /from\s*['"]@\/src\/components\/molecules\/InvoiceStatusBadge['"]/g,
+		message: 'Invoice-specific components are not part of the app-agnostic design-system.',
+	},
+	{
+		name: 'legacy-app-banner-import',
+		pattern: /from\s*['"]@\/src\/components\/atoms\/(OfflineBanner|SyncIndicator|QueryBoundary|ErrorBoundary)['"]/g,
+		message:
+			'App-scoped infrastructure components cannot be imported into the app-agnostic design-system.',
+	},
+];
+
+function normalize(relPath) {
+	return relPath.split(path.sep).join('/');
+}
+
 function parseConstStringArray(text, constName) {
 	const match = text.match(new RegExp(`const ${constName} = \\[(.*?)\\] as const;`, 's'));
 	if (!match) {
@@ -53,20 +109,21 @@ function parseConstStringArray(text, constName) {
 	return [...match[1].matchAll(/['"]([^'"]+)['"]/g)].map((entry) => entry[1]);
 }
 
-function parseComponentHasTestsMap(text) {
-	const componentHasTests = new Map();
+function parseGeneratedComponents(text) {
+	const components = [];
 
 	for (const match of text.matchAll(
-		/[\"']?name[\"']?\s*:\s*['"]([^'"]+)['"][\s\S]*?[\"']?hasTests[\"']?\s*:\s*(true|false)/g,
+		/[\"']?name[\"']?\s*:\s*['"]([^'"]+)['"][\s\S]*?[\"']?kind[\"']?\s*:\s*['"]([^'"]+)['"][\s\S]*?[\"']?filePath[\"']?\s*:\s*['"]([^'"]+)['"][\s\S]*?[\"']?hasTests[\"']?\s*:\s*(true|false)/g,
 	)) {
-		componentHasTests.set(match[1], match[2] === 'true');
+		components.push({
+			name: match[1],
+			kind: match[2],
+			filePath: match[3],
+			hasTests: match[4] === 'true',
+		});
 	}
 
-	return componentHasTests;
-}
-
-function normalize(relPath) {
-	return relPath.split(path.sep).join('/');
+	return components;
 }
 
 function walk(dirPath, out) {
@@ -106,6 +163,18 @@ function indexToLine(text, index) {
 	return text.slice(0, index).split('\n').length;
 }
 
+function hasComponentTests(filePath) {
+	const absoluteFilePath = path.join(root, filePath);
+	const componentDir = path.dirname(absoluteFilePath);
+	const name = path.basename(absoluteFilePath, path.extname(absoluteFilePath));
+	const candidates = [
+		path.join(componentDir, '__tests__', `${name}.test.tsx`),
+		path.join(componentDir, '__tests__', `${name}.test.ts`),
+	];
+
+	return candidates.some((candidate) => fs.existsSync(candidate));
+}
+
 const files = TARGET_DIRS.flatMap((dir) => walk(path.join(root, dir), []));
 const violations = [];
 
@@ -127,7 +196,23 @@ for (const relPath of files) {
 		});
 	}
 
-	for (const rule of RULES) {
+	for (const rule of FILE_TEXT_RULES) {
+		rule.pattern.lastIndex = 0;
+		for (const match of text.matchAll(rule.pattern)) {
+			if (match.index == null) {
+				continue;
+			}
+
+			violations.push({
+				file: relPath,
+				line: indexToLine(text, match.index),
+				rule: rule.name,
+				message: rule.message,
+			});
+		}
+	}
+
+	for (const rule of DISALLOWED_IMPORT_RULES) {
 		rule.pattern.lastIndex = 0;
 		for (const match of text.matchAll(rule.pattern)) {
 			if (match.index == null) {
@@ -151,39 +236,124 @@ for (const requiredTestFile of REQUIRED_TEST_FILES) {
 			line: 1,
 			rule: 'design-system-proof-matrix',
 			message:
-				'The design-system folder must keep both qualityMatrix and themeMatrix tests as hard guardrails.',
+				'The design-system folder must keep its route-boundary, quality-matrix, and theme-matrix tests as hard guardrails.',
+		});
+	}
+}
+
+if (!fs.existsSync(path.join(root, DESIGN_SYSTEM_ROUTE_PATH))) {
+	violations.push({
+		file: DESIGN_SYSTEM_ROUTE_PATH,
+		line: 1,
+		rule: 'design-system-route',
+		message: 'The design-system app surface must exist at app/design-system/index.tsx.',
+	});
+}
+
+if (fs.existsSync(path.join(root, LEGACY_DESIGN_SYSTEM_ROUTE_DIR))) {
+	violations.push({
+		file: LEGACY_DESIGN_SYSTEM_ROUTE_DIR,
+		line: 1,
+		rule: 'design-system-route-boundary',
+		message: 'The design-system route must not live under app/(app).',
+	});
+}
+
+if (fs.existsSync(path.join(root, PRODUCT_MORE_TAB_PATH))) {
+	const moreTabText = fs.readFileSync(path.join(root, PRODUCT_MORE_TAB_PATH), 'utf8');
+	if (moreTabText.includes('design-system')) {
+		violations.push({
+			file: PRODUCT_MORE_TAB_PATH,
+			line: 1,
+			rule: 'design-system-product-nav-link',
+			message:
+				'The product More tab must not wire the app-agnostic design-system into product navigation.',
 		});
 	}
 }
 
 const catalogText = fs.readFileSync(path.join(root, 'src/design-system/catalog.ts'), 'utf8');
-const componentCatalogText = fs.readFileSync(
-	path.join(root, 'src/design-system/generated/componentCatalog.ts'),
-	'utf8',
-);
 const previewLabels = parseConstStringArray(catalogText, 'DESIGN_LIBRARY_PREVIEW_LABELS');
 const livePreviewComponents = parseConstStringArray(catalogText, 'LIVE_PREVIEW_COMPONENTS');
-const componentHasTests = parseComponentHasTestsMap(componentCatalogText);
 
-for (const componentName of livePreviewComponents) {
-	const hasTests = componentHasTests.get(componentName);
+const registry = JSON.parse(fs.readFileSync(path.join(root, COMPONENT_REGISTRY_PATH), 'utf8'));
+const registryByPath = new Map(registry.map((entry) => [entry.filePath, entry]));
+const componentCatalogText = fs.readFileSync(path.join(root, COMPONENT_CATALOG_PATH), 'utf8');
+const generatedComponents = parseGeneratedComponents(componentCatalogText);
 
-	if (hasTests == null) {
+for (const entry of registry) {
+	if (!hasComponentTests(entry.filePath)) {
 		violations.push({
-			file: 'src/design-system/catalog.ts',
+			file: entry.filePath,
 			line: 1,
-			rule: 'live-demo-component-catalog',
-			message: `Live preview component "${componentName}" is missing from the generated component catalog.`,
+			rule: 'registry-component-tests',
+			message:
+				'Every component registered as part of the supported design-system surface must have automated tests.',
+		});
+	}
+}
+
+if (generatedComponents.length !== registry.length) {
+	violations.push({
+		file: COMPONENT_CATALOG_PATH,
+		line: 1,
+		rule: 'component-catalog-stale',
+		message:
+			'The generated component catalog is stale. Re-run npm run generate:design-system after changing the design-system registry.',
+	});
+}
+
+for (const generatedComponent of generatedComponents) {
+	const registryEntry = registryByPath.get(generatedComponent.filePath);
+
+	if (!registryEntry) {
+		violations.push({
+			file: COMPONENT_CATALOG_PATH,
+			line: 1,
+			rule: 'component-catalog-registry-drift',
+			message: `Generated component "${generatedComponent.filePath}" is not present in src/design-system/componentRegistry.json.`,
 		});
 		continue;
 	}
 
-	if (!hasTests) {
+	if (registryEntry.kind !== generatedComponent.kind) {
+		violations.push({
+			file: COMPONENT_CATALOG_PATH,
+			line: 1,
+			rule: 'component-catalog-kind-drift',
+			message: `Generated component "${generatedComponent.filePath}" has kind "${generatedComponent.kind}" but the registry expects "${registryEntry.kind}".`,
+		});
+	}
+
+	if (!generatedComponent.hasTests) {
+		violations.push({
+			file: COMPONENT_CATALOG_PATH,
+			line: 1,
+			rule: 'component-catalog-test-drift',
+			message: `Generated component "${generatedComponent.name}" is missing tests. Re-run generation after adding coverage or remove it from the supported registry.`,
+		});
+	}
+}
+
+for (const componentName of livePreviewComponents) {
+	const generatedComponent = generatedComponents.find((component) => component.name === componentName);
+
+	if (!generatedComponent) {
+		violations.push({
+			file: 'src/design-system/catalog.ts',
+			line: 1,
+			rule: 'live-demo-component-catalog',
+			message: `Live preview component "${componentName}" is missing from the supported component catalog.`,
+		});
+		continue;
+	}
+
+	if (!generatedComponent.hasTests) {
 		violations.push({
 			file: 'src/design-system/catalog.ts',
 			line: 1,
 			rule: 'live-demo-component-tests',
-			message: `Live preview component "${componentName}" must have a colocated test before it can stay in the internal dashboard.`,
+			message: `Live preview component "${componentName}" must have automated test coverage.`,
 		});
 	}
 }
@@ -223,6 +393,7 @@ console.log(
 	JSON.stringify(
 		{
 			checkedFiles: files.length,
+			registeredComponents: registry.length,
 			status: 'ok',
 		},
 		null,

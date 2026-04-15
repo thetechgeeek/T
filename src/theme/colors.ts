@@ -31,7 +31,7 @@ import {
 } from './uiMetrics';
 import { buildDensitySpacingSet, resolveThemePreset, THEME_PRESET_OPTIONS } from './presets';
 
-export const DEFAULT_THEME_PRESET_ID: ThemePresetId = 'tilemaster';
+export const DEFAULT_THEME_PRESET_ID: ThemePresetId = 'baseline';
 
 const COLLECTIONS: Theme['collections'] = {
 	partyAvatarColors,

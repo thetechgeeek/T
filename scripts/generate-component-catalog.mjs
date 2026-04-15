@@ -6,11 +6,15 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
-const componentsRoot = path.join(root, 'src', 'components');
+const registryPath = path.join(root, 'src', 'design-system', 'componentRegistry.json');
 const outputPath = path.join(root, 'src', 'design-system', 'generated', 'componentCatalog.ts');
 
 /**
  * @typedef {'atoms' | 'molecules' | 'organisms' | 'skeletons'} DesignSystemComponentKind
+ * @typedef {{
+ *   kind: DesignSystemComponentKind;
+ *   filePath: string;
+ * }} RegistryEntry
  * @typedef {{
  *   id: string;
  *   name: string;
@@ -19,26 +23,6 @@ const outputPath = path.join(root, 'src', 'design-system', 'generated', 'compone
  *   hasTests: boolean;
  * }} DesignSystemComponent
  */
-
-/**
- * @param {string} dirPath
- * @returns {string[]}
- */
-function walkFiles(dirPath) {
-	return fs.readdirSync(dirPath, { withFileTypes: true }).flatMap((entry) => {
-		const entryPath = path.join(dirPath, entry.name);
-		if (entry.name === '__tests__') {
-			return [];
-		}
-		if (entry.isDirectory()) {
-			return walkFiles(entryPath);
-		}
-		if (!entry.name.endsWith('.ts') && !entry.name.endsWith('.tsx')) {
-			return [];
-		}
-		return [entryPath];
-	});
-}
 
 /**
  * @param {string} value
@@ -52,47 +36,51 @@ function slugify(value) {
 }
 
 /**
- * @param {string} filePath
- * @returns {DesignSystemComponentKind}
- */
-function getKind(filePath) {
-	const relativePath = path.relative(componentsRoot, filePath).split(path.sep);
-	if (relativePath[0] === 'molecules' && relativePath[1] === 'skeletons') {
-		return 'skeletons';
-	}
-	if (relativePath[0] === 'atoms' || relativePath[0] === 'molecules' || relativePath[0] === 'organisms') {
-		return relativePath[0];
-	}
-	throw new Error(`Unsupported component kind for ${filePath}`);
-}
-
-/**
- * @param {string} name
- * @param {string} relativePath
+ * @param {RegistryEntry} entry
  * @returns {boolean}
  */
-function hasTestFile(name, relativePath) {
-	const segments = relativePath.split('/');
-	const rootDir = segments[2];
+function hasTestFile(entry) {
+	const absoluteFilePath = path.join(root, entry.filePath);
+	const componentDir = path.dirname(absoluteFilePath);
+	const name = path.basename(absoluteFilePath, path.extname(absoluteFilePath));
 	const candidates = [
-		path.join(root, 'src', 'components', rootDir, '__tests__', `${name}.test.tsx`),
-		path.join(root, 'src', 'components', rootDir, '__tests__', `${name}.test.ts`),
+		path.join(componentDir, '__tests__', `${name}.test.tsx`),
+		path.join(componentDir, '__tests__', `${name}.test.ts`),
 	];
+
 	return candidates.some((candidate) => fs.existsSync(candidate));
 }
 
+/** @type {RegistryEntry[]} */
+const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+const seenPaths = new Set();
+
+for (const entry of registry) {
+	if (!entry?.filePath || !entry?.kind) {
+		throw new Error(`Invalid component registry entry: ${JSON.stringify(entry)}`);
+	}
+
+	if (seenPaths.has(entry.filePath)) {
+		throw new Error(`Duplicate component registry path: ${entry.filePath}`);
+	}
+	seenPaths.add(entry.filePath);
+
+	const absoluteFilePath = path.join(root, entry.filePath);
+	if (!fs.existsSync(absoluteFilePath)) {
+		throw new Error(`Component registry path does not exist: ${entry.filePath}`);
+	}
+}
+
 /** @type {DesignSystemComponent[]} */
-const components = walkFiles(componentsRoot)
-	.filter((filePath) => !filePath.includes(`${path.sep}__tests__${path.sep}`))
-	.map((filePath) => {
-		const relativePath = path.relative(root, filePath).replaceAll(path.sep, '/');
-		const name = path.basename(filePath, path.extname(filePath));
+const components = registry
+	.map((entry) => {
+		const name = path.basename(entry.filePath, path.extname(entry.filePath));
 		return {
-			id: slugify(relativePath),
+			id: slugify(entry.filePath),
 			name,
-			kind: getKind(filePath),
-			filePath: relativePath,
-			hasTests: hasTestFile(name, relativePath),
+			kind: entry.kind,
+			filePath: entry.filePath,
+			hasTests: hasTestFile(entry),
 		};
 	})
 	.sort((left, right) => {
@@ -157,6 +145,7 @@ console.log(
 	JSON.stringify(
 		{
 			outputPath: path.relative(root, outputPath),
+			registryPath: path.relative(root, registryPath),
 			...stats,
 		},
 		null,

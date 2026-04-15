@@ -183,12 +183,12 @@ export interface DesignSystemCopy {
 	patternSamples: {
 		title: string;
 		description: string;
-		ordersToday: string;
-		ordersTrend: string;
-		ordersTrendLabel: string;
-		inventoryAlerts: string;
-		inventoryTrend: string;
-		inventoryTrendLabel: string;
+		previewReadyComponents: string;
+		previewReadyTrend: string;
+		previewReadyTrendLabel: string;
+		accessibilityCoverage: string;
+		accessibilityTrend: string;
+		accessibilityTrendLabel: string;
 		emptyStateTitle: string;
 		emptyStateDescription: string;
 		emptyStateAction: string;
@@ -206,7 +206,7 @@ export interface DesignSystemCopy {
 		tested: string;
 		needsTests: string;
 		liveDemo: string;
-		inventoryOnly: string;
+		registryOnly: string;
 	};
 	checklistExplorer: {
 		title: string;
@@ -294,13 +294,13 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			directionBadge: localize(`Direction: ${direction.toUpperCase()}`),
 		},
 		screen: {
-			title: localize('Design Library'),
-			accessibilityLabel: localize('Internal design library dashboard'),
+			title: localize('Design System'),
+			accessibilityLabel: localize('Internal design system workbench'),
 		},
 		hero: {
-			title: localize('Internal Design Library'),
+			title: localize('Design System Workbench'),
 			description: localize(
-				'A live, in-app gallery for the mobile design system, checklist explorer, and runtime look-and-feel presets.',
+				'A live, app-agnostic mobile workbench for tokens, components, accessibility stress, and runtime look-and-feel presets.',
 			),
 			presetBadge: (presetLabel) => localize(`Preset: ${presetLabel}`),
 			modeBadge: (mode) => localize(`Mode: ${mode}`),
@@ -311,8 +311,8 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			completed: localize('Completed'),
 			open: localize('Open'),
 			commonMobile: localize('Common + Mobile'),
-			libraryComponents: localize('Library components'),
-			liveDemos: localize('Live demos'),
+			libraryComponents: localize('Supported components'),
+			liveDemos: localize('Workbench demos'),
 		},
 		runtimeTheming: {
 			title: localize('Runtime Theming'),
@@ -343,7 +343,7 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 		componentGallery: {
 			title: localize('Component Gallery'),
 			description: localize(
-				'A living preview deck seeded from the current atoms, molecules, and patterns.',
+				'A neutral preview deck for reusable atoms, molecules, feedback patterns, and mobile-ready surfaces.',
 			),
 			categoryBadges: {
 				inputs: localize('Inputs'),
@@ -380,35 +380,35 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			picker: {
 				title: localize('Preview Picker'),
 				options: [
-					{ label: 'Inventory', value: 'inventory' },
-					{ label: 'Invoices', value: 'invoices' },
-					{ label: 'Reports', value: 'reports' },
-					{ label: 'Settings', value: 'settings' },
+					{ label: 'Foundation', value: 'foundation' },
+					{ label: 'Inputs', value: 'inputs' },
+					{ label: 'Feedback', value: 'feedback' },
+					{ label: 'Navigation', value: 'navigation' },
 				].map((option) => localizeOption(localize, option)),
 			},
-			notesSeed: localize('This design library is now driving previews.'),
+			notesSeed: localize('This workbench is validating the reusable UI surface.'),
 		},
 		patternSamples: {
 			title: localize('Pattern Samples'),
 			description: localize(
-				'These are higher-level examples showing how primitives compose into product UI.',
+				'These are higher-level examples showing how library primitives compose into reusable mobile surfaces.',
 			),
-			ordersToday: localize('Orders today'),
-			ordersTrend: localize('+12%'),
-			ordersTrendLabel: localize('vs yesterday'),
-			inventoryAlerts: localize('Inventory alerts'),
-			inventoryTrend: localize('-3'),
-			inventoryTrendLabel: localize('after restock'),
-			emptyStateTitle: localize('No design debt in this slice'),
+			previewReadyComponents: localize('Preview-ready components'),
+			previewReadyTrend: localize('+6'),
+			previewReadyTrendLabel: localize('added this sprint'),
+			accessibilityCoverage: localize('Accessibility pass rate'),
+			accessibilityTrend: localize('+4 pts'),
+			accessibilityTrendLabel: localize('after the latest audit'),
+			emptyStateTitle: localize('No quality regressions in this surface'),
 			emptyStateDescription: localize(
-				'Once the library matures, empty, loading, error, and success states should all preview here.',
+				'Approved loading, empty, error, and success states should all be verified here before product features adopt them.',
 			),
 			emptyStateAction: localize('Trigger Toast'),
 		},
 		componentInventory: {
-			title: localize('Component Inventory'),
+			title: localize('Supported Component Catalog'),
 			description: localize(
-				'This inventory is generated from the actual src/components tree so the dashboard doubles as a live system map.',
+				'This catalog is generated from the design-system registry, not from product feature screens.',
 			),
 			searchPlaceholder: localize('Search components by name, kind, or file path'),
 			kindFilters: componentKindOptions.map((option) =>
@@ -427,12 +427,12 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			tested: localize('Tested'),
 			needsTests: localize('Needs tests'),
 			liveDemo: localize('Live demo'),
-			inventoryOnly: localize('Inventory only'),
+			registryOnly: localize('Registry only'),
 		},
 		checklistExplorer: {
 			title: localize('Checklist Explorer'),
 			description: localize(
-				'Search and inspect the generated checklist data. The Common + Mobile scope is the active mobile build target.',
+				'Search and inspect the generated checklist data. Common + Mobile is the active native build target.',
 			),
 			searchPlaceholder: localize('Search checklist items, sections, or platforms'),
 			platformFilters: platformOptions.map((option) =>
@@ -458,7 +458,7 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 		localization: {
 			title: localize('Localization and Accessibility'),
 			description: localize(
-				'Stress the internal dashboard with locale switches, RTL mirroring, and runtime accessibility signals before feature screens inherit the patterns.',
+				'Stress the workbench with locale switches, RTL mirroring, and runtime accessibility signals before product surfaces inherit the patterns.',
 			),
 			localeSelector: localize('Dashboard locale'),
 			runtimeSignals: localize('Runtime quality signals'),

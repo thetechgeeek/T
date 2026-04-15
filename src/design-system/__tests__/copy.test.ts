@@ -6,7 +6,7 @@ describe('design-system copy registry', () => {
 
 		expect(copy.locale).toBe('en');
 		expect(copy.direction).toBe('ltr');
-		expect(copy.hero.title).toBe('Internal Design Library');
+		expect(copy.hero.title).toBe('Design System Workbench');
 		expect(copy.stats.completed).toBe('Completed');
 	});
 
@@ -25,6 +25,6 @@ describe('design-system copy registry', () => {
 
 		expect(arabic.direction).toBe('rtl');
 		expect(arabic.meta.directionBadge).toBeTruthy();
-		expect(arabic.screen.accessibilityLabel).not.toBe('Internal design library dashboard');
+		expect(arabic.screen.accessibilityLabel).not.toBe('Internal design system workbench');
 	});
 });

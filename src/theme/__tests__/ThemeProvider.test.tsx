@@ -3,6 +3,7 @@ import { act, render, renderHook, waitFor } from '@testing-library/react-native'
 import React from 'react';
 import { AccessibilityInfo, Appearance, I18nManager, PixelRatio, Text } from 'react-native';
 import {
+	LEGACY_THEME_SETTINGS_STORAGE_KEY,
 	LEGACY_THEME_STORAGE_KEY,
 	THEME_STORAGE_KEY,
 	ThemeProvider,
@@ -62,6 +63,21 @@ describe('ThemeProvider', () => {
 		expect(result.current.isDark).toBe(true);
 	});
 
+	it('maps the legacy structured preset id onto the generic baseline preset', async () => {
+		await AsyncStorage.setItem(
+			LEGACY_THEME_SETTINGS_STORAGE_KEY,
+			JSON.stringify({ mode: 'light', presetId: 'tilemaster' }),
+		);
+
+		const { result } = renderHook(() => useTheme(), { wrapper: rootWrapper });
+
+		await waitFor(() => {
+			expect(result.current.mode).toBe('light');
+			expect(result.current.presetId).toBe('baseline');
+		});
+		expect(result.current.theme.meta.presetLabel).toBe('Baseline');
+	});
+
 	it('persists theme changes when mode and preset are updated', async () => {
 		const { result } = renderHook(() => useTheme(), { wrapper: rootWrapper });
 
@@ -109,7 +125,7 @@ describe('ThemeProvider', () => {
 
 	it('supports nested theme providers for subtree theming', () => {
 		const { getByText } = render(
-			<ThemeProvider initialMode="light" initialPresetId="tilemaster" persist={false}>
+			<ThemeProvider initialMode="light" initialPresetId="baseline" persist={false}>
 				<ThemeProbe label="outer" />
 				<ThemeProvider initialPresetId="mono" persist={false}>
 					<ThemeProbe label="inner" />
@@ -117,7 +133,7 @@ describe('ThemeProvider', () => {
 			</ThemeProvider>,
 		);
 
-		expect(getByText('outer:TileMaster:light')).toBeTruthy();
+		expect(getByText('outer:Baseline:light')).toBeTruthy();
 		expect(getByText('inner:Mono:light')).toBeTruthy();
 	});
 

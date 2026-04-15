@@ -1,12 +1,12 @@
 # Design System Workspace
 
-This folder is the in-repo source of truth for the internal mobile design library route at `/(app)/design-system`.
+This folder is the in-repo source of truth for the app-agnostic mobile design-system workbench at `/design-system`.
 
 ## Goals
 
 - Give product and engineering a live in-app component gallery instead of depending on Figma first.
 - Track the full checklist scope from [UI_Library_Checklist.md](../../docs/UI_Library_Checklist.md).
-- Keep the inventory tied to the actual `src/components` tree so the dashboard reflects the codebase we ship.
+- Keep the supported component catalog tied to an explicit design-system registry instead of product feature screens.
 - Support runtime look-and-feel switching through theme presets, not only light/dark colors.
 
 ## Files
@@ -31,8 +31,10 @@ This folder is the in-repo source of truth for the internal mobile design librar
     - merges locale-aware diagnostics with the runtime signals already supplied by `ThemeProvider`
 - `generated/uiLibraryCatalog.ts`
     - generated from the checklist doc
+- `componentRegistry.json`
+    - explicit allowlist of shared components that count as the supported design-system surface
 - `generated/componentCatalog.ts`
-    - generated from `src/components`
+    - generated from `componentRegistry.json`
 
 ## Generators
 
@@ -44,7 +46,10 @@ This folder is the in-repo source of truth for the internal mobile design librar
     - enforces design-system-only UI guardrails
     - blocks inline copy, raw LTR-only spacing props, and raw `Text` usage inside the folder
     - blocks direct platform runtime-signal imports outside `runtimeSignals.ts`
-    - fails when a live-demo component in the dashboard is missing automated test coverage
+    - blocks product stores, services, features, organisms, and app-only headers from entering the folder
+    - fails when a supported or live-demo component is missing automated test coverage
+    - fails when the generated component catalog drifts away from `componentRegistry.json`
+    - fails if the design-system route leaks back under `app/(app)` or into the product More tab
     - fails when a preview label drifts away from the generated checklist catalog
     - fails if the design-system proof-matrix tests disappear
 
@@ -52,9 +57,10 @@ This folder is the in-repo source of truth for the internal mobile design librar
 
 - New reusable UI should land in `src/components` first, not directly inside feature screens.
 - If a component is meant to be part of the supported library, add a live demo for it in `DesignLibraryScreen.tsx`.
-- When a component gets a live demo, register it in `catalog.ts` so the inventory marks it as `Live demo`.
+- If a shared component becomes design-system-supported, register it in `componentRegistry.json` and regenerate the catalog.
+- When a component gets a live demo, register it in `catalog.ts` so the catalog marks it as `Live demo`.
 - Keep the dashboard representative, not exhaustive at the prop-matrix level. It should show the supported patterns clearly and fast.
-- Treat the checklist explorer as the target-state backlog. Treat the component inventory as the current implementation map.
+- Treat the checklist explorer as the target-state backlog. Treat the supported component catalog as the current implementation contract.
 - Keep user-facing dashboard copy in `copy.ts`, not inline in `DesignLibraryScreen.tsx`.
 - Prefer `paddingStart` / `paddingEnd` and other logical-direction-safe styles so RTL checks stay green.
 - Treat `src/design-system` as the tightest-guarded UI zone in the repo: this folder should be where we prove i18n, localization stress, RTL safety, accessibility labels, and design-system automation first.

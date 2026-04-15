@@ -6,7 +6,6 @@ import {
 	TrendingUp,
 	Settings,
 	Package,
-	Palette,
 	Users,
 	Languages,
 	Moon,
@@ -84,13 +83,6 @@ export default function MoreTab() {
 			icon: Settings,
 			route: '/(app)/settings/',
 			color: c.onSurfaceVariant,
-		},
-		{
-			label: 'Design Library',
-			accessibilityLabel: 'menu-design-library',
-			icon: Palette,
-			route: '/(app)/design-system',
-			color: c.primary,
 		},
 	];
 

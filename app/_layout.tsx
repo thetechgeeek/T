@@ -24,32 +24,38 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 	);
 	const router = useRouter();
 	const segments = useSegments();
+	const inDesignSystem = segments[0] === 'design-system';
 
 	useEffect(() => {
+		if (inDesignSystem) {
+			return;
+		}
 		initialize();
-	}, [initialize]);
+	}, [inDesignSystem, initialize]);
 
 	useEffect(() => {
-		if (loading) return;
+		if (loading || inDesignSystem) return;
 		const inAuthGroup = segments[0] === '(auth)';
 		if (!isAuthenticated && !inAuthGroup) {
 			router.replace('/(auth)/login');
 		} else if (isAuthenticated && inAuthGroup) {
 			router.replace('/(app)/(tabs)' as Href);
 		}
-	}, [isAuthenticated, loading, segments, router]);
+	}, [inDesignSystem, isAuthenticated, loading, segments, router]);
 
 	return <>{children}</>;
 }
 
 function AppShell() {
 	const { theme } = useThemeTokens();
+	const segments = useSegments();
+	const inDesignSystem = segments[0] === 'design-system';
 
 	return (
 		<GestureHandlerRootView style={styles.root}>
 			<SafeAreaProvider>
 				<StatusBar style={theme.isDark ? 'light' : 'dark'} />
-				<OfflineBanner />
+				{inDesignSystem ? null : <OfflineBanner />}
 				<AuthGate>
 					<Slot />
 				</AuthGate>

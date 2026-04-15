@@ -2,7 +2,6 @@ import React from 'react';
 import { View, TextInput, StyleSheet, ViewStyle, Pressable } from 'react-native';
 import { Search, X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { useLocale } from '@/src/hooks/useLocale';
 
 interface SearchBarProps {
 	value: string;
@@ -11,6 +10,10 @@ interface SearchBarProps {
 	style?: ViewStyle;
 	/** Stable English identifier for screen readers. Defaults to placeholder or 'Search'. */
 	accessibilityLabel?: string;
+	/** Optional screen-reader hint for the field. */
+	accessibilityHint?: string;
+	/** Stable label for the clear affordance. Defaults to 'Clear search'. */
+	clearAccessibilityLabel?: string;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -19,10 +22,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 	placeholder,
 	style,
 	accessibilityLabel,
+	accessibilityHint,
+	clearAccessibilityLabel = 'Clear search',
 }) => {
 	const { theme } = useTheme();
-	const { t } = useLocale();
 	const searchTokens = theme.components.searchBar;
+	const resolvedPlaceholder = placeholder ?? 'Search';
+	const resolvedAccessibilityLabel = accessibilityLabel ?? resolvedPlaceholder;
 
 	return (
 		<View
@@ -45,8 +51,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 			/>
 			<TextInput
 				accessible={true}
-				accessibilityLabel={accessibilityLabel ?? placeholder ?? t('common.search')}
-				accessibilityHint={t('inventory.emptyFilterHint')}
+				accessibilityLabel={resolvedAccessibilityLabel}
+				accessibilityHint={accessibilityHint}
 				style={[
 					styles.input,
 					{
@@ -57,7 +63,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 				]}
 				value={value}
 				onChangeText={onChangeText}
-				placeholder={placeholder ?? t('common.search')}
+				placeholder={resolvedPlaceholder}
 				placeholderTextColor={theme.colors.placeholder}
 				autoCorrect={false}
 			/>
@@ -66,7 +72,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 					onPress={() => onChangeText('')}
 					hitSlop={10}
 					accessibilityRole="button"
-					accessibilityLabel={t('common.clear')}
+					accessibilityLabel={clearAccessibilityLabel}
 				>
 					<X
 						size={searchTokens.iconSize}

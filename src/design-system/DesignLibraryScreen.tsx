@@ -1,21 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import {
-	Calendar,
-	Moon,
-	Package,
-	Palette,
-	Search,
-	Settings,
-	ShoppingCart,
-	Sun,
-	Zap,
-} from 'lucide-react-native';
+import { Calendar, Moon, Package, Palette, Search, Settings, Sun, Zap } from 'lucide-react-native';
 import { ThemeProvider, useTheme } from '@/src/theme/ThemeProvider';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
 import { Card } from '@/src/components/atoms/Card';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { Button } from '@/src/components/atoms/Button';
@@ -51,6 +40,7 @@ import type { ThemeMode, ThemePresetId } from '@/src/theme';
 import { getDesignSystemCopy, type DesignSystemLocale } from './copy';
 import { buildDesignSystemLocaleDiagnostics } from './formatters';
 import { useDesignSystemQualitySignals } from './useQualitySignals';
+import { WorkbenchHeader } from './components/WorkbenchHeader';
 
 const AMOUNT_PREVIEW_VALUE = 125000;
 const KPI_CARD_MIN_WIDTH = 160;
@@ -212,7 +202,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 	const [searchValue, setSearchValue] = useState('');
 	const [filterValue, setFilterValue] = useState('all');
 	const [pickerVisible, setPickerVisible] = useState(false);
-	const [pickerValue, setPickerValue] = useState('inventory');
+	const [pickerValue, setPickerValue] = useState('foundation');
 	const [phoneValue, setPhoneValue] = useState('9876543210');
 	const [amountValue, setAmountValue] = useState(AMOUNT_PREVIEW_VALUE);
 	const [dateValue, setDateValue] = useState('2026-04-15');
@@ -713,7 +703,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						title={copy.componentGallery.buttons.openPicker}
 						variant="secondary"
 						onPress={() => setPickerVisible(true)}
-						leftIcon={<ShoppingCart size={16} color={c.onSurfaceVariant} />}
+						leftIcon={<Package size={16} color={c.onSurfaceVariant} />}
 					/>
 				</View>
 			</PreviewSection>
@@ -731,21 +721,21 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					}}
 				>
 					<StatCard
-						label={copy.patternSamples.ordersToday}
-						value="248"
-						icon={ShoppingCart}
+						label={copy.patternSamples.previewReadyComponents}
+						value="18"
+						icon={Palette}
 						color={c.success}
-						trend={copy.patternSamples.ordersTrend}
-						trendLabel={copy.patternSamples.ordersTrendLabel}
+						trend={copy.patternSamples.previewReadyTrend}
+						trendLabel={copy.patternSamples.previewReadyTrendLabel}
 						style={{ flex: 1, minWidth: 180 }}
 					/>
 					<StatCard
-						label={copy.patternSamples.inventoryAlerts}
-						value="19"
-						icon={Package}
-						color={c.warning}
-						trend={copy.patternSamples.inventoryTrend}
-						trendLabel={copy.patternSamples.inventoryTrendLabel}
+						label={copy.patternSamples.accessibilityCoverage}
+						value="94%"
+						icon={Zap}
+						color={c.info}
+						trend={copy.patternSamples.accessibilityTrend}
+						trendLabel={copy.patternSamples.accessibilityTrendLabel}
 						style={{ flex: 1, minWidth: 180 }}
 					/>
 				</View>
@@ -874,7 +864,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 											label={
 												isLivePreviewComponent(component)
 													? copy.componentInventory.liveDemo
-													: copy.componentInventory.inventoryOnly
+													: copy.componentInventory.registryOnly
 											}
 											variant={
 												isLivePreviewComponent(component)
@@ -976,7 +966,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				safeAreaEdges={['bottom']}
 				withKeyboard={false}
 				contentContainerStyle={{ direction: copy.direction }}
-				header={<ScreenHeader title={copy.screen.title} showSyncStatus={false} />}
+				header={<WorkbenchHeader title={copy.screen.title} />}
 			>
 				<FlashList
 					data={filteredItems}

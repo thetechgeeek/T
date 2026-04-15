@@ -7,7 +7,7 @@ const SAMPLE_NUMBER = 1234567.89;
 const SAMPLE_CURRENCY_VALUE = 125000;
 const SAMPLE_DATE = new Date('2026-04-15T09:30:00.000Z');
 const SAMPLE_RELATIVE_DAY_DELTA = -3;
-const SAMPLE_LIST = ['Tiles', 'Invoices', 'Reports'] as const;
+const SAMPLE_LIST = ['Tokens', 'Patterns', 'Accessibility'] as const;
 const SAMPLE_SORT_VALUES = ['zebra', 'apple', 'angstrom'] as const;
 
 export interface DesignSystemLocaleDiagnostics {

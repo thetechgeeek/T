@@ -5,8 +5,8 @@ import type { ThemeMode, ThemePresetId } from '@/src/theme';
 import DesignLibraryScreen from '../DesignLibraryScreen';
 
 const PRESET_MATRIX: ReadonlyArray<{ presetId: ThemePresetId; mode: ThemeMode }> = [
-	{ presetId: 'tilemaster', mode: 'light' },
-	{ presetId: 'tilemaster', mode: 'dark' },
+	{ presetId: 'baseline', mode: 'light' },
+	{ presetId: 'baseline', mode: 'dark' },
 	{ presetId: 'executive', mode: 'light' },
 	{ presetId: 'executive', mode: 'dark' },
 	{ presetId: 'studio', mode: 'light' },
