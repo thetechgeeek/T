@@ -9,6 +9,7 @@ interface CardProps {
 	padding?: 'none' | 'sm' | 'md' | 'lg';
 	accessible?: boolean;
 	accessibilityLabel?: string;
+	testID?: string;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -18,6 +19,7 @@ export const Card: React.FC<CardProps> = ({
 	padding = 'md',
 	accessible,
 	accessibilityLabel,
+	testID,
 }) => {
 	const { theme } = useTheme();
 	const cardTokens = theme.components.card;
@@ -39,6 +41,7 @@ export const Card: React.FC<CardProps> = ({
 
 	return (
 		<View
+			testID={testID}
 			style={cardStyles as StyleProp<ViewStyle>}
 			accessible={accessible}
 			accessibilityLabel={accessibilityLabel}

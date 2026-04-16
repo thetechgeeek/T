@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import type { LucideIcon } from 'lucide-react-native';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
@@ -11,7 +11,8 @@ interface StatCardProps {
 	color?: string;
 	trend?: string;
 	trendLabel?: string;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
+	testID?: string;
 	/** Stable English identifier for screen readers and Maestro. Overrides computed label. */
 	accessibilityLabel?: string;
 }
@@ -24,6 +25,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 	trend,
 	trendLabel,
 	style,
+	testID,
 	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
@@ -33,6 +35,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 
 	return (
 		<View
+			testID={testID}
 			accessible={true}
 			accessibilityLabel={accessibilityLabel ?? `${label}: ${value}`}
 			accessibilityRole="summary"

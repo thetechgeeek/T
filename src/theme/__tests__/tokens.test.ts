@@ -80,6 +80,8 @@ describe('Theme Tokens (P0.1)', () => {
 	it('should expose palette-backed collections through the theme', () => {
 		expect(lightTheme.collections.partyAvatarColors).toHaveLength(8);
 		expect(lightTheme.collections.expenseCategoryPickColors[0]).toBe('#C1440E');
+		expect(lightTheme.collections.chartQualitativeColors).toHaveLength(10);
+		expect(new Set(lightTheme.collections.chartQualitativeColors).size).toBe(10);
 		expect(lightTheme.collections.printThemeSwatches).toEqual(
 			expect.arrayContaining([
 				expect.objectContaining({ key: 'professional', color: '#1D4ED8' }),
@@ -96,14 +98,23 @@ describe('Theme Tokens (P0.1)', () => {
 
 describe('Layout gap helpers (Phase 0)', () => {
 	it('covers full spacing scale including new entries', () => {
+		expect(layout.gap0).toEqual({ gap: 0 });
+		expect(layout.gap1).toEqual({ gap: 1 });
 		expect(layout.gap2).toEqual({ gap: 2 });
+		expect(layout.gap3).toEqual({ gap: 3 });
 		expect(layout.gap4).toEqual({ gap: 4 });
+		expect(layout.gap5).toEqual({ gap: 5 });
+		expect(layout.gap6).toEqual({ gap: 6 });
 		expect(layout.gap8).toEqual({ gap: 8 });
+		expect(layout.gap10).toEqual({ gap: 10 });
 		expect(layout.gap12).toEqual({ gap: 12 });
 		expect(layout.gap16).toEqual({ gap: 16 });
+		expect(layout.gap20).toEqual({ gap: 20 });
 		expect(layout.gap24).toEqual({ gap: 24 });
 		expect(layout.gap32).toEqual({ gap: 32 });
+		expect(layout.gap40).toEqual({ gap: 40 });
 		expect(layout.gap48).toEqual({ gap: 48 });
+		expect(layout.gap64).toEqual({ gap: 64 });
 	});
 });
 

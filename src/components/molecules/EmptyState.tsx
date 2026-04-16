@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
 import { SIZE_EMPTY_STATE_ICON } from '@/theme/uiMetrics';
@@ -12,7 +12,9 @@ interface EmptyStateProps {
 	icon?: React.ReactNode;
 	actionLabel?: string;
 	onAction?: () => void;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
+	testID?: string;
+	accessibilityLabel?: string;
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -23,11 +25,18 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 	actionLabel,
 	onAction,
 	style,
+	testID,
+	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
 
 	return (
-		<View style={[styles.container, style]}>
+		<View
+			testID={testID}
+			accessible={true}
+			accessibilityLabel={accessibilityLabel ?? title}
+			style={[styles.container, style]}
+		>
 			{icon && (
 				<View style={styles.icon} importantForAccessibility="no">
 					{icon}

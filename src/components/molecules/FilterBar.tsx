@@ -1,5 +1,12 @@
 import React from 'react';
-import { Text, Pressable, ScrollView, StyleSheet } from 'react-native';
+import {
+	Text,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
@@ -16,6 +23,8 @@ export interface FilterBarProps {
 	onSelect: (value: string) => void;
 	defaultValue?: string;
 	onClear?: () => void;
+	style?: StyleProp<ViewStyle>;
+	testID?: string;
 }
 
 /**
@@ -30,6 +39,8 @@ export function FilterBar({
 	onSelect,
 	defaultValue,
 	onClear,
+	style,
+	testID,
 }: FilterBarProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
@@ -39,9 +50,10 @@ export function FilterBar({
 
 	return (
 		<ScrollView
+			testID={testID}
 			horizontal
 			showsHorizontalScrollIndicator={false}
-			contentContainerStyle={styles.container}
+			contentContainerStyle={[styles.container, style]}
 			keyboardShouldPersistTaps="handled"
 		>
 			{filters.map((filter) => {

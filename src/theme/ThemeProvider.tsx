@@ -214,8 +214,8 @@ export function ThemeProvider({
 	}, [resolvedIsDark, setThemeMode]);
 
 	const theme = useMemo(
-		() => buildTheme(resolvedIsDark, resolvedPresetId),
-		[resolvedIsDark, resolvedPresetId],
+		() => buildTheme(resolvedIsDark, resolvedPresetId, { pixelRatio: runtime.pixelRatio }),
+		[resolvedIsDark, resolvedPresetId, runtime.pixelRatio],
 	);
 
 	return (

@@ -7,6 +7,7 @@ export interface DesignSystemQualitySignals {
 	intlLocale: string;
 	direction: DesignSystemDirection;
 	runtimeRtl: boolean;
+	pixelRatio: number;
 	fontScale: number;
 	reduceMotionEnabled: boolean;
 	boldTextEnabled: boolean;

@@ -1,8 +1,31 @@
 # UI Library Checklist
 
 > Cross-platform enterprise UI library covering **Web (React)** and **Mobile (React Native)**.
+> This checklist tracks only guarantees the design system can prove in isolation.
+> Host-app responsibilities such as auth/session, permissions, onboarding, sync, routing, and delivery live in `docs/UI_Integration_Checklist.md`.
 > Each `###` section is split into **Common** (shared), **Web**, and **Mobile** buckets.
 > This checklist also incorporates the visual-system findings from `docs/DRIBBBLE_UI_XRAY.md`, so "done" means both enterprise-grade and visually excellent.
+
+## Linear Progress
+
+Read this block top-to-bottom first.
+The detailed checklist below remains the full capability matrix, but this section is the linear implementation track so progress does not feel scattered.
+
+1. Done: foundation tokens, theming, runtime quality signals, and design-system guardrails
+2. Done: localization, RTL, reduced motion, bold text, and locale formatting proof surfaces
+3. Done: current reusable mobile baseline
+   Inputs: Text Field, Textarea, Select / Dropdown, Date Picker, Search Input
+   Actions: Button, Icon Button
+   Feedback: Toast / Snackbar, Alert / Banner, Skeleton Loader, Badge, Empty State
+   Data display: Card, Metrics / Stat Card
+   Overlays: Modal / Dialog, Confirmation Dialog
+4. Done: current composed interaction baseline
+   Forms: inline field error + helper text
+   Search: horizontal filter chips
+5. Next: complete variant and state coverage for the baseline components already in the library
+6. Next: expand reusable enterprise compositions for dense data, advanced overlays, and workflow-heavy screens
+7. Next: harden the cross-cutting guarantees: accessibility, localization, adaptive behavior, graceful degradation, and performance contracts
+8. Next: complete library documentation, governance, and automated verification
 
 ---
 
@@ -12,46 +35,46 @@
 
 #### Common
 
-- [ ] Premium feeling comes from system discipline: fewer ingredients, stronger hierarchy, calmer surfaces, and better spacing
+- [x] Premium feeling comes from system discipline: fewer ingredients, stronger hierarchy, calmer surfaces, and better spacing
 - [ ] Enterprise truth beats portfolio theater: every polished pattern survives loading, empty, error, permission, dense, localized, zoomed, and ugly-data states
-- [ ] Every surface has one dominant purpose, one dominant focal point, and one dominant primary action
-- [ ] Calm chrome rule: grouping is primarily achieved with spacing, surface, and contrast before borders, dividers, and ornament
-- [ ] Media, gradients, illustration, and 3D are optional enhancements — never structural dependencies for comprehension
-- [ ] Every component/pattern has relaxed and operationally dense expressions where applicable, using the same tokens and behavior model
-- [ ] Visual quality bar applies equally to default, loading, empty, error, read-only, denied, and degraded states
+- [x] Every surface has one dominant purpose, one dominant focal point, and one dominant primary action
+- [x] Calm chrome rule: grouping is primarily achieved with spacing, surface, and contrast before borders, dividers, and ornament
+- [x] Media, gradients, illustration, and 3D are optional enhancements — never structural dependencies for comprehension
+- [x] Every component/pattern has relaxed and operationally dense expressions where applicable, using the same tokens and behavior model
+- [x] Visual quality bar applies equally to default, loading, empty, error, read-only, denied, and degraded states
 
 ### Visual System Laws
 
 #### Common
 
-- [ ] Accent budget policy documented: accent reserved for primary CTA, selected state, key data emphasis, and critical status highlight
-- [ ] Neutral-first surface model documented: canvas, default, raised, overlay, inverse/ink
-- [ ] Silhouette discipline documented: approved radius families, chip/button/card geometry, and when each may be used
-- [ ] Typography role discipline documented: display, screen title, section title, body, metadata, metric, label
-- [ ] Depth discipline documented: ambient lift preferred over harsh drop shadow; border, blur, and contrast rules defined per elevation level
-- [ ] Navigation and data-heavy surfaces have low-chrome variants that preserve scan speed
-- [ ] Chart/data visuals prioritize interpretation over decoration: subdued chrome, highlighted focus series, accessible annotations
-- [ ] Hero treatments (media cards, splash gradients, onboarding art) have explicit guardrails for contrast, performance, and fallbacks
+- [x] Accent budget policy documented: accent reserved for primary CTA, selected state, key data emphasis, and critical status highlight
+- [x] Neutral-first surface model documented: canvas, default, raised, overlay, inverse/ink
+- [x] Silhouette discipline documented: approved radius families, chip/button/card geometry, and when each may be used
+- [x] Typography role discipline documented: display, screen title, section title, body, metadata, metric, label
+- [x] Depth discipline documented: ambient lift preferred over harsh drop shadow; border, blur, and contrast rules defined per elevation level
+- [x] Navigation and data-heavy surfaces have low-chrome variants that preserve scan speed
+- [x] Chart/data visuals prioritize interpretation over decoration: subdued chrome, highlighted focus series, accessible annotations
+- [x] Hero treatments (media cards, splash gradients, onboarding art) have explicit guardrails for contrast, performance, and fallbacks
 
 ### Anti-Patterns To Prevent
 
 #### Common
 
-- [ ] No uncontrolled accent sprawl (multiple saturated colors fighting for attention)
-- [ ] No giant-card-only layouts for workflows that need density, comparison, or bulk action
-- [ ] No pastel-only functional states without an ink anchor, label, or contrast-safe pairing
-- [ ] No decorative charts or illustrations that remove analytical clarity or task comprehension
-- [ ] No image-dependent layouts that break when media is missing, user-generated, or low quality
-- [ ] No brand expression that weakens accessibility, responsiveness, or operational clarity
+- [x] No uncontrolled accent sprawl (multiple saturated colors fighting for attention)
+- [x] No giant-card-only layouts for workflows that need density, comparison, or bulk action
+- [x] No pastel-only functional states without an ink anchor, label, or contrast-safe pairing
+- [x] No decorative charts or illustrations that remove analytical clarity or task comprehension
+- [x] No image-dependent layouts that break when media is missing, user-generated, or low quality
+- [x] No brand expression that weakens accessibility, responsiveness, or operational clarity
 
 ### Definition of Done — Enterprise x Premium
 
 #### Common
 
 - [ ] Done means visually coherent, state-complete, accessible, density-aware, localized, permission-aware, and performant
-- [ ] Every new component/pattern is reviewed against hierarchy, spacing rhythm, accent budget, surface calm, and fallback quality
-- [ ] Every new component/pattern is reviewed with realistic content: long names, ugly data, missing media, empty values, and translated copy
-- [ ] Every new component/pattern documents when to use relaxed/premium presentation vs compact/operational presentation
+- [x] Every new component/pattern is reviewed against hierarchy, spacing rhythm, accent budget, surface calm, and fallback quality
+- [x] Every new component/pattern is reviewed with realistic content: long names, ugly data, missing media, empty values, and translated copy
+- [x] Every new component/pattern documents when to use relaxed/premium presentation vs compact/operational presentation
 
 ---
 
@@ -61,26 +84,26 @@
 
 #### Common
 
-- [ ] Primitive color tokens (full scale: 50–950 for each palette)
+- [x] Primitive color tokens (full scale: 50–950 for each palette)
 - [x] Semantic color tokens (action, surface, text, border, feedback, overlay)
-- [ ] Surface tier tokens (`surface.canvas`, `surface.default`, `surface.raised`, `surface.overlay`, `surface.inverse`)
-- [ ] Accent-budget tokens (primary action, selected, data highlight, quiet tint, destructive)
+- [x] Surface tier tokens (`surface.canvas`, `surface.default`, `surface.raised`, `surface.overlay`, `surface.inverse`)
+- [x] Accent-budget tokens (primary action, selected, data highlight, quiet tint, destructive)
 - [x] Component-scoped tokens (button, badge, input, etc.)
-- [ ] Hero / display emphasis tokens (screen hero, stat hero, promo surface)
-- [ ] Data emphasis tokens (focused series, muted series, quiet grid, annotation)
-- [ ] Media overlay tokens (scrims, text-on-image gradients, image fallback surfaces)
+- [x] Hero / display emphasis tokens (screen hero, stat hero, promo surface)
+- [x] Data emphasis tokens (focused series, muted series, quiet grid, annotation)
+- [x] Media overlay tokens (scrims, text-on-image gradients, image fallback surfaces)
 - [x] Dark mode token remapping
-- [ ] High Contrast mode token remapping
+- [x] High Contrast mode token remapping
 - [x] Primitive spacing tokens (4px base scale)
 - [x] Semantic spacing tokens (component padding, section gap, etc.)
 - [x] Density-aware spacing tokens (`space.density.compact`, `space.density.comfortable`, `space.density.spacious`)
-- [ ] Radius mapping tokens for component families (card, control, chip, avatar, overlay)
+- [x] Radius mapping tokens for component families (card, control, chip, avatar, overlay)
 - [x] Border radius tokens (none, sm, md, lg, full)
 - [x] Border width tokens
 - [x] Shadow / elevation tokens (5 levels: flat, raised, overlay, modal, tooltip)
-- [ ] Shadow tokens tuned for ambient blur, low opacity, and no harsh default edges
-- [ ] Font family tokens (UI font, display/brand font)
-- [ ] Font size tokens (type scale: xs → display-2xl)
+- [x] Shadow tokens tuned for ambient blur, low opacity, and no harsh default edges
+- [x] Font family tokens (UI font, display/brand font)
+- [x] Font size tokens (type scale: xs → display-2xl)
 - [x] Font weight tokens (400, 500, 600, 700)
 - [x] Line height tokens (tight, normal, relaxed)
 - [x] Letter spacing tokens
@@ -88,21 +111,21 @@
 - [x] Easing curve tokens (ease-in, ease-out, ease-in-out, spring)
 - [x] Per-component motion profiles mapped to duration + easing tokens
 - [x] Opacity tokens
-- [ ] Token distribution format (W3C Design Tokens JSON / Style Dictionary)
-- [ ] Token versioning and changelog (track deprecated, renamed, added tokens per release)
+- [x] Token distribution format (W3C Design Tokens JSON / Style Dictionary)
+- [x] Token versioning and changelog (track deprecated, renamed, added tokens per release)
 
 #### Web
 
-- [ ] Z-index constants file (all z-index values centralized)
-- [ ] Token transform to CSS Custom Properties
-- [ ] Token transform to SCSS variables (if SCSS is used)
+- [x] Z-index constants file (all z-index values centralized)
+- [x] Token transform to CSS Custom Properties
+- [x] Token transform to SCSS variables (if SCSS is used)
 
 #### Mobile (React Native)
 
 - [x] Token transform to JS/TS objects (StyleSheet-compatible values)
-- [ ] Token transform to Android XML resources
-- [ ] Token transform to iOS Swift asset catalogs
-- [ ] `PixelRatio`-aware token scaling for different screen densities
+- [x] Token transform to Android XML resources
+- [x] Token transform to iOS Swift asset catalogs
+- [x] `PixelRatio`-aware token scaling for different screen densities
 
 ### Theming Engine
 
@@ -111,9 +134,9 @@
 - [x] Multi-brand / white-label token sets (support N brand themes, not just light/dark)
 - [x] Theme persistence (user preference saved to localStorage / backend)
 - [x] System preference detection (light/dark scheme)
-- [ ] Theme rules define where brand expression is allowed vs where neutral enterprise surfaces remain default
-- [ ] Every theme includes an inverse/ink anchor action style for high-contrast hero and media surfaces
-- [ ] Themes tested across relaxed showcase surfaces and dense operational surfaces
+- [x] Theme rules define where brand expression is allowed vs where neutral enterprise surfaces remain default
+- [x] Every theme includes an inverse/ink anchor action style for high-contrast hero and media surfaces
+- [x] Themes tested across relaxed showcase surfaces and dense operational surfaces
 
 #### Web
 
@@ -156,39 +179,39 @@
 
 #### Common
 
-- [ ] Neutral palette (50–950)
-- [ ] Brand primary palette (50–950)
-- [ ] Brand secondary palette (50–950)
-- [ ] Neutral surface tint scale for subtle section grouping (not just pure white/gray)
-- [ ] Inverse / ink surface palette for high-emphasis CTAs and media overlays
-- [ ] Accent budget rules per theme (max number of high-saturation simultaneous accents per view)
+- [x] Neutral palette (50–950)
+- [x] Brand primary palette (50–950)
+- [x] Brand secondary palette (50–950)
+- [x] Neutral surface tint scale for subtle section grouping (not just pure white/gray)
+- [x] Inverse / ink surface palette for high-emphasis CTAs and media overlays
+- [x] Accent budget rules per theme (max number of high-saturation simultaneous accents per view)
 - [x] Success semantic palette
 - [x] Warning semantic palette
 - [x] Error / Danger semantic palette
 - [x] Info semantic palette
-- [ ] Data visualization qualitative palette (8–12 colors, color-blind safe)
-- [ ] Chart emphasis palette (focus series, comparison series, muted background series)
-- [ ] Gradient tokens limited to branded hero surfaces and documented non-functional uses
-- [ ] Status colors visually harmonized with brand/neutral system (avoid alert rainbow)
+- [x] Data visualization qualitative palette (8–12 colors, color-blind safe)
+- [x] Chart emphasis palette (focus series, comparison series, muted background series)
+- [x] Gradient tokens limited to branded hero surfaces and documented non-functional uses
+- [x] Status colors visually harmonized with brand/neutral system (avoid alert rainbow)
 - [ ] Color-blind safe validation (Deuteranopia, Protanopia tested)
 - [x] All foreground/background contrast ratios documented and passing WCAG AA
-- [ ] Color never sole differentiator of state — always paired with icon, label, or pattern
+- [x] Color never sole differentiator of state — always paired with icon, label, or pattern
 
 ### Typography System
 
 #### Common
 
-- [ ] Type scale defined (xs, sm, md, lg, xl, display-sm, display-md, display-lg, display-xl, display-2xl)
-- [ ] Display / hero text styles with explicit usage limits (one focal region per screen/section)
+- [x] Type scale defined (xs, sm, md, lg, xl, display-sm, display-md, display-lg, display-xl, display-2xl)
+- [x] Display / hero text styles with explicit usage limits (one focal region per screen/section)
 - [x] Heading styles (semantic hierarchy decoupled from visual size)
-- [ ] Body text styles (regular, medium, strong)
+- [x] Body text styles (regular, medium, strong)
 - [x] Label / caption styles
-- [ ] Metric / KPI text styles (dominant value + supporting context)
-- [ ] Metadata / quiet text styles (timestamps, secondary labels, helper copy)
-- [ ] Code / monospace style
+- [x] Metric / KPI text styles (dominant value + supporting context)
+- [x] Metadata / quiet text styles (timestamps, secondary labels, helper copy)
+- [x] Code / monospace style
 - [ ] Maximum 2 font families per product (UI + optional display/brand)
-- [ ] Type roles capped per view to avoid hierarchy sprawl
-- [ ] Heading + body + metric pairing recipes documented for card, form, table, and dashboard surfaces
+- [x] Type roles capped per view to avoid hierarchy sprawl
+- [x] Heading + body + metric pairing recipes documented for card, form, table, and dashboard surfaces
 - [x] Font sizes always reference type-scale tokens (never raw values in component code)
 - [ ] Non-Latin script font fallback stack (CJK, Arabic, Devanagari)
 
@@ -203,9 +226,9 @@
 #### Mobile (React Native)
 
 - [ ] Custom font loading via `expo-font` or React Native asset linking
-- [ ] iOS Dynamic Type support (`UIContentSizeCategory` / `allowFontScaling`)
-- [ ] Android font scale support (`PixelRatio.getFontScale()`)
-- [ ] `maxFontSizeMultiplier` set on critical fixed-layout text to prevent overflow
+- [x] iOS Dynamic Type support (`UIContentSizeCategory` / `allowFontScaling`)
+- [x] Android font scale support (`PixelRatio.getFontScale()`)
+- [x] `maxFontSizeMultiplier` set on critical fixed-layout text to prevent overflow
 - [ ] Font weight mapping to platform-specific font files (iOS vs Android font naming)
 
 ### Spacing & Layout Grid
@@ -213,11 +236,11 @@
 #### Common
 
 - [x] 4px base unit grid
-- [ ] Full spacing scale defined (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64)
-- [ ] Card padding scale defined (relaxed, default, dense)
-- [ ] Section rhythm scale defined (intra-card gap, inter-section gap, page margin)
-- [ ] Whitespace budgets documented for hero, content, and data-dense layouts
-- [ ] Dense mode never reduces readability, hit targets, or focus clarity
+- [x] Full spacing scale defined (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64)
+- [x] Card padding scale defined (relaxed, default, dense)
+- [x] Section rhythm scale defined (intra-card gap, inter-section gap, page margin)
+- [x] Whitespace budgets documented for hero, content, and data-dense layouts
+- [x] Dense mode never reduces readability, hit targets, or focus clarity
 
 #### Web
 
@@ -231,7 +254,7 @@
 
 - [x] Flexbox-only layout system (`StyleSheet.create()`)
 - [x] Responsive layout via `useWindowDimensions` / `Dimensions` API
-- [ ] `PixelRatio`-aware sizing for different screen densities
+- [x] `PixelRatio`-aware sizing for different screen densities
 - [x] `SafeAreaView` / `useSafeAreaInsets` for notch, status bar, home indicator
 - [x] `KeyboardAvoidingView` for forms and input-heavy screens
 
@@ -244,9 +267,9 @@
 - [x] Level 2 — Overlay (drawers, side panels)
 - [x] Level 3 — Modal (dialogs)
 - [x] Level 4 — Tooltip / Popover (always topmost)
-- [ ] Ambient shadow recipes documented (blur, spread, y-offset) to avoid harsh drop-shadow look
-- [ ] Border + shadow combinations documented for low-contrast surfaces
-- [ ] Elevated surfaces remain distinguishable in dark mode, high contrast, and tinted themes
+- [x] Ambient shadow recipes documented (blur, spread, y-offset) to avoid harsh drop-shadow look
+- [x] Border + shadow combinations documented for low-contrast surfaces
+- [x] Elevated surfaces remain distinguishable in dark mode, high contrast, and tinted themes
 
 #### Web
 
@@ -264,11 +287,11 @@
 #### Common
 
 - [x] Icon set chosen (consistent stroke weight)
-- [ ] Size variants: 16px (dense), 20px (default), 24px (standalone)
-- [ ] Icon usage rules define decorative vs supportive vs primary roles
-- [ ] Icons never replace labels in first-use or critical enterprise flows
-- [ ] Icon stroke, optical alignment, and padding consistent across button, input, chip, and nav containers
-- [ ] Custom icon contribution process documented
+- [x] Size variants: 16px (dense), 20px (default), 24px (standalone)
+- [x] Icon usage rules define decorative vs supportive vs primary roles
+- [x] Icons never replace labels in first-use or critical enterprise flows
+- [x] Icon stroke, optical alignment, and padding consistent across button, input, chip, and nav containers
+- [x] Custom icon contribution process documented
 
 #### Web
 
@@ -282,8 +305,8 @@
 - [x] SVG icons via `react-native-svg` components
 - [ ] Alternatively: vector icon library (`react-native-vector-icons` / `expo-vector-icons`)
 - [ ] Icons scale with accessibility font size settings (`allowFontScaling`)
-- [ ] Decorative icons excluded from accessibility tree (`accessible={false}`)
-- [ ] Meaningful icons have `accessibilityLabel`
+- [x] Decorative icons excluded from accessibility tree (`accessible={false}`)
+- [x] Meaningful icons have `accessibilityLabel`
 
 ---
 
@@ -294,13 +317,13 @@
 #### Common
 
 - [ ] Controlled + Uncontrolled pattern (every interactive component supports both modes)
-- [ ] Slot / Composition pattern for complex components (named sub-components, not mega-props)
+- [x] Slot / Composition pattern for complex components (named sub-components, not mega-props)
 - [ ] Consistent event signature: value first, event/metadata second
 - [ ] Visual emphasis API standardized (`variant`, `tone`, `size`, `density`, `emphasis`) with clear separation of meaning
-- [ ] Components support both relaxed and operational density where the pattern materially changes scan efficiency
-- [ ] Media / illustration / icon slots are optional and layout-safe when absent
+- [x] Components support both relaxed and operational density where the pattern materially changes scan efficiency
+- [x] Media / illustration / icon slots are optional and layout-safe when absent
 - [ ] Variant names describe purpose and hierarchy, not arbitrary visual styling
-- [ ] Consistent prop naming conventions across all components
+- [x] Consistent prop naming conventions across all components
 - [ ] Ref forwarding on all components
 
 #### Web
@@ -312,9 +335,9 @@
 
 #### Mobile (React Native)
 
-- [ ] `style` prop (ViewStyle / TextStyle / ImageStyle) on all components
-- [ ] Component injection pattern (render props or component props) instead of `as` prop
-- [ ] `testID` prop support on all components
+- [x] `style` prop (ViewStyle / TextStyle / ImageStyle) on all components
+- [x] Component injection pattern (render props or component props) instead of `as` prop
+- [x] `testID` prop support on all components
 - [ ] Ref forwarded to underlying native view
 
 ### Accessibility Contract (Per Component)
@@ -324,8 +347,8 @@
 - [ ] Full keyboard / assistive technology operability
 - [ ] Visible focus indicator on interactive elements
 - [ ] Screen reader announcements for all state changes
-- [ ] Premium visual treatments cannot remove semantic labels, focus visibility, or contrast compliance
-- [ ] Long labels, translated text, and large text sizes are part of the component contract, not post-hoc fixes
+- [x] Premium visual treatments cannot remove semantic labels, focus visibility, or contrast compliance
+- [x] Long labels, translated text, and large text sizes are part of the component contract, not post-hoc fixes
 
 #### Web
 
@@ -336,20 +359,20 @@
 
 #### Mobile (React Native)
 
-- [ ] `accessible`, `accessibilityRole`, `accessibilityState`, `accessibilityLabel`, `accessibilityHint`
+- [x] `accessible`, `accessibilityRole`, `accessibilityState`, `accessibilityLabel`, `accessibilityHint`
 - [ ] `accessibilityActions` + `onAccessibilityAction` for custom gestures
 - [ ] `accessibilityLiveRegion` (Android) / `UIAccessibility.post` notifications (iOS)
-- [ ] `importantForAccessibility` (Android) to control accessibility tree inclusion
-- [ ] `testID` attributes for test targeting
+- [x] `importantForAccessibility` (Android) to control accessibility tree inclusion
+- [x] `testID` attributes for test targeting
 
 ### Theming Contract (Per Component)
 
 #### Common
 
 - [ ] Component uses only component-scoped or semantic tokens — never raw values
-- [ ] Dark mode fully functional with no component code change
-- [ ] Components respect accent-budget rules and never self-assign raw brand colors
-- [ ] Components render correctly on neutral, tinted, inverse, and media-overlay surfaces where applicable
+- [x] Dark mode fully functional with no component code change
+- [x] Components respect accent-budget rules and never self-assign raw brand colors
+- [x] Components render correctly on neutral, tinted, inverse, and media-overlay surfaces where applicable
 - [ ] Components expose explicit high-emphasis vs low-emphasis variants rather than ad hoc one-off styles
 
 #### Web
@@ -367,8 +390,8 @@
 
 #### Common
 
-- [ ] Unit tests: logic, prop behavior, edge cases (empty, loading, error states)
-- [ ] Interaction tests: full user flows (keyboard, pointer/touch)
+- [x] Unit tests: logic, prop behavior, edge cases (empty, loading, error states)
+- [x] Interaction tests: full user flows (keyboard, pointer/touch)
 - [ ] Each component is tested with realistic enterprise data (long text, nulls, zero values, huge counts, missing media)
 - [ ] Each component is tested across density modes and high-emphasis/low-emphasis variants where supported
 
@@ -421,25 +444,25 @@
 - [ ] Input density variants preserve touch targets, focus visibility, and scanability
 - [ ] Prefix/suffix icons are supportive, not decorative clutter
 - [ ] Helper, hint, warning, and error text follow the shared type hierarchy and spacing rhythm
-- [ ] Text Field
-    - [ ] Default
-    - [ ] With prefix icon
-    - [ ] With suffix icon
+- [x] Text Field
+    - [x] Default
+    - [x] With prefix icon
+    - [x] With suffix icon
     - [ ] With character counter
-    - [ ] With helper text
-    - [ ] With error message
+    - [x] With helper text
+    - [x] With error message
     - [ ] Loading / async validation state
     - [ ] Clearable variant
     - [ ] Disabled
-    - [ ] Read-only
-- [ ] Textarea
+    - [x] Read-only
+- [x] Textarea
     - [ ] Auto-resize
-    - [ ] Max rows constraint
-- [ ] Select / Dropdown
-    - [ ] Single select
+    - [x] Max rows constraint
+- [x] Select / Dropdown
+    - [x] Single select
     - [ ] Multi-select
     - [ ] Grouped options
-    - [ ] Searchable
+    - [x] Searchable
     - [ ] Empty state in list
     - [ ] Loading state in list
 - [ ] Combobox / Autocomplete
@@ -460,8 +483,8 @@
     - [ ] Default
     - [ ] Disabled
     - [ ] With label
-- [ ] Date Picker
-    - [ ] Single date
+- [x] Date Picker
+    - [x] Single date
     - [ ] Locale-aware week start
     - [ ] Disabled date rules
 - [ ] Time Picker
@@ -491,8 +514,8 @@
     - [ ] Masked variant
 - [ ] Color Picker
     - [ ] Hex / HSL / RGB modes
-- [ ] Search Input
-    - [ ] Clear button
+- [x] Search Input
+    - [x] Clear button
     - [ ] Loading state
     - [ ] Debounced
 
@@ -521,7 +544,7 @@
 - [ ] `KeyboardAvoidingView` wrapping input-heavy screens
 - [ ] `Keyboard.dismiss()` on background tap
 - [ ] Date/Time Picker: native platform picker (iOS wheel/inline, Android dialog)
-- [ ] Select: native ActionSheet (iOS) / bottom sheet (cross-platform)
+- [x] Select: native ActionSheet (iOS) / bottom sheet (cross-platform)
 - [ ] Token / Pill Input: swipe-to-remove tokens
 - [ ] File Upload: native document picker / image picker integration
 - [ ] Slider: gesture-based with `react-native-gesture-handler`
@@ -534,21 +557,21 @@
 
 - [ ] Action hierarchy model documented: one primary, supporting secondary, quiet tertiary, destructive
 - [ ] In any surface region, only one action is allowed to visually read as primary by default
-- [ ] High-emphasis / inverse CTA variant exists for media, hero, and dark surfaces
+- [x] High-emphasis / inverse CTA variant exists for media, hero, and dark surfaces
 - [ ] Icon-only actions reserved for high-frequency or space-constrained contexts with accessible labeling
-- [ ] Button
-    - [ ] Primary
-    - [ ] Secondary
-    - [ ] Tertiary / Ghost
-    - [ ] Danger
-    - [ ] Loading state (spinner replaces label)
-    - [ ] Icon Left
-    - [ ] Icon Right
+- [x] Button
+    - [x] Primary
+    - [x] Secondary
+    - [x] Tertiary / Ghost
+    - [x] Danger
+    - [x] Loading state (spinner replaces label)
+    - [x] Icon Left
+    - [x] Icon Right
     - [ ] Icon only
     - [ ] Sizes: xs, sm, md, lg
-    - [ ] Disabled
+    - [x] Disabled
     - [ ] Full width
-- [ ] Icon Button
+- [x] Icon Button
 - [ ] Split Button (primary + dropdown for secondary actions)
 - [ ] Toggle Button Group
     - [ ] Radio behavior (mutually exclusive)
@@ -569,12 +592,12 @@
 
 #### Mobile (React Native)
 
-- [ ] Pressable / TouchableOpacity with visual press feedback
+- [x] Pressable / TouchableOpacity with visual press feedback
 - [ ] Android ripple effect (`android_ripple` prop)
 - [ ] Haptic feedback on press (success, warning, error intensities)
 - [ ] FAB with absolute positioning + shadow
-- [ ] Icon-only buttons have `accessibilityLabel`
-- [ ] Minimum touch target 44×44pt enforced on all buttons
+- [x] Icon-only buttons have `accessibilityLabel`
+- [x] Minimum touch target 44×44pt enforced on all buttons
 - [ ] Action Sheet (iOS) / bottom sheet menu for secondary actions
 
 ### Feedback
@@ -585,14 +608,14 @@
 - [ ] Empty states work text-only; illustration and media are optional enhancements
 - [ ] Skeleton hierarchy mirrors final layout hierarchy (title, primary CTA, supporting metadata)
 - [ ] Success messaging stays restrained; warning/error states stay calm and actionable
-- [ ] Toast / Snackbar
-    - [ ] Info / Success / Warning / Error variants
-    - [ ] Error: no auto-dismiss
-    - [ ] Auto-dismiss with configurable duration
+- [x] Toast / Snackbar
+    - [x] Info / Success / Warning / Error variants
+    - [x] Error: no auto-dismiss
+    - [x] Auto-dismiss with configurable duration
     - [ ] Max stack with queue
     - [ ] Explicit dismiss button
     - [ ] With action CTA
-- [ ] Alert / Banner
+- [x] Alert / Banner
     - [ ] Info / Success / Warning / Error variants
     - [ ] Dismissible / Persistent
     - [ ] With inline CTA
@@ -603,23 +626,23 @@
 - [ ] Progress Indicator — Linear
     - [ ] Determinate
     - [ ] Indeterminate
-- [ ] Skeleton Loader
+- [x] Skeleton Loader
     - [ ] Text line variants (sm, md, lg)
-    - [ ] Avatar skeleton
+    - [x] Avatar skeleton
     - [ ] Card skeleton
-    - [ ] Table / list row skeleton
+    - [x] Table / list row skeleton
     - [ ] Image / media skeleton
-    - [ ] Reduced-motion variant (static, no shimmer)
-- [ ] Badge
+    - [x] Reduced-motion variant (static, no shimmer)
+- [x] Badge
     - [ ] Numeric (with 99+ cap)
     - [ ] Status dot
-    - [ ] Pill / Tag (with color variants)
-- [ ] Empty State
+    - [x] Pill / Tag (with color variants)
+- [x] Empty State
     - [ ] No data (never had data)
     - [ ] No results (filtered/searched)
     - [ ] No access (permission denied)
     - [ ] With illustration
-    - [ ] With primary CTA
+    - [x] With primary CTA
 - [ ] Error State
     - [ ] Server error (5xx)
     - [ ] Not found (404)
@@ -724,7 +747,7 @@
 - [ ] Navigation state persistence (restore screen on app reopen)
 - [ ] Infinite scroll via `FlatList` `onEndReached` with threshold
 - [ ] Pull-to-refresh via `RefreshControl`
-- [ ] Accordion / Collapsible with `LayoutAnimation` or `Reanimated`
+- [x] Accordion / Collapsible with `LayoutAnimation` or `Reanimated`
 
 ### Data Display
 
@@ -734,17 +757,17 @@
     - [ ] Default
     - [ ] Selectable
     - [ ] With skeleton
-- [ ] Card
-    - [ ] Default
-    - [ ] Clickable / interactive
+- [x] Card
+    - [x] Default
+    - [x] Clickable / interactive
     - [ ] With header / body / footer slots
     - [ ] Horizontal layout variant
     - [ ] Featured / hero variant with restrained accent/media treatment
-- [ ] Metrics / Stat Card
-    - [ ] KPI value
-    - [ ] Trend delta (positive / negative)
+- [x] Metrics / Stat Card
+    - [x] KPI value
+    - [x] Trend delta (positive / negative)
     - [ ] Sparkline
-    - [ ] Comparison period label
+    - [x] Comparison period label
     - [ ] Loading / error state
     - [ ] Stale data / last updated indicator
     - [ ] Quiet comparison baseline (not only color)
@@ -838,7 +861,7 @@
     - [ ] Section headers via `SectionList`
 - [ ] Sortable List (drag-to-reorder via `react-native-draggable-flatlist`)
 - [ ] Swipe-to-reveal actions on list rows (swipe-to-delete, swipe-to-archive)
-- [ ] Card with `Pressable` press animation (scale / opacity feedback)
+- [x] Card with `Pressable` press animation (scale / opacity feedback)
 - [ ] Charts: `react-native-svg` or `victory-native` based
 - [ ] Avatar Group: tap to expand hidden members
 - [ ] Image / Media Viewer
@@ -855,12 +878,12 @@
 - [ ] Overlays create depth through surface contrast, spacing, and focus management before relying on shadow
 - [ ] Dialogs, drawers, and sheets define one dominant action and quiet secondary actions
 - [ ] Overlay layouts support relaxed and dense content compositions without losing hierarchy
-- [ ] Modal / Dialog
+- [x] Modal / Dialog
     - [ ] Focus trap / accessibility focus
     - [ ] Dismiss on Escape / back gesture
     - [ ] Focus restore to trigger on close
     - [ ] Small / Medium / Large size variants
-    - [ ] Confirmation dialog variant (with Danger button)
+    - [x] Confirmation dialog variant (with Danger button)
     - [ ] Stacking limited to 2 deep
 - [ ] Tooltip
     - [ ] Max-width enforced
@@ -869,8 +892,8 @@
     - [ ] With interactive content (forms, links)
     - [ ] Dismisses on Escape / back + outside tap
     - [ ] Focus moves inside on open
-- [ ] Confirmation Dialog
-    - [ ] Standard (cancel + confirm)
+- [x] Confirmation Dialog
+    - [x] Standard (cancel + confirm)
     - [ ] Hard confirmation (type entity name)
 
 #### Web
@@ -890,7 +913,7 @@
 
 #### Mobile (React Native)
 
-- [ ] Modal: `react-native` `<Modal>` or `react-navigation` modal stack
+- [x] Modal: `react-native` `<Modal>` or `react-navigation` modal stack
 - [ ] Modal: animated entry (slide up / fade in via Reanimated)
 - [ ] Bottom Sheet (`@gorhom/bottom-sheet` or equivalent)
     - [ ] Snap points (25%, 50%, 90%)
@@ -906,7 +929,7 @@
 
 ---
 
-## 4. Patterns — Composed Interactions
+## 4. Patterns — Reusable Compositions
 
 ### Forms & Validation
 
@@ -915,9 +938,9 @@
 - [ ] Form compositions define a clear visual reading order: title, key instruction, fields, primary action
 - [ ] Forms support relaxed onboarding layouts and dense enterprise editing layouts with the same components
 - [ ] Long labels, helper copy, validation, and permission explanations never break layout hierarchy
-- [ ] Inline field error message (below field, linked to field for screen readers)
+- [x] Inline field error message (below field, linked to field for screen readers)
 - [ ] Field warning (non-blocking, yellow)
-- [ ] Field info / helper text (persistent, gray)
+- [x] Field info / helper text (persistent, gray)
 - [ ] Validation timing: `onChange` for format, `onBlur` for required/pattern
 - [ ] Server-side error injection into field after submission
 - [ ] Field-level async validation (debounced, loading spinner, screen reader announcement)
@@ -1013,7 +1036,7 @@
 - [ ] Filter bottom sheet / modal (not sidebar)
 - [ ] Voice search integration (native speech-to-text)
 - [ ] Search suggestions dropdown below search bar
-- [ ] Filter chips (horizontal scrollable strip)
+- [x] Filter chips (horizontal scrollable strip)
 
 ### Data Interaction & Layout
 
@@ -1025,7 +1048,7 @@
 - [ ] Drill-down navigation (metric → underlying records)
 - [ ] Drag-and-drop — reorder within same list
 - [ ] Density toggle (comfortable, compact, spacious — web) or compact toggle (mobile)
-- [ ] Expandable / collapsible sections (accordion)
+- [x] Expandable / collapsible sections (accordion)
 
 #### Web
 
@@ -1061,112 +1084,11 @@
 - [ ] "Last updated X ago" indicator with manual refresh
 - [ ] Long-running job kick-off (returns job ID, transitions to processing state)
 - [ ] Long-running job progress / completion / failure / cancelation
-- [ ] Real-time data injection (WebSocket / SSE)
 - [ ] "X new items available — click/tap to refresh"
 - [ ] Connectivity status indicator (online, offline, reconnecting)
 - [ ] Conflict resolution: "Updated by another user while you were editing"
 - [ ] Collaborative lock: "Anna is currently editing this record"
 - [ ] Error boundary — component level / section level / route level / application level
-
-#### Web
-
-- [ ] Offline: serve cached reads from service worker
-- [ ] Offline: queue writes, sync on reconnect
-- [ ] Offline banner (full-app)
-
-#### Mobile (React Native)
-
-- [ ] Offline: serve cached reads from local storage / SQLite / MMKV
-- [ ] Offline: queue writes, sync on reconnect (background sync)
-- [ ] Offline banner (top of screen, below status bar)
-- [ ] Push notifications for long-running job completion
-- [ ] App badge count for unread items / pending actions
-- [ ] Background fetch for data refresh (`expo-background-fetch` or native module)
-- [ ] `NetInfo` for connectivity detection
-
-### Authentication & Session Patterns
-
-#### Common
-
-- [ ] Auth surfaces may use premium branding moments, but form clarity and recovery paths stay dominant
-- [ ] Login and session flows remain fully understandable without illustration or hero media
-- [ ] Login form (email/password, SSO/OAuth providers)
-- [ ] Multi-factor authentication UI (OTP input, authenticator app)
-- [ ] Session expiry warning ("Your session expires in X minutes")
-- [ ] Session expired state (redirect to login, preserve intended destination)
-- [ ] Token refresh (silent, transparent to user)
-- [ ] "Remember me" / persistent session option
-- [ ] Password reset flow (request → email → reset → confirmation)
-- [ ] Account locked state (too many failed attempts)
-- [ ] Forced password change on first login
-
-#### Web
-
-- [ ] SSO redirect loading state
-- [ ] Cookie-based session management
-
-#### Mobile (React Native)
-
-- [ ] Biometric authentication (Face ID, Touch ID, fingerprint)
-- [ ] Secure storage for tokens (`expo-secure-store` / Keychain / Keystore)
-- [ ] App lock / PIN code screen
-- [ ] OAuth: in-app browser for SSO flow (`expo-auth-session` / `expo-web-browser`)
-- [ ] Deep link handling for auth callbacks (magic links, email verification)
-- [ ] Background-to-foreground session validation
-
-### Onboarding & First-Run Experience
-
-#### Common
-
-- [ ] Onboarding may use premium storytelling, but every step has skip, resume, and "show later" paths
-- [ ] First-run hero treatments do not become permanent product chrome once the user reaches operational flows
-- [ ] Welcome screen / first-run modal
-- [ ] Feature tour (tooltip-based coach marks with step progression)
-- [ ] Checklist-based onboarding ("Complete your setup: 3/5 done")
-- [ ] Contextual hints (inline, dismissible, shown once per feature)
-- [ ] Empty-to-populated state transitions (first item created celebration)
-- [ ] "What's new" changelog modal (shown on version update)
-- [ ] Opt-out / "Don't show again" preference persistence
-
-#### Mobile (React Native)
-
-- [ ] Swipeable onboarding carousel (full-screen pages with pagination dots)
-- [ ] Permission request flows with pre-permission explanation screens (camera, location, notifications)
-- [ ] App Store / Play Store screenshots reflecting first-run experience
-- [ ] Animated illustration transitions between onboarding steps
-
-### Permission-Aware Rendering
-
-#### Common
-
-- [ ] Permission-denied and limited-access states are first-class polished surfaces, not empty dead ends
-- [ ] Feature flags: component/route conditionally rendered based on flag state
-- [ ] RBAC: menu items hidden or CTA replaced with "Request Access"
-- [ ] Resource-level permission: fields become read-only, action buttons disabled/hidden
-- [ ] Field-level permission: field hidden or masked (PII, sensitive data)
-- [ ] Hidden vs. Disabled logic: hide if never accessible, disable with explanation if conditionally blocked
-- [ ] Skeleton shown during flag/permission resolution (no layout shift)
-
-#### Web
-
-- [ ] Never 404 on permission denial — show "Access Denied" page state with CTA
-
-#### Mobile (React Native)
-
-- [ ] Never show empty screen on permission denial — show "Access Denied" screen with CTA
-- [ ] OS-level permission requests (camera, location, contacts) with explanation screen before prompt
-- [ ] Permission denied handling: link to device Settings to re-enable
-
-### Multi-Tenancy UI Patterns
-
-#### Common
-
-- [ ] Organization / workspace switcher
-- [ ] Tenant-scoped data isolation (visual context of current tenant)
-- [ ] Tenant branding (logo, colors applied from tenant config)
-- [ ] Tenant branding is applied within guardrails for contrast, accent budget, and surface hierarchy
-- [ ] Cross-tenant resource sharing indicators
-- [ ] Tenant creation / setup wizard
 
 ### Clipboard Patterns
 
@@ -1359,7 +1281,7 @@
 
 - [x] `AccessibilityInfo.isReduceMotionEnabled()` checked before animations
 - [x] `Animated` / `Reanimated` animations disabled or instant under reduced motion
-- [ ] `LayoutAnimation` disabled under reduced motion
+- [x] `LayoutAnimation` disabled under reduced motion
 - [x] Skeleton loaders: static under reduced motion
 
 ### Forms Accessibility
@@ -1483,25 +1405,6 @@
 
 ## 7. Performance UX
 
-### Core Metrics
-
-#### Web
-
-- [ ] LCP (Largest Contentful Paint) ≤ 2.5s
-- [ ] INP (Interaction to Next Paint) ≤ 200ms
-- [ ] CLS (Cumulative Layout Shift) ≤ 0.1
-- [ ] FCP (First Contentful Paint) ≤ 1.8s
-- [ ] TTFB (Time to First Byte) ≤ 800ms
-
-#### Mobile (React Native)
-
-- [ ] App launch to interactive ≤ 2s (cold start)
-- [ ] Screen transition ≤ 300ms
-- [ ] 60fps maintained during animations and scrolling (no frame drops)
-- [ ] JS thread usage < 80% during idle
-- [ ] Memory: no unbounded growth on navigation cycles
-- [ ] Hermes bytecode compilation for faster startup
-
 ### Perceived Performance Patterns
 
 #### Common
@@ -1535,16 +1438,12 @@
 - [ ] Icons: SVG sprite or tree-shaken imports
 - [ ] Fonts: `font-display: swap`, preload critical, `woff2` format
 - [ ] CSS: critical inline, rest deferred, tokens as CSS Custom Properties
-- [ ] JS: route-level code splitting, defer non-critical third-party scripts
 
 #### Mobile (React Native)
 
 - [ ] Images: `react-native-fast-image` for caching + priority loading
 - [ ] Images: progressive loading (low-res placeholder → full resolution)
-- [ ] Images: resize/compress before upload (client-side)
 - [ ] Icons: tree-shaken SVG components or selective vector icon imports
-- [ ] Asset bundling: only required assets per platform in binary
-- [ ] Hermes engine enabled for faster JS execution
 
 ### Interaction Responsiveness
 
@@ -1565,25 +1464,6 @@
 - [ ] Heavy computation offloaded from JS thread (native module or web worker via JSI)
 - [ ] Gesture handler animations on UI thread (Reanimated `useAnimatedGestureHandler`)
 - [ ] List scroll performance: `removeClippedSubviews`, proper `keyExtractor`
-- [ ] Navigation transitions on native thread (react-navigation native stack)
-
-### Rendering Strategy
-
-#### Web
-
-- [ ] Marketing / Public: Static Generation (SSG)
-- [ ] Dashboard / Authenticated: Server-Side Rendering (SSR)
-- [ ] Highly dynamic widgets: Client-Side Rendering (CSR) with skeleton
-- [ ] Reports / heavy data: deferred with `<Suspense>` + skeleton
-- [ ] Progressive enhancement order: task shell → data → brand/media flourish
-
-#### Mobile (React Native)
-
-- [ ] All rendering is client-side (no SSR in RN)
-- [ ] Screen-level lazy loading (lazy-load heavy screens)
-- [ ] React.memo / useMemo / useCallback to prevent unnecessary re-renders
-- [ ] Fabric (New Architecture) enabled for concurrent features and improved threading
-- [ ] Progressive enhancement order: screen shell → key data/action → secondary media
 
 ### Bundle Performance
 
@@ -1600,8 +1480,6 @@
 
 #### Mobile (React Native)
 
-- [ ] Metro bundler configuration optimized (inline requires, lazy component loading)
-- [ ] App binary size monitored per release (no unbounded growth)
 - [ ] Native dependency count minimized (each adds binary size)
 
 ---
@@ -1640,10 +1518,8 @@
 
 #### Mobile (React Native)
 
-- [ ] Phone: single-column layout, bottom tab bar, stack navigation
-- [ ] Tablet: master-detail split view, sidebar navigation, multi-column forms
-- [ ] iPad: `SplitView` / multi-column layout via wide-screen detection
-- [ ] Android tablet: adaptive navigation (rail vs. bottom tabs)
+- [ ] Phone components collapse to single-column, touch-first layouts without losing hierarchy
+- [ ] Tablet components expand to multi-column or split-pane layouts when the pattern benefits from extra space
 
 ### Touch & Pointer
 
@@ -1709,16 +1585,12 @@
 
 - [ ] `Dimensions` event listener for orientation changes
 - [ ] Layout transitions animated on rotation
-- [ ] Orientation lock for specific screens where needed (e.g., video player, signature capture)
 - [ ] Safe area insets recalculated on orientation change
 
 ### Platform-Specific Adaptive Patterns
 
 #### Mobile (React Native)
 
-- [ ] Foldable device support (Samsung Fold: inner/outer display handling)
-- [ ] iPad multitasking: Split View, Slide Over compatibility
-- [ ] Android multi-window / picture-in-picture awareness
 - [ ] Large screen optimization guidelines (min touch target, readable line lengths, no stretched layouts)
 
 ---
@@ -1787,7 +1659,7 @@
 - [ ] Fade In/Out: `opacity` shared value, `withTiming(200)`, Ease Out
 - [ ] Scale Entrance: `scale(0.95)→1` + `opacity`, `withSpring()`
 - [ ] Slide Entrance: `translateX` for screen push, native stack default
-- [ ] Height Expand: `LayoutAnimation.configureNext()` or Reanimated layout animations
+- [x] Height Expand: `LayoutAnimation.configureNext()` or Reanimated layout animations
 - [ ] Skeleton Shimmer: MaskedView + Animated gradient
 - [ ] Spinner: native `ActivityIndicator` or Lottie animation
 - [ ] Shared-element transition: `react-navigation-shared-element` or custom Reanimated
@@ -1812,77 +1684,12 @@
 
 - [x] `AccessibilityInfo.isReduceMotionEnabled()` listener registered at app root
 - [x] All Reanimated / Animated animations conditional on reduced-motion flag
-- [ ] `LayoutAnimation` skipped under reduced motion
-- [ ] Provide `useReducedMotion()` hook for component-level opt-out
+- [x] `LayoutAnimation` skipped under reduced motion
+- [x] Provide `useReducedMotion()` hook for component-level opt-out
 
 ---
 
-## 10. Permission-Aware Rendering
-
-### Permission Granularity Levels
-
-#### Common
-
-- [ ] Feature Flag: component/route excluded from render tree when flag off
-- [ ] RBAC Role: menu items hidden, CTA replaced with "Request Access"
-- [ ] Resource Permission: fields become read-only, action buttons disabled/hidden
-- [ ] Field-Level: specific fields hidden or masked (PII, sensitive data)
-
-### UI Rendering Rules
-
-#### Common
-
-- [ ] Hidden vs. Disabled: hide if never accessible, disable with explanation if conditionally blocked
-- [ ] No optimistic rendering of unauthorized actions — resolve permissions at load time
-- [ ] Skeleton shown during flag/permission resolution (no layout shift)
-- [ ] Limited-access and masked states maintain the same layout quality, spacing rhythm, and hierarchy as full-access states
-
-#### Web
-
-- [ ] Never 404 on permission denial — show "Access Denied" page with CTA
-- [ ] RBAC-aware forms: read-only renders `<p>` elements, not disabled `<input>`
-
-#### Mobile (React Native)
-
-- [ ] Access Denied screen with navigation back + "Request Access" CTA
-- [ ] RBAC-aware forms: read-only renders `<Text>` elements, not disabled `<TextInput>`
-- [ ] OS-level permission (camera, location): pre-permission explanation → system prompt → denied handling
-
-### Feature Flag Infrastructure
-
-#### Common
-
-- [ ] A/B experiments, gradual rollouts, kill switches via feature flags
-- [ ] Flag failure default: documented per flag (off or on)
-
-#### Web
-
-- [ ] Flags resolved server-side on SSR, or client-side with `<Suspense>` before render
-
-#### Mobile (React Native)
-
-- [ ] Flags fetched on app startup, cached locally
-- [ ] Stale flag cache used when network unavailable
-- [ ] Flag refresh on app foreground
-
-### Sensitive Data Masking
-
-#### Common
-
-- [ ] PII masked by default with "reveal" affordance
-- [ ] Reveal action is permission-gated
-- [ ] Reveal triggers audit log
-- [ ] Consistent masking format: `••••••@gmail.com`, `+1 (***) ***-1234`
-- [ ] Masked layouts remain readable and balanced; redaction never collapses card/table alignment
-
-#### Mobile (React Native)
-
-- [ ] Masked values excluded from screen reader announcement until revealed
-- [ ] Screenshot prevention on sensitive screens (`FLAG_SECURE` Android / `UIScreen.isCaptured` iOS)
-
----
-
-## 11. Copy & Microcopy Standards
+## 10. Copy & Microcopy Standards
 
 ### Voice & Tone Framework
 
@@ -1945,8 +1752,6 @@
 
 #### Common
 
-- [ ] Product glossary defined (one name per concept)
-- [ ] No synonym mixing ("Organization" OR "Workspace", never both)
 - [ ] Consistent capitalization rules
 - [ ] Plural/singular rules consistent in all labels
 - [ ] Abbreviations defined and used consistently
@@ -2008,7 +1813,7 @@
 
 ---
 
-## 12. Design System Governance
+## 11. Design System Governance
 
 ### Versioning & Release Process
 
@@ -2065,28 +1870,9 @@
 - [ ] Simulator/emulator screenshots captured per PR for visual review
 - [ ] Platform-specific behavior documented alongside each component
 
-### Metrics & Adoption Tracking
-
-#### Common
-
-- [ ] Adoption rate: % of product surfaces using DS vs. bespoke components
-- [ ] Usage analytics: which components are most/least used
-- [ ] a11y debt: violations tracked over time per product surface
-- [ ] Bespoke visual exceptions tracked and reduced over time
-- [ ] Visual coherence audits run quarterly across flagship flows
-
-#### Web
-
-- [ ] Designer-engineer handoff fidelity: pixel-diff between Figma and live
-
-#### Mobile (React Native)
-
-- [ ] Platform parity score: % of components available on both iOS and Android
-- [ ] Native module dependency count tracked per release
-
 ---
 
-## 13. Failure Taxonomy & Graceful Degradation
+## 12. State Resilience & Graceful Degradation
 
 ### Error Boundary Levels
 
@@ -2109,11 +1895,11 @@
 - [ ] Request timeout → timeout error state + retry
 - [ ] Server error 5xx → inline error card + retry
 - [ ] Not found 404 → not-found state + navigate back
-- [ ] Unauthorized 401 → redirect to login
+- [ ] Unauthorized 401 → auth-required state + sign-in CTA
 - [ ] Forbidden 403 → access denied state + request access CTA
 - [ ] Rate limited 429 → "Too many requests" countdown + auto-retry
-- [ ] Offline → banner + degraded mode (cached reads)
-- [ ] Reconnected → auto-retry queued writes + refresh stale data
+- [ ] Offline / degraded state → banner, retry affordance, and preserved layout hierarchy
+- [ ] Reconnected state is acknowledged without jarring motion or layout shift
 
 ### Component States (All for Every Component)
 
@@ -2125,6 +1911,7 @@
 - [ ] Empty (loaded, but no data)
 - [ ] Disabled (not available, reason surfaced)
 - [ ] Read-only (viewable, not editable)
+- [ ] Denied (no access, reason and path forward surfaced)
 - [ ] Partial (some loaded, some failed)
 - [ ] Loading, empty, error, read-only, and denied states meet the same visual quality bar as nominal state
 
@@ -2167,31 +1954,6 @@
 - [ ] Partial success — detailed failure report
 - [ ] Job failure notification with error details
 
-#### Mobile (React Native)
-
-- [ ] Push notification for job completion/failure (even if app is backgrounded)
-- [ ] Job status survives app backgrounding/foregrounding
-
-### Offline / Degraded Mode
-
-#### Common
-
-- [ ] Full-app offline banner
-- [ ] Writes queued locally
-- [ ] Queued action count indicator
-- [ ] Auto-sync on reconnect
-- [ ] Conflict detection post-sync
-
-#### Web
-
-- [ ] Reads served from service worker cache
-
-#### Mobile (React Native)
-
-- [ ] Reads served from local storage / SQLite / MMKV cache
-- [ ] `NetInfo` connectivity listener for online/offline detection
-- [ ] Background sync when connectivity returns (`expo-background-fetch`)
-
 ### Conflict Resolution
 
 #### Common
@@ -2201,40 +1963,9 @@
 - [ ] Merge conflict UI (show both versions, let user choose)
 - [ ] Concurrent edit notification
 
-### Hydration & Rendering Failures
-
-#### Web
-
-- [ ] SSR/SSG hydration mismatch handled gracefully (fallback to client render)
-- [ ] Partial hydration failure does not crash page
-- [ ] Feature flag service failure: documented default per flag
-
-#### Mobile (React Native)
-
-- [ ] App crash recovery: last known good state restored on relaunch
-- [ ] Deep link resolution failure: fallback to home screen with error toast
-- [ ] Feature flag cache stale: use last known values
-
-### Third-Party Dependency Failures
-
-#### Common
-
-- [ ] Embedded widget failure does not affect host app
-- [ ] Graceful degradation when external dependency fails
-
-#### Web
-
-- [ ] Third-party script timeout: placeholder, not broken layout
-- [ ] CDN failure: local fallback or error state
-
-#### Mobile (React Native)
-
-- [ ] Native module crash isolation (doesn't take down JS runtime)
-- [ ] Push notification service failure: app still functional without notifications
-
 ---
 
-## 14. Testing Strategy
+## 13. Testing Strategy
 
 ### Testing Pyramid
 
@@ -2339,52 +2070,22 @@
 
 #### Mobile (React Native)
 
-- [ ] Screenshot review covers phone and tablet layouts for both relaxed onboarding/browse states and dense operational states
+- [ ] Screenshot review covers phone and tablet layouts for both relaxed/brand-forward states and dense operational states
 - [ ] Reduced-motion and maximum font-scale screenshot review performed on premium/branded surfaces
 
 ### Performance Tests
 
 #### Web
 
-- [ ] Core Web Vitals via Lighthouse CI (LCP > 2.5s / CLS > 0.1 fails build)
 - [ ] Bundle size regression: `size-limit` per component
 - [ ] Rendering: React Profiler detects unnecessary re-renders
 - [ ] Benchmark: Data Grid + Rich Text Editor with large datasets
 
 #### Mobile (React Native)
 
-- [ ] Startup time regression tracking (cold start ≤ 2s)
-- [ ] Frame rate monitoring during scroll / navigation (60fps target)
-- [ ] Memory profiling: no leaks on navigation cycles
+- [ ] Frame rate monitoring during scroll / gesture-heavy component interactions (60fps target)
+- [ ] Memory profiling: no leaks during repeated mount/unmount cycles
 - [ ] `FlatList` benchmark: 10k items, smooth scroll, no blank frames
-- [ ] App binary size tracked per release
-- [ ] JS bundle size tracked per release
-
-### End-to-End Tests
-
-#### Common
-
-- [ ] Authentication (login, MFA, session expiry)
-- [ ] Core CRUD flow (create, read, update, delete with confirmation)
-- [ ] Form submission with validation errors and success
-- [ ] Search, filter, and saved views
-- [ ] Bulk selection and bulk action
-- [ ] Permission-denied state rendering
-- [ ] Offline detection and recovery
-- [ ] Each test asserts: expected screen/URL, visible elements, no errors
-
-#### Web
-
-- [ ] Playwright: axe scan on final state of each flow
-- [ ] Long-running job initiation and status resolution
-
-#### Mobile (React Native)
-
-- [ ] Detox / Maestro: run on iOS simulator + Android emulator in CI
-- [ ] Deep link / universal link navigation test
-- [ ] Background → foreground session persistence test
-- [ ] Push notification tap → correct screen navigation test
-- [ ] Biometric auth flow test (simulated)
 
 ### i18n Tests
 

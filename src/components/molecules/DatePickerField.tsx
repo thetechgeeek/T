@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
@@ -47,6 +47,7 @@ export interface DatePickerFieldProps {
 	minDate?: string;
 	maxDate?: string;
 	testID?: string;
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -60,6 +61,7 @@ export function DatePickerField({
 	onChange,
 	showShortcuts = false,
 	testID,
+	style,
 }: DatePickerFieldProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
@@ -73,7 +75,7 @@ export function DatePickerField({
 	};
 
 	return (
-		<View testID={testID}>
+		<View testID={testID} style={style}>
 			<Text
 				style={{
 					fontSize: theme.typography.sizes.sm,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, type PressableProps, type ViewStyle, type StyleProp } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
 export interface TouchableCardProps extends Omit<PressableProps, 'style'> {
@@ -25,9 +25,8 @@ export function TouchableCard({
 	testID,
 	...props
 }: TouchableCardProps) {
-	const { theme, runtime } = useTheme();
-	const reduceMotionEnabled =
-		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
+	const { theme } = useTheme();
+	const reduceMotionEnabled = useReducedMotion();
 	const cardMotion = theme.animation.profiles.cardPress;
 
 	const scale = useSharedValue(1);
@@ -62,9 +61,7 @@ export function TouchableCard({
 			// eslint-disable-next-line react-hooks/immutability
 			opacity.value = withSpring(1, cardMotion.spring);
 		} else {
-			// eslint-disable-next-line react-hooks/immutability
 			scale.value = 1;
-			// eslint-disable-next-line react-hooks/immutability
 			opacity.value = 1;
 		}
 		onPressOut?.(e);

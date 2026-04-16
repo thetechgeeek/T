@@ -1,5 +1,13 @@
 import React from 'react';
-import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
+import {
+	Modal,
+	View,
+	Text,
+	StyleSheet,
+	Pressable,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
@@ -14,6 +22,7 @@ export interface ConfirmationModalProps {
 	/** Use 'destructive' for delete/void actions — confirm button renders red */
 	variant?: 'default' | 'destructive';
 	testID?: string;
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -31,6 +40,7 @@ export function ConfirmationModal({
 	cancelLabel = 'Cancel',
 	variant = 'default',
 	testID,
+	style,
 }: ConfirmationModalProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
@@ -57,6 +67,7 @@ export function ConfirmationModal({
 							backgroundColor: c.surface,
 							borderRadius: theme.borderRadius.lg,
 						},
+						style,
 					]}
 				>
 					<Text

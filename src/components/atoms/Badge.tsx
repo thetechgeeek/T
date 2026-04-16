@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle, TextStyle, type StyleProp } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
@@ -19,9 +19,10 @@ export type BadgeVariant =
 interface BadgeProps {
 	label: string;
 	variant?: BadgeVariant;
-	style?: ViewStyle;
-	textStyle?: TextStyle;
+	style?: StyleProp<ViewStyle>;
+	textStyle?: StyleProp<TextStyle>;
 	size?: 'sm' | 'md';
+	testID?: string;
 	/** Stable English identifier for screen readers. Defaults to label. */
 	accessibilityLabel?: string;
 }
@@ -32,6 +33,7 @@ export const Badge: React.FC<BadgeProps> = ({
 	style,
 	textStyle,
 	size = 'md',
+	testID,
 	accessibilityLabel,
 }) => {
 	const { theme } = useTheme();
@@ -65,6 +67,7 @@ export const Badge: React.FC<BadgeProps> = ({
 
 	return (
 		<View
+			testID={testID}
 			accessible={true}
 			accessibilityLabel={accessibilityLabel ?? label}
 			style={[

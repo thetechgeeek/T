@@ -8,21 +8,39 @@ import {
 } from './layoutMetrics';
 import {
 	darkColors as baseDarkColors,
+	highContrastDarkColors,
+	highContrastLightColors,
 	lightColors as baseLightColors,
 	themePresetColorOverrides,
 } from './palette';
+import {
+	FONT_FAMILY_TOKENS,
+	FONT_SIZE_TOKENS,
+	FONT_WEIGHT_TOKENS,
+	TOKEN_VERSION,
+} from './designTokens';
 import { EASING_CURVES, MOTION_PROFILES } from './animations';
 import { FONT_SIZE, FONT_SIZE_SCALE, LINE_HEIGHT, LINE_HEIGHT_RATIO } from './typographyMetrics';
+import {
+	detectPixelRatio,
+	resolveDensityAwareDimension,
+	resolveDensityAwareRadius,
+	resolveDensityAwareTouchTarget,
+} from './density';
 import type {
 	Theme,
 	ThemeColors,
+	ThemeContrastMode,
 	ThemeExpression,
 	ThemeMeta,
 	ThemePresetId,
 	ThemeTypography,
 } from './index';
 
-export interface ThemePresetOption extends ThemeMeta {
+export interface ThemePresetOption extends Pick<
+	ThemeMeta,
+	'presetId' | 'presetLabel' | 'density' | 'expression' | 'accentBudget'
+> {
 	description: string;
 }
 
@@ -57,10 +75,13 @@ export interface ResolvedThemePreset {
 	};
 }
 
-const SYSTEM_FONT =
-	Platform.select({ ios: 'System', android: 'sans-serif', default: 'System' }) ?? 'System';
+const SYSTEM_FONT = Platform.select(FONT_FAMILY_TOKENS.ui) ?? FONT_FAMILY_TOKENS.ui.default;
 const SYSTEM_FONT_BOLD =
-	Platform.select({ ios: 'System', android: 'sans-serif-medium', default: 'System' }) ?? 'System';
+	Platform.select(FONT_FAMILY_TOKENS.display) ?? FONT_FAMILY_TOKENS.display.default;
+const SYSTEM_FONT_BRAND =
+	Platform.select(FONT_FAMILY_TOKENS.brand) ?? FONT_FAMILY_TOKENS.brand.default;
+const SYSTEM_FONT_MONO =
+	Platform.select(FONT_FAMILY_TOKENS.mono) ?? FONT_FAMILY_TOKENS.mono.default;
 
 const BASE_SPACING = SPACING_PX;
 const BASE_RADIUS = BORDER_RADIUS_PX;
@@ -71,6 +92,7 @@ const MIN_SIZE_LG = 15;
 const MIN_SIZE_XL = 17;
 const MIN_SIZE_2XL = 18;
 const MIN_SIZE_3XL = 22;
+const MIN_SIZE_4XL = 26;
 const MIN_DISPLAY_SIZE = 26;
 const MIN_DISPLAY_LINE_HEIGHT = 34;
 const MIN_H1_SIZE = 22;
@@ -124,59 +146,100 @@ function roundToken(value: number, minimum = 0) {
 	return Math.max(minimum, Math.round(value));
 }
 
-function scaleSpacing(scale: number): Theme['spacing'] {
+function scaleSpacing(scale: number, pixelRatio = 2): Theme['spacing'] {
 	return {
-		xxs: roundToken(BASE_SPACING.xxs * scale, 2),
-		xs: roundToken(BASE_SPACING.xs * scale, 4),
-		sm: roundToken(BASE_SPACING.sm * scale, 6),
-		md: roundToken(BASE_SPACING.md * scale, 8),
-		lg: roundToken(BASE_SPACING.lg * scale, 10),
-		xl: roundToken(BASE_SPACING.xl * scale, 16),
-		'2xl': roundToken(BASE_SPACING['2xl'] * scale, 20),
-		'3xl': roundToken(BASE_SPACING['3xl'] * scale, 28),
-		'4xl': roundToken(BASE_SPACING['4xl'] * scale, 40),
+		xxs: resolveDensityAwareDimension(roundToken(BASE_SPACING.xxs * scale, 2), pixelRatio),
+		xs: resolveDensityAwareDimension(roundToken(BASE_SPACING.xs * scale, 4), pixelRatio),
+		sm: resolveDensityAwareDimension(roundToken(BASE_SPACING.sm * scale, 6), pixelRatio),
+		md: resolveDensityAwareDimension(roundToken(BASE_SPACING.md * scale, 8), pixelRatio),
+		lg: resolveDensityAwareDimension(roundToken(BASE_SPACING.lg * scale, 10), pixelRatio),
+		xl: resolveDensityAwareDimension(roundToken(BASE_SPACING.xl * scale, 16), pixelRatio),
+		'2xl': resolveDensityAwareDimension(
+			roundToken(BASE_SPACING['2xl'] * scale, 20),
+			pixelRatio,
+		),
+		'3xl': resolveDensityAwareDimension(
+			roundToken(BASE_SPACING['3xl'] * scale, 28),
+			pixelRatio,
+		),
+		'4xl': resolveDensityAwareDimension(
+			roundToken(BASE_SPACING['4xl'] * scale, 40),
+			pixelRatio,
+		),
 	};
 }
 
-export function buildDensitySpacingSet(): Theme['densitySpacing'] {
+export function buildDensitySpacingSet(pixelRatio = detectPixelRatio()): Theme['densitySpacing'] {
 	return {
-		compact: scaleSpacing(EXECUTIVE_SPACING_SCALE),
-		comfortable: scaleSpacing(1),
-		spacious: scaleSpacing(STUDIO_SPACING_SCALE),
+		compact: scaleSpacing(EXECUTIVE_SPACING_SCALE, pixelRatio),
+		comfortable: scaleSpacing(1, pixelRatio),
+		spacious: scaleSpacing(STUDIO_SPACING_SCALE, pixelRatio),
 	};
 }
 
-function scaleRadius(scale: number): Theme['borderRadius'] {
+function scaleRadius(scale: number, pixelRatio = 2): Theme['borderRadius'] {
 	return {
 		none: 0,
-		xs: roundToken(BASE_RADIUS.xs * scale, 2),
-		sm: roundToken(BASE_RADIUS.sm * scale, 4),
-		md: roundToken(BASE_RADIUS.md * scale, 6),
-		lg: roundToken(BASE_RADIUS.lg * scale, 8),
-		xl: roundToken(BASE_RADIUS.xl * scale, 10),
+		xs: resolveDensityAwareRadius(roundToken(BASE_RADIUS.xs * scale, 2), pixelRatio),
+		sm: resolveDensityAwareRadius(roundToken(BASE_RADIUS.sm * scale, 4), pixelRatio),
+		md: resolveDensityAwareRadius(roundToken(BASE_RADIUS.md * scale, 6), pixelRatio),
+		lg: resolveDensityAwareRadius(roundToken(BASE_RADIUS.lg * scale, 8), pixelRatio),
+		xl: resolveDensityAwareRadius(roundToken(BASE_RADIUS.xl * scale, 10), pixelRatio),
 		full: BASE_RADIUS.full,
 	};
 }
 
-function scaleTypography(fontScale: number, lineHeightScale: number): ThemeTypography {
+function scaleTypography(
+	fontScale: number,
+	lineHeightScale: number,
+	pixelRatio: number,
+	colors: Pick<ThemeColors, 'primary' | 'error'>,
+): ThemeTypography {
+	const scaleSize = (value: number, minimum: number) =>
+		resolveDensityAwareDimension(roundToken(value * fontScale, minimum), pixelRatio);
+	const scaleLineHeightValue = (value: number, minimum: number) =>
+		resolveDensityAwareDimension(roundToken(value * lineHeightScale, minimum), pixelRatio);
+
 	return {
 		fontFamily: SYSTEM_FONT,
 		fontFamilyBold: SYSTEM_FONT_BOLD,
-		fontFamilyDisplay: SYSTEM_FONT_BOLD,
+		fontFamilyDisplay: SYSTEM_FONT_BRAND,
+		families: {
+			ui: SYSTEM_FONT,
+			display: SYSTEM_FONT_BOLD,
+			brand: SYSTEM_FONT_BRAND,
+			mono: SYSTEM_FONT_MONO,
+		},
+		scale: {
+			xs: scaleSize(FONT_SIZE_TOKENS.xs, MIN_SIZE_XS),
+			sm: scaleSize(FONT_SIZE_TOKENS.sm, MIN_SIZE_SM),
+			md: scaleSize(FONT_SIZE_TOKENS.md, MIN_SIZE_MD),
+			lg: scaleSize(FONT_SIZE_TOKENS.lg, MIN_SIZE_LG),
+			xl: scaleSize(FONT_SIZE_TOKENS.xl, MIN_SIZE_XL),
+			'2xl': scaleSize(FONT_SIZE_TOKENS['2xl'], MIN_SIZE_2XL),
+			'3xl': scaleSize(FONT_SIZE_TOKENS['3xl'], MIN_SIZE_3XL),
+			'4xl': scaleSize(FONT_SIZE_TOKENS['4xl'], MIN_SIZE_4XL),
+			'display-sm': scaleSize(FONT_SIZE_TOKENS['display-sm'], MIN_DISPLAY_SIZE),
+			'display-md': scaleSize(FONT_SIZE_TOKENS['display-md'], 32),
+			'display-lg': scaleSize(FONT_SIZE_TOKENS['display-lg'], 36),
+			'display-xl': scaleSize(FONT_SIZE_TOKENS['display-xl'], 40),
+			'display-2xl': scaleSize(FONT_SIZE_TOKENS['display-2xl'], 48),
+		},
 		sizes: {
-			xs: roundToken(FONT_SIZE_SCALE.xs * fontScale, MIN_SIZE_XS),
-			sm: roundToken(FONT_SIZE_SCALE.sm * fontScale, MIN_SIZE_SM),
-			md: roundToken(FONT_SIZE_SCALE.md * fontScale, MIN_SIZE_MD),
-			lg: roundToken(FONT_SIZE_SCALE.lg * fontScale, MIN_SIZE_LG),
-			xl: roundToken(FONT_SIZE_SCALE.xl * fontScale, MIN_SIZE_XL),
-			'2xl': roundToken(FONT_SIZE_SCALE['2xl'] * fontScale, MIN_SIZE_2XL),
-			'3xl': roundToken(FONT_SIZE_SCALE['3xl'] * fontScale, MIN_SIZE_3XL),
+			xs: scaleSize(FONT_SIZE_SCALE.xs, MIN_SIZE_XS),
+			sm: scaleSize(FONT_SIZE_SCALE.sm, MIN_SIZE_SM),
+			md: scaleSize(FONT_SIZE_SCALE.md, MIN_SIZE_MD),
+			lg: scaleSize(FONT_SIZE_SCALE.lg, MIN_SIZE_LG),
+			xl: scaleSize(FONT_SIZE_SCALE.xl, MIN_SIZE_XL),
+			'2xl': scaleSize(FONT_SIZE_SCALE['2xl'], MIN_SIZE_2XL),
+			'3xl': scaleSize(FONT_SIZE_SCALE['3xl'], MIN_SIZE_3XL),
+			'4xl': scaleSize(FONT_SIZE_SCALE['4xl'], MIN_SIZE_4XL),
 		},
 		weights: {
-			regular: '400',
-			medium: '500',
-			semibold: '600',
-			bold: '700',
+			regular: FONT_WEIGHT_TOKENS.regular,
+			medium: FONT_WEIGHT_TOKENS.medium,
+			semibold: FONT_WEIGHT_TOKENS.semibold,
+			bold: FONT_WEIGHT_TOKENS.bold,
 		},
 		lineHeights: {
 			tight: Number((LINE_HEIGHT_RATIO.tight * lineHeightScale).toFixed(2)),
@@ -185,127 +248,126 @@ function scaleTypography(fontScale: number, lineHeightScale: number): ThemeTypog
 		},
 		variants: {
 			display: {
-				fontSize: roundToken(FONT_SIZE.display * fontScale, MIN_DISPLAY_SIZE),
-				fontWeight: '700',
-				lineHeight: roundToken(
-					LINE_HEIGHT.display * lineHeightScale,
-					MIN_DISPLAY_LINE_HEIGHT,
-				),
+				fontSize: scaleSize(FONT_SIZE.display, MIN_DISPLAY_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.display, MIN_DISPLAY_LINE_HEIGHT),
+				fontFamily: SYSTEM_FONT_BRAND,
 			},
 			screenTitle: {
-				fontSize: roundToken(FONT_SIZE.h1 * fontScale, MIN_H1_SIZE),
-				fontWeight: '700',
-				lineHeight: roundToken(LINE_HEIGHT.h1 * lineHeightScale, MIN_H1_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.h1, MIN_H1_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.h1, MIN_H1_LINE_HEIGHT),
 			},
 			sectionTitle: {
-				fontSize: roundToken(FONT_SIZE.h3 * fontScale, MIN_H3_SIZE),
-				fontWeight: '600',
-				lineHeight: roundToken(LINE_HEIGHT.h3 * lineHeightScale, MIN_H3_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.h3, MIN_H3_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.semibold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.h3, MIN_H3_LINE_HEIGHT),
 			},
 			h1: {
-				fontSize: roundToken(FONT_SIZE.h1 * fontScale, MIN_H1_SIZE),
-				fontWeight: '700',
-				lineHeight: roundToken(LINE_HEIGHT.h1 * lineHeightScale, MIN_H1_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.h1, MIN_H1_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.h1, MIN_H1_LINE_HEIGHT),
 			},
 			h2: {
-				fontSize: roundToken(FONT_SIZE.h2 * fontScale, MIN_H2_SIZE),
-				fontWeight: '600',
-				lineHeight: roundToken(LINE_HEIGHT.h2 * lineHeightScale, MIN_H2_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.h2, MIN_H2_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.semibold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.h2, MIN_H2_LINE_HEIGHT),
 			},
 			h3: {
-				fontSize: roundToken(FONT_SIZE.h3 * fontScale, MIN_H3_SIZE),
-				fontWeight: '600',
-				lineHeight: roundToken(LINE_HEIGHT.h3 * lineHeightScale, MIN_H3_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.h3, MIN_H3_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.semibold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.h3, MIN_H3_LINE_HEIGHT),
 			},
 			body: {
-				fontSize: roundToken(FONT_SIZE.body * fontScale, 15),
-				fontWeight: '400',
-				lineHeight: roundToken(LINE_HEIGHT.body * lineHeightScale, MIN_BODY_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.body, 15),
+				fontWeight: FONT_WEIGHT_TOKENS.regular,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.body, MIN_BODY_LINE_HEIGHT),
+			},
+			bodyMedium: {
+				fontSize: scaleSize(FONT_SIZE.body, 15),
+				fontWeight: FONT_WEIGHT_TOKENS.medium,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.body, MIN_BODY_LINE_HEIGHT),
 			},
 			bodyStrong: {
-				fontSize: roundToken(FONT_SIZE.body * fontScale, 15),
-				fontWeight: '600',
-				lineHeight: roundToken(LINE_HEIGHT.body * lineHeightScale, MIN_BODY_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.body, 15),
+				fontWeight: FONT_WEIGHT_TOKENS.semibold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.body, MIN_BODY_LINE_HEIGHT),
 			},
 			bodyBold: {
-				fontSize: roundToken(FONT_SIZE.body * fontScale, 15),
-				fontWeight: '700',
-				lineHeight: roundToken(LINE_HEIGHT.body * lineHeightScale, MIN_BODY_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.body, 15),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.body, MIN_BODY_LINE_HEIGHT),
 			},
 			metadata: {
-				fontSize: roundToken(FONT_SIZE.caption * fontScale, MIN_METADATA_SIZE),
-				fontWeight: '500',
-				lineHeight: roundToken(
-					LINE_HEIGHT.caption * lineHeightScale,
-					MIN_METADATA_LINE_HEIGHT,
-				),
+				fontSize: scaleSize(FONT_SIZE.caption, MIN_METADATA_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.medium,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.caption, MIN_METADATA_LINE_HEIGHT),
 			},
 			metric: {
-				fontSize: roundToken(FONT_SIZE.amountLarge * fontScale, MIN_METRIC_SIZE),
-				fontWeight: '700',
-				lineHeight: roundToken(
-					LINE_HEIGHT.amountLarge * lineHeightScale,
-					MIN_METRIC_LINE_HEIGHT,
-				),
+				fontSize: scaleSize(FONT_SIZE.amountLarge, MIN_METRIC_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.amountLarge, MIN_METRIC_LINE_HEIGHT),
+			},
+			code: {
+				fontSize: scaleSize(FONT_SIZE.caption, MIN_CAPTION_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.medium,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.caption, MIN_CAPTION_LINE_HEIGHT),
+				fontFamily: SYSTEM_FONT_MONO,
 			},
 			caption: {
-				fontSize: roundToken(FONT_SIZE.caption * fontScale, MIN_CAPTION_SIZE),
-				fontWeight: '400',
-				lineHeight: roundToken(
-					LINE_HEIGHT.caption * lineHeightScale,
-					MIN_CAPTION_LINE_HEIGHT,
-				),
+				fontSize: scaleSize(FONT_SIZE.caption, MIN_CAPTION_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.regular,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.caption, MIN_CAPTION_LINE_HEIGHT),
 			},
 			captionBold: {
-				fontSize: roundToken(FONT_SIZE.caption * fontScale, MIN_CAPTION_SIZE),
-				fontWeight: '700',
-				lineHeight: roundToken(
-					LINE_HEIGHT.caption * lineHeightScale,
-					MIN_CAPTION_LINE_HEIGHT,
-				),
+				fontSize: scaleSize(FONT_SIZE.caption, MIN_CAPTION_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.caption, MIN_CAPTION_LINE_HEIGHT),
 			},
 			amount: {
-				fontSize: roundToken(FONT_SIZE.amount * fontScale, MIN_AMOUNT_SIZE),
-				fontWeight: '700',
-				lineHeight: roundToken(
-					LINE_HEIGHT.amount * lineHeightScale,
-					MIN_AMOUNT_LINE_HEIGHT,
-				),
-				color: baseLightColors.primary,
+				fontSize: scaleSize(FONT_SIZE.amount, MIN_AMOUNT_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.amount, MIN_AMOUNT_LINE_HEIGHT),
+				color: colors.primary,
 			},
 			amountLarge: {
-				fontSize: roundToken(FONT_SIZE.amountLarge * fontScale, MIN_AMOUNT_LARGE_SIZE),
-				fontWeight: '700',
-				lineHeight: roundToken(
-					LINE_HEIGHT.amountLarge * lineHeightScale,
+				fontSize: scaleSize(FONT_SIZE.amountLarge, MIN_AMOUNT_LARGE_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(
+					LINE_HEIGHT.amountLarge,
 					MIN_AMOUNT_LARGE_LINE_HEIGHT,
 				),
-				color: baseLightColors.primary,
+				color: colors.primary,
 			},
 			amountNegative: {
-				fontSize: roundToken(FONT_SIZE.amount * fontScale, MIN_AMOUNT_SIZE),
-				fontWeight: '700',
-				lineHeight: roundToken(
-					LINE_HEIGHT.amount * lineHeightScale,
-					MIN_AMOUNT_LINE_HEIGHT,
-				),
-				color: baseLightColors.error,
+				fontSize: scaleSize(FONT_SIZE.amount, MIN_AMOUNT_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.bold,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.amount, MIN_AMOUNT_LINE_HEIGHT),
+				color: colors.error,
 			},
 			label: {
-				fontSize: roundToken(FONT_SIZE.label * fontScale, MIN_LABEL_SIZE),
-				fontWeight: '500',
-				lineHeight: roundToken(LINE_HEIGHT.label * lineHeightScale, MIN_LABEL_LINE_HEIGHT),
+				fontSize: scaleSize(FONT_SIZE.label, MIN_LABEL_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.medium,
+				lineHeight: scaleLineHeightValue(LINE_HEIGHT.label, MIN_LABEL_LINE_HEIGHT),
 			},
 			captionSmall: {
-				fontSize: roundToken(FONT_SIZE.captionSmall * fontScale, MIN_CAPTION_SMALL_SIZE),
-				fontWeight: '400',
-				lineHeight: roundToken(
-					LINE_HEIGHT.captionSmall * lineHeightScale,
+				fontSize: scaleSize(FONT_SIZE.captionSmall, MIN_CAPTION_SMALL_SIZE),
+				fontWeight: FONT_WEIGHT_TOKENS.regular,
+				lineHeight: scaleLineHeightValue(
+					LINE_HEIGHT.captionSmall,
 					MIN_CAPTION_SMALL_LINE_HEIGHT,
 				),
 			},
 		},
 	};
+}
+
+function resolvePresetBaseColors(isDark: boolean, contrastMode: ThemeContrastMode) {
+	if (contrastMode === 'high') {
+		return isDark ? highContrastDarkColors : highContrastLightColors;
+	}
+
+	return isDark ? baseDarkColors : baseLightColors;
 }
 
 const THEME_PRESET_DEFINITIONS: Record<ThemePresetId, ThemePresetDefinition> = {
@@ -398,11 +460,25 @@ export const THEME_PRESET_OPTIONS = Object.values(THEME_PRESET_DEFINITIONS).map(
 	}),
 ) as readonly ThemePresetOption[];
 
-export function resolveThemePreset(presetId: ThemePresetId, isDark: boolean): ResolvedThemePreset {
+export function resolveThemePreset(
+	presetId: ThemePresetId,
+	isDark: boolean,
+	options: {
+		contrastMode?: ThemeContrastMode;
+		pixelRatio?: number;
+	} = {},
+): ResolvedThemePreset {
 	const preset = THEME_PRESET_DEFINITIONS[presetId] ?? THEME_PRESET_DEFINITIONS.baseline;
+	const contrastMode = options.contrastMode ?? 'default';
+	const pixelRatio = options.pixelRatio ?? detectPixelRatio();
+	const baseColors = resolvePresetBaseColors(isDark, contrastMode);
 	const colors: ThemeColors = {
-		...(isDark ? baseDarkColors : baseLightColors),
-		...(isDark ? preset.darkOverrides : preset.lightOverrides),
+		...baseColors,
+		...(contrastMode === 'default'
+			? isDark
+				? preset.darkOverrides
+				: preset.lightOverrides
+			: {}),
 	};
 
 	return {
@@ -412,11 +488,13 @@ export function resolveThemePreset(presetId: ThemePresetId, isDark: boolean): Re
 			density: preset.density,
 			expression: preset.expression,
 			accentBudget: preset.accentBudget,
+			contrastMode,
+			tokenVersion: TOKEN_VERSION,
 		},
 		colors,
-		typography: scaleTypography(preset.fontScale, preset.lineHeightScale),
-		spacing: scaleSpacing(preset.spacingScale),
-		borderRadius: scaleRadius(preset.radiusScale),
+		typography: scaleTypography(preset.fontScale, preset.lineHeightScale, pixelRatio, colors),
+		spacing: scaleSpacing(preset.spacingScale, pixelRatio),
+		borderRadius: scaleRadius(preset.radiusScale, pixelRatio),
 		animation: {
 			durationInstant: ANIMATION_MS.instant,
 			durationMicro: roundToken(ANIMATION_MS.micro * preset.animationScale, 80),
@@ -476,7 +554,7 @@ export function resolveThemePreset(presetId: ThemePresetId, isDark: boolean): Re
 				},
 			},
 		},
-		touchTarget: preset.touchTarget,
+		touchTarget: resolveDensityAwareTouchTarget(preset.touchTarget, pixelRatio),
 		shadowProfile: {
 			opacityScale: preset.shadowOpacityScale,
 			radiusScale: preset.shadowRadiusScale,

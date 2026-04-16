@@ -9,7 +9,7 @@ import Animated, {
 import { WifiOff, ChevronRight } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
@@ -19,9 +19,8 @@ import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export function OfflineBanner() {
 	const { isConnected } = useNetworkStatus();
-	const { theme, runtime } = useTheme();
-	const reduceMotionEnabled =
-		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
+	const { theme } = useTheme();
+	const reduceMotionEnabled = useReducedMotion();
 	const router = useRouter();
 	const bannerMotion = theme.animation.profiles.bannerEnter;
 

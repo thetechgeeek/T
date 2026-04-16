@@ -1,5 +1,15 @@
 import React, { useState, useMemo } from 'react';
-import { Modal, View, Text, Pressable, ScrollView, TextInput, StyleSheet } from 'react-native';
+import {
+	Modal,
+	View,
+	Text,
+	Pressable,
+	ScrollView,
+	TextInput,
+	StyleSheet,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SIZE_BUTTON_HEIGHT_SM, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
@@ -19,6 +29,8 @@ export interface BottomSheetPickerProps {
 	selectedValue?: string;
 	allowAdd?: boolean;
 	onAddNew?: () => void;
+	style?: StyleProp<ViewStyle>;
+	testID?: string;
 }
 
 /**
@@ -35,6 +47,8 @@ export function BottomSheetPicker({
 	selectedValue,
 	allowAdd = false,
 	onAddNew,
+	style,
+	testID,
 }: BottomSheetPickerProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
@@ -52,6 +66,7 @@ export function BottomSheetPicker({
 		<Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
 			<Pressable style={[styles.backdrop, { backgroundColor: c.scrim }]} onPress={onClose} />
 			<View
+				testID={testID}
 				style={[
 					styles.sheet,
 					{
@@ -59,6 +74,7 @@ export function BottomSheetPicker({
 						borderTopLeftRadius: theme.borderRadius.xl,
 						borderTopRightRadius: theme.borderRadius.xl,
 					},
+					style,
 				]}
 			>
 				{/* Header */}

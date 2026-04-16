@@ -25,6 +25,7 @@ export interface ScreenProps {
 	scrollViewProps?: ScrollViewProps;
 	backgroundColor?: string;
 	accessibilityLabel?: string;
+	testID?: string;
 }
 
 export const Screen: React.FC<ScreenProps> = ({
@@ -40,6 +41,7 @@ export const Screen: React.FC<ScreenProps> = ({
 	scrollViewProps,
 	backgroundColor,
 	accessibilityLabel,
+	testID,
 }) => {
 	const { theme } = useTheme();
 	const insets = useSafeAreaInsets();
@@ -89,6 +91,7 @@ export const Screen: React.FC<ScreenProps> = ({
 	if (withKeyboard) {
 		return (
 			<KeyboardAvoidingView
+				testID={testID}
 				style={containerStyle}
 				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
 				accessibilityLabel={accessibilityLabel}
@@ -99,7 +102,7 @@ export const Screen: React.FC<ScreenProps> = ({
 	}
 
 	return (
-		<View style={containerStyle} accessibilityLabel={accessibilityLabel}>
+		<View testID={testID} style={containerStyle} accessibilityLabel={accessibilityLabel}>
 			{content}
 		</View>
 	);

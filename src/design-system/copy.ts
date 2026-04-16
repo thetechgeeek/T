@@ -1,8 +1,9 @@
 import type { DesignSystemComponentKind } from './generated/componentCatalog';
-import type {
-	ComponentKindFilter,
-	LibraryCompletionFilter,
-	LibraryPlatformFilter,
+import {
+	DESIGN_LIBRARY_OVERVIEW,
+	type ComponentKindFilter,
+	type LibraryCompletionFilter,
+	type LibraryPlatformFilter,
 } from './catalog';
 
 export type DesignSystemLocale = 'en' | 'pseudo' | 'ar';
@@ -141,6 +142,8 @@ export interface DesignSystemCopy {
 		currentExpression: (expression: string) => string;
 		currentAccentBudget: (count: number) => string;
 		currentSurfaceBias: (bias: string) => string;
+		currentBrandZones: (zones: readonly string[]) => string;
+		currentInverseActionSurfaces: (surfaces: readonly string[]) => string;
 		currentTouchTarget: (value: number) => string;
 		currentSpacing: (value: number) => string;
 		currentRadius: (value: number) => string;
@@ -210,7 +213,10 @@ export interface DesignSystemCopy {
 			secondary: string;
 			outline: string;
 			danger: string;
+			inverse: string;
+			inverseHint: string;
 			openPicker: string;
+			openDialog: string;
 		};
 		iconButtons: {
 			search: string;
@@ -224,6 +230,29 @@ export interface DesignSystemCopy {
 			phoneInput: string;
 			amountInput: string;
 			datePicker: string;
+			textarea: string;
+			errorField: string;
+			errorFieldError: string;
+		};
+		accordion: {
+			title: string;
+			subtitle: string;
+			collapsedLabel: string;
+			expandedLabel: string;
+			body: string;
+			badge: string;
+		};
+		feedbackBanner: {
+			label: string;
+			title: string;
+			description: string;
+			actionLabel: string;
+		};
+		dialog: {
+			title: string;
+			message: string;
+			confirmLabel: string;
+			cancelLabel: string;
 		};
 		filterOptions: ReadonlyArray<{ label: string; value: string }>;
 		picker: {
@@ -327,6 +356,7 @@ export interface DesignSystemCopy {
 		localeOptions: ReadonlyArray<{ label: string; value: DesignSystemLocale }>;
 		detectedLocale: (value: string) => string;
 		intlLocale: (value: string) => string;
+		pixelRatio: (value: number) => string;
 		fontScale: (value: number) => string;
 		reduceMotion: (enabled: boolean) => string;
 		boldText: (enabled: boolean) => string;
@@ -360,10 +390,13 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 		{ label: 'Skeletons', value: 'skeletons' },
 	];
 	const platformOptions: ReadonlyArray<{ label: string; value: LibraryPlatformFilter }> = [
-		{ label: 'Common + Mobile', value: 'common-mobile' },
-		{ label: 'Common', value: 'common' },
-		{ label: 'Mobile', value: 'mobile' },
-		{ label: 'All 1239', value: 'all' },
+		{
+			label: `Common + Mobile (${DESIGN_LIBRARY_OVERVIEW.commonMobile})`,
+			value: 'common-mobile',
+		},
+		{ label: `Common (${DESIGN_LIBRARY_OVERVIEW.common})`, value: 'common' },
+		{ label: `Mobile (${DESIGN_LIBRARY_OVERVIEW.mobile})`, value: 'mobile' },
+		{ label: `All (${DESIGN_LIBRARY_OVERVIEW.total})`, value: 'all' },
 	];
 	const statusOptions: ReadonlyArray<{ label: string; value: LibraryCompletionFilter }> = [
 		{ label: 'All Rows', value: 'all' },
@@ -492,6 +525,9 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			currentExpression: (expression) => localize(`Expression: ${expression}`),
 			currentAccentBudget: (count) => localize(`Accent budget: ${count}`),
 			currentSurfaceBias: (bias) => localize(`Surface bias: ${bias}`),
+			currentBrandZones: (zones) => localize(`Brand zones: ${zones.join(', ')}`),
+			currentInverseActionSurfaces: (surfaces) =>
+				localize(`Inverse actions: ${surfaces.join(', ')}`),
 			currentTouchTarget: (value) => localize(`Touch: ${value}px`),
 			currentSpacing: (value) => localize(`Spacing lg: ${value}`),
 			currentRadius: (value) => localize(`Radius md: ${value}`),
@@ -575,7 +611,10 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 				secondary: localize('Secondary'),
 				outline: localize('Outline'),
 				danger: localize('Danger'),
+				inverse: localize('Inverse'),
+				inverseHint: localize('Use on hero, media, and dark emphasis surfaces'),
 				openPicker: localize('Open Bottom Sheet Picker'),
+				openDialog: localize('Open Confirmation Dialog'),
 			},
 			iconButtons: {
 				search: localize('Search'),
@@ -589,6 +628,37 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 				phoneInput: localize('Phone Input'),
 				amountInput: localize('Amount Input'),
 				datePicker: localize('Date Picker'),
+				textarea: localize('Textarea'),
+				errorField: localize('Approval Email'),
+				errorFieldError: localize('Enter a valid approver email before continuing'),
+			},
+			accordion: {
+				title: localize('Collapsible Section'),
+				subtitle: localize(
+					'Use a clear header and explicit state label so hierarchy survives even when motion is reduced.',
+				),
+				collapsedLabel: localize('Show details'),
+				expandedLabel: localize('Hide details'),
+				body: localize(
+					'Expanded content should reveal supportive detail without changing the primary task hierarchy.',
+				),
+				badge: localize('Motion-safe'),
+			},
+			feedbackBanner: {
+				label: localize('Alert / Banner preview'),
+				title: localize('Sync service attention needed'),
+				description: localize(
+					'Keep the tone calm and actionable even when a service dependency is degraded.',
+				),
+				actionLabel: localize('Review queue'),
+			},
+			dialog: {
+				title: localize('Publish checklist updates?'),
+				message: localize(
+					'Confirm the current workbench changes before they roll into the shared library surface.',
+				),
+				confirmLabel: localize('Publish'),
+				cancelLabel: localize('Keep editing'),
 			},
 			filterOptions: [
 				{ label: 'All', value: 'all' },
@@ -741,6 +811,7 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			),
 			detectedLocale: (value) => localize(`Runtime locale: ${value}`),
 			intlLocale: (value) => localize(`Intl locale: ${value}`),
+			pixelRatio: (value) => localize(`Pixel ratio: ${value.toFixed(2)}x`),
 			fontScale: (value) => localize(`Font scale: ${value.toFixed(2)}x`),
 			reduceMotion: (enabled) => localize(`Reduce motion: ${enabled ? 'On' : 'Off'}`),
 			boldText: (enabled) => localize(`Bold text: ${enabled ? 'On' : 'Off'}`),

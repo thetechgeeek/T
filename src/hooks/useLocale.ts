@@ -1,16 +1,15 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { resolveSupportedLanguage, type SupportedLanguage } from '@/src/i18n';
 import { formatINR, formatINRShort } from '@/src/utils/currency';
 import { formatDate, formatRelativeDate, formatShortDate } from '@/src/utils/dateUtils';
 
 const STORAGE_KEY = '@tilemaster/locale';
 
-export type SupportedLanguage = 'hi' | 'en';
-
 export function useLocale() {
 	const { t, i18n } = useTranslation();
-	const currentLanguage = i18n.language as SupportedLanguage;
+	const currentLanguage = resolveSupportedLanguage(i18n.resolvedLanguage ?? i18n.language);
 
 	const toggleLanguage = useCallback(async () => {
 		const next: SupportedLanguage = currentLanguage === 'hi' ? 'en' : 'hi';

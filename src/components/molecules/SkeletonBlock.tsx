@@ -11,6 +11,7 @@ interface SkeletonBlockProps {
 	height?: number;
 	borderRadius?: number;
 	style?: StyleProp<ViewStyle>;
+	testID?: string;
 }
 
 export function SkeletonBlock({
@@ -18,6 +19,7 @@ export function SkeletonBlock({
 	height = 16,
 	borderRadius,
 	style,
+	testID,
 }: SkeletonBlockProps) {
 	const { c, r } = useThemeTokens();
 	const progress = useSkeletonShimmer();
@@ -28,6 +30,7 @@ export function SkeletonBlock({
 
 	return (
 		<Animated.View
+			testID={testID}
 			accessibilityElementsHidden={true}
 			importantForAccessibility="no-hide-descendants"
 			style={[

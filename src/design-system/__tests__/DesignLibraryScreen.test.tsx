@@ -15,5 +15,6 @@ describe('DesignLibraryScreen', () => {
 		expect(getByText(String(DESIGN_LIBRARY_OVERVIEW.commonMobile))).toBeTruthy();
 		expect(getByText('Supported Component Catalog')).toBeTruthy();
 		expect(getByText('Checklist Explorer')).toBeTruthy();
+		expect(getByText(`All (${DESIGN_LIBRARY_OVERVIEW.total})`)).toBeTruthy();
 	});
 });

@@ -27,6 +27,7 @@ describe('ThemeProvider', () => {
 		jest.restoreAllMocks();
 		await AsyncStorage.clear();
 		jest.spyOn(Appearance, 'getColorScheme').mockReturnValue('light');
+		jest.spyOn(PixelRatio, 'get').mockReturnValue(2);
 		jest.spyOn(PixelRatio, 'getFontScale').mockReturnValue(1);
 		jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(false);
 		jest.spyOn(AccessibilityInfo, 'isBoldTextEnabled').mockResolvedValue(false);
@@ -138,6 +139,7 @@ describe('ThemeProvider', () => {
 	});
 
 	it('exposes runtime accessibility and locale quality signals from the root provider', async () => {
+		jest.spyOn(PixelRatio, 'get').mockReturnValue(3);
 		jest.spyOn(PixelRatio, 'getFontScale').mockReturnValue(1.8);
 		jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
 		jest.spyOn(AccessibilityInfo, 'isBoldTextEnabled').mockResolvedValue(true);
@@ -149,6 +151,7 @@ describe('ThemeProvider', () => {
 			expect(result.current.runtime.reduceMotionEnabled).toBe(true);
 			expect(result.current.runtime.boldTextEnabled).toBe(true);
 		});
+		expect(result.current.runtime.pixelRatio).toBe(3);
 		expect(result.current.runtime.fontScale).toBe(1.8);
 		expect(result.current.runtime.runtimeRtl).toBe(true);
 		expect(result.current.runtime.detectedLocale.length).toBeGreaterThan(0);
@@ -162,6 +165,7 @@ describe('ThemeProvider', () => {
 					runtimeOverrides={{
 						reduceMotionEnabled: true,
 						boldTextEnabled: true,
+						pixelRatio: 3,
 						fontScale: 1.6,
 						runtimeRtl: true,
 					}}
@@ -173,6 +177,7 @@ describe('ThemeProvider', () => {
 
 		expect(result.current.runtime.reduceMotionEnabled).toBe(true);
 		expect(result.current.runtime.boldTextEnabled).toBe(true);
+		expect(result.current.runtime.pixelRatio).toBe(3);
 		expect(result.current.runtime.fontScale).toBe(1.6);
 		expect(result.current.runtime.runtimeRtl).toBe(true);
 	});

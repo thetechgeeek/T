@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SIZE_TOAST_BOTTOM_OFFSET } from '@/theme/uiMetrics';
 import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
-export type ToastVariant = 'success' | 'error' | 'info';
+export type ToastVariant = 'success' | 'error' | 'info' | 'warning';
+
+const DEFAULT_TOAST_DURATION_MS = 3000;
 
 export interface ToastProps {
 	visible: boolean;
@@ -15,41 +17,53 @@ export interface ToastProps {
 	/** Auto-dismiss duration in ms. Default 3000. */
 	duration?: number;
 	testID?: string;
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
  * P0.5 — Toast
- * Appears at bottom of screen above tab bar. Auto-dismisses after 3s.
- * success → green left border, error → red left border, info → blue left border.
+ * Appears at bottom of screen above tab bar.
+ * Success, info, and warning auto-dismiss by default after 3s. Error stays visible unless
+ * an explicit duration is provided.
  */
 export function Toast({
 	visible,
 	message,
 	variant,
 	onDismiss,
-	duration = 3000,
+	duration,
 	testID,
+	style,
 }: ToastProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	useEffect(() => {
-		if (visible) {
+		const shouldAutoDismiss = variant !== 'error' || duration !== undefined;
+		if (visible && shouldAutoDismiss) {
 			timerRef.current = setTimeout(() => {
 				onDismiss();
-			}, duration);
+			}, duration ?? DEFAULT_TOAST_DURATION_MS);
 		}
 		return () => {
 			if (timerRef.current) {
 				clearTimeout(timerRef.current);
+				timerRef.current = null;
 			}
 		};
-	}, [visible, duration, onDismiss]);
+	}, [visible, duration, onDismiss, variant]);
 
 	if (!visible) return null;
 
-	const borderColor = variant === 'success' ? c.success : variant === 'error' ? c.error : c.info;
+	const borderColor =
+		variant === 'success'
+			? c.success
+			: variant === 'error'
+				? c.error
+				: variant === 'warning'
+					? c.warning
+					: c.info;
 
 	return (
 		<View
@@ -62,6 +76,7 @@ export function Toast({
 					borderLeftColor: borderColor,
 					borderRadius: theme.borderRadius.md,
 				},
+				style,
 			]}
 			accessibilityLiveRegion="polite"
 			accessibilityRole="alert"

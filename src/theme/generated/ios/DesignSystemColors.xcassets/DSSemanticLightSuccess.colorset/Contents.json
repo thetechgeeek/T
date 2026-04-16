@@ -1,0 +1,20 @@
+{
+  "info": {
+    "author": "codex",
+    "version": 1
+  },
+  "colors": [
+    {
+      "idiom": "universal",
+      "color": {
+        "color-space": "srgb",
+        "components": {
+          "red": "0.101961",
+          "green": "0.529412",
+          "blue": "0.329412",
+          "alpha": "1.000000"
+        }
+      }
+    }
+  ]
+}

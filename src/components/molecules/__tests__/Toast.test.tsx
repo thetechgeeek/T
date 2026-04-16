@@ -5,8 +5,16 @@ import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 jest.useFakeTimers();
 
+afterEach(() => {
+	jest.clearAllTimers();
+});
+
 const renderWithTheme = (component: React.ReactElement) =>
-	render(<ThemeProvider>{component}</ThemeProvider>);
+	render(
+		<ThemeProvider initialMode="light" persist={false}>
+			{component}
+		</ThemeProvider>,
+	);
 
 describe('Toast', () => {
 	it('renders message when visible', () => {
@@ -55,5 +63,52 @@ describe('Toast', () => {
 			<Toast testID="toast" visible message="Failed" variant="error" onDismiss={jest.fn()} />,
 		);
 		expect(getByTestId('toast')).toBeTruthy();
+	});
+
+	it('renders warning variant', () => {
+		const { getByTestId } = renderWithTheme(
+			<Toast
+				testID="toast"
+				visible
+				message="Check your changes"
+				variant="warning"
+				onDismiss={jest.fn()}
+			/>,
+		);
+		expect(getByTestId('toast')).toBeTruthy();
+	});
+
+	it('supports a custom auto-dismiss duration', () => {
+		const onDismiss = jest.fn();
+		renderWithTheme(
+			<Toast
+				visible
+				message="Saved"
+				variant="success"
+				duration={1200}
+				onDismiss={onDismiss}
+			/>,
+		);
+
+		act(() => {
+			jest.advanceTimersByTime(1199);
+		});
+		expect(onDismiss).not.toHaveBeenCalled();
+
+		act(() => {
+			jest.advanceTimersByTime(1);
+		});
+		expect(onDismiss).toHaveBeenCalledTimes(1);
+	});
+
+	it('does not auto-dismiss error toasts unless a duration is provided', () => {
+		const onDismiss = jest.fn();
+		renderWithTheme(<Toast visible message="Failed" variant="error" onDismiss={onDismiss} />);
+
+		act(() => {
+			jest.advanceTimersByTime(10000);
+		});
+
+		expect(onDismiss).not.toHaveBeenCalled();
 	});
 });

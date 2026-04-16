@@ -2,9 +2,20 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { ConfirmationModal } from '../ConfirmationModal';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { buildTheme } from '@/src/theme/colors';
+
+const lightTheme = buildTheme(false);
+
+function flattenStyle(style: unknown) {
+	return Array.isArray(style) ? Object.assign({}, ...style.filter(Boolean)) : style;
+}
 
 const renderWithTheme = (component: React.ReactElement) =>
-	render(<ThemeProvider>{component}</ThemeProvider>);
+	render(
+		<ThemeProvider initialMode="light" persist={false}>
+			{component}
+		</ThemeProvider>,
+	);
 
 describe('ConfirmationModal', () => {
 	const defaultProps = {
@@ -65,5 +76,15 @@ describe('ConfirmationModal', () => {
 			<ConfirmationModal {...defaultProps} testID="modal-overlay" />,
 		);
 		expect(getByTestId('modal-overlay')).toBeTruthy();
+	});
+
+	it('supports a destructive confirmation variant', () => {
+		const { getByLabelText } = renderWithTheme(
+			<ConfirmationModal {...defaultProps} variant="destructive" confirmLabel="Delete" />,
+		);
+
+		expect(flattenStyle(getByLabelText('Delete').props.style)).toEqual(
+			expect.objectContaining({ backgroundColor: lightTheme.colors.error }),
+		);
 	});
 });

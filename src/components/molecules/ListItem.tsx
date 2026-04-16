@@ -1,8 +1,8 @@
 import React from 'react';
-import { Pressable, View, StyleSheet, ViewStyle } from 'react-native';
+import { Pressable, View, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { ChevronRight } from 'lucide-react-native';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { ThemedText } from '../atoms/ThemedText';
@@ -13,8 +13,9 @@ interface ListItemProps {
 	leftIcon?: React.ReactNode;
 	rightElement?: React.ReactNode;
 	onPress?: () => void;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
 	showChevron?: boolean;
+	testID?: string;
 	/** Stable English identifier. Defaults to combining title + subtitle. */
 	accessibilityLabel?: string;
 	accessibilityHint?: string;
@@ -28,12 +29,12 @@ export const ListItem: React.FC<ListItemProps> = ({
 	onPress,
 	style,
 	showChevron = true,
+	testID,
 	accessibilityLabel,
 	accessibilityHint,
 }) => {
-	const { theme, runtime } = useTheme();
-	const reduceMotionEnabled =
-		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
+	const { theme } = useTheme();
+	const reduceMotionEnabled = useReducedMotion();
 	const listItemMotion = theme.animation.profiles.listItemPress;
 
 	const scale = useSharedValue(1);
@@ -46,6 +47,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 	return (
 		<Animated.View style={[animStyle, style]}>
 			<Pressable
+				testID={testID}
 				onPress={onPress}
 				onPressIn={() => {
 					if (onPress && !reduceMotionEnabled) {
@@ -81,7 +83,11 @@ export const ListItem: React.FC<ListItemProps> = ({
 				]}
 			>
 				<View style={styles.content}>
-					{leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
+					{leftIcon && (
+						<View style={styles.leftIcon} importantForAccessibility="no">
+							{leftIcon}
+						</View>
+					)}
 					<View style={styles.textContainer}>
 						<ThemedText
 							allowFontScaling

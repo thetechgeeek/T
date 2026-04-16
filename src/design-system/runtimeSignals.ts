@@ -1,7 +1,8 @@
 import { AccessibilityInfo, I18nManager, PixelRatio } from 'react-native';
 import { useEffect, useState } from 'react';
+import { detectDeviceLocale } from '@/src/i18n/runtime';
+import { detectPixelRatio } from '@/src/theme/density';
 
-const DEFAULT_RUNTIME_LOCALE = 'en-US';
 const FONT_SCALE_DECIMALS = 2;
 
 type AccessibilitySubscription = { remove?: () => void } | undefined;
@@ -9,26 +10,20 @@ type AccessibilitySubscription = { remove?: () => void } | undefined;
 export interface RuntimeQualitySignals {
 	detectedLocale: string;
 	runtimeRtl: boolean;
+	pixelRatio: number;
 	fontScale: number;
 	reduceMotionEnabled: boolean;
 	boldTextEnabled: boolean;
 }
 
 export const DEFAULT_RUNTIME_QUALITY_SIGNALS: RuntimeQualitySignals = {
-	detectedLocale: DEFAULT_RUNTIME_LOCALE,
+	detectedLocale: detectDeviceLocale(),
 	runtimeRtl: false,
+	pixelRatio: detectPixelRatio(),
 	fontScale: 1,
 	reduceMotionEnabled: false,
 	boldTextEnabled: false,
 };
-
-function detectRuntimeLocale() {
-	try {
-		return Intl.DateTimeFormat().resolvedOptions().locale || DEFAULT_RUNTIME_LOCALE;
-	} catch {
-		return DEFAULT_RUNTIME_LOCALE;
-	}
-}
 
 function detectFontScale() {
 	const fontScale = PixelRatio.getFontScale?.() ?? 1;
@@ -66,7 +61,8 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 	const [boldTextEnabled, setBoldTextEnabled] = useState(
 		DEFAULT_RUNTIME_QUALITY_SIGNALS.boldTextEnabled,
 	);
-	const [detectedLocale] = useState(detectRuntimeLocale);
+	const [detectedLocale] = useState(detectDeviceLocale);
+	const [pixelRatio] = useState(detectPixelRatio);
 	const [fontScale] = useState(detectFontScale);
 
 	useEffect(() => {
@@ -107,6 +103,7 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 	return {
 		detectedLocale,
 		runtimeRtl: I18nManager.isRTL,
+		pixelRatio,
 		fontScale,
 		reduceMotionEnabled,
 		boldTextEnabled,

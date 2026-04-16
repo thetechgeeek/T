@@ -10,17 +10,11 @@
  *   MS_*         — duration / interval in milliseconds
  */
 
-// ─── Z-index scale ───────────────────────────────────────────────────────────
+import { ICON_SIZE_TOKENS } from './designTokens';
 
-export const Z_INDEX = {
-	base: 0,
-	dropdown: 10,
-	sticky: 50,
-	overlay: 100,
-	modal: 200,
-	toast: 300,
-	max: 999,
-} as const;
+export { Z_INDEX } from './zIndex';
+
+// ─── Z-index scale ───────────────────────────────────────────────────────────
 
 // ─── FAB positioning ──────────────────────────────────────────────────────────
 
@@ -46,6 +40,9 @@ export const SIZE_ICON_CONTAINER = 34;
 export const SIZE_ICON_SM = 12;
 export const SIZE_ICON_MD = 20;
 export const SIZE_ICON_LG = 24;
+export const SIZE_ICON_DENSE = ICON_SIZE_TOKENS.dense;
+export const SIZE_ICON_DEFAULT = ICON_SIZE_TOKENS.default;
+export const SIZE_ICON_STANDALONE = ICON_SIZE_TOKENS.standalone;
 
 /** Circular icon container (e.g. list-row leading icon) */
 export const SIZE_ICON_CIRCLE_MD = 40;

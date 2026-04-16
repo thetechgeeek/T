@@ -16,20 +16,27 @@ export type ComponentKindFilter = 'all' | DesignSystemComponentKind;
 
 export const DESIGN_LIBRARY_PREVIEW_LABELS = [
 	'Text Field',
+	'Textarea',
+	'Select / Dropdown',
 	'Search Input',
 	'Date Picker',
 	'Button',
+	'High-emphasis / inverse CTA variant exists for media, hero, and dark surfaces',
 	'Icon Button',
 	'Toast / Snackbar',
 	'Alert / Banner',
+	'Skeleton Loader',
 	'Badge',
-	'Tabs',
+	'Empty State',
 	'Card',
 	'Metrics / Stat Card',
 	'Modal / Dialog',
-	'Bottom Tab Bar (React Navigation `BottomTabNavigator`)',
+	'Confirmation Dialog',
 	'Inline field error message (below field, linked to field for screen readers)',
 	'Filter chips (horizontal scrollable strip)',
+	'Accordion / Collapsible with `LayoutAnimation` or `Reanimated`',
+	'Expandable / collapsible sections (accordion)',
+	'Height Expand: `LayoutAnimation.configureNext()` or Reanimated layout animations',
 ] as const;
 
 const PREVIEW_LABEL_SET = new Set<string>(DESIGN_LIBRARY_PREVIEW_LABELS);
@@ -40,6 +47,8 @@ const LIVE_PREVIEW_COMPONENTS = [
 	'Button',
 	'Card',
 	'Chip',
+	'CollapsibleSection',
+	'ConfirmationModal',
 	'DatePickerField',
 	'EmptyState',
 	'FilterBar',
@@ -51,6 +60,7 @@ const LIVE_PREVIEW_COMPONENTS = [
 	'SkeletonRow',
 	'StatCard',
 	'TextInput',
+	'TextAreaField',
 	'ThemedText',
 	'Toast',
 ] as const;

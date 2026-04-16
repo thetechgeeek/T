@@ -4,9 +4,9 @@ import { Appearance, View } from 'react-native';
 import { ThemedText, resolveAccessibleFontWeight } from '../ThemedText';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { buildTheme } from '@/src/theme/colors';
-import { FONT_SIZE, LINE_HEIGHT } from '@/src/theme/typographyMetrics';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 
@@ -52,13 +52,14 @@ describe('ThemedText (P0.2)', () => {
 	});
 
 	it('applies the correct font size for body variant (16sp)', () => {
+		const theme = buildTheme(false);
 		const { getByText } = renderWithColorScheme(
 			<ThemedText variant="body">Hello</ThemedText>,
 			'light',
 		);
 		const text = getByText('Hello');
 		expect(text.props.style).toContainEqual(
-			expect.objectContaining({ fontSize: FONT_SIZE.body }),
+			expect.objectContaining({ fontSize: theme.typography.variants.body.fontSize }),
 		);
 	});
 
@@ -81,24 +82,48 @@ describe('ThemedText (P0.2)', () => {
 	});
 
 	it('supports amount variants', () => {
+		const theme = buildTheme(false);
 		const { getByText } = renderWithColorScheme(
 			<ThemedText variant="amount">₹ 1,000</ThemedText>,
 			'light',
 		);
 		const text = getByText('₹ 1,000');
 		expect(text.props.style).toContainEqual(
-			expect.objectContaining({ fontSize: FONT_SIZE.amount, fontWeight: '700' }),
+			expect.objectContaining({
+				fontSize: theme.typography.variants.amount.fontSize,
+				fontWeight: '700',
+			}),
+		);
+	});
+
+	it('supports bodyMedium and code variants for quiet emphasis and monospace content', () => {
+		const { getByText } = renderWithColorScheme(
+			<>
+				<ThemedText variant="bodyMedium">Calmer emphasis</ThemedText>
+				<ThemedText variant="code">INV-2026-0042</ThemedText>
+			</>,
+			'light',
+		);
+		const bodyMedium = getByText('Calmer emphasis');
+		const code = getByText('INV-2026-0042');
+
+		expect(bodyMedium.props.style).toContainEqual(
+			expect.objectContaining({ fontWeight: '500' }),
+		);
+		expect(code.props.style).toContainEqual(
+			expect.objectContaining({ fontFamily: buildTheme(false).typography.families.mono }),
 		);
 	});
 
 	it('applies 1.5x line height for body text', () => {
+		const theme = buildTheme(false);
 		const { getByText } = renderWithColorScheme(
 			<ThemedText variant="body">Hello</ThemedText>,
 			'light',
 		);
 		const text = getByText('Hello');
 		expect(text.props.style).toContainEqual(
-			expect.objectContaining({ lineHeight: LINE_HEIGHT.body }),
+			expect.objectContaining({ lineHeight: theme.typography.variants.body.lineHeight }),
 		);
 	});
 

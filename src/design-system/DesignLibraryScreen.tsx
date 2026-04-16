@@ -20,10 +20,13 @@ import { FilterBar } from '@/src/components/molecules/FilterBar';
 import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { Toast } from '@/src/components/molecules/Toast';
 import { BottomSheetPicker } from '@/src/components/molecules/BottomSheetPicker';
+import { CollapsibleSection } from '@/src/components/molecules/CollapsibleSection';
+import { ConfirmationModal } from '@/src/components/molecules/ConfirmationModal';
 import { ListItem } from '@/src/components/molecules/ListItem';
 import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
 import { SkeletonRow } from '@/src/components/molecules/SkeletonRow';
 import { StatCard } from '@/src/components/molecules/StatCard';
+import { TextAreaField } from '@/src/components/molecules/TextAreaField';
 import {
 	DESIGN_LIBRARY_COMPONENT_OVERVIEW,
 	DESIGN_LIBRARY_OVERVIEW,
@@ -247,6 +250,76 @@ function SurfaceTierCard({
 			<ThemedText variant="caption" style={{ color: c.onSurfaceVariant, marginTop: s.xs }}>
 				{description}
 			</ThemedText>
+		</Card>
+	);
+}
+
+function AlertBannerPreview({
+	label,
+	title,
+	description,
+	actionLabel,
+}: {
+	label: string;
+	title: string;
+	description: string;
+	actionLabel: string;
+}) {
+	const { theme, c, s, r, visual } = useThemeTokens();
+
+	return (
+		<Card
+			variant="outlined"
+			padding="none"
+			style={{
+				overflow: 'hidden',
+				backgroundColor: visual.surfaces.default,
+				borderColor: c.border,
+			}}
+		>
+			<View
+				style={{
+					paddingHorizontal: s.md,
+					paddingVertical: s.sm,
+					backgroundColor: visual.surfaces.quiet,
+					borderBottomWidth: theme.borderWidth.sm,
+					borderBottomColor: c.border,
+				}}
+			>
+				<ThemedText variant="metadata" style={{ color: c.onSurfaceVariant }}>
+					{label}
+				</ThemedText>
+			</View>
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'flex-start',
+					gap: s.md,
+					padding: s.md,
+				}}
+			>
+				<View
+					style={{
+						width: s.xs,
+						height: s['2xl'],
+						borderRadius: r.full,
+						backgroundColor: c.warning,
+						marginTop: s.xxs,
+					}}
+				/>
+				<View style={{ flex: 1 }}>
+					<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
+						{title}
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						style={{ color: c.onSurfaceVariant, marginTop: s.xxs }}
+					>
+						{description}
+					</ThemedText>
+				</View>
+				<Button title={actionLabel} variant="outline" size="sm" onPress={() => {}} />
+			</View>
 		</Card>
 	);
 }
@@ -477,7 +550,12 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 	const [phoneValue, setPhoneValue] = useState('9876543210');
 	const [amountValue, setAmountValue] = useState(AMOUNT_PREVIEW_VALUE);
 	const [dateValue, setDateValue] = useState('2026-04-15');
+	const [textareaValue, setTextareaValue] = useState(
+		() => getDesignSystemCopy(locale).componentGallery.notesSeed,
+	);
+	const [approvalEmailValue, setApprovalEmailValue] = useState('approver@');
 	const [toastVisible, setToastVisible] = useState(false);
+	const [confirmationVisible, setConfirmationVisible] = useState(false);
 	const [noteValue, setNoteValue] = useState(
 		() => getDesignSystemCopy(locale).componentGallery.notesSeed,
 	);
@@ -489,7 +567,9 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 
 	const handleLocaleChange = useCallback((nextLocale: DesignSystemLocale) => {
 		setSelectedLocale(nextLocale);
-		setNoteValue(getDesignSystemCopy(nextLocale).componentGallery.notesSeed);
+		const nextCopy = getDesignSystemCopy(nextLocale);
+		setNoteValue(nextCopy.componentGallery.notesSeed);
+		setTextareaValue(nextCopy.componentGallery.notesSeed);
 	}, []);
 
 	const filteredItems = useMemo(
@@ -743,6 +823,18 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						variant="default"
 					/>
 					<Badge
+						label={copy.runtimeTheming.currentBrandZones(
+							theme.visual.presentation.brandExpressionZones,
+						)}
+						variant="warning"
+					/>
+					<Badge
+						label={copy.runtimeTheming.currentInverseActionSurfaces(
+							theme.visual.presentation.inverseActionSurfaces,
+						)}
+						variant="info"
+					/>
+					<Badge
 						label={copy.runtimeTheming.currentTouchTarget(theme.touchTarget)}
 						variant="info"
 					/>
@@ -898,6 +990,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						variant="info"
 					/>
 					<Badge
+						label={copy.localization.pixelRatio(qualitySignals.pixelRatio)}
+						variant="success"
+					/>
+					<Badge
 						label={copy.localization.fontScale(qualitySignals.fontScale)}
 						variant="success"
 					/>
@@ -1006,6 +1102,40 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						/>
 					</View>
 
+					<Card
+						variant="outlined"
+						style={{
+							backgroundColor: theme.visual.surfaces.hero,
+							borderColor: c.border,
+						}}
+					>
+						<ThemedText
+							variant="metadata"
+							style={{ color: theme.visual.surfaces.onHero }}
+						>
+							{copy.componentGallery.buttons.inverseHint}
+						</ThemedText>
+						<View
+							style={{
+								flexDirection: 'row',
+								flexWrap: 'wrap',
+								gap: s.sm,
+								marginTop: s.sm,
+							}}
+						>
+							<Button
+								title={copy.componentGallery.buttons.inverse}
+								variant="inverse"
+								onPress={() => setToastVisible(true)}
+							/>
+							<Button
+								title={copy.componentGallery.buttons.secondary}
+								variant="outline"
+								onPress={() => setToastVisible(true)}
+							/>
+						</View>
+					</Card>
+
 					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.lg }}>
 						<IconButton
 							icon={<Search size={20} color={c.primary} />}
@@ -1035,6 +1165,23 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						value={noteValue}
 						onChangeText={setNoteValue}
 						helperText={copy.componentGallery.fields.textFieldHelper}
+					/>
+
+					<TextInput
+						label={copy.componentGallery.fields.errorField}
+						value={approvalEmailValue}
+						onChangeText={setApprovalEmailValue}
+						error={copy.componentGallery.fields.errorFieldError}
+						keyboardType="email-address"
+						autoCapitalize="none"
+					/>
+
+					<TextAreaField
+						label={copy.componentGallery.fields.textarea}
+						value={textareaValue}
+						onChange={setTextareaValue}
+						placeholder={copy.componentGallery.notesSeed}
+						maxLength={280}
 					/>
 
 					<SearchBar
@@ -1079,11 +1226,44 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						trendLabel={copy.stats.completed}
 					/>
 
+					<CollapsibleSection
+						title={copy.componentGallery.accordion.title}
+						subtitle={copy.componentGallery.accordion.subtitle}
+						collapsedLabel={copy.componentGallery.accordion.collapsedLabel}
+						expandedLabel={copy.componentGallery.accordion.expandedLabel}
+						testID="component-gallery-collapsible"
+						contentTestID="component-gallery-collapsible-content"
+					>
+						<View style={{ gap: s.xs }}>
+							<ThemedText variant="body">
+								{copy.componentGallery.accordion.body}
+							</ThemedText>
+							<Badge
+								label={copy.componentGallery.accordion.badge}
+								variant="info"
+								size="sm"
+							/>
+						</View>
+					</CollapsibleSection>
+
 					<Button
 						title={copy.componentGallery.buttons.openPicker}
 						variant="secondary"
 						onPress={() => setPickerVisible(true)}
 						leftIcon={<Package size={16} color={c.onSurfaceVariant} />}
+					/>
+
+					<Button
+						title={copy.componentGallery.buttons.openDialog}
+						variant="outline"
+						onPress={() => setConfirmationVisible(true)}
+					/>
+
+					<AlertBannerPreview
+						label={copy.componentGallery.feedbackBanner.label}
+						title={copy.componentGallery.feedbackBanner.title}
+						description={copy.componentGallery.feedbackBanner.description}
+						actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
 					/>
 				</View>
 			</PreviewSection>
@@ -1609,6 +1789,16 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				selectedValue={pickerValue}
 				onSelect={setPickerValue}
 				onClose={() => setPickerVisible(false)}
+			/>
+
+			<ConfirmationModal
+				visible={confirmationVisible}
+				title={copy.componentGallery.dialog.title}
+				message={copy.componentGallery.dialog.message}
+				confirmLabel={copy.componentGallery.dialog.confirmLabel}
+				cancelLabel={copy.componentGallery.dialog.cancelLabel}
+				onConfirm={() => setConfirmationVisible(false)}
+				onCancel={() => setConfirmationVisible(false)}
 			/>
 
 			<Toast

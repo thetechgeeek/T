@@ -1,64 +1,39 @@
 import { StyleSheet } from 'react-native';
+import {
+	BORDER_WIDTH_TOKENS,
+	DURATION_TOKENS,
+	RADIUS_TOKENS,
+	SPACING_TOKENS,
+	SPRING_TOKENS,
+} from './designTokens';
 
 /** Spacing scale (px) — use via `theme.spacing` */
 export const SPACING_PX = {
-	xxs: 2,
-	xs: 4,
-	sm: 8,
-	md: 12,
-	lg: 16,
-	xl: 24,
-	'2xl': 32,
-	'3xl': 48,
-	'4xl': 64,
+	...SPACING_TOKENS,
 } as const;
-
-/** Large enough to fully round any practical on-screen component (pill / circle) */
-const BORDER_RADIUS_FULL_ROUND_PX = 9999;
 
 /** Border radii (px) */
 export const BORDER_RADIUS_PX = {
-	none: 0,
-	xs: 2,
-	sm: 4,
-	md: 8,
-	lg: 12,
-	xl: 16,
-	full: BORDER_RADIUS_FULL_ROUND_PX,
+	...RADIUS_TOKENS,
 } as const;
 
 /** Border widths (px) */
 export const BORDER_WIDTH_PX = {
-	none: 0,
+	...BORDER_WIDTH_TOKENS,
 	hairline: StyleSheet.hairlineWidth,
-	sm: 1,
-	md: 2,
-	lg: 3,
 } as const;
 
 export const ANIMATION_MS = {
-	instant: 0,
-	micro: 100,
-	fast: 200,
-	normal: 300,
-	slow: 500,
+	...DURATION_TOKENS,
 } as const;
 
-const SPRING_BOUNCE_MASS = 0.8;
-
 export const SPRING_PHYSICS = {
-	damping: 20,
-	stiffness: 200,
-	mass: 1,
+	...SPRING_TOKENS.default,
 	press: {
-		damping: 15,
-		stiffness: 180,
-		mass: 1,
+		...SPRING_TOKENS.press,
 	},
 	bounce: {
-		damping: 10,
-		stiffness: 200,
-		mass: SPRING_BOUNCE_MASS,
+		...SPRING_TOKENS.bounce,
 	},
 } as const;
 

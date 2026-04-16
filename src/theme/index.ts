@@ -59,6 +59,7 @@ export interface ThemeColors {
 export type ThemeDensity = 'compact' | 'comfortable' | 'spacious';
 export type ThemeExpression = 'operational' | 'balanced' | 'showcase';
 export type ThemePresetId = 'baseline' | 'executive' | 'studio' | 'mono';
+export type ThemeContrastMode = 'default' | 'high';
 
 export interface ThemeMeta {
 	presetId: ThemePresetId;
@@ -66,6 +67,8 @@ export interface ThemeMeta {
 	density: ThemeDensity;
 	expression: ThemeExpression;
 	accentBudget: number;
+	contrastMode: ThemeContrastMode;
+	tokenVersion: string;
 }
 
 export interface PrintThemeSwatch {
@@ -84,6 +87,7 @@ export interface ExpenseReportDemoSlice {
 export interface ThemeCollections {
 	partyAvatarColors: readonly string[];
 	expenseCategoryPickColors: readonly string[];
+	chartQualitativeColors: readonly string[];
 	printThemeSwatches: readonly PrintThemeSwatch[];
 	expenseReportDemoSlices: readonly ExpenseReportDemoSlice[];
 	allTransactionsTypeColors: Readonly<Record<string, string>>;
@@ -93,6 +97,27 @@ export interface ThemeTypography {
 	fontFamily: string;
 	fontFamilyBold: string;
 	fontFamilyDisplay: string;
+	families: {
+		ui: string;
+		display: string;
+		brand: string;
+		mono: string;
+	};
+	scale: {
+		xs: number;
+		sm: number;
+		md: number;
+		lg: number;
+		xl: number;
+		'2xl': number;
+		'3xl': number;
+		'4xl': number;
+		'display-sm': number;
+		'display-md': number;
+		'display-lg': number;
+		'display-xl': number;
+		'display-2xl': number;
+	};
 	sizes: {
 		xs: number;
 		sm: number;
@@ -101,6 +126,7 @@ export interface ThemeTypography {
 		xl: number;
 		'2xl': number;
 		'3xl': number;
+		'4xl': number;
 	};
 	weights: {
 		regular: TextStyle['fontWeight'];
@@ -121,10 +147,12 @@ export interface ThemeTypography {
 		h2: TextStyle;
 		h3: TextStyle;
 		body: TextStyle;
+		bodyMedium: TextStyle;
 		bodyStrong: TextStyle;
 		bodyBold: TextStyle;
 		metadata: TextStyle;
 		metric: TextStyle;
+		code: TextStyle;
 		caption: TextStyle;
 		captionBold: TextStyle;
 		amount: TextStyle;
@@ -231,6 +259,32 @@ export interface ThemeDataTokens {
 	annotation: string;
 }
 
+export interface ThemeHeroTokens {
+	screen: {
+		surface: string;
+		onSurface: string;
+		accent: string;
+	};
+	stat: {
+		surface: string;
+		onSurface: string;
+		accent: string;
+	};
+	promo: {
+		surface: string;
+		onSurface: string;
+		accent: string;
+	};
+}
+
+export interface ThemeMediaTokens {
+	scrimSoft: string;
+	scrimStrong: string;
+	textGradientStart: string;
+	textGradientEnd: string;
+	fallbackSurface: string;
+}
+
 export interface ThemeSilhouetteTokens {
 	card: number;
 	control: number;
@@ -241,10 +295,15 @@ export interface ThemeSilhouetteTokens {
 
 export interface ThemeDepthTokens {
 	ambientShadowOpacity: number;
-	ambientShadowRadiusScale: number;
+	ambientShadowBlur: number;
+	ambientShadowYOffset: number;
 	lowContrastBorder: string;
 	harshShadowAvoided: boolean;
 }
+
+export type ThemeBrandExpressionZone = 'hero' | 'promo' | 'media';
+export type ThemeNeutralSurfaceTier = 'canvas' | 'default' | 'raised' | 'overlay';
+export type ThemeInverseActionSurface = 'hero' | 'media' | 'inverse';
 
 export interface ThemePresentationTokens {
 	defaultSurfaceBias: 'neutral' | 'brand';
@@ -252,12 +311,17 @@ export interface ThemePresentationTokens {
 	operationalDensity: ThemeDensity;
 	inverseAction: 'required' | 'optional';
 	heroMediaAllowed: boolean;
+	brandExpressionZones: readonly ThemeBrandExpressionZone[];
+	neutralSurfaceTiers: readonly ThemeNeutralSurfaceTier[];
+	inverseActionSurfaces: readonly ThemeInverseActionSurface[];
 }
 
 export interface ThemeVisualTokens {
 	surfaces: ThemeSurfaceTokens;
 	accents: ThemeAccentTokens;
 	data: ThemeDataTokens;
+	hero: ThemeHeroTokens;
+	media: ThemeMediaTokens;
 	silhouette: ThemeSilhouetteTokens;
 	depth: ThemeDepthTokens;
 	presentation: ThemePresentationTokens;

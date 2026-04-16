@@ -1,105 +1,35 @@
 import type { ThemeColors } from './index';
+import {
+	BASE_THEME_COLOR_RECIPES,
+	HIGH_CONTRAST_THEME_COLOR_RECIPES,
+	MEDIA_OVERLAY_TOKENS,
+	PRIMITIVE_COLOR_PALETTES,
+	QUALITATIVE_DATA_PALETTE_TOKENS,
+	SURFACE_TIER_TOKENS,
+} from './designTokens';
 
 /**
  * Single source for #hex literals. App code should use theme colors, `palette.*`,
  * or named exports from this file — not inline hex strings.
  */
+export const primitiveColorPalettes = PRIMITIVE_COLOR_PALETTES;
+export const surfaceTierTokens = SURFACE_TIER_TOKENS;
+export const mediaOverlayTokens = MEDIA_OVERLAY_TOKENS;
+
 export const lightColors: ThemeColors = {
-	background: '#F5F0EB',
-	surface: '#FFFFFF',
-	surfaceVariant: '#E5DDD5',
-	card: '#FFFFFF',
-	onBackground: '#1A1412',
-	onSurface: '#1A1412',
-	onSurfaceVariant: '#6B5E52',
-	placeholder: '#A89B94',
-	primary: '#C1440E',
-	primaryLight: '#E8622A',
-	primaryDark: '#8B2F07',
-	onPrimary: '#FFFFFF',
-	primaryGradientStart: '#C1440E',
-	primaryGradientEnd: '#8B2F07',
-	primaryContainer: '#FCE7DF',
-	onPrimaryContainer: '#2D0D00',
-	secondary: '#6B5E52',
-	onSecondary: '#FFFFFF',
-	success: '#1A8754',
-	onSuccess: '#FFFFFF',
-	successLight: '#D1FAE5',
-	warning: '#B45309',
-	onWarning: '#FFFFFF',
-	warningLight: '#FEF3C7',
-	error: '#B91C1C',
-	onError: '#FFFFFF',
-	errorLight: '#FEE2E2',
-	info: '#1D4ED8',
-	onInfo: '#FFFFFF',
-	infoLight: '#DBEAFE',
-	border: '#E5DDD5',
-	borderStrong: '#B0A49C',
-	separator: '#EDE8E4',
-	overlay: 'rgba(0,0,0,0.4)',
-	scrim: 'rgba(0,0,0,0.6)',
-	white: '#FFFFFF',
-	shadow: '#4A3828',
-	tabBar: '#FFFFFF',
-	tabActive: '#C1440E',
-	tabInactive: '#6B5E52',
-	badge: '#C1440E',
-	paid: '#065F46',
-	partial: '#92400E',
-	unpaid: '#991B1B',
-	lowStock: '#B91C1C',
-	overdue: '#7F1D1D',
+	...BASE_THEME_COLOR_RECIPES.light,
 };
 
 export const darkColors: ThemeColors = {
-	background: '#000000',
-	surface: '#1C1C1E',
-	surfaceVariant: '#38383A',
-	card: '#1C1C1E',
-	onBackground: '#F2EDE8',
-	onSurface: '#F2EDE8',
-	onSurfaceVariant: '#98989E',
-	placeholder: '#7A6E68',
-	primary: '#E8622A',
-	primaryLight: '#FF8A60',
-	primaryDark: '#C1440E',
-	onPrimary: '#1A0A00',
-	primaryGradientStart: '#E8622A',
-	primaryGradientEnd: '#C1440E',
-	primaryContainer: '#451A03',
-	onPrimaryContainer: '#FFDBCF',
-	secondary: '#98989E',
-	onSecondary: '#000000',
-	success: '#2DB87A',
-	onSuccess: '#000000',
-	successLight: '#064E3B',
-	warning: '#F59E0B',
-	onWarning: '#000000',
-	warningLight: '#451A03',
-	error: '#EF4444',
-	onError: '#000000',
-	errorLight: '#450A0A',
-	info: '#60A5FA',
-	onInfo: '#000000',
-	infoLight: '#1E3A8A',
-	border: '#38383A',
-	borderStrong: '#5D4838',
-	separator: '#302820',
-	overlay: 'rgba(0,0,0,0.6)',
-	scrim: 'rgba(0,0,0,0.8)',
-	white: '#FFFFFF',
-	shadow: '#000000',
-	tabBar: '#1C1C1E',
-	tabActive: '#E8622A',
-	tabInactive: '#98989E',
-	badge: '#E8622A',
-	paid: '#A7F3D0',
-	partial: '#FDE68A',
-	unpaid: '#FECACA',
-	lowStock: '#EF4444',
-	overdue: '#FECACA',
+	...BASE_THEME_COLOR_RECIPES.dark,
+};
+
+export const highContrastLightColors: ThemeColors = {
+	...HIGH_CONTRAST_THEME_COLOR_RECIPES.light,
+};
+
+export const highContrastDarkColors: ThemeColors = {
+	...HIGH_CONTRAST_THEME_COLOR_RECIPES.dark,
 };
 
 /** Shared tokens (shadows, brand chrome, integrations) — use from theme where possible. */
@@ -211,6 +141,9 @@ export const expenseCategoryPickColors = [
 	'#1E40AF',
 	'#581C87',
 ] as const;
+
+/** Charts and analytics surfaces: qualitative palette tuned for color-blind-safe separation. */
+export const chartQualitativeColors = [...QUALITATIVE_DATA_PALETTE_TOKENS] as const;
 
 export const printThemeSwatches = [
 	{ key: 'classic', label: 'Classic', color: '#2D2D2D' },

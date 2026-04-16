@@ -9,10 +9,10 @@ import {
 
 describe('design system catalog', () => {
 	it('tracks total and Common + Mobile checklist scope', () => {
-		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1414);
-		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(1075);
-		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(717);
-		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(358);
+		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1243);
+		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(934);
+		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(647);
+		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(287);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBeGreaterThan(0);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed + DESIGN_LIBRARY_OVERVIEW.open).toBe(
 			DESIGN_LIBRARY_OVERVIEW.total,
@@ -20,10 +20,10 @@ describe('design system catalog', () => {
 	});
 
 	it('tracks the generated component inventory and live demo coverage', () => {
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(31);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(31);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(32);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(32);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.atoms).toBe(10);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.molecules).toBe(19);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.molecules).toBe(20);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.organisms).toBe(0);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.skeletons).toBe(2);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.livePreviewCount).toBeGreaterThan(10);
@@ -51,20 +51,28 @@ describe('design system catalog', () => {
 		const [firstPreviewable] = filterLibraryItems('Date Picker', 'common-mobile').filter(
 			isPreviewableItem,
 		);
+		const [confirmationDialog] = filterLibraryItems(
+			'Confirmation Dialog',
+			'common-mobile',
+		).filter(isPreviewableItem);
 
 		expect(firstPreviewable).toBeDefined();
 		expect(firstPreviewable?.title).toBe('Date Picker');
+		expect(confirmationDialog?.title).toBe('Confirmation Dialog');
 	});
 
 	it('filters component inventory and identifies live demos', () => {
 		const [button] = filterCatalogComponents('Button', 'atoms');
+		const [collapsibleSection] = filterCatalogComponents('CollapsibleSection', 'molecules');
 		const livePreviewComponents = filterCatalogComponents('', 'all').filter(
 			isLivePreviewComponent,
 		);
 
 		expect(button).toBeDefined();
 		expect(button?.name).toBe('Button');
+		expect(collapsibleSection?.name).toBe('CollapsibleSection');
 		expect(isLivePreviewComponent(button!)).toBe(true);
+		expect(isLivePreviewComponent(collapsibleSection!)).toBe(true);
 		expect(livePreviewComponents.every((component) => component.hasTests)).toBe(true);
 	});
 });

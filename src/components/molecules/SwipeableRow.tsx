@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
@@ -13,6 +13,8 @@ export interface SwipeableRowProps {
 	deleteLabel?: string;
 	editLabel?: string;
 	shareLabel?: string;
+	style?: StyleProp<ViewStyle>;
+	testID?: string;
 }
 
 /**
@@ -32,12 +34,14 @@ export function SwipeableRow({
 	deleteLabel = 'Delete',
 	editLabel = 'Edit',
 	shareLabel = 'Share',
+	style,
+	testID,
 }: SwipeableRowProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
 
 	return (
-		<View style={styles.container}>
+		<View testID={testID} style={[styles.container, style]}>
 			{/* Main content */}
 			<View style={styles.content}>{children}</View>
 

@@ -7,6 +7,8 @@ import {
 	ActivityIndicator,
 	StyleSheet,
 	type ListRenderItem,
+	type StyleProp,
+	type ViewStyle,
 } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SkeletonRow } from '@/src/components/molecules/SkeletonRow';
@@ -26,6 +28,9 @@ export interface PaginatedListProps<T> {
 	emptyDescription?: string;
 	ListHeaderComponent?: React.ReactElement | null;
 	skeletonCount?: number;
+	style?: StyleProp<ViewStyle>;
+	contentContainerStyle?: StyleProp<ViewStyle>;
+	testID?: string;
 }
 
 /**
@@ -46,6 +51,9 @@ export function PaginatedList<T>({
 	emptyDescription,
 	ListHeaderComponent,
 	skeletonCount = 3,
+	style,
+	contentContainerStyle,
+	testID,
 }: PaginatedListProps<T>) {
 	const { theme } = useTheme();
 	const c = theme.colors;
@@ -98,6 +106,7 @@ export function PaginatedList<T>({
 
 	return (
 		<FlatList
+			testID={testID}
 			data={data}
 			renderItem={renderItem}
 			keyExtractor={keyExtractor}
@@ -105,6 +114,8 @@ export function PaginatedList<T>({
 			onEndReachedThreshold={0.3}
 			onRefresh={onRefresh}
 			refreshing={isRefreshing}
+			style={style}
+			contentContainerStyle={contentContainerStyle}
 			ListHeaderComponent={ListHeaderComponent}
 			ListEmptyComponent={
 				<View testID="empty-state" style={styles.center}>

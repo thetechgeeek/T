@@ -1,14 +1,22 @@
-import type { Theme, ThemePresetId } from './index';
+import type { Theme, ThemeContrastMode, ThemePresetId } from './index';
 import { Platform } from 'react-native';
 import {
 	darkColors as baseDarkColors,
-	lightColors as baseLightColors,
 	partyAvatarColors,
 	expenseCategoryPickColors,
+	chartQualitativeColors,
+	lightColors as baseLightColors,
 	printThemeSwatches,
 	expenseReportDemoSlices,
 	allTransactionsTypeColors,
 } from './palette';
+import {
+	DATA_EMPHASIS_TOKENS,
+	HERO_TOKENS,
+	MEDIA_OVERLAY_TOKENS,
+	SHADOW_TOKEN_RECIPES,
+	SURFACE_TIER_TOKENS,
+} from './designTokens';
 import { PRESS_OPACITY } from './animations';
 import { BORDER_WIDTH_PX } from './layoutMetrics';
 import { ELEVATION, SHADOW_IOS, SHADOW_OFFSET, SHADOW_RADIUS } from './shadowMetrics';
@@ -30,12 +38,14 @@ import {
 	SIZE_ICON_MD,
 } from './uiMetrics';
 import { buildDensitySpacingSet, resolveThemePreset, THEME_PRESET_OPTIONS } from './presets';
+import { detectPixelRatio } from './density';
 
 export const DEFAULT_THEME_PRESET_ID: ThemePresetId = 'baseline';
 
 const COLLECTIONS: Theme['collections'] = {
 	partyAvatarColors,
 	expenseCategoryPickColors,
+	chartQualitativeColors,
 	printThemeSwatches,
 	expenseReportDemoSlices,
 	allTransactionsTypeColors,
@@ -85,6 +95,14 @@ const buildLetterSpacing = (): Theme['letterSpacing'] => ({
 	account: LETTER_SPACING_ACCOUNT,
 });
 
+function resolveColorVariant(isDark: boolean, contrastMode: ThemeContrastMode) {
+	if (contrastMode === 'high') {
+		return isDark ? 'highContrastDark' : 'highContrastLight';
+	}
+
+	return isDark ? 'dark' : 'light';
+}
+
 const buildVisualTokens = ({
 	colors,
 	borderRadius,
@@ -101,55 +119,95 @@ const buildVisualTokens = ({
 		radiusScale: number;
 		elevationScale: number;
 	};
-}): Theme['visual'] => ({
-	surfaces: {
-		canvas: colors.background,
-		default: colors.surface,
-		raised: colors.card,
-		overlay: colors.card,
-		inverse: isDark ? baseLightColors.surface : colors.onSurface,
-		onInverse: isDark ? baseLightColors.onSurface : colors.white,
-		hero: colors.primaryContainer,
-		onHero: colors.onPrimaryContainer,
-		quiet: colors.surfaceVariant,
-		mediaFallback: colors.surfaceVariant,
-	},
-	accents: {
-		primaryAction: colors.primary,
-		selected: colors.primary,
-		dataHighlight: colors.info,
-		quietTint: colors.primaryContainer,
-		destructive: colors.error,
-		maxHotspots: meta.accentBudget,
-	},
-	data: {
-		focusSeries: colors.primary,
-		comparisonSeries: colors.secondary,
-		mutedSeries: colors.onSurfaceVariant,
-		quietGrid: colors.separator,
-		annotation: colors.info,
-	},
-	silhouette: {
-		card: borderRadius.md,
-		control: borderRadius.md,
-		chip: borderRadius.full,
-		avatar: borderRadius.full,
-		overlay: borderRadius.lg,
-	},
-	depth: {
-		ambientShadowOpacity: Number(shadowProfile.opacityScale.toFixed(2)),
-		ambientShadowRadiusScale: Number(shadowProfile.radiusScale.toFixed(2)),
-		lowContrastBorder: colors.border,
-		harshShadowAvoided: true,
-	},
-	presentation: {
-		defaultSurfaceBias: meta.expression === 'showcase' ? 'brand' : 'neutral',
-		showcaseDensity: 'spacious',
-		operationalDensity: 'compact',
-		inverseAction: 'required',
-		heroMediaAllowed: meta.expression === 'showcase',
-	},
-});
+}): Theme['visual'] => {
+	const variant = resolveColorVariant(isDark, meta.contrastMode);
+	const surfaceTokens = SURFACE_TIER_TOKENS[variant];
+	const mediaTokens = MEDIA_OVERLAY_TOKENS[variant];
+	const heroTokens = HERO_TOKENS[variant];
+	const dataTokens = DATA_EMPHASIS_TOKENS[variant];
+	const depthRecipe = SHADOW_TOKEN_RECIPES[variant].md;
+
+	return {
+		surfaces: {
+			canvas: surfaceTokens.canvas,
+			default: surfaceTokens.default,
+			raised: surfaceTokens.raised,
+			overlay: surfaceTokens.overlay,
+			inverse: surfaceTokens.inverse,
+			onInverse: surfaceTokens.onInverse,
+			hero: surfaceTokens.hero,
+			onHero: surfaceTokens.onHero,
+			quiet: surfaceTokens.quiet,
+			mediaFallback: surfaceTokens.mediaFallback,
+		},
+		accents: {
+			primaryAction: colors.primary,
+			selected: colors.primary,
+			dataHighlight: colors.info,
+			quietTint: colors.primaryContainer,
+			destructive: colors.error,
+			maxHotspots: meta.accentBudget,
+		},
+		data: {
+			focusSeries: colors.primary,
+			comparisonSeries: dataTokens.comparisonSeries,
+			mutedSeries: dataTokens.mutedSeries,
+			quietGrid: dataTokens.quietGrid,
+			annotation: dataTokens.annotation,
+		},
+		hero: {
+			screen: {
+				surface: heroTokens.screen.surface,
+				onSurface: heroTokens.screen.onSurface,
+				accent: colors.primary,
+			},
+			stat: {
+				surface: heroTokens.stat.surface,
+				onSurface: heroTokens.stat.onSurface,
+				accent: heroTokens.stat.accent,
+			},
+			promo: {
+				surface: heroTokens.promo.surface,
+				onSurface: heroTokens.promo.onSurface,
+				accent: heroTokens.promo.accent,
+			},
+		},
+		media: {
+			scrimSoft: mediaTokens.scrimSoft,
+			scrimStrong: mediaTokens.scrimStrong,
+			textGradientStart: mediaTokens.textGradientStart,
+			textGradientEnd: mediaTokens.textGradientEnd,
+			fallbackSurface: mediaTokens.fallbackSurface,
+		},
+		silhouette: {
+			card: borderRadius.md,
+			control: borderRadius.md,
+			chip: borderRadius.full,
+			avatar: borderRadius.full,
+			overlay: borderRadius.lg,
+		},
+		depth: {
+			ambientShadowOpacity: Number(
+				(depthRecipe.opacity * shadowProfile.opacityScale).toFixed(2),
+			),
+			ambientShadowBlur: Number((depthRecipe.blur * shadowProfile.radiusScale).toFixed(2)),
+			ambientShadowYOffset: Number((depthRecipe.y * shadowProfile.elevationScale).toFixed(2)),
+			lowContrastBorder: colors.border,
+			harshShadowAvoided: true,
+		},
+		presentation: {
+			defaultSurfaceBias: meta.expression === 'showcase' ? 'brand' : 'neutral',
+			showcaseDensity: 'spacious',
+			operationalDensity: 'compact',
+			inverseAction: 'required',
+			heroMediaAllowed: meta.expression === 'showcase',
+			brandExpressionZones:
+				meta.expression === 'showcase' ? ['hero', 'promo', 'media'] : ['hero'],
+			neutralSurfaceTiers: ['canvas', 'default', 'raised', 'overlay'],
+			inverseActionSurfaces: ['hero', 'media', 'inverse'],
+		},
+	};
+};
 
 const buildComponentTokens = ({
 	spacing,
@@ -340,8 +398,14 @@ const buildElevationTokens = (shadows: Theme['shadows']): Theme['elevation'] => 
 export function buildTheme(
 	isDark: boolean,
 	presetId: ThemePresetId = DEFAULT_THEME_PRESET_ID,
+	options: {
+		contrastMode?: ThemeContrastMode;
+		pixelRatio?: number;
+	} = {},
 ): Theme {
-	const preset = resolveThemePreset(presetId, isDark);
+	const contrastMode = options.contrastMode ?? 'default';
+	const pixelRatio = options.pixelRatio ?? detectPixelRatio();
+	const preset = resolveThemePreset(presetId, isDark, { contrastMode, pixelRatio });
 	const borderWidth: Theme['borderWidth'] = {
 		...BORDER_WIDTH_PX,
 	};
@@ -363,7 +427,7 @@ export function buildTheme(
 		typography: preset.typography,
 		spacing,
 		semanticSpacing: buildSemanticSpacing(spacing),
-		densitySpacing: buildDensitySpacingSet(),
+		densitySpacing: buildDensitySpacingSet(pixelRatio),
 		letterSpacing: buildLetterSpacing(),
 		borderRadius,
 		borderWidth,
@@ -383,8 +447,16 @@ export function buildTheme(
 	};
 }
 
-export const lightTheme = buildTheme(false, DEFAULT_THEME_PRESET_ID);
-export const darkTheme = buildTheme(true, DEFAULT_THEME_PRESET_ID);
+export const lightTheme = buildTheme(false, DEFAULT_THEME_PRESET_ID, { pixelRatio: 2 });
+export const darkTheme = buildTheme(true, DEFAULT_THEME_PRESET_ID, { pixelRatio: 2 });
+export const highContrastLightTheme = buildTheme(false, DEFAULT_THEME_PRESET_ID, {
+	contrastMode: 'high',
+	pixelRatio: 2,
+});
+export const highContrastDarkTheme = buildTheme(true, DEFAULT_THEME_PRESET_ID, {
+	contrastMode: 'high',
+	pixelRatio: 2,
+});
 export const lightColors = lightTheme.colors;
 export const darkColors = darkTheme.colors;
 export const themePresetOptions = THEME_PRESET_OPTIONS;

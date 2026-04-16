@@ -7,7 +7,7 @@ describe('design-system boundary', () => {
 		const bannedComponentPattern =
 			/(DashboardHeader|ErrorBoundary|InvoiceStatusBadge|OfflineBanner|PaymentModal|QueryBoundary|QuickActionsGrid|RecentInvoicesList|ScreenHeader|SyncIndicator|TileSetCard)/;
 
-		expect(DESIGN_SYSTEM_COMPONENTS).toHaveLength(31);
+		expect(DESIGN_SYSTEM_COMPONENTS).toHaveLength(32);
 		expect(DESIGN_SYSTEM_COMPONENTS.every((component) => component.hasTests)).toBe(true);
 		expect(
 			DESIGN_SYSTEM_COMPONENTS.some((component) =>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, StyleSheet, ViewStyle, Pressable } from 'react-native';
+import { View, TextInput, StyleSheet, ViewStyle, Pressable, type StyleProp } from 'react-native';
 import { Search, X } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
@@ -7,7 +7,8 @@ interface SearchBarProps {
 	value: string;
 	onChangeText: (text: string) => void;
 	placeholder?: string;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
+	testID?: string;
 	/** Stable English identifier for screen readers. Defaults to placeholder or 'Search'. */
 	accessibilityLabel?: string;
 	/** Optional screen-reader hint for the field. */
@@ -21,6 +22,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 	onChangeText,
 	placeholder,
 	style,
+	testID,
 	accessibilityLabel,
 	accessibilityHint,
 	clearAccessibilityLabel = 'Clear search',
@@ -32,6 +34,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
 	return (
 		<View
+			testID={testID}
 			style={[
 				styles.container,
 				{

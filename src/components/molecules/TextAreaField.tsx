@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { SIZE_TEXTAREA_MIN_HEIGHT } from '@/theme/uiMetrics';
@@ -15,6 +15,7 @@ export interface TextAreaFieldProps {
 	testID?: string;
 	editable?: boolean;
 	required?: boolean;
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -31,12 +32,13 @@ export function TextAreaField({
 	testID,
 	editable = true,
 	required = false,
+	style,
 }: TextAreaFieldProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
 
 	return (
-		<View>
+		<View style={style}>
 			<Text
 				style={{
 					fontSize: theme.typography.sizes.sm,
@@ -63,6 +65,7 @@ export function TextAreaField({
 					onChangeText={onChange}
 					placeholder={placeholder}
 					placeholderTextColor={c.placeholder}
+					accessibilityLabel={label}
 					multiline
 					numberOfLines={3}
 					maxLength={maxLength}

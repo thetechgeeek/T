@@ -5,7 +5,11 @@ import { IconButton, FAB } from '../IconButton';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 const renderWithTheme = (component: React.ReactElement) =>
-	render(<ThemeProvider>{component}</ThemeProvider>);
+	render(
+		<ThemeProvider initialMode="light" persist={false}>
+			{component}
+		</ThemeProvider>,
+	);
 
 describe('IconButton', () => {
 	it('renders icon', () => {
@@ -49,6 +53,18 @@ describe('IconButton', () => {
 			? Object.assign({}, ...btn.props.style.filter(Boolean))
 			: btn.props.style;
 		expect(style).toEqual(expect.objectContaining({ minWidth: 48, minHeight: 48 }));
+	});
+
+	it('supports explicit accessibility labels for icon-only actions', () => {
+		const { getByLabelText } = renderWithTheme(
+			<IconButton
+				icon={<Text>★</Text>}
+				onPress={jest.fn()}
+				accessibilityLabel="Open filters"
+			/>,
+		);
+
+		expect(getByLabelText('Open filters')).toBeTruthy();
 	});
 });
 

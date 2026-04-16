@@ -15,6 +15,7 @@ describe('design-system quality signals', () => {
 	});
 
 	it('reads runtime locale, font scale, and accessibility preferences', async () => {
+		jest.spyOn(PixelRatio, 'get').mockReturnValue(3);
 		jest.spyOn(PixelRatio, 'getFontScale').mockReturnValue(1.8);
 		jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
 		jest.spyOn(AccessibilityInfo, 'isBoldTextEnabled').mockResolvedValue(true);
@@ -31,6 +32,7 @@ describe('design-system quality signals', () => {
 		expect(result.current.intlLocale).toBe('ar-SA');
 		expect(result.current.direction).toBe('rtl');
 		expect(result.current.runtimeRtl).toBe(true);
+		expect(result.current.pixelRatio).toBe(3);
 		expect(result.current.fontScale).toBe(1.8);
 		expect(result.current.detectedLocale.length).toBeGreaterThan(0);
 	});

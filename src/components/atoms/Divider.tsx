@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
 interface DividerProps {
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
 	inset?: boolean;
+	testID?: string;
 }
 
-export const Divider: React.FC<DividerProps> = ({ style, inset }) => {
+export const Divider: React.FC<DividerProps> = ({ style, inset, testID }) => {
 	const { theme } = useTheme();
 
 	return (
 		<View
+			testID={testID}
 			accessible={false}
 			importantForAccessibility="no"
 			style={[

@@ -9,7 +9,7 @@ import {
 	type GestureResponderEvent,
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 
@@ -17,7 +17,7 @@ export interface ButtonProps extends Omit<PressableProps, 'style'> {
 	title?: string;
 	/** Stable English identifier used by screen readers and Maestro. Overrides the default title-derived label. */
 	accessibilityLabel?: string;
-	variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+	variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'inverse';
 	size?: 'sm' | 'md' | 'lg';
 	loading?: boolean;
 	leftIcon?: React.ReactNode;
@@ -40,12 +40,13 @@ export function Button({
 	onPressOut,
 	...props
 }: ButtonProps) {
-	const { theme, runtime } = useTheme();
-	const reduceMotionEnabled =
-		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
+	const { theme } = useTheme();
+	const reduceMotionEnabled = useReducedMotion();
 	const c = theme.colors;
 	const buttonTokens = theme.components.button;
 	const buttonMotion = theme.animation.profiles.buttonPress;
+	const inverseSurface = theme.visual.surfaces.inverse;
+	const inverseText = theme.visual.surfaces.onInverse;
 
 	const scale = useSharedValue(1);
 	const animStyle = useAnimatedStyle(() => ({
@@ -62,6 +63,8 @@ export function Button({
 				return { bg: 'transparent', text: c.primary, border: 'transparent' };
 			case 'danger':
 				return { bg: c.error, text: c.onError, border: 'transparent' };
+			case 'inverse':
+				return { bg: inverseSurface, text: inverseText, border: 'transparent' };
 			case 'primary':
 			default:
 				return { bg: c.primary, text: c.onPrimary, border: 'transparent' };
@@ -126,7 +129,6 @@ export function Button({
 						// eslint-disable-next-line react-hooks/immutability
 						scale.value = withSpring(1, buttonMotion.spring);
 					} else {
-						// eslint-disable-next-line react-hooks/immutability
 						scale.value = 1;
 					}
 					onPressOut?.(e);

@@ -9,7 +9,7 @@ import Animated, {
 	Easing,
 	cancelAnimation,
 } from 'react-native-reanimated';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { ThemedText } from './ThemedText';
 import { MS_SYNC_POLL, SYNC_BADGE_MAX, SIZE_BADGE_OFFSET, Z_INDEX } from '@/theme/uiMetrics';
@@ -30,9 +30,8 @@ export interface SyncIndicatorProps {
  * - offline: grey cloud-off
  */
 export function SyncIndicator({ status, pendingCount = 0 }: SyncIndicatorProps) {
-	const { c, runtime } = useThemeTokens();
-	const reduceMotionEnabled =
-		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
+	const { c } = useThemeTokens();
+	const reduceMotionEnabled = useReducedMotion();
 
 	const rotation = useSharedValue(0);
 

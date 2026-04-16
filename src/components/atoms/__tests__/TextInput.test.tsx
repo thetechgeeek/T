@@ -5,7 +5,11 @@ import { TextInput } from '../TextInput';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
+	return render(
+		<ThemeProvider initialMode="light" persist={false}>
+			{component}
+		</ThemeProvider>,
+	);
 };
 
 describe('TextInput', () => {
@@ -26,6 +30,21 @@ describe('TextInput', () => {
 		expect(input.props.accessibilityHint).toBe('Error: Required field');
 	});
 
+	it('shows helper text and exposes it through the accessibility hint', () => {
+		const { getByText, getByPlaceholderText } = renderWithTheme(
+			<TextInput
+				label="Project Name"
+				placeholder="Atlas"
+				helperText="Visible to the entire team"
+			/>,
+		);
+
+		expect(getByText('Visible to the entire team')).toBeTruthy();
+		expect(getByPlaceholderText('Atlas').props.accessibilityHint).toBe(
+			'Visible to the entire team',
+		);
+	});
+
 	it('renders left and right icons', () => {
 		const { getByTestId } = renderWithTheme(
 			<TextInput
@@ -39,9 +58,6 @@ describe('TextInput', () => {
 	});
 
 	it('changes border color on focus and blur', () => {
-		const { getByPlaceholderText } = renderWithTheme(<TextInput placeholder="Input" />);
-		const input = getByPlaceholderText('Input');
-		// Accessing internal styles is brittle, but we can verify onFocus/onBlur callbacks
 		const onFocus = jest.fn();
 		const onBlur = jest.fn();
 
@@ -61,7 +77,7 @@ describe('TextInput', () => {
 		const { getByDisplayValue } = renderWithTheme(
 			<TextInput value="Pre-filled value" readOnly />,
 		);
-		expect(getByDisplayValue('Pre-filled value')).toBeTruthy();
+		expect(getByDisplayValue('Pre-filled value')).toHaveProp('readOnly', true);
 	});
 
 	it('passes keyboardType and multiline props', () => {

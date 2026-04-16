@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { createTimingConfig } from '@/src/theme/animations';
 
@@ -10,9 +10,8 @@ import { createTimingConfig } from '@/src/theme/animations';
  * Fully wired in Phase 8 — exported here for API stability.
  */
 export function useSkeletonShimmer() {
-	const { theme, runtime } = useTheme();
-	const reduceMotionEnabled =
-		runtime?.reduceMotionEnabled ?? DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled;
+	const { theme } = useTheme();
+	const reduceMotionEnabled = useReducedMotion();
 	const progress = useSharedValue(0);
 	const shimmerMotion = theme.animation.profiles.shimmerLoop;
 

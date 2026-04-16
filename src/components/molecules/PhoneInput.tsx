@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
@@ -26,6 +26,7 @@ export interface PhoneInputProps {
 	label?: string;
 	testID?: string;
 	editable?: boolean;
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -33,7 +34,14 @@ export interface PhoneInputProps {
  * +91 prefix (non-editable), 10-digit validation on blur.
  * Strips +91, spaces, dashes from pasted numbers.
  */
-export function PhoneInput({ value, onChange, label, testID, editable = true }: PhoneInputProps) {
+export function PhoneInput({
+	value,
+	onChange,
+	label,
+	testID,
+	editable = true,
+	style,
+}: PhoneInputProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
 	const inputTokens = theme.components.input;
@@ -58,7 +66,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 	};
 
 	return (
-		<View>
+		<View style={style}>
 			{label ? (
 				<Text
 					style={{
@@ -100,6 +108,7 @@ export function PhoneInput({ value, onChange, label, testID, editable = true }: 
 					onChangeText={handleChange}
 					onBlur={handleBlur}
 					keyboardType="phone-pad"
+					accessibilityLabel={label ?? 'Phone number'}
 					maxLength={10}
 					editable={editable}
 					placeholder="XXXXX XXXXX"

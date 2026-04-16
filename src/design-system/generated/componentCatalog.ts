@@ -109,6 +109,13 @@ export const DESIGN_SYSTEM_COMPONENTS: DesignSystemComponent[] = [
 		hasTests: true,
 	},
 	{
+		id: 'src-components-molecules-collapsiblesection-tsx',
+		name: 'CollapsibleSection',
+		kind: 'molecules',
+		filePath: 'src/components/molecules/CollapsibleSection.tsx',
+		hasTests: true,
+	},
+	{
 		id: 'src-components-molecules-confirmationmodal-tsx',
 		name: 'ConfirmationModal',
 		kind: 'molecules',
@@ -244,11 +251,11 @@ export const DESIGN_SYSTEM_COMPONENTS: DesignSystemComponent[] = [
 ] as DesignSystemComponent[];
 
 export const DESIGN_SYSTEM_COMPONENT_STATS: DesignSystemComponentStats = {
-	total: 31,
-	tested: 31,
+	total: 32,
+	tested: 32,
 	byKind: {
 		atoms: 10,
-		molecules: 19,
+		molecules: 20,
 		organisms: 0,
 		skeletons: 2,
 	},

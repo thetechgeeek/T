@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { INDIAN_GROUPING_TAIL_DIGIT_COUNT } from '@/constants/money';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
@@ -28,6 +28,7 @@ export interface AmountInputProps {
 	allowDecimals?: boolean;
 	testID?: string;
 	editable?: boolean;
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -44,6 +45,7 @@ export function AmountInput({
 	allowDecimals = false,
 	testID,
 	editable = true,
+	style,
 }: AmountInputProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
@@ -77,7 +79,7 @@ export function AmountInput({
 			: null;
 
 	return (
-		<View>
+		<View style={style}>
 			{label ? (
 				<Text
 					style={{
@@ -119,6 +121,7 @@ export function AmountInput({
 					value={displayText}
 					onChangeText={handleChange}
 					keyboardType="number-pad"
+					accessibilityLabel={label ?? 'Amount'}
 					placeholder={placeholder ?? (value === 0 ? '0' : undefined)}
 					placeholderTextColor={c.placeholder}
 					editable={editable}
