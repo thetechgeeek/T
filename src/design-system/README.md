@@ -29,6 +29,12 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - `useQualitySignals.ts`
     - design-system-facing quality hook for the dashboard
     - merges locale-aware diagnostics with the runtime signals already supplied by `ThemeProvider`
+- `fixtures.ts`
+    - realistic no-media, ugly-data, read-only, and presentation fixtures used by the workbench proof deck
+    - keeps fallback-state demos grounded in representative enterprise content instead of placeholder lorem ipsum
+- `components/ThemeSnapshotPreview.tsx`
+    - curated preset-proof surface used by the theme matrix snapshots
+    - keeps preset, density, RTL, bold-text, and reduced-motion regression checks fast enough to stay in CI
 - `generated/uiLibraryCatalog.ts`
     - generated from the checklist doc
 - `componentRegistry.json`
@@ -62,7 +68,10 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - Keep the dashboard representative, not exhaustive at the prop-matrix level. It should show the supported patterns clearly and fast.
 - Treat the checklist explorer as the target-state backlog. Treat the supported component catalog as the current implementation contract.
 - Keep user-facing dashboard copy in `copy.ts`, not inline in `DesignLibraryScreen.tsx`.
+- The workbench must always show both `Relaxed showcase` and `Operational dense` expressions so new presets prove they can handle premium and operational surfaces with the same primitives.
+- Keep fallback states first-class: loading, empty, error, read-only, denied, no-media, and ugly-data proofs belong in the design-system before they spread into product screens.
+- Prefer neutral enterprise surfaces as the default bias. Brand-heavy or inverse surfaces should be deliberate exceptions, not the ambient default.
 - Prefer `paddingStart` / `paddingEnd` and other logical-direction-safe styles so RTL checks stay green.
 - Treat `src/design-system` as the tightest-guarded UI zone in the repo: this folder should be where we prove i18n, localization stress, RTL safety, accessibility labels, and design-system automation first.
 - New locale/RTL/accessibility work should land here before it spreads to product screens. If it cannot survive pseudo-localization, RTL, and max-font-scale diagnostics here, it is not ready for the app.
-- Keep the proof matrix healthy: `qualityMatrix.test.tsx` covers locale/accessibility affordances, and `themeMatrix.test.tsx` covers the full live-library surface across all supported presets plus an accessibility stress profile.
+- Keep the proof matrix healthy: `qualityMatrix.test.tsx` covers locale/accessibility affordances plus the premium-quality sections, and `themeMatrix.test.tsx` covers the curated preset-proof surface across all supported presets plus an accessibility stress profile.

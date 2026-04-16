@@ -32,12 +32,14 @@ import { useFinanceStore } from '@/src/stores/financeStore';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useOrderStore } from '@/src/stores/orderStore';
+import { useSyncStore } from '@/src/stores/syncStore';
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { inventoryService } from '@/src/services/inventoryService';
 import { itemPartyRateService } from '@/src/services/itemPartyRateService';
 import { orderService } from '@/src/services/orderService';
 import { paymentService } from '@/src/services/paymentService';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
+import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 function mockTranslate(key: string, options?: Record<string, unknown>) {
@@ -187,6 +189,14 @@ jest.mock('@/src/stores/invoiceStore', () => ({
 
 jest.mock('@/src/stores/orderStore', () => ({
 	useOrderStore: jest.fn(),
+}));
+
+jest.mock('@/src/stores/syncStore', () => ({
+	useSyncStore: jest.fn(),
+}));
+
+jest.mock('@/src/hooks/useNetworkStatus', () => ({
+	useNetworkStatus: jest.fn(),
 }));
 
 jest.mock('@/src/services/businessProfileService', () => ({
@@ -565,6 +575,11 @@ let orderStoreState: {
 	importParsedData: jest.Mock;
 	clearParsedData: jest.Mock;
 };
+let syncStoreState: {
+	lastSyncedAt: string | null;
+	isSyncing: boolean;
+	pendingCount: number;
+};
 
 function selectState<TState>(state: TState, selector?: Selector<TState>) {
 	return typeof selector === 'function' ? selector(state) : state;
@@ -576,6 +591,8 @@ const mockUseFinanceStore = useFinanceStore as unknown as jest.Mock;
 const mockUseInventoryStore = useInventoryStore as unknown as jest.Mock;
 const mockUseInvoiceStore = useInvoiceStore as unknown as jest.Mock;
 const mockUseOrderStore = useOrderStore as unknown as jest.Mock;
+const mockUseSyncStore = useSyncStore as unknown as jest.Mock;
+const mockUseNetworkStatus = useNetworkStatus as unknown as jest.Mock;
 const SNAPSHOT_INVOICE_CREATE_NOW = new Date('2026-04-14T00:00:00.000Z');
 
 async function expectSnapshotMatch(
@@ -658,6 +675,11 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 			importParsedData: jest.fn(),
 			clearParsedData: jest.fn(),
 		};
+		syncStoreState = {
+			lastSyncedAt: null,
+			isSyncing: false,
+			pendingCount: 0,
+		};
 
 		(useRouter as jest.Mock).mockReturnValue({
 			push: mockPush,
@@ -685,6 +707,10 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 		mockUseOrderStore.mockImplementation((selector?: Selector<typeof orderStoreState>) =>
 			selectState(orderStoreState, selector),
 		);
+		mockUseSyncStore.mockImplementation((selector?: Selector<typeof syncStoreState>) =>
+			selectState(syncStoreState, selector),
+		);
+		mockUseNetworkStatus.mockReturnValue({ isConnected: true });
 
 		jest.mocked(useInventoryStore).getState = jest
 			.fn()

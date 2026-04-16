@@ -47,6 +47,8 @@ const LIVE_PREVIEW_COMPONENTS = [
 	'PhoneInput',
 	'Screen',
 	'SearchBar',
+	'SkeletonBlock',
+	'SkeletonRow',
 	'StatCard',
 	'TextInput',
 	'ThemedText',

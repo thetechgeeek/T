@@ -13,7 +13,7 @@ export interface ThemedTextProps extends TextProps {
 }
 
 // h1/h2/h3 variants map to the 'header' role so VoiceOver/TalkBack announces them as headings
-const HEADING_VARIANTS = new Set(['h1', 'h2', 'h3']);
+const HEADING_VARIANTS = new Set(['display', 'screenTitle', 'sectionTitle', 'h1', 'h2', 'h3']);
 const ACCESSIBLE_WEIGHT_PROMOTION_MAP: Record<string, TextStyle['fontWeight']> = {
 	'400': '500',
 	'500': '600',

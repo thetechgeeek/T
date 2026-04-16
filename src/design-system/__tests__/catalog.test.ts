@@ -9,10 +9,10 @@ import {
 
 describe('design system catalog', () => {
 	it('tracks total and Common + Mobile checklist scope', () => {
-		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1239);
-		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(909);
-		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(559);
-		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(350);
+		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1414);
+		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(1075);
+		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(717);
+		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(358);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBeGreaterThan(0);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed + DESIGN_LIBRARY_OVERVIEW.open).toBe(
 			DESIGN_LIBRARY_OVERVIEW.total,

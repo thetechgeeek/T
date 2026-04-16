@@ -18,7 +18,14 @@ const THEME_MATRIX = [
 	{ label: 'dark', colorScheme: 'dark' as const },
 ] as const;
 
-const HEADING_VARIANTS = new Set<TypographyVariant>(['h1', 'h2', 'h3']);
+const HEADING_VARIANTS = new Set<TypographyVariant>([
+	'display',
+	'screenTitle',
+	'sectionTitle',
+	'h1',
+	'h2',
+	'h3',
+]);
 
 function renderWithColorScheme(component: React.ReactElement, colorScheme: ThemeColorScheme) {
 	jest.spyOn(Appearance, 'getColorScheme').mockReturnValue(colorScheme);

@@ -12,14 +12,25 @@ const SKIP_FILES = new Set(['src/design-system/copy.ts']);
 const RUNTIME_SIGNAL_SOURCE = 'src/design-system/runtimeSignals.ts';
 const COMPONENT_REGISTRY_PATH = 'src/design-system/componentRegistry.json';
 const COMPONENT_CATALOG_PATH = 'src/design-system/generated/componentCatalog.ts';
+const README_PATH = 'src/design-system/README.md';
+const REQUIRED_SOURCE_FILES = [
+	'src/design-system/fixtures.ts',
+	'src/design-system/components/ThemeSnapshotPreview.tsx',
+];
 const REQUIRED_TEST_FILES = [
 	'src/design-system/__tests__/boundary.test.ts',
+	'src/design-system/__tests__/fixtures.test.ts',
 	'src/design-system/__tests__/qualityMatrix.test.tsx',
 	'src/design-system/__tests__/themeMatrix.test.tsx',
 ];
 const DESIGN_SYSTEM_ROUTE_PATH = 'app/design-system/index.tsx';
 const LEGACY_DESIGN_SYSTEM_ROUTE_DIR = 'app/(app)/design-system';
 const PRODUCT_MORE_TAB_PATH = 'app/(app)/(tabs)/more.tsx';
+const REQUIRED_README_PHRASES = [
+	'Relaxed showcase',
+	'Operational dense',
+	'loading, empty, error, read-only, denied, no-media, and ugly-data',
+];
 
 const FILE_TEXT_RULES = [
 	{
@@ -238,6 +249,43 @@ for (const requiredTestFile of REQUIRED_TEST_FILES) {
 			message:
 				'The design-system folder must keep its route-boundary, quality-matrix, and theme-matrix tests as hard guardrails.',
 		});
+	}
+}
+
+for (const requiredSourceFile of REQUIRED_SOURCE_FILES) {
+	if (!fs.existsSync(path.join(root, requiredSourceFile))) {
+		violations.push({
+			file: requiredSourceFile,
+			line: 1,
+			rule: 'design-system-proof-fixtures',
+			message:
+				'The design-system folder must keep its shared proof fixtures so premium-quality and fallback-state demos stay representative.',
+		});
+	}
+}
+
+if (!fs.existsSync(path.join(root, README_PATH))) {
+	violations.push({
+		file: README_PATH,
+		line: 1,
+		rule: 'design-system-workbench-docs',
+		message:
+			'The design-system folder must keep its README documenting the relaxed/operational split and fallback-state proof deck.',
+	});
+} else {
+	const readme = fs.readFileSync(path.join(root, README_PATH), 'utf8');
+
+	for (const phrase of REQUIRED_README_PHRASES) {
+		if (!readme.includes(phrase)) {
+			violations.push({
+				file: README_PATH,
+				line: 1,
+				rule: 'design-system-workbench-docs',
+				message:
+					'The design-system README must document the relaxed/operational split and the required fallback-state proof deck.',
+			});
+			break;
+		}
 	}
 }
 

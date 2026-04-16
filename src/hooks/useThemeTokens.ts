@@ -21,6 +21,7 @@ export function useThemeTokens() {
 		r: theme.borderRadius,
 		bw: theme.borderWidth,
 		opacity: theme.opacity,
+		visual: theme.visual,
 		typo: theme.typography,
 		animation: theme.animation,
 		components: theme.components,

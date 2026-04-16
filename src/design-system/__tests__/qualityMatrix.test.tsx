@@ -18,7 +18,10 @@ describe('design-system quality matrix', () => {
 		const { getByText } = renderDesignSystem('pseudo', 'dark');
 
 		expect(getByText(copy.hero.title)).toBeTruthy();
+		expect(getByText(copy.qualityBar.title)).toBeTruthy();
 		expect(getByText(copy.runtimeTheming.title)).toBeTruthy();
+		expect(getByText(copy.presentationModes.title)).toBeTruthy();
+		expect(getByText(copy.stateProof.title)).toBeTruthy();
 		expect(getByText(copy.componentInventory.title)).toBeTruthy();
 		expect(getByText(copy.checklistExplorer.title)).toBeTruthy();
 	});
@@ -34,10 +37,12 @@ describe('design-system quality matrix', () => {
 
 	it('keeps primary controls accessible in english mode', () => {
 		const copy = getDesignSystemCopy('en');
-		const { getByLabelText } = renderDesignSystem('en');
+		const { getByLabelText, getByText } = renderDesignSystem('en');
 
 		expect(getByLabelText(copy.runtimeTheming.cycleLookAndFeel)).toBeTruthy();
 		expect(getByLabelText(copy.componentGallery.buttons.primary)).toBeTruthy();
 		expect(getByLabelText(copy.componentGallery.iconButtons.search)).toBeTruthy();
+		expect(getByText(copy.stateProof.noMedia.title)).toBeTruthy();
+		expect(getByText(copy.presentationModes.relaxed.title)).toBeTruthy();
 	});
 });

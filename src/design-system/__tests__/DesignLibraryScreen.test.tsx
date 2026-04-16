@@ -1,17 +1,19 @@
 import React from 'react';
 import { renderWithTheme } from '@/__tests__/utils/renderWithTheme';
 import DesignLibraryScreen from '../DesignLibraryScreen';
+import { DESIGN_LIBRARY_OVERVIEW } from '../catalog';
 
 describe('DesignLibraryScreen', () => {
-	it('renders the design library hero and checklist stats', () => {
-		const { getByText, getAllByText } = renderWithTheme(<DesignLibraryScreen />);
+	it('renders the premium-quality workbench sections and generated counts', () => {
+		const { getByText } = renderWithTheme(<DesignLibraryScreen />);
 
 		expect(getByText('Design System Workbench')).toBeTruthy();
-		expect(getByText('All checklist items')).toBeTruthy();
-		expect(getByText('1239')).toBeTruthy();
-		expect(getAllByText('Common + Mobile').length).toBeGreaterThan(0);
-		expect(getByText('909')).toBeTruthy();
+		expect(getByText('Enterprise x Premium Quality Bar')).toBeTruthy();
+		expect(getByText('Relaxed vs Operational Presentation')).toBeTruthy();
+		expect(getByText('State Proof Deck')).toBeTruthy();
+		expect(getByText(String(DESIGN_LIBRARY_OVERVIEW.total))).toBeTruthy();
+		expect(getByText(String(DESIGN_LIBRARY_OVERVIEW.commonMobile))).toBeTruthy();
 		expect(getByText('Supported Component Catalog')).toBeTruthy();
-		expect(getAllByText('Button').length).toBeGreaterThan(0);
+		expect(getByText('Checklist Explorer')).toBeTruthy();
 	});
 });

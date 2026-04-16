@@ -13,7 +13,14 @@ import {
 } from './palette';
 import { EASING_CURVES, MOTION_PROFILES } from './animations';
 import { FONT_SIZE, FONT_SIZE_SCALE, LINE_HEIGHT, LINE_HEIGHT_RATIO } from './typographyMetrics';
-import type { Theme, ThemeColors, ThemeMeta, ThemePresetId, ThemeTypography } from './index';
+import type {
+	Theme,
+	ThemeColors,
+	ThemeExpression,
+	ThemeMeta,
+	ThemePresetId,
+	ThemeTypography,
+} from './index';
 
 export interface ThemePresetOption extends ThemeMeta {
 	description: string;
@@ -22,6 +29,8 @@ export interface ThemePresetOption extends ThemeMeta {
 interface ThemePresetDefinition extends ThemePresetOption {
 	lightOverrides: Partial<ThemeColors>;
 	darkOverrides: Partial<ThemeColors>;
+	expression: ThemeExpression;
+	accentBudget: number;
 	spacingScale: number;
 	radiusScale: number;
 	fontScale: number;
@@ -81,6 +90,10 @@ const MIN_LABEL_SIZE = 12;
 const MIN_LABEL_LINE_HEIGHT = 16;
 const MIN_CAPTION_SMALL_SIZE = 10;
 const MIN_CAPTION_SMALL_LINE_HEIGHT = 14;
+const MIN_METADATA_SIZE = 12;
+const MIN_METADATA_LINE_HEIGHT = 16;
+const MIN_METRIC_SIZE = 28;
+const MIN_METRIC_LINE_HEIGHT = 34;
 const EXECUTIVE_SPACING_SCALE = 0.92;
 const EXECUTIVE_RADIUS_SCALE = 0.72;
 const EXECUTIVE_FONT_SCALE = 0.97;
@@ -149,6 +162,7 @@ function scaleTypography(fontScale: number, lineHeightScale: number): ThemeTypog
 	return {
 		fontFamily: SYSTEM_FONT,
 		fontFamilyBold: SYSTEM_FONT_BOLD,
+		fontFamilyDisplay: SYSTEM_FONT_BOLD,
 		sizes: {
 			xs: roundToken(FONT_SIZE_SCALE.xs * fontScale, MIN_SIZE_XS),
 			sm: roundToken(FONT_SIZE_SCALE.sm * fontScale, MIN_SIZE_SM),
@@ -178,6 +192,16 @@ function scaleTypography(fontScale: number, lineHeightScale: number): ThemeTypog
 					MIN_DISPLAY_LINE_HEIGHT,
 				),
 			},
+			screenTitle: {
+				fontSize: roundToken(FONT_SIZE.h1 * fontScale, MIN_H1_SIZE),
+				fontWeight: '700',
+				lineHeight: roundToken(LINE_HEIGHT.h1 * lineHeightScale, MIN_H1_LINE_HEIGHT),
+			},
+			sectionTitle: {
+				fontSize: roundToken(FONT_SIZE.h3 * fontScale, MIN_H3_SIZE),
+				fontWeight: '600',
+				lineHeight: roundToken(LINE_HEIGHT.h3 * lineHeightScale, MIN_H3_LINE_HEIGHT),
+			},
 			h1: {
 				fontSize: roundToken(FONT_SIZE.h1 * fontScale, MIN_H1_SIZE),
 				fontWeight: '700',
@@ -198,10 +222,31 @@ function scaleTypography(fontScale: number, lineHeightScale: number): ThemeTypog
 				fontWeight: '400',
 				lineHeight: roundToken(LINE_HEIGHT.body * lineHeightScale, MIN_BODY_LINE_HEIGHT),
 			},
+			bodyStrong: {
+				fontSize: roundToken(FONT_SIZE.body * fontScale, 15),
+				fontWeight: '600',
+				lineHeight: roundToken(LINE_HEIGHT.body * lineHeightScale, MIN_BODY_LINE_HEIGHT),
+			},
 			bodyBold: {
 				fontSize: roundToken(FONT_SIZE.body * fontScale, 15),
 				fontWeight: '700',
 				lineHeight: roundToken(LINE_HEIGHT.body * lineHeightScale, MIN_BODY_LINE_HEIGHT),
+			},
+			metadata: {
+				fontSize: roundToken(FONT_SIZE.caption * fontScale, MIN_METADATA_SIZE),
+				fontWeight: '500',
+				lineHeight: roundToken(
+					LINE_HEIGHT.caption * lineHeightScale,
+					MIN_METADATA_LINE_HEIGHT,
+				),
+			},
+			metric: {
+				fontSize: roundToken(FONT_SIZE.amountLarge * fontScale, MIN_METRIC_SIZE),
+				fontWeight: '700',
+				lineHeight: roundToken(
+					LINE_HEIGHT.amountLarge * lineHeightScale,
+					MIN_METRIC_LINE_HEIGHT,
+				),
 			},
 			caption: {
 				fontSize: roundToken(FONT_SIZE.caption * fontScale, MIN_CAPTION_SIZE),
@@ -269,6 +314,8 @@ const THEME_PRESET_DEFINITIONS: Record<ThemePresetId, ThemePresetDefinition> = {
 		presetLabel: 'Baseline',
 		description: 'Balanced neutral surfaces with comfortable spacing.',
 		density: 'comfortable',
+		expression: 'balanced',
+		accentBudget: 1,
 		lightOverrides: {},
 		darkOverrides: {},
 		spacingScale: 1,
@@ -286,6 +333,8 @@ const THEME_PRESET_DEFINITIONS: Record<ThemePresetId, ThemePresetDefinition> = {
 		presetLabel: 'Executive',
 		description: 'Sharper, denser, boardroom-oriented visual language.',
 		density: 'compact',
+		expression: 'operational',
+		accentBudget: 1,
 		lightOverrides: themePresetColorOverrides.executive.light,
 		darkOverrides: themePresetColorOverrides.executive.dark,
 		spacingScale: EXECUTIVE_SPACING_SCALE,
@@ -303,6 +352,8 @@ const THEME_PRESET_DEFINITIONS: Record<ThemePresetId, ThemePresetDefinition> = {
 		presetLabel: 'Studio',
 		description: 'More expressive spacing, roundness, and brighter brand accents.',
 		density: 'spacious',
+		expression: 'showcase',
+		accentBudget: 2,
 		lightOverrides: themePresetColorOverrides.studio.light,
 		darkOverrides: themePresetColorOverrides.studio.dark,
 		spacingScale: STUDIO_SPACING_SCALE,
@@ -320,6 +371,8 @@ const THEME_PRESET_DEFINITIONS: Record<ThemePresetId, ThemePresetDefinition> = {
 		presetLabel: 'Mono',
 		description: 'Neutral monochrome surfaces with precise accent highlights.',
 		density: 'comfortable',
+		expression: 'balanced',
+		accentBudget: 1,
 		lightOverrides: themePresetColorOverrides.mono.light,
 		darkOverrides: themePresetColorOverrides.mono.dark,
 		spacingScale: 1,
@@ -335,11 +388,13 @@ const THEME_PRESET_DEFINITIONS: Record<ThemePresetId, ThemePresetDefinition> = {
 };
 
 export const THEME_PRESET_OPTIONS = Object.values(THEME_PRESET_DEFINITIONS).map(
-	({ presetId, presetLabel, description, density }) => ({
+	({ presetId, presetLabel, description, density, expression, accentBudget }) => ({
 		presetId,
 		presetLabel,
 		description,
 		density,
+		expression,
+		accentBudget,
 	}),
 ) as readonly ThemePresetOption[];
 
@@ -355,6 +410,8 @@ export function resolveThemePreset(presetId: ThemePresetId, isDark: boolean): Re
 			presetId: preset.presetId,
 			presetLabel: preset.presetLabel,
 			density: preset.density,
+			expression: preset.expression,
+			accentBudget: preset.accentBudget,
 		},
 		colors,
 		typography: scaleTypography(preset.fontScale, preset.lineHeightScale),

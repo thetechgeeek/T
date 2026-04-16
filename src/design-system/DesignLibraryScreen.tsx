@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { Calendar, Moon, Package, Palette, Search, Settings, Sun, Zap } from 'lucide-react-native';
+import { Calendar, Moon, Package, Palette, Search, Sun } from 'lucide-react-native';
 import { ThemeProvider, useTheme } from '@/src/theme/ThemeProvider';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { Screen } from '@/src/components/atoms/Screen';
@@ -21,6 +21,8 @@ import { EmptyState } from '@/src/components/molecules/EmptyState';
 import { Toast } from '@/src/components/molecules/Toast';
 import { BottomSheetPicker } from '@/src/components/molecules/BottomSheetPicker';
 import { ListItem } from '@/src/components/molecules/ListItem';
+import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
+import { SkeletonRow } from '@/src/components/molecules/SkeletonRow';
 import { StatCard } from '@/src/components/molecules/StatCard';
 import {
 	DESIGN_LIBRARY_COMPONENT_OVERVIEW,
@@ -41,10 +43,19 @@ import { getDesignSystemCopy, type DesignSystemLocale } from './copy';
 import { buildDesignSystemLocaleDiagnostics } from './formatters';
 import { useDesignSystemQualitySignals } from './useQualitySignals';
 import { WorkbenchHeader } from './components/WorkbenchHeader';
+import {
+	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,
+	DESIGN_SYSTEM_READ_ONLY_FIELDS,
+	DESIGN_SYSTEM_RELAXED_FIXTURE,
+	DESIGN_SYSTEM_STATE_FIXTURES,
+} from './fixtures';
 
 const AMOUNT_PREVIEW_VALUE = 125000;
-const KPI_CARD_MIN_WIDTH = 160;
+const METRIC_CARD_MIN_WIDTH = 170;
+const PRINCIPLE_CARD_MIN_WIDTH = 220;
+const PROOF_CARD_MIN_WIDTH = 260;
 const COMPONENT_CARD_MIN_WIDTH = 220;
+const SURFACE_TIER_ORDER = ['canvas', 'default', 'raised', 'overlay', 'inverse'] as const;
 
 const PLATFORM_VARIANT: Record<UiLibraryChecklistItem['platform'], 'info' | 'success' | 'neutral'> =
 	{
@@ -63,6 +74,8 @@ const COMPONENT_KIND_VARIANT: Record<
 	skeletons: 'neutral',
 };
 
+type SurfaceTierKey = (typeof SURFACE_TIER_ORDER)[number];
+
 function PreviewSection({
 	title,
 	description,
@@ -72,16 +85,23 @@ function PreviewSection({
 	description: string;
 	children: React.ReactNode;
 }) {
-	const { c, s } = useThemeTokens();
+	const { c, s, visual } = useThemeTokens();
 
 	return (
-		<Card style={{ marginBottom: s.lg }}>
+		<Card
+			variant="outlined"
+			style={{
+				marginBottom: s.lg,
+				backgroundColor: visual.surfaces.raised,
+				borderColor: c.border,
+			}}
+		>
 			<View style={{ marginBottom: s.md }}>
-				<ThemedText variant="h3" style={{ color: c.onSurface }}>
+				<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 					{title}
 				</ThemedText>
 				<ThemedText
-					variant="caption"
+					variant="metadata"
 					style={{ color: c.onSurfaceVariant, marginTop: s.xxs }}
 				>
 					{description}
@@ -104,76 +124,327 @@ function ThemeModeChip({
 	return <Chip label={label} selected={selected} onPress={onPress} />;
 }
 
-function ScopedThemePreviewCardContent({
+function WorkbenchMetricCard({
 	label,
-	modeLabel,
-	spacingLabel,
-	radiusLabel,
+	value,
+	detail,
+	variant = 'default',
 }: {
 	label: string;
-	modeLabel: (isDark: boolean) => string;
-	spacingLabel: (value: number) => string;
-	radiusLabel: (value: number) => string;
+	value: string | number;
+	detail: string;
+	variant?: 'default' | 'success' | 'warning' | 'info';
 }) {
-	const { theme, c, s } = useThemeTokens();
+	const { c, s, visual } = useThemeTokens();
+
+	const metricColor =
+		variant === 'success'
+			? c.success
+			: variant === 'warning'
+				? c.warning
+				: variant === 'info'
+					? c.info
+					: c.primary;
+
+	return (
+		<Card
+			variant="outlined"
+			style={{
+				flex: 1,
+				minWidth: METRIC_CARD_MIN_WIDTH,
+				backgroundColor: visual.surfaces.default,
+				borderColor: c.border,
+			}}
+		>
+			<ThemedText variant="metadata" style={{ color: c.onSurfaceVariant }}>
+				{label}
+			</ThemedText>
+			<ThemedText variant="metric" style={{ color: metricColor, marginTop: s.xs }}>
+				{value}
+			</ThemedText>
+			<ThemedText variant="caption" style={{ color: c.onSurfaceVariant, marginTop: s.xs }}>
+				{detail}
+			</ThemedText>
+		</Card>
+	);
+}
+
+function PrincipleCard({
+	title,
+	description,
+	variant = 'neutral',
+}: {
+	title: string;
+	description: string;
+	variant?: 'neutral' | 'info' | 'warning';
+}) {
+	const { c, s, visual } = useThemeTokens();
+
+	const accent =
+		variant === 'warning' ? c.warning : variant === 'info' ? c.info : c.onSurfaceVariant;
 
 	return (
 		<Card
 			variant="flat"
 			style={{
 				flex: 1,
-				minWidth: 180,
-				borderWidth: theme.borderWidth.sm,
-				borderColor: c.border,
+				minWidth: PRINCIPLE_CARD_MIN_WIDTH,
+				backgroundColor: visual.surfaces.quiet,
 			}}
 		>
-			<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
-				{label}
-			</ThemedText>
-			<ThemedText variant="h3" style={{ color: c.onSurface, marginTop: s.xxs }}>
-				{theme.meta.presetLabel}
-			</ThemedText>
-			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.xs, marginTop: s.sm }}>
-				<Badge label={modeLabel(theme.isDark)} variant="info" size="sm" />
-				<Badge label={spacingLabel(theme.spacing.lg)} variant="success" size="sm" />
-				<Badge label={radiusLabel(theme.borderRadius.md)} variant="default" size="sm" />
-			</View>
 			<View
 				style={{
+					width: s.xs,
 					height: s.xl,
-					borderRadius: theme.borderRadius.full,
-					backgroundColor: c.primary,
-					marginTop: s.sm,
+					borderRadius: s.xs,
+					backgroundColor: accent,
+					marginBottom: s.sm,
 				}}
 			/>
+			<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
+				{title}
+			</ThemedText>
+			<ThemedText variant="caption" style={{ color: c.onSurfaceVariant, marginTop: s.xs }}>
+				{description}
+			</ThemedText>
 		</Card>
 	);
 }
 
-function ScopedThemePreviewCard({
+function SurfaceTierCard({
+	tierKey,
+	label,
+	description,
+}: {
+	tierKey: SurfaceTierKey;
+	label: string;
+	description: string;
+}) {
+	const { c, s, r, visual } = useThemeTokens();
+
+	return (
+		<Card
+			variant="outlined"
+			style={{
+				flex: 1,
+				minWidth: 180,
+				backgroundColor: visual.surfaces.default,
+				borderColor: c.border,
+			}}
+		>
+			<View
+				style={{
+					height: s.xl,
+					borderRadius: r.md,
+					backgroundColor: visual.surfaces[tierKey],
+					borderWidth: tierKey === 'inverse' ? 0 : 1,
+					borderColor: c.border,
+				}}
+			/>
+			<ThemedText variant="bodyStrong" style={{ color: c.onSurface, marginTop: s.sm }}>
+				{label}
+			</ThemedText>
+			<ThemedText variant="caption" style={{ color: c.onSurfaceVariant, marginTop: s.xs }}>
+				{description}
+			</ThemedText>
+		</Card>
+	);
+}
+
+function PresentationPreviewCardContent({
+	label,
+	title,
+	description,
+	metricValue,
+	metricLabel,
+	metricContext,
+	searchPlaceholder,
+	filterLabels,
+	primaryAction,
+	secondaryAction,
+}: {
+	label: string;
+	title: string;
+	description: string;
+	metricValue: string;
+	metricLabel: string;
+	metricContext: string;
+	searchPlaceholder: string;
+	filterLabels: readonly string[];
+	primaryAction: string;
+	secondaryAction: string;
+}) {
+	const { theme, c, s, visual } = useThemeTokens();
+
+	return (
+		<Card
+			variant="outlined"
+			style={{
+				flex: 1,
+				minWidth: 300,
+				backgroundColor: visual.surfaces.default,
+				borderColor: c.border,
+			}}
+		>
+			<View
+				style={{
+					backgroundColor: visual.surfaces.hero,
+					borderRadius: visual.silhouette.overlay,
+					padding: s.md,
+					marginBottom: s.md,
+				}}
+			>
+				<Badge label={label} variant="neutral" size="sm" />
+				<ThemedText
+					variant="screenTitle"
+					style={{ color: visual.surfaces.onHero, marginTop: s.xs }}
+				>
+					{title}
+				</ThemedText>
+				<ThemedText variant="body" style={{ color: c.onPrimaryContainer, marginTop: s.xs }}>
+					{description}
+				</ThemedText>
+			</View>
+
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					gap: s.md,
+				}}
+			>
+				<View style={{ flex: 1 }}>
+					<ThemedText variant="metadata" style={{ color: c.onSurfaceVariant }}>
+						{metricLabel}
+					</ThemedText>
+					<ThemedText variant="metric" style={{ color: c.onSurface, marginTop: s.xxs }}>
+						{metricValue}
+					</ThemedText>
+				</View>
+				<Badge
+					label={metricContext}
+					variant={theme.meta.expression === 'operational' ? 'warning' : 'success'}
+				/>
+			</View>
+
+			<SearchBar
+				value=""
+				onChangeText={() => {}}
+				placeholder={searchPlaceholder}
+				style={{ marginTop: s.md }}
+			/>
+
+			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm, marginTop: s.md }}>
+				{filterLabels.map((chipLabel) => (
+					<Chip
+						key={chipLabel}
+						label={chipLabel}
+						selected={chipLabel === filterLabels[0]}
+					/>
+				))}
+			</View>
+
+			<View style={{ gap: s.sm, marginTop: s.md }}>
+				<ListItem
+					title={metricLabel}
+					subtitle={metricContext}
+					showChevron={false}
+					style={{ backgroundColor: visual.surfaces.default }}
+				/>
+				<ListItem
+					title={label}
+					subtitle={theme.meta.presetLabel}
+					showChevron={false}
+					style={{ backgroundColor: visual.surfaces.default }}
+				/>
+			</View>
+
+			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm, marginTop: s.md }}>
+				<Button title={primaryAction} onPress={() => {}} />
+				<Button title={secondaryAction} variant="secondary" onPress={() => {}} />
+			</View>
+		</Card>
+	);
+}
+
+function PresentationPreviewCard({
 	label,
 	mode,
 	presetId,
-	modeLabel,
-	spacingLabel,
-	radiusLabel,
+	title,
+	description,
+	metricValue,
+	metricLabel,
+	metricContext,
+	searchPlaceholder,
+	filterLabels,
+	primaryAction,
+	secondaryAction,
 }: {
 	label: string;
 	mode: ThemeMode;
 	presetId: ThemePresetId;
-	modeLabel: (isDark: boolean) => string;
-	spacingLabel: (value: number) => string;
-	radiusLabel: (value: number) => string;
+	title: string;
+	description: string;
+	metricValue: string;
+	metricLabel: string;
+	metricContext: string;
+	searchPlaceholder: string;
+	filterLabels: readonly string[];
+	primaryAction: string;
+	secondaryAction: string;
 }) {
 	return (
 		<ThemeProvider initialMode={mode} initialPresetId={presetId} persist={false}>
-			<ScopedThemePreviewCardContent
+			<PresentationPreviewCardContent
 				label={label}
-				modeLabel={modeLabel}
-				spacingLabel={spacingLabel}
-				radiusLabel={radiusLabel}
+				title={title}
+				description={description}
+				metricValue={metricValue}
+				metricLabel={metricLabel}
+				metricContext={metricContext}
+				searchPlaceholder={searchPlaceholder}
+				filterLabels={filterLabels}
+				primaryAction={primaryAction}
+				secondaryAction={secondaryAction}
 			/>
 		</ThemeProvider>
+	);
+}
+
+function StateProofCard({
+	title,
+	description,
+	children,
+}: {
+	title: string;
+	description: string;
+	children: React.ReactNode;
+}) {
+	const { c, s, visual } = useThemeTokens();
+
+	return (
+		<Card
+			variant="outlined"
+			style={{
+				flex: 1,
+				minWidth: PROOF_CARD_MIN_WIDTH,
+				backgroundColor: visual.surfaces.default,
+				borderColor: c.border,
+			}}
+		>
+			<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
+				{title}
+			</ThemedText>
+			<ThemedText
+				variant="caption"
+				style={{ color: c.onSurfaceVariant, marginTop: s.xxs, marginBottom: s.md }}
+			>
+				{description}
+			</ThemedText>
+			{children}
+		</Card>
 	);
 }
 
@@ -182,7 +453,7 @@ export interface DesignLibraryScreenProps {
 }
 
 export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScreenProps) {
-	const { theme, c, s, r } = useThemeTokens();
+	const { theme, c, s, r, visual } = useThemeTokens();
 	const { mode, setThemeMode, presetId, setThemePreset, cycleThemePreset, availablePresets } =
 		useTheme();
 	const [selectedLocale, setSelectedLocale] = useState<DesignSystemLocale | null>(null);
@@ -215,6 +486,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 		theme.typography.variants.body.fontSize ?? theme.typography.sizes.md;
 	const resolvedBodyLineHeight =
 		theme.typography.variants.body.lineHeight ?? theme.typography.sizes.lg;
+
 	const handleLocaleChange = useCallback((nextLocale: DesignSystemLocale) => {
 		setSelectedLocale(nextLocale);
 		setNoteValue(getDesignSystemCopy(nextLocale).componentGallery.notesSeed);
@@ -266,8 +538,8 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 			<Card
 				style={{
 					marginBottom: s.lg,
-					backgroundColor: c.primaryContainer,
-					borderRadius: r.lg,
+					backgroundColor: visual.surfaces.hero,
+					borderRadius: visual.silhouette.overlay,
 				}}
 			>
 				<View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: s.md }}>
@@ -275,7 +547,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						style={{
 							width: s['3xl'],
 							height: s['3xl'],
-							borderRadius: r.lg,
+							borderRadius: visual.silhouette.overlay,
 							backgroundColor: c.primary,
 							alignItems: 'center',
 							justifyContent: 'center',
@@ -284,20 +556,25 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						<Palette size={24} color={c.onPrimary} />
 					</View>
 					<View style={{ flex: 1 }}>
-						<ThemedText variant="h1" style={{ color: c.onSurface, marginBottom: s.xs }}>
+						<ThemedText
+							variant="screenTitle"
+							style={{ color: visual.surfaces.onHero, marginBottom: s.xs }}
+						>
 							{copy.hero.title}
 						</ThemedText>
-						<ThemedText variant="body" style={{ color: c.onSurfaceVariant }}>
+						<ThemedText variant="body" style={{ color: c.onPrimaryContainer }}>
 							{copy.hero.description}
 						</ThemedText>
 					</View>
 				</View>
+
 				<View
 					style={{
 						flexDirection: 'row',
 						flexWrap: 'wrap',
 						gap: s.sm,
 						marginTop: s.md,
+						marginBottom: s.md,
 					}}
 				>
 					<Badge
@@ -309,6 +586,12 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					<Badge label={copy.meta.localeBadge} variant="neutral" />
 					<Badge label={copy.meta.directionBadge} variant="neutral" />
 				</View>
+
+				<Button
+					title={copy.runtimeTheming.cycleLookAndFeel}
+					onPress={cycleThemePreset}
+					leftIcon={<Palette size={16} color={c.onPrimary} />}
+				/>
 			</Card>
 
 			<View
@@ -319,56 +602,71 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					marginBottom: s.lg,
 				}}
 			>
-				<StatCard
+				<WorkbenchMetricCard
 					label={copy.stats.allChecklistItems}
 					value={DESIGN_LIBRARY_OVERVIEW.total}
-					icon={Search}
-					color={c.primary}
-					style={{ flex: 1, minWidth: KPI_CARD_MIN_WIDTH }}
+					detail={copy.stats.completed}
 				/>
-				<StatCard
+				<WorkbenchMetricCard
 					label={copy.stats.completed}
 					value={DESIGN_LIBRARY_OVERVIEW.completed}
-					icon={Zap}
-					color={c.success}
-					style={{ flex: 1, minWidth: KPI_CARD_MIN_WIDTH }}
+					detail={copy.stats.open}
+					variant="success"
 				/>
-				<StatCard
-					label={copy.stats.open}
-					value={DESIGN_LIBRARY_OVERVIEW.open}
-					icon={Settings}
-					color={c.warning}
-					style={{ flex: 1, minWidth: KPI_CARD_MIN_WIDTH }}
-				/>
-				<StatCard
+				<WorkbenchMetricCard
 					label={copy.stats.commonMobile}
 					value={DESIGN_LIBRARY_OVERVIEW.commonMobile}
-					icon={Settings}
-					color={c.info}
-					style={{ flex: 1, minWidth: KPI_CARD_MIN_WIDTH }}
+					detail={copy.stats.libraryComponents}
+					variant="info"
 				/>
-				<StatCard
-					label={copy.stats.libraryComponents}
-					value={DESIGN_LIBRARY_COMPONENT_OVERVIEW.total}
-					icon={Package}
-					color={c.primary}
-					style={{ flex: 1, minWidth: KPI_CARD_MIN_WIDTH }}
-				/>
-				<StatCard
+				<WorkbenchMetricCard
 					label={copy.stats.liveDemos}
 					value={DESIGN_LIBRARY_COMPONENT_OVERVIEW.livePreviewCount}
-					icon={Palette}
-					color={c.success}
-					style={{ flex: 1, minWidth: KPI_CARD_MIN_WIDTH }}
+					detail={copy.stats.libraryComponents}
+					variant="warning"
 				/>
 			</View>
+
+			<PreviewSection title={copy.qualityBar.title} description={copy.qualityBar.description}>
+				<View style={{ gap: s.lg }}>
+					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+						{copy.qualityBar.doctrineCards.map((item) => (
+							<PrincipleCard
+								key={item.title}
+								title={item.title}
+								description={item.description}
+								variant="info"
+							/>
+						))}
+					</View>
+					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+						{copy.qualityBar.visualLawCards.map((item) => (
+							<PrincipleCard
+								key={item.title}
+								title={item.title}
+								description={item.description}
+							/>
+						))}
+					</View>
+					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+						{copy.qualityBar.antiPatternCards.map((item) => (
+							<PrincipleCard
+								key={item.title}
+								title={item.title}
+								description={item.description}
+								variant="warning"
+							/>
+						))}
+					</View>
+				</View>
+			</PreviewSection>
 
 			<PreviewSection
 				title={copy.runtimeTheming.title}
 				description={copy.runtimeTheming.description}
 			>
 				<ThemedText
-					variant="caption"
+					variant="metadata"
 					style={{ color: c.onSurfaceVariant, marginBottom: s.sm }}
 				>
 					{copy.runtimeTheming.themePresets}
@@ -387,8 +685,9 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						/>
 					))}
 				</ScrollView>
+
 				<ThemedText
-					variant="caption"
+					variant="metadata"
 					style={{ color: c.onSurfaceVariant, marginBottom: s.sm }}
 				>
 					{copy.runtimeTheming.appearanceMode}
@@ -410,8 +709,9 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						/>
 					))}
 				</View>
+
 				<ThemedText
-					variant="caption"
+					variant="metadata"
 					style={{ color: c.onSurfaceVariant, marginBottom: s.sm }}
 				>
 					{copy.runtimeTheming.currentProfile}
@@ -427,6 +727,20 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					<Badge
 						label={copy.runtimeTheming.currentDensity(theme.meta.density)}
 						variant="neutral"
+					/>
+					<Badge
+						label={copy.runtimeTheming.currentExpression(theme.meta.expression)}
+						variant="info"
+					/>
+					<Badge
+						label={copy.runtimeTheming.currentAccentBudget(theme.meta.accentBudget)}
+						variant="warning"
+					/>
+					<Badge
+						label={copy.runtimeTheming.currentSurfaceBias(
+							theme.visual.presentation.defaultSurfaceBias,
+						)}
+						variant="default"
 					/>
 					<Badge
 						label={copy.runtimeTheming.currentTouchTarget(theme.touchTarget)}
@@ -448,34 +762,91 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						variant="warning"
 					/>
 				</View>
-				<Button
-					title={copy.runtimeTheming.cycleLookAndFeel}
-					onPress={cycleThemePreset}
-					leftIcon={<Palette size={16} color={c.onPrimary} />}
-				/>
+
 				<ThemedText
-					variant="caption"
+					variant="metadata"
 					style={{ color: c.onSurfaceVariant, marginTop: s.md, marginBottom: s.sm }}
 				>
 					{copy.runtimeTheming.nestedSubtreePreviews}
 				</ThemedText>
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-					<ScopedThemePreviewCard
-						label={copy.runtimeTheming.boardroomSurface}
+					<PresentationPreviewCard
+						label={copy.runtimeTheming.operationalSurface}
 						mode={previewMode}
 						presetId="executive"
-						modeLabel={copy.runtimeTheming.subtreeMode}
-						spacingLabel={copy.runtimeTheming.subtreeSpacing}
-						radiusLabel={copy.runtimeTheming.subtreeRadius}
+						title={copy.presentationModes.operational.title}
+						description={copy.presentationModes.operational.description}
+						metricValue={DESIGN_SYSTEM_OPERATIONAL_FIXTURE.metricValue}
+						metricLabel={copy.presentationModes.operational.metricLabel}
+						metricContext={DESIGN_SYSTEM_OPERATIONAL_FIXTURE.metricContext}
+						searchPlaceholder={copy.presentationModes.operational.searchPlaceholder}
+						filterLabels={copy.presentationModes.operational.filterLabels}
+						primaryAction={copy.presentationModes.operational.primaryAction}
+						secondaryAction={copy.presentationModes.operational.secondaryAction}
 					/>
-					<ScopedThemePreviewCard
-						label={copy.runtimeTheming.creativeSurface}
+					<PresentationPreviewCard
+						label={copy.runtimeTheming.showcaseSurface}
 						mode={previewMode}
 						presetId="studio"
-						modeLabel={copy.runtimeTheming.subtreeMode}
-						spacingLabel={copy.runtimeTheming.subtreeSpacing}
-						radiusLabel={copy.runtimeTheming.subtreeRadius}
+						title={copy.presentationModes.relaxed.title}
+						description={copy.presentationModes.relaxed.description}
+						metricValue={DESIGN_SYSTEM_RELAXED_FIXTURE.metricValue}
+						metricLabel={copy.presentationModes.relaxed.metricLabel}
+						metricContext={DESIGN_SYSTEM_RELAXED_FIXTURE.metricContext}
+						searchPlaceholder={copy.presentationModes.relaxed.searchPlaceholder}
+						filterLabels={copy.presentationModes.relaxed.filterLabels}
+						primaryAction={copy.presentationModes.relaxed.primaryAction}
+						secondaryAction={copy.presentationModes.relaxed.secondaryAction}
 					/>
+				</View>
+			</PreviewSection>
+
+			<PreviewSection
+				title={copy.presentationModes.title}
+				description={copy.presentationModes.description}
+			>
+				<View
+					style={{
+						flexDirection: 'row',
+						flexWrap: 'wrap',
+						gap: s.sm,
+						marginBottom: s.md,
+					}}
+				>
+					<Badge
+						label={copy.presentationModes.accentBudget(theme.meta.accentBudget)}
+						variant="warning"
+					/>
+					<Badge
+						label={copy.presentationModes.defaultSurfaceBias(
+							theme.visual.presentation.defaultSurfaceBias,
+						)}
+						variant="neutral"
+					/>
+					<Badge label={copy.presentationModes.inverseAction} variant="info" />
+				</View>
+
+				<ThemedText
+					variant="metadata"
+					style={{ color: c.onSurfaceVariant, marginBottom: s.sm }}
+				>
+					{copy.presentationModes.surfaceTiersTitle}
+				</ThemedText>
+				<ThemedText
+					variant="caption"
+					style={{ color: c.onSurfaceVariant, marginBottom: s.md }}
+				>
+					{copy.presentationModes.surfaceTiersDescription}
+				</ThemedText>
+				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+					{SURFACE_TIER_ORDER.map((tierKey) => (
+						<SurfaceTierCard
+							key={tierKey}
+							tierKey={tierKey}
+							label={copy.presentationModes.tierLabels[tierKey]}
+							description={copy.presentationModes.tierDescriptions[tierKey]}
+						/>
+					))}
 				</View>
 			</PreviewSection>
 
@@ -484,7 +855,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				description={copy.localization.description}
 			>
 				<ThemedText
-					variant="caption"
+					variant="metadata"
 					style={{ color: c.onSurfaceVariant, marginBottom: s.sm }}
 				>
 					{copy.localization.localeSelector}
@@ -505,7 +876,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					))}
 				</ScrollView>
 				<ThemedText
-					variant="caption"
+					variant="metadata"
 					style={{ color: c.onSurfaceVariant, marginBottom: s.sm }}
 				>
 					{copy.localization.runtimeSignals}
@@ -544,7 +915,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					/>
 				</View>
 				<ThemedText
-					variant="caption"
+					variant="metadata"
 					style={{ color: c.onSurfaceVariant, marginBottom: s.sm }}
 				>
 					{copy.localization.formatExamples}
@@ -699,6 +1070,15 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						showShortcuts
 					/>
 
+					<StatCard
+						label={copy.stateProof.uglyData.metricLabel}
+						value={DESIGN_SYSTEM_OPERATIONAL_FIXTURE.metricValue}
+						icon={Palette}
+						color={c.primary}
+						trend="+4"
+						trendLabel={copy.stats.completed}
+					/>
+
 					<Button
 						title={copy.componentGallery.buttons.openPicker}
 						variant="secondary"
@@ -708,45 +1088,169 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				</View>
 			</PreviewSection>
 
-			<PreviewSection
-				title={copy.patternSamples.title}
-				description={copy.patternSamples.description}
-			>
-				<View
-					style={{
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-						gap: s.md,
-						marginBottom: s.lg,
-					}}
-				>
-					<StatCard
-						label={copy.patternSamples.previewReadyComponents}
-						value="18"
-						icon={Palette}
-						color={c.success}
-						trend={copy.patternSamples.previewReadyTrend}
-						trendLabel={copy.patternSamples.previewReadyTrendLabel}
-						style={{ flex: 1, minWidth: 180 }}
-					/>
-					<StatCard
-						label={copy.patternSamples.accessibilityCoverage}
-						value="94%"
-						icon={Zap}
-						color={c.info}
-						trend={copy.patternSamples.accessibilityTrend}
-						trendLabel={copy.patternSamples.accessibilityTrendLabel}
-						style={{ flex: 1, minWidth: 180 }}
-					/>
-				</View>
+			<PreviewSection title={copy.stateProof.title} description={copy.stateProof.description}>
+				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+					<StateProofCard
+						title={copy.stateProof.loading.title}
+						description={copy.stateProof.loading.description}
+					>
+						<View style={{ gap: s.sm }}>
+							<SkeletonRow
+								withAvatar
+								lines={2}
+								testID="state-proof-loading-primary"
+							/>
+							<SkeletonRow lines={1} />
+							<SkeletonBlock width="48%" height={12} />
+						</View>
+					</StateProofCard>
 
-				<EmptyState
-					title={copy.patternSamples.emptyStateTitle}
-					description={copy.patternSamples.emptyStateDescription}
-					actionLabel={copy.patternSamples.emptyStateAction}
-					onAction={() => setToastVisible(true)}
-					icon={<Palette size={32} color={c.primary} />}
-				/>
+					<StateProofCard
+						title={copy.stateProof.empty.title}
+						description={copy.stateProof.empty.description}
+					>
+						<EmptyState
+							title={copy.stateProof.empty.title}
+							description={copy.stateProof.empty.description}
+							actionLabel={copy.stateProof.empty.actionLabel}
+							onAction={() => setToastVisible(true)}
+							style={{ flex: 0, padding: 0 }}
+						/>
+					</StateProofCard>
+
+					<StateProofCard
+						title={copy.stateProof.error.title}
+						description={copy.stateProof.error.description}
+					>
+						<View style={{ gap: s.sm }}>
+							<Badge label={copy.stateProof.error.title} variant="warning" />
+							<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
+								{copy.stateProof.error.description}
+							</ThemedText>
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm }}>
+								<Button
+									title={copy.stateProof.error.retryLabel}
+									onPress={() => setToastVisible(true)}
+								/>
+								<Button
+									title={copy.stateProof.error.supportLabel}
+									variant="secondary"
+									onPress={() => setToastVisible(true)}
+								/>
+							</View>
+						</View>
+					</StateProofCard>
+
+					<StateProofCard
+						title={copy.stateProof.readOnly.title}
+						description={copy.stateProof.readOnly.description}
+					>
+						<View style={{ gap: s.xs }}>
+							{DESIGN_SYSTEM_READ_ONLY_FIELDS.map((field) => (
+								<ListItem
+									key={field.label}
+									title={field.label}
+									subtitle={`${field.value} • ${field.meta}`}
+									showChevron={false}
+								/>
+							))}
+						</View>
+					</StateProofCard>
+
+					<StateProofCard
+						title={copy.stateProof.denied.title}
+						description={copy.stateProof.denied.description}
+					>
+						<View style={{ gap: s.sm }}>
+							<Badge label={copy.stateProof.denied.title} variant="warning" />
+							<ThemedText variant="body" style={{ color: c.onSurface }}>
+								{copy.stateProof.denied.description}
+							</ThemedText>
+							<Button
+								title={copy.stateProof.denied.actionLabel}
+								variant="outline"
+								onPress={() => setToastVisible(true)}
+							/>
+						</View>
+					</StateProofCard>
+
+					<StateProofCard
+						title={copy.stateProof.noMedia.title}
+						description={copy.stateProof.noMedia.description}
+					>
+						<View style={{ flexDirection: 'row', gap: s.md }}>
+							<View
+								style={{
+									width: s['3xl'],
+									height: s['3xl'],
+									borderRadius: r.full,
+									backgroundColor: visual.surfaces.quiet,
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
+									{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.monogram}
+								</ThemedText>
+							</View>
+							<View style={{ flex: 1 }}>
+								<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
+									{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.title}
+								</ThemedText>
+								<ThemedText
+									variant="caption"
+									style={{ color: c.onSurfaceVariant, marginTop: s.xxs }}
+								>
+									{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.meta}
+								</ThemedText>
+								<ThemedText
+									variant="caption"
+									style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
+								>
+									{copy.stateProof.noMedia.description}
+								</ThemedText>
+							</View>
+						</View>
+					</StateProofCard>
+
+					<StateProofCard
+						title={copy.stateProof.uglyData.title}
+						description={copy.stateProof.uglyData.description}
+					>
+						<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
+							{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.title}
+						</ThemedText>
+						<ThemedText
+							variant="caption"
+							style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
+						>
+							{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.detail}
+						</ThemedText>
+						<View
+							style={{
+								flexDirection: 'row',
+								flexWrap: 'wrap',
+								gap: s.sm,
+								marginTop: s.md,
+							}}
+						>
+							<Badge label={copy.stateProof.uglyData.metricLabel} variant="info" />
+							<Badge label={copy.stateProof.uglyData.metaLabel} variant="warning" />
+						</View>
+						<ThemedText
+							variant="metric"
+							style={{ color: c.onSurface, marginTop: s.md }}
+						>
+							{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue}
+						</ThemedText>
+						<ThemedText
+							variant="metadata"
+							style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
+						>
+							{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricContext}
+						</ThemedText>
+					</StateProofCard>
+				</View>
 			</PreviewSection>
 
 			<PreviewSection
@@ -819,14 +1323,19 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 									</View>
 								) : null}
 								<Card
+									variant="outlined"
 									style={{
 										marginBottom: s.xs,
 										borderRadius: r.md,
-										backgroundColor: c.surface,
+										backgroundColor: visual.surfaces.default,
+										borderColor: c.border,
 										minWidth: COMPONENT_CARD_MIN_WIDTH,
 									}}
 								>
-									<ThemedText variant="h3" style={{ color: c.onSurface }}>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
 										{component.name}
 									</ThemedText>
 									<ThemedText
@@ -994,7 +1503,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 											{item.section}
 										</ThemedText>
 										<ThemedText
-											variant="caption"
+											variant="metadata"
 											style={{ color: c.onSurfaceVariant }}
 										>
 											{item.subsection}
@@ -1003,10 +1512,12 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 								) : null}
 
 								<Card
+									variant="outlined"
 									style={{
 										marginBottom: s.sm,
-										backgroundColor: c.surface,
+										backgroundColor: visual.surfaces.default,
 										borderRadius: r.md,
+										borderColor: c.border,
 									}}
 								>
 									<View

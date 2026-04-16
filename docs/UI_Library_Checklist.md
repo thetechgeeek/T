@@ -2,6 +2,56 @@
 
 > Cross-platform enterprise UI library covering **Web (React)** and **Mobile (React Native)**.
 > Each `###` section is split into **Common** (shared), **Web**, and **Mobile** buckets.
+> This checklist also incorporates the visual-system findings from `docs/DRIBBBLE_UI_XRAY.md`, so "done" means both enterprise-grade and visually excellent.
+
+---
+
+## 0. Enterprise x Premium Quality Bar
+
+### Core Doctrine
+
+#### Common
+
+- [ ] Premium feeling comes from system discipline: fewer ingredients, stronger hierarchy, calmer surfaces, and better spacing
+- [ ] Enterprise truth beats portfolio theater: every polished pattern survives loading, empty, error, permission, dense, localized, zoomed, and ugly-data states
+- [ ] Every surface has one dominant purpose, one dominant focal point, and one dominant primary action
+- [ ] Calm chrome rule: grouping is primarily achieved with spacing, surface, and contrast before borders, dividers, and ornament
+- [ ] Media, gradients, illustration, and 3D are optional enhancements — never structural dependencies for comprehension
+- [ ] Every component/pattern has relaxed and operationally dense expressions where applicable, using the same tokens and behavior model
+- [ ] Visual quality bar applies equally to default, loading, empty, error, read-only, denied, and degraded states
+
+### Visual System Laws
+
+#### Common
+
+- [ ] Accent budget policy documented: accent reserved for primary CTA, selected state, key data emphasis, and critical status highlight
+- [ ] Neutral-first surface model documented: canvas, default, raised, overlay, inverse/ink
+- [ ] Silhouette discipline documented: approved radius families, chip/button/card geometry, and when each may be used
+- [ ] Typography role discipline documented: display, screen title, section title, body, metadata, metric, label
+- [ ] Depth discipline documented: ambient lift preferred over harsh drop shadow; border, blur, and contrast rules defined per elevation level
+- [ ] Navigation and data-heavy surfaces have low-chrome variants that preserve scan speed
+- [ ] Chart/data visuals prioritize interpretation over decoration: subdued chrome, highlighted focus series, accessible annotations
+- [ ] Hero treatments (media cards, splash gradients, onboarding art) have explicit guardrails for contrast, performance, and fallbacks
+
+### Anti-Patterns To Prevent
+
+#### Common
+
+- [ ] No uncontrolled accent sprawl (multiple saturated colors fighting for attention)
+- [ ] No giant-card-only layouts for workflows that need density, comparison, or bulk action
+- [ ] No pastel-only functional states without an ink anchor, label, or contrast-safe pairing
+- [ ] No decorative charts or illustrations that remove analytical clarity or task comprehension
+- [ ] No image-dependent layouts that break when media is missing, user-generated, or low quality
+- [ ] No brand expression that weakens accessibility, responsiveness, or operational clarity
+
+### Definition of Done — Enterprise x Premium
+
+#### Common
+
+- [ ] Done means visually coherent, state-complete, accessible, density-aware, localized, permission-aware, and performant
+- [ ] Every new component/pattern is reviewed against hierarchy, spacing rhythm, accent budget, surface calm, and fallback quality
+- [ ] Every new component/pattern is reviewed with realistic content: long names, ugly data, missing media, empty values, and translated copy
+- [ ] Every new component/pattern documents when to use relaxed/premium presentation vs compact/operational presentation
 
 ---
 
@@ -13,15 +63,22 @@
 
 - [ ] Primitive color tokens (full scale: 50–950 for each palette)
 - [x] Semantic color tokens (action, surface, text, border, feedback, overlay)
+- [ ] Surface tier tokens (`surface.canvas`, `surface.default`, `surface.raised`, `surface.overlay`, `surface.inverse`)
+- [ ] Accent-budget tokens (primary action, selected, data highlight, quiet tint, destructive)
 - [x] Component-scoped tokens (button, badge, input, etc.)
+- [ ] Hero / display emphasis tokens (screen hero, stat hero, promo surface)
+- [ ] Data emphasis tokens (focused series, muted series, quiet grid, annotation)
+- [ ] Media overlay tokens (scrims, text-on-image gradients, image fallback surfaces)
 - [x] Dark mode token remapping
 - [ ] High Contrast mode token remapping
 - [x] Primitive spacing tokens (4px base scale)
 - [x] Semantic spacing tokens (component padding, section gap, etc.)
 - [x] Density-aware spacing tokens (`space.density.compact`, `space.density.comfortable`, `space.density.spacious`)
+- [ ] Radius mapping tokens for component families (card, control, chip, avatar, overlay)
 - [x] Border radius tokens (none, sm, md, lg, full)
 - [x] Border width tokens
 - [x] Shadow / elevation tokens (5 levels: flat, raised, overlay, modal, tooltip)
+- [ ] Shadow tokens tuned for ambient blur, low opacity, and no harsh default edges
 - [ ] Font family tokens (UI font, display/brand font)
 - [ ] Font size tokens (type scale: xs → display-2xl)
 - [x] Font weight tokens (400, 500, 600, 700)
@@ -54,6 +111,9 @@
 - [x] Multi-brand / white-label token sets (support N brand themes, not just light/dark)
 - [x] Theme persistence (user preference saved to localStorage / backend)
 - [x] System preference detection (light/dark scheme)
+- [ ] Theme rules define where brand expression is allowed vs where neutral enterprise surfaces remain default
+- [ ] Every theme includes an inverse/ink anchor action style for high-contrast hero and media surfaces
+- [ ] Themes tested across relaxed showcase surfaces and dense operational surfaces
 
 #### Web
 
@@ -77,16 +137,20 @@
 - [ ] Figma token export pipeline (Tokens Studio / Style Dictionary / token transformer)
 - [ ] Automated token sync from design tool to code repository
 - [ ] Figma component annotations linked to implementation docs
+- [ ] Figma review checklist includes hierarchy, accent budget, density mode, and fallback-state checks before implementation
+- [ ] Design annotations call out hero/featured treatments vs standard operational treatments
 
 #### Web
 
 - [ ] Figma frames linked to Storybook stories (Chromatic / Storybook Figma plugin)
 - [ ] Visual diff between Figma design and live web implementation
+- [ ] Visual diff baselines cover default, dense, empty, error, and no-media variants
 
 #### Mobile (React Native)
 
 - [ ] Figma frames linked to native component examples
 - [ ] Visual diff between Figma and rendered native components (simulator screenshots)
+- [ ] Visual diff baselines cover default, dense, empty, error, and no-media variants
 
 ### Color System
 
@@ -95,11 +159,17 @@
 - [ ] Neutral palette (50–950)
 - [ ] Brand primary palette (50–950)
 - [ ] Brand secondary palette (50–950)
+- [ ] Neutral surface tint scale for subtle section grouping (not just pure white/gray)
+- [ ] Inverse / ink surface palette for high-emphasis CTAs and media overlays
+- [ ] Accent budget rules per theme (max number of high-saturation simultaneous accents per view)
 - [x] Success semantic palette
 - [x] Warning semantic palette
 - [x] Error / Danger semantic palette
 - [x] Info semantic palette
 - [ ] Data visualization qualitative palette (8–12 colors, color-blind safe)
+- [ ] Chart emphasis palette (focus series, comparison series, muted background series)
+- [ ] Gradient tokens limited to branded hero surfaces and documented non-functional uses
+- [ ] Status colors visually harmonized with brand/neutral system (avoid alert rainbow)
 - [ ] Color-blind safe validation (Deuteranopia, Protanopia tested)
 - [x] All foreground/background contrast ratios documented and passing WCAG AA
 - [ ] Color never sole differentiator of state — always paired with icon, label, or pattern
@@ -109,11 +179,16 @@
 #### Common
 
 - [ ] Type scale defined (xs, sm, md, lg, xl, display-sm, display-md, display-lg, display-xl, display-2xl)
+- [ ] Display / hero text styles with explicit usage limits (one focal region per screen/section)
 - [x] Heading styles (semantic hierarchy decoupled from visual size)
 - [ ] Body text styles (regular, medium, strong)
 - [x] Label / caption styles
+- [ ] Metric / KPI text styles (dominant value + supporting context)
+- [ ] Metadata / quiet text styles (timestamps, secondary labels, helper copy)
 - [ ] Code / monospace style
 - [ ] Maximum 2 font families per product (UI + optional display/brand)
+- [ ] Type roles capped per view to avoid hierarchy sprawl
+- [ ] Heading + body + metric pairing recipes documented for card, form, table, and dashboard surfaces
 - [x] Font sizes always reference type-scale tokens (never raw values in component code)
 - [ ] Non-Latin script font fallback stack (CJK, Arabic, Devanagari)
 
@@ -139,6 +214,10 @@
 
 - [x] 4px base unit grid
 - [ ] Full spacing scale defined (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64)
+- [ ] Card padding scale defined (relaxed, default, dense)
+- [ ] Section rhythm scale defined (intra-card gap, inter-section gap, page margin)
+- [ ] Whitespace budgets documented for hero, content, and data-dense layouts
+- [ ] Dense mode never reduces readability, hit targets, or focus clarity
 
 #### Web
 
@@ -165,6 +244,9 @@
 - [x] Level 2 — Overlay (drawers, side panels)
 - [x] Level 3 — Modal (dialogs)
 - [x] Level 4 — Tooltip / Popover (always topmost)
+- [ ] Ambient shadow recipes documented (blur, spread, y-offset) to avoid harsh drop-shadow look
+- [ ] Border + shadow combinations documented for low-contrast surfaces
+- [ ] Elevated surfaces remain distinguishable in dark mode, high contrast, and tinted themes
 
 #### Web
 
@@ -183,6 +265,9 @@
 
 - [x] Icon set chosen (consistent stroke weight)
 - [ ] Size variants: 16px (dense), 20px (default), 24px (standalone)
+- [ ] Icon usage rules define decorative vs supportive vs primary roles
+- [ ] Icons never replace labels in first-use or critical enterprise flows
+- [ ] Icon stroke, optical alignment, and padding consistent across button, input, chip, and nav containers
 - [ ] Custom icon contribution process documented
 
 #### Web
@@ -211,6 +296,10 @@
 - [ ] Controlled + Uncontrolled pattern (every interactive component supports both modes)
 - [ ] Slot / Composition pattern for complex components (named sub-components, not mega-props)
 - [ ] Consistent event signature: value first, event/metadata second
+- [ ] Visual emphasis API standardized (`variant`, `tone`, `size`, `density`, `emphasis`) with clear separation of meaning
+- [ ] Components support both relaxed and operational density where the pattern materially changes scan efficiency
+- [ ] Media / illustration / icon slots are optional and layout-safe when absent
+- [ ] Variant names describe purpose and hierarchy, not arbitrary visual styling
 - [ ] Consistent prop naming conventions across all components
 - [ ] Ref forwarding on all components
 
@@ -235,6 +324,8 @@
 - [ ] Full keyboard / assistive technology operability
 - [ ] Visible focus indicator on interactive elements
 - [ ] Screen reader announcements for all state changes
+- [ ] Premium visual treatments cannot remove semantic labels, focus visibility, or contrast compliance
+- [ ] Long labels, translated text, and large text sizes are part of the component contract, not post-hoc fixes
 
 #### Web
 
@@ -257,6 +348,9 @@
 
 - [ ] Component uses only component-scoped or semantic tokens — never raw values
 - [ ] Dark mode fully functional with no component code change
+- [ ] Components respect accent-budget rules and never self-assign raw brand colors
+- [ ] Components render correctly on neutral, tinted, inverse, and media-overlay surfaces where applicable
+- [ ] Components expose explicit high-emphasis vs low-emphasis variants rather than ad hoc one-off styles
 
 #### Web
 
@@ -275,6 +369,8 @@
 
 - [ ] Unit tests: logic, prop behavior, edge cases (empty, loading, error states)
 - [ ] Interaction tests: full user flows (keyboard, pointer/touch)
+- [ ] Each component is tested with realistic enterprise data (long text, nulls, zero values, huge counts, missing media)
+- [ ] Each component is tested across density modes and high-emphasis/low-emphasis variants where supported
 
 #### Web
 
@@ -297,6 +393,9 @@
 - [ ] All meaningful states (loading, disabled, error, empty)
 - [ ] Real-world composition example
 - [ ] Prop table with type, default, and description
+- [ ] Each component docs page shows relaxed/premium usage and dense/operational usage
+- [ ] Each component docs page includes "works without media/art" example
+- [ ] Do / Don't guidance includes noisy, over-accented, low-contrast misuse examples
 - [ ] Do / Don't usage examples
 
 #### Web
@@ -318,6 +417,10 @@
 
 #### Common
 
+- [ ] All inputs use quiet chrome + strong label hierarchy (label first, placeholder never primary label)
+- [ ] Input density variants preserve touch targets, focus visibility, and scanability
+- [ ] Prefix/suffix icons are supportive, not decorative clutter
+- [ ] Helper, hint, warning, and error text follow the shared type hierarchy and spacing rhythm
 - [ ] Text Field
     - [ ] Default
     - [ ] With prefix icon
@@ -429,6 +532,10 @@
 
 #### Common
 
+- [ ] Action hierarchy model documented: one primary, supporting secondary, quiet tertiary, destructive
+- [ ] In any surface region, only one action is allowed to visually read as primary by default
+- [ ] High-emphasis / inverse CTA variant exists for media, hero, and dark surfaces
+- [ ] Icon-only actions reserved for high-frequency or space-constrained contexts with accessible labeling
 - [ ] Button
     - [ ] Primary
     - [ ] Secondary
@@ -474,6 +581,10 @@
 
 #### Common
 
+- [ ] Feedback states remain visually polished in success, warning, error, empty, and degraded conditions
+- [ ] Empty states work text-only; illustration and media are optional enhancements
+- [ ] Skeleton hierarchy mirrors final layout hierarchy (title, primary CTA, supporting metadata)
+- [ ] Success messaging stays restrained; warning/error states stay calm and actionable
 - [ ] Toast / Snackbar
     - [ ] Info / Success / Warning / Error variants
     - [ ] Error: no auto-dismiss
@@ -542,6 +653,9 @@
 
 #### Common
 
+- [ ] Navigation chrome is intentionally quiet; active state is clear without saturating the entire shell
+- [ ] Navigation supports both relaxed showcase shells and dense operational shells using the same token system
+- [ ] Counts, badges, and status markers never overpower labels or route clarity
 - [ ] Tabs
     - [ ] Horizontal
     - [ ] With icon
@@ -625,12 +739,15 @@
     - [ ] Clickable / interactive
     - [ ] With header / body / footer slots
     - [ ] Horizontal layout variant
+    - [ ] Featured / hero variant with restrained accent/media treatment
 - [ ] Metrics / Stat Card
     - [ ] KPI value
     - [ ] Trend delta (positive / negative)
     - [ ] Sparkline
     - [ ] Comparison period label
     - [ ] Loading / error state
+    - [ ] Stale data / last updated indicator
+    - [ ] Quiet comparison baseline (not only color)
 - [ ] Timeline / Activity Feed
     - [ ] Date separators
     - [ ] Infinite scroll
@@ -651,6 +768,14 @@
     - [ ] Color-blind safe palette
     - [ ] Empty / Loading / Error states
     - [ ] Accessible title + description
+    - [ ] Focus-series emphasis and muted non-focus series
+    - [ ] Calm grid / axis styling
+    - [ ] Annotation / threshold markers
+- [ ] Card families share silhouette, spacing, header/body/footer grammar, and density variants
+- [ ] Stat cards expose one dominant metric, one secondary context band, and quiet metadata
+- [ ] Charts prioritize interpretation over decoration: subdued scaffolding, focused data emphasis, accessible annotations
+- [ ] Media-based displays degrade gracefully to text-first layouts when imagery is missing or poor
+- [ ] Every data surface has a dense operational variant where the domain requires comparison or bulk scanning
 
 #### Web
 
@@ -727,6 +852,9 @@
 
 #### Common
 
+- [ ] Overlays create depth through surface contrast, spacing, and focus management before relying on shadow
+- [ ] Dialogs, drawers, and sheets define one dominant action and quiet secondary actions
+- [ ] Overlay layouts support relaxed and dense content compositions without losing hierarchy
 - [ ] Modal / Dialog
     - [ ] Focus trap / accessibility focus
     - [ ] Dismiss on Escape / back gesture
@@ -784,6 +912,9 @@
 
 #### Common
 
+- [ ] Form compositions define a clear visual reading order: title, key instruction, fields, primary action
+- [ ] Forms support relaxed onboarding layouts and dense enterprise editing layouts with the same components
+- [ ] Long labels, helper copy, validation, and permission explanations never break layout hierarchy
 - [ ] Inline field error message (below field, linked to field for screen readers)
 - [ ] Field warning (non-blocking, yellow)
 - [ ] Field info / helper text (persistent, gray)
@@ -817,6 +948,9 @@
 
 #### Common
 
+- [ ] CRUD flows support both dense table/grid operations and calmer summary/detail surfaces
+- [ ] Destructive action hierarchy escalates visually with severity without becoming theatrical
+- [ ] Bulk action surfaces preserve one clear primary action and quiet secondary utilities
 - [ ] Dirty-state indicator (unsaved changes badge)
 - [ ] Bulk action bar (appears on any selection)
 - [ ] Select all on current page / across all pages (with count)
@@ -850,6 +984,9 @@
 
 #### Common
 
+- [ ] Search entry can feel premium and welcoming, but advanced filtering scales to dozens of enterprise criteria without losing clarity
+- [ ] Filter chips, pills, and saved views have overflow/compaction behavior
+- [ ] Active filters use restrained emphasis; not every control is saturated or elevated
 - [ ] Faceted filters (checkbox per facet with count)
 - [ ] Live filter (apply on change) vs. explicit apply button
 - [ ] Filter by text / number / date / enum
@@ -882,6 +1019,9 @@
 
 #### Common
 
+- [ ] Each view defines one dominant focal region (hero metric, table, chart, detail panel) rather than many equal-weight panels
+- [ ] Layout system supports summary-first and dense-analysis modes
+- [ ] Featured widgets/cards are optional and removable without collapsing the core workflow
 - [ ] Drill-down navigation (metric → underlying records)
 - [ ] Drag-and-drop — reorder within same list
 - [ ] Density toggle (comfortable, compact, spacious — web) or compact toggle (mobile)
@@ -914,6 +1054,8 @@
 
 #### Common
 
+- [ ] Tentative, syncing, stale, and confirmed states are visually distinct without noisy animation
+- [ ] Background refresh and job progress surfaces stay calm and non-disruptive
 - [ ] Optimistic UI update (instant + rollback on failure)
 - [ ] Stale-while-revalidate (show cached data, update in background)
 - [ ] "Last updated X ago" indicator with manual refresh
@@ -946,6 +1088,8 @@
 
 #### Common
 
+- [ ] Auth surfaces may use premium branding moments, but form clarity and recovery paths stay dominant
+- [ ] Login and session flows remain fully understandable without illustration or hero media
 - [ ] Login form (email/password, SSO/OAuth providers)
 - [ ] Multi-factor authentication UI (OTP input, authenticator app)
 - [ ] Session expiry warning ("Your session expires in X minutes")
@@ -974,6 +1118,8 @@
 
 #### Common
 
+- [ ] Onboarding may use premium storytelling, but every step has skip, resume, and "show later" paths
+- [ ] First-run hero treatments do not become permanent product chrome once the user reaches operational flows
 - [ ] Welcome screen / first-run modal
 - [ ] Feature tour (tooltip-based coach marks with step progression)
 - [ ] Checklist-based onboarding ("Complete your setup: 3/5 done")
@@ -993,6 +1139,7 @@
 
 #### Common
 
+- [ ] Permission-denied and limited-access states are first-class polished surfaces, not empty dead ends
 - [ ] Feature flags: component/route conditionally rendered based on flag state
 - [ ] RBAC: menu items hidden or CTA replaced with "Request Access"
 - [ ] Resource-level permission: fields become read-only, action buttons disabled/hidden
@@ -1017,6 +1164,7 @@
 - [ ] Organization / workspace switcher
 - [ ] Tenant-scoped data isolation (visual context of current tenant)
 - [ ] Tenant branding (logo, colors applied from tenant config)
+- [ ] Tenant branding is applied within guardrails for contrast, accent budget, and surface hierarchy
 - [ ] Cross-tenant resource sharing indicators
 - [ ] Tenant creation / setup wizard
 
@@ -1063,6 +1211,7 @@
 - [ ] Import error report (row-level errors with correction suggestions)
 - [ ] Import progress indicator for large datasets
 - [ ] Template download for import format
+- [ ] Import/export flows prioritize clarity, mapping fidelity, and correction speed over decorative chrome
 
 #### Mobile (React Native)
 
@@ -1081,6 +1230,7 @@
 - [ ] Minimum: WCAG 2.2 Level AA
 - [ ] Target: WCAG 2.2 Level AAA for critical flows (auth, account settings, checkout)
 - [ ] Legal compliance documented (Section 508, EN 301 549, AODA as applicable)
+- [ ] Premium/branded surfaces have no accessibility exemptions for contrast, focus, motion, or readability
 
 ### Semantic Structure
 
@@ -1165,6 +1315,8 @@
 - [ ] Text contrast: 4.5:1 (normal text), 3:1 (large text ≥ 18pt / 14pt bold)
 - [ ] UI component contrast: 3:1 (WCAG 1.4.11)
 - [ ] Color never sole differentiator of state
+- [ ] Soft/pastel themes include high-contrast ink anchors for primary actions and critical states
+- [ ] Charts use label, shape, pattern, and stroke differentiation in addition to color
 
 #### Web
 
@@ -1237,12 +1389,14 @@
 
 - [ ] All pages tested at 200% browser zoom (WCAG 1.4.4) — no clipping
 - [ ] All pages tested at 400% zoom — content reflows to single column
+- [ ] Hero/display typography and featured cards reflow gracefully without losing hierarchy at max zoom
 
 #### Mobile (React Native)
 
 - [ ] System font scale tested at maximum (iOS: ~300%, Android: ~200%)
 - [ ] `maxFontSizeMultiplier` set on layout-critical text
 - [ ] Layouts tested at largest accessibility text size without content clipping
+- [ ] Hero/display typography and featured cards reflow gracefully without losing hierarchy at max font scale
 
 ---
 
@@ -1313,6 +1467,8 @@
 - [ ] No fixed-width containers for text labels (wrapping allowed)
 - [ ] Truncation with tooltip/hint fallback for space-constrained labels
 - [ ] All locales tested in visual regression (minimum: en-US, de-DE, ar-SA, ja-JP)
+- [ ] Hero headings, pill controls, chips, and metric labels wrap/scale gracefully under long locales
+- [ ] Dense table/card layouts preserve hierarchy when translated labels grow
 
 ### Character Set & Encoding
 
@@ -1354,6 +1510,8 @@
 - [ ] Optimistic UI: update immediately for high-success-rate actions
 - [ ] Stale-while-revalidate: show cached data immediately, refresh in background
 - [ ] Progressive loading: critical content first, secondary lazy-loaded
+- [ ] First meaningful hierarchy (screen title, primary CTA, key metric or key task input) appears before decorative enhancements
+- [ ] Hero media, illustrations, and brand motion never block core task readiness
 
 #### Web
 
@@ -1417,6 +1575,7 @@
 - [ ] Dashboard / Authenticated: Server-Side Rendering (SSR)
 - [ ] Highly dynamic widgets: Client-Side Rendering (CSR) with skeleton
 - [ ] Reports / heavy data: deferred with `<Suspense>` + skeleton
+- [ ] Progressive enhancement order: task shell → data → brand/media flourish
 
 #### Mobile (React Native)
 
@@ -1424,6 +1583,7 @@
 - [ ] Screen-level lazy loading (lazy-load heavy screens)
 - [ ] React.memo / useMemo / useCallback to prevent unnecessary re-renders
 - [ ] Fabric (New Architecture) enabled for concurrent features and improved threading
+- [ ] Progressive enhancement order: screen shell → key data/action → secondary media
 
 ### Bundle Performance
 
@@ -1432,6 +1592,7 @@
 - [ ] Component library is tree-shakeable (ESM exports, no side effects)
 - [ ] Per-component bundle size limits enforced
 - [ ] No circular dependencies between component packages
+- [ ] Base component usability does not depend on optional illustration, chart, or animation packages
 
 #### Web
 
@@ -1475,6 +1636,7 @@
 - [ ] Tabs: horizontal scrollable → dropdown selector (mobile viewport)
 - [ ] Charts: full labels → simplified / abbreviated (mobile viewport)
 - [ ] FAB: visible on mobile viewport, hidden when toolbar visible (desktop)
+- [ ] Hero/featured card layouts collapse to dense task-first layouts on smaller viewports
 
 #### Mobile (React Native)
 
@@ -1513,12 +1675,14 @@
 - [ ] Fluid typography using CSS `clamp()` between breakpoints
 - [ ] Fluid spacing using CSS `clamp()` between breakpoints
 - [ ] Font sizes never clip or overflow container at any breakpoint
+- [ ] Whitespace scales intentionally; small screens avoid dead zones while preserving hierarchy
 
 #### Mobile (React Native)
 
 - [ ] Responsive font sizes via scale factor utility (based on screen width)
 - [ ] Font sizes respect system accessibility scaling (`allowFontScaling`)
 - [ ] Spacing scales appropriately between phone and tablet layouts
+- [ ] Card padding, hero spacing, and CTA hierarchy adapt between phone and tablet without bloating or crowding
 
 ### Print
 
@@ -1567,6 +1731,8 @@
 
 - [ ] Every animation communicates something (state change, hierarchy, direction) — no decorative-only motion
 - [ ] All animations are interruptible (cancellable if user triggers counter-action)
+- [ ] Motion is subtle and structural, never ambient clutter on primary work surfaces
+- [ ] Motion reinforces focus, hierarchy, and spatial continuity between related states
 
 #### Web
 
@@ -1613,6 +1779,8 @@
 - [ ] Spinner: CSS `@keyframes`, `aria-label`, `role="status"`
 - [ ] Page Transition: fade-through or shared-element, 300ms
 - [ ] Toast Entry: slide in + fade; auto-dismiss with progress underline
+- [ ] Shared-element or hero transitions used only when they improve orientation and do not delay work
+- [ ] No infinite decorative motion on operational surfaces
 
 #### Mobile (React Native)
 
@@ -1626,6 +1794,8 @@
 - [ ] Bottom sheet snap: spring-driven with velocity-based gesture release
 - [ ] List item entry: `entering`/`exiting` layout animations (Reanimated)
 - [ ] Haptic feedback paired with animation completion (toggle, delete, success)
+- [ ] Shared-element or branded transitions reserved for onboarding, browsing, or detail flows with clear context value
+- [ ] Continuous background motion disabled on work surfaces
 
 ### Reduced Motion Contract
 
@@ -1665,6 +1835,7 @@
 - [ ] Hidden vs. Disabled: hide if never accessible, disable with explanation if conditionally blocked
 - [ ] No optimistic rendering of unauthorized actions — resolve permissions at load time
 - [ ] Skeleton shown during flag/permission resolution (no layout shift)
+- [ ] Limited-access and masked states maintain the same layout quality, spacing rhythm, and hierarchy as full-access states
 
 #### Web
 
@@ -1702,6 +1873,7 @@
 - [ ] Reveal action is permission-gated
 - [ ] Reveal triggers audit log
 - [ ] Consistent masking format: `••••••@gmail.com`, `+1 (***) ***-1234`
+- [ ] Masked layouts remain readable and balanced; redaction never collapses card/table alignment
 
 #### Mobile (React Native)
 
@@ -1718,6 +1890,8 @@
 
 - [ ] Tone guidelines documented per context (empty, error, destructive, success, loading, permission denial)
 - [ ] Voice is consistent: helpful, direct, never blaming, never over-celebratory
+- [ ] Premium tone is restrained, confident, and useful — never hype-heavy, cutesy, or vague
+- [ ] Microcopy supports a calm interface by reducing noise, repetition, and unnecessary labels
 
 ### Button & CTA Labels
 
@@ -1728,6 +1902,7 @@
 - [ ] Cancel is always "Cancel" (never "Go Back", "Close", "No")
 - [ ] Danger buttons use explicit destructive verbs ("Delete", "Remove", "Revoke")
 - [ ] Loading button labels reflect action in progress ("Saving…", "Deleting…")
+- [ ] Only the highest-priority action gets high-emphasis wording and styling within a surface
 
 ### Error Messages
 
@@ -1747,6 +1922,7 @@
 - [ ] Empty state includes a clear, single CTA
 - [ ] Loading labels are action-framed ("Loading your data…" not "Please wait…")
 - [ ] Skeleton text length approximates actual content length
+- [ ] Empty states explain the situation clearly even when illustration/art is removed
 
 ### Confirmation & Destructive Actions
 
@@ -1792,6 +1968,7 @@
 - [ ] Percentages consistently formatted
 - [ ] Currency always displays symbol and amount together
 - [ ] "0" vs "None" vs "—" defined per context and consistent
+- [ ] KPI copy pairs dominant values with timeframe/comparison context
 
 ### Truncation Rules
 
@@ -1800,6 +1977,7 @@
 - [ ] Long text: truncated with `…` + tooltip/hint showing full text
 - [ ] Labels: never truncate action labels (buttons, CTAs); wrap or abbreviate
 - [ ] User names: truncated after first name if space-constrained, full name accessible
+- [ ] Hero headings, tabs, chips, and metric labels have explicit wrapping/overflow rules
 
 #### Web
 
@@ -1859,6 +2037,8 @@
 - [ ] Proposal: RFC via GitHub Discussion, reviewed by DS team + 2 consumer team leads
 - [ ] Build vs. Borrow: prefer wrapping headless libraries (Radix, React Aria) over building from scratch
 - [ ] Quality gate: full Component Contract Standard (§2) required
+- [ ] Every RFC includes enterprise x premium review: hierarchy, accent budget, density, state completeness, and no-media fallback
+- [ ] No new visual flourish is added unless backed by reusable tokens, accessibility review, and cross-surface need
 
 #### Mobile (React Native)
 
@@ -1870,6 +2050,7 @@
 #### Common
 
 - [ ] CI integration: documentation builds on every PR
+- [ ] Documentation explains when to use relaxed showcase presentation vs dense operational presentation
 
 #### Web
 
@@ -1891,6 +2072,8 @@
 - [ ] Adoption rate: % of product surfaces using DS vs. bespoke components
 - [ ] Usage analytics: which components are most/least used
 - [ ] a11y debt: violations tracked over time per product surface
+- [ ] Bespoke visual exceptions tracked and reduced over time
+- [ ] Visual coherence audits run quarterly across flagship flows
 
 #### Web
 
@@ -1914,6 +2097,7 @@
 - [ ] Route/screen-level boundary (broken page/screen, navigation functional)
 - [ ] Application-level boundary (last resort, full-screen error with reload + support contact)
 - [ ] Partial failure state (some widgets loaded, some failed — clearly differentiated)
+- [ ] Failure surfaces preserve composure: clear hierarchy, calm chrome, actionable next step
 
 ### Network / API Failures
 
@@ -1942,6 +2126,7 @@
 - [ ] Disabled (not available, reason surfaced)
 - [ ] Read-only (viewable, not editable)
 - [ ] Partial (some loaded, some failed)
+- [ ] Loading, empty, error, read-only, and denied states meet the same visual quality bar as nominal state
 
 ### Data Edge Cases
 
@@ -1954,6 +2139,7 @@
 - [ ] Large numeric value — locale-formatted, never overflows
 - [ ] Large dataset (10k+ rows) — virtualized, keyboard/scroll nav intact
 - [ ] Stale / cached data — visually distinguished with timestamp
+- [ ] Missing media, avatar, illustration, or sparkline falls back to text-first layout with no broken composition
 
 #### Web
 
@@ -2079,6 +2265,8 @@
 - [ ] All interactive states tested (press, focus, keyboard)
 - [ ] Edge cases: empty props, null data, long strings, 0 / max values
 - [ ] Controlled vs. uncontrolled mode behavior
+- [ ] No-media / no-icon / no-illustration rendering variants are tested
+- [ ] Density, hierarchy, and emphasis variants are tested where supported
 
 #### Web
 
@@ -2118,6 +2306,8 @@
 - [ ] Per-component snapshots: all states × all themes
 - [ ] RTL snapshot: confirming mirrored layout
 - [ ] Baseline: approved screenshots; PRs fail on unexpected diff
+- [ ] Ugly-data / missing-media fixtures included in snapshot matrix
+- [ ] High-emphasis vs low-emphasis variants included in snapshot matrix
 
 #### Web
 
@@ -2130,6 +2320,27 @@
 - [ ] iOS simulator + Android emulator snapshots per component
 - [ ] Both platform screenshots in light + dark mode
 - [ ] Device-specific: iPhone SE (small), iPhone Pro Max (large), iPad, Pixel, Samsung Galaxy
+
+### Enterprise x Premium Quality Review
+
+#### Common
+
+- [ ] New components/patterns reviewed for focal hierarchy, primary action clarity, spacing rhythm, and surface calm
+- [ ] Accent budget review performed on representative screens/stories
+- [ ] Relaxed and dense compositions both reviewed where supported
+- [ ] No-media / no-illustration / no-icon / ugly-data fixtures reviewed
+- [ ] Loading, empty, error, permission-denied, and read-only variants receive equal visual review, not only default state
+- [ ] Realistic enterprise content fixtures used in stories and screenshot tests (long names, nulls, high counts, dense tables)
+
+#### Web
+
+- [ ] Storybook review page shows premium showcase shell and operational dense shell side by side
+- [ ] Representative screens reviewed at mobile, tablet, desktop, and wide densities for hierarchy drift
+
+#### Mobile (React Native)
+
+- [ ] Screenshot review covers phone and tablet layouts for both relaxed onboarding/browse states and dense operational states
+- [ ] Reduced-motion and maximum font-scale screenshot review performed on premium/branded surfaces
 
 ### Performance Tests
 

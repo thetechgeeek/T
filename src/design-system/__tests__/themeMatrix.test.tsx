@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import type { ThemeMode, ThemePresetId } from '@/src/theme';
-import DesignLibraryScreen from '../DesignLibraryScreen';
+import { ThemeSnapshotPreview } from '../components/ThemeSnapshotPreview';
 
 const PRESET_MATRIX: ReadonlyArray<{ presetId: ThemePresetId; mode: ThemeMode }> = [
 	{ presetId: 'baseline', mode: 'light' },
@@ -17,11 +17,11 @@ const PRESET_MATRIX: ReadonlyArray<{ presetId: ThemePresetId; mode: ThemeMode }>
 
 describe('design-system theme matrix', () => {
 	it.each(PRESET_MATRIX)(
-		'matches the full preview snapshot for $presetId in $mode mode',
+		'matches the preset proof snapshot for $presetId in $mode mode',
 		({ presetId, mode }) => {
 			const { toJSON } = render(
 				<ThemeProvider initialMode={mode} initialPresetId={presetId} persist={false}>
-					<DesignLibraryScreen locale="en" />
+					<ThemeSnapshotPreview locale="en" />
 				</ThemeProvider>,
 			);
 
@@ -42,7 +42,7 @@ describe('design-system theme matrix', () => {
 					runtimeRtl: true,
 				}}
 			>
-				<DesignLibraryScreen locale="ar" />
+				<ThemeSnapshotPreview locale="ar" />
 			</ThemeProvider>,
 		);
 

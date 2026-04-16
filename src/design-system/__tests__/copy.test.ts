@@ -7,7 +7,9 @@ describe('design-system copy registry', () => {
 		expect(copy.locale).toBe('en');
 		expect(copy.direction).toBe('ltr');
 		expect(copy.hero.title).toBe('Design System Workbench');
-		expect(copy.stats.completed).toBe('Completed');
+		expect(copy.qualityBar.title).toBe('Enterprise x Premium Quality Bar');
+		expect(copy.presentationModes.operational.title).toBe('Operational dense');
+		expect(copy.stateProof.title).toBe('State Proof Deck');
 	});
 
 	it('produces pseudo-localized stress copy', () => {
@@ -18,6 +20,7 @@ describe('design-system copy registry', () => {
 		expect(pseudo.hero.title).not.toBe(english.hero.title);
 		expect(pseudo.hero.title).toContain('[~');
 		expect(pseudo.componentGallery.notesSeed).toContain('[~');
+		expect(pseudo.qualityBar.doctrineCards[0]?.title).toContain('[~');
 	});
 
 	it('produces rtl-aware localized copy', () => {

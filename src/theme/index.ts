@@ -57,12 +57,15 @@ export interface ThemeColors {
 }
 
 export type ThemeDensity = 'compact' | 'comfortable' | 'spacious';
+export type ThemeExpression = 'operational' | 'balanced' | 'showcase';
 export type ThemePresetId = 'baseline' | 'executive' | 'studio' | 'mono';
 
 export interface ThemeMeta {
 	presetId: ThemePresetId;
 	presetLabel: string;
 	density: ThemeDensity;
+	expression: ThemeExpression;
+	accentBudget: number;
 }
 
 export interface PrintThemeSwatch {
@@ -89,6 +92,7 @@ export interface ThemeCollections {
 export interface ThemeTypography {
 	fontFamily: string;
 	fontFamilyBold: string;
+	fontFamilyDisplay: string;
 	sizes: {
 		xs: number;
 		sm: number;
@@ -111,11 +115,16 @@ export interface ThemeTypography {
 	};
 	variants: {
 		display: TextStyle;
+		screenTitle: TextStyle;
+		sectionTitle: TextStyle;
 		h1: TextStyle;
 		h2: TextStyle;
 		h3: TextStyle;
 		body: TextStyle;
+		bodyStrong: TextStyle;
 		bodyBold: TextStyle;
+		metadata: TextStyle;
+		metric: TextStyle;
 		caption: TextStyle;
 		captionBold: TextStyle;
 		amount: TextStyle;
@@ -190,6 +199,68 @@ export interface ThemeOpacity {
 	strong: number;
 	overlay: number;
 	scrim: number;
+}
+
+export interface ThemeSurfaceTokens {
+	canvas: string;
+	default: string;
+	raised: string;
+	overlay: string;
+	inverse: string;
+	onInverse: string;
+	hero: string;
+	onHero: string;
+	quiet: string;
+	mediaFallback: string;
+}
+
+export interface ThemeAccentTokens {
+	primaryAction: string;
+	selected: string;
+	dataHighlight: string;
+	quietTint: string;
+	destructive: string;
+	maxHotspots: number;
+}
+
+export interface ThemeDataTokens {
+	focusSeries: string;
+	comparisonSeries: string;
+	mutedSeries: string;
+	quietGrid: string;
+	annotation: string;
+}
+
+export interface ThemeSilhouetteTokens {
+	card: number;
+	control: number;
+	chip: number;
+	avatar: number;
+	overlay: number;
+}
+
+export interface ThemeDepthTokens {
+	ambientShadowOpacity: number;
+	ambientShadowRadiusScale: number;
+	lowContrastBorder: string;
+	harshShadowAvoided: boolean;
+}
+
+export interface ThemePresentationTokens {
+	defaultSurfaceBias: 'neutral' | 'brand';
+	showcaseDensity: ThemeDensity;
+	operationalDensity: ThemeDensity;
+	inverseAction: 'required' | 'optional';
+	heroMediaAllowed: boolean;
+}
+
+export interface ThemeVisualTokens {
+	surfaces: ThemeSurfaceTokens;
+	accents: ThemeAccentTokens;
+	data: ThemeDataTokens;
+	silhouette: ThemeSilhouetteTokens;
+	depth: ThemeDepthTokens;
+	presentation: ThemePresentationTokens;
 }
 
 export interface ThemeComponentTokens {
@@ -369,6 +440,7 @@ export interface Theme {
 		};
 	};
 	opacity: ThemeOpacity;
+	visual: ThemeVisualTokens;
 	components: ThemeComponentTokens;
 	collections: ThemeCollections;
 	touchTarget: number; // minimum 48

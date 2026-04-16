@@ -1410,6 +1410,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
         }
       >
         <Text
+          accessibilityRole="header"
           allowFontScaling={true}
           maxFontSizeMultiplier={1.3}
           style={
@@ -4106,6 +4107,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               outstandingBalance
             </Text>
             <Text
+              accessibilityRole="header"
               allowFontScaling={true}
               maxFontSizeMultiplier={1.3}
               style={
@@ -23727,6 +23729,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
         }
       >
         <Text
+          accessibilityRole="header"
           allowFontScaling={true}
           maxFontSizeMultiplier={1.3}
           style={
@@ -26423,6 +26426,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               outstandingBalance
             </Text>
             <Text
+              accessibilityRole="header"
               allowFontScaling={true}
               maxFontSizeMultiplier={1.3}
               style={

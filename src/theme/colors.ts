@@ -85,6 +85,72 @@ const buildLetterSpacing = (): Theme['letterSpacing'] => ({
 	account: LETTER_SPACING_ACCOUNT,
 });
 
+const buildVisualTokens = ({
+	colors,
+	borderRadius,
+	isDark,
+	meta,
+	shadowProfile,
+}: {
+	colors: Theme['colors'];
+	borderRadius: Theme['borderRadius'];
+	isDark: boolean;
+	meta: Theme['meta'];
+	shadowProfile: {
+		opacityScale: number;
+		radiusScale: number;
+		elevationScale: number;
+	};
+}): Theme['visual'] => ({
+	surfaces: {
+		canvas: colors.background,
+		default: colors.surface,
+		raised: colors.card,
+		overlay: colors.card,
+		inverse: isDark ? baseLightColors.surface : colors.onSurface,
+		onInverse: isDark ? baseLightColors.onSurface : colors.white,
+		hero: colors.primaryContainer,
+		onHero: colors.onPrimaryContainer,
+		quiet: colors.surfaceVariant,
+		mediaFallback: colors.surfaceVariant,
+	},
+	accents: {
+		primaryAction: colors.primary,
+		selected: colors.primary,
+		dataHighlight: colors.info,
+		quietTint: colors.primaryContainer,
+		destructive: colors.error,
+		maxHotspots: meta.accentBudget,
+	},
+	data: {
+		focusSeries: colors.primary,
+		comparisonSeries: colors.secondary,
+		mutedSeries: colors.onSurfaceVariant,
+		quietGrid: colors.separator,
+		annotation: colors.info,
+	},
+	silhouette: {
+		card: borderRadius.md,
+		control: borderRadius.md,
+		chip: borderRadius.full,
+		avatar: borderRadius.full,
+		overlay: borderRadius.lg,
+	},
+	depth: {
+		ambientShadowOpacity: Number(shadowProfile.opacityScale.toFixed(2)),
+		ambientShadowRadiusScale: Number(shadowProfile.radiusScale.toFixed(2)),
+		lowContrastBorder: colors.border,
+		harshShadowAvoided: true,
+	},
+	presentation: {
+		defaultSurfaceBias: meta.expression === 'showcase' ? 'brand' : 'neutral',
+		showcaseDensity: 'spacious',
+		operationalDensity: 'compact',
+		inverseAction: 'required',
+		heroMediaAllowed: meta.expression === 'showcase',
+	},
+});
+
 const buildComponentTokens = ({
 	spacing,
 	borderRadius,
@@ -283,6 +349,13 @@ export function buildTheme(
 	const borderRadius = preset.borderRadius;
 	const opacity = buildOpacity();
 	const shadows = makeShadows(preset.colors.shadow, isDark, preset.shadowProfile);
+	const visual = buildVisualTokens({
+		colors: preset.colors,
+		borderRadius,
+		isDark,
+		meta: preset.meta,
+		shadowProfile: preset.shadowProfile,
+	});
 	return {
 		isDark,
 		meta: preset.meta,
@@ -298,6 +371,7 @@ export function buildTheme(
 		elevation: buildElevationTokens(shadows),
 		animation: preset.animation,
 		opacity,
+		visual,
 		components: buildComponentTokens({
 			spacing,
 			borderRadius,
