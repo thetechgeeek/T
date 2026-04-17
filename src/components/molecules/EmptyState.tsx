@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
+import { View, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/components/atoms/Button';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { SIZE_EMPTY_STATE_ICON } from '@/theme/uiMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
@@ -42,8 +43,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 					{icon}
 				</View>
 			)}
-			<Text
+			<ThemedText
 				accessibilityRole="header"
+				variant="sectionTitle"
 				style={[
 					styles.title,
 					{
@@ -54,9 +56,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 				]}
 			>
 				{title}
-			</Text>
+			</ThemedText>
 			{!!(description || subtitle) && (
-				<Text
+				<ThemedText
+					variant="body"
+					align="center"
 					style={[
 						styles.description,
 						{
@@ -67,7 +71,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 					]}
 				>
 					{description || subtitle}
-				</Text>
+				</ThemedText>
 			)}
 			{actionLabel && onAction && (
 				<Button

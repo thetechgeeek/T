@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Fails if any #hex color literal appears outside src/theme/palette.ts.
+ * Fails if any #hex color literal appears outside the token source-of-truth files.
  * Run in CI / validate to block scattered hard-coded colors.
  */
 import fs from 'fs';
@@ -13,6 +13,7 @@ const root = path.join(__dirname, '..');
 const HEX_RE = /#[0-9A-Fa-f]{3,8}\b/g;
 const ALLOWED_FILES = new Set([
 	'src/theme/palette.ts',
+	'src/theme/designTokens.ts',
 	// escapeHtml uses &#039; which matches #039 as a false hex hit
 	'src/utils/html.ts',
 ]);
@@ -69,11 +70,13 @@ for (const abs of files) {
 }
 
 if (violations.length) {
-	console.error('Hex color literals found outside src/theme/palette.ts:\n');
+	console.error('Hex color literals found outside src/theme/palette.ts or src/theme/designTokens.ts:\n');
 	for (const v of violations) {
 		console.error(`  ${v.rel} (${v.count} occurrence(s))`);
 	}
-	console.error('\nUse theme colors, `palette.*` from @/src/theme/palette, or add tokens to palette.ts.');
+	console.error(
+		'\nUse theme colors, `palette.*` from @/src/theme/palette, or add tokens to src/theme/designTokens.ts.',
+	);
 	process.exit(1);
 }
 

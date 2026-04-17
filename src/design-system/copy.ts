@@ -322,10 +322,29 @@ export interface DesignSystemCopy {
 		testedCount: (count: number) => string;
 		liveDemoCount: (count: number) => string;
 		groupCount: (count: number) => string;
+		storyCount: (count: number) => string;
+		variantCount: (count: number) => string;
+		stateCount: (count: number) => string;
+		propCount: (count: number) => string;
 		tested: string;
 		needsTests: string;
 		liveDemo: string;
 		registryOnly: string;
+		summary: string;
+		exampleStories: string;
+		variants: string;
+		sizes: string;
+		states: string;
+		composition: string;
+		relaxed: string;
+		operational: string;
+		noMedia: string;
+		props: string;
+		doLabel: string;
+		dontLabel: string;
+		accessibility: string;
+		platform: string;
+		defaultValue: string;
 	};
 	checklistExplorer: {
 		title: string;
@@ -767,10 +786,29 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			testedCount: (count) => localize(`${count} with tests`),
 			liveDemoCount: (count) => localize(`${count} live demos`),
 			groupCount: (count) => localize(`${count} groups`),
+			storyCount: (count) => localize(`${count} stories`),
+			variantCount: (count) => localize(`${count} variants`),
+			stateCount: (count) => localize(`${count} states`),
+			propCount: (count) => localize(`${count} props`),
 			tested: localize('Tested'),
 			needsTests: localize('Needs tests'),
 			liveDemo: localize('Live demo'),
 			registryOnly: localize('Registry only'),
+			summary: localize('Summary'),
+			exampleStories: localize('Example stories'),
+			variants: localize('Variants'),
+			sizes: localize('Sizes'),
+			states: localize('States'),
+			composition: localize('Composition example'),
+			relaxed: localize('Relaxed showcase'),
+			operational: localize('Operational dense'),
+			noMedia: localize('No-media proof'),
+			props: localize('Prop table'),
+			doLabel: localize('Do'),
+			dontLabel: localize("Don't"),
+			accessibility: localize('Accessibility notes'),
+			platform: localize('Platform notes'),
+			defaultValue: localize('Default'),
 		},
 		checklistExplorer: {
 			title: localize('Checklist Explorer'),

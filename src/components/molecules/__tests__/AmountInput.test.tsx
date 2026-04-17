@@ -8,14 +8,16 @@ const renderWithTheme = (component: React.ReactElement) =>
 
 describe('AmountInput', () => {
 	it('renders ₹ prefix', () => {
-		const { getByText } = renderWithTheme(<AmountInput value={0} onChange={jest.fn()} />);
+		const { getByText } = renderWithTheme(
+			<AmountInput defaultValue={0} onChange={jest.fn()} />,
+		);
 		expect(getByText('₹')).toBeTruthy();
 	});
 
 	it('calls onChange with numeric value when text changes', () => {
 		const onChange = jest.fn();
 		const { getByTestId } = renderWithTheme(
-			<AmountInput testID="amount-input" value={0} onChange={onChange} />,
+			<AmountInput testID="amount-input" defaultValue={0} onChange={onChange} />,
 		);
 		fireEvent.changeText(getByTestId('amount-input'), '5000');
 		expect(onChange).toHaveBeenCalledWith(5000);
@@ -24,7 +26,7 @@ describe('AmountInput', () => {
 	it('ignores non-numeric characters', () => {
 		const onChange = jest.fn();
 		const { getByTestId } = renderWithTheme(
-			<AmountInput testID="amount-input" value={0} onChange={onChange} />,
+			<AmountInput testID="amount-input" defaultValue={0} onChange={onChange} />,
 		);
 		fireEvent.changeText(getByTestId('amount-input'), 'abc');
 		expect(onChange).toHaveBeenCalledWith(0);
@@ -32,14 +34,19 @@ describe('AmountInput', () => {
 
 	it('displays label when provided', () => {
 		const { getByText } = renderWithTheme(
-			<AmountInput value={1000} onChange={jest.fn()} label="Total Amount" />,
+			<AmountInput defaultValue={1000} onChange={jest.fn()} label="Total Amount" />,
 		);
 		expect(getByText('Total Amount')).toBeTruthy();
 	});
 
 	it('shows error text when maxValue exceeded', () => {
 		const { getByTestId, getByText } = renderWithTheme(
-			<AmountInput testID="amount-input" value={0} onChange={jest.fn()} maxValue={1000} />,
+			<AmountInput
+				testID="amount-input"
+				defaultValue={0}
+				onChange={jest.fn()}
+				maxValue={1000}
+			/>,
 		);
 		fireEvent.changeText(getByTestId('amount-input'), '2000');
 		expect(getByText(/1,000/)).toBeTruthy();
@@ -47,14 +54,14 @@ describe('AmountInput', () => {
 
 	it('uses number-pad keyboard type', () => {
 		const { getByTestId } = renderWithTheme(
-			<AmountInput testID="amount-input" value={0} onChange={jest.fn()} />,
+			<AmountInput testID="amount-input" defaultValue={0} onChange={jest.fn()} />,
 		);
 		expect(getByTestId('amount-input')).toHaveProp('keyboardType', 'number-pad');
 	});
 
 	it('has minimum height of 52', () => {
 		const { getByTestId } = renderWithTheme(
-			<AmountInput testID="amount-input" value={0} onChange={jest.fn()} />,
+			<AmountInput testID="amount-input" defaultValue={0} onChange={jest.fn()} />,
 		);
 		const input = getByTestId('amount-input');
 		// Style is applied on the container wrapper; verify via prop inspection

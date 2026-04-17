@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
+import { View, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import type { LucideIcon } from 'lucide-react-native';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 
 interface StatCardProps {
 	label: string;
@@ -55,7 +56,8 @@ export const StatCard: React.FC<StatCardProps> = ({
 					<Icon size={20} color={color || c.primary} strokeWidth={2} />
 				</View>
 			)}
-			<Text
+			<ThemedText
+				variant="metric"
 				numberOfLines={1}
 				adjustsFontSizeToFit
 				style={[
@@ -69,23 +71,26 @@ export const StatCard: React.FC<StatCardProps> = ({
 				]}
 			>
 				{value}
-			</Text>
-			<Text
+			</ThemedText>
+			<ThemedText
+				variant="caption"
+				weight="semibold"
 				style={[
 					styles.label,
 					{
 						color: c.onSurfaceVariant,
 						fontSize: theme.typography.sizes.xs,
-						fontWeight: theme.typography.weights.semibold,
 					},
 				]}
 			>
 				{label}
-			</Text>
+			</ThemedText>
 
 			{trend && (
 				<View style={styles.trendRow}>
-					<Text
+					<ThemedText
+						variant="caption"
+						weight="bold"
 						style={[
 							styles.trend,
 							{
@@ -95,15 +100,16 @@ export const StatCard: React.FC<StatCardProps> = ({
 						]}
 					>
 						{trend}
-					</Text>
-					<Text
+					</ThemedText>
+					<ThemedText
+						variant="caption"
 						style={[
 							styles.trendLabel,
 							{ color: c.onSurfaceVariant, fontSize: theme.typography.sizes.xs },
 						]}
 					>
 						{trendLabel}
-					</Text>
+					</ThemedText>
 				</View>
 			)}
 		</View>

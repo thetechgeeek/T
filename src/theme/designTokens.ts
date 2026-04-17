@@ -568,6 +568,13 @@ export const FONT_FAMILY_TOKENS = {
 	},
 } as const;
 
+export const FONT_POLICY_TOKENS = {
+	maxProductFamilies: 2,
+	displayFamilyOptional: true,
+	monoFamilyExempt: true,
+	productRoles: ['ui', 'display/brand'] as const,
+} as const;
+
 export const FONT_SIZE_TOKENS = {
 	xs: 11,
 	sm: 13,

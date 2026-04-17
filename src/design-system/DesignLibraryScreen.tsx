@@ -46,6 +46,7 @@ import { getDesignSystemCopy, type DesignSystemLocale } from './copy';
 import { buildDesignSystemLocaleDiagnostics } from './formatters';
 import { useDesignSystemQualitySignals } from './useQualitySignals';
 import { WorkbenchHeader } from './components/WorkbenchHeader';
+import { DESIGN_SYSTEM_COMPONENT_DOCS } from './componentDocs';
 import {
 	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,
 	DESIGN_SYSTEM_READ_ONLY_FIELDS,
@@ -125,6 +126,19 @@ function ThemeModeChip({
 	onPress: () => void;
 }) {
 	return <Chip label={label} selected={selected} onPress={onPress} />;
+}
+
+function DetailBlock({ label, children }: { label: string; children: React.ReactNode }) {
+	const { c, s } = useThemeTokens();
+
+	return (
+		<View style={{ marginTop: s.sm }}>
+			<ThemedText variant="label" style={{ color: c.onSurface }}>
+				{label}
+			</ThemedText>
+			<View style={{ marginTop: s.xxs }}>{children}</View>
+		</View>
+	);
 }
 
 function WorkbenchMetricCard({
@@ -1487,6 +1501,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						const previousComponent = index > 0 ? filteredComponents[index - 1] : null;
 						const showKindHeader =
 							!previousComponent || previousComponent.kind !== component.kind;
+						const docsEntry = DESIGN_SYSTEM_COMPONENT_DOCS[component.name];
 
 						return (
 							<View key={component.id}>
@@ -1518,6 +1533,17 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 									>
 										{component.name}
 									</ThemedText>
+									{docsEntry ? (
+										<ThemedText
+											variant="caption"
+											style={{
+												color: c.onSurfaceVariant,
+												marginTop: s.xs,
+											}}
+										>
+											{docsEntry.summary}
+										</ThemedText>
+									) : null}
 									<ThemedText
 										variant="caption"
 										style={{ color: c.onSurfaceVariant, marginTop: s.xxs }}
@@ -1562,7 +1588,213 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 											}
 											size="sm"
 										/>
+										{docsEntry ? (
+											<>
+												<Badge
+													label={copy.componentInventory.storyCount(
+														docsEntry.exampleStories.length,
+													)}
+													variant="neutral"
+													size="sm"
+												/>
+												<Badge
+													label={copy.componentInventory.variantCount(
+														docsEntry.variants.length,
+													)}
+													variant="info"
+													size="sm"
+												/>
+												<Badge
+													label={copy.componentInventory.stateCount(
+														docsEntry.states.length,
+													)}
+													variant="warning"
+													size="sm"
+												/>
+												<Badge
+													label={copy.componentInventory.propCount(
+														docsEntry.propTable.length,
+													)}
+													variant="success"
+													size="sm"
+												/>
+											</>
+										) : null}
 									</View>
+									{docsEntry ? (
+										<View style={{ marginTop: s.md }}>
+											<DetailBlock label={copy.componentInventory.summary}>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.summary}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock
+												label={copy.componentInventory.exampleStories}
+											>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.exampleStories.join(' • ')}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.variants}>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.variants.join(' • ')}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.sizes}>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.sizes.join(' • ')}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.states}>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.states.join(' • ')}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock
+												label={copy.componentInventory.composition}
+											>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.compositionExample}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.relaxed}>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.usage.relaxed}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock
+												label={copy.componentInventory.operational}
+											>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.usage.operational}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.noMedia}>
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{docsEntry.usage.noMedia}
+												</ThemedText>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.props}>
+												<View style={{ gap: s.xs }}>
+													{docsEntry.propTable.map((prop) => (
+														<View key={`${component.id}-${prop.name}`}>
+															<ThemedText
+																variant="caption"
+																weight="semibold"
+																style={{ color: c.onSurface }}
+															>
+																{`${prop.name} • ${prop.type}`}
+															</ThemedText>
+															<ThemedText
+																variant="metadata"
+																style={{
+																	color: c.onSurfaceVariant,
+																}}
+															>
+																{prop.defaultValue
+																	? `${copy.componentInventory.defaultValue}: ${prop.defaultValue} • ${prop.description}`
+																	: prop.description}
+															</ThemedText>
+														</View>
+													))}
+												</View>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.doLabel}>
+												<View style={{ gap: s.xxs }}>
+													{docsEntry.doList.map((item) => (
+														<ThemedText
+															key={`${component.id}-do-${item}`}
+															variant="caption"
+															style={{ color: c.onSurfaceVariant }}
+														>
+															{`• ${item}`}
+														</ThemedText>
+													))}
+												</View>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.dontLabel}>
+												<View style={{ gap: s.xxs }}>
+													{docsEntry.dontList.map((item) => (
+														<ThemedText
+															key={`${component.id}-dont-${item}`}
+															variant="caption"
+															style={{ color: c.onSurfaceVariant }}
+														>
+															{`• ${item}`}
+														</ThemedText>
+													))}
+												</View>
+											</DetailBlock>
+
+											<DetailBlock
+												label={copy.componentInventory.accessibility}
+											>
+												<View style={{ gap: s.xxs }}>
+													{docsEntry.accessibilityNotes.map((item) => (
+														<ThemedText
+															key={`${component.id}-a11y-${item}`}
+															variant="caption"
+															style={{ color: c.onSurfaceVariant }}
+														>
+															{`• ${item}`}
+														</ThemedText>
+													))}
+												</View>
+											</DetailBlock>
+
+											<DetailBlock label={copy.componentInventory.platform}>
+												<View style={{ gap: s.xxs }}>
+													{docsEntry.platformNotes.map((item) => (
+														<ThemedText
+															key={`${component.id}-platform-${item}`}
+															variant="caption"
+															style={{ color: c.onSurfaceVariant }}
+														>
+															{`• ${item}`}
+														</ThemedText>
+													))}
+												</View>
+											</DetailBlock>
+										</View>
+									) : null}
 								</Card>
 							</View>
 						);

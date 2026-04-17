@@ -18,7 +18,16 @@ describe('design-system README contract', () => {
 			'Mobile components standardize on `style`, `testID`, `accessibilityLabel`',
 		);
 		expect(readme).toContain(
+			'Product typography is capped at two families: the core UI family plus an optional display/brand family.',
+		);
+		expect(readme).toContain(
+			'The qualitative chart palette must remain distinguishable under deuteranopia and protanopia simulation',
+		);
+		expect(readme).toContain(
 			'Large text, pseudo-localization, RTL, reduced motion, and bold-text behavior are part of the component contract',
 		);
+		expect(readme).toContain('npm run test:design-system:ios');
+		expect(readme).toContain('.maestro/design_system_workbench.yaml');
+		expect(readme).toContain('DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md');
 	});
 });

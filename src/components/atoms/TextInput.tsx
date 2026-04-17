@@ -2,7 +2,6 @@ import React, { forwardRef, useState } from 'react';
 import {
 	View,
 	TextInput as RNTextInput,
-	Text,
 	StyleSheet,
 	type TextInputProps as RNTextInputProps,
 	type StyleProp,
@@ -10,12 +9,14 @@ import {
 	type TextStyle,
 } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { ThemedText } from './ThemedText';
 
 export interface TextInputProps extends RNTextInputProps {
 	label?: string;
 	/** Stable English identifier for screen readers and Maestro. Takes precedence over label. */
 	accessibilityLabel?: string;
 	error?: string;
+	onValueChange?: (value: string, meta?: { source: 'input' }) => void;
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
 	containerStyle?: StyleProp<ViewStyle>;
@@ -34,8 +35,10 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 			containerStyle,
 			inputStyle,
 			helperText,
+			onValueChange,
 			onFocus,
 			onBlur,
+			onChangeText,
 			...props
 		},
 		ref,
@@ -54,20 +57,20 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 		return (
 			<View style={[styles.container, containerStyle]}>
 				{label && (
-					<Text
+					<ThemedText
 						importantForAccessibility="no"
+						variant="label"
 						style={[
 							styles.label,
 							{
 								color: c.onSurfaceVariant,
-								fontSize: theme.typography.sizes.sm,
 								fontWeight: theme.typography.weights.medium,
 								marginBottom: inputTokens.labelGap,
 							},
 						]}
 					>
 						{label}
-					</Text>
+					</ThemedText>
 				)}
 				<View
 					style={[
@@ -115,6 +118,10 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 							setIsFocused(false);
 							onBlur?.(e);
 						}}
+						onChangeText={(nextValue) => {
+							onChangeText?.(nextValue);
+							onValueChange?.(nextValue, { source: 'input' });
+						}}
 						{...props}
 					/>
 					{rightIcon && (
@@ -128,19 +135,19 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 				</View>
 				{/* Error/helper text is announced via the input's accessibilityHint; kept visual-only here */}
 				{!!(error || helperText) && (
-					<Text
+					<ThemedText
 						importantForAccessibility="no"
+						variant="caption"
 						style={[
 							styles.helper,
 							{
 								color: error ? c.error : c.onSurfaceVariant,
-								fontSize: theme.typography.sizes.xs,
 								marginTop: inputTokens.helperGap,
 							},
 						]}
 					>
 						{error || helperText}
-					</Text>
+					</ThemedText>
 				)}
 			</View>
 		);

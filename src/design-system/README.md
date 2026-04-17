@@ -61,6 +61,23 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
     - fails when a preview label drifts away from the generated checklist catalog
     - fails if the design-system proof-matrix tests disappear
 
+## Native Proof
+
+- `npm run test:design-system:ios`
+    - launches the dedicated Maestro smoke flow for the `/design-system` route
+    - compares captured simulator screenshots against the committed iOS baselines in `artifacts/design-system-baselines/ios`
+- `npm run test:design-system:ios:update`
+    - refreshes the committed iOS screenshot baseline from the current simulator run
+- `npm run test:design-system:android`
+    - runs the same Maestro smoke flow on Android once an emulator is available
+    - collects Android proof artifacts even before a committed screenshot baseline is introduced
+- `.maestro/design_system_workbench.yaml`
+    - keeps the native smoke path intentionally small and stable: deep link into the workbench, prove the route opens, cycle the live theme controls, and capture a screenshot artifact
+- `scripts/check-design-system-visual-regression.mjs`
+    - pixel-compares captured Maestro screenshots against the committed baseline set
+- [DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md](../../docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md)
+    - records the current accessibility audit scope, findings, and follow-up rules for the supported library surface
+
 ## Working Rules
 
 - New reusable UI should land in `src/components` first, not directly inside feature screens.
@@ -127,6 +144,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - Gradients are limited to branded hero or media-overlay usage. They are never structural affordances.
 - Status colors must stay harmonized with the neutral and brand system instead of becoming an alert rainbow.
 - Color may not be the sole differentiator of state. Pair it with text, iconography, layout, or pattern change.
+- The qualitative chart palette must remain distinguishable under deuteranopia and protanopia simulation, not only in full-color review.
 
 ### Typography
 
@@ -134,6 +152,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - Hero/display text belongs to a single focal region per screen or section.
 - Body text has calm regular, medium, semibold, and bold roles; metadata stays quieter than body; metrics remain dominant and short.
 - Code and machine-readable content use the monospace family token.
+- Product typography is capped at two families: the core UI family plus an optional display/brand family. Monospace is a utility exemption for code and machine-readable data.
 - Views should stay within a small set of type roles instead of inventing one-off hierarchy jumps.
 - Pairings should stay predictable:
     - cards: section title + body/metadata + metric

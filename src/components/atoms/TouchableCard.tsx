@@ -1,7 +1,8 @@
-import React from 'react';
-import { Pressable, type PressableProps, type ViewStyle, type StyleProp } from 'react-native';
+import React, { forwardRef, useState } from 'react';
+import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+import { buildFocusRingStyle } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
 export interface TouchableCardProps extends Omit<PressableProps, 'style'> {
@@ -15,79 +16,105 @@ export interface TouchableCardProps extends Omit<PressableProps, 'style'> {
  * Tappable card with Reanimated scale 0.97 + opacity 0.85 press animation.
  * Used for all tappable cards in the app.
  */
-export function TouchableCard({
-	children,
-	style,
-	disabled,
-	onPress,
-	onPressIn,
-	onPressOut,
-	testID,
-	...props
-}: TouchableCardProps) {
-	const { theme } = useTheme();
-	const reduceMotionEnabled = useReducedMotion();
-	const cardMotion = theme.animation.profiles.cardPress;
+export const TouchableCard = forwardRef<React.ElementRef<typeof Pressable>, TouchableCardProps>(
+	(
+		{
+			children,
+			style,
+			disabled,
+			onPress,
+			onPressIn,
+			onPressOut,
+			onFocus,
+			onBlur,
+			testID,
+			...props
+		},
+		ref,
+	) => {
+		const { theme } = useTheme();
+		const reduceMotionEnabled = useReducedMotion();
+		const cardMotion = theme.animation.profiles.cardPress;
+		const [isFocused, setIsFocused] = useState(false);
 
-	const scale = useSharedValue(1);
-	const opacity = useSharedValue(1);
+		const scale = useSharedValue(1);
+		const opacity = useSharedValue(1);
 
-	const animStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
-		opacity: opacity.value,
-	}));
+		const animStyle = useAnimatedStyle(() => ({
+			transform: [{ scale: scale.value }],
+			opacity: opacity.value,
+		}));
 
-	const handlePress = (e: Parameters<NonNullable<PressableProps['onPress']>>[0]) => {
-		if (disabled) return;
-		onPress?.(e);
-	};
+		const handlePress = (e: Parameters<NonNullable<PressableProps['onPress']>>[0]) => {
+			if (disabled) return;
+			onPress?.(e);
+		};
 
-	const handlePressIn = (e: Parameters<NonNullable<PressableProps['onPressIn']>>[0]) => {
-		if (disabled) return;
-		if (!reduceMotionEnabled) {
-			// eslint-disable-next-line react-hooks/immutability
-			scale.value = withSpring(cardMotion.scalePressed, cardMotion.spring);
-			// eslint-disable-next-line react-hooks/immutability
-			opacity.value = withSpring(cardMotion.opacityPressed, cardMotion.spring);
-		}
-		onPressIn?.(e);
-	};
+		const handlePressIn = (e: Parameters<NonNullable<PressableProps['onPressIn']>>[0]) => {
+			if (disabled) return;
+			if (!reduceMotionEnabled) {
+				// eslint-disable-next-line react-hooks/immutability
+				scale.value = withSpring(cardMotion.scalePressed, cardMotion.spring);
+				// eslint-disable-next-line react-hooks/immutability
+				opacity.value = withSpring(cardMotion.opacityPressed, cardMotion.spring);
+			}
+			onPressIn?.(e);
+		};
 
-	const handlePressOut = (e: Parameters<NonNullable<PressableProps['onPressOut']>>[0]) => {
-		if (disabled) return;
-		if (!reduceMotionEnabled) {
-			// eslint-disable-next-line react-hooks/immutability
-			scale.value = withSpring(1, cardMotion.spring);
-			// eslint-disable-next-line react-hooks/immutability
-			opacity.value = withSpring(1, cardMotion.spring);
-		} else {
-			scale.value = 1;
-			opacity.value = 1;
-		}
-		onPressOut?.(e);
-	};
+		const handlePressOut = (e: Parameters<NonNullable<PressableProps['onPressOut']>>[0]) => {
+			if (disabled) return;
+			if (!reduceMotionEnabled) {
+				// eslint-disable-next-line react-hooks/immutability
+				scale.value = withSpring(1, cardMotion.spring);
+				// eslint-disable-next-line react-hooks/immutability
+				opacity.value = withSpring(1, cardMotion.spring);
+			} else {
+				scale.value = 1;
+				opacity.value = 1;
+			}
+			onPressOut?.(e);
+		};
 
-	return (
-		<Animated.View style={animStyle}>
-			<Pressable
-				{...props}
-				testID={testID}
-				disabled={disabled}
-				onPress={handlePress}
-				onPressIn={handlePressIn}
-				onPressOut={handlePressOut}
-				accessibilityRole="button"
-				accessibilityState={{ disabled: !!disabled }}
-				style={[
-					{
-						backgroundColor: theme.colors.card,
-						borderRadius: theme.borderRadius.md,
-					},
-					style,
-				]}
-			>
-				{children}
-			</Pressable>
-		</Animated.View>
-	);
-}
+		return (
+			<Animated.View style={animStyle}>
+				<Pressable
+					ref={ref}
+					{...props}
+					testID={testID}
+					disabled={disabled}
+					focusable={!disabled}
+					onPress={handlePress}
+					onPressIn={handlePressIn}
+					onPressOut={handlePressOut}
+					onFocus={(e) => {
+						setIsFocused(true);
+						onFocus?.(e);
+					}}
+					onBlur={(e) => {
+						setIsFocused(false);
+						onBlur?.(e);
+					}}
+					accessibilityRole="button"
+					accessibilityState={{ disabled: !!disabled }}
+					style={[
+						{
+							backgroundColor: theme.colors.card,
+							borderRadius: theme.borderRadius.md,
+						},
+						isFocused
+							? buildFocusRingStyle({
+									color: theme.colors.primary,
+									radius: theme.borderRadius.md,
+								})
+							: null,
+						style,
+					]}
+				>
+					{children}
+				</Pressable>
+			</Animated.View>
+		);
+	},
+);
+
+TouchableCard.displayName = 'TouchableCard';

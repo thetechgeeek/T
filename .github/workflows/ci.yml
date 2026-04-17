@@ -37,3 +37,106 @@ jobs:
               if: always()
               with:
                   fail_ci_if_error: false
+
+    design-system-ios:
+        runs-on: macos-latest
+        timeout-minutes: 60
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Install Maestro
+              run: brew install maestro
+
+            - name: Generate design-system artifacts
+              run: npm run generate:design-system
+
+            - name: Start iOS simulator
+              run: maestro start-device --platform ios --os-version 18 --force-create
+
+            - name: Build iOS app
+              run: npx expo run:ios -d "iPhone 11"
+
+            - name: Run iOS design-system native proof
+              run: npm run test:design-system:ios
+
+            - name: Upload iOS design-system artifacts
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: design-system-ios-proof
+                  path: artifacts/design-system-proof/ios
+
+    design-system-android:
+        runs-on: macos-latest
+        timeout-minutes: 75
+        env:
+            ANDROID_SDK_ROOT: /opt/homebrew/share/android-commandlinetools
+            ANDROID_HOME: /opt/homebrew/share/android-commandlinetools
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Install Maestro and Android tooling
+              run: brew install maestro android-commandlinetools android-platform-tools
+
+            - name: Accept Android licenses
+              shell: bash
+              run: yes | sdkmanager --licenses
+
+            - name: Install Android SDK packages
+              shell: bash
+              run: |
+                  sdkmanager --install \
+                    "emulator" \
+                    "platforms;android-35" \
+                    "build-tools;35.0.0" \
+                    "system-images;android-35;google_apis;arm64-v8a"
+
+            - name: Generate design-system artifacts
+              run: npm run generate:design-system
+
+            - name: Start Android emulator
+              shell: bash
+              run: |
+                  export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"
+                  maestro start-device --platform android --os-version 33 --force-create
+
+            - name: Build Android app
+              shell: bash
+              run: |
+                  export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"
+                  npx expo run:android
+
+            - name: Run Android design-system native proof
+              shell: bash
+              run: |
+                  export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"
+                  npm run test:design-system:android
+
+            - name: Upload Android design-system artifacts
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: design-system-android-proof
+                  path: artifacts/design-system-proof/android

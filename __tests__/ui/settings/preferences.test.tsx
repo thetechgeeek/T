@@ -27,6 +27,7 @@ const mockSetThemeMode = jest.fn();
 jest.mock('@/src/theme/ThemeProvider', () => {
 	const React = require('react');
 	const { buildTheme } = require('@/src/theme/colors');
+	const { DEFAULT_RUNTIME_QUALITY_SIGNALS } = require('@/src/design-system/runtimeSignals');
 	const actual = jest.requireActual('@/src/theme/ThemeProvider');
 	return {
 		...actual,
@@ -34,7 +35,12 @@ jest.mock('@/src/theme/ThemeProvider', () => {
 			theme: buildTheme(false),
 			isDark: false,
 			mode: 'light',
+			presetId: 'baseline',
+			runtime: DEFAULT_RUNTIME_QUALITY_SIGNALS,
+			availablePresets: [],
 			setThemeMode: mockSetThemeMode,
+			setThemePreset: jest.fn(),
+			cycleThemePreset: jest.fn(),
 			toggleTheme: jest.fn(),
 		}),
 		ThemeProvider: ({ children }: { children: React.ReactNode }) =>

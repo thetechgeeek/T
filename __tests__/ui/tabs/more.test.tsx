@@ -6,6 +6,7 @@ import { useAuthStore } from '@/src/stores/authStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
 import { lightTheme, darkTheme } from '@/src/theme/colors';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 
 jest.mock('@/src/theme/ThemeProvider', () => ({
 	...jest.requireActual('@/src/theme/ThemeProvider'),
@@ -61,9 +62,14 @@ beforeEach(() => {
 	(useTheme as jest.Mock).mockReturnValue({
 		theme: lightTheme,
 		isDark: false,
+		presetId: 'baseline',
+		runtime: DEFAULT_RUNTIME_QUALITY_SIGNALS,
+		availablePresets: [],
 		toggleTheme: mockToggleTheme,
 		mode: 'light' as const,
 		setThemeMode: jest.fn(),
+		setThemePreset: jest.fn(),
+		cycleThemePreset: jest.fn(),
 	});
 });
 

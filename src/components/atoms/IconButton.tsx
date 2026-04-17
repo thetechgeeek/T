@@ -1,6 +1,8 @@
-import React from 'react';
-import { Pressable, Text, StyleSheet, type ViewStyle } from 'react-native';
+import React, { forwardRef, useState } from 'react';
+import { Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { buildFocusRingStyle } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { ThemedText } from './ThemedText';
 
 export interface IconButtonProps {
 	icon: React.ReactNode;
@@ -9,63 +11,71 @@ export interface IconButtonProps {
 	disabled?: boolean;
 	testID?: string;
 	accessibilityLabel?: string;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
  * P0.4 — IconButton
  * Icon + optional text label below. Minimum 48×48dp touch target.
  */
-export function IconButton({
-	icon,
-	label,
-	onPress,
-	disabled,
-	testID,
-	accessibilityLabel,
-	style,
-}: IconButtonProps) {
-	const { theme } = useTheme();
-	const iconButtonTokens = theme.components.iconButton;
+export const IconButton = forwardRef<React.ElementRef<typeof Pressable>, IconButtonProps>(
+	({ icon, label, onPress, disabled, testID, accessibilityLabel, style }, ref) => {
+		const { theme } = useTheme();
+		const iconButtonTokens = theme.components.iconButton;
+		const [isFocused, setIsFocused] = useState(false);
 
-	const handlePress = () => {
-		if (disabled) return;
-		onPress();
-	};
+		const handlePress = () => {
+			if (disabled) return;
+			onPress();
+		};
 
-	return (
-		<Pressable
-			testID={testID}
-			onPress={handlePress}
-			disabled={disabled}
-			accessibilityRole="button"
-			accessibilityLabel={accessibilityLabel ?? label}
-			accessibilityState={{ disabled: !!disabled }}
-			style={[
-				styles.container,
-				{
-					minWidth: iconButtonTokens.minSize,
-					minHeight: iconButtonTokens.minSize,
-				},
-				style,
-			]}
-		>
-			{icon}
-			{label ? (
-				<Text
-					style={{
-						fontSize: theme.typography.sizes.xs,
-						color: disabled ? theme.colors.placeholder : theme.colors.onSurface,
-						marginTop: iconButtonTokens.labelGap,
-						textAlign: 'center',
-					}}
-				>
-					{label}
-				</Text>
-			) : null}
-		</Pressable>
-	);
-}
+		return (
+			<Pressable
+				ref={ref}
+				testID={testID}
+				onPress={handlePress}
+				disabled={disabled}
+				focusable={!disabled}
+				accessibilityRole="button"
+				accessibilityLabel={accessibilityLabel ?? label}
+				accessibilityState={{ disabled: !!disabled }}
+				onFocus={() => setIsFocused(true)}
+				onBlur={() => setIsFocused(false)}
+				style={[
+					styles.container,
+					{
+						minWidth: iconButtonTokens.minSize,
+						minHeight: iconButtonTokens.minSize,
+						borderRadius: theme.borderRadius.full,
+					},
+					isFocused
+						? buildFocusRingStyle({
+								color: theme.colors.primary,
+								radius: theme.borderRadius.full,
+							})
+						: null,
+					style,
+				]}
+			>
+				{icon}
+				{label ? (
+					<ThemedText
+						variant="caption"
+						style={{
+							color: disabled ? theme.colors.placeholder : theme.colors.onSurface,
+							marginTop: iconButtonTokens.labelGap,
+							textAlign: 'center',
+						}}
+					>
+						{label}
+					</ThemedText>
+				) : null}
+			</Pressable>
+		);
+	},
+);
+
+IconButton.displayName = 'IconButton';
 
 const styles = StyleSheet.create({
 	container: {
@@ -78,49 +88,60 @@ export interface FABProps {
 	onPress: () => void;
 	testID?: string;
 	accessibilityLabel?: string;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
  * P0.4 — FAB (Floating Action Button)
  * 56×56dp circle, terracotta background, shadow-lg, "+" icon.
  */
-export function FAB({ onPress, testID, accessibilityLabel, style }: FABProps) {
-	const { theme } = useTheme();
-	const fabTokens = theme.components.fab;
+export const FAB = forwardRef<React.ElementRef<typeof Pressable>, FABProps>(
+	({ onPress, testID, accessibilityLabel, style }, ref) => {
+		const { theme } = useTheme();
+		const fabTokens = theme.components.fab;
+		const [isFocused, setIsFocused] = useState(false);
 
-	const handlePress = () => {
-		onPress();
-	};
-
-	return (
-		<Pressable
-			testID={testID}
-			onPress={handlePress}
-			accessibilityRole="button"
-			accessibilityLabel={accessibilityLabel ?? 'Add'}
-			style={[
-				{
-					width: fabTokens.size,
-					height: fabTokens.size,
-					borderRadius: fabTokens.radius,
-					backgroundColor: theme.colors.primary,
-					alignItems: 'center',
-					justifyContent: 'center',
-				},
-				style,
-			]}
-		>
-			<Text
-				style={{
-					color: theme.colors.onPrimary,
-					fontSize: fabTokens.iconSize,
-					lineHeight: theme.spacing['2xl'],
-					fontWeight: '400',
-				}}
+		return (
+			<Pressable
+				ref={ref}
+				testID={testID}
+				onPress={onPress}
+				focusable
+				accessibilityRole="button"
+				accessibilityLabel={accessibilityLabel ?? 'Add'}
+				onFocus={() => setIsFocused(true)}
+				onBlur={() => setIsFocused(false)}
+				style={[
+					{
+						width: fabTokens.size,
+						height: fabTokens.size,
+						borderRadius: fabTokens.radius,
+						backgroundColor: theme.colors.primary,
+						alignItems: 'center',
+						justifyContent: 'center',
+					},
+					isFocused
+						? buildFocusRingStyle({
+								color: theme.colors.onPrimary,
+								radius: fabTokens.radius,
+							})
+						: null,
+					style,
+				]}
 			>
-				+
-			</Text>
-		</Pressable>
-	);
-}
+				<ThemedText
+					variant="metric"
+					style={{
+						color: theme.colors.onPrimary,
+						fontSize: fabTokens.iconSize,
+						lineHeight: theme.spacing['2xl'],
+					}}
+				>
+					+
+				</ThemedText>
+			</Pressable>
+		);
+	},
+);
+
+FAB.displayName = 'FAB';

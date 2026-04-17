@@ -511,12 +511,23 @@ jest.mock('i18next', () => {
 });
 
 // Helper for shared translations to avoid discrepancies between different i18n mocks
-// Note: We used to have separate mocks for @/src/i18n and i18next, but i18next mock is more fundamental.
-// We'll keep @/src/i18n mock as a simple re-export of the i18next mock for completeness.
+// The design-system contract now relies on runtime locale helpers as well, so we
+// merge those real exports onto the lightweight i18next test double.
+const createI18nModuleMock = () => {
+	const i18nModule = require('i18next');
+	const runtime = jest.requireActual('./src/i18n/runtime');
+	const defaultExport = i18nModule.default ?? i18nModule;
+	return {
+		__esModule: true,
+		default: defaultExport,
+		...i18nModule,
+		...runtime,
+	};
+};
 
-jest.mock('@/src/i18n', () => require('i18next'));
+jest.mock('@/src/i18n', () => createI18nModuleMock());
 
-jest.mock('./src/i18n', () => require('i18next'));
+jest.mock('./src/i18n', () => createI18nModuleMock());
 
 // react-i18next — fallback returns last key segment so tests don't assert raw keys (QA issue 3.4)
 jest.mock('react-i18next', () => {

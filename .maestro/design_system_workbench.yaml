@@ -1,0 +1,14 @@
+appId: com.tilemaster.app
+env:
+  DESIGN_SYSTEM_DEEPLINK: ${DESIGN_SYSTEM_DEEPLINK}
+---
+# Design-system proof flow: opens the dedicated workbench and captures stable
+# screenshots for the foundation, overlay, catalog, and checklist surfaces.
+- launchApp
+- openLink: ${DESIGN_SYSTEM_DEEPLINK}
+- tapOn:
+    text: 'Open'
+    optional: true
+- assertVisible:
+    label: 'Internal design system workbench'
+- takeScreenshot: design-system-foundation

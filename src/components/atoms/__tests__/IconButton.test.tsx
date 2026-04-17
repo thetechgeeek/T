@@ -52,7 +52,8 @@ describe('IconButton', () => {
 		const style = Array.isArray(btn.props.style)
 			? Object.assign({}, ...btn.props.style.filter(Boolean))
 			: btn.props.style;
-		expect(style).toEqual(expect.objectContaining({ minWidth: 48, minHeight: 48 }));
+		expect(style.minWidth).toBeGreaterThanOrEqual(48);
+		expect(style.minHeight).toBeGreaterThanOrEqual(48);
 	});
 
 	it('supports explicit accessibility labels for icon-only actions', () => {

@@ -1,6 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import React, { forwardRef, useState } from 'react';
+import {
+	View,
+	TextInput,
+	StyleSheet,
+	type StyleProp,
+	type TextInput as NativeTextInput,
+	type ViewStyle,
+} from 'react-native';
+import { useControllableState } from '@/src/hooks/useControllableState';
+import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { INDIAN_GROUPING_TAIL_DIGIT_COUNT } from '@/constants/money';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
@@ -20,8 +30,10 @@ function formatIndian(value: number): string {
 }
 
 export interface AmountInputProps {
-	value: number;
+	value?: number;
+	defaultValue?: number;
 	onChange: (value: number) => void;
+	onValueChange?: (value: number, meta?: { source: 'input' }) => void;
 	label?: string;
 	placeholder?: string;
 	maxValue?: number;
@@ -36,119 +48,161 @@ export interface AmountInputProps {
  * ₹ prefix (non-editable), Indian number grouping, 20sp bold terracotta text.
  * onChange always receives a raw number.
  */
-export function AmountInput({
-	value,
-	onChange,
-	label,
-	placeholder,
-	maxValue,
-	allowDecimals = false,
-	testID,
-	editable = true,
-	style,
-}: AmountInputProps) {
-	const { theme } = useTheme();
-	const c = theme.colors;
-	const inputTokens = theme.components.input;
+export const AmountInput = forwardRef<NativeTextInput, AmountInputProps>(
+	(
+		{
+			value,
+			defaultValue = 0,
+			onChange,
+			onValueChange,
+			label,
+			placeholder,
+			maxValue,
+			allowDecimals = false,
+			testID,
+			editable = true,
+			style,
+		},
+		ref,
+	) => {
+		const { theme } = useTheme();
+		const c = theme.colors;
+		const inputTokens = theme.components.input;
+		const [draftText, setDraftText] = useState<string | null>(null);
+		const [exceeded, setExceeded] = useState(false);
+		const [isFocused, setIsFocused] = useState(false);
+		const [currentValue, setCurrentValue] = useControllableState({
+			value,
+			defaultValue,
+			onChange: (nextValue) => {
+				onChange(nextValue);
+				onValueChange?.(nextValue, { source: 'input' });
+			},
+		});
 
-	const [localText, setLocalText] = useState('');
-	const [exceeded, setExceeded] = useState(false);
+		const displayText =
+			draftText !== null ? draftText : currentValue !== 0 ? formatIndian(currentValue) : '';
 
-	// Use local text when user is typing; fall back to formatted prop value otherwise
-	const displayText = localText !== '' ? localText : value !== 0 ? formatIndian(value) : '';
+		const handleChange = (text: string) => {
+			const cleaned = allowDecimals
+				? text.replace(/[^0-9.]/g, '')
+				: text.replace(/[^0-9]/g, '');
+			const numeric = cleaned === '' ? 0 : parseFloat(cleaned) || 0;
 
-	const handleChange = (text: string) => {
-		// Strip all non-numeric (and non-decimal when allowed)
-		const cleaned = allowDecimals ? text.replace(/[^0-9.]/g, '') : text.replace(/[^0-9]/g, '');
+			if (maxValue !== undefined && numeric > maxValue) {
+				setExceeded(true);
+			} else {
+				setExceeded(false);
+			}
 
-		const numeric = cleaned === '' ? 0 : parseFloat(cleaned) || 0;
+			setDraftText(cleaned);
+			setCurrentValue(numeric, { source: 'input' });
+			if (Object.is(numeric, currentValue)) {
+				onChange(numeric);
+				onValueChange?.(numeric, { source: 'input' });
+			}
+		};
 
-		if (maxValue !== undefined && numeric > maxValue) {
-			setExceeded(true);
-		} else {
-			setExceeded(false);
-		}
+		const handleBlur = () => {
+			setIsFocused(false);
+			setDraftText(null);
+			if (maxValue !== undefined && currentValue > maxValue) {
+				const message = `₹ ${formatIndian(maxValue)} से अधिक नहीं हो सकता`;
+				void announceForScreenReader(message);
+			}
+		};
 
-		setLocalText(cleaned);
-		onChange(numeric);
-	};
+		const errorMsg =
+			exceeded && maxValue !== undefined
+				? `₹ ${formatIndian(maxValue)} से अधिक नहीं हो सकता`
+				: null;
 
-	const errorMsg =
-		exceeded && maxValue !== undefined
-			? `₹ ${formatIndian(maxValue)} से अधिक नहीं हो सकता`
-			: null;
-
-	return (
-		<View style={style}>
-			{label ? (
-				<Text
-					style={{
-						fontSize: theme.typography.sizes.sm,
-						color: c.onSurfaceVariant,
-						marginBottom: inputTokens.labelGap,
-						fontWeight: '600',
-					}}
-				>
-					{label}
-				</Text>
-			) : null}
-			<View
-				style={[
-					styles.row,
-					{
-						borderColor: exceeded ? c.error : c.border,
-						borderRadius: inputTokens.radius,
-						minHeight: inputTokens.minHeight,
-						borderWidth: exceeded
-							? inputTokens.errorBorderWidth
-							: inputTokens.borderWidth,
-					},
-				]}
-			>
-				<Text
-					style={{
-						fontSize: FONT_SIZE.amount,
-						fontWeight: '700',
-						color: c.primary,
-						paddingLeft: SPACING_PX.md,
-						alignSelf: 'center',
-					}}
-				>
-					₹
-				</Text>
-				<TextInput
-					testID={testID}
-					value={displayText}
-					onChangeText={handleChange}
-					keyboardType="number-pad"
-					accessibilityLabel={label ?? 'Amount'}
-					placeholder={placeholder ?? (value === 0 ? '0' : undefined)}
-					placeholderTextColor={c.placeholder}
-					editable={editable}
+		return (
+			<View style={style}>
+				{label ? (
+					<ThemedText
+						variant="label"
+						weight="semibold"
+						style={{
+							fontSize: theme.typography.sizes.sm,
+							color: c.onSurfaceVariant,
+							marginBottom: inputTokens.labelGap,
+						}}
+					>
+						{label}
+					</ThemedText>
+				) : null}
+				<View
 					style={[
-						styles.input,
+						styles.row,
 						{
-							fontSize: FONT_SIZE.amount,
-							fontWeight: '700',
-							color: c.primary,
+							borderColor: exceeded ? c.error : isFocused ? c.primary : c.border,
+							borderRadius: inputTokens.radius,
+							minHeight: inputTokens.minHeight,
+							borderWidth: exceeded
+								? inputTokens.errorBorderWidth
+								: inputTokens.borderWidth,
 						},
+						isFocused
+							? buildFocusRingStyle({
+									color: c.primary,
+									radius: inputTokens.radius,
+								})
+							: null,
 					]}
-				/>
-			</View>
-			{errorMsg ? (
-				<Text
-					style={{
-						fontSize: theme.typography.sizes.xs,
-						color: c.error,
-						marginTop: inputTokens.helperGap,
-					}}
 				>
-					{errorMsg}
-				</Text>
-			) : null}
-		</View>
-	);
-}
+					<ThemedText
+						variant="metric"
+						weight="bold"
+						style={{
+							fontSize: FONT_SIZE.amount,
+							color: c.primary,
+							paddingLeft: SPACING_PX.md,
+							alignSelf: 'center',
+						}}
+					>
+						₹
+					</ThemedText>
+					<TextInput
+						ref={ref}
+						testID={testID}
+						value={displayText}
+						onFocus={() => setIsFocused(true)}
+						onBlur={handleBlur}
+						onChangeText={handleChange}
+						keyboardType="number-pad"
+						accessibilityLabel={label ?? 'Amount'}
+						placeholder={placeholder ?? (currentValue === 0 ? '0' : undefined)}
+						placeholderTextColor={c.placeholder}
+						editable={editable}
+						style={[
+							styles.input,
+							{
+								fontSize: FONT_SIZE.amount,
+								fontWeight: '700',
+								color: c.primary,
+							},
+						]}
+					/>
+				</View>
+				{errorMsg ? (
+					<ThemedText
+						variant="caption"
+						style={{
+							fontSize: theme.typography.sizes.xs,
+							color: c.error,
+							marginTop: inputTokens.helperGap,
+						}}
+					>
+						{errorMsg}
+					</ThemedText>
+				) : null}
+			</View>
+		);
+	},
+);
+
+AmountInput.displayName = 'AmountInput';
 
 const styles = StyleSheet.create({
 	row: {

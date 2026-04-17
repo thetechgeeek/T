@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef, useState } from 'react';
 import {
 	Pressable,
 	StyleSheet,
@@ -9,6 +9,7 @@ import {
 	type GestureResponderEvent,
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { buildFocusRingStyle } from '@/src/utils/accessibility';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
@@ -19,167 +20,237 @@ export interface ButtonProps extends Omit<PressableProps, 'style'> {
 	accessibilityLabel?: string;
 	variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'inverse';
 	size?: 'sm' | 'md' | 'lg';
+	tone?: 'brand' | 'neutral' | 'danger' | 'inverse';
+	emphasis?: 'high' | 'medium' | 'low';
+	density?: 'compact' | 'default' | 'relaxed';
 	loading?: boolean;
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
 	style?: StyleProp<ViewStyle>;
 }
 
-export function Button({
-	title,
-	accessibilityLabel,
-	variant = 'primary',
-	size = 'md',
-	loading = false,
-	leftIcon,
-	rightIcon,
-	style,
-	disabled,
-	onPress,
-	onPressIn,
-	onPressOut,
-	...props
-}: ButtonProps) {
-	const { theme } = useTheme();
-	const reduceMotionEnabled = useReducedMotion();
-	const c = theme.colors;
-	const buttonTokens = theme.components.button;
-	const buttonMotion = theme.animation.profiles.buttonPress;
-	const inverseSurface = theme.visual.surfaces.inverse;
-	const inverseText = theme.visual.surfaces.onInverse;
+export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps>(
+	(
+		{
+			title,
+			accessibilityLabel,
+			variant,
+			size,
+			tone = 'brand',
+			emphasis = 'high',
+			density = 'default',
+			loading = false,
+			leftIcon,
+			rightIcon,
+			style,
+			disabled,
+			onPress,
+			onPressIn,
+			onPressOut,
+			onFocus,
+			onBlur,
+			...props
+		},
+		ref,
+	) => {
+		const { theme } = useTheme();
+		const reduceMotionEnabled = useReducedMotion();
+		const c = theme.colors;
+		const buttonTokens = theme.components.button;
+		const buttonMotion = theme.animation.profiles.buttonPress;
+		const inverseSurface = theme.visual.surfaces.inverse;
+		const inverseText = theme.visual.surfaces.onInverse;
+		const [isFocused, setIsFocused] = useState(false);
 
-	const scale = useSharedValue(1);
-	const animStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
-	}));
+		const scale = useSharedValue(1);
+		const animStyle = useAnimatedStyle(() => ({
+			transform: [{ scale: scale.value }],
+		}));
 
-	const getVariantStyles = () => {
-		switch (variant) {
-			case 'secondary':
-				return { bg: c.surfaceVariant, text: c.onSurfaceVariant, border: 'transparent' };
-			case 'outline':
-				return { bg: 'transparent', text: c.primary, border: c.primary };
-			case 'ghost':
-				return { bg: 'transparent', text: c.primary, border: 'transparent' };
-			case 'danger':
-				return { bg: c.error, text: c.onError, border: 'transparent' };
-			case 'inverse':
-				return { bg: inverseSurface, text: inverseText, border: 'transparent' };
-			case 'primary':
-			default:
-				return { bg: c.primary, text: c.onPrimary, border: 'transparent' };
-		}
-	};
+		const resolvedVariant =
+			variant ??
+			(() => {
+				if (tone === 'inverse') {
+					return 'inverse';
+				}
+				if (tone === 'danger') {
+					return 'danger';
+				}
+				if (tone === 'neutral') {
+					return emphasis === 'high'
+						? 'secondary'
+						: emphasis === 'medium'
+							? 'outline'
+							: 'ghost';
+				}
+				return emphasis === 'high'
+					? 'primary'
+					: emphasis === 'medium'
+						? 'outline'
+						: 'ghost';
+			})();
 
-	const getSizeStyles = () => {
-		switch (size) {
-			case 'sm':
-				return {
-					height: buttonTokens.heights.sm,
-					px: buttonTokens.paddingX.sm,
-					fontSize: theme.typography.sizes.sm,
-				};
-			case 'lg':
-				return {
-					height: buttonTokens.heights.lg,
-					px: buttonTokens.paddingX.lg,
-					fontSize: theme.typography.sizes.lg,
-				};
-			case 'md':
-			default:
-				return {
-					height: buttonTokens.heights.md,
-					px: buttonTokens.paddingX.md,
-					fontSize: theme.typography.sizes.md,
-				};
-		}
-	};
+		const resolvedSize =
+			size ?? (density === 'compact' ? 'sm' : density === 'relaxed' ? 'lg' : 'md');
 
-	const v = getVariantStyles();
-	const s = getSizeStyles();
+		const getVariantStyles = () => {
+			switch (resolvedVariant) {
+				case 'secondary':
+					return {
+						bg: c.surfaceVariant,
+						text: c.onSurfaceVariant,
+						border: 'transparent',
+					};
+				case 'outline':
+					return { bg: 'transparent', text: c.primary, border: c.primary };
+				case 'ghost':
+					return { bg: 'transparent', text: c.primary, border: 'transparent' };
+				case 'danger':
+					return { bg: c.error, text: c.onError, border: 'transparent' };
+				case 'inverse':
+					return { bg: inverseSurface, text: inverseText, border: 'transparent' };
+				case 'primary':
+				default:
+					return { bg: c.primary, text: c.onPrimary, border: 'transparent' };
+			}
+		};
 
-	const isOutline = variant === 'outline';
-	const isDisabled = disabled || loading;
+		const getSizeStyles = () => {
+			switch (resolvedSize) {
+				case 'sm':
+					return {
+						height: buttonTokens.heights.sm,
+						px: buttonTokens.paddingX.sm,
+						fontSize: theme.typography.sizes.sm,
+					};
+				case 'lg':
+					return {
+						height: buttonTokens.heights.lg,
+						px: buttonTokens.paddingX.lg,
+						fontSize: theme.typography.sizes.lg,
+					};
+				case 'md':
+				default:
+					return {
+						height: buttonTokens.heights.md,
+						px: buttonTokens.paddingX.md,
+						fontSize: theme.typography.sizes.md,
+					};
+			}
+		};
 
-	const handlePress = (e: GestureResponderEvent) => {
-		if (isDisabled) return;
-		onPress?.(e);
-	};
+		const v = getVariantStyles();
+		const s = getSizeStyles();
 
-	return (
-		<Animated.View style={[animStyle, style]}>
-			<Pressable
-				{...props}
-				disabled={isDisabled}
-				accessibilityRole="button"
-				accessibilityLabel={accessibilityLabel ?? title}
-				accessibilityState={{ disabled: isDisabled, busy: loading }}
-				accessibilityHint={loading ? 'Loading, please wait' : undefined}
-				onPressIn={(e: GestureResponderEvent) => {
-					if (isDisabled) return;
-					if (!reduceMotionEnabled) {
-						// eslint-disable-next-line react-hooks/immutability
-						scale.value = withSpring(buttonMotion.scalePressed, buttonMotion.spring);
-					}
-					onPressIn?.(e);
-				}}
-				onPressOut={(e: GestureResponderEvent) => {
-					if (isDisabled) return;
-					if (!reduceMotionEnabled) {
-						// eslint-disable-next-line react-hooks/immutability
-						scale.value = withSpring(1, buttonMotion.spring);
-					} else {
-						scale.value = 1;
-					}
-					onPressOut?.(e);
-				}}
-				style={[
-					styles.button,
-					{
-						backgroundColor:
-							isDisabled && !isOutline && variant !== 'ghost'
-								? c.surfaceVariant
-								: v.bg,
-						borderColor: isDisabled && isOutline ? c.border : v.border,
-						borderWidth: isOutline ? buttonTokens.outlineWidth : 0,
-						borderRadius: buttonTokens.radius,
-						height: s.height,
-						paddingHorizontal: s.px,
-					},
-				]}
-				onPress={handlePress}
-			>
-				{loading ? (
-					<ActivityIndicator
-						testID="loading-indicator"
-						color={isOutline || variant === 'ghost' ? c.primary : v.text}
-					/>
-				) : (
-					<>
-						{leftIcon}
-						<ThemedText
-							allowFontScaling
-							variant="label"
-							weight="semibold"
-							style={[
-								styles.label,
-								{
-									color: isDisabled ? c.placeholder : v.text,
-									fontSize: s.fontSize,
-									marginStart: leftIcon ? buttonTokens.iconGap : 0,
-									marginEnd: rightIcon ? buttonTokens.iconGap : 0,
-								},
-							]}
-						>
-							{title}
-						</ThemedText>
-						{rightIcon}
-					</>
-				)}
-			</Pressable>
-		</Animated.View>
-	);
-}
+		const isOutline = resolvedVariant === 'outline';
+		const isGhost = resolvedVariant === 'ghost';
+		const isDisabled = disabled || loading;
+
+		const handlePress = (e: GestureResponderEvent) => {
+			if (isDisabled) return;
+			onPress?.(e);
+		};
+
+		return (
+			<Animated.View style={[animStyle, style]}>
+				<Pressable
+					ref={ref}
+					{...props}
+					disabled={isDisabled}
+					focusable={!isDisabled}
+					accessibilityRole="button"
+					accessibilityLabel={accessibilityLabel ?? title}
+					accessibilityState={{ disabled: isDisabled, busy: loading }}
+					accessibilityHint={loading ? 'Loading, please wait' : undefined}
+					onFocus={(e) => {
+						setIsFocused(true);
+						onFocus?.(e);
+					}}
+					onBlur={(e) => {
+						setIsFocused(false);
+						onBlur?.(e);
+					}}
+					onPressIn={(e: GestureResponderEvent) => {
+						if (isDisabled) return;
+						if (!reduceMotionEnabled) {
+							// eslint-disable-next-line react-hooks/immutability
+							scale.value = withSpring(
+								buttonMotion.scalePressed,
+								buttonMotion.spring,
+							);
+						}
+						onPressIn?.(e);
+					}}
+					onPressOut={(e: GestureResponderEvent) => {
+						if (isDisabled) return;
+						if (!reduceMotionEnabled) {
+							// eslint-disable-next-line react-hooks/immutability
+							scale.value = withSpring(1, buttonMotion.spring);
+						} else {
+							scale.value = 1;
+						}
+						onPressOut?.(e);
+					}}
+					style={[
+						styles.button,
+						{
+							backgroundColor:
+								isDisabled && !isOutline && !isGhost ? c.surfaceVariant : v.bg,
+							borderColor: isFocused
+								? c.primary
+								: isDisabled && isOutline
+									? c.border
+									: v.border,
+							borderWidth:
+								isFocused && !isOutline
+									? buildFocusRingStyle({
+											color: c.primary,
+											radius: buttonTokens.radius,
+										}).borderWidth
+									: isOutline
+										? buttonTokens.outlineWidth
+										: 0,
+							borderRadius: buttonTokens.radius,
+							height: s.height,
+							paddingHorizontal: s.px,
+						},
+					]}
+					onPress={handlePress}
+				>
+					{loading ? (
+						<ActivityIndicator
+							testID="loading-indicator"
+							color={isOutline || isGhost ? c.primary : v.text}
+						/>
+					) : (
+						<>
+							{leftIcon}
+							<ThemedText
+								allowFontScaling
+								variant="label"
+								weight="semibold"
+								style={[
+									styles.label,
+									{
+										color: isDisabled ? c.placeholder : v.text,
+										fontSize: s.fontSize,
+										marginStart: leftIcon ? buttonTokens.iconGap : 0,
+										marginEnd: rightIcon ? buttonTokens.iconGap : 0,
+									},
+								]}
+							>
+								{title}
+							</ThemedText>
+							{rightIcon}
+						</>
+					)}
+				</Pressable>
+			</Animated.View>
+		);
+	},
+);
+
+Button.displayName = 'Button';
 
 const styles = StyleSheet.create({
 	button: {

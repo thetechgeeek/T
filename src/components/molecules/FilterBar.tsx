@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { forwardRef, useState } from 'react';
 import {
-	Text,
 	Pressable,
 	ScrollView,
 	StyleSheet,
+	type ScrollView as NativeScrollView,
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
+import { useControllableState } from '@/src/hooks/useControllableState';
+import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import { SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
@@ -19,8 +22,10 @@ export interface FilterOption {
 
 export interface FilterBarProps {
 	filters: FilterOption[];
-	activeValue: string;
+	activeValue?: string;
+	value?: string;
 	onSelect: (value: string) => void;
+	onValueChange?: (value: string, meta?: { source: 'selection' | 'clear' }) => void;
 	defaultValue?: string;
 	onClear?: () => void;
 	style?: StyleProp<ViewStyle>;
@@ -33,82 +38,129 @@ export interface FilterBarProps {
  * Inactive chip: white bg + terracotta border/text.
  * Shows "Clear" chip when non-default filter is active.
  */
-export function FilterBar({
-	filters,
-	activeValue,
-	onSelect,
-	defaultValue,
-	onClear,
-	style,
-	testID,
-}: FilterBarProps) {
-	const { theme } = useTheme();
-	const c = theme.colors;
+export const FilterBar = forwardRef<NativeScrollView, FilterBarProps>(
+	(
+		{
+			filters,
+			activeValue,
+			value,
+			onSelect,
+			onValueChange,
+			defaultValue,
+			onClear,
+			style,
+			testID,
+		},
+		ref,
+	) => {
+		const { theme } = useTheme();
+		const c = theme.colors;
+		const [focusedValue, setFocusedValue] = useState<string | null>(null);
+		const [currentValue, setCurrentValue] = useControllableState({
+			value: value ?? activeValue,
+			defaultValue: defaultValue ?? filters[0]?.value ?? '',
+			onChange: (nextValue, meta) => {
+				onSelect(nextValue);
+				onValueChange?.(nextValue, {
+					source: meta?.source === 'clear' ? 'clear' : 'selection',
+				});
+			},
+		});
 
-	const showClear =
-		defaultValue !== undefined && activeValue !== defaultValue && onClear !== undefined;
+		const showClear =
+			defaultValue !== undefined && currentValue !== defaultValue && onClear !== undefined;
 
-	return (
-		<ScrollView
-			testID={testID}
-			horizontal
-			showsHorizontalScrollIndicator={false}
-			contentContainerStyle={[styles.container, style]}
-			keyboardShouldPersistTaps="handled"
-		>
-			{filters.map((filter) => {
-				const isActive = filter.value === activeValue;
-				return (
+		return (
+			<ScrollView
+				ref={ref}
+				testID={testID}
+				horizontal
+				showsHorizontalScrollIndicator={false}
+				contentContainerStyle={[styles.container, style]}
+				keyboardShouldPersistTaps="handled"
+			>
+				{filters.map((filter) => {
+					const isActive = filter.value === currentValue;
+					const isFocused = filter.value === focusedValue;
+					return (
+						<Pressable
+							key={filter.value}
+							testID={
+								isActive ? `chip-${filter.value}-active` : `chip-${filter.value}`
+							}
+							onPress={() => {
+								setCurrentValue(filter.value, { source: 'selection' });
+								void announceForScreenReader(`${filter.label} filter selected`);
+							}}
+							onFocus={() => setFocusedValue(filter.value)}
+							onBlur={() => setFocusedValue(null)}
+							accessibilityRole="button"
+							accessibilityLabel={filter.label}
+							accessibilityState={{ selected: isActive }}
+							style={[
+								styles.chip,
+								{
+									backgroundColor: isActive ? c.primary : c.surface,
+									borderColor: c.primary,
+									borderRadius: theme.borderRadius.full,
+								},
+								isFocused
+									? buildFocusRingStyle({
+											color: c.primary,
+											radius: theme.borderRadius.full,
+										})
+									: null,
+							]}
+						>
+							<ThemedText
+								variant="caption"
+								weight={isActive ? 'semibold' : 'regular'}
+								style={{
+									fontSize: FONT_SIZE.label,
+									color: isActive ? c.onPrimary : c.primary,
+								}}
+							>
+								{filter.label}
+							</ThemedText>
+						</Pressable>
+					);
+				})}
+
+				{showClear ? (
 					<Pressable
-						key={filter.value}
-						testID={isActive ? `chip-${filter.value}-active` : `chip-${filter.value}`}
-						onPress={() => onSelect(filter.value)}
+						testID="chip-clear"
+						onPress={() => {
+							const clearedValue = defaultValue ?? '';
+							setCurrentValue(clearedValue, { source: 'clear' });
+							onClear?.();
+							void announceForScreenReader('Filters cleared');
+						}}
 						accessibilityRole="button"
-						accessibilityState={{ selected: isActive }}
+						accessibilityLabel="Clear filters"
 						style={[
 							styles.chip,
 							{
-								backgroundColor: isActive ? c.primary : c.surface,
-								borderColor: c.primary,
+								backgroundColor: c.errorLight,
+								borderColor: c.error,
 								borderRadius: theme.borderRadius.full,
 							},
 						]}
 					>
-						<Text
-							style={{
-								fontSize: FONT_SIZE.label,
-								color: isActive ? c.onPrimary : c.primary,
-								fontWeight: isActive ? '600' : '400',
-							}}
+						<ThemedText
+							variant="caption"
+							weight="semibold"
+							style={{ fontSize: FONT_SIZE.label, color: c.error }}
 						>
-							{filter.label}
-						</Text>
+							Clear
+						</ThemedText>
 					</Pressable>
-				);
-			})}
+				) : null}
+			</ScrollView>
+		);
+	},
+);
 
-			{showClear ? (
-				<Pressable
-					testID="chip-clear"
-					onPress={onClear}
-					accessibilityRole="button"
-					style={[
-						styles.chip,
-						{
-							backgroundColor: c.errorLight,
-							borderColor: c.error,
-							borderRadius: theme.borderRadius.full,
-						},
-					]}
-				>
-					<Text style={{ fontSize: FONT_SIZE.label, color: c.error, fontWeight: '600' }}>
-						Clear
-					</Text>
-				</Pressable>
-			) : null}
-		</ScrollView>
-	);
-}
+FilterBar.displayName = 'FilterBar';
 
 const styles = StyleSheet.create({
 	container: {

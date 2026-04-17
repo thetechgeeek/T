@@ -5,7 +5,7 @@ import { DESIGN_LIBRARY_OVERVIEW } from '../catalog';
 
 describe('DesignLibraryScreen', () => {
 	it('renders the premium-quality workbench sections and generated counts', () => {
-		const { getByText } = renderWithTheme(<DesignLibraryScreen />);
+		const { getByText, getAllByText } = renderWithTheme(<DesignLibraryScreen />);
 
 		expect(getByText('Design System Workbench')).toBeTruthy();
 		expect(getByText('Enterprise x Premium Quality Bar')).toBeTruthy();
@@ -16,5 +16,7 @@ describe('DesignLibraryScreen', () => {
 		expect(getByText('Supported Component Catalog')).toBeTruthy();
 		expect(getByText('Checklist Explorer')).toBeTruthy();
 		expect(getByText(`All (${DESIGN_LIBRARY_OVERVIEW.total})`)).toBeTruthy();
+		expect(getAllByText('Example stories').length).toBeGreaterThan(0);
+		expect(getAllByText('Prop table').length).toBeGreaterThan(0);
 	});
 });

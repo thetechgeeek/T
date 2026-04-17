@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, TextStyle, type StyleProp } from 'react-native';
+import { View, StyleSheet, ViewStyle, TextStyle, type StyleProp } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { ThemedText } from './ThemedText';
 
 export type BadgeVariant =
 	| 'primary'
@@ -83,22 +84,23 @@ export const Badge: React.FC<BadgeProps> = ({
 				style,
 			]}
 		>
-			<Text
+			<ThemedText
 				importantForAccessibility="no"
+				variant="caption"
+				weight="semibold"
 				style={[
 					styles.text,
 					{
 						color: text,
 						fontSize:
 							size === 'sm' ? theme.typography.sizes.xs : theme.typography.sizes.sm,
-						fontWeight: theme.typography.weights.semibold,
 						fontFamily: theme.typography.fontFamilyBold,
 					},
 					textStyle,
 				]}
 			>
 				{label}
-			</Text>
+			</ThemedText>
 		</View>
 	);
 };

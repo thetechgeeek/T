@@ -37,12 +37,12 @@ describe('design-system quality matrix', () => {
 
 	it('keeps primary controls accessible in english mode', () => {
 		const copy = getDesignSystemCopy('en');
-		const { getByLabelText, getByText } = renderDesignSystem('en');
+		const { getAllByText, getByLabelText, getByText } = renderDesignSystem('en');
 
 		expect(getByLabelText(copy.runtimeTheming.cycleLookAndFeel)).toBeTruthy();
 		expect(getByLabelText(copy.componentGallery.buttons.primary)).toBeTruthy();
 		expect(getByLabelText(copy.componentGallery.iconButtons.search)).toBeTruthy();
 		expect(getByText(copy.stateProof.noMedia.title)).toBeTruthy();
-		expect(getByText(copy.presentationModes.relaxed.title)).toBeTruthy();
+		expect(getAllByText(copy.presentationModes.relaxed.title).length).toBeGreaterThan(0);
 	});
 });

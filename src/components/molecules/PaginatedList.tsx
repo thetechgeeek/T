@@ -1,9 +1,7 @@
 import React from 'react';
 import {
 	View,
-	Text,
 	FlatList,
-	Pressable,
 	ActivityIndicator,
 	StyleSheet,
 	type ListRenderItem,
@@ -12,6 +10,8 @@ import {
 } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SkeletonRow } from '@/src/components/molecules/SkeletonRow';
+import { Button } from '@/src/components/atoms/Button';
+import { ThemedText } from '@/src/components/atoms/ThemedText';
 import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
 export interface PaginatedListProps<T> {
@@ -75,7 +75,9 @@ export function PaginatedList<T>({
 		return (
 			<View style={styles.center}>
 				{ListHeaderComponent}
-				<Text
+				<ThemedText
+					variant="body"
+					align="center"
 					style={{
 						color: c.error,
 						fontSize: theme.typography.sizes.md,
@@ -83,22 +85,14 @@ export function PaginatedList<T>({
 					}}
 				>
 					Something went wrong. Please try again.
-				</Text>
+				</ThemedText>
 				{onRetry ? (
-					<Pressable
+					<Button
 						testID="error-retry-btn"
 						onPress={onRetry}
-						accessibilityRole="button"
-						style={[
-							styles.retryBtn,
-							{
-								backgroundColor: c.primary,
-								borderRadius: theme.borderRadius.md,
-							},
-						]}
-					>
-						<Text style={{ color: c.onPrimary, fontWeight: '600' }}>Retry</Text>
-					</Pressable>
+						title="Retry"
+						style={styles.retryBtn}
+					/>
 				) : null}
 			</View>
 		);
@@ -119,27 +113,29 @@ export function PaginatedList<T>({
 			ListHeaderComponent={ListHeaderComponent}
 			ListEmptyComponent={
 				<View testID="empty-state" style={styles.center}>
-					<Text
+					<ThemedText
+						variant="sectionTitle"
+						align="center"
 						style={{
 							fontSize: theme.typography.sizes.lg,
 							fontWeight: '700',
 							color: c.onSurface,
 							marginBottom: SPACING_PX.sm,
-							textAlign: 'center',
 						}}
 					>
 						{emptyTitle}
-					</Text>
+					</ThemedText>
 					{emptyDescription ? (
-						<Text
+						<ThemedText
+							variant="body"
+							align="center"
 							style={{
 								fontSize: theme.typography.sizes.md,
 								color: c.onSurfaceVariant,
-								textAlign: 'center',
 							}}
 						>
 							{emptyDescription}
-						</Text>
+						</ThemedText>
 					) : null}
 				</View>
 			}
@@ -164,10 +160,6 @@ const styles = StyleSheet.create({
 		padding: SPACING_PX.xl,
 	},
 	retryBtn: {
-		paddingHorizontal: SPACING_PX.xl,
-		paddingVertical: SPACING_PX.md,
 		minHeight: TOUCH_TARGET_MIN_PX,
-		alignItems: 'center',
-		justifyContent: 'center',
 	},
 });
