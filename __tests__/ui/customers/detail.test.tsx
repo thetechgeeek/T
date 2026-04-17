@@ -28,7 +28,7 @@ jest.mock('@/src/hooks/useLocale', () => ({
 	}),
 }));
 
-jest.mock('@/src/components/organisms/PaymentModal', () => {
+jest.mock('@/app/components/organisms/PaymentModal', () => {
 	require('react');
 	return { PaymentModal: () => null };
 });

@@ -1,4 +1,5 @@
 import { buildTheme, DEFAULT_THEME_PRESET_ID } from '../colors';
+import { resolveTypographyFamiliesForLocale } from '../localeTypography';
 
 describe('theme presets', () => {
 	it('keeps the default preset aligned with baseline', () => {
@@ -35,6 +36,18 @@ describe('theme presets', () => {
 		expect(theme.typography.variants.metric.fontSize).toBeGreaterThan(
 			theme.typography.variants.body.fontSize ?? 0,
 		);
+	});
+
+	it('resolves script-safe font families for non-Latin locales', () => {
+		const hindiTheme = buildTheme(false, 'baseline', {
+			pixelRatio: 2,
+			detectedLocale: 'hi-IN',
+		});
+		const families = resolveTypographyFamiliesForLocale('hi-IN');
+
+		expect(hindiTheme.typography.fontFamily).toBe(families.ui);
+		expect(hindiTheme.typography.fontFamilyDisplay).toBe(families.brand);
+		expect(hindiTheme.typography.families.display).toBe(families.display);
 	});
 
 	it('applies executive density and chrome changes', () => {

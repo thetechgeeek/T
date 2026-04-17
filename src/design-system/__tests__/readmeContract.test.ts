@@ -20,6 +20,13 @@ describe('design-system README contract', () => {
 		expect(readme).toContain(
 			'Product typography is capped at two families: the core UI family plus an optional display/brand family.',
 		);
+		expect(readme).toContain('DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md');
+		expect(readme).toContain(
+			'Non-Latin locales must fall back to script-safe families for Arabic, Devanagari, and CJK',
+		);
+		expect(readme).toContain(
+			'Lucide SVG icons are the primary DS path; a Material Icons adapter remains available',
+		);
 		expect(readme).toContain(
 			'The qualitative chart palette must remain distinguishable under deuteranopia and protanopia simulation',
 		);

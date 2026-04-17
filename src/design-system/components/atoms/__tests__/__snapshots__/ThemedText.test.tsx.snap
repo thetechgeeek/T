@@ -1,0 +1,823 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`] = `
+<View>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 31.200000000000003,
+          "fontWeight": "700",
+          "lineHeight": 46.800000000000004,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    display
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 24.96,
+          "fontWeight": "700",
+          "lineHeight": 37.44,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    screenTitle
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 18.72,
+          "fontWeight": "600",
+          "lineHeight": 29.12,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    sectionTitle
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 24.96,
+          "fontWeight": "700",
+          "lineHeight": 37.44,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    h1
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 20.8,
+          "fontWeight": "600",
+          "lineHeight": 31.200000000000003,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    h2
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 18.72,
+          "fontWeight": "600",
+          "lineHeight": 29.12,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    h3
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 16.64,
+          "fontWeight": "400",
+          "lineHeight": 24.96,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    body
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 16.64,
+          "fontWeight": "500",
+          "lineHeight": 24.96,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    bodyMedium
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 16.64,
+          "fontWeight": "600",
+          "lineHeight": 24.96,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    bodyStrong
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 16.64,
+          "fontWeight": "700",
+          "lineHeight": 24.96,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    bodyBold
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 13.52,
+          "fontWeight": "500",
+          "lineHeight": 21.84,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    metadata
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 29.12,
+          "fontWeight": "700",
+          "lineHeight": 43.68,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    metric
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "Menlo",
+          "fontSize": 13.52,
+          "fontWeight": "500",
+          "lineHeight": 21.84,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    code
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 13.52,
+          "fontWeight": "400",
+          "lineHeight": 21.84,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    caption
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 13.52,
+          "fontWeight": "700",
+          "lineHeight": 21.84,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    captionBold
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#E8622A",
+          "fontFamily": "System",
+          "fontSize": 20.8,
+          "fontWeight": "700",
+          "lineHeight": 31.200000000000003,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    amount
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#E8622A",
+          "fontFamily": "System",
+          "fontSize": 29.12,
+          "fontWeight": "700",
+          "lineHeight": 43.68,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    amountLarge
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#EF4444",
+          "fontFamily": "System",
+          "fontSize": 20.8,
+          "fontWeight": "700",
+          "lineHeight": 31.200000000000003,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    amountNegative
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 13.52,
+          "fontWeight": "500",
+          "lineHeight": 18.72,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    label
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#F2EDE8",
+          "fontFamily": "System",
+          "fontSize": 11.440000000000001,
+          "fontWeight": "400",
+          "lineHeight": 16.64,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    captionSmall
+  </Text>
+</View>
+`;
+
+exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`] = `
+<View>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 31.200000000000003,
+          "fontWeight": "700",
+          "lineHeight": 46.800000000000004,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    display
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 24.96,
+          "fontWeight": "700",
+          "lineHeight": 37.44,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    screenTitle
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 18.72,
+          "fontWeight": "600",
+          "lineHeight": 29.12,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    sectionTitle
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 24.96,
+          "fontWeight": "700",
+          "lineHeight": 37.44,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    h1
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 20.8,
+          "fontWeight": "600",
+          "lineHeight": 31.200000000000003,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    h2
+  </Text>
+  <Text
+    accessibilityRole="header"
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 18.72,
+          "fontWeight": "600",
+          "lineHeight": 29.12,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    h3
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 16.64,
+          "fontWeight": "400",
+          "lineHeight": 24.96,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    body
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 16.64,
+          "fontWeight": "500",
+          "lineHeight": 24.96,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    bodyMedium
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 16.64,
+          "fontWeight": "600",
+          "lineHeight": 24.96,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    bodyStrong
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 16.64,
+          "fontWeight": "700",
+          "lineHeight": 24.96,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    bodyBold
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 13.52,
+          "fontWeight": "500",
+          "lineHeight": 21.84,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    metadata
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 29.12,
+          "fontWeight": "700",
+          "lineHeight": 43.68,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    metric
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "Menlo",
+          "fontSize": 13.52,
+          "fontWeight": "500",
+          "lineHeight": 21.84,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    code
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 13.52,
+          "fontWeight": "400",
+          "lineHeight": 21.84,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    caption
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 13.52,
+          "fontWeight": "700",
+          "lineHeight": 21.84,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    captionBold
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#C1440E",
+          "fontFamily": "System",
+          "fontSize": 20.8,
+          "fontWeight": "700",
+          "lineHeight": 31.200000000000003,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    amount
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#C1440E",
+          "fontFamily": "System",
+          "fontSize": 29.12,
+          "fontWeight": "700",
+          "lineHeight": 43.68,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    amountLarge
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#B91C1C",
+          "fontFamily": "System",
+          "fontSize": 20.8,
+          "fontWeight": "700",
+          "lineHeight": 31.200000000000003,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    amountNegative
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 13.52,
+          "fontWeight": "500",
+          "lineHeight": 18.72,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    label
+  </Text>
+  <Text
+    allowFontScaling={true}
+    maxFontSizeMultiplier={1.3}
+    style={
+      [
+        {
+          "color": "#1A1412",
+          "fontFamily": "System",
+          "fontSize": 11.440000000000001,
+          "fontWeight": "400",
+          "lineHeight": 16.64,
+          "opacity": undefined,
+          "textAlign": undefined,
+        },
+        undefined,
+      ]
+    }
+  >
+    captionSmall
+  </Text>
+</View>
+`;

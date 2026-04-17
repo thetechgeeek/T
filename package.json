@@ -35,11 +35,13 @@
 	"dependencies": {
 		"@hookform/resolvers": "^5.2.2",
 		"@react-native-async-storage/async-storage": "2.2.0",
+		"@react-native-community/datetimepicker": "^8.4.4",
 		"@shopify/flash-list": "^2.0.2",
 		"@supabase/supabase-js": "^2.99.3",
 		"date-fns": "^4.1.0",
 		"expo": "^54.0.0",
 		"expo-camera": "~17.0.10",
+		"expo-clipboard": "~8.0.8",
 		"expo-constants": "~18.0.13",
 		"expo-dev-client": "~6.0.20",
 		"expo-document-picker": "~14.0.8",

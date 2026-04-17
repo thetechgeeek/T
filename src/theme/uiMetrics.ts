@@ -83,6 +83,15 @@ export const SIZE_OPTION_CARD_MIN_HEIGHT = 90;
 export const SIZE_RADIO_OUTER = 20;
 export const SIZE_RADIO_INNER = 10;
 
+/** Checkbox-control dimensions */
+export const SIZE_CHECKBOX = 20;
+export const SIZE_CHECKBOX_INDICATOR = 14;
+
+/** Toggle-switch dimensions */
+export const SIZE_SWITCH_TRACK_WIDTH = 48;
+export const SIZE_SWITCH_TRACK_HEIGHT = 28;
+export const SIZE_SWITCH_THUMB = 20;
+
 /** Scan frame overlay dimensions */
 export const SIZE_SCAN_FRAME_WIDTH = 300;
 export const SIZE_SCAN_FRAME_HEIGHT = 180;

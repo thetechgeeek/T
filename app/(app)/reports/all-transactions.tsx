@@ -12,9 +12,9 @@ import {
 	Receipt,
 	Search,
 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';

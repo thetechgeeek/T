@@ -116,6 +116,11 @@ jest.mock('react-native', () => {
 		...props
 	}: { children?: React.ReactNode } & Record<string, unknown>) =>
 		React.createElement('KeyboardAvoidingView', props, children);
+	const TouchableWithoutFeedback = ({
+		children,
+		...props
+	}: { children?: React.ReactNode } & Record<string, unknown>) =>
+		React.createElement('TouchableWithoutFeedback', props, children);
 	const Touchable = { Mixin: {} };
 	const Pressable = ({
 		children,
@@ -130,6 +135,10 @@ jest.mock('react-native', () => {
 		visible ? React.createElement('Modal', props, children) : null;
 	const RefreshControl = (props: Record<string, unknown>) =>
 		React.createElement('RefreshControl', props);
+	const Clipboard = {
+		setString: jest.fn(),
+		getString: jest.fn().mockResolvedValue(''),
+	};
 
 	const FlatList = ({
 		data,
@@ -198,6 +207,12 @@ jest.mock('react-native', () => {
 		renderItem,
 		renderSectionHeader,
 		keyExtractor,
+		ListFooterComponent,
+		ListEmptyComponent,
+		onEndReached,
+		refreshControl,
+		testID,
+		...props
 	}: {
 		sections: Array<{ data: unknown[] } & Record<string, unknown>>;
 		renderItem: ({
@@ -211,24 +226,50 @@ jest.mock('react-native', () => {
 		}) => React.ReactNode;
 		renderSectionHeader?: ({ section }: { section: unknown }) => React.ReactNode;
 		keyExtractor?: (item: unknown, index: number) => string;
+		ListFooterComponent?: React.ReactNode | React.ComponentType;
+		ListEmptyComponent?: React.ReactNode | React.ComponentType;
+		onEndReached?: () => void;
+		refreshControl?: React.ReactNode;
+		testID?: string;
+		[key: string]: unknown;
 	}) => {
 		return React.createElement(
 			'View',
-			null,
-			sections.map((section: { data: unknown[] }, sIndex: number) =>
-				React.createElement(
-					'View',
-					{ key: sIndex },
-					renderSectionHeader && renderSectionHeader({ section }),
-					section.data.map((item: unknown, index: number) =>
+			{ testID, ...props, refreshControl },
+			sections.length > 0
+				? sections.map((section: { data: unknown[] }, sIndex: number) =>
 						React.createElement(
 							'View',
-							{ key: keyExtractor ? keyExtractor(item, index) : index },
-							renderItem({ item, index, section }),
+							{ key: sIndex },
+							renderSectionHeader && renderSectionHeader({ section }),
+							section.data.map((item: unknown, index: number) =>
+								React.createElement(
+									'View',
+									{ key: keyExtractor ? keyExtractor(item, index) : index },
+									renderItem({ item, index, section }),
+								),
+							),
 						),
-					),
-				),
-			),
+					)
+				: ListEmptyComponent
+					? typeof ListEmptyComponent === 'function'
+						? React.createElement(ListEmptyComponent)
+						: ListEmptyComponent
+					: null,
+			ListFooterComponent
+				? typeof ListFooterComponent === 'function'
+					? React.createElement(ListFooterComponent)
+					: ListFooterComponent
+				: null,
+			React.createElement(TouchableOpacity, {
+				testID: testID ? `${testID}-end-trigger` : 'sectionlist-end-trigger',
+				onPress: onEndReached,
+			}),
+			React.createElement(TouchableOpacity, {
+				testID: testID ? `${testID}-refresh-trigger` : 'sectionlist-refresh-trigger',
+				onPress: (refreshControl as { props?: { onRefresh?: () => void } } | null)?.props
+					?.onRefresh,
+			}),
 		);
 	};
 
@@ -236,6 +277,11 @@ jest.mock('react-native', () => {
 		currentState: 'active',
 		addEventListener: jest.fn(() => ({ remove: jest.fn() })),
 		removeEventListener: jest.fn(),
+	};
+	const Keyboard = {
+		dismiss: jest.fn(),
+		addListener: jest.fn(() => ({ remove: jest.fn() })),
+		removeListener: jest.fn(),
 	};
 
 	const NativeModules = {
@@ -265,11 +311,14 @@ jest.mock('react-native', () => {
 		Alert,
 		AccessibilityInfo,
 		I18nManager,
+		Keyboard,
 		KeyboardAvoidingView,
+		TouchableWithoutFeedback,
 		Touchable,
 		Pressable,
 		Modal,
 		RefreshControl,
+		Clipboard,
 		FlatList,
 		SectionList,
 		AppState,
@@ -291,6 +340,10 @@ jest.mock(
 			ListHeaderComponent,
 			ListFooterComponent,
 			ListEmptyComponent,
+			onEndReached,
+			onRefresh,
+			testID,
+			...props
 		}: {
 			data?: unknown[];
 			renderItem: ({ item, index }: { item: unknown; index: number }) => React.ReactNode;
@@ -298,12 +351,16 @@ jest.mock(
 			ListHeaderComponent?: React.ReactNode | React.ComponentType;
 			ListFooterComponent?: React.ReactNode | React.ComponentType;
 			ListEmptyComponent?: React.ReactNode | React.ComponentType;
+			onEndReached?: () => void;
+			onRefresh?: () => void;
+			testID?: string;
+			[key: string]: unknown;
 		}) => {
 			const React = jest.requireActual('react');
-			const { View } = jest.requireActual('react-native');
+			const { TouchableOpacity, View } = jest.requireActual('react-native');
 			return React.createElement(
 				View,
-				null,
+				{ testID, ...props },
 				ListHeaderComponent &&
 					(typeof ListHeaderComponent === 'function'
 						? React.createElement(ListHeaderComponent)
@@ -324,6 +381,14 @@ jest.mock(
 					(typeof ListFooterComponent === 'function'
 						? React.createElement(ListFooterComponent)
 						: ListFooterComponent),
+				React.createElement(TouchableOpacity, {
+					testID: testID ? `${testID}-end-trigger` : 'flashlist-end-trigger',
+					onPress: onEndReached,
+				}),
+				React.createElement(TouchableOpacity, {
+					testID: testID ? `${testID}-refresh-trigger` : 'flashlist-refresh-trigger',
+					onPress: onRefresh,
+				}),
 			);
 		},
 	}),
@@ -392,6 +457,59 @@ jest.mock('react-native-reanimated', () => {
 	};
 });
 
+jest.mock('react-native-gesture-handler', () => {
+	const React = require('react');
+	const RN = require('react-native');
+	const createGesture = () => {
+		const handlers: Record<string, ((event?: any) => void) | undefined> = {};
+		const gesture = {
+			handlers,
+			runOnJS: () => gesture,
+			activateAfterLongPress: () => gesture,
+			onBegin: (callback: (event?: any) => void) => {
+				handlers.begin = callback;
+				return gesture;
+			},
+			onChange: (callback: (event?: any) => void) => {
+				handlers.change = callback;
+				return gesture;
+			},
+			onUpdate: (callback: (event?: any) => void) => {
+				handlers.update = callback;
+				return gesture;
+			},
+			onEnd: (callback: (event?: any) => void) => {
+				handlers.end = callback;
+				return gesture;
+			},
+			onFinalize: (callback: (event?: any) => void) => {
+				handlers.finalize = callback;
+				return gesture;
+			},
+		};
+
+		return gesture;
+	};
+
+	return {
+		Gesture: {
+			Pan: () => createGesture(),
+			Pinch: () => createGesture(),
+			Simultaneous: (...gestures: unknown[]) => ({ type: 'simultaneous', gestures }),
+		},
+		GestureDetector: ({
+			children,
+			gesture,
+		}: {
+			children?: React.ReactNode;
+			gesture?: unknown;
+		}) => React.createElement('GestureDetector', { gesture }, children),
+		GestureHandlerRootView: ({ children }: { children?: React.ReactNode }) =>
+			React.createElement(RN.View, null, children),
+		Swipeable: RN.View,
+	};
+});
+
 // expo-router — useLocalSearchParams returns {} by default (QA issue 3.3)
 // Per-test params: use setMockSearchParams() from __tests__/utils/mockSearchParams.ts
 jest.mock('expo-router', () => {
@@ -436,6 +554,38 @@ jest.mock('expo-document-picker', () => ({
 	getDocumentAsync: jest.fn(),
 }));
 
+jest.mock('expo-image-picker', () => ({
+	launchImageLibraryAsync: jest.fn(),
+	MediaTypeOptions: {
+		Images: 'images',
+	},
+}));
+
+jest.mock('expo-haptics', () => ({
+	selectionAsync: jest.fn(),
+	impactAsync: jest.fn(),
+	notificationAsync: jest.fn(),
+	ImpactFeedbackStyle: {
+		Light: 'light',
+	},
+	NotificationFeedbackType: {
+		Success: 'success',
+		Warning: 'warning',
+		Error: 'error',
+	},
+}));
+
+jest.mock('@react-native-community/datetimepicker', () => {
+	const React = require('react');
+	const MockDateTimePicker = ({
+		children,
+		...props
+	}: { children?: React.ReactNode } & Record<string, unknown>) =>
+		React.createElement('RNDateTimePicker', props, children);
+	MockDateTimePicker.displayName = 'MockDateTimePicker';
+	return MockDateTimePicker;
+});
+
 jest.mock('expo-file-system', () => ({
 	documentDirectory: 'test-dir/',
 	writeAsStringAsync: jest.fn(),
@@ -453,6 +603,17 @@ jest.mock('expo-font', () => ({
 	isLoaded: jest.fn().mockReturnValue(true),
 	loadAsync: jest.fn().mockResolvedValue(undefined),
 }));
+
+jest.mock('@expo/vector-icons', () => {
+	const React = require('react');
+	const MaterialIcons = ({
+		children,
+		...props
+	}: { children?: React.ReactNode } & Record<string, unknown>) =>
+		React.createElement('MaterialIcons', props, children);
+	MaterialIcons.displayName = 'MaterialIcons';
+	return { MaterialIcons };
+});
 
 jest.mock('expo-camera', () => ({
 	CameraView: 'CameraView',
@@ -613,9 +774,11 @@ jest.mock('react-native-keyboard-controller', () => {
 jest.mock('react-native-svg', () => {
 	const React = jest.requireActual('react');
 	return {
+		__esModule: true,
 		default: ({ children, ...props }: any) => React.createElement('Svg', props, children),
 		Svg: ({ children, ...props }: any) => React.createElement('Svg', props, children),
 		Circle: (props: any) => React.createElement('Circle', props),
+		Line: (props: any) => React.createElement('Line', props),
 		Rect: (props: any) => React.createElement('Rect', props),
 		Path: (props: any) => React.createElement('Path', props),
 		G: ({ children, ...props }: any) => React.createElement('G', props, children),

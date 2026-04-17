@@ -259,11 +259,11 @@ jest.mock('expo-image', () => ({
 
 jest.mock('react-native-qrcode-svg', () => 'QRCode');
 
-jest.mock('@/src/components/organisms/PaymentModal', () => ({
+jest.mock('@/app/components/organisms/PaymentModal', () => ({
 	PaymentModal: () => null,
 }));
 
-jest.mock('@/src/components/molecules/StatCard', () => ({
+jest.mock('@/src/design-system/components/molecules/StatCard', () => ({
 	StatCard: ({
 		label,
 		value,

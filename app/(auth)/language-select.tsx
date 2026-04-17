@@ -10,8 +10,8 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { withOpacity } from '@/src/utils/color';
 
 const LANG_KEY = '@app/language';

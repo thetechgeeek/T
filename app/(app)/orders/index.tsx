@@ -9,12 +9,12 @@ import { withOpacity } from '@/src/utils/color';
 import { OPACITY_SKELETON_BASE } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useOrderStore } from '@/src/stores/orderStore';
-import { Button } from '@/src/components/atoms/Button';
-import { TouchableCard } from '@/src/components/atoms/TouchableCard';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { OrderListSkeleton } from '@/src/components/molecules/skeletons/OrderListSkeleton';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { TouchableCard } from '@/src/design-system/components/atoms/TouchableCard';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { OrderListSkeleton } from '@/app/components/molecules/skeletons/OrderListSkeleton';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 const ORDER_BADGE_RADIUS = SPACING_PX.md;

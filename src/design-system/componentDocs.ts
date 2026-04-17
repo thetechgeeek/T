@@ -32,14 +32,10 @@ const COMMON_A11Y_PROP = prop(
 export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = {
 	Badge: doc({
 		name: 'Badge',
-		filePath: 'src/components/atoms/Badge.tsx',
+		filePath: 'src/design-system/components/atoms/Badge.tsx',
 		summary:
 			'Compact status, count, and metadata pill for inline emphasis without introducing heavy chrome.',
-		exampleStories: [
-			'neutral metadata chip',
-			'success status pill',
-			'dense invoice state badge',
-		],
+		exampleStories: ['neutral metadata chip', 'success status pill', 'dense status badge'],
 		variants: [
 			'primary/default',
 			'neutral',
@@ -50,7 +46,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		],
 		sizes: ['sm', 'md'],
 		states: ['default', 'dense list row', 'long localized label'],
-		compositionExample: 'Customer list row with payment-status badge and quiet metadata.',
+		compositionExample: 'Entity list row with status badge and quiet metadata.',
 		usage: {
 			relaxed: 'Use a medium badge beside hero stats or section-level metadata.',
 			operational: 'Prefer small badges in dense rows, chips, and approval queues.',
@@ -82,7 +78,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	Button: doc({
 		name: 'Button',
-		filePath: 'src/components/atoms/Button.tsx',
+		filePath: 'src/design-system/components/atoms/Button.tsx',
 		summary:
 			'Primary action primitive with purpose-driven hierarchy props, density mapping, loading state, focus visibility, and forwarded native ref.',
 		exampleStories: [
@@ -147,18 +143,32 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	Card: doc({
 		name: 'Card',
-		filePath: 'src/components/atoms/Card.tsx',
-		summary: 'Foundational surface container for raised, outlined, and quiet groupings.',
-		exampleStories: ['raised detail card', 'outlined data card', 'flat section grouping'],
-		variants: ['elevated', 'outlined', 'flat'],
-		sizes: ['padding none', 'padding sm', 'padding md', 'padding lg'],
-		states: ['default', 'dense stack', 'inverse-adjacent surface'],
-		compositionExample: 'Metrics module card with title, value, and supporting metadata.',
+		filePath: 'src/design-system/components/atoms/Card.tsx',
+		summary:
+			'Foundational card surface with header/body/footer grammar, horizontal media layout, and featured hero treatment.',
+		exampleStories: [
+			'raised detail card',
+			'outlined data card',
+			'horizontal media card',
+			'featured hero card',
+		],
+		variants: ['elevated', 'outlined', 'flat', 'featured'],
+		sizes: [
+			'padding none',
+			'padding sm',
+			'padding md',
+			'padding lg',
+			'density compact/default/relaxed',
+		],
+		states: ['default', 'dense stack', 'header/footer slots', 'horizontal layout'],
+		compositionExample:
+			'Metrics or media module card with title, body content, and a quiet footer action band.',
 		usage: {
 			relaxed: 'Use elevated cards for premium overview modules and spaced settings blocks.',
 			operational:
-				'Use outlined cards for dense operational grouping where scan speed matters.',
-			noMedia: 'Cards remain structurally complete with text-only headers and no artwork.',
+				'Use compact outlined cards for dense operational grouping where scan speed matters.',
+			noMedia:
+				'Cards remain structurally complete with text-only headers, body, and footer slots when media is missing.',
 		},
 		propTable: [
 			prop(
@@ -167,7 +177,23 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 				'Surface treatment and separation.',
 				'elevated',
 			),
+			prop('header', 'ReactNode', 'Optional top section slot.'),
+			prop('footer', 'ReactNode', 'Optional bottom section slot.'),
+			prop('media', 'ReactNode', 'Optional media slot for hero or horizontal layouts.'),
+			prop(
+				'orientation',
+				"'vertical' | 'horizontal'",
+				'Controls media/content layout.',
+				'vertical',
+			),
+			prop('featured', 'boolean', 'Applies restrained hero emphasis styling.', 'false'),
 			prop('padding', "'none' | 'sm' | 'md' | 'lg'", 'Tokenized card padding.', 'md'),
+			prop(
+				'density',
+				"'compact' | 'default' | 'relaxed'",
+				'Maps to operational or showcase spacing.',
+				'default',
+			),
 			COMMON_A11Y_PROP,
 			COMMON_STYLE_PROP,
 			COMMON_TEST_ID_PROP,
@@ -189,9 +215,60 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			'Outlined cards remain visible in dark and high-contrast themes.',
 		],
 	}),
+	Checkbox: doc({
+		name: 'Checkbox',
+		filePath: 'src/design-system/components/atoms/Checkbox.tsx',
+		summary:
+			'Selection control for independent boolean or multi-select choices, with indeterminate support, group composition, focus visibility, and announced state changes.',
+		exampleStories: [
+			'default checkbox',
+			'indeterminate bulk-select checkbox',
+			'checkbox group with helper copy',
+		],
+		variants: ['default', 'checked', 'indeterminate', 'disabled', 'group'],
+		sizes: ['touch-safe default'],
+		states: ['unchecked', 'checked', 'mixed', 'disabled', 'grouped options'],
+		compositionExample:
+			'Bulk-action preferences section with several independent delivery-channel toggles.',
+		usage: {
+			relaxed: 'Use helper copy when the consequence of a checked state needs context.',
+			operational:
+				'Use concise labels and dense vertical rhythm in settings lists and bulk edit panels.',
+			noMedia:
+				'Checkboxes remain explicit through text labels and state icons without illustration.',
+		},
+		propTable: [
+			prop('label', 'string', 'Visible option label.'),
+			prop('description', 'string', 'Optional helper copy under the label.'),
+			prop('checked', 'boolean', 'Controlled checked state.'),
+			prop('defaultChecked', 'boolean', 'Uncontrolled checked state.', 'false'),
+			prop('indeterminate', 'boolean', 'Renders the mixed-selection state.', 'false'),
+			prop('onCheckedChange', '(checked: boolean) => void', 'Canonical toggle callback.'),
+			prop('disabled', 'boolean', 'Disables interaction and dims the control.', 'false'),
+			COMMON_A11Y_PROP,
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Use indeterminate state for partial bulk selection.',
+			'Keep option labels specific enough that checked state reads clearly out of context.',
+		],
+		dontList: [
+			'Do not use checkboxes for mutually exclusive choices.',
+			'Do not rely on color alone to communicate selection.',
+		],
+		accessibilityNotes: [
+			'Uses checkbox role with checked, mixed, and disabled state mapping.',
+			'Announces checked and unchecked changes through the shared accessibility helper.',
+		],
+		platformNotes: [
+			'Visual treatment stays consistent across iOS and Android while keeping native accessibility semantics.',
+			'Minimum touch target is preserved through the shared mobile control spacing tokens.',
+		],
+	}),
 	Chip: doc({
 		name: 'Chip',
-		filePath: 'src/components/atoms/Chip.tsx',
+		filePath: 'src/design-system/components/atoms/Chip.tsx',
 		summary:
 			'Toggleable selection pill with controlled or uncontrolled selected state, focus visibility, and forwarded ref.',
 		exampleStories: [
@@ -234,7 +311,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	Divider: doc({
 		name: 'Divider',
-		filePath: 'src/components/atoms/Divider.tsx',
+		filePath: 'src/design-system/components/atoms/Divider.tsx',
 		summary: 'Quiet separator for grouped content where spacing alone is not enough.',
 		exampleStories: ['full-width divider', 'inset list divider'],
 		variants: ['default', 'inset'],
@@ -270,7 +347,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	IconButton: doc({
 		name: 'IconButton',
-		filePath: 'src/components/atoms/IconButton.tsx',
+		filePath: 'src/design-system/components/atoms/IconButton.tsx',
 		summary:
 			'Compact icon-led action with optional caption, focus visibility, and forwarded native ref.',
 		exampleStories: ['toolbar action', 'labeled quick action', 'floating action button'],
@@ -310,18 +387,69 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			'FAB shares the same focus and label contract as IconButton.',
 		],
 	}),
+	Radio: doc({
+		name: 'Radio',
+		filePath: 'src/design-system/components/atoms/Radio.tsx',
+		summary:
+			'Single-choice selector for mutually exclusive options, with group composition, focus visibility, and announced selection changes.',
+		exampleStories: ['standalone selected radio', 'disabled radio option', 'radio group'],
+		variants: ['default', 'selected', 'disabled', 'group'],
+		sizes: ['touch-safe default'],
+		states: ['unselected', 'selected', 'disabled', 'grouped choices'],
+		compositionExample:
+			'Preference panel where exactly one scheduling mode can be active at a time.',
+		usage: {
+			relaxed:
+				'Use descriptive helper copy when users need more context before choosing one option.',
+			operational: 'Use radios for compact, mutually exclusive configuration choices.',
+			noMedia:
+				'State remains clear through dot fill and text labels without extra iconography.',
+		},
+		propTable: [
+			prop('label', 'string', 'Visible option label.'),
+			prop('description', 'string', 'Optional helper copy under the label.'),
+			prop('selected', 'boolean', 'Controlled selected state.'),
+			prop('defaultSelected', 'boolean', 'Uncontrolled selected state.', 'false'),
+			prop(
+				'onSelectedChange',
+				'(selected: boolean) => void',
+				'Canonical selection callback.',
+			),
+			prop('disabled', 'boolean', 'Disables interaction and dims the control.', 'false'),
+			COMMON_A11Y_PROP,
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Use radios when only one option may be active.',
+			'Group related options under one visible question or section title.',
+		],
+		dontList: [
+			'Do not use radios for independent toggles.',
+			'Do not allow one radio group to represent unrelated choices.',
+		],
+		accessibilityNotes: [
+			'Uses radio role with selected and disabled states.',
+			'Announces newly selected options for screen-reader users.',
+		],
+		platformNotes: [
+			'Rendering is intentionally identical across iOS and Android for enterprise consistency.',
+			'Touch target stays above the shared minimum on both platforms.',
+		],
+	}),
 	Screen: doc({
 		name: 'Screen',
-		filePath: 'src/components/atoms/Screen.tsx',
+		filePath: 'src/design-system/components/atoms/Screen.tsx',
 		summary: 'Safe-area, scroll, and keyboard-aware page shell for reusable mobile surfaces.',
 		exampleStories: [
 			'scrolling form screen',
 			'static summary screen',
 			'screen with footer actions',
+			'input screen with keyboard dismissal on background tap',
 		],
-		variants: ['static', 'scrollable', 'keyboard-aware'],
+		variants: ['static', 'scrollable', 'keyboard-aware', 'keyboard-dismissable'],
 		sizes: ['safe-area top', 'safe-area top+bottom'],
-		states: ['default', 'with footer', 'with overlay'],
+		states: ['default', 'with footer', 'with overlay', 'keyboard open'],
 		compositionExample:
 			'Settings page with header, scrollable body, and fixed footer action group.',
 		usage: {
@@ -339,6 +467,12 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 				'false',
 			),
 			prop('withKeyboard', 'boolean', 'Enables keyboard avoidance behavior.', 'true'),
+			prop(
+				'dismissKeyboardOnBackgroundTap',
+				'boolean',
+				'Dismisses the native keyboard when the background shell is tapped.',
+				'false',
+			),
 			prop(
 				'safeAreaEdges',
 				"('top' | 'bottom' | 'left' | 'right')[]",
@@ -359,6 +493,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		accessibilityNotes: [
 			'Top-level accessibility label can identify the screen shell in automation.',
 			'Keyboard avoidance keeps inputs reachable without requiring product-specific wrappers.',
+			'Optional background-tap dismissal preserves native keyboard escape behavior.',
 		],
 		platformNotes: [
 			'Keyboard behavior differs by platform and is normalized through react-native-keyboard-controller.',
@@ -367,19 +502,39 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	TextInput: doc({
 		name: 'TextInput',
-		filePath: 'src/components/atoms/TextInput.tsx',
+		filePath: 'src/design-system/components/atoms/TextInput.tsx',
 		summary:
-			'Core single-line field with canonical value-change callback, helper/error messaging, focus visibility, and forwarded native input ref.',
+			'Core single-line field with canonical value-change callback, helper/error messaging, clearable and loading states, mobile autofill hooks, and forwarded native input ref.',
 		exampleStories: [
 			'default field',
 			'prefix/suffix icon field',
 			'helper and error state field',
+			'clearable character-count field',
+			'loading async-validation field',
+			'secure autofill field',
 		],
-		variants: ['default', 'helper text', 'error text', 'left/right icon'],
+		variants: [
+			'default',
+			'helper text',
+			'warning text',
+			'error text',
+			'left/right icon',
+			'clearable',
+			'loading',
+		],
 		sizes: ['default height'],
-		states: ['default', 'focused', 'error', 'read-only', 'long localized label'],
+		states: [
+			'default',
+			'focused',
+			'warning',
+			'error',
+			'loading',
+			'disabled',
+			'read-only',
+			'long localized label',
+		],
 		compositionExample:
-			'Profile form field with leading icon, translated label, and inline validation.',
+			'Profile form field with leading icon, translated label, async validation, and mobile autofill hints.',
 		usage: {
 			relaxed: 'Use on spaced forms where helper text can breathe below the field.',
 			operational:
@@ -391,11 +546,26 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('defaultValue', 'string', 'Native uncontrolled field value.'),
 			prop('onValueChange', '(value: string) => void', 'Canonical value-first callback.'),
 			prop('error', 'string', 'Visual and announced error message.'),
+			prop('warningText', 'string', 'Optional warning message without error styling.'),
 			prop('helperText', 'string', 'Supportive helper copy announced with the field.'),
+			prop(
+				'clearable',
+				'boolean',
+				'Shows a clear affordance when the field has content.',
+				'false',
+			),
+			prop('showCharacterCount', 'boolean', 'Displays current/max character count.', 'false'),
+			prop(
+				'loading',
+				'boolean',
+				'Shows async validation or pending-state indicator.',
+				'false',
+			),
 		],
 		doList: [
 			'Keep labels outside the placeholder.',
-			'Use helper and error text through the shared contract.',
+			'Use helper, warning, and error text through the shared contract.',
+			'Use clearable or loading states instead of product-specific ad hoc trailing controls.',
 		],
 		dontList: [
 			'Do not use placeholder as the primary label.',
@@ -403,16 +573,17 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		],
 		accessibilityNotes: [
 			'Forwards the native input ref for focus control.',
-			'Error and helper text are mirrored into accessibility hints.',
+			'Error, warning, and helper text are mirrored into accessibility hints.',
+			'Loading and disabled state are surfaced through native accessibilityState.',
 		],
 		platformNotes: [
-			'Keyboard and font scaling follow native input behavior on iOS and Android.',
-			'Focus ring and border state are tokenized across platforms.',
+			'Keyboard, autofill, return key, and secure-entry behavior flow straight through to the native input on iOS and Android.',
+			'Focus ring, clear affordance, and border state are tokenized across platforms.',
 		],
 	}),
 	ThemedText: doc({
 		name: 'ThemedText',
-		filePath: 'src/components/atoms/ThemedText.tsx',
+		filePath: 'src/design-system/components/atoms/ThemedText.tsx',
 		summary:
 			'Typography primitive that binds semantic variants to tokenized type roles and accessibility-aware font weight handling.',
 		exampleStories: ['section title', 'body copy', 'metadata label', 'code sample'],
@@ -465,16 +636,66 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			'Platform font-family mapping remains centralized in the theme preset layer.',
 		],
 	}),
+	ToggleSwitch: doc({
+		name: 'ToggleSwitch',
+		filePath: 'src/design-system/components/atoms/ToggleSwitch.tsx',
+		summary:
+			'Binary setting control with optional label and helper copy, focus visibility, and announced on/off state changes.',
+		exampleStories: [
+			'bare switch',
+			'labeled policy toggle',
+			'disabled toggle with helper copy',
+		],
+		variants: ['default', 'on', 'off', 'disabled', 'labeled'],
+		sizes: ['touch-safe default'],
+		states: ['on', 'off', 'disabled', 'with helper copy'],
+		compositionExample:
+			'Settings row that enables a workflow rule and explains the downstream behavior.',
+		usage: {
+			relaxed: 'Use labeled toggles with helper copy when a setting needs explanation.',
+			operational:
+				'Use concise labels in dense settings panels and operational preferences lists.',
+			noMedia:
+				'The switch remains legible through track/thumb contrast and text-only labeling.',
+		},
+		propTable: [
+			prop('label', 'string', 'Visible setting label.'),
+			prop('description', 'string', 'Optional helper copy under the label.'),
+			prop('value', 'boolean', 'Controlled on/off state.'),
+			prop('defaultValue', 'boolean', 'Uncontrolled on/off state.', 'false'),
+			prop('onValueChange', '(value: boolean) => void', 'Canonical toggle callback.'),
+			prop('disabled', 'boolean', 'Disables interaction and dims the control.', 'false'),
+			COMMON_A11Y_PROP,
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Use switches for immediate boolean settings.',
+			'Add helper text when the effect of a rule needs explanation.',
+		],
+		dontList: [
+			'Do not use switches for actions that require confirmation.',
+			'Do not hide the setting meaning behind an unlabeled switch when a visible label is possible.',
+		],
+		accessibilityNotes: [
+			'Uses switch role with checked and disabled state mapping.',
+			'Announces on and off state changes through the shared accessibility helper.',
+		],
+		platformNotes: [
+			'Track and thumb styling stay token-driven across iOS and Android for consistent output.',
+			'The touch-safe row container gives reliable toggling on both platforms and keyboard environments.',
+		],
+	}),
 	TouchableCard: doc({
 		name: 'TouchableCard',
-		filePath: 'src/components/atoms/TouchableCard.tsx',
+		filePath: 'src/design-system/components/atoms/TouchableCard.tsx',
 		summary:
 			'Interactive card surface with reduced-motion-aware press feedback, visible focus ring, and forwarded native ref.',
 		exampleStories: ['tap-to-open summary card', 'dense interactive list row card'],
 		variants: ['default interactive card'],
 		sizes: ['card radius md'],
 		states: ['default', 'pressed', 'focused', 'disabled'],
-		compositionExample: 'Invoice summary card that opens detail view when tapped.',
+		compositionExample: 'Summary card that opens a detail view when tapped.',
 		usage: {
 			relaxed: 'Use on premium overview cards that need calm motion and a clear target.',
 			operational:
@@ -506,16 +727,16 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	AmountInput: doc({
 		name: 'AmountInput',
-		filePath: 'src/components/molecules/AmountInput.tsx',
+		filePath: 'src/design-system/components/molecules/AmountInput.tsx',
 		summary:
 			'Currency field with Indian number normalization, controlled or uncontrolled state, error announcement, and forwarded input ref.',
-		exampleStories: ['amount-only field', 'max-value validation', 'dense payment entry'],
+		exampleStories: ['amount-only field', 'max-value validation', 'dense amount entry'],
 		variants: ['default', 'max-value validation'],
 		sizes: ['default field height'],
 		states: ['default', 'focused', 'exceeded max', 'read-only'],
-		compositionExample: 'Payment capture form with amount, method, and notes.',
+		compositionExample: 'Settlement form with amount, method, and notes.',
 		usage: {
-			relaxed: 'Use in payment or pricing forms where the amount needs prominence.',
+			relaxed: 'Use in pricing or settlement forms where the amount needs prominence.',
 			operational: 'Use in dense operational forms with explicit max-value validation.',
 			noMedia:
 				'The currency prefix and label keep the field understandable without iconography.',
@@ -546,17 +767,18 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	BottomSheetPicker: doc({
 		name: 'BottomSheetPicker',
-		filePath: 'src/components/molecules/BottomSheetPicker.tsx',
+		filePath: 'src/design-system/components/molecules/BottomSheetPicker.tsx',
 		summary:
-			'Searchable selection sheet with controlled or uncontrolled open/value state, selection announcements, and forwarded sheet ref.',
+			'Searchable selection sheet with controlled or uncontrolled open/value state, snap-point sizing, drag-to-dismiss, keyboard-aware height promotion, selection announcements, and forwarded sheet ref.',
 		exampleStories: [
 			'single-select picker',
 			'searchable options',
 			'picker with add-new affordance',
+			'drag-dismissable 90% sheet',
 		],
-		variants: ['default', 'searchable', 'allow add new'],
-		sizes: ['sheet max-height 80%'],
-		states: ['closed', 'open', 'search filtered', 'selected option'],
+		variants: ['default', 'searchable', 'allow add new', 'drag dismiss'],
+		sizes: ['25% snap point', '50% snap point', '90% snap point'],
+		states: ['closed', 'open', 'search filtered', 'selected option', 'keyboard raised'],
 		compositionExample: 'Entity selector used from a form field or command button.',
 		usage: {
 			relaxed: 'Use on showcase forms where selection needs context and space.',
@@ -571,6 +793,18 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('value', 'string', 'Controlled selected option value.'),
 			prop('defaultValue', 'string', 'Uncontrolled selected option value.', "''"),
 			prop('onValueChange', '(value: string) => void', 'Canonical selection callback.'),
+			prop(
+				'snapPoint',
+				"'25%' | '50%' | '90%'",
+				'Primary snap point used by the sheet surface.',
+				"'50%'",
+			),
+			prop(
+				'dragToDismiss',
+				'boolean',
+				'Allows the handle area to dismiss with downward drag velocity.',
+				'true',
+			),
 		],
 		doList: [
 			'Use for option sets that benefit from search or add-new affordances.',
@@ -586,12 +820,12 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		],
 		platformNotes: [
 			'Android back closes through onRequestClose; iOS uses the same modal presentation contract.',
-			'Bottom-sheet animation remains modal-driven rather than gesture-dismissed.',
+			'Drag dismissal, backdrop tap, and nested scrolling stay aligned with mobile sheet expectations on both platforms.',
 		],
 	}),
 	CollapsibleSection: doc({
 		name: 'CollapsibleSection',
-		filePath: 'src/components/molecules/CollapsibleSection.tsx',
+		filePath: 'src/design-system/components/molecules/CollapsibleSection.tsx',
 		summary:
 			'Expandable disclosure surface with controlled or uncontrolled expanded state, accessibility actions, announcements, and forwarded header ref.',
 		exampleStories: [
@@ -650,13 +884,17 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	ConfirmationModal: doc({
 		name: 'ConfirmationModal',
-		filePath: 'src/components/molecules/ConfirmationModal.tsx',
+		filePath: 'src/design-system/components/molecules/ConfirmationModal.tsx',
 		summary:
-			'Decision modal with controlled or uncontrolled open state, focus handoff, screen-reader announcement, and confirm/cancel accessibility actions.',
-		exampleStories: ['default confirm dialog', 'destructive delete dialog'],
+			'Decision modal with controlled or uncontrolled open state, size variants, focus handoff and restore, optional hard confirmation field, screen-reader announcement, and confirm/cancel accessibility actions.',
+		exampleStories: [
+			'default confirm dialog',
+			'destructive delete dialog',
+			'hard confirmation publish dialog',
+		],
 		variants: ['default', 'destructive'],
-		sizes: ['modal width full within horizontal padding'],
-		states: ['closed', 'open', 'focused cancel', 'focused confirm'],
+		sizes: ['small', 'medium', 'large'],
+		states: ['closed', 'open', 'focused cancel', 'focused confirm', 'hard confirm gated'],
 		compositionExample: 'Delete, archive, or permission-sensitive confirmation checkpoint.',
 		usage: {
 			relaxed: 'Use where the consequence needs space for description and user reassurance.',
@@ -668,6 +906,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('open', 'boolean', 'Controlled modal visibility.'),
 			prop('defaultOpen', 'boolean', 'Uncontrolled modal visibility.', 'false'),
 			prop('onOpenChange', '(open: boolean) => void', 'Canonical visibility callback.'),
+			prop('size', "'sm' | 'md' | 'lg'", 'Shared modal width variants.', "'md'"),
 			prop(
 				'variant',
 				"'default' | 'destructive'",
@@ -675,6 +914,11 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 				'default',
 			),
 			prop('confirmLabel', 'string', 'Visible confirm action label.', 'Confirm'),
+			prop(
+				'hardConfirmValue',
+				'string',
+				'Optional exact-match value required before confirm becomes active.',
+			),
 		],
 		doList: [
 			'Place the safe cancel path first.',
@@ -690,12 +934,12 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		],
 		platformNotes: [
 			'Android back maps to cancel via onRequestClose.',
-			'VoiceOver and TalkBack stay trapped inside the modal through accessibilityViewIsModal.',
+			'VoiceOver and TalkBack stay trapped inside the modal through accessibilityViewIsModal, and focus can be restored to the trigger on close.',
 		],
 	}),
 	DatePickerField: doc({
 		name: 'DatePickerField',
-		filePath: 'src/components/molecules/DatePickerField.tsx',
+		filePath: 'src/design-system/components/molecules/DatePickerField.tsx',
 		summary:
 			'Date field with controlled or uncontrolled value, shortcut actions, visible focus ring, and accessibility shortcut actions.',
 		exampleStories: ['single date', 'today shortcut', 'yesterday shortcut'],
@@ -736,13 +980,13 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	EmptyState: doc({
 		name: 'EmptyState',
-		filePath: 'src/components/molecules/EmptyState.tsx',
+		filePath: 'src/design-system/components/molecules/EmptyState.tsx',
 		summary: 'Reusable no-data surface with optional icon and recovery action.',
 		exampleStories: ['text-only empty state', 'icon-led empty state', 'empty state with CTA'],
 		variants: ['default', 'with icon', 'with action'],
 		sizes: ['full-screen centered'],
 		states: ['default', 'no media', 'actionable'],
-		compositionExample: 'Empty customer list with add-customer call to action.',
+		compositionExample: 'Empty records list with add-item call to action.',
 		usage: {
 			relaxed: 'Use with descriptive guidance and optional iconography on spacious pages.',
 			operational: 'Keep copy concise and CTA obvious in dense operational contexts.',
@@ -774,7 +1018,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	FilterBar: doc({
 		name: 'FilterBar',
-		filePath: 'src/components/molecules/FilterBar.tsx',
+		filePath: 'src/design-system/components/molecules/FilterBar.tsx',
 		summary:
 			'Horizontal selection rail with controlled or uncontrolled value, filter announcements, and focus visibility.',
 		exampleStories: [
@@ -818,7 +1062,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	FormField: doc({
 		name: 'FormField',
-		filePath: 'src/components/molecules/FormField.tsx',
+		filePath: 'src/design-system/components/molecules/FormField.tsx',
 		summary:
 			'Labeled form wrapper around the shared TextInput primitive for consistent helper and error presentation.',
 		exampleStories: ['required field', 'helper text field', 'error field'],
@@ -863,13 +1107,13 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	FormSection: doc({
 		name: 'FormSection',
-		filePath: 'src/components/molecules/FormSection.tsx',
+		filePath: 'src/design-system/components/molecules/FormSection.tsx',
 		summary: 'Reusable labeled section wrapper for related form groups.',
 		exampleStories: ['section with action', 'section with subtitle'],
 		variants: ['default', 'uppercase header'],
 		sizes: ['default section gap'],
 		states: ['default', 'with action'],
-		compositionExample: 'Billing form split into customer, payment, and notes sections.',
+		compositionExample: 'Multi-part form split into profile, settlement, and notes sections.',
 		usage: {
 			relaxed: 'Use on spacious forms where grouped sections improve rhythm and clarity.',
 			operational: 'Use compact section spacing to keep large forms scannable.',
@@ -901,14 +1145,14 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	ListItem: doc({
 		name: 'ListItem',
-		filePath: 'src/components/molecules/ListItem.tsx',
+		filePath: 'src/design-system/components/molecules/ListItem.tsx',
 		summary:
 			'Reusable row primitive for list surfaces with optional media, metadata, and trailing content.',
 		exampleStories: ['default list item', 'item with subtitle', 'item with trailing action'],
 		variants: ['default', 'subtitle', 'leading icon/avatar', 'trailing content'],
 		sizes: ['default row height'],
 		states: ['default', 'dense list row', 'no media'],
-		compositionExample: 'Customer list row with title, outstanding amount, and status badge.',
+		compositionExample: 'Entity list row with title, outstanding amount, and status badge.',
 		usage: {
 			relaxed: 'Use with larger spacing and richer metadata in showcase lists.',
 			operational:
@@ -942,7 +1186,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	PaginatedList: doc({
 		name: 'PaginatedList',
-		filePath: 'src/components/molecules/PaginatedList.tsx',
+		filePath: 'src/design-system/components/molecules/PaginatedList.tsx',
 		summary:
 			'FlatList wrapper with loading, empty, error, retry, and load-more states for reusable data surfaces.',
 		exampleStories: [
@@ -954,8 +1198,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		variants: ['default', 'with header'],
 		sizes: ['skeleton count configurable'],
 		states: ['loading', 'error', 'empty', 'refreshing', 'load more'],
-		compositionExample:
-			'Invoices or customers list with query, filters, and retry handling above the rows.',
+		compositionExample: 'Records list with query, filters, and retry handling above the rows.',
 		usage: {
 			relaxed: 'Use when list empty or error states need more explanatory space.',
 			operational: 'Use concise empty and error copy in dense queue-style views.',
@@ -987,7 +1230,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	PhoneInput: doc({
 		name: 'PhoneInput',
-		filePath: 'src/components/molecules/PhoneInput.tsx',
+		filePath: 'src/design-system/components/molecules/PhoneInput.tsx',
 		summary:
 			'Phone field with +91 prefix normalization, controlled or uncontrolled value, blur validation, error announcements, and forwarded ref.',
 		exampleStories: [
@@ -998,7 +1241,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		variants: ['default'],
 		sizes: ['default field height'],
 		states: ['default', 'focused', 'invalid length', 'read-only'],
-		compositionExample: 'Customer or supplier contact form with mobile number field.',
+		compositionExample: 'Contact or profile form with mobile number field.',
 		usage: {
 			relaxed: 'Use with label and helper context in profile or onboarding forms.',
 			operational:
@@ -1033,19 +1276,80 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			'Border, focus, and validation states stay token-consistent across iOS and Android.',
 		],
 	}),
+	Popover: doc({
+		name: 'Popover',
+		filePath: 'src/design-system/components/molecules/Popover.tsx',
+		summary:
+			'Anchored overlay with controlled or uncontrolled open state, press or long-press trigger modes, optional haptic feedback, focus handoff, and interactive content support.',
+		exampleStories: ['quick-edit popover', 'anchored action menu', 'long-press context menu'],
+		variants: ['press trigger', 'long-press trigger', 'with title and description'],
+		sizes: ['default max-width 320'],
+		states: ['closed', 'open', 'focus moved inside'],
+		compositionExample:
+			'Anchored secondary editing or action surface launched from a nearby card, chip, or toolbar trigger.',
+		usage: {
+			relaxed:
+				'Use when a roomy parent surface still benefits from anchored editing or helper content.',
+			operational:
+				'Use for fast secondary actions or inline adjustments without forcing a full modal jump.',
+			noMedia:
+				'Popover clarity comes from hierarchy, spacing, and action sequencing rather than artwork.',
+		},
+		propTable: [
+			prop('open', 'boolean', 'Controlled popover visibility.'),
+			prop('defaultOpen', 'boolean', 'Uncontrolled popover visibility.', 'false'),
+			prop('onOpenChange', '(open: boolean) => void', 'Canonical visibility callback.'),
+			prop(
+				'triggerMode',
+				"'press' | 'longPress'",
+				'Launch gesture used by the trigger wrapper.',
+				"'press'",
+			),
+			prop(
+				'hapticFeedback',
+				'DesignSystemHaptic',
+				'Optional haptic feedback when the popover opens.',
+				"'none'",
+			),
+			prop('maxWidth', 'number', 'Maximum anchored surface width.', '320'),
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Use popovers for anchored secondary work that should stay visually tied to its trigger.',
+			'Move focus inside when the popover opens if it contains interactive controls.',
+		],
+		dontList: [
+			'Do not turn a popover into a full-screen workflow.',
+			'Do not bury primary destructive actions in an unlabeled anchored surface.',
+		],
+		accessibilityNotes: [
+			'Moves accessibility focus into the anchored surface when opened.',
+			'Outside tap and native back both dismiss the popover.',
+		],
+		platformNotes: [
+			'Anchor position is derived from trigger layout measurements for mobile-safe placement.',
+			'Long-press mode can add haptic confirmation for context-menu style affordances.',
+		],
+	}),
 	SearchBar: doc({
 		name: 'SearchBar',
-		filePath: 'src/components/molecules/SearchBar.tsx',
+		filePath: 'src/design-system/components/molecules/SearchBar.tsx',
 		summary:
-			'Search field with controlled or uncontrolled value, canonical value callback, clear affordance announcement, focus ring, and forwarded ref.',
-		exampleStories: ['empty search', 'filled search with clear', 'large-text search bar'],
-		variants: ['default', 'clearable'],
+			'Search field with controlled or uncontrolled value, canonical value callback, clear affordance announcement, debounced query hook, loading state, focus ring, and forwarded ref.',
+		exampleStories: [
+			'empty search',
+			'filled search with clear',
+			'loading search',
+			'debounced query search',
+			'large-text search bar',
+		],
+		variants: ['default', 'clearable', 'loading', 'debounced'],
 		sizes: ['default height'],
-		states: ['empty', 'focused', 'filled', 'cleared'],
+		states: ['empty', 'focused', 'filled', 'loading', 'cleared', 'debounced'],
 		compositionExample:
 			'Component inventory and checklist explorer search surfaces in the design-system workbench.',
 		usage: {
-			relaxed: 'Use in roomy browse headers or search-first dashboards.',
+			relaxed: 'Use in roomy browse headers or search-first overview surfaces.',
 			operational: 'Use in compact toolbars with adjacent chips or filters.',
 			noMedia:
 				'Search affordance remains clear through label, field shape, and clear action even without extra art.',
@@ -1054,6 +1358,18 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('value', 'string', 'Controlled search query.'),
 			prop('defaultValue', 'string', 'Uncontrolled search query.', "''"),
 			prop('onValueChange', '(value: string) => void', 'Canonical query callback.'),
+			prop(
+				'onDebouncedChange',
+				'(value: string) => void',
+				'Optional debounced query callback.',
+			),
+			prop('debounceMs', 'number', 'Debounce delay for onDebouncedChange.', '0'),
+			prop(
+				'loading',
+				'boolean',
+				'Shows pending-search indicator in place of clear action.',
+				'false',
+			),
 			prop('clearAccessibilityLabel', 'string', 'Stable clear-action label.', 'Clear search'),
 			COMMON_TEST_ID_PROP,
 		],
@@ -1068,6 +1384,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		accessibilityNotes: [
 			'Clear action announces when the query is reset.',
 			'Forwards the native TextInput ref for focus management.',
+			'Loading state is surfaced through native accessibilityState busy hints.',
 		],
 		platformNotes: [
 			'Focus ring is visible in keyboard-accessible environments on both platforms.',
@@ -1076,7 +1393,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	SectionHeader: doc({
 		name: 'SectionHeader',
-		filePath: 'src/components/molecules/SectionHeader.tsx',
+		filePath: 'src/design-system/components/molecules/SectionHeader.tsx',
 		summary: 'Reusable titled row for sections with optional subtitle and trailing action.',
 		exampleStories: ['default section header', 'uppercase label header', 'header with action'],
 		variants: ['default', 'uppercase'],
@@ -1116,7 +1433,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	SettingsCard: doc({
 		name: 'SettingsCard',
-		filePath: 'src/components/molecules/SettingsCard.tsx',
+		filePath: 'src/design-system/components/molecules/SettingsCard.tsx',
 		summary:
 			'Composable settings surface for grouped preferences with optional title, body, and actions.',
 		exampleStories: ['default settings card', 'card with footer action'],
@@ -1156,7 +1473,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	SkeletonBlock: doc({
 		name: 'SkeletonBlock',
-		filePath: 'src/components/molecules/SkeletonBlock.tsx',
+		filePath: 'src/design-system/components/molecules/SkeletonBlock.tsx',
 		summary: 'Primitive skeleton placeholder block for loading surfaces.',
 		exampleStories: ['text line skeleton', 'card media skeleton'],
 		variants: ['default'],
@@ -1194,13 +1511,13 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	SkeletonRow: doc({
 		name: 'SkeletonRow',
-		filePath: 'src/components/molecules/SkeletonRow.tsx',
+		filePath: 'src/design-system/components/molecules/SkeletonRow.tsx',
 		summary: 'Row-shaped loading placeholder for lists and tables.',
 		exampleStories: ['text row skeleton', 'avatar row skeleton'],
 		variants: ['default', 'withAvatar'],
 		sizes: ['one line', 'multiple lines'],
 		states: ['default', 'reduced motion'],
-		compositionExample: 'List placeholder while customer or invoice data loads.',
+		compositionExample: 'List placeholder while record data loads.',
 		usage: {
 			relaxed: 'Use in hero or detail layouts with more breathing room between rows.',
 			operational: 'Use compact row placeholders for dense tables and list queues.',
@@ -1231,16 +1548,24 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	StatCard: doc({
 		name: 'StatCard',
-		filePath: 'src/components/molecules/StatCard.tsx',
-		summary: 'KPI surface for value, context, icon, and optional trend metadata.',
-		exampleStories: ['value only', 'value with trend', 'icon-led metric card'],
-		variants: ['default', 'with trend', 'with icon'],
-		sizes: ['default stat spacing'],
-		states: ['default', 'comparison trend', 'long label'],
-		compositionExample: 'Dashboard metric rail with KPI, trend, and contextual label.',
+		filePath: 'src/design-system/components/molecules/StatCard.tsx',
+		summary:
+			'KPI surface for one dominant metric, quiet comparison context, optional sparkline, and freshness/error states.',
+		exampleStories: [
+			'value only',
+			'value with trend',
+			'icon-led metric card',
+			'sparkline metric card',
+			'loading stat card',
+		],
+		variants: ['default', 'with trend', 'with icon', 'with sparkline'],
+		sizes: ['default stat spacing', 'compact'],
+		states: ['default', 'comparison trend', 'long label', 'loading', 'stale', 'error'],
+		compositionExample:
+			'Overview metric rail with KPI, quiet comparison baseline, sparkline, and last-updated metadata.',
 		usage: {
 			relaxed: 'Use to showcase one dominant metric with optional supporting trend.',
-			operational: 'Use compact stat cards in dashboard rails where scan speed matters.',
+			operational: 'Use compact stat cards in overview rails where scan speed matters.',
 			noMedia: 'The icon is optional; metric hierarchy remains strong without it.',
 		},
 		propTable: [
@@ -1248,7 +1573,19 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('value', 'string | number', 'Primary metric value.'),
 			prop('trend', 'string', 'Optional trend string, e.g. +12%.'),
 			prop('icon', 'LucideIcon', 'Optional icon slot.'),
+			prop('sparklineValues', 'number[]', 'Optional compact sparkline data.'),
+			prop(
+				'comparisonBaseline',
+				'string',
+				'Quiet comparison context shown beneath the metric.',
+			),
+			prop('updatedAtLabel', 'string', 'Stale-data or freshness metadata.'),
+			prop('isLoading', 'boolean', 'Switches to skeleton loading state.', 'false'),
+			prop('errorMessage', 'string', 'Inline error or delayed-feed note.'),
+			prop('density', "'compact' | 'default'", 'Operational spacing control.', 'default'),
 			COMMON_A11Y_PROP,
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
 		],
 		doList: [
 			'Keep the metric dominant and the label concise.',
@@ -1269,13 +1606,23 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	SwipeableRow: doc({
 		name: 'SwipeableRow',
-		filePath: 'src/components/molecules/SwipeableRow.tsx',
+		filePath: 'src/design-system/components/molecules/SwipeableRow.tsx',
 		summary:
-			'Action row with share, edit, and delete affordances plus accessibility actions for non-gesture users.',
-		exampleStories: ['delete-only row', 'edit and delete row', 'share edit delete row'],
-		variants: ['delete only', 'delete + edit', 'delete + edit + share'],
+			'Action row that reveals archive, edit, share, and delete affordances while still exposing accessible fallback actions.',
+		exampleStories: [
+			'delete-only row',
+			'archive and delete row',
+			'edit archive delete row',
+			'share edit archive delete row',
+		],
+		variants: [
+			'delete only',
+			'delete + archive',
+			'delete + archive + edit',
+			'full action rail',
+		],
 		sizes: ['fixed action width'],
-		states: ['default', 'action triggered'],
+		states: ['default', 'revealed actions', 'action triggered'],
 		compositionExample: 'Queue row with inline destructive and supportive follow-up actions.',
 		usage: {
 			relaxed: 'Use where row actions need more breathing room or explanation.',
@@ -1285,6 +1632,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		},
 		propTable: [
 			prop('onDelete', '() => void', 'Required destructive action handler.'),
+			prop('onArchive', '() => void', 'Optional archive action handler.'),
 			prop('onEdit', '() => void', 'Optional edit action handler.'),
 			prop('onShare', '() => void', 'Optional share action handler.'),
 			prop('deleteLabel', 'string', 'Accessible delete label.', 'Delete'),
@@ -1309,13 +1657,13 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	TableRow: doc({
 		name: 'TableRow',
-		filePath: 'src/components/molecules/TableRow.tsx',
+		filePath: 'src/design-system/components/molecules/TableRow.tsx',
 		summary: 'Reusable data row surface for compact key-value or columnar table-like content.',
 		exampleStories: ['two-column row', 'row with right-aligned metric'],
 		variants: ['default'],
 		sizes: ['dense operational row'],
 		states: ['default', 'long label', 'numeric emphasis'],
-		compositionExample: 'Invoice summary table row with label, amount, and quiet metadata.',
+		compositionExample: 'Summary table row with label, amount, and quiet metadata.',
 		usage: {
 			relaxed: 'Use with more row spacing in showcase summaries.',
 			operational: 'Use dense alignment and restrained chrome for transactional tables.',
@@ -1343,7 +1691,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	TextAreaField: doc({
 		name: 'TextAreaField',
-		filePath: 'src/components/molecules/TextAreaField.tsx',
+		filePath: 'src/design-system/components/molecules/TextAreaField.tsx',
 		summary:
 			'Multiline field with controlled or uncontrolled value, visible focus ring, character counting, and forwarded ref.',
 		exampleStories: ['default textarea', 'character counter', 'required notes field'],
@@ -1383,7 +1731,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 	}),
 	Toast: doc({
 		name: 'Toast',
-		filePath: 'src/components/molecules/Toast.tsx',
+		filePath: 'src/design-system/components/molecules/Toast.tsx',
 		summary:
 			'Transient feedback banner with semantic variants, alert semantics, and sticky-error behavior.',
 		exampleStories: ['success toast', 'warning toast', 'sticky error toast'],
@@ -1424,6 +1772,1178 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		platformNotes: [
 			'Positioning respects shared mobile bottom offset tokens on both platforms.',
 			'Announcement behavior stays consistent through shared accessibility helpers.',
+		],
+	}),
+	Tooltip: doc({
+		name: 'Tooltip',
+		filePath: 'src/design-system/components/molecules/Tooltip.tsx',
+		summary:
+			'Non-interactive anchored helper overlay with controlled or uncontrolled open state, max-width enforcement, and touch-friendly press or long-press trigger modes.',
+		exampleStories: ['long-press helper tooltip', 'press-trigger tooltip'],
+		variants: ['top', 'bottom', 'long press', 'press'],
+		sizes: ['default max-width 240'],
+		states: ['closed', 'open', 'focused trigger'],
+		compositionExample:
+			'Short supporting copy attached to a nearby badge, icon, or quiet helper affordance.',
+		usage: {
+			relaxed:
+				'Use for brief supporting notes where the parent surface has enough breathing room.',
+			operational:
+				'Keep tooltip copy terse and factual so it stays useful in dense operational UI.',
+			noMedia:
+				'Tooltip meaning is carried entirely by text; the component intentionally avoids interactive content.',
+		},
+		propTable: [
+			prop('open', 'boolean', 'Controlled tooltip visibility.'),
+			prop('defaultOpen', 'boolean', 'Uncontrolled tooltip visibility.', 'false'),
+			prop('onOpenChange', '(open: boolean) => void', 'Canonical visibility callback.'),
+			prop(
+				'triggerMode',
+				"'press' | 'longPress'",
+				'Trigger gesture used to reveal the tooltip.',
+				"'longPress'",
+			),
+			prop(
+				'placement',
+				"'top' | 'bottom'",
+				'Tooltip placement relative to the trigger.',
+				"'top'",
+			),
+			prop('maxWidth', 'number', 'Maximum tooltip width.', '240'),
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Keep tooltip copy short, precise, and supportive.',
+			'Prefer long-press on touch surfaces instead of hover-only disclosure.',
+		],
+		dontList: [
+			'Do not place interactive controls inside a tooltip.',
+			'Do not use a tooltip for critical primary-task instructions.',
+		],
+		accessibilityNotes: [
+			'Tooltip content is announced when opened.',
+			'Focus-visible trigger styling supports keyboard-accessible environments.',
+		],
+		platformNotes: [
+			'Anchors to trigger measurements for stable mobile positioning.',
+			'Long-press mode gives touch devices a hover-free tooltip pattern.',
+		],
+	}),
+	ActionMenuSheet: doc({
+		name: 'ActionMenuSheet',
+		filePath: 'src/design-system/components/molecules/ActionMenuSheet.tsx',
+		summary:
+			'Bottom-sheet secondary action menu for mobile-safe destructive and supporting actions.',
+		exampleStories: ['secondary action sheet', 'destructive menu item'],
+		variants: ['default', 'destructive action'],
+		sizes: ['default bottom sheet'],
+		states: ['closed', 'open', 'disabled action'],
+		compositionExample: 'Overflow action menu from a row toolbar or split button.',
+		usage: {
+			relaxed:
+				'Use when secondary actions should stay tucked away from spacious hero CTA layouts.',
+			operational: 'Prefer for dense workflows where extra buttons would crowd the surface.',
+			noMedia: 'Action clarity depends on labels and hierarchy, not artwork.',
+		},
+		propTable: [
+			prop('title', 'string', 'Sheet heading shown above the action list.'),
+			prop('actions', 'ActionMenuSheetItem[]', 'Available secondary actions.'),
+			prop('open', 'boolean', 'Controlled open state.'),
+			prop('defaultOpen', 'boolean', 'Uncontrolled open state.', 'false'),
+			prop('onOpenChange', '(open: boolean) => void', 'Canonical open-state callback.'),
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Group secondary actions here instead of adding more high-emphasis buttons.'],
+		dontList: ['Do not hide primary save/confirm actions inside the sheet.'],
+		accessibilityNotes: [
+			'Menu actions remain exposed as standard buttons with stable labels.',
+			'Open state can be controlled for automation and assistive flow.',
+		],
+		platformNotes: [
+			'Presentation matches mobile bottom-sheet expectations on iOS and Android.',
+			'Destructive action styling stays semantic across themes.',
+		],
+	}),
+	AlertBanner: doc({
+		name: 'AlertBanner',
+		filePath: 'src/design-system/components/molecules/AlertBanner.tsx',
+		summary:
+			'Inline or page-level banner for calm, actionable info, success, warning, or error communication.',
+		exampleStories: ['inline warning banner', 'page-level error banner'],
+		variants: ['info', 'success', 'warning', 'error'],
+		sizes: ['inline', 'page-level'],
+		states: ['persistent', 'dismissible', 'action CTA'],
+		compositionExample:
+			'Import review surface with a warning banner and inline remediation action.',
+		usage: {
+			relaxed: 'Use for ambient guidance in setup and settings flows.',
+			operational: 'Use terse titles and immediate next-step CTAs in data-heavy workflows.',
+			noMedia: 'Banner communication remains text-led and self-contained.',
+		},
+		propTable: [
+			prop('title', 'string', 'Banner heading.'),
+			prop('description', 'string', 'Optional supporting copy.'),
+			prop('variant', 'AlertBannerVariant', 'Semantic banner tone.', 'info'),
+			prop('actionLabel', 'string', 'Optional CTA label.'),
+			prop('dismissible', 'boolean', 'Shows a dismiss affordance when true.', 'false'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Keep warning and error banners calm, direct, and actionable.'],
+		dontList: ['Do not use banners as permanent decorative color blocks.'],
+		accessibilityNotes: [
+			'Error banners expose alert semantics while other tones remain readable inline content.',
+			'Action and dismiss affordances are standard buttons.',
+		],
+		platformNotes: [
+			'Banner chrome stays restrained across light, dark, and high-contrast themes.',
+			'Layout remains stable in dense mobile content regions.',
+		],
+	}),
+	AutocompleteField: doc({
+		name: 'AutocompleteField',
+		filePath: 'src/design-system/components/molecules/AutocompleteField.tsx',
+		summary:
+			'Typeahead combobox with synchronous or async options, inline create, and optional multi-select token display.',
+		exampleStories: ['local typeahead', 'async search', 'multi-select owner picker'],
+		variants: ['single select', 'multi-select', 'create new'],
+		sizes: ['default field + option list'],
+		states: ['idle', 'matching results', 'no matches', 'create inline'],
+		compositionExample:
+			'Owner or label picker with fast keyboard filtering inside a dense form.',
+		usage: {
+			relaxed:
+				'Use when exploratory search benefits from helper copy and visible result grouping.',
+			operational: 'Prefer concise labels and quick keyboard filtering in workflow forms.',
+			noMedia: 'Option discovery relies on text matching and hierarchy, not iconography.',
+		},
+		propTable: [
+			prop('options', 'AutocompleteOption[]', 'Static option source.'),
+			prop(
+				'onAsyncSearch',
+				'(query: string) => Promise<AutocompleteOption[]>',
+				'Optional async result loader.',
+			),
+			prop('multiple', 'boolean', 'Allows selecting more than one option.', 'false'),
+			prop('allowCreate', 'boolean', 'Shows inline create action for new values.', 'false'),
+			prop('value', 'string | string[]', 'Controlled selected value or values.'),
+			prop('defaultValue', 'string | string[]', 'Uncontrolled selected value or values.'),
+			prop('onValueChange', '(value) => void', 'Canonical selection callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Use async search for large or remote option sets.'],
+		dontList: [
+			'Do not force users to scroll giant static lists when typeahead would be faster.',
+		],
+		accessibilityNotes: [
+			'The field keeps a standard text-input label while results remain button-like options.',
+			'Multi-select mode still exposes selected values as readable text tokens.',
+		],
+		platformNotes: [
+			'Debounce behavior is shared across iOS and Android.',
+			'Inline create stays in the same result lane rather than opening a separate modal.',
+		],
+	}),
+	ColorPicker: doc({
+		name: 'ColorPicker',
+		filePath: 'src/design-system/components/molecules/ColorPicker.tsx',
+		summary:
+			'Controlled color surface supporting hex, RGB, HSL, and swatch-driven edits from one reusable control.',
+		exampleStories: ['hex edit', 'rgb channels', 'hsl channels'],
+		variants: ['hex', 'rgb', 'hsl', 'swatch preset'],
+		sizes: ['default control'],
+		states: ['editing channels', 'swatch selected'],
+		compositionExample: 'Theme accent customizer or label-color assignment control.',
+		usage: {
+			relaxed: 'Use where users are intentionally customizing a visual system choice.',
+			operational:
+				'Prefer swatches first in dense workflows; expose channel editing as secondary detail.',
+			noMedia: 'Selected color is always paired with readable textual values.',
+		},
+		propTable: [
+			prop('value', 'string', 'Controlled hex value.'),
+			prop(
+				'defaultValue',
+				'string',
+				'Uncontrolled hex value.',
+				'primitiveColorPalettes.primary[600]',
+			),
+			prop('onValueChange', '(value: string) => void', 'Canonical color callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Pair swatches with textual color values for precise edits.'],
+		dontList: ['Do not rely on swatches alone for precise enterprise configuration.'],
+		accessibilityNotes: [
+			'Mode switching is text-labeled and swatches expose stable button labels.',
+			'Hex/RGB/HSL fields remain editable without gesture-only interaction.',
+		],
+		platformNotes: [
+			'Color math is shared across platforms for predictable values.',
+			'Swatch sizing respects the same token scale on iOS and Android.',
+		],
+	}),
+	DateRangePickerField: doc({
+		name: 'DateRangePickerField',
+		filePath: 'src/design-system/components/molecules/DateRangePickerField.tsx',
+		summary:
+			'Two-ended date range control with preset shortcuts and min/max guardrails between start and end.',
+		exampleStories: ['last 7 days preset', 'this month preset', 'custom range'],
+		variants: ['preset-driven', 'custom range'],
+		sizes: ['two-field stack'],
+		states: ['preset active', 'custom start/end'],
+		compositionExample: 'Reporting filter bar with quick presets and manual date overrides.',
+		usage: {
+			relaxed: 'Use when a reporting surface can afford visible presets above the fields.',
+			operational: 'Keep presets concise and stack start/end pickers for scannability.',
+			noMedia: 'Range selection is expressed fully through labels and date values.',
+		},
+		propTable: [
+			prop('value', 'DateRangeValue', 'Controlled date range.'),
+			prop('defaultValue', 'Partial<DateRangeValue>', 'Uncontrolled initial range.'),
+			prop('presets', 'DateRangePreset[]', 'Shortcut range presets.'),
+			prop('onValueChange', '(value: DateRangeValue) => void', 'Canonical range callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Offer preset ranges for common reporting windows.'],
+		dontList: ['Do not let the end date silently precede the start date.'],
+		accessibilityNotes: [
+			'Each boundary keeps its own labeled date picker for assistive clarity.',
+			'Preset shortcuts remain standard pressable controls.',
+		],
+		platformNotes: [
+			'Works with the shared date picker contract on both platforms.',
+			'Preset chips keep the same spacing rhythm as filter bars and chip groups.',
+		],
+	}),
+	ErrorState: doc({
+		name: 'ErrorState',
+		filePath: 'src/design-system/components/molecules/ErrorState.tsx',
+		summary:
+			'Reusable calm-error surface for server, not-found, and offline failures with optional recovery CTA.',
+		exampleStories: ['server error', 'not found', 'offline retry'],
+		variants: ['server', 'not-found', 'offline'],
+		sizes: ['card-like recovery block'],
+		states: ['default', 'with retry action'],
+		compositionExample: 'Failed data module with a retry CTA inside a dashboard panel.',
+		usage: {
+			relaxed: 'Use where an error surface should still feel composed and premium.',
+			operational: 'Keep copy concise and offer the most direct recovery action.',
+			noMedia: 'The state remains understandable with icon, title, and copy only.',
+		},
+		propTable: [
+			prop('variant', 'ErrorStateVariant', 'Preset error type.', 'server'),
+			prop('title', 'string', 'Optional custom title override.'),
+			prop('description', 'string', 'Optional custom supporting copy.'),
+			prop('actionLabel', 'string', 'Optional recovery CTA label.', 'Retry'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Use specific variants so support copy stays consistent across the app.'],
+		dontList: ['Do not dump raw server payloads into the visible state.'],
+		accessibilityNotes: [
+			'Recovery actions remain standard buttons with readable labels.',
+			'The state stays readable even when iconography is ignored by assistive tech.',
+		],
+		platformNotes: [
+			'Icon sizing and spacing remain tokenized across iOS and Android.',
+			'Variant tone stays consistent through shared semantic colors.',
+		],
+	}),
+	FileUploadField: doc({
+		name: 'FileUploadField',
+		filePath: 'src/design-system/components/molecules/FileUploadField.tsx',
+		summary:
+			'Document and image upload field with picker integration, per-file progress, cancellation, and validation states.',
+		exampleStories: ['single document upload', 'multi-image upload', 'failed upload row'],
+		variants: ['document picker', 'image picker', 'multi-file'],
+		sizes: ['default upload stack'],
+		states: [
+			'uploading',
+			'uploaded',
+			'cancelled',
+			'invalid format',
+			'size exceeded',
+			'upload failed',
+		],
+		compositionExample: 'Attachment section on an expense, import, or approval workflow.',
+		usage: {
+			relaxed: 'Use where uploads benefit from visible status rows and clear source actions.',
+			operational: 'Keep rows compact and preserve per-file status at a glance.',
+			noMedia:
+				'File handling remains fully understandable through text rows and progress bars.',
+		},
+		propTable: [
+			prop('multiple', 'boolean', 'Allows selecting multiple assets.', 'true'),
+			prop('maxFileSizeBytes', 'number', 'Validation limit for file size.', '5242880'),
+			prop('allowedMimeTypes', 'string[]', 'Optional format allowlist.'),
+			prop('value', 'UploadItem[]', 'Controlled file list.'),
+			prop('defaultValue', 'UploadItem[]', 'Uncontrolled file list.'),
+			prop(
+				'onValueChange',
+				'(files: UploadItem[]) => void',
+				'Canonical upload-list callback.',
+			),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: [
+			'Show per-file progress and failure states instead of a single ambiguous spinner.',
+		],
+		dontList: ['Do not hide validation failures behind generic error copy.'],
+		accessibilityNotes: [
+			'Upload buttons remain explicit document/image actions.',
+			'Each file row exposes readable progress and cancel affordances.',
+		],
+		platformNotes: [
+			'Integrates with Expo document and image pickers on mobile.',
+			'Per-file states stay consistent across native platforms.',
+		],
+	}),
+	NotificationCenter: doc({
+		name: 'NotificationCenter',
+		filePath: 'src/design-system/components/molecules/NotificationCenter.tsx',
+		summary:
+			'Grouped inbox surface for read/unread notification review with mark-all-as-read support.',
+		exampleStories: ['system section', 'mentions section', 'empty inbox'],
+		variants: ['grouped inbox', 'empty state'],
+		sizes: ['default list stack'],
+		states: ['unread', 'read', 'mark all as read', 'empty'],
+		compositionExample: 'Shared updates inbox for task, approval, and system events.',
+		usage: {
+			relaxed: 'Use where a messaging surface can breathe with grouped categories.',
+			operational: 'Keep category labels short and unread markers restrained.',
+			noMedia: 'Read status uses text and subtle badges without relying on artwork.',
+		},
+		propTable: [
+			prop('items', 'NotificationItem[]', 'Controlled inbox items.'),
+			prop('defaultItems', 'NotificationItem[]', 'Uncontrolled inbox items.'),
+			prop(
+				'onValueChange',
+				'(items: NotificationItem[]) => void',
+				'Canonical item-state callback.',
+			),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Group notifications by category so scan paths stay predictable.'],
+		dontList: ['Do not let unread markers overpower titles or route meaning.'],
+		accessibilityNotes: [
+			'Unread state is paired with text labels and accessible badges.',
+			'Mark-all action remains a standard button, not a hidden gesture.',
+		],
+		platformNotes: [
+			'Grouping is section-list driven and platform-neutral.',
+			'Empty state falls back to the shared EmptyState component.',
+		],
+	}),
+	NumericStepper: doc({
+		name: 'NumericStepper',
+		filePath: 'src/design-system/components/molecules/NumericStepper.tsx',
+		summary:
+			'Increment/decrement control for bounded numeric values with locale-aware formatted display.',
+		exampleStories: ['whole number stepper', 'decimal-friendly locale stepper'],
+		variants: ['default'],
+		sizes: ['touch-safe control'],
+		states: ['min bound', 'max bound', 'increment', 'decrement'],
+		compositionExample: 'Quantity, retry count, or reminder interval selector.',
+		usage: {
+			relaxed:
+				'Use where value changes are small and users benefit from obvious increment controls.',
+			operational:
+				'Prefer in dense forms where free-form numeric input would slow users down.',
+			noMedia: 'Meaning is carried by the label and formatted value only.',
+		},
+		propTable: [
+			prop('min', 'number', 'Minimum allowed value.', '0'),
+			prop('max', 'number', 'Maximum allowed value.', '999'),
+			prop('step', 'number', 'Increment/decrement amount.', '1'),
+			prop('locale', 'string', 'Locale used for number formatting.', 'en-US'),
+			prop('value', 'number', 'Controlled numeric value.'),
+			prop('defaultValue', 'number', 'Uncontrolled numeric value.', '0'),
+			prop('onValueChange', '(value: number) => void', 'Canonical value callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Use explicit bounds so users understand the valid range.'],
+		dontList: ['Do not use a free-form field when only a few step values are valid.'],
+		accessibilityNotes: [
+			'Separate increment and decrement controls stay readable for assistive tech.',
+			'Formatted value remains visible between the two actions.',
+		],
+		platformNotes: [
+			'Locale formatting works the same way on both native platforms.',
+			'Touch targets stay above the mobile minimum.',
+		],
+	}),
+	OtpCodeInput: doc({
+		name: 'OtpCodeInput',
+		filePath: 'src/design-system/components/molecules/OtpCodeInput.tsx',
+		summary:
+			'Cell-based one-time code input with auto-advance, paste splitting, masking, and mobile autofill hints.',
+		exampleStories: ['6-digit code', 'masked code'],
+		variants: ['default', 'masked'],
+		sizes: ['4 digit', '6 digit'],
+		states: ['empty', 'partially filled', 'fully pasted'],
+		compositionExample: 'Login verification or step-up approval challenge.',
+		usage: {
+			relaxed: 'Use where verification is a dedicated step and spacing can stay generous.',
+			operational: 'Keep cells compact and predictable in auth or approval flows.',
+			noMedia: 'Cell structure and labels fully communicate the task without illustration.',
+		},
+		propTable: [
+			prop('length', 'number', 'Number of code cells to render.', '6'),
+			prop('masked', 'boolean', 'Displays filled cells as bullets.', 'false'),
+			prop('value', 'string', 'Controlled code value.'),
+			prop('defaultValue', 'string', 'Uncontrolled code value.', "''"),
+			prop('onValueChange', '(value: string) => void', 'Canonical code callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Use with platform SMS/autofill hints on the first cell.'],
+		dontList: ['Do not force users to type a code into one long unlabeled field.'],
+		accessibilityNotes: [
+			'Each cell exposes a stable per-digit accessibility label.',
+			'Paste splitting still keeps a plain text-input fallback path.',
+		],
+		platformNotes: [
+			'Uses native one-time-code autofill hints on iOS and Android.',
+			'Backspace and focus behavior stay consistent across both platforms.',
+		],
+	}),
+	ProgressIndicator: doc({
+		name: 'ProgressIndicator',
+		filePath: 'src/design-system/components/molecules/ProgressIndicator.tsx',
+		summary:
+			'Determinate or indeterminate progress primitive supporting both linear and circular presentation.',
+		exampleStories: ['linear determinate', 'linear indeterminate', 'circular determinate'],
+		variants: ['linear', 'circular'],
+		sizes: ['default'],
+		states: ['determinate', 'indeterminate'],
+		compositionExample: 'Upload progress, background sync, or wizard completion signal.',
+		usage: {
+			relaxed: 'Use circular progress for spacious, singular loading moments.',
+			operational: 'Use linear progress for dense lists or stacked upload rows.',
+			noMedia: 'The label and numeric percentage remain enough for comprehension.',
+		},
+		propTable: [
+			prop('variant', "'linear' | 'circular'", 'Visual progress treatment.'),
+			prop('value', 'number', 'Determinate value from 0-100.', '0'),
+			prop(
+				'indeterminate',
+				'boolean',
+				'Renders busy feedback instead of a numeric fill.',
+				'false',
+			),
+			prop('label', 'string', 'Optional supporting label.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Pair progress bars with concise labels when the task is not self-evident.'],
+		dontList: ['Do not fake determinate percentages when no real value exists.'],
+		accessibilityNotes: [
+			'Indeterminate mode falls back to a native activity indicator for assistive clarity.',
+			'Determinate values remain readable as text when using the circular treatment.',
+		],
+		platformNotes: [
+			'Linear and circular styles use shared token spacing across platforms.',
+			'Indeterminate mode leans on native spinner affordances.',
+		],
+	}),
+	RangeSlider: doc({
+		name: 'RangeSlider',
+		filePath: 'src/design-system/components/molecules/RangeSlider.tsx',
+		summary:
+			'Gesture-driven slider supporting single or dual handles, step snapping, and drag-value tooltips.',
+		exampleStories: ['single threshold slider', 'dual range slider'],
+		variants: ['single handle', 'dual handle'],
+		sizes: ['default track'],
+		states: ['idle', 'dragging tooltip', 'step snapped'],
+		compositionExample: 'Price, threshold, or budget range filter control.',
+		usage: {
+			relaxed: 'Use where a value range benefits from tactile exploration.',
+			operational: 'Keep slider width constrained and pair it with visible numeric values.',
+			noMedia: 'Tooltip and label carry the meaning without any decorative flourish.',
+		},
+		propTable: [
+			prop('range', 'boolean', 'Enables dual-handle range selection.', 'false'),
+			prop('min', 'number', 'Minimum slider value.', '0'),
+			prop('max', 'number', 'Maximum slider value.', '100'),
+			prop('step', 'number', 'Step snapping increment.', '5'),
+			prop('value', 'number | [number, number]', 'Controlled slider value or range.'),
+			prop('defaultValue', 'number | [number, number]', 'Uncontrolled value or range.', '25'),
+			prop('showTooltip', 'boolean', 'Shows the active handle value while dragging.', 'true'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Snap values to a meaningful step so the control stays precise.'],
+		dontList: ['Do not use a slider when users need exact free-form numeric entry.'],
+		accessibilityNotes: [
+			'Handles use adjustable semantics rather than relying on gesture-only discovery.',
+			'Tooltip values remain visible as text while dragging.',
+		],
+		platformNotes: [
+			'Uses react-native-gesture-handler for native-feeling drag behavior.',
+			'Single and dual-handle modes share the same tokenized track treatment.',
+		],
+	}),
+	SegmentedControl: doc({
+		name: 'SegmentedControl',
+		filePath: 'src/design-system/components/molecules/SegmentedControl.tsx',
+		summary:
+			'Single-select segmented choice control for compact mutually exclusive view or mode switching.',
+		exampleStories: ['list vs board mode', 'compact metric toggle'],
+		variants: ['single select'],
+		sizes: ['default'],
+		states: ['selected', 'unselected'],
+		compositionExample: 'Mode switcher in a header or report toolbar.',
+		usage: {
+			relaxed: 'Use for calm view switching without adding heavy navigation chrome.',
+			operational: 'Prefer for compact mode toggles in dense toolbars.',
+			noMedia: 'Each segment remains readable text-first content.',
+		},
+		propTable: [
+			prop('options', 'ToggleButtonOption[]', 'Segment choices.'),
+			prop('value', 'string', 'Controlled selected segment.'),
+			prop('defaultValue', 'string', 'Uncontrolled selected segment.'),
+			prop('onValueChange', '(value: string) => void', 'Canonical segment callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Use when choices are few and mutually exclusive.'],
+		dontList: ['Do not overload with many long segment labels.'],
+		accessibilityNotes: [
+			'Selection state is exposed through the underlying toggle group semantics.',
+			'Segments remain keyboard and assistive-tech reachable.',
+		],
+		platformNotes: [
+			'Leverages the same native-safe button treatment as the toggle group.',
+			'Spacing and selected-state contrast stay consistent across themes.',
+		],
+	}),
+	SplitButton: doc({
+		name: 'SplitButton',
+		filePath: 'src/design-system/components/molecules/SplitButton.tsx',
+		summary:
+			'Primary action button paired with a secondary-action disclosure for overflow choices.',
+		exampleStories: ['save + draft actions', 'publish + schedule actions'],
+		variants: ['primary + menu'],
+		sizes: ['default'],
+		states: ['idle', 'secondary menu open'],
+		compositionExample:
+			'Create or edit footer where one action is primary and others are nearby but secondary.',
+		usage: {
+			relaxed: 'Use when a premium CTA still needs a small set of adjacent alternatives.',
+			operational: 'Keep the primary label decisive and the secondary menu focused.',
+			noMedia: 'Action hierarchy comes from button treatment and labels only.',
+		},
+		propTable: [
+			prop('label', 'string', 'Primary action label.'),
+			prop('secondaryActions', 'ActionMenuSheetItem[]', 'Overflow action list.'),
+			prop('onSecondaryAction', '(value: string) => void', 'Secondary action callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Use when one action is primary and the rest are genuinely secondary.'],
+		dontList: ['Do not hide critical destructive confirmation paths behind the split toggle.'],
+		accessibilityNotes: [
+			'Primary and secondary triggers remain separate labeled buttons.',
+			'Secondary actions inherit the accessible action-sheet menu contract.',
+		],
+		platformNotes: [
+			'The main button uses the shared action hierarchy tokens.',
+			'Secondary actions open the same mobile-safe sheet on both platforms.',
+		],
+	}),
+	Stepper: doc({
+		name: 'Stepper',
+		filePath: 'src/design-system/components/molecules/Stepper.tsx',
+		summary:
+			'Reusable step navigation surface supporting horizontal or vertical layouts and explicit step states.',
+		exampleStories: ['horizontal onboarding steps', 'vertical approval wizard'],
+		variants: ['horizontal', 'vertical'],
+		sizes: ['compact row', 'stacked flow'],
+		states: ['completed', 'active', 'upcoming', 'error'],
+		compositionExample: 'Wizard header or side-rail progress summary.',
+		usage: {
+			relaxed: 'Use where users benefit from visible progress and roomy copy.',
+			operational: 'Keep labels terse and rely on state markers for quick scanning.',
+			noMedia: 'Progress remains obvious through numbers, labels, and states alone.',
+		},
+		propTable: [
+			prop('steps', 'StepperStep[]', 'Ordered step descriptors and states.'),
+			prop('orientation', "'horizontal' | 'vertical'", 'Layout direction.', 'horizontal'),
+			prop(
+				'onStepPress',
+				'(value: string) => void',
+				'Optional non-linear navigation callback.',
+			),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Mark completed and errored steps explicitly.'],
+		dontList: ['Do not allow jumping to incomplete steps without clear rules.'],
+		accessibilityNotes: [
+			'Completed steps can be exposed as buttons for non-linear return paths.',
+			'Step labels remain readable even when badges are ignored by assistive tech.',
+		],
+		platformNotes: [
+			'Orientation changes remain purely layout-driven and platform-neutral.',
+			'Step badges use the shared semantic badge palette.',
+		],
+	}),
+	Tabs: doc({
+		name: 'Tabs',
+		filePath: 'src/design-system/components/molecules/Tabs.tsx',
+		summary: 'Quiet tab navigation surface with optional icons and restrained badge counts.',
+		exampleStories: ['text tabs', 'icon tabs', 'tabs with badge counts'],
+		variants: ['text only', 'with icon', 'with badge'],
+		sizes: ['horizontal tab strip'],
+		states: ['selected', 'unselected'],
+		compositionExample: 'Top-level sub-navigation inside a feature module or detail screen.',
+		usage: {
+			relaxed:
+				'Use when tabbed sections should feel light and premium rather than shell-heavy.',
+			operational: 'Keep active indication clear but restrained for dense shells.',
+			noMedia: 'Route clarity comes from labels and selected state, not decoration.',
+		},
+		propTable: [
+			prop('options', 'TabOption[]', 'Available tabs with optional icons and counts.'),
+			prop('value', 'string', 'Controlled selected tab.'),
+			prop('defaultValue', 'string', 'Uncontrolled selected tab.'),
+			prop('onValueChange', '(value: string) => void', 'Canonical tab change callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Keep badges secondary to the route label and active state.'],
+		dontList: ['Do not saturate the entire tab chrome to show selection.'],
+		accessibilityNotes: [
+			'Tabs expose explicit selected state to assistive technologies.',
+			'Badge counts remain supplemental and not the only indicator of importance.',
+		],
+		platformNotes: [
+			'Scrollable horizontal tabs behave consistently across platforms.',
+			'Optional icons align to the same token rhythm as the rest of the DS.',
+		],
+	}),
+	TimePickerField: doc({
+		name: 'TimePickerField',
+		filePath: 'src/design-system/components/molecules/TimePickerField.tsx',
+		summary:
+			'Native-backed time picker field with formatted display and minute-interval support.',
+		exampleStories: ['meeting time', '15-minute interval picker'],
+		variants: ['default'],
+		sizes: ['default field'],
+		states: ['idle', 'native picker open'],
+		compositionExample: 'Meeting scheduler or reminder time configuration.',
+		usage: {
+			relaxed: 'Use when time choice is part of a spacious scheduling surface.',
+			operational: 'Keep it compact and paired with adjacent date controls in dense forms.',
+			noMedia: 'Selected time remains fully readable as text.',
+		},
+		propTable: [
+			prop('value', 'string', 'Controlled time value in HH:mm format.'),
+			prop('defaultValue', 'string', 'Uncontrolled time value.', '09:00'),
+			prop('minuteInterval', '1 | 5 | 10 | 15 | 30', 'Native picker minute increment.', '5'),
+			prop('locale', 'string', 'Locale used for time formatting.', 'en-US'),
+			prop('onValueChange', '(value: string) => void', 'Canonical time callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Use minute intervals that match the business workflow.'],
+		dontList: ['Do not ask users to type times manually when a picker will be faster.'],
+		accessibilityNotes: [
+			'The field remains a labeled button that opens a native time control.',
+			'Selected time stays available as plain text.',
+		],
+		platformNotes: [
+			'Backs onto the native platform time picker on iOS and Android.',
+			'Formatting respects locale while maintaining shared DS field styling.',
+		],
+	}),
+	Avatar: doc({
+		name: 'Avatar',
+		filePath: 'src/design-system/components/atoms/Avatar.tsx',
+		summary:
+			'Identity primitive with remote image support, initials fallback, size variants, and status indicator.',
+		exampleStories: ['image avatar', 'initials fallback avatar', 'avatar with presence status'],
+		variants: ['image', 'fallback initials', 'status indicator'],
+		sizes: ['sm', 'md', 'lg', 'xl'],
+		states: ['image loaded', 'image failed fallback', 'online', 'busy', 'offline'],
+		compositionExample:
+			'List row or board card assignee chip with resilient fallback handling.',
+		usage: {
+			relaxed: 'Use larger sizes on showcase cards and overview panels.',
+			operational: 'Prefer md or sm avatars in dense lists and comparison surfaces.',
+			noMedia:
+				'Initials fallback and deterministic background color preserve identity when media is missing.',
+		},
+		propTable: [
+			prop('name', 'string', 'Identity label used for initials and accessible name.'),
+			prop('source', 'string', 'Optional remote image URL.'),
+			prop('size', 'AvatarSize', 'Tokenized avatar scale.', 'md'),
+			prop('status', 'AvatarStatus', 'Optional presence or status dot.'),
+			COMMON_A11Y_PROP,
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Rely on name initials when image quality is poor or absent.'],
+		dontList: ['Do not treat imagery as required for identity recognition.'],
+		accessibilityNotes: [
+			'Accessible label defaults to the person or entity name.',
+			'Status indicator is purely visual and should be paired with nearby text when critical.',
+		],
+		platformNotes: [
+			'Remote image rendering uses the same DS media path on iOS and Android.',
+			'Presence dot sizing scales with the avatar token size.',
+		],
+	}),
+	ActivityFeed: doc({
+		name: 'ActivityFeed',
+		filePath: 'src/design-system/components/molecules/ActivityFeed.tsx',
+		summary:
+			'Timeline surface with date separators, load-more handling, and queued real-time injection.',
+		exampleStories: ['dated activity feed', 'feed with pending updates', 'load older events'],
+		variants: ['default', 'pending updates banner'],
+		sizes: ['default'],
+		states: ['default', 'new items waiting', 'older events load more'],
+		compositionExample:
+			'Operational approval timeline showing who changed what and when across multiple dates.',
+		usage: {
+			relaxed: 'Use more descriptive event copy in activity summaries and audit views.',
+			operational:
+				'Keep event titles sharp and date separators compact in review queues and logs.',
+			noMedia: 'Meaning is fully preserved through text hierarchy and status labels.',
+		},
+		propTable: [
+			prop('items', 'ActivityFeedItem[]', 'Controlled timeline items.'),
+			prop('defaultItems', 'ActivityFeedItem[]', 'Uncontrolled timeline items.', '[]'),
+			prop(
+				'pendingItems',
+				'ActivityFeedItem[]',
+				'Queued real-time items awaiting injection.',
+				'[]',
+			),
+			prop(
+				'onItemsChange',
+				'(items: ActivityFeedItem[]) => void',
+				'Canonical feed callback.',
+			),
+			prop(
+				'onLoadMore',
+				'() => void',
+				'Load older events when the footer or end threshold is reached.',
+			),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Group events by date and keep real-time additions explicit.'],
+		dontList: ['Do not silently prepend new events while someone is reading older activity.'],
+		accessibilityNotes: [
+			'Queued updates announce themselves when injected.',
+			'Date separators preserve context when the feed is linearized by assistive tech.',
+		],
+		platformNotes: [
+			'SectionList semantics stay native on both platforms.',
+			'Load-more affordances remain explicit even when infinite scroll is wired in.',
+		],
+	}),
+	AvatarGroup: doc({
+		name: 'AvatarGroup',
+		filePath: 'src/design-system/components/molecules/AvatarGroup.tsx',
+		summary:
+			'Overlapping avatar stack with +N overflow and tap-to-expand behavior for hidden members.',
+		exampleStories: ['three visible avatars', 'overflow group', 'expanded group'],
+		variants: ['compact overlap', 'expanded all members'],
+		sizes: ['sm', 'md', 'lg', 'xl'],
+		states: ['default', 'overflow', 'expanded'],
+		compositionExample: 'Assignee cluster or approval audience summary on a card or board.',
+		usage: {
+			relaxed: 'Use larger sizes and more breathing room on overview cards.',
+			operational: 'Use md or sm avatars with restrained overlap in dense rows.',
+			noMedia: 'Initials fallback ensures hidden or failed images still remain identifiable.',
+		},
+		propTable: [
+			prop('items', 'AvatarGroupItem[]', 'Visible avatar members.'),
+			prop(
+				'maxVisible',
+				'number',
+				'How many avatars remain visible before +N overflow.',
+				'3',
+			),
+			prop('size', 'AvatarSize', 'Shared avatar size token.', 'md'),
+			prop('expanded', 'boolean', 'Controlled expanded state.'),
+			prop('defaultExpanded', 'boolean', 'Uncontrolled expanded state.', 'false'),
+			prop('onExpandedChange', '(expanded: boolean) => void', 'Expansion callback.'),
+			COMMON_A11Y_PROP,
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Use overflow to keep clusters compact until someone asks for more detail.'],
+		dontList: ['Do not force every member to be visible in dense comparison layouts.'],
+		accessibilityNotes: [
+			'Overflow control exposes a stable label describing how many avatars are hidden.',
+			'Expanded state announces itself for screen-reader users.',
+		],
+		platformNotes: [
+			'Overlap spacing is tokenized and scales across native densities.',
+			'Tap-to-expand behavior works on touch-first environments without hover affordances.',
+		],
+	}),
+	DataChart: doc({
+		name: 'DataChart',
+		filePath: 'src/design-system/components/molecules/DataChart.tsx',
+		summary:
+			'Shared chart renderer covering line, bar, area, pie, donut, scatter, heatmap, and sparkline variants.',
+		exampleStories: [
+			'line chart',
+			'bar comparison',
+			'donut chart',
+			'scatter plot',
+			'heatmap',
+			'sparkline',
+		],
+		variants: ['line', 'bar', 'area', 'pie', 'donut', 'scatter', 'heatmap', 'sparkline'],
+		sizes: ['compact metadata', 'default chart frame'],
+		states: ['default', 'loading', 'empty', 'error', 'focused series'],
+		compositionExample:
+			'Executive metric surface with a primary trend line, quiet comparison series, and threshold markers.',
+		usage: {
+			relaxed: 'Use richer titles and descriptions when the chart needs interpretation help.',
+			operational:
+				'Keep legend chips concise and rely on focus-series emphasis instead of saturated scaffolding.',
+			noMedia:
+				'Every chart has text title, description, and fallback states without decorative media.',
+		},
+		propTable: [
+			prop('variant', 'DataChartVariant', 'Chart family to render.'),
+			prop('title', 'string', 'Chart heading.'),
+			prop('description', 'string', 'Supporting explanation or reading instruction.'),
+			prop('series', 'DataChartSeries[]', 'Line, bar, area, or sparkline data.'),
+			prop('slices', 'DataChartSlice[]', 'Pie and donut data.'),
+			prop('points', 'DataChartPoint[]', 'Scatter plot points.'),
+			prop('heatmap', 'DataChartHeatmapCell[]', 'Heatmap matrix values.'),
+			prop('annotations', 'DataChartAnnotation[]', 'Threshold or target markers.', '[]'),
+			prop('focusedSeriesId', 'string', 'Controlled focused series identifier.'),
+			prop('defaultFocusedSeriesId', 'string', 'Uncontrolled focused series identifier.'),
+			prop('onFocusedSeriesChange', '(seriesId: string) => void', 'Legend focus callback.'),
+			prop('isLoading', 'boolean', 'Switches to skeleton loading state.', 'false'),
+			prop('hasError', 'boolean', 'Switches to error state.', 'false'),
+			prop('density', "'compact' | 'default'", 'Metadata density.', 'default'),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Use the focused-series pattern to reduce clutter when multiple series compete.',
+			'Prefer annotations and explicit thresholds over heavy decoration.',
+		],
+		dontList: [
+			'Do not saturate every line and marker at full emphasis simultaneously.',
+			'Do not rely on color alone without a title and description.',
+		],
+		accessibilityNotes: [
+			'Title and description remain outside the SVG so assistive tech can read the chart intent.',
+			'Fallback states keep chart surfaces understandable even without any visual marks.',
+		],
+		platformNotes: [
+			'Rendering is SVG-backed for parity on iOS and Android.',
+			'Palette and grid styling come from shared DS visual data tokens.',
+		],
+	}),
+	DescriptionList: doc({
+		name: 'DescriptionList',
+		filePath: 'src/design-system/components/molecules/DescriptionList.tsx',
+		summary:
+			'Key-value display surface with horizontal or vertical layout, copy actions, and masked-value reveal support.',
+		exampleStories: [
+			'vertical metadata list',
+			'horizontal metadata list',
+			'masked sensitive value',
+		],
+		variants: ['vertical', 'horizontal'],
+		sizes: ['default', 'compact'],
+		states: ['default', 'copyable', 'sensitive hidden', 'sensitive revealed'],
+		compositionExample:
+			'Entity detail panel or invoice metadata summary with copyable identifiers.',
+		usage: {
+			relaxed: 'Use vertical layout when explanations and long values need room.',
+			operational: 'Use compact horizontal layout in dense detail summaries or side panels.',
+			noMedia:
+				'The pattern is fully text-first and does not assume any icon or artwork support.',
+		},
+		propTable: [
+			prop('items', 'DescriptionListItem[]', 'Rows of key-value metadata.'),
+			prop('layout', "'vertical' | 'horizontal'", 'Presentation layout.', 'vertical'),
+			prop('density', "'compact' | 'default'", 'Operational density mode.', 'default'),
+			prop('copyLabel', 'string', 'Accessible copy-action prefix.', 'Copy value'),
+			prop('revealLabel', 'string', 'Accessible reveal-action prefix.', 'Reveal value'),
+			prop('hideLabel', 'string', 'Accessible hide-action prefix.', 'Hide value'),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Mask sensitive values by default and let people reveal them intentionally.'],
+		dontList: ['Do not dump long raw identifiers into a layout without copy support.'],
+		accessibilityNotes: [
+			'Copy and reveal controls expose stable labels tied to the field name.',
+			'Reveal state is announced so assistive-tech users know the value changed.',
+		],
+		platformNotes: [
+			'Uses the native clipboard bridge available on both mobile platforms.',
+			'Layout remains RTL-safe through logical spacing and flex alignment.',
+		],
+	}),
+	KanbanBoard: doc({
+		name: 'KanbanBoard',
+		filePath: 'src/design-system/components/molecules/KanbanBoard.tsx',
+		summary:
+			'Horizontal board layout with tokenized columns, WIP hints, drag-reorder inside columns, and explicit cross-column move controls.',
+		exampleStories: [
+			'three-column board',
+			'board with WIP warning',
+			'column reorder interactions',
+		],
+		variants: ['default', 'column over WIP limit'],
+		sizes: ['default column width'],
+		states: ['default', 'reordering card', 'over limit'],
+		compositionExample:
+			'Operational workflow board for queued, in-progress, and completed tasks.',
+		usage: {
+			relaxed: 'Use on overview boards where cards need more descriptive copy.',
+			operational:
+				'Keep card copy compact and column widths stable for fast scanning on mobile.',
+			noMedia:
+				'Board comprehension relies on titles, descriptions, and status labels without artwork.',
+		},
+		propTable: [
+			prop('columns', 'KanbanBoardColumn[]', 'Controlled board columns.'),
+			prop('defaultColumns', 'KanbanBoardColumn[]', 'Uncontrolled board columns.', '[]'),
+			prop(
+				'onColumnsChange',
+				'(columns: KanbanBoardColumn[]) => void',
+				'Canonical board callback.',
+			),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Keep WIP limits visible and use quiet warnings when a column is overloaded.'],
+		dontList: ['Do not rely on drag alone when cards also need accessible move controls.'],
+		accessibilityNotes: [
+			'Column transfer buttons preserve a non-drag path for assistive-tech users.',
+			'Card ordering itself is powered by the shared sortable-list accessibility actions.',
+		],
+		platformNotes: [
+			'Columns live inside a horizontal ScrollView so they remain touch-friendly on mobile.',
+			'Cards reuse the shared sortable-list gesture contract within each lane.',
+		],
+	}),
+	MediaViewer: doc({
+		name: 'MediaViewer',
+		filePath: 'src/design-system/components/molecules/MediaViewer.tsx',
+		summary:
+			'Gallery viewer with progressive image loading, pinch zoom, swipe navigation, swipe-to-dismiss, and text-first fallback.',
+		exampleStories: [
+			'gallery item with thumbnail',
+			'swipe between images',
+			'missing-media fallback',
+		],
+		variants: ['gallery', 'fallback card'],
+		sizes: ['default modal frame'],
+		states: ['open', 'closed', 'loaded', 'missing media fallback'],
+		compositionExample: 'Evidence or attachment viewer launched from a detail surface.',
+		usage: {
+			relaxed: 'Use when high-resolution imagery or attachments need roomy focus treatment.',
+			operational:
+				'Keep captions concise and rely on progressive loading when media is large.',
+			noMedia:
+				'Fallback copy keeps the viewer usable even when the image is missing or fails to load.',
+		},
+		propTable: [
+			prop('items', 'MediaViewerItem[]', 'Gallery items to view.'),
+			prop('index', 'number', 'Controlled active gallery index.'),
+			prop('defaultIndex', 'number', 'Uncontrolled active gallery index.', '0'),
+			prop('onIndexChange', '(index: number) => void', 'Gallery index callback.'),
+			prop('open', 'boolean', 'Controlled open state.'),
+			prop('defaultOpen', 'boolean', 'Uncontrolled open state.', 'true'),
+			prop('onOpenChange', '(open: boolean) => void', 'Viewer open-state callback.'),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Provide captions and alt-like labels so imagery never stands alone.'],
+		dontList: [
+			'Do not assume image availability or quality when the workflow depends on the content.',
+		],
+		accessibilityNotes: [
+			'Close, previous, and next affordances all expose explicit labels.',
+			'Fallback text preserves meaning when the image path fails.',
+		],
+		platformNotes: [
+			'Pinch and pan gestures rely on the native gesture-handler stack on iOS and Android.',
+			'Progressive loading uses the shared Expo image component for consistency.',
+		],
+	}),
+	SortableList: doc({
+		name: 'SortableList',
+		filePath: 'src/design-system/components/molecules/SortableList.tsx',
+		summary:
+			'Gesture-driven reorder surface with drag handle, move up/down fallbacks, and announced ordering changes.',
+		exampleStories: ['short reorder list', 'active dragged row', 'keyboard or button fallback'],
+		variants: ['default'],
+		sizes: ['default item height'],
+		states: ['default', 'active drag', 'empty'],
+		compositionExample: 'Priority queue or board lane where item ordering matters.',
+		usage: {
+			relaxed: 'Use when cards need more descriptive space while still being reorderable.',
+			operational:
+				'Use consistent row heights so drag thresholds remain predictable in dense lists.',
+			noMedia: 'Reorder affordances work without any decorative imagery.',
+		},
+		propTable: [
+			prop('items', 'T[]', 'Controlled sortable list items.'),
+			prop('defaultItems', 'T[]', 'Uncontrolled sortable list items.', '[]'),
+			prop('onItemsChange', '(items: T[]) => void', 'Canonical reorder callback.'),
+			prop('renderItem', '(item, index, active) => ReactNode', 'Row renderer.'),
+			prop('itemHeight', 'number', 'Expected row height for reorder thresholding.', '76'),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Keep row heights reasonably consistent for predictable drag results.'],
+		dontList: ['Do not hide every reorder path behind a gesture-only affordance.'],
+		accessibilityNotes: [
+			'Rows expose move-up and move-down accessibility actions.',
+			'Ordering changes announce the new position for assistive-tech users.',
+		],
+		platformNotes: [
+			'Drag thresholding uses gesture-handler pan gestures on both platforms.',
+			'Touch-safe fallback buttons remain available even when gestures are reduced or unavailable.',
+		],
+	}),
+	TokenInput: doc({
+		name: 'TokenInput',
+		filePath: 'src/design-system/components/molecules/TokenInput.tsx',
+		summary:
+			'Multi-tag field with add/remove flow, tag limits, and swipe-to-remove token rows on mobile.',
+		exampleStories: ['simple tags', 'max-tag limit', 'swipe-remove token'],
+		variants: ['default', 'limit reached'],
+		sizes: ['default field'],
+		states: ['empty', 'has tokens', 'limit reached'],
+		compositionExample:
+			'Label editor, notification audience picker, or metadata tagging field.',
+		usage: {
+			relaxed: 'Use where visible token rows help people understand structured tags.',
+			operational: 'Keep limits explicit and token rows compact.',
+			noMedia: 'Token meaning is fully expressed through text badges and counts.',
+		},
+		propTable: [
+			prop('values', 'string[]', 'Controlled token list.'),
+			prop('defaultValues', 'string[]', 'Uncontrolled token list.', '[]'),
+			prop('maxTags', 'number', 'Maximum number of tokens.', '5'),
+			prop('placeholder', 'string', 'Input placeholder.', 'Add a tag'),
+			prop('onValueChange', '(values: string[]) => void', 'Canonical token-list callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Show the current count relative to the limit.'],
+		dontList: ['Do not let hidden overflow silently swallow user input.'],
+		accessibilityNotes: [
+			'Tokens remain readable badges and each row exposes a delete action.',
+			'Swipe-to-remove still keeps a visible accessible delete affordance.',
+		],
+		platformNotes: [
+			'Mobile token rows compose the shared swipeable-row gesture contract.',
+			'Limit styling stays calm and warning-toned rather than alarmist.',
+		],
+	}),
+	ToggleButtonGroup: doc({
+		name: 'ToggleButtonGroup',
+		filePath: 'src/design-system/components/molecules/ToggleButtonGroup.tsx',
+		summary:
+			'Grouped toggle buttons supporting either radio-style single select or checkbox-style multi-select.',
+		exampleStories: ['single select group', 'multi-select facet group'],
+		variants: ['single select', 'multi-select'],
+		sizes: ['default'],
+		states: ['selected', 'unselected'],
+		compositionExample: 'Mode filters, facet toggles, or compact preference groups.',
+		usage: {
+			relaxed: 'Use for mode switches that should still feel tactile and premium.',
+			operational:
+				'Use concise labels and restrained selected-state color in dense toolbars.',
+			noMedia: 'Selection meaning comes from label and state, not icons alone.',
+		},
+		propTable: [
+			prop('options', 'ToggleButtonOption[]', 'Available toggle buttons.'),
+			prop('multiple', 'boolean', 'Switches to checkbox-style multi-select.', 'false'),
+			prop('value', 'string | string[]', 'Controlled selected value or values.'),
+			prop('defaultValue', 'string | string[]', 'Uncontrolled selected value or values.'),
+			prop('onValueChange', '(value) => void', 'Canonical group callback.'),
+			COMMON_TEST_ID_PROP,
+			COMMON_STYLE_PROP,
+		],
+		doList: ['Choose single or multi-select behavior intentionally.'],
+		dontList: ['Do not mix mutually exclusive and additive choices in the same group.'],
+		accessibilityNotes: [
+			'Selected state remains explicit on every button.',
+			'Single and multi-select behaviors use the same readable control pattern.',
+		],
+		platformNotes: [
+			'Spacing and selected treatment reuse the shared button tokens.',
+			'Behavior is consistent across iOS and Android without depending on platform shell chrome.',
+		],
+	}),
+	VirtualizedList: doc({
+		name: 'VirtualizedList',
+		filePath: 'src/design-system/components/molecules/VirtualizedList.tsx',
+		summary:
+			'FlashList/SectionList wrapper for long datasets with selection, load more, refresh, empty, and skeleton behavior.',
+		exampleStories: ['skeleton state', 'flat flash list', 'sectioned list with headers'],
+		variants: ['flash list', 'section list'],
+		sizes: ['compact', 'default'],
+		states: ['loading', 'empty', 'selected rows', 'refreshing', 'load more'],
+		compositionExample: 'Dense operational dataset with section headers and selectable rows.',
+		usage: {
+			relaxed:
+				'Use richer empty descriptions and larger item heights on spacious overview surfaces.',
+			operational:
+				'Turn on compact density and fixed item height when scan speed and virtualization matter most.',
+			noMedia: 'Empty and skeleton states remain understandable without imagery.',
+		},
+		propTable: [
+			prop('data', 'T[]', 'Flat dataset for FlashList rendering.', '[]'),
+			prop('sections', 'VirtualizedListSection<T>[]', 'Optional sectioned dataset.'),
+			prop(
+				'renderItem',
+				'(context) => ReactElement | null',
+				'Item renderer with selection helpers.',
+			),
+			prop('keyExtractor', '(item, index) => string', 'Stable row identity.'),
+			prop('selectedKeys', 'string[]', 'Controlled selected row ids.'),
+			prop('defaultSelectedKeys', 'string[]', 'Uncontrolled selected row ids.', '[]'),
+			prop('onSelectedKeysChange', '(keys: string[]) => void', 'Selection callback.'),
+			prop('itemHeight', 'number', 'Fixed-height optimization for getItemLayout.'),
+			prop('estimatedItemSize', 'number', 'FlashList estimated item size.', '72'),
+			prop('onLoadMore', '() => void', 'Load-more callback at list end.'),
+			prop('onRefresh', '() => void', 'Pull-to-refresh callback.'),
+			prop('isRefreshing', 'boolean', 'Refresh state.', 'false'),
+			prop('isLoading', 'boolean', 'Initial loading state.', 'false'),
+			prop('density', "'compact' | 'default'", 'Skeleton and row density.', 'default'),
+			COMMON_STYLE_PROP,
+			prop(
+				'contentContainerStyle',
+				'StyleProp<ViewStyle>',
+				'List container layout overrides.',
+			),
+			COMMON_TEST_ID_PROP,
+		],
+		doList: ['Use a fixed item height when the dataset truly supports it.'],
+		dontList: ['Do not drop back to ScrollView for long datasets that need virtualization.'],
+		accessibilityNotes: [
+			'Selection state is explicit and exposed through the shared renderItem contract.',
+			'Empty and skeleton states stay readable under large text settings.',
+		],
+		platformNotes: [
+			'Flat datasets use FlashList, while grouped datasets use SectionList on native platforms.',
+			'Refresh and end-reached behaviors align with mobile list conventions.',
 		],
 	}),
 };

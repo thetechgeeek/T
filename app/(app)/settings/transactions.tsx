@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { View, Switch, StyleSheet, TextInput } from 'react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import type { ThemeColors } from '@/src/theme';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/components/molecules/SectionHeader';
-import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/design-system/components/molecules/SettingsCard';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 

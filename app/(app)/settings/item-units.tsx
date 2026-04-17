@@ -26,11 +26,11 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Plus, Pencil, Trash2 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
-import { Card } from '@/src/components/atoms/Card';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { Card } from '@/src/design-system/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';

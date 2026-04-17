@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Card } from '@/src/components/atoms/Card';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Card } from '@/src/design-system/components/atoms/Card';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';

@@ -30,12 +30,17 @@ import {
 	LETTER_SPACING_ACCOUNT,
 	LETTER_SPACING_SECTION,
 	RADIUS_FAB,
+	SIZE_CHECKBOX,
+	SIZE_CHECKBOX_INDICATOR,
 	SIZE_BUTTON_HEIGHT_LG,
 	SIZE_BUTTON_HEIGHT_SM,
 	SIZE_CHIP_HEIGHT,
 	SIZE_FAB,
 	SIZE_FAB_ICON,
 	SIZE_ICON_MD,
+	SIZE_SWITCH_THUMB,
+	SIZE_SWITCH_TRACK_HEIGHT,
+	SIZE_SWITCH_TRACK_WIDTH,
 } from './uiMetrics';
 import { buildDensitySpacingSet, resolveThemePreset, THEME_PRESET_OPTIONS } from './presets';
 import { detectPixelRatio } from './density';
@@ -220,11 +225,13 @@ const buildComponentTokens = ({
 >): Theme['components'] => ({
 	button: {
 		heights: {
+			xs: touchTarget - spacing.xs,
 			sm: SIZE_BUTTON_HEIGHT_SM,
 			md: touchTarget,
 			lg: SIZE_BUTTON_HEIGHT_LG,
 		},
 		paddingX: {
+			xs: spacing.md,
 			sm: spacing.lg,
 			md: spacing.xl,
 			lg: spacing['2xl'],
@@ -278,6 +285,21 @@ const buildComponentTokens = ({
 		labelGap: spacing.xs,
 		helperGap: spacing.xs,
 		iconGap: spacing.sm,
+	},
+	selectionControl: {
+		size: SIZE_CHECKBOX,
+		radius: borderRadius.sm,
+		borderWidth: borderWidth.sm,
+		indicatorSize: SIZE_CHECKBOX_INDICATOR,
+		gap: spacing.sm,
+		descriptionGap: spacing.xxs,
+	},
+	toggleSwitch: {
+		minHeight: touchTarget,
+		trackWidth: SIZE_SWITCH_TRACK_WIDTH,
+		trackHeight: SIZE_SWITCH_TRACK_HEIGHT,
+		thumbSize: SIZE_SWITCH_THUMB,
+		gap: spacing.md,
 	},
 	searchBar: {
 		height: spacing['3xl'],
@@ -401,11 +423,16 @@ export function buildTheme(
 	options: {
 		contrastMode?: ThemeContrastMode;
 		pixelRatio?: number;
+		detectedLocale?: string;
 	} = {},
 ): Theme {
 	const contrastMode = options.contrastMode ?? 'default';
 	const pixelRatio = options.pixelRatio ?? detectPixelRatio();
-	const preset = resolveThemePreset(presetId, isDark, { contrastMode, pixelRatio });
+	const preset = resolveThemePreset(presetId, isDark, {
+		contrastMode,
+		pixelRatio,
+		detectedLocale: options.detectedLocale,
+	});
 	const borderWidth: Theme['borderWidth'] = {
 		...BORDER_WIDTH_PX,
 	};

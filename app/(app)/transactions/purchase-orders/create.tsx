@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { Plus, Trash2 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
-import { DatePickerField } from '@/src/components/molecules/DatePickerField';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_ROW_HIGHLIGHT } from '@/src/theme/uiMetrics';

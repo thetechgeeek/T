@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, Switch, StyleSheet, Pressable, TextInput } from 'react-native';
 
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/components/molecules/SectionHeader';
-import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/design-system/components/molecules/SettingsCard';
 import { withOpacity } from '@/src/utils/color';
 import {
 	BORDER_WIDTH_BASE,

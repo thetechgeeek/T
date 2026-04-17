@@ -15,9 +15,9 @@ import { View, TextInput, Pressable, ActivityIndicator, StyleSheet } from 'react
 import { useRouter } from 'expo-router';
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { useTheme } from '@/src/theme/ThemeProvider';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
 import { storageService } from '@/src/services/storageService';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';

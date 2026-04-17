@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet } from 'react-native';
 
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/components/atoms/Card';
-import { Badge } from '@/src/components/atoms/Badge';
-import { EmptyState } from '@/src/components/molecules/EmptyState';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Card } from '@/src/design-system/components/atoms/Card';
+import { Badge } from '@/src/design-system/components/atoms/Badge';
+import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 
 export default function AgingReportScreen() {
 	const { c: colors, s } = useThemeTokens();

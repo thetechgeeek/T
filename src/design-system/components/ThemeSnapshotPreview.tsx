@@ -1,13 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Card } from '@/src/components/atoms/Card';
-import { Badge } from '@/src/components/atoms/Badge';
-import { Button } from '@/src/components/atoms/Button';
-import { Chip } from '@/src/components/atoms/Chip';
-import { TextInput } from '@/src/components/atoms/TextInput';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
-import { SkeletonRow } from '@/src/components/molecules/SkeletonRow';
+import { Card } from '@/src/design-system/components/atoms/Card';
+import { Badge } from '@/src/design-system/components/atoms/Badge';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { Chip } from '@/src/design-system/components/atoms/Chip';
+import { TextInput } from '@/src/design-system/components/atoms/TextInput';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
+import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import {
 	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,

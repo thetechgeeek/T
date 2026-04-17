@@ -14,11 +14,11 @@ import {
 	RefreshControl,
 	Pressable,
 } from 'react-native';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Card } from '@/src/components/atoms/Card';
-import { Button } from '@/src/components/atoms/Button';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Card } from '@/src/design-system/components/atoms/Card';
+import { Button } from '@/src/design-system/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { MOCK_CASH_TRANSACTIONS } from '@/src/mocks/finance/cash';

@@ -3,10 +3,10 @@ import { View, StyleSheet, ScrollView, TextInput, Pressable, Alert, Switch } fro
 import { useRouter } from 'expo-router';
 import { BORDER_WIDTH_BASE, LETTER_SPACING_ACCOUNT, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';

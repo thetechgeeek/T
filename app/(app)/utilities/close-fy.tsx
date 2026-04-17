@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import { CheckCircle2, Circle } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useRouter } from 'expo-router';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';

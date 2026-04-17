@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { ChevronDown, ChevronUp, FileCode } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/components/molecules/SectionHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_SKELETON_BASE, SIZE_ICON_LG, SIZE_ICON_MD } from '@/src/theme/uiMetrics';

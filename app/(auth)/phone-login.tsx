@@ -10,9 +10,9 @@ import {
 	SIZE_INPUT_HEIGHT,
 } from '@/theme/uiMetrics';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Screen } from '@/src/components/atoms/Screen';
-import { PhoneInput } from '@/src/components/molecules/PhoneInput';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { PhoneInput } from '@/src/design-system/components/molecules/PhoneInput';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 
 /**
  * P1.2 — Phone OTP Login Screen

@@ -6,10 +6,10 @@ import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { GLASS_WHITE_LIGHT, OPACITY_HOVER, SIZE_AUTH_LOGO_LG } from '@/theme/uiMetrics';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/components/atoms/Screen';
-import { Button } from '@/src/components/atoms/Button';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { PhoneInput } from '@/src/components/molecules/PhoneInput';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { PhoneInput } from '@/src/design-system/components/molecules/PhoneInput';
 
 export default function LoginScreen() {
 	const { c, s, r, typo } = useThemeTokens();

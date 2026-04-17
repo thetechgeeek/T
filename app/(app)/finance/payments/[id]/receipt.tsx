@@ -15,12 +15,12 @@ import { MessageCircle, FileText, CheckCircle2 } from 'lucide-react-native';
 import { paymentService } from '@/src/services/paymentService';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
-import { Divider } from '@/src/components/atoms/Divider';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { Divider } from '@/src/design-system/components/atoms/Divider';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
 import type { Payment } from '@/src/types/finance';
 
 // ── Helpers ────────────────────────────────────────────────────────────────

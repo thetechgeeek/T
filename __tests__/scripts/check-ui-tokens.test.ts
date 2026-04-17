@@ -74,7 +74,7 @@ describe('check-ui-tokens', () => {
 					);
 				}
 			`,
-			'src/components/atoms/Card.tsx': `
+			'src/design-system/components/atoms/Card.tsx': `
 				export const cardStyle = { borderRadius: token.r.md, paddingTop: token.s.sm };
 			`,
 		});

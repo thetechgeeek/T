@@ -4,8 +4,8 @@ import { Home, Package, QrCode, FileText, MoreHorizontal } from 'lucide-react-na
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ErrorBoundaryProps } from 'expo-router';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
 import {
 	FAB_OFFSET_BOTTOM,
 	OPACITY_GLOW,

@@ -20,8 +20,10 @@ jest.mock('@/src/services/dashboardService', () => ({
 
 // We'll use a counter in a mock to track renders of a key sub-component
 let mockStatCardRenderCount = 0;
-jest.mock('@/src/components/molecules/StatCard', () => {
-	const ActualStatCard = jest.requireActual('@/src/components/molecules/StatCard').StatCard;
+jest.mock('@/src/design-system/components/molecules/StatCard', () => {
+	const ActualStatCard = jest.requireActual(
+		'@/src/design-system/components/molecules/StatCard',
+	).StatCard;
 	return {
 		StatCard: (props: Record<string, unknown>) => {
 			mockStatCardRenderCount++;

@@ -8,8 +8,8 @@ import { Camera, X } from 'lucide-react-native';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { businessProfileService } from '@/src/services/businessProfileService';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { storageService } from '@/src/services/storageService';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import {

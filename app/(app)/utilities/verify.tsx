@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { Button } from '@/src/components/atoms/Button';
-import { Card } from '@/src/components/atoms/Card';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { Card } from '@/src/design-system/components/atoms/Card';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import { OPACITY_TINT_SUBTLE } from '@/src/theme/uiMetrics';

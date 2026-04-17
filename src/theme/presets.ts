@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import {
 	ANIMATION_MS,
 	BORDER_RADIUS_PX,
@@ -13,12 +12,7 @@ import {
 	lightColors as baseLightColors,
 	themePresetColorOverrides,
 } from './palette';
-import {
-	FONT_FAMILY_TOKENS,
-	FONT_SIZE_TOKENS,
-	FONT_WEIGHT_TOKENS,
-	TOKEN_VERSION,
-} from './designTokens';
+import { FONT_SIZE_TOKENS, FONT_WEIGHT_TOKENS, TOKEN_VERSION } from './designTokens';
 import { EASING_CURVES, MOTION_PROFILES } from './animations';
 import { FONT_SIZE, FONT_SIZE_SCALE, LINE_HEIGHT, LINE_HEIGHT_RATIO } from './typographyMetrics';
 import {
@@ -27,6 +21,7 @@ import {
 	resolveDensityAwareRadius,
 	resolveDensityAwareTouchTarget,
 } from './density';
+import { resolveTypographyFamiliesForLocale } from './localeTypography';
 import type {
 	Theme,
 	ThemeColors,
@@ -74,14 +69,6 @@ export interface ResolvedThemePreset {
 		elevationScale: number;
 	};
 }
-
-const SYSTEM_FONT = Platform.select(FONT_FAMILY_TOKENS.ui) ?? FONT_FAMILY_TOKENS.ui.default;
-const SYSTEM_FONT_BOLD =
-	Platform.select(FONT_FAMILY_TOKENS.display) ?? FONT_FAMILY_TOKENS.display.default;
-const SYSTEM_FONT_BRAND =
-	Platform.select(FONT_FAMILY_TOKENS.brand) ?? FONT_FAMILY_TOKENS.brand.default;
-const SYSTEM_FONT_MONO =
-	Platform.select(FONT_FAMILY_TOKENS.mono) ?? FONT_FAMILY_TOKENS.mono.default;
 
 const BASE_SPACING = SPACING_PX;
 const BASE_RADIUS = BORDER_RADIUS_PX;
@@ -194,21 +181,23 @@ function scaleTypography(
 	lineHeightScale: number,
 	pixelRatio: number,
 	colors: Pick<ThemeColors, 'primary' | 'error'>,
+	detectedLocale = 'en-US',
 ): ThemeTypography {
 	const scaleSize = (value: number, minimum: number) =>
 		resolveDensityAwareDimension(roundToken(value * fontScale, minimum), pixelRatio);
 	const scaleLineHeightValue = (value: number, minimum: number) =>
 		resolveDensityAwareDimension(roundToken(value * lineHeightScale, minimum), pixelRatio);
+	const families = resolveTypographyFamiliesForLocale(detectedLocale);
 
 	return {
-		fontFamily: SYSTEM_FONT,
-		fontFamilyBold: SYSTEM_FONT_BOLD,
-		fontFamilyDisplay: SYSTEM_FONT_BRAND,
+		fontFamily: families.ui,
+		fontFamilyBold: families.display,
+		fontFamilyDisplay: families.brand,
 		families: {
-			ui: SYSTEM_FONT,
-			display: SYSTEM_FONT_BOLD,
-			brand: SYSTEM_FONT_BRAND,
-			mono: SYSTEM_FONT_MONO,
+			ui: families.ui,
+			display: families.display,
+			brand: families.brand,
+			mono: families.mono,
 		},
 		scale: {
 			xs: scaleSize(FONT_SIZE_TOKENS.xs, MIN_SIZE_XS),
@@ -251,7 +240,7 @@ function scaleTypography(
 				fontSize: scaleSize(FONT_SIZE.display, MIN_DISPLAY_SIZE),
 				fontWeight: FONT_WEIGHT_TOKENS.bold,
 				lineHeight: scaleLineHeightValue(LINE_HEIGHT.display, MIN_DISPLAY_LINE_HEIGHT),
-				fontFamily: SYSTEM_FONT_BRAND,
+				fontFamily: families.brand,
 			},
 			screenTitle: {
 				fontSize: scaleSize(FONT_SIZE.h1, MIN_H1_SIZE),
@@ -312,7 +301,7 @@ function scaleTypography(
 				fontSize: scaleSize(FONT_SIZE.caption, MIN_CAPTION_SIZE),
 				fontWeight: FONT_WEIGHT_TOKENS.medium,
 				lineHeight: scaleLineHeightValue(LINE_HEIGHT.caption, MIN_CAPTION_LINE_HEIGHT),
-				fontFamily: SYSTEM_FONT_MONO,
+				fontFamily: families.mono,
 			},
 			caption: {
 				fontSize: scaleSize(FONT_SIZE.caption, MIN_CAPTION_SIZE),
@@ -466,6 +455,7 @@ export function resolveThemePreset(
 	options: {
 		contrastMode?: ThemeContrastMode;
 		pixelRatio?: number;
+		detectedLocale?: string;
 	} = {},
 ): ResolvedThemePreset {
 	const preset = THEME_PRESET_DEFINITIONS[presetId] ?? THEME_PRESET_DEFINITIONS.baseline;
@@ -492,7 +482,13 @@ export function resolveThemePreset(
 			tokenVersion: TOKEN_VERSION,
 		},
 		colors,
-		typography: scaleTypography(preset.fontScale, preset.lineHeightScale, pixelRatio, colors),
+		typography: scaleTypography(
+			preset.fontScale,
+			preset.lineHeightScale,
+			pixelRatio,
+			colors,
+			options.detectedLocale,
+		),
 		spacing: scaleSpacing(preset.spacingScale, pixelRatio),
 		borderRadius: scaleRadius(preset.radiusScale, pixelRatio),
 		animation: {

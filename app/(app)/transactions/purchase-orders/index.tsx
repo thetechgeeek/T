@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import { Plus, ShoppingCart } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Badge } from '@/src/components/atoms/Badge';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useRouter } from 'expo-router';

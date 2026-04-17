@@ -16,7 +16,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = path.join(__dirname, '..');
-const UI_SOURCE_DIRS = ['app', 'src/components', 'src/features'];
+const UI_SOURCE_DIRS = ['app', 'src/design-system/components', 'src/features'];
 const ALLOWLIST_PATH = 'docs/COLLOQUIAL_UI_ALLOWLIST.md';
 const DIRECTORY_SKIP = new Set(['node_modules', 'dist', 'coverage', '.expo']);
 

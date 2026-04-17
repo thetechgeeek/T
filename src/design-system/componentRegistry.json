@@ -1,34 +1,115 @@
 [
-	{ "kind": "atoms", "filePath": "src/components/atoms/Badge.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/Button.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/Card.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/Chip.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/Divider.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/IconButton.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/Screen.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/TextInput.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/ThemedText.tsx" },
-	{ "kind": "atoms", "filePath": "src/components/atoms/TouchableCard.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/AmountInput.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/BottomSheetPicker.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/CollapsibleSection.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/ConfirmationModal.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/DatePickerField.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/EmptyState.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/FilterBar.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/FormField.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/FormSection.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/ListItem.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/PaginatedList.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/PhoneInput.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/SearchBar.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/SectionHeader.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/SettingsCard.tsx" },
-	{ "kind": "skeletons", "filePath": "src/components/molecules/SkeletonBlock.tsx" },
-	{ "kind": "skeletons", "filePath": "src/components/molecules/SkeletonRow.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/StatCard.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/SwipeableRow.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/TableRow.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/TextAreaField.tsx" },
-	{ "kind": "molecules", "filePath": "src/components/molecules/Toast.tsx" }
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Badge.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Avatar.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Button.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Card.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Checkbox.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Chip.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Divider.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/IconButton.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Radio.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/Screen.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/TextInput.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/ThemedText.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/ToggleSwitch.tsx" },
+	{ "kind": "atoms", "filePath": "src/design-system/components/atoms/TouchableCard.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/AmountInput.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/ActionMenuSheet.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/ActivityFeed.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/AlertBanner.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/AutocompleteField.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/AvatarGroup.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/BottomSheetPicker.tsx"
+	},
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/CollapsibleSection.tsx"
+	},
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/ConfirmationModal.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/DataChart.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/DatePickerField.tsx"
+	},
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/DateRangePickerField.tsx"
+	},
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/DescriptionList.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/EmptyState.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/ErrorState.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/FileUploadField.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/FilterBar.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/FormField.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/FormSection.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/KanbanBoard.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/ListItem.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/MediaViewer.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/NotificationCenter.tsx"
+	},
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/NumericStepper.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/OtpCodeInput.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/PaginatedList.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/PhoneInput.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/Popover.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/ProgressIndicator.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/RangeSlider.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/SortableList.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/SearchBar.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/SegmentedControl.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/SectionHeader.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/SettingsCard.tsx" },
+	{ "kind": "skeletons", "filePath": "src/design-system/components/molecules/SkeletonBlock.tsx" },
+	{ "kind": "skeletons", "filePath": "src/design-system/components/molecules/SkeletonRow.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/SplitButton.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/Stepper.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/StatCard.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/SwipeableRow.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/Tabs.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/TableRow.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/TextAreaField.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/TimePickerField.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/Tooltip.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/TokenInput.tsx" },
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/Toast.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/ToggleButtonGroup.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/ColorPicker.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/VirtualizedList.tsx"
+	}
 ]

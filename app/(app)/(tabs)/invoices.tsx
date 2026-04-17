@@ -4,14 +4,14 @@ import { View, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from '
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { Button } from '@/src/components/atoms/Button';
+import { Button } from '@/src/design-system/components/atoms/Button';
 import { useLocale } from '@/src/hooks/useLocale';
 import { FileText, Plus, Search, X } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { InvoiceStatusBadge } from '@/src/components/molecules/InvoiceStatusBadge';
-import type { InvoiceStatus } from '@/src/components/molecules/InvoiceStatusBadge';
-import { InvoiceListSkeleton } from '@/src/components/molecules/skeletons/InvoiceListSkeleton';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { InvoiceStatusBadge } from '@/app/components/molecules/InvoiceStatusBadge';
+import type { InvoiceStatus } from '@/app/components/molecules/InvoiceStatusBadge';
+import { InvoiceListSkeleton } from '@/app/components/molecules/skeletons/InvoiceListSkeleton';
 import type { Invoice, PaymentStatus } from '@/src/types/invoice';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 

@@ -12,12 +12,12 @@ import {
 	DollarSign,
 	MoreHorizontal,
 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { FilterBar } from '@/src/components/molecules/FilterBar';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Card } from '@/src/components/atoms/Card';
-import { EmptyState } from '@/src/components/molecules/EmptyState';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { FilterBar } from '@/src/design-system/components/molecules/FilterBar';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Card } from '@/src/design-system/components/atoms/Card';
+import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@/src/theme/layout';

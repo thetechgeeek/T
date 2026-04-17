@@ -14,12 +14,12 @@ import {
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
-import { StatCard } from '@/src/components/molecules/StatCard';
-import { ListItem } from '@/src/components/molecules/ListItem';
-import { Divider } from '@/src/components/atoms/Divider';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { StatCard } from '@/src/design-system/components/molecules/StatCard';
+import { ListItem } from '@/src/design-system/components/molecules/ListItem';
+import { Divider } from '@/src/design-system/components/atoms/Divider';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
 import React, { useEffect, useState } from 'react';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 

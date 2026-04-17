@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { Button } from '@/src/components/atoms/Button';
+import { Button } from '@/src/design-system/components/atoms/Button';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { View, Text } from 'react-native';
 

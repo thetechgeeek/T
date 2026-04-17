@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, Alert, TextInput } from 'react-native';
 import { ArrowRightLeft } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { withOpacity } from '@/src/utils/color';
 import {
@@ -17,7 +17,7 @@ import {
 	SIZE_THEME_SWATCH_WIDTH,
 } from '@/src/theme/uiMetrics';
 import { useLocale } from '@/src/hooks/useLocale';
-import { DatePickerField } from '@/src/components/molecules/DatePickerField';
+import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
 import { MOCK_TRANSFER_ACCOUNTS } from '@/src/mocks/finance/transfer';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';

@@ -330,11 +330,13 @@ export interface ThemeVisualTokens {
 export interface ThemeComponentTokens {
 	button: {
 		heights: {
+			xs: number;
 			sm: number;
 			md: number;
 			lg: number;
 		};
 		paddingX: {
+			xs: number;
 			sm: number;
 			md: number;
 			lg: number;
@@ -388,6 +390,21 @@ export interface ThemeComponentTokens {
 		labelGap: number;
 		helperGap: number;
 		iconGap: number;
+	};
+	selectionControl: {
+		size: number;
+		radius: number;
+		borderWidth: number;
+		indicatorSize: number;
+		gap: number;
+		descriptionGap: number;
+	};
+	toggleSwitch: {
+		minHeight: number;
+		trackWidth: number;
+		trackHeight: number;
+		thumbSize: number;
+		gap: number;
 	};
 	searchBar: {
 		height: number;

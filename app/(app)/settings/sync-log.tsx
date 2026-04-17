@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert, RefreshControl } from 'react-native';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
 import { BORDER_WIDTH_BASE, OPACITY_ROW_DIVIDER } from '@/theme/uiMetrics';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { writeQueue, type QueuedMutation } from '@/src/services/writeQueueService';
 import { useSyncStore } from '@/src/stores/syncStore';
 import { useLocale } from '@/src/hooks/useLocale';

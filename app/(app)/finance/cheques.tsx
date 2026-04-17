@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable, Alert, type AlertButton } from 'react-native';
 import { FileText, AlertTriangle, Plus } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Badge } from '@/src/components/atoms/Badge';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { BadgeVariant } from '@/src/components/atoms/Badge';
+import type { BadgeVariant } from '@/src/design-system/components/atoms/Badge';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import {
 	BORDER_WIDTH_BASE,

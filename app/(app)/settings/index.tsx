@@ -3,11 +3,11 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/components/molecules/SectionHeader';
-import { SettingsCard } from '@/src/components/molecules/SettingsCard';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
+import { SettingsCard } from '@/src/design-system/components/molecules/SettingsCard';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 interface NavRow {

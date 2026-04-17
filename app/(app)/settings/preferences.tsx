@@ -4,11 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import type { ThemeMode } from '@/src/theme/index';
-import { Screen } from '@/src/components/atoms/Screen';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
 import { withOpacity } from '@/src/utils/color';
 import {
 	BORDER_WIDTH_BASE,

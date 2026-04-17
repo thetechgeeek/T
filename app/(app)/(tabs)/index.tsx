@@ -2,23 +2,23 @@ import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, RefreshControl, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
 import { layout } from '@/src/theme/layout';
 import { withOpacity } from '@/src/utils/color';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Card } from '@/src/components/atoms/Card';
-import { SectionHeader } from '@/src/components/molecules/SectionHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Card } from '@/src/design-system/components/atoms/Card';
+import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
 
 // Atomic Design Components
-import { StatCard } from '@/src/components/molecules/StatCard';
-import { DashboardSkeleton } from '@/src/components/molecules/skeletons/DashboardSkeleton';
-import { DashboardHeader } from '@/src/components/organisms/DashboardHeader';
-import { QuickActionsGrid } from '@/src/components/organisms/QuickActionsGrid';
-import { RecentInvoicesList } from '@/src/components/organisms/RecentInvoicesList';
+import { StatCard } from '@/src/design-system/components/molecules/StatCard';
+import { DashboardSkeleton } from '@/app/components/molecules/skeletons/DashboardSkeleton';
+import { DashboardHeader } from '@/app/components/organisms/DashboardHeader';
+import { QuickActionsGrid } from '@/app/components/organisms/QuickActionsGrid';
+import { RecentInvoicesList } from '@/app/components/organisms/RecentInvoicesList';
 import {
 	TrendingUp,
 	AlertTriangle,

@@ -6,28 +6,29 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 
 - Give product and engineering a live in-app component gallery instead of depending on Figma first.
 - Track the pure library contract from [UI_Library_Checklist.md](../../docs/UI_Library_Checklist.md); host-app responsibilities live in [UI_Integration_Checklist.md](../../docs/UI_Integration_Checklist.md).
+- Track external design-tool and asset-delivery workflow in [DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md](../../docs/DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md) instead of mixing it into the core library contract.
 - Keep the supported component catalog tied to an explicit design-system registry instead of product feature screens.
 - Support runtime look-and-feel switching through theme presets, not only light/dark colors.
 
 ## Files
 
 - `DesignLibraryScreen.tsx`
-    - the internal dashboard route
+    - the internal workbench route
     - hosts the runtime theme controls, gallery previews, component inventory, and checklist explorer
 - `catalog.ts`
     - query helpers and manual live-preview registry
-    - if a component is demoed on the dashboard, add it to the live preview set here
+    - if a component is demoed in the workbench, add it to the live preview set here
 - `copy.ts`
-    - typed internal copy registry for the dashboard
+    - typed internal copy registry for the workbench
     - locale-ready and used by tests to stress pseudo-localization and RTL scenarios
 - `formatters.ts`
-    - locale-aware `Intl` helpers used by the dashboard quality section
+    - locale-aware `Intl` helpers used by the workbench quality section
     - covers numbers, currency, dates, relative time, lists, collation, and plural rules
 - `runtimeSignals.ts`
     - root runtime quality source for locale detection, RTL, font scale, reduced motion, and bold text
     - consumed by `ThemeProvider` so shared primitives can react without screen-level wiring
 - `useQualitySignals.ts`
-    - design-system-facing quality hook for the dashboard
+    - design-system-facing quality hook for the workbench
     - merges locale-aware diagnostics with the runtime signals already supplied by `ThemeProvider`
 - `fixtures.ts`
     - realistic no-media, ugly-data, read-only, and presentation fixtures used by the workbench proof deck
@@ -80,13 +81,14 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 
 ## Working Rules
 
-- New reusable UI should land in `src/components` first, not directly inside feature screens.
+- New reusable UI should land in `src/design-system/components` first.
+- App-only compositions belong in `app/components` or feature-local modules, not in the design-system workspace.
 - If a component is meant to be part of the supported library, add a live demo for it in `DesignLibraryScreen.tsx`.
 - If a shared component becomes design-system-supported, register it in `componentRegistry.json` and regenerate the catalog.
 - When a component gets a live demo, register it in `catalog.ts` so the catalog marks it as `Live demo`.
-- Keep the dashboard representative, not exhaustive at the prop-matrix level. It should show the supported patterns clearly and fast.
+- Keep the workbench representative, not exhaustive at the prop-matrix level. It should show the supported patterns clearly and fast.
 - Treat the checklist explorer as the target-state backlog. Treat the supported component catalog as the current implementation contract.
-- Keep user-facing dashboard copy in `copy.ts`, not inline in `DesignLibraryScreen.tsx`.
+- Keep user-facing workbench copy in `copy.ts`, not inline in `DesignLibraryScreen.tsx`.
 - The workbench must always show both `Relaxed showcase` and `Operational dense` expressions so new presets prove they can handle premium and operational surfaces with the same primitives.
 - Keep fallback states first-class: loading, empty, error, read-only, denied, no-media, and ugly-data proofs belong in the design-system before they spread into product screens.
 - Prefer neutral enterprise surfaces as the default bias. Brand-heavy or inverse surfaces should be deliberate exceptions, not the ambient default.
@@ -154,6 +156,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - Code and machine-readable content use the monospace family token.
 - Product typography is capped at two families: the core UI family plus an optional display/brand family. Monospace is a utility exemption for code and machine-readable data.
 - Views should stay within a small set of type roles instead of inventing one-off hierarchy jumps.
+- Non-Latin locales must fall back to script-safe families for Arabic, Devanagari, and CJK before any display/brand treatment is attempted.
 - Pairings should stay predictable:
     - cards: section title + body/metadata + metric
     - forms: label + body + helper/error caption
@@ -186,6 +189,8 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - Decorative, supportive, and primary/action icon roles are different and must be named as such in component APIs and docs.
 - Icons must not replace labels in first-use or critical enterprise flows.
 - Decorative icons should be removed from the accessibility tree; meaningful icon-only actions must have stable labels.
+- Lucide SVG icons are the primary DS path; a Material Icons adapter remains available for dense native glyph cases without changing the spacing contract.
+- DS icon helpers scale with runtime font size settings so icon-led controls stay proportionate at larger accessibility sizes.
 - Custom icon contributions must preserve the shared stroke language, optical alignment, padding rhythm, and touch-target rules.
 
 ## Mobile Component Contract

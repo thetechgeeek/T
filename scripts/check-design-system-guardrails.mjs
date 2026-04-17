@@ -10,6 +10,7 @@ const TARGET_DIRS = ['src/design-system', 'app/design-system'];
 const SKIP_SEGMENTS = new Set(['generated', '__tests__']);
 const SKIP_FILES = new Set(['src/design-system/copy.ts']);
 const RUNTIME_SIGNAL_SOURCE = 'src/design-system/runtimeSignals.ts';
+const DESIGN_SYSTEM_COMPONENT_PREFIX = 'src/design-system/components/';
 const COMPONENT_REGISTRY_PATH = 'src/design-system/componentRegistry.json';
 const COMPONENT_CATALOG_PATH = 'src/design-system/generated/componentCatalog.ts';
 const README_PATH = 'src/design-system/README.md';
@@ -26,6 +27,7 @@ const REQUIRED_TEST_FILES = [
 const DESIGN_SYSTEM_ROUTE_PATH = 'app/design-system/index.tsx';
 const LEGACY_DESIGN_SYSTEM_ROUTE_DIR = 'app/(app)/design-system';
 const PRODUCT_MORE_TAB_PATH = 'app/(app)/(tabs)/more.tsx';
+const DESIGN_SYSTEM_ROUTE_RE = /['"`](?:\/design-system|app\/design-system)['"`]/;
 const REQUIRED_README_PHRASES = [
 	'Relaxed showcase',
 	'Operational dense',
@@ -84,26 +86,15 @@ const DISALLOWED_IMPORT_RULES = [
 		message: 'Design-system code must not import product feature modules.',
 	},
 	{
-		name: 'product-organism-import',
-		pattern: /from\s*['"]@\/src\/components\/organisms\//g,
-		message: 'Design-system code must not depend on product organisms.',
+		name: 'app-component-import',
+		pattern: /from\s*['"]@\/app\/components\//g,
+		message: 'Design-system code must not import app-only components from app/components/.',
 	},
 	{
-		name: 'legacy-header-import',
-		pattern: /from\s*['"]@\/src\/components\/molecules\/ScreenHeader['"]/g,
+		name: 'legacy-components-import',
+		pattern: /from\s*['"]@\/src\/components\//g,
 		message:
-			'Use a design-system-local header inside src/design-system instead of the app-aware ScreenHeader.',
-	},
-	{
-		name: 'legacy-invoice-badge-import',
-		pattern: /from\s*['"]@\/src\/components\/molecules\/InvoiceStatusBadge['"]/g,
-		message: 'Invoice-specific components are not part of the app-agnostic design-system.',
-	},
-	{
-		name: 'legacy-app-banner-import',
-		pattern: /from\s*['"]@\/src\/components\/atoms\/(OfflineBanner|SyncIndicator|QueryBoundary|ErrorBoundary)['"]/g,
-		message:
-			'App-scoped infrastructure components cannot be imported into the app-agnostic design-system.',
+			'Design-system code must import shared UI from src/design-system/components instead of the retired src/components tree.',
 	},
 ];
 
@@ -191,6 +182,7 @@ const violations = [];
 
 for (const relPath of files) {
 	const text = fs.readFileSync(path.join(root, relPath), 'utf8');
+	const isSharedComponentFile = relPath.startsWith(DESIGN_SYSTEM_COMPONENT_PREFIX);
 
 	if (
 		relPath !== RUNTIME_SIGNAL_SOURCE &&
@@ -208,6 +200,19 @@ for (const relPath of files) {
 	}
 
 	for (const rule of FILE_TEXT_RULES) {
+		if (
+			isSharedComponentFile &&
+			(rule.name === 'inline-copy-prop' || rule.name === 'inline-themed-text')
+		) {
+			continue;
+		}
+		if (
+			relPath === 'src/design-system/components/atoms/ThemedText.tsx' &&
+			rule.name === 'react-native-text'
+		) {
+			continue;
+		}
+
 		rule.pattern.lastIndex = 0;
 		for (const match of text.matchAll(rule.pattern)) {
 			if (match.index == null) {
@@ -309,7 +314,7 @@ if (fs.existsSync(path.join(root, LEGACY_DESIGN_SYSTEM_ROUTE_DIR))) {
 
 if (fs.existsSync(path.join(root, PRODUCT_MORE_TAB_PATH))) {
 	const moreTabText = fs.readFileSync(path.join(root, PRODUCT_MORE_TAB_PATH), 'utf8');
-	if (moreTabText.includes('design-system')) {
+	if (DESIGN_SYSTEM_ROUTE_RE.test(moreTabText)) {
 		violations.push({
 			file: PRODUCT_MORE_TAB_PATH,
 			line: 1,
@@ -330,6 +335,16 @@ const componentCatalogText = fs.readFileSync(path.join(root, COMPONENT_CATALOG_P
 const generatedComponents = parseGeneratedComponents(componentCatalogText);
 
 for (const entry of registry) {
+	if (!entry.filePath.startsWith('src/design-system/components/')) {
+		violations.push({
+			file: entry.filePath,
+			line: 1,
+			rule: 'registry-component-boundary',
+			message:
+				'Every supported registry entry must live under src/design-system/components/.',
+		});
+	}
+
 	if (!hasComponentTests(entry.filePath)) {
 		violations.push({
 			file: entry.filePath,

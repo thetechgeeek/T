@@ -24,9 +24,13 @@ const RAW_NATIVE_TEXT_IMPORT_PATTERN = /import\s*\{[^}]*\bText\b[^}]*\}\s*from '
 
 const INTERACTIVE_REF_COMPONENTS = [
 	'Button',
+	'Checkbox',
 	'Chip',
 	'IconButton',
+	'Radio',
+	'AvatarGroup',
 	'TouchableCard',
+	'ToggleSwitch',
 	'TextInput',
 	'AmountInput',
 	'BottomSheetPicker',
@@ -37,9 +41,11 @@ const INTERACTIVE_REF_COMPONENTS = [
 	'FormField',
 	'ListItem',
 	'PhoneInput',
+	'Popover',
 	'SearchBar',
 	'SwipeableRow',
 	'TextAreaField',
+	'Tooltip',
 ] as const;
 
 const FOCUS_VISIBLE_COMPONENTS = INTERACTIVE_REF_COMPONENTS.filter(
@@ -47,8 +53,11 @@ const FOCUS_VISIBLE_COMPONENTS = INTERACTIVE_REF_COMPONENTS.filter(
 );
 
 const CONTROLLED_COMPONENT_PATTERNS: Readonly<Record<string, RegExp[]>> = {
+	Checkbox: [/\bchecked\??:/, /\bdefaultChecked\??:/, /\bonCheckedChange\??:/],
 	Chip: [/\bselected\??:/, /\bdefaultSelected\??:/, /\bonSelectedChange\??:/],
 	AmountInput: [/\bvalue\??:/, /\bdefaultValue\??:/, /\bonValueChange\??:/],
+	ActivityFeed: [/\bitems\??:/, /\bdefaultItems\??:/, /\bonItemsChange\??:/],
+	AvatarGroup: [/\bexpanded\??:/, /\bdefaultExpanded\??:/, /\bonExpandedChange\??:/],
 	BottomSheetPicker: [
 		/\bopen\??:/,
 		/\bdefaultOpen\??:/,
@@ -59,23 +68,57 @@ const CONTROLLED_COMPONENT_PATTERNS: Readonly<Record<string, RegExp[]>> = {
 	],
 	CollapsibleSection: [/\bexpanded\??:/, /\bdefaultExpanded\??:/, /\bonExpandedChange\??:/],
 	ConfirmationModal: [/\bopen\??:/, /\bdefaultOpen\??:/, /\bonOpenChange\??:/],
+	DataChart: [
+		/\bfocusedSeriesId\??:/,
+		/\bdefaultFocusedSeriesId\??:/,
+		/\bonFocusedSeriesChange\??:/,
+	],
 	DatePickerField: [/\bvalue\??:/, /\bdefaultValue\??:/, /\bonValueChange\??:/],
 	FilterBar: [/\bvalue\??:/, /\bdefaultValue\??:/, /\bonValueChange\??:/],
+	KanbanBoard: [/\bcolumns\??:/, /\bdefaultColumns\??:/, /\bonColumnsChange\??:/],
+	MediaViewer: [
+		/\bindex\??:/,
+		/\bdefaultIndex\??:/,
+		/\bonIndexChange\??:/,
+		/\bopen\??:/,
+		/\bdefaultOpen\??:/,
+		/\bonOpenChange\??:/,
+	],
 	PhoneInput: [/\bvalue\??:/, /\bdefaultValue\??:/, /\bonValueChange\??:/],
+	Popover: [/\bopen\??:/, /\bdefaultOpen\??:/, /\bonOpenChange\??:/],
+	Radio: [/\bselected\??:/, /\bdefaultSelected\??:/, /\bonSelectedChange\??:/],
 	SearchBar: [/\bvalue\??:/, /\bdefaultValue\??:/, /\bonValueChange\??:/],
+	SortableList: [/\bitems\??:/, /\bdefaultItems\??:/, /\bonItemsChange\??:/],
 	TextAreaField: [/\bvalue\??:/, /\bdefaultValue\??:/, /\bonValueChange\??:/],
+	Tooltip: [/\bopen\??:/, /\bdefaultOpen\??:/, /\bonOpenChange\??:/],
+	ToggleSwitch: [/\bvalue\??:/, /\bdefaultValue\??:/, /\bonValueChange\??:/],
+	VirtualizedList: [
+		/\bselectedKeys\??:/,
+		/\bdefaultSelectedKeys\??:/,
+		/\bonSelectedKeysChange\??:/,
+	],
 } as const;
 
 const ANNOUNCEMENT_COMPONENTS = [
+	'ActivityFeed',
 	'AmountInput',
+	'AvatarGroup',
 	'BottomSheetPicker',
+	'Checkbox',
 	'CollapsibleSection',
 	'ConfirmationModal',
 	'DatePickerField',
+	'DescriptionList',
 	'FilterBar',
+	'MediaViewer',
 	'PhoneInput',
+	'Popover',
+	'Radio',
 	'SearchBar',
+	'SortableList',
 	'SwipeableRow',
+	'Tooltip',
+	'ToggleSwitch',
 	'Toast',
 ] as const;
 
@@ -83,6 +126,7 @@ const ACCESSIBILITY_ACTION_COMPONENTS = [
 	'CollapsibleSection',
 	'ConfirmationModal',
 	'DatePickerField',
+	'SortableList',
 	'SwipeableRow',
 ] as const;
 

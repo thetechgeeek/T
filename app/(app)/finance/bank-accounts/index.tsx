@@ -12,11 +12,11 @@ import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { Building2, Plus } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Card } from '@/src/components/atoms/Card';
-import { Badge } from '@/src/components/atoms/Badge';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Card } from '@/src/design-system/components/atoms/Card';
+import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import {

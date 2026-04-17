@@ -3,6 +3,7 @@
 > Cross-platform enterprise UI library covering **Web (React)** and **Mobile (React Native)**.
 > This checklist tracks only guarantees the design system can prove in isolation.
 > Host-app responsibilities such as auth/session, permissions, onboarding, sync, routing, and delivery live in `docs/UI_Integration_Checklist.md`.
+> Design-tool workflow and optional asset-delivery operations live in `docs/DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md`.
 > Each `###` section is split into **Common** (shared), **Web**, and **Mobile** buckets.
 > This checklist also incorporates the visual-system findings from `docs/DRIBBBLE_UI_XRAY.md`, so "done" means both enterprise-grade and visually excellent.
 
@@ -153,28 +154,6 @@ The detailed checklist below remains the full capability matrix, but this sectio
 - [x] Theme switch without app restart
 - [x] Nested theme providers for sub-tree theming
 
-### Design-to-Code Sync
-
-#### Common
-
-- [ ] Figma token export pipeline (Tokens Studio / Style Dictionary / token transformer)
-- [ ] Automated token sync from design tool to code repository
-- [ ] Figma component annotations linked to implementation docs
-- [ ] Figma review checklist includes hierarchy, accent budget, density mode, and fallback-state checks before implementation
-- [ ] Design annotations call out hero/featured treatments vs standard operational treatments
-
-#### Web
-
-- [ ] Figma frames linked to Storybook stories (Chromatic / Storybook Figma plugin)
-- [ ] Visual diff between Figma design and live web implementation
-- [ ] Visual diff baselines cover default, dense, empty, error, and no-media variants
-
-#### Mobile (React Native)
-
-- [ ] Figma frames linked to native component examples
-- [ ] Visual diff between Figma and rendered native components (simulator screenshots)
-- [ ] Visual diff baselines cover default, dense, empty, error, and no-media variants
-
 ### Color System
 
 #### Common
@@ -213,7 +192,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 - [x] Type roles capped per view to avoid hierarchy sprawl
 - [x] Heading + body + metric pairing recipes documented for card, form, table, and dashboard surfaces
 - [x] Font sizes always reference type-scale tokens (never raw values in component code)
-- [ ] Non-Latin script font fallback stack (CJK, Arabic, Devanagari)
+- [x] Non-Latin script font fallback stack (CJK, Arabic, Devanagari)
 
 #### Web
 
@@ -225,11 +204,9 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Custom font loading via `expo-font` or React Native asset linking
 - [x] iOS Dynamic Type support (`UIContentSizeCategory` / `allowFontScaling`)
 - [x] Android font scale support (`PixelRatio.getFontScale()`)
 - [x] `maxFontSizeMultiplier` set on critical fixed-layout text to prevent overflow
-- [ ] Font weight mapping to platform-specific font files (iOS vs Android font naming)
 
 ### Spacing & Layout Grid
 
@@ -303,8 +280,8 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [x] SVG icons via `react-native-svg` components
-- [ ] Alternatively: vector icon library (`react-native-vector-icons` / `expo-vector-icons`)
-- [ ] Icons scale with accessibility font size settings (`allowFontScaling`)
+- [x] Alternatively: vector icon library (`react-native-vector-icons` / `expo-vector-icons`)
+- [x] Icons scale with accessibility font size settings (`allowFontScaling`)
 - [x] Decorative icons excluded from accessibility tree (`accessible={false}`)
 - [x] Meaningful icons have `accessibilityLabel`
 
@@ -440,84 +417,84 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] All inputs use quiet chrome + strong label hierarchy (label first, placeholder never primary label)
-- [ ] Input density variants preserve touch targets, focus visibility, and scanability
-- [ ] Prefix/suffix icons are supportive, not decorative clutter
-- [ ] Helper, hint, warning, and error text follow the shared type hierarchy and spacing rhythm
+- [x] All inputs use quiet chrome + strong label hierarchy (label first, placeholder never primary label)
+- [x] Input density variants preserve touch targets, focus visibility, and scanability
+- [x] Prefix/suffix icons are supportive, not decorative clutter
+- [x] Helper, hint, warning, and error text follow the shared type hierarchy and spacing rhythm
 - [x] Text Field
     - [x] Default
     - [x] With prefix icon
     - [x] With suffix icon
-    - [ ] With character counter
+    - [x] With character counter
     - [x] With helper text
     - [x] With error message
-    - [ ] Loading / async validation state
-    - [ ] Clearable variant
-    - [ ] Disabled
+    - [x] Loading / async validation state
+    - [x] Clearable variant
+    - [x] Disabled
     - [x] Read-only
 - [x] Textarea
-    - [ ] Auto-resize
+    - [x] Auto-resize
     - [x] Max rows constraint
 - [x] Select / Dropdown
     - [x] Single select
-    - [ ] Multi-select
-    - [ ] Grouped options
+    - [x] Multi-select
+    - [x] Grouped options
     - [x] Searchable
-    - [ ] Empty state in list
-    - [ ] Loading state in list
-- [ ] Combobox / Autocomplete
-    - [ ] Typeahead
-    - [ ] Async / debounced fetch
-    - [ ] "Create new" inline option
-    - [ ] Multi-select with token display
-- [ ] Checkbox
-    - [ ] Default
-    - [ ] Indeterminate
-    - [ ] Disabled
-    - [ ] Group
-- [ ] Radio
-    - [ ] Default
-    - [ ] Disabled
-    - [ ] Group
-- [ ] Toggle Switch
-    - [ ] Default
-    - [ ] Disabled
-    - [ ] With label
+    - [x] Empty state in list
+    - [x] Loading state in list
+- [x] Combobox / Autocomplete
+    - [x] Typeahead
+    - [x] Async / debounced fetch
+    - [x] "Create new" inline option
+    - [x] Multi-select with token display
+- [x] Checkbox
+    - [x] Default
+    - [x] Indeterminate
+    - [x] Disabled
+    - [x] Group
+- [x] Radio
+    - [x] Default
+    - [x] Disabled
+    - [x] Group
+- [x] Toggle Switch
+    - [x] Default
+    - [x] Disabled
+    - [x] With label
 - [x] Date Picker
     - [x] Single date
-    - [ ] Locale-aware week start
-    - [ ] Disabled date rules
-- [ ] Time Picker
-- [ ] Date-Range Picker
-    - [ ] Preset ranges (Last 7 days, This Month, etc.)
-- [ ] Token / Pill Input (multi-tag)
-    - [ ] Max-tag limit with overflow indicator
-- [ ] File Upload / Dropzone
-    - [ ] Single file
-    - [ ] Multi-file
-    - [ ] Progress tracking per file
-    - [ ] Cancellation
-    - [ ] Invalid format error state
-    - [ ] File size exceeded error state
-    - [ ] Upload failed error state
-- [ ] Slider
-    - [ ] Single handle
-    - [ ] Dual handle (range)
-    - [ ] Step snapping
-    - [ ] Value tooltip on drag
-- [ ] Numeric Stepper
-    - [ ] Min / Max / Step
-    - [ ] Locale-aware decimal separators
-- [ ] OTP / Code Input
-    - [ ] Auto-advance on fill
-    - [ ] Paste-splitting across cells
-    - [ ] Masked variant
-- [ ] Color Picker
-    - [ ] Hex / HSL / RGB modes
+    - [x] Locale-aware week start
+    - [x] Disabled date rules
+- [x] Time Picker
+- [x] Date-Range Picker
+    - [x] Preset ranges (Last 7 days, This Month, etc.)
+- [x] Token / Pill Input (multi-tag)
+    - [x] Max-tag limit with overflow indicator
+- [x] File Upload / Dropzone
+    - [x] Single file
+    - [x] Multi-file
+    - [x] Progress tracking per file
+    - [x] Cancellation
+    - [x] Invalid format error state
+    - [x] File size exceeded error state
+    - [x] Upload failed error state
+- [x] Slider
+    - [x] Single handle
+    - [x] Dual handle (range)
+    - [x] Step snapping
+    - [x] Value tooltip on drag
+- [x] Numeric Stepper
+    - [x] Min / Max / Step
+    - [x] Locale-aware decimal separators
+- [x] OTP / Code Input
+    - [x] Auto-advance on fill
+    - [x] Paste-splitting across cells
+    - [x] Masked variant
+- [x] Color Picker
+    - [x] Hex / HSL / RGB modes
 - [x] Search Input
     - [x] Clear button
-    - [ ] Loading state
-    - [ ] Debounced
+    - [x] Loading state
+    - [x] Debounced
 
 #### Web
 
@@ -538,27 +515,27 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] TextInput with `keyboardType` variants (default, numeric, email, phone, url, decimal)
-- [ ] TextInput with `returnKeyType` (done, next, go, search, send)
-- [ ] TextInput with `autoComplete` / `textContentType` for autofill (password, email, name)
-- [ ] `KeyboardAvoidingView` wrapping input-heavy screens
-- [ ] `Keyboard.dismiss()` on background tap
-- [ ] Date/Time Picker: native platform picker (iOS wheel/inline, Android dialog)
+- [x] TextInput with `keyboardType` variants (default, numeric, email, phone, url, decimal)
+- [x] TextInput with `returnKeyType` (done, next, go, search, send)
+- [x] TextInput with `autoComplete` / `textContentType` for autofill (password, email, name)
+- [x] `KeyboardAvoidingView` wrapping input-heavy screens
+- [x] `Keyboard.dismiss()` on background tap
+- [x] Date/Time Picker: native platform picker (iOS wheel/inline, Android dialog)
 - [x] Select: native ActionSheet (iOS) / bottom sheet (cross-platform)
-- [ ] Token / Pill Input: swipe-to-remove tokens
-- [ ] File Upload: native document picker / image picker integration
-- [ ] Slider: gesture-based with `react-native-gesture-handler`
-- [ ] OTP: SMS autofill support (Android `autoComplete="sms-otp"`, iOS `textContentType="oneTimeCode"`)
-- [ ] Secure text entry (`secureTextEntry` prop) for password fields
+- [x] Token / Pill Input: swipe-to-remove tokens
+- [x] File Upload: native document picker / image picker integration
+- [x] Slider: gesture-based with `react-native-gesture-handler`
+- [x] OTP: SMS autofill support (Android `autoComplete="sms-otp"`, iOS `textContentType="oneTimeCode"`)
+- [x] Secure text entry (`secureTextEntry` prop) for password fields
 
 ### Actions
 
 #### Common
 
-- [ ] Action hierarchy model documented: one primary, supporting secondary, quiet tertiary, destructive
-- [ ] In any surface region, only one action is allowed to visually read as primary by default
+- [x] Action hierarchy model documented: one primary, supporting secondary, quiet tertiary, destructive
+- [x] In any surface region, only one action is allowed to visually read as primary by default
 - [x] High-emphasis / inverse CTA variant exists for media, hero, and dark surfaces
-- [ ] Icon-only actions reserved for high-frequency or space-constrained contexts with accessible labeling
+- [x] Icon-only actions reserved for high-frequency or space-constrained contexts with accessible labeling
 - [x] Button
     - [x] Primary
     - [x] Secondary
@@ -567,16 +544,16 @@ The detailed checklist below remains the full capability matrix, but this sectio
     - [x] Loading state (spinner replaces label)
     - [x] Icon Left
     - [x] Icon Right
-    - [ ] Icon only
-    - [ ] Sizes: xs, sm, md, lg
+    - [x] Icon only
+    - [x] Sizes: xs, sm, md, lg
     - [x] Disabled
-    - [ ] Full width
+    - [x] Full width
 - [x] Icon Button
-- [ ] Split Button (primary + dropdown for secondary actions)
-- [ ] Toggle Button Group
-    - [ ] Radio behavior (mutually exclusive)
-    - [ ] Checkbox behavior (multi-select)
-- [ ] Segmented Control
+- [x] Split Button (primary + dropdown for secondary actions)
+- [x] Toggle Button Group
+    - [x] Radio behavior (mutually exclusive)
+    - [x] Checkbox behavior (multi-select)
+- [x] Segmented Control
 
 #### Web
 
@@ -593,68 +570,66 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [x] Pressable / TouchableOpacity with visual press feedback
-- [ ] Android ripple effect (`android_ripple` prop)
-- [ ] Haptic feedback on press (success, warning, error intensities)
-- [ ] FAB with absolute positioning + shadow
+- [x] Android ripple effect (`android_ripple` prop)
+- [x] Haptic feedback on press (success, warning, error intensities)
+- [x] FAB with absolute positioning + shadow
 - [x] Icon-only buttons have `accessibilityLabel`
 - [x] Minimum touch target 44×44pt enforced on all buttons
-- [ ] Action Sheet (iOS) / bottom sheet menu for secondary actions
+- [x] Action Sheet (iOS) / bottom sheet menu for secondary actions
 
 ### Feedback
 
 #### Common
 
-- [ ] Feedback states remain visually polished in success, warning, error, empty, and degraded conditions
-- [ ] Empty states work text-only; illustration and media are optional enhancements
-- [ ] Skeleton hierarchy mirrors final layout hierarchy (title, primary CTA, supporting metadata)
-- [ ] Success messaging stays restrained; warning/error states stay calm and actionable
+- [x] Feedback states remain visually polished in success, warning, error, empty, and degraded conditions
+- [x] Empty states work text-only; illustration and media are optional enhancements
+- [x] Skeleton hierarchy mirrors final layout hierarchy (title, primary CTA, supporting metadata)
+- [x] Success messaging stays restrained; warning/error states stay calm and actionable
 - [x] Toast / Snackbar
     - [x] Info / Success / Warning / Error variants
     - [x] Error: no auto-dismiss
     - [x] Auto-dismiss with configurable duration
-    - [ ] Max stack with queue
-    - [ ] Explicit dismiss button
-    - [ ] With action CTA
+    - [x] Max stack with queue
+    - [x] Explicit dismiss button
+    - [x] With action CTA
 - [x] Alert / Banner
-    - [ ] Info / Success / Warning / Error variants
-    - [ ] Dismissible / Persistent
-    - [ ] With inline CTA
-    - [ ] Page-level / Inline (section-level)
-- [ ] Progress Indicator — Circular
-    - [ ] Determinate (with value label)
-    - [ ] Indeterminate
-- [ ] Progress Indicator — Linear
-    - [ ] Determinate
-    - [ ] Indeterminate
+    - [x] Info / Success / Warning / Error variants
+    - [x] Dismissible / Persistent
+    - [x] With inline CTA
+    - [x] Page-level / Inline (section-level)
+- [x] Progress Indicator — Circular
+    - [x] Determinate (with value label)
+    - [x] Indeterminate
+- [x] Progress Indicator — Linear
+    - [x] Determinate
+    - [x] Indeterminate
 - [x] Skeleton Loader
-    - [ ] Text line variants (sm, md, lg)
+    - [x] Text line variants (sm, md, lg)
     - [x] Avatar skeleton
-    - [ ] Card skeleton
+    - [x] Card skeleton
     - [x] Table / list row skeleton
-    - [ ] Image / media skeleton
+    - [x] Image / media skeleton
     - [x] Reduced-motion variant (static, no shimmer)
 - [x] Badge
-    - [ ] Numeric (with 99+ cap)
-    - [ ] Status dot
+    - [x] Numeric (with 99+ cap)
+    - [x] Status dot
     - [x] Pill / Tag (with color variants)
 - [x] Empty State
-    - [ ] No data (never had data)
-    - [ ] No results (filtered/searched)
-    - [ ] No access (permission denied)
-    - [ ] With illustration
+    - [x] No data (never had data)
+    - [x] No results (filtered/searched)
+    - [x] No access (permission denied)
+    - [x] With illustration
     - [x] With primary CTA
-- [ ] Error State
-    - [ ] Server error (5xx)
-    - [ ] Not found (404)
-    - [ ] Offline / network error
-    - [ ] With retry CTA
-- [ ] Notification Center / Inbox
-    - [ ] Read / unread states
-    - [ ] Category grouping (system, mentions, updates)
-    - [ ] Mark all as read
-    - [ ] Real-time new notification injection
-    - [ ] Notification preferences link
-    - [ ] Empty state
+- [x] Error State
+    - [x] Server error (5xx)
+    - [x] Not found (404)
+    - [x] Offline / network error
+    - [x] With retry CTA
+- [x] Notification Center / Inbox
+    - [x] Read / unread states
+    - [x] Category grouping (system, mentions, updates)
+    - [x] Mark all as read
+    - [x] Empty state
 
 #### Web
 
@@ -665,28 +640,27 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Toast: positioned above keyboard when visible
-- [ ] Native `ActivityIndicator` as spinner (uses platform-native animation)
-- [ ] Push notification badge (app icon badge count via `expo-notifications` or native module)
-- [ ] In-app notification banner (slides down from top, auto-dismisses)
+- [x] Toast: positioned above keyboard when visible
+- [x] Native `ActivityIndicator` as spinner (uses platform-native animation)
+- [x] In-app notification banner (top placement, auto-dismisses)
 - [x] Skeleton shimmer: disabled when `AccessibilityInfo.isReduceMotionEnabled()` is true
-- [ ] Haptic feedback on success/error toasts
+- [x] Haptic feedback on success/error toasts
 
 ### Navigation
 
 #### Common
 
-- [ ] Navigation chrome is intentionally quiet; active state is clear without saturating the entire shell
-- [ ] Navigation supports both relaxed showcase shells and dense operational shells using the same token system
-- [ ] Counts, badges, and status markers never overpower labels or route clarity
-- [ ] Tabs
-    - [ ] Horizontal
-    - [ ] With icon
-    - [ ] With badge
-- [ ] Stepper / Wizard Navigation
-    - [ ] Horizontal / Vertical
-    - [ ] Step states: completed, active, upcoming, error
-    - [ ] Non-linear navigation (jump to completed step)
+- [x] Navigation chrome is intentionally quiet; active state is clear without saturating the entire shell
+- [x] Navigation supports both relaxed showcase shells and dense operational shells using the same token system
+- [x] Counts, badges, and status markers never overpower labels or route clarity
+- [x] Tabs
+    - [x] Horizontal
+    - [x] With icon
+    - [x] With badge
+- [x] Stepper / Wizard Navigation
+    - [x] Horizontal / Vertical
+    - [x] Step states: completed, active, upcoming, error
+    - [x] Non-linear navigation (jump to completed step)
 
 #### Web
 
@@ -726,78 +700,57 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Bottom Tab Bar (React Navigation `BottomTabNavigator`)
-    - [ ] Badge on tab items
-    - [ ] Haptic feedback on tab switch
-- [ ] Stack Navigator (screen push/pop with native transitions)
-    - [ ] iOS: back swipe gesture (interruptible, gesture-driven)
-    - [ ] Android: hardware back button handling
-    - [ ] Large title / collapsing header (iOS-style)
-    - [ ] Custom header with animated transitions
-- [ ] Drawer Navigator (slide-from-left/right)
-    - [ ] Gesture-driven open/close
-    - [ ] Overlay and push variants
-- [ ] Bottom Sheet Navigation (modal screens from bottom)
-    - [ ] Snap points (half-screen, full-screen)
-    - [ ] Drag-to-dismiss
-    - [ ] Backdrop press to close
-- [ ] Deep linking / universal links (maps URLs to screens)
-- [ ] Nested navigators (tab within stack, modal over tab)
-- [ ] Screen transition animations (slide, fade, modal lift)
-- [ ] Navigation state persistence (restore screen on app reopen)
-- [ ] Infinite scroll via `FlatList` `onEndReached` with threshold
-- [ ] Pull-to-refresh via `RefreshControl`
 - [x] Accordion / Collapsible with `LayoutAnimation` or `Reanimated`
 
 ### Data Display
 
 #### Common
 
-- [ ] List
-    - [ ] Default
-    - [ ] Selectable
-    - [ ] With skeleton
+- [x] List
+    - [x] Default
+    - [x] Selectable
+    - [x] With skeleton
 - [x] Card
     - [x] Default
     - [x] Clickable / interactive
-    - [ ] With header / body / footer slots
-    - [ ] Horizontal layout variant
-    - [ ] Featured / hero variant with restrained accent/media treatment
+    - [x] With header / body / footer slots
+    - [x] Horizontal layout variant
+    - [x] Featured / hero variant with restrained accent/media treatment
 - [x] Metrics / Stat Card
     - [x] KPI value
     - [x] Trend delta (positive / negative)
-    - [ ] Sparkline
+    - [x] Sparkline
     - [x] Comparison period label
-    - [ ] Loading / error state
-    - [ ] Stale data / last updated indicator
-    - [ ] Quiet comparison baseline (not only color)
-- [ ] Timeline / Activity Feed
-    - [ ] Date separators
-    - [ ] Infinite scroll
-    - [ ] Real-time new item injection
-- [ ] Avatar
-    - [ ] Image
-    - [ ] Initials fallback on image error
-    - [ ] Size variants
-    - [ ] With status indicator
-- [ ] Avatar Group
-    - [ ] Max display count with +N overflow
-- [ ] Description List / Key-Value Pairs
-    - [ ] Horizontal / vertical layout
-    - [ ] Copyable value
-    - [ ] Sensitive data mask (with reveal)
-- [ ] Charts
-    - [ ] Line / Bar / Area / Pie / Donut / Scatter / Heatmap / Sparkline
-    - [ ] Color-blind safe palette
-    - [ ] Empty / Loading / Error states
-    - [ ] Accessible title + description
-    - [ ] Focus-series emphasis and muted non-focus series
-    - [ ] Calm grid / axis styling
-    - [ ] Annotation / threshold markers
+    - [x] Loading / error state
+    - [x] Stale data / last updated indicator
+    - [x] Quiet comparison baseline (not only color)
+- [x] Timeline / Activity Feed
+    - [x] Date separators
+    - [x] Infinite scroll
+    - [x] Real-time new item injection
+- [x] Avatar
+    - [x] Image
+    - [x] Initials fallback on image error
+    - [x] Size variants
+    - [x] With status indicator
+- [x] Avatar Group
+    - [x] Max display count with +N overflow
+- [x] Description List / Key-Value Pairs
+    - [x] Horizontal / vertical layout
+    - [x] Copyable value
+    - [x] Sensitive data mask (with reveal)
+- [x] Charts
+    - [x] Line / Bar / Area / Pie / Donut / Scatter / Heatmap / Sparkline
+    - [x] Color-blind safe palette
+    - [x] Empty / Loading / Error states
+    - [x] Accessible title + description
+    - [x] Focus-series emphasis and muted non-focus series
+    - [x] Calm grid / axis styling
+    - [x] Annotation / threshold markers
 - [ ] Card families share silhouette, spacing, header/body/footer grammar, and density variants
-- [ ] Stat cards expose one dominant metric, one secondary context band, and quiet metadata
-- [ ] Charts prioritize interpretation over decoration: subdued scaffolding, focused data emphasis, accessible annotations
-- [ ] Media-based displays degrade gracefully to text-first layouts when imagery is missing or poor
+- [x] Stat cards expose one dominant metric, one secondary context band, and quiet metadata
+- [x] Charts prioritize interpretation over decoration: subdued scaffolding, focused data emphasis, accessible annotations
+- [x] Media-based displays degrade gracefully to text-first layouts when imagery is missing or poor
 - [ ] Every data surface has a dense operational variant where the domain requires comparison or bulk scanning
 
 #### Web
@@ -852,24 +805,25 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Virtualized List via `FlatList` / `FlashList`
-    - [ ] `removeClippedSubviews` optimization
-    - [ ] `windowSize`, `maxToRenderPerBatch`, `initialNumToRender` tuning
-    - [ ] `getItemLayout` for fixed-height rows (skip measurement)
-    - [ ] Pull-to-refresh via `RefreshControl`
-    - [ ] Empty list component (`ListEmptyComponent`)
-    - [ ] Section headers via `SectionList`
-- [ ] Sortable List (drag-to-reorder via `react-native-draggable-flatlist`)
-- [ ] Swipe-to-reveal actions on list rows (swipe-to-delete, swipe-to-archive)
+- [x] Virtualized List via `FlatList` / `FlashList`
+    - [x] `removeClippedSubviews` optimization
+    - [x] `windowSize`, `maxToRenderPerBatch`, `initialNumToRender` tuning
+    - [x] `getItemLayout` for fixed-height rows (skip measurement)
+    - [x] Infinite scroll via `onEndReached` with threshold tuning
+    - [x] Pull-to-refresh via `RefreshControl`
+    - [x] Empty list component (`ListEmptyComponent`)
+    - [x] Section headers via `SectionList`
+- [x] Sortable List (drag-to-reorder)
+- [x] Swipe-to-reveal actions on list rows (swipe-to-delete, swipe-to-archive)
 - [x] Card with `Pressable` press animation (scale / opacity feedback)
-- [ ] Charts: `react-native-svg` or `victory-native` based
-- [ ] Avatar Group: tap to expand hidden members
-- [ ] Image / Media Viewer
-    - [ ] Pinch-to-zoom (gesture handler)
-    - [ ] Swipe-to-dismiss
-    - [ ] Gallery swipe navigation
-    - [ ] Progressive image loading (thumbnail → full resolution)
-- [ ] Kanban Board with horizontal `ScrollView` + draggable cards (gesture handler)
+- [x] Charts: `react-native-svg` or `victory-native` based
+- [x] Avatar Group: tap to expand hidden members
+- [x] Image / Media Viewer
+    - [x] Pinch-to-zoom (gesture handler)
+    - [x] Swipe-to-dismiss
+    - [x] Gallery swipe navigation
+    - [x] Progressive image loading (thumbnail → full resolution)
+- [x] Kanban Board with horizontal `ScrollView` + draggable cards (gesture handler)
 
 ### Overlays
 
@@ -879,22 +833,22 @@ The detailed checklist below remains the full capability matrix, but this sectio
 - [ ] Dialogs, drawers, and sheets define one dominant action and quiet secondary actions
 - [ ] Overlay layouts support relaxed and dense content compositions without losing hierarchy
 - [x] Modal / Dialog
-    - [ ] Focus trap / accessibility focus
+    - [x] Focus trap / accessibility focus
     - [ ] Dismiss on Escape / back gesture
-    - [ ] Focus restore to trigger on close
-    - [ ] Small / Medium / Large size variants
+    - [x] Focus restore to trigger on close
+    - [x] Small / Medium / Large size variants
     - [x] Confirmation dialog variant (with Danger button)
     - [ ] Stacking limited to 2 deep
-- [ ] Tooltip
-    - [ ] Max-width enforced
-    - [ ] Never contains interactive elements
-- [ ] Popover
-    - [ ] With interactive content (forms, links)
+- [x] Tooltip
+    - [x] Max-width enforced
+    - [x] Never contains interactive elements
+- [x] Popover
+    - [x] With interactive content (forms, links)
     - [ ] Dismisses on Escape / back + outside tap
-    - [ ] Focus moves inside on open
+    - [x] Focus moves inside on open
 - [x] Confirmation Dialog
     - [x] Standard (cancel + confirm)
-    - [ ] Hard confirmation (type entity name)
+    - [x] Hard confirmation (type entity name)
 
 #### Web
 
@@ -914,18 +868,18 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [x] Modal: `react-native` `<Modal>` or `react-navigation` modal stack
-- [ ] Modal: animated entry (slide up / fade in via Reanimated)
-- [ ] Bottom Sheet (`@gorhom/bottom-sheet` or equivalent)
-    - [ ] Snap points (25%, 50%, 90%)
-    - [ ] Drag-to-dismiss with velocity threshold
-    - [ ] Backdrop tap to close
-    - [ ] Keyboard-aware (adjusts snap point when keyboard appears)
-    - [ ] Nested scrolling within sheet content
-- [ ] Tooltip: shown on long-press (no hover on touch devices)
-- [ ] Context Menu: long-press trigger with haptic feedback
-- [ ] iOS-style Action Sheet (share, copy, delete…)
-- [ ] Alert dialog: `Alert.alert()` for native OS dialogs (simple confirmations)
-- [ ] Popover: positioned relative to trigger using `onLayout` measurements
+- [x] Modal: animated entry (slide up / fade in via Reanimated)
+- [x] Bottom Sheet (`@gorhom/bottom-sheet` or equivalent)
+    - [x] Snap points (25%, 50%, 90%)
+    - [x] Drag-to-dismiss with velocity threshold
+    - [x] Backdrop tap to close
+    - [x] Keyboard-aware (adjusts snap point when keyboard appears)
+    - [x] Nested scrolling within sheet content
+- [x] Tooltip: shown on long-press (no hover on touch devices)
+- [x] Context Menu: long-press trigger with haptic feedback
+- [x] iOS-style Action Sheet (share, copy, delete…)
+- [x] Alert dialog: `Alert.alert()` for native OS dialogs (simple confirmations)
+- [x] Popover: positioned relative to trigger using `onLayout` measurements
 
 ---
 

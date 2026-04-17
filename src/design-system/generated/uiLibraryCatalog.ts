@@ -796,116 +796,6 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '1-design-system-architecture-design-to-code-sync-common-figma-token-export-pipeline-tokens-studio-style-dictionary-token',
-		title: 'Figma token export pipeline (Tokens Studio / Style Dictionary / token transformer)',
-		completed: false,
-		platform: 'Common',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-common-automated-token-sync-from-design-tool-to-code-repository',
-		title: 'Automated token sync from design tool to code repository',
-		completed: false,
-		platform: 'Common',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-common-figma-component-annotations-linked-to-implementation-docs',
-		title: 'Figma component annotations linked to implementation docs',
-		completed: false,
-		platform: 'Common',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-common-figma-review-checklist-includes-hierarchy-accent-budget-density-',
-		title: 'Figma review checklist includes hierarchy, accent budget, density mode, and fallback-state checks before implementation',
-		completed: false,
-		platform: 'Common',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-common-design-annotations-call-out-hero-featured-treatments-vs-standard',
-		title: 'Design annotations call out hero/featured treatments vs standard operational treatments',
-		completed: false,
-		platform: 'Common',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-web-figma-frames-linked-to-storybook-stories-chromatic-storybook-figma-',
-		title: 'Figma frames linked to Storybook stories (Chromatic / Storybook Figma plugin)',
-		completed: false,
-		platform: 'Web',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-web-visual-diff-between-figma-design-and-live-web-implementation',
-		title: 'Visual diff between Figma design and live web implementation',
-		completed: false,
-		platform: 'Web',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-web-visual-diff-baselines-cover-default-dense-empty-error-and-no-media-',
-		title: 'Visual diff baselines cover default, dense, empty, error, and no-media variants',
-		completed: false,
-		platform: 'Web',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-mobile-react-native-figma-frames-linked-to-native-component-examples',
-		title: 'Figma frames linked to native component examples',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-mobile-react-native-visual-diff-between-figma-and-rendered-native-compo',
-		title: 'Visual diff between Figma and rendered native components (simulator screenshots)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-design-to-code-sync-mobile-react-native-visual-diff-baselines-cover-default-dense-empty-err',
-		title: 'Visual diff baselines cover default, dense, empty, error, and no-media variants',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '1. Design System Architecture',
-		subsection: 'Design-to-Code Sync',
-		depth: 0,
-		parentId: null,
-	},
-	{
 		id: '1-design-system-architecture-color-system-common-neutral-palette-50-950',
 		title: 'Neutral palette (50–950)',
 		completed: true,
@@ -1198,7 +1088,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '1-design-system-architecture-typography-system-common-non-latin-script-font-fallback-stack-cjk-arabic-devanagari',
 		title: 'Non-Latin script font fallback stack (CJK, Arabic, Devanagari)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '1. Design System Architecture',
 		subsection: 'Typography System',
@@ -1256,16 +1146,6 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '1-design-system-architecture-typography-system-mobile-react-native-custom-font-loading-via-expo-font-or-react-native-ass',
-		title: 'Custom font loading via `expo-font` or React Native asset linking',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '1. Design System Architecture',
-		subsection: 'Typography System',
-		depth: 0,
-		parentId: null,
-	},
-	{
 		id: '1-design-system-architecture-typography-system-mobile-react-native-ios-dynamic-type-support-uicontentsizecategory-allowf',
 		title: 'iOS Dynamic Type support (`UIContentSizeCategory` / `allowFontScaling`)',
 		completed: true,
@@ -1289,16 +1169,6 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		id: '1-design-system-architecture-typography-system-mobile-react-native-maxfontsizemultiplier-set-on-critical-fixed-layout-te',
 		title: '`maxFontSizeMultiplier` set on critical fixed-layout text to prevent overflow',
 		completed: true,
-		platform: 'Mobile (React Native)',
-		section: '1. Design System Architecture',
-		subsection: 'Typography System',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '1-design-system-architecture-typography-system-mobile-react-native-font-weight-mapping-to-platform-specific-font-files-i',
-		title: 'Font weight mapping to platform-specific font files (iOS vs Android font naming)',
-		completed: false,
 		platform: 'Mobile (React Native)',
 		section: '1. Design System Architecture',
 		subsection: 'Typography System',
@@ -1708,7 +1578,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '1-design-system-architecture-iconography-mobile-react-native-alternatively-vector-icon-library-react-native-vector-icons',
 		title: 'Alternatively: vector icon library (`react-native-vector-icons` / `expo-vector-icons`)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '1. Design System Architecture',
 		subsection: 'Iconography',
@@ -1718,7 +1588,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '1-design-system-architecture-iconography-mobile-react-native-icons-scale-with-accessibility-font-size-settings-allowfont',
 		title: 'Icons scale with accessibility font size settings (`allowFontScaling`)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '1. Design System Architecture',
 		subsection: 'Iconography',
@@ -2398,7 +2268,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-all-inputs-use-quiet-chrome-strong-label-hierarchy-label-first-placeholder',
 		title: 'All inputs use quiet chrome + strong label hierarchy (label first, placeholder never primary label)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2408,7 +2278,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-input-density-variants-preserve-touch-targets-focus-visibility-and-scanabi',
 		title: 'Input density variants preserve touch targets, focus visibility, and scanability',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2418,7 +2288,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-prefix-suffix-icons-are-supportive-not-decorative-clutter',
 		title: 'Prefix/suffix icons are supportive, not decorative clutter',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2428,7 +2298,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-helper-hint-warning-and-error-text-follow-the-shared-type-hierarchy-and-sp',
 		title: 'Helper, hint, warning, and error text follow the shared type hierarchy and spacing rhythm',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2478,7 +2348,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-text-field-with-character-co',
 		title: 'With character counter',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2508,7 +2378,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-text-field-loading-async-val',
 		title: 'Loading / async validation state',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2518,7 +2388,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-text-field-clearable-variant',
 		title: 'Clearable variant',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2528,7 +2398,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-text-field-disabled',
 		title: 'Disabled',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2558,7 +2428,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-textarea-auto-resize',
 		title: 'Auto-resize',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2598,7 +2468,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-select-dropdown-multi-select',
 		title: 'Multi-select',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2608,7 +2478,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-select-dropdown-grouped-opti',
 		title: 'Grouped options',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2628,7 +2498,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-select-dropdown-empty-state-',
 		title: 'Empty state in list',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2638,7 +2508,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-select-dropdown-loading-stat',
 		title: 'Loading state in list',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2648,7 +2518,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-combobox-autocomplete',
 		title: 'Combobox / Autocomplete',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2658,7 +2528,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-combobox-autocomplete-typeah',
 		title: 'Typeahead',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2668,7 +2538,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-combobox-autocomplete-async-',
 		title: 'Async / debounced fetch',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2678,7 +2548,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-combobox-autocomplete-create',
 		title: '"Create new" inline option',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2688,7 +2558,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-combobox-autocomplete-multi-',
 		title: 'Multi-select with token display',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2698,7 +2568,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-checkbox',
 		title: 'Checkbox',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2708,7 +2578,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-checkbox-default',
 		title: 'Default',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2718,7 +2588,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-checkbox-indeterminate',
 		title: 'Indeterminate',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2728,7 +2598,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-checkbox-disabled',
 		title: 'Disabled',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2738,7 +2608,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-checkbox-group',
 		title: 'Group',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2748,7 +2618,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-radio',
 		title: 'Radio',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2758,7 +2628,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-radio-default',
 		title: 'Default',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2768,7 +2638,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-radio-disabled',
 		title: 'Disabled',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2778,7 +2648,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-radio-group',
 		title: 'Group',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2788,7 +2658,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-toggle-switch',
 		title: 'Toggle Switch',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2798,7 +2668,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-toggle-switch-default',
 		title: 'Default',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2808,7 +2678,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-toggle-switch-disabled',
 		title: 'Disabled',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2818,7 +2688,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-toggle-switch-with-label',
 		title: 'With label',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2848,7 +2718,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-date-picker-locale-aware-wee',
 		title: 'Locale-aware week start',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2858,7 +2728,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-date-picker-disabled-date-ru',
 		title: 'Disabled date rules',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2868,7 +2738,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-time-picker',
 		title: 'Time Picker',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2878,7 +2748,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-date-range-picker',
 		title: 'Date-Range Picker',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2888,7 +2758,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-date-range-picker-preset-ran',
 		title: 'Preset ranges (Last 7 days, This Month, etc.)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2898,7 +2768,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-token-pill-input-multi-tag',
 		title: 'Token / Pill Input (multi-tag)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2908,7 +2778,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-token-pill-input-multi-tag-m',
 		title: 'Max-tag limit with overflow indicator',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2918,7 +2788,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-file-upload-dropzone',
 		title: 'File Upload / Dropzone',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2928,7 +2798,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-file-upload-dropzone-single-',
 		title: 'Single file',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2938,7 +2808,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-file-upload-dropzone-multi-f',
 		title: 'Multi-file',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2948,7 +2818,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-file-upload-dropzone-progres',
 		title: 'Progress tracking per file',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2958,7 +2828,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-file-upload-dropzone-cancell',
 		title: 'Cancellation',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2968,7 +2838,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-file-upload-dropzone-invalid',
 		title: 'Invalid format error state',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2978,7 +2848,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-file-upload-dropzone-file-si',
 		title: 'File size exceeded error state',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2988,7 +2858,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-file-upload-dropzone-upload-',
 		title: 'Upload failed error state',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -2998,7 +2868,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-slider',
 		title: 'Slider',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3008,7 +2878,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-slider-single-handle',
 		title: 'Single handle',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3018,7 +2888,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-slider-dual-handle-range',
 		title: 'Dual handle (range)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3028,7 +2898,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-slider-step-snapping',
 		title: 'Step snapping',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3038,7 +2908,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-slider-value-tooltip-on-drag',
 		title: 'Value tooltip on drag',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3048,7 +2918,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-numeric-stepper',
 		title: 'Numeric Stepper',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3058,7 +2928,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-numeric-stepper-min-max-step',
 		title: 'Min / Max / Step',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3068,7 +2938,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-numeric-stepper-locale-aware',
 		title: 'Locale-aware decimal separators',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3078,7 +2948,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-otp-code-input',
 		title: 'OTP / Code Input',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3088,7 +2958,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-otp-code-input-auto-advance-',
 		title: 'Auto-advance on fill',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3098,7 +2968,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-otp-code-input-paste-splitti',
 		title: 'Paste-splitting across cells',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3108,7 +2978,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-otp-code-input-masked-varian',
 		title: 'Masked variant',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3118,7 +2988,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-color-picker',
 		title: 'Color Picker',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3128,7 +2998,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-color-picker-hex-hsl-rgb-mod',
 		title: 'Hex / HSL / RGB modes',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3158,7 +3028,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-search-input-loading-state',
 		title: 'Loading state',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3168,7 +3038,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-common-3-components-reusable-ui-blocks-inputs-common-search-input-debounced',
 		title: 'Debounced',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3318,7 +3188,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-textinput-with-keyboardtype-variants-default-numeric-email-ph',
 		title: 'TextInput with `keyboardType` variants (default, numeric, email, phone, url, decimal)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3328,7 +3198,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-textinput-with-returnkeytype-done-next-go-search-send',
 		title: 'TextInput with `returnKeyType` (done, next, go, search, send)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3338,7 +3208,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-textinput-with-autocomplete-textcontenttype-for-autofill-pass',
 		title: 'TextInput with `autoComplete` / `textContentType` for autofill (password, email, name)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3348,7 +3218,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-keyboardavoidingview-wrapping-input-heavy-screens',
 		title: '`KeyboardAvoidingView` wrapping input-heavy screens',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3358,7 +3228,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-keyboard-dismiss-on-background-tap',
 		title: '`Keyboard.dismiss()` on background tap',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3368,7 +3238,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-date-time-picker-native-platform-picker-ios-wheel-inline-andr',
 		title: 'Date/Time Picker: native platform picker (iOS wheel/inline, Android dialog)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3388,7 +3258,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-token-pill-input-swipe-to-remove-tokens',
 		title: 'Token / Pill Input: swipe-to-remove tokens',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3398,7 +3268,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-file-upload-native-document-picker-image-picker-integration',
 		title: 'File Upload: native document picker / image picker integration',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3408,7 +3278,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-slider-gesture-based-with-react-native-gesture-handler',
 		title: 'Slider: gesture-based with `react-native-gesture-handler`',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3418,7 +3288,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-otp-sms-autofill-support-android-autocomplete-sms-otp-ios-tex',
 		title: 'OTP: SMS autofill support (Android `autoComplete="sms-otp"`, iOS `textContentType="oneTimeCode"`)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3428,7 +3298,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-inputs-mobile-react-native-secure-text-entry-securetextentry-prop-for-password-fields',
 		title: 'Secure text entry (`secureTextEntry` prop) for password fields',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Inputs',
@@ -3438,7 +3308,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-action-hierarchy-model-documented-one-primary-supporting-secondary-quiet-',
 		title: 'Action hierarchy model documented: one primary, supporting secondary, quiet tertiary, destructive',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3448,7 +3318,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-in-any-surface-region-only-one-action-is-allowed-to-visually-read-as-prim',
 		title: 'In any surface region, only one action is allowed to visually read as primary by default',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3468,7 +3338,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-icon-only-actions-reserved-for-high-frequency-or-space-constrained-contex',
 		title: 'Icon-only actions reserved for high-frequency or space-constrained contexts with accessible labeling',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3558,7 +3428,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-3-components-reusable-ui-blocks-actions-common-button-icon-only',
 		title: 'Icon only',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3568,7 +3438,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-3-components-reusable-ui-blocks-actions-common-button-sizes-xs-sm-md-lg',
 		title: 'Sizes: xs, sm, md, lg',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3588,7 +3458,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-3-components-reusable-ui-blocks-actions-common-button-full-width',
 		title: 'Full width',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3608,7 +3478,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-split-button-primary-dropdown-for-secondary-actions',
 		title: 'Split Button (primary + dropdown for secondary actions)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3618,7 +3488,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-toggle-button-group',
 		title: 'Toggle Button Group',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3628,7 +3498,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-3-components-reusable-ui-blocks-actions-common-toggle-button-group-radio-',
 		title: 'Radio behavior (mutually exclusive)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3638,7 +3508,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-3-components-reusable-ui-blocks-actions-common-toggle-button-group-checkb',
 		title: 'Checkbox behavior (multi-select)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3648,7 +3518,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-common-segmented-control',
 		title: 'Segmented Control',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3758,7 +3628,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-mobile-react-native-android-ripple-effect-android-ripple-prop',
 		title: 'Android ripple effect (`android_ripple` prop)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3768,7 +3638,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-mobile-react-native-haptic-feedback-on-press-success-warning-error-intensities',
 		title: 'Haptic feedback on press (success, warning, error intensities)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3778,7 +3648,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-mobile-react-native-fab-with-absolute-positioning-shadow',
 		title: 'FAB with absolute positioning + shadow',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3808,7 +3678,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-actions-mobile-react-native-action-sheet-ios-bottom-sheet-menu-for-secondary-actions',
 		title: 'Action Sheet (iOS) / bottom sheet menu for secondary actions',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Actions',
@@ -3818,7 +3688,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-feedback-states-remain-visually-polished-in-success-warning-error-empty-',
 		title: 'Feedback states remain visually polished in success, warning, error, empty, and degraded conditions',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3828,7 +3698,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-empty-states-work-text-only-illustration-and-media-are-optional-enhancem',
 		title: 'Empty states work text-only; illustration and media are optional enhancements',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3838,7 +3708,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-skeleton-hierarchy-mirrors-final-layout-hierarchy-title-primary-cta-supp',
 		title: 'Skeleton hierarchy mirrors final layout hierarchy (title, primary CTA, supporting metadata)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3848,7 +3718,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-success-messaging-stays-restrained-warning-error-states-stay-calm-and-ac',
 		title: 'Success messaging stays restrained; warning/error states stay calm and actionable',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3898,7 +3768,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-toast-snackbar-max-stack',
 		title: 'Max stack with queue',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3908,7 +3778,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-toast-snackbar-explicit-',
 		title: 'Explicit dismiss button',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3918,7 +3788,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-toast-snackbar-with-acti',
 		title: 'With action CTA',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3938,7 +3808,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-alert-banner-info-succes',
 		title: 'Info / Success / Warning / Error variants',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3948,7 +3818,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-alert-banner-dismissible',
 		title: 'Dismissible / Persistent',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3958,7 +3828,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-alert-banner-with-inline',
 		title: 'With inline CTA',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3968,7 +3838,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-alert-banner-page-level-',
 		title: 'Page-level / Inline (section-level)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3978,7 +3848,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-progress-indicator-circular',
 		title: 'Progress Indicator — Circular',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3988,7 +3858,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-progress-indicator-circu',
 		title: 'Determinate (with value label)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -3998,7 +3868,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-progress-indicator-circu-2',
 		title: 'Indeterminate',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4008,7 +3878,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-progress-indicator-linear',
 		title: 'Progress Indicator — Linear',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4018,7 +3888,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-progress-indicator-linea',
 		title: 'Determinate',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4028,7 +3898,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-progress-indicator-linea-2',
 		title: 'Indeterminate',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4048,7 +3918,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-skeleton-loader-text-lin',
 		title: 'Text line variants (sm, md, lg)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4068,7 +3938,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-skeleton-loader-card-ske',
 		title: 'Card skeleton',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4088,7 +3958,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-skeleton-loader-image-me',
 		title: 'Image / media skeleton',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4118,7 +3988,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-badge-numeric-with-99-ca',
 		title: 'Numeric (with 99+ cap)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4128,7 +3998,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-badge-status-dot',
 		title: 'Status dot',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4158,7 +4028,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-empty-state-no-data-neve',
 		title: 'No data (never had data)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4168,7 +4038,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-empty-state-no-results-f',
 		title: 'No results (filtered/searched)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4178,7 +4048,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-empty-state-no-access-pe',
 		title: 'No access (permission denied)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4188,7 +4058,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-empty-state-with-illustr',
 		title: 'With illustration',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4208,7 +4078,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-error-state',
 		title: 'Error State',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4218,7 +4088,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-error-state-server-error',
 		title: 'Server error (5xx)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4228,7 +4098,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-error-state-not-found-40',
 		title: 'Not found (404)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4238,7 +4108,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-error-state-offline-netw',
 		title: 'Offline / network error',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4248,7 +4118,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-error-state-with-retry-c',
 		title: 'With retry CTA',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4258,7 +4128,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-notification-center-inbox',
 		title: 'Notification Center / Inbox',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4268,7 +4138,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-notification-center-inbo',
 		title: 'Read / unread states',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4278,7 +4148,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-notification-center-inbo-2',
 		title: 'Category grouping (system, mentions, updates)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4288,7 +4158,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-notification-center-inbo-3',
 		title: 'Mark all as read',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4297,28 +4167,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	},
 	{
 		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-notification-center-inbo-4',
-		title: 'Real-time new notification injection',
-		completed: false,
-		platform: 'Common',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Feedback',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-notification-center-inbo-5',
-		title: 'Notification preferences link',
-		completed: false,
-		platform: 'Common',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Feedback',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-feedback-common-3-components-reusable-ui-blocks-feedback-common-notification-center-inbo-6',
 		title: 'Empty state',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4368,7 +4218,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-mobile-react-native-toast-positioned-above-keyboard-when-visible',
 		title: 'Toast: positioned above keyboard when visible',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4378,7 +4228,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-mobile-react-native-native-activityindicator-as-spinner-uses-platform-native-an',
 		title: 'Native `ActivityIndicator` as spinner (uses platform-native animation)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4386,19 +4236,9 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '3-components-reusable-ui-blocks-feedback-mobile-react-native-push-notification-badge-app-icon-badge-count-via-expo-notif',
-		title: 'Push notification badge (app icon badge count via `expo-notifications` or native module)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Feedback',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-feedback-mobile-react-native-in-app-notification-banner-slides-down-from-top-auto-dismis',
-		title: 'In-app notification banner (slides down from top, auto-dismisses)',
-		completed: false,
+		id: '3-components-reusable-ui-blocks-feedback-mobile-react-native-in-app-notification-banner-top-placement-auto-dismisses',
+		title: 'In-app notification banner (top placement, auto-dismisses)',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4418,7 +4258,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-feedback-mobile-react-native-haptic-feedback-on-success-error-toasts',
 		title: 'Haptic feedback on success/error toasts',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Feedback',
@@ -4428,7 +4268,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-navigation-chrome-is-intentionally-quiet-active-state-is-clear-without',
 		title: 'Navigation chrome is intentionally quiet; active state is clear without saturating the entire shell',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4438,7 +4278,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-navigation-supports-both-relaxed-showcase-shells-and-dense-operational',
 		title: 'Navigation supports both relaxed showcase shells and dense operational shells using the same token system',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4448,7 +4288,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-counts-badges-and-status-markers-never-overpower-labels-or-route-clari',
 		title: 'Counts, badges, and status markers never overpower labels or route clarity',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4458,7 +4298,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-tabs',
 		title: 'Tabs',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4468,7 +4308,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-3-components-reusable-ui-blocks-navigation-common-tabs-horizontal',
 		title: 'Horizontal',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4478,7 +4318,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-3-components-reusable-ui-blocks-navigation-common-tabs-with-icon',
 		title: 'With icon',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4488,7 +4328,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-3-components-reusable-ui-blocks-navigation-common-tabs-with-badge',
 		title: 'With badge',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4498,7 +4338,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-stepper-wizard-navigation',
 		title: 'Stepper / Wizard Navigation',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4508,7 +4348,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-3-components-reusable-ui-blocks-navigation-common-stepper-wizard-navig',
 		title: 'Horizontal / Vertical',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4518,7 +4358,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-3-components-reusable-ui-blocks-navigation-common-stepper-wizard-navig-2',
 		title: 'Step states: completed, active, upcoming, error',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4528,7 +4368,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-navigation-common-3-components-reusable-ui-blocks-navigation-common-stepper-wizard-navig-3',
 		title: 'Non-linear navigation (jump to completed step)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Navigation',
@@ -4866,216 +4706,6 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-bottom-tab-bar-react-navigation-bottomtabnavigator',
-		title: 'Bottom Tab Bar (React Navigation `BottomTabNavigator`)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n',
-		title: 'Badge on tab items',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-2',
-		title: 'Haptic feedback on tab switch',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-stack-navigator-screen-push-pop-with-native-transitions',
-		title: 'Stack Navigator (screen push/pop with native transitions)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-3',
-		title: 'iOS: back swipe gesture (interruptible, gesture-driven)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-4',
-		title: 'Android: hardware back button handling',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-5',
-		title: 'Large title / collapsing header (iOS-style)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-6',
-		title: 'Custom header with animated transitions',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-drawer-navigator-slide-from-left-right',
-		title: 'Drawer Navigator (slide-from-left/right)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-7',
-		title: 'Gesture-driven open/close',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-8',
-		title: 'Overlay and push variants',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-bottom-sheet-navigation-modal-screens-from-bottom',
-		title: 'Bottom Sheet Navigation (modal screens from bottom)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-9',
-		title: 'Snap points (half-screen, full-screen)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-10',
-		title: 'Drag-to-dismiss',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-3-components-reusable-ui-blocks-navigation-mobile-react-n-11',
-		title: 'Backdrop press to close',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 2,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-deep-linking-universal-links-maps-urls-to-screens',
-		title: 'Deep linking / universal links (maps URLs to screens)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-nested-navigators-tab-within-stack-modal-over-tab',
-		title: 'Nested navigators (tab within stack, modal over tab)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-screen-transition-animations-slide-fade-modal-lift',
-		title: 'Screen transition animations (slide, fade, modal lift)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-navigation-state-persistence-restore-screen-on-app-reopen',
-		title: 'Navigation state persistence (restore screen on app reopen)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-infinite-scroll-via-flatlist-onendreached-with-threshold',
-		title: 'Infinite scroll via `FlatList` `onEndReached` with threshold',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
-		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-pull-to-refresh-via-refreshcontrol',
-		title: 'Pull-to-refresh via `RefreshControl`',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Navigation',
-		depth: 0,
-		parentId: null,
-	},
-	{
 		id: '3-components-reusable-ui-blocks-navigation-mobile-react-native-accordion-collapsible-with-layoutanimation-or-reanimated',
 		title: 'Accordion / Collapsible with `LayoutAnimation` or `Reanimated`',
 		completed: true,
@@ -5088,7 +4718,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-list',
 		title: 'List',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5098,7 +4728,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-list-default',
 		title: 'Default',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5108,7 +4738,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-list-selectable',
 		title: 'Selectable',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5118,7 +4748,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-list-with-skelet',
 		title: 'With skeleton',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5158,7 +4788,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-card-with-header',
 		title: 'With header / body / footer slots',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5168,7 +4798,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-card-horizontal-',
 		title: 'Horizontal layout variant',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5178,7 +4808,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-card-featured-he',
 		title: 'Featured / hero variant with restrained accent/media treatment',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5218,7 +4848,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-metrics-stat-car-3',
 		title: 'Sparkline',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5238,7 +4868,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-metrics-stat-car-5',
 		title: 'Loading / error state',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5248,7 +4878,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-metrics-stat-car-6',
 		title: 'Stale data / last updated indicator',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5258,7 +4888,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-metrics-stat-car-7',
 		title: 'Quiet comparison baseline (not only color)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5268,7 +4898,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-timeline-activity-feed',
 		title: 'Timeline / Activity Feed',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5278,7 +4908,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-timeline-activit',
 		title: 'Date separators',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5288,7 +4918,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-timeline-activit-2',
 		title: 'Infinite scroll',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5298,7 +4928,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-timeline-activit-3',
 		title: 'Real-time new item injection',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5308,7 +4938,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-avatar',
 		title: 'Avatar',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5318,7 +4948,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-avatar-image',
 		title: 'Image',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5328,7 +4958,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-avatar-initials-',
 		title: 'Initials fallback on image error',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5338,7 +4968,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-avatar-size-vari',
 		title: 'Size variants',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5348,7 +4978,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-avatar-with-stat',
 		title: 'With status indicator',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5358,7 +4988,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-avatar-group',
 		title: 'Avatar Group',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5368,7 +4998,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-avatar-group-max',
 		title: 'Max display count with +N overflow',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5378,7 +5008,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-description-list-key-value-pairs',
 		title: 'Description List / Key-Value Pairs',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5388,7 +5018,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-description-list',
 		title: 'Horizontal / vertical layout',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5398,7 +5028,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-description-list-2',
 		title: 'Copyable value',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5408,7 +5038,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-description-list-3',
 		title: 'Sensitive data mask (with reveal)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5418,7 +5048,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-charts',
 		title: 'Charts',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5428,7 +5058,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-charts-line-bar-',
 		title: 'Line / Bar / Area / Pie / Donut / Scatter / Heatmap / Sparkline',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5438,7 +5068,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-charts-color-bli',
 		title: 'Color-blind safe palette',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5448,7 +5078,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-charts-empty-loa',
 		title: 'Empty / Loading / Error states',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5458,7 +5088,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-charts-accessibl',
 		title: 'Accessible title + description',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5468,7 +5098,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-charts-focus-ser',
 		title: 'Focus-series emphasis and muted non-focus series',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5478,7 +5108,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-charts-calm-grid',
 		title: 'Calm grid / axis styling',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5488,7 +5118,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-3-components-reusable-ui-blocks-data-display-common-charts-annotatio',
 		title: 'Annotation / threshold markers',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5508,7 +5138,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-stat-cards-expose-one-dominant-metric-one-secondary-context-band-and',
 		title: 'Stat cards expose one dominant metric, one secondary context band, and quiet metadata',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5518,7 +5148,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-charts-prioritize-interpretation-over-decoration-subdued-scaffolding',
 		title: 'Charts prioritize interpretation over decoration: subdued scaffolding, focused data emphasis, accessible annotations',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5528,7 +5158,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-media-based-displays-degrade-gracefully-to-text-first-layouts-when-i',
 		title: 'Media-based displays degrade gracefully to text-first layouts when imagery is missing or poor',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6018,7 +5648,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-virtualized-list-via-flatlist-flashlist',
 		title: 'Virtualized List via `FlatList` / `FlashList`',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6028,7 +5658,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea',
 		title: '`removeClippedSubviews` optimization',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6038,7 +5668,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-2',
 		title: '`windowSize`, `maxToRenderPerBatch`, `initialNumToRender` tuning',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6048,7 +5678,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-3',
 		title: '`getItemLayout` for fixed-height rows (skip measurement)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6057,8 +5687,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	},
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-4',
-		title: 'Pull-to-refresh via `RefreshControl`',
-		completed: false,
+		title: 'Infinite scroll via `onEndReached` with threshold tuning',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6067,8 +5697,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	},
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-5',
-		title: 'Empty list component (`ListEmptyComponent`)',
-		completed: false,
+		title: 'Pull-to-refresh via `RefreshControl`',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6077,8 +5707,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	},
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-6',
-		title: 'Section headers via `SectionList`',
-		completed: false,
+		title: 'Empty list component (`ListEmptyComponent`)',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6086,9 +5716,19 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-sortable-list-drag-to-reorder-via-react-native-draggabl',
-		title: 'Sortable List (drag-to-reorder via `react-native-draggable-flatlist`)',
-		completed: false,
+		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-7',
+		title: 'Section headers via `SectionList`',
+		completed: true,
+		platform: 'Mobile (React Native)',
+		section: '3. Components — Reusable UI Blocks',
+		subsection: 'Data Display',
+		depth: 2,
+		parentId: null,
+	},
+	{
+		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-sortable-list-drag-to-reorder',
+		title: 'Sortable List (drag-to-reorder)',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6098,7 +5738,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-swipe-to-reveal-actions-on-list-rows-swipe-to-delete-sw',
 		title: 'Swipe-to-reveal actions on list rows (swipe-to-delete, swipe-to-archive)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6118,7 +5758,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-charts-react-native-svg-or-victory-native-based',
 		title: 'Charts: `react-native-svg` or `victory-native` based',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6128,7 +5768,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-avatar-group-tap-to-expand-hidden-members',
 		title: 'Avatar Group: tap to expand hidden members',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6138,7 +5778,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-image-media-viewer',
 		title: 'Image / Media Viewer',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6146,19 +5786,9 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-7',
-		title: 'Pinch-to-zoom (gesture handler)',
-		completed: false,
-		platform: 'Mobile (React Native)',
-		section: '3. Components — Reusable UI Blocks',
-		subsection: 'Data Display',
-		depth: 2,
-		parentId: null,
-	},
-	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-8',
-		title: 'Swipe-to-dismiss',
-		completed: false,
+		title: 'Pinch-to-zoom (gesture handler)',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6167,8 +5797,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	},
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-9',
-		title: 'Gallery swipe navigation',
-		completed: false,
+		title: 'Swipe-to-dismiss',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6177,8 +5807,18 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	},
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-10',
+		title: 'Gallery swipe navigation',
+		completed: true,
+		platform: 'Mobile (React Native)',
+		section: '3. Components — Reusable UI Blocks',
+		subsection: 'Data Display',
+		depth: 2,
+		parentId: null,
+	},
+	{
+		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-3-components-reusable-ui-blocks-data-display-mobile-rea-11',
 		title: 'Progressive image loading (thumbnail → full resolution)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6188,7 +5828,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-mobile-react-native-kanban-board-with-horizontal-scrollview-draggable-cards',
 		title: 'Kanban Board with horizontal `ScrollView` + draggable cards (gesture handler)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -6238,7 +5878,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-modal-dialog-focus-trap-',
 		title: 'Focus trap / accessibility focus',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6258,7 +5898,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-modal-dialog-focus-resto',
 		title: 'Focus restore to trigger on close',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6268,7 +5908,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-modal-dialog-small-mediu',
 		title: 'Small / Medium / Large size variants',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6298,7 +5938,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-tooltip',
 		title: 'Tooltip',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6308,7 +5948,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-tooltip-max-width-enforc',
 		title: 'Max-width enforced',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6318,7 +5958,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-tooltip-never-contains-i',
 		title: 'Never contains interactive elements',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6328,7 +5968,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-popover',
 		title: 'Popover',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6338,7 +5978,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-popover-with-interactive',
 		title: 'With interactive content (forms, links)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6358,7 +5998,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-popover-focus-moves-insi',
 		title: 'Focus moves inside on open',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6388,7 +6028,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-confirmation-dialog-hard',
 		title: 'Hard confirmation (type entity name)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6528,7 +6168,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-modal-animated-entry-slide-up-fade-in-via-reanimated',
 		title: 'Modal: animated entry (slide up / fade in via Reanimated)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6538,7 +6178,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-bottom-sheet-gorhom-bottom-sheet-or-equivalent',
 		title: 'Bottom Sheet (`@gorhom/bottom-sheet` or equivalent)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6548,7 +6188,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-3-components-reusable-ui-blocks-overlays-mobile-react-nativ',
 		title: 'Snap points (25%, 50%, 90%)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6558,7 +6198,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-3-components-reusable-ui-blocks-overlays-mobile-react-nativ-2',
 		title: 'Drag-to-dismiss with velocity threshold',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6568,7 +6208,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-3-components-reusable-ui-blocks-overlays-mobile-react-nativ-3',
 		title: 'Backdrop tap to close',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6578,7 +6218,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-3-components-reusable-ui-blocks-overlays-mobile-react-nativ-4',
 		title: 'Keyboard-aware (adjusts snap point when keyboard appears)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6588,7 +6228,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-3-components-reusable-ui-blocks-overlays-mobile-react-nativ-5',
 		title: 'Nested scrolling within sheet content',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6598,7 +6238,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-tooltip-shown-on-long-press-no-hover-on-touch-devices',
 		title: 'Tooltip: shown on long-press (no hover on touch devices)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6608,7 +6248,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-context-menu-long-press-trigger-with-haptic-feedback',
 		title: 'Context Menu: long-press trigger with haptic feedback',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6618,7 +6258,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-ios-style-action-sheet-share-copy-delete',
 		title: 'iOS-style Action Sheet (share, copy, delete…)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6628,7 +6268,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-alert-dialog-alert-alert-for-native-os-dialogs-simple-confi',
 		title: 'Alert dialog: `Alert.alert()` for native OS dialogs (simple confirmations)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -6638,7 +6278,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-mobile-react-native-popover-positioned-relative-to-trigger-using-onlayout-measu',
 		title: 'Popover: positioned relative to trigger using `onLayout` measurements',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -12468,13 +12108,13 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 ] as UiLibraryChecklistItem[];
 
 export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
-	total: 1243,
-	completed: 270,
-	open: 973,
-	common: 647,
-	web: 309,
-	mobile: 287,
-	commonMobile: 934,
+	total: 1207,
+	completed: 489,
+	open: 718,
+	common: 640,
+	web: 306,
+	mobile: 261,
+	commonMobile: 901,
 	sections: [
 		{
 			name: '0. Enterprise x Premium Quality Bar',
@@ -12487,12 +12127,12 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		},
 		{
 			name: '1. Design System Architecture',
-			count: 146,
-			completedCount: 110,
-			openCount: 36,
-			commonMobileCount: 120,
-			commonMobileCompletedCount: 107,
-			commonMobileOpenCount: 13,
+			count: 133,
+			completedCount: 113,
+			openCount: 20,
+			commonMobileCount: 110,
+			commonMobileCompletedCount: 110,
+			commonMobileOpenCount: 0,
 		},
 		{
 			name: '2. Component Contract Standard',
@@ -12505,12 +12145,12 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		},
 		{
 			name: '3. Components — Reusable UI Blocks',
-			count: 425,
-			completedCount: 59,
-			openCount: 366,
-			commonMobileCount: 306,
-			commonMobileCompletedCount: 59,
-			commonMobileOpenCount: 247,
+			count: 402,
+			completedCount: 275,
+			openCount: 127,
+			commonMobileCount: 283,
+			commonMobileCompletedCount: 275,
+			commonMobileOpenCount: 8,
 		},
 		{
 			name: '4. Patterns — Reusable Compositions',

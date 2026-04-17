@@ -19,12 +19,12 @@ import {
 	Zap,
 } from 'lucide-react-native';
 
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { Card } from '@/src/components/atoms/Card';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Button } from '@/src/components/atoms/Button';
-import { Badge } from '@/src/components/atoms/Badge';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { Card } from '@/src/design-system/components/atoms/Card';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
 

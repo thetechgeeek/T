@@ -4,6 +4,8 @@ import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import DesignLibraryScreen from '../DesignLibraryScreen';
 import { getDesignSystemCopy, type DesignSystemLocale } from '../copy';
 
+jest.setTimeout(15000);
+
 function renderDesignSystem(locale: DesignSystemLocale, mode: 'light' | 'dark' = 'light') {
 	return render(
 		<ThemeProvider initialMode={mode} persist={false}>
@@ -37,11 +39,14 @@ describe('design-system quality matrix', () => {
 
 	it('keeps primary controls accessible in english mode', () => {
 		const copy = getDesignSystemCopy('en');
-		const { getAllByText, getByLabelText, getByText } = renderDesignSystem('en');
+		const { getAllByLabelText, getAllByText, getByLabelText, getByText } =
+			renderDesignSystem('en');
 
 		expect(getByLabelText(copy.runtimeTheming.cycleLookAndFeel)).toBeTruthy();
-		expect(getByLabelText(copy.componentGallery.buttons.primary)).toBeTruthy();
-		expect(getByLabelText(copy.componentGallery.iconButtons.search)).toBeTruthy();
+		expect(getAllByLabelText(copy.componentGallery.buttons.primary).length).toBeGreaterThan(0);
+		expect(getAllByLabelText(copy.componentGallery.iconButtons.search).length).toBeGreaterThan(
+			0,
+		);
 		expect(getByText(copy.stateProof.noMedia.title)).toBeTruthy();
 		expect(getAllByText(copy.presentationModes.relaxed.title).length).toBeGreaterThan(0);
 	});

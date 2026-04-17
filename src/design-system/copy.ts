@@ -226,13 +226,47 @@ export interface DesignSystemCopy {
 		fields: {
 			textField: string;
 			textFieldHelper: string;
+			counterField: string;
+			counterFieldHelper: string;
+			asyncField: string;
+			asyncFieldHelper: string;
+			disabledField: string;
+			emailField: string;
+			numericField: string;
+			phoneKeyboardField: string;
+			urlField: string;
+			decimalField: string;
+			passwordField: string;
+			passwordFieldHelper: string;
 			searchPlaceholder: string;
+			searchDebouncedLabel: string;
+			searchDebouncedIdle: string;
 			phoneInput: string;
 			amountInput: string;
 			datePicker: string;
 			textarea: string;
 			errorField: string;
 			errorFieldError: string;
+		};
+		selectionControls: {
+			checkbox: string;
+			checkboxDescription: string;
+			checkboxIndeterminate: string;
+			checkboxIndeterminateDescription: string;
+			checkboxDisabled: string;
+			checkboxGroup: string;
+			checkboxGroupDescription: string;
+			checkboxOptions: ReadonlyArray<{ label: string; value: string }>;
+			radio: string;
+			radioDisabled: string;
+			radioGroup: string;
+			radioGroupDescription: string;
+			radioOptions: ReadonlyArray<{ label: string; value: string }>;
+			toggle: string;
+			toggleDescription: string;
+			toggleBareLabel: string;
+			toggleDisabled: string;
+			toggleDisabledDescription: string;
 		};
 		accordion: {
 			title: string;
@@ -247,6 +281,208 @@ export interface DesignSystemCopy {
 			title: string;
 			description: string;
 			actionLabel: string;
+		};
+		advanced: {
+			timePicker: string;
+			dateRangePicker: string;
+			autocomplete: string;
+			tokenInput: string;
+			fileUpload: string;
+			rangeSlider: string;
+			numericStepper: string;
+			otp: string;
+			colorPicker: string;
+			segmentedControl: string;
+			toggleGroup: string;
+			splitButton: string;
+			actionSheet: string;
+			fabLabel: string;
+			progressUpload: string;
+			progressRefresh: string;
+			progressCoverage: string;
+			progressExport: string;
+			errorRetry: string;
+			toastQueueSuccess: string;
+			toastQueueWarning: string;
+			toastQueueError: string;
+			toastSuccessMessage: string;
+			toastWarningMessage: string;
+			toastWarningAction: string;
+			toastErrorMessage: string;
+			toastDismiss: string;
+			stepperReturnPrefix: string;
+			autocompleteOptions: ReadonlyArray<{ label: string; value: string }>;
+			toggleOptions: ReadonlyArray<{ label: string; value: string }>;
+			actionMenuItems: ReadonlyArray<{
+				label: string;
+				value: string;
+				destructive?: boolean;
+			}>;
+			tabOptions: ReadonlyArray<{ label: string; value: string; badgeCount?: number }>;
+			stepperSteps: ReadonlyArray<{
+				label: string;
+				value: string;
+				state: 'completed' | 'active' | 'upcoming';
+				description: string;
+			}>;
+			notificationItems: ReadonlyArray<{
+				id: string;
+				title: string;
+				category: string;
+				read: boolean;
+			}>;
+		};
+		dataDisplay: {
+			sectionTitle: string;
+			sectionDescription: string;
+			cardHeader: string;
+			cardFooterPrimary: string;
+			cardFooterSecondary: string;
+			cardHeroTitle: string;
+			cardHeroDescription: string;
+			cardHorizontalTitle: string;
+			cardHorizontalDescription: string;
+			listTitle: string;
+			listDescription: string;
+			listSelectionLabel: string;
+			listEmptyTitle: string;
+			listEmptyDescription: string;
+			listSections: ReadonlyArray<string>;
+			listItems: ReadonlyArray<{
+				id: string;
+				title: string;
+				subtitle: string;
+				status: string;
+			}>;
+			timelineTitle: string;
+			timelineDescription: string;
+			timelineLoadMore: string;
+			timelineNewItems: string;
+			timelineItems: ReadonlyArray<{
+				id: string;
+				title: string;
+				description: string;
+				timeLabel: string;
+				dateLabel: string;
+				statusLabel?: string;
+			}>;
+			timelinePendingItems: ReadonlyArray<{
+				id: string;
+				title: string;
+				description: string;
+				timeLabel: string;
+				dateLabel: string;
+				statusLabel?: string;
+			}>;
+			avatarsTitle: string;
+			avatarsDescription: string;
+			avatarItems: ReadonlyArray<{
+				id: string;
+				name: string;
+				status?: 'online' | 'busy' | 'offline' | 'warning';
+			}>;
+			keyValueTitle: string;
+			keyValueDescription: string;
+			keyValueItems: ReadonlyArray<{
+				id: string;
+				label: string;
+				value: string;
+				copyable?: boolean;
+				sensitive?: boolean;
+				maskedValue?: string;
+			}>;
+			chartsTitle: string;
+			chartsDescription: string;
+			chartCategories: ReadonlyArray<string>;
+			chartSeries: ReadonlyArray<{
+				id: string;
+				label: string;
+				values: ReadonlyArray<number>;
+			}>;
+			chartSlices: ReadonlyArray<{
+				id: string;
+				label: string;
+				value: number;
+			}>;
+			chartPoints: ReadonlyArray<{
+				id: string;
+				x: number;
+				y: number;
+				seriesId?: string;
+			}>;
+			chartHeatmap: ReadonlyArray<{
+				row: string;
+				column: string;
+				value: number;
+			}>;
+			chartAnnotations: ReadonlyArray<{
+				label: string;
+				value: number;
+			}>;
+			swipeTitle: string;
+			swipeDescription: string;
+			mediaTitle: string;
+			mediaDescription: string;
+			mediaOpen: string;
+			mediaItems: ReadonlyArray<{
+				id: string;
+				uri?: string;
+				thumbnailUri?: string;
+				alt: string;
+				caption?: string;
+			}>;
+			boardTitle: string;
+			boardDescription: string;
+			boardColumns: ReadonlyArray<{
+				id: string;
+				title: string;
+				wipLimit?: number;
+				items: ReadonlyArray<{
+					id: string;
+					title: string;
+					description?: string;
+					statusLabel?: string;
+				}>;
+			}>;
+			statUpdatedAt: string;
+			statComparisonBaseline: string;
+			statErrorMessage: string;
+		};
+		overlays: {
+			sectionTitle: string;
+			sectionDescription: string;
+			sizeSmall: string;
+			sizeMedium: string;
+			sizeLarge: string;
+			hardConfirmation: string;
+			hardConfirmationTitle: string;
+			hardConfirmationMessage: string;
+			hardConfirmationKeyword: string;
+			hardConfirmationLabel: string;
+			hardConfirmationHelper: string;
+			tooltipTitle: string;
+			tooltipDescription: string;
+			tooltipTrigger: string;
+			tooltipContent: string;
+			popoverTitle: string;
+			popoverDescription: string;
+			popoverTrigger: string;
+			popoverFieldLabel: string;
+			popoverFieldHelper: string;
+			popoverAction: string;
+			popoverSaved: string;
+			contextMenuTitle: string;
+			contextMenuDescription: string;
+			contextMenuTriggerTitle: string;
+			contextMenuTriggerDescription: string;
+			contextActionPrefix: string;
+			nativeAlertButton: string;
+			nativeAlertTitle: string;
+			nativeAlertMessage: string;
+			nativeAlertConfirm: string;
+			nativeAlertCancel: string;
+			nativeAlertConfirmed: string;
+			nativeAlertCancelled: string;
 		};
 		dialog: {
 			title: string;
@@ -643,13 +879,67 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			fields: {
 				textField: localize('Text Field'),
 				textFieldHelper: localize('Primitive text input preview'),
+				counterField: localize('Project Summary'),
+				counterFieldHelper: localize('Clearable field with character count'),
+				asyncField: localize('Team Slug'),
+				asyncFieldHelper: localize('Checking availability before provisioning'),
+				disabledField: localize('Locked Field'),
+				emailField: localize('Email Autofill'),
+				numericField: localize('Numeric Keyboard'),
+				phoneKeyboardField: localize('Phone Keyboard'),
+				urlField: localize('URL Keyboard'),
+				decimalField: localize('Decimal Keyboard'),
+				passwordField: localize('Password Field'),
+				passwordFieldHelper: localize('Secure entry with autofill hints'),
 				searchPlaceholder: localize('Search input preview'),
+				searchDebouncedLabel: localize('Debounced query'),
+				searchDebouncedIdle: localize('Waiting for pause in typing'),
 				phoneInput: localize('Phone Input'),
 				amountInput: localize('Amount Input'),
 				datePicker: localize('Date Picker'),
 				textarea: localize('Textarea'),
 				errorField: localize('Approval Email'),
 				errorFieldError: localize('Enter a valid approver email before continuing'),
+			},
+			selectionControls: {
+				checkbox: localize('Email summary'),
+				checkboxDescription: localize(
+					'Send a daily digest when approvals are waiting for review.',
+				),
+				checkboxIndeterminate: localize('Apply policy to invoices'),
+				checkboxIndeterminateDescription: localize(
+					'Some invoices already follow this rule, but not all of them.',
+				),
+				checkboxDisabled: localize('Lock after export'),
+				checkboxGroup: localize('Delivery channels'),
+				checkboxGroupDescription: localize(
+					'Choose every channel that should receive approval escalations.',
+				),
+				checkboxOptions: [
+					{ label: 'Email', value: 'email' },
+					{ label: 'SMS', value: 'sms' },
+					{ label: 'WhatsApp', value: 'whatsapp' },
+				].map((option) => localizeOption(localize, option)),
+				radio: localize('Weekly summary'),
+				radioDisabled: localize('Monthly summary'),
+				radioGroup: localize('Digest cadence'),
+				radioGroupDescription: localize(
+					'Pick exactly one delivery frequency for the approval digest.',
+				),
+				radioOptions: [
+					{ label: 'Daily', value: 'daily' },
+					{ label: 'Weekly', value: 'weekly' },
+					{ label: 'Monthly', value: 'monthly' },
+				].map((option) => localizeOption(localize, option)),
+				toggle: localize('Auto reminders'),
+				toggleDescription: localize(
+					'Send a reminder every morning until the blocker is resolved.',
+				),
+				toggleBareLabel: localize('Enable approval rule'),
+				toggleDisabled: localize('Freeze archived periods'),
+				toggleDisabledDescription: localize(
+					'This setting is managed centrally and cannot be changed here.',
+				),
 			},
 			accordion: {
 				title: localize('Collapsible Section'),
@@ -670,6 +960,440 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 					'Keep the tone calm and actionable even when a service dependency is degraded.',
 				),
 				actionLabel: localize('Review queue'),
+			},
+			advanced: {
+				timePicker: localize('Escalation time'),
+				dateRangePicker: localize('Reporting range'),
+				autocomplete: localize('Approver team'),
+				tokenInput: localize('Routing tags'),
+				fileUpload: localize('Attachments'),
+				rangeSlider: localize('Discount threshold'),
+				numericStepper: localize('Reminder cadence'),
+				otp: localize('Verification code'),
+				colorPicker: localize('Accent color'),
+				segmentedControl: localize('Canvas mode'),
+				toggleGroup: localize('Visible views'),
+				splitButton: localize('Save'),
+				actionSheet: localize('Secondary actions'),
+				fabLabel: localize('Create new record'),
+				progressUpload: localize('Upload progress'),
+				progressRefresh: localize('Refreshing queue'),
+				progressCoverage: localize('Checklist coverage'),
+				progressExport: localize('Preparing export'),
+				errorRetry: localize('Retry import'),
+				toastQueueSuccess: localize('Queue success toast'),
+				toastQueueWarning: localize('Queue warning toast'),
+				toastQueueError: localize('Queue error toast'),
+				toastSuccessMessage: localize('Saved to approval queue'),
+				toastWarningMessage: localize('Review required before publish'),
+				toastWarningAction: localize('Review'),
+				toastErrorMessage: localize('Upload failed'),
+				toastDismiss: localize('Close'),
+				stepperReturnPrefix: localize('Returned to '),
+				autocompleteOptions: [
+					{ label: 'Finance', value: 'finance' },
+					{ label: 'Operations', value: 'operations' },
+					{ label: 'People Ops', value: 'people-ops' },
+				].map((option) => localizeOption(localize, option)),
+				toggleOptions: [
+					{ label: 'List', value: 'list' },
+					{ label: 'Board', value: 'board' },
+					{ label: 'Calendar', value: 'calendar' },
+				].map((option) => localizeOption(localize, option)),
+				actionMenuItems: [
+					{ label: 'Save as draft', value: 'draft' },
+					{ label: 'Share for review', value: 'share' },
+					{ label: 'Delete record', value: 'delete', destructive: true },
+				].map((item) => ({ ...item, label: localize(item.label) })),
+				tabOptions: [
+					{ label: 'Overview', value: 'overview', badgeCount: 3 },
+					{ label: 'Approvals', value: 'approvals' },
+					{ label: 'Files', value: 'files' },
+				].map((item) => ({ ...item, label: localize(item.label) })),
+				stepperSteps: [
+					{
+						label: 'Details',
+						value: 'details',
+						state: 'completed' as const,
+						description: 'Complete',
+					},
+					{
+						label: 'Review',
+						value: 'review',
+						state: 'active' as const,
+						description: 'Needs approval',
+					},
+					{
+						label: 'Archive',
+						value: 'archive',
+						state: 'upcoming' as const,
+						description: 'Pending',
+					},
+				].map((item) => ({
+					...item,
+					label: localize(item.label),
+					description: localize(item.description),
+				})),
+				notificationItems: [
+					{
+						id: 'notif-1',
+						title: 'Low-stock alert acknowledged',
+						category: 'System',
+						read: false,
+					},
+					{
+						id: 'notif-2',
+						title: 'Approval request assigned',
+						category: 'Mentions',
+						read: false,
+					},
+					{
+						id: 'notif-3',
+						title: 'Payment reminder sent',
+						category: 'Updates',
+						read: true,
+					},
+				].map((item) => ({
+					...item,
+					title: localize(item.title),
+					category: localize(item.category),
+				})),
+			},
+			dataDisplay: {
+				sectionTitle: localize('Data Display'),
+				sectionDescription: localize(
+					'Prove list, metric, chart, media, and board surfaces with the same calm enterprise grammar across dense and relaxed states.',
+				),
+				cardHeader: localize('Revenue summary'),
+				cardFooterPrimary: localize('Open report'),
+				cardFooterSecondary: localize('Share snapshot'),
+				cardHeroTitle: localize('Quarterly margin overview'),
+				cardHeroDescription: localize(
+					'Featured cards should use restrained emphasis, not louder chrome.',
+				),
+				cardHorizontalTitle: localize('Inventory watchlist'),
+				cardHorizontalDescription: localize(
+					'Horizontal cards keep media secondary while preserving text-first scanability.',
+				),
+				listTitle: localize('Virtualized operational list'),
+				listDescription: localize(
+					'Selectable rows, skeletons, section headers, and empty handling all live in the shared list shell.',
+				),
+				listSelectionLabel: localize('Select row'),
+				listEmptyTitle: localize('No operational records'),
+				listEmptyDescription: localize(
+					'The empty state should explain what to do next instead of leaving a blank canvas.',
+				),
+				listSections: [localize('Active queue'), localize('Recently archived')],
+				listItems: [
+					{
+						id: 'list-1',
+						title: 'Approval block on supplier invoice',
+						subtitle: 'Needs finance review before dispatch',
+						status: 'Blocked',
+					},
+					{
+						id: 'list-2',
+						title: 'Export pack ready for warehouse',
+						subtitle: 'Label print and manifest both complete',
+						status: 'Ready',
+					},
+					{
+						id: 'list-3',
+						title: 'Route assignment updated',
+						subtitle: 'Carrier and dock time re-confirmed',
+						status: 'Updated',
+					},
+				].map((item) => ({
+					...item,
+					title: localize(item.title),
+					subtitle: localize(item.subtitle),
+					status: localize(item.status),
+				})),
+				timelineTitle: localize('Activity feed'),
+				timelineDescription: localize(
+					'Timelines need clear date separators, load-more behavior, and calm real-time injection.',
+				),
+				timelineLoadMore: localize('Load older events'),
+				timelineNewItems: localize('Show new activity'),
+				timelineItems: [
+					{
+						id: 'timeline-1',
+						title: 'Shipment approved',
+						description: 'Operations confirmed dispatch after documentation review.',
+						timeLabel: '09:12',
+						dateLabel: 'Today',
+						statusLabel: 'Approved',
+					},
+					{
+						id: 'timeline-2',
+						title: 'Margin threshold crossed',
+						description: 'The planned discount now exceeds the alert baseline.',
+						timeLabel: '08:40',
+						dateLabel: 'Today',
+						statusLabel: 'Review',
+					},
+					{
+						id: 'timeline-3',
+						title: 'Vendor contract renewed',
+						description: 'Commercial terms were updated for the next quarter.',
+						timeLabel: '17:25',
+						dateLabel: 'Yesterday',
+					},
+				].map((item) => ({
+					...item,
+					title: localize(item.title),
+					description: localize(item.description),
+					dateLabel: localize(item.dateLabel),
+					statusLabel: item.statusLabel ? localize(item.statusLabel) : undefined,
+				})),
+				timelinePendingItems: [
+					{
+						id: 'timeline-pending-1',
+						title: 'New note from finance',
+						description: 'A fresh comment was attached to the approval trail.',
+						timeLabel: '09:19',
+						dateLabel: 'Today',
+						statusLabel: 'New',
+					},
+				].map((item) => ({
+					...item,
+					title: localize(item.title),
+					description: localize(item.description),
+					dateLabel: localize(item.dateLabel),
+					statusLabel: item.statusLabel ? localize(item.statusLabel) : undefined,
+				})),
+				avatarsTitle: localize('Avatar and overflow group'),
+				avatarsDescription: localize(
+					'Avatar groups should handle missing media gracefully and let hidden members expand on tap.',
+				),
+				avatarItems: [
+					{ id: 'avatar-1', name: 'Aarav Mehta', status: 'online' as const },
+					{ id: 'avatar-2', name: 'Nisha Rao', status: 'busy' as const },
+					{ id: 'avatar-3', name: 'Priya Shah', status: 'offline' as const },
+					{ id: 'avatar-4', name: 'Rohan Verma', status: 'warning' as const },
+				].map((item) => ({ ...item, name: localize(item.name) })),
+				keyValueTitle: localize('Description list'),
+				keyValueDescription: localize(
+					'Copyable values and sensitive reveal states should stay quiet and readable.',
+				),
+				keyValueItems: [
+					{ id: 'desc-1', label: 'Customer ID', value: 'CUS-2048', copyable: true },
+					{
+						id: 'desc-2',
+						label: 'Primary contact',
+						value: 'accounts@northyard.example',
+						copyable: true,
+					},
+					{
+						id: 'desc-3',
+						label: 'Bank reference',
+						value: '9981 5510 0048',
+						sensitive: true,
+						maskedValue: '•••• •••• 0048',
+						copyable: true,
+					},
+				].map((item) => ({
+					...item,
+					label: localize(item.label),
+					value: localize(item.value),
+					maskedValue: item.maskedValue ? localize(item.maskedValue) : undefined,
+				})),
+				chartsTitle: localize('Chart suite'),
+				chartsDescription: localize(
+					'Charts use the shared qualitative palette, quiet scaffolding, and focused-series emphasis instead of decorative noise.',
+				),
+				chartCategories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((label) =>
+					localize(label),
+				),
+				chartSeries: [
+					// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- representative chart fixture values for the workbench.
+					{ id: 'series-primary', label: 'Primary', values: [42, 48, 51, 46, 58] },
+					// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- representative comparison values for the workbench.
+					{ id: 'series-compare', label: 'Comparison', values: [36, 39, 44, 41, 47] },
+				].map((series) => ({ ...series, label: localize(series.label) })),
+				chartSlices: [
+					// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- slice sizes are illustrative preview data.
+					{ id: 'slice-ops', label: 'Operations', value: 42 },
+					{ id: 'slice-finance', label: 'Finance', value: 28 },
+					{ id: 'slice-sales', label: 'Sales', value: 18 },
+					{ id: 'slice-support', label: 'Support', value: 12 },
+				].map((slice) => ({ ...slice, label: localize(slice.label) })),
+				chartPoints: [
+					{ id: 'point-1', x: 1, y: 12, seriesId: 'series-primary' },
+					{ id: 'point-2', x: 2, y: 18, seriesId: 'series-primary' },
+					{ id: 'point-3', x: 3, y: 16, seriesId: 'series-compare' },
+					{ id: 'point-4', x: 4, y: 21, seriesId: 'series-compare' },
+				],
+				chartHeatmap: [
+					{ row: 'North', column: 'Mon', value: 12 },
+					{ row: 'North', column: 'Tue', value: 18 },
+					{ row: 'South', column: 'Mon', value: 9 },
+					{ row: 'South', column: 'Tue', value: 16 },
+					{ row: 'West', column: 'Mon', value: 14 },
+					{ row: 'West', column: 'Tue', value: 20 },
+				].map((cell) => ({
+					...cell,
+					row: localize(cell.row),
+					column: localize(cell.column),
+				})),
+				chartAnnotations: [
+					{ label: 'Target', value: 50 },
+					// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- threshold marker is an intentional fixture.
+					{ label: 'Alert threshold', value: 38 },
+				].map((annotation) => ({ ...annotation, label: localize(annotation.label) })),
+				swipeTitle: localize('Swipe actions'),
+				swipeDescription: localize(
+					'Swipeable rows should reveal archive and delete actions without making gestures the only path.',
+				),
+				mediaTitle: localize('Media viewer'),
+				mediaDescription: localize(
+					'Media surfaces must work with progressive loading and degrade to text-first fallback when imagery is unavailable.',
+				),
+				mediaOpen: localize('Open media viewer'),
+				mediaItems: [
+					{
+						id: 'media-1',
+						uri: 'https://picsum.photos/id/1062/1200/800',
+						thumbnailUri: 'https://picsum.photos/id/1062/320/220',
+						alt: 'Warehouse detail view',
+						caption: 'High-resolution photo with a smaller preview image.',
+					},
+					{
+						id: 'media-2',
+						uri: 'https://picsum.photos/id/1025/1200/800',
+						thumbnailUri: 'https://picsum.photos/id/1025/320/220',
+						alt: 'Field installation',
+						caption: 'Swipe horizontally between gallery items.',
+					},
+					{
+						id: 'media-3',
+						alt: 'Fallback media note',
+						caption: 'Missing imagery should fall back to a text-first explanation.',
+					},
+				].map((item) => ({
+					...item,
+					alt: localize(item.alt),
+					caption: item.caption ? localize(item.caption) : undefined,
+				})),
+				boardTitle: localize('Kanban board'),
+				boardDescription: localize(
+					'Boards stay horizontally scrollable while each column keeps drag-reorder and explicit WIP cues.',
+				),
+				boardColumns: [
+					{
+						id: 'board-todo',
+						title: 'Queued',
+						wipLimit: 3,
+						items: [
+							{
+								id: 'card-1',
+								title: 'Confirm vendor SLA',
+								description: 'Commercial team review pending.',
+								statusLabel: 'Queued',
+							},
+							{
+								id: 'card-2',
+								title: 'Prepare dispatch sheet',
+								description: 'Waiting on logistics attachments.',
+								statusLabel: 'Ready',
+							},
+						],
+					},
+					{
+						id: 'board-progress',
+						title: 'In progress',
+						wipLimit: 2,
+						items: [
+							{
+								id: 'card-3',
+								title: 'Resolve packaging variance',
+								description: 'Operations and QA are aligned on next steps.',
+								statusLabel: 'Active',
+							},
+						],
+					},
+					{
+						id: 'board-done',
+						title: 'Done',
+						items: [
+							{
+								id: 'card-4',
+								title: 'Update approval matrix',
+								description: 'Access model is ready for rollout.',
+								statusLabel: 'Done',
+							},
+						],
+					},
+				].map((column) => ({
+					...column,
+					title: localize(column.title),
+					items: column.items.map((item) => ({
+						...item,
+						title: localize(item.title),
+						description: item.description ? localize(item.description) : undefined,
+						statusLabel: item.statusLabel ? localize(item.statusLabel) : undefined,
+					})),
+				})),
+				statUpdatedAt: localize('Updated 12 minutes ago'),
+				statComparisonBaseline: localize('Compared with the trailing 7-day baseline'),
+				statErrorMessage: localize('Live warehouse feed delayed'),
+			},
+			overlays: {
+				sectionTitle: localize('Overlays'),
+				sectionDescription: localize(
+					'Validate dialogs, sheets, tooltips, popovers, and native alerts with the same focus discipline and restrained hierarchy as the rest of the library.',
+				),
+				sizeSmall: localize('Open small dialog'),
+				sizeMedium: localize('Open medium dialog'),
+				sizeLarge: localize('Open large dialog'),
+				hardConfirmation: localize('Open hard confirmation'),
+				hardConfirmationTitle: localize('Publish shared changes?'),
+				hardConfirmationMessage: localize(
+					'This pushes the updated overlay contract into the shared design-system surface for downstream adoption.',
+				),
+				hardConfirmationKeyword: localize('PUBLISH'),
+				hardConfirmationLabel: localize('Type to confirm'),
+				hardConfirmationHelper: localize(
+					'Type PUBLISH exactly before the primary action becomes available.',
+				),
+				tooltipTitle: localize('Tooltip'),
+				tooltipDescription: localize(
+					'Tooltips stay short, non-interactive, and long-press friendly on touch surfaces.',
+				),
+				tooltipTrigger: localize('Hold for support note'),
+				tooltipContent: localize(
+					'This action only applies the shared overlay tokens and never stores product data.',
+				),
+				popoverTitle: localize('Popover'),
+				popoverDescription: localize(
+					'Popovers support anchored interactive content without stealing the visual hierarchy from the parent surface.',
+				),
+				popoverTrigger: localize('Open quick editor'),
+				popoverFieldLabel: localize('Review note'),
+				popoverFieldHelper: localize(
+					'Short inline edits should stay inside the anchored surface.',
+				),
+				popoverAction: localize('Save quick edit'),
+				popoverSaved: localize('Quick edit saved'),
+				contextMenuTitle: localize('Context menu'),
+				contextMenuDescription: localize(
+					'Long-press should open a haptic-backed menu anchored to the invoking surface.',
+				),
+				contextMenuTriggerTitle: localize('Hold for row actions'),
+				contextMenuTriggerDescription: localize(
+					'Share, duplicate, or delete the item from the anchored action menu.',
+				),
+				contextActionPrefix: localize('Ran'),
+				nativeAlertButton: localize('Open native alert'),
+				nativeAlertTitle: localize('Escalate this handoff?'),
+				nativeAlertMessage: localize(
+					'Use the OS-native alert for simple confirmations that do not need custom layout.',
+				),
+				nativeAlertConfirm: localize('Escalate'),
+				nativeAlertCancel: localize('Not now'),
+				nativeAlertConfirmed: localize('Native alert confirmed'),
+				nativeAlertCancelled: localize('Native alert cancelled'),
 			},
 			dialog: {
 				title: localize('Publish checklist updates?'),

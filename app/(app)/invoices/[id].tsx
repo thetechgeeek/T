@@ -26,21 +26,21 @@ import {
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { pdfService } from '@/src/services/pdfService';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
-import { Screen } from '@/src/components/atoms/Screen';
-import { Button } from '@/src/components/atoms/Button';
-import { Divider } from '@/src/components/atoms/Divider';
-import { Badge } from '@/src/components/atoms/Badge';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { Divider } from '@/src/design-system/components/atoms/Divider';
+import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SectionHeader } from '@/src/components/molecules/SectionHeader';
-import { ScreenHeader } from '@/src/components/molecules/ScreenHeader';
-import { InvoiceDetailSkeleton } from '@/src/components/molecules/skeletons/InvoiceDetailSkeleton';
+import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
+import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { InvoiceDetailSkeleton } from '@/app/components/molecules/skeletons/InvoiceDetailSkeleton';
 import { layout } from '@/src/theme/layout';
-import { PaymentModal } from '@/src/components/organisms/PaymentModal';
+import { PaymentModal } from '@/app/components/organisms/PaymentModal';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { SIZE_BUTTON_HEIGHT_SM } from '@/theme/uiMetrics';
 import type { UUID } from '@/src/types/common';
-import type { BadgeVariant } from '@/src/components/atoms/Badge';
+import type { BadgeVariant } from '@/src/design-system/components/atoms/Badge';
 import type { PaymentStatus } from '@/src/types/invoice';
 
 // ─── helpers ────────────────────────────────────────────────────────────────

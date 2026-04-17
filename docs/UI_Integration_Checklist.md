@@ -81,6 +81,30 @@
 - [ ] iPad multitasking: Split View, Slide Over compatibility
 - [ ] Android multi-window / picture-in-picture awareness
 
+### Navigation & Routing
+
+#### Mobile (React Native)
+
+- [ ] Bottom Tab Bar (React Navigation `BottomTabNavigator`)
+    - [ ] Badge on tab items
+    - [ ] Haptic feedback on tab switch
+- [ ] Stack Navigator (screen push/pop with native transitions)
+    - [ ] iOS: back swipe gesture (interruptible, gesture-driven)
+    - [ ] Android: hardware back button handling
+    - [ ] Large title / collapsing header (iOS-style)
+    - [ ] Custom header with animated transitions
+- [ ] Drawer Navigator (slide-from-left/right)
+    - [ ] Gesture-driven open/close
+    - [ ] Overlay and push variants
+- [ ] Bottom Sheet Navigation (modal screens from bottom)
+    - [ ] Snap points (half-screen, full-screen)
+    - [ ] Drag-to-dismiss
+    - [ ] Backdrop press to close
+- [ ] Deep linking / universal links (maps URLs to screens)
+- [ ] Nested navigators (tab within stack, modal over tab)
+- [ ] Screen transition animations (slide, fade, modal lift)
+- [ ] Navigation state persistence (restore screen on app reopen)
+
 ## 2. Identity, Access & Tenant Context
 
 ### Authentication & Session Patterns
@@ -209,6 +233,17 @@
 - [ ] App badge count for unread items / pending actions
 - [ ] Background fetch for data refresh (`expo-background-fetch` or native module)
 - [ ] Job status survives app backgrounding/foregrounding
+
+### Notification Wiring & Delivery
+
+#### Common
+
+- [ ] Real-time notification injection is wired from app events/services into the reusable DS inbox/banner surfaces
+- [ ] Notification preferences route/settings are wired anywhere the DS notification surfaces expose a preferences affordance
+
+#### Mobile (React Native)
+
+- [ ] Push notification badge (app icon badge count via `expo-notifications` or native module)
 
 ### Offline & Degraded Mode
 

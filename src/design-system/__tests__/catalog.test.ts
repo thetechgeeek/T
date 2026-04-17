@@ -9,10 +9,10 @@ import {
 
 describe('design system catalog', () => {
 	it('tracks total and Common + Mobile checklist scope', () => {
-		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1243);
-		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(934);
-		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(647);
-		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(287);
+		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1207);
+		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(901);
+		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(640);
+		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(261);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBeGreaterThan(0);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed + DESIGN_LIBRARY_OVERVIEW.open).toBe(
 			DESIGN_LIBRARY_OVERVIEW.total,
@@ -20,10 +20,10 @@ describe('design system catalog', () => {
 	});
 
 	it('tracks the generated component inventory and live demo coverage', () => {
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(32);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(32);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.atoms).toBe(10);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.molecules).toBe(20);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(65);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(65);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.atoms).toBe(14);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.molecules).toBe(49);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.organisms).toBe(0);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.skeletons).toBe(2);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.livePreviewCount).toBeGreaterThan(10);

@@ -48,7 +48,7 @@ jest.mock('@/src/hooks/useLocale', () => ({
 	}),
 }));
 
-jest.mock('@/src/components/molecules/StatCard', () => ({
+jest.mock('@/src/design-system/components/molecules/StatCard', () => ({
 	StatCard: ({
 		label,
 		value,
@@ -69,21 +69,21 @@ jest.mock('@/src/components/molecules/StatCard', () => ({
 }));
 
 // Mock large sub-components to keep snapshot size manageable
-jest.mock('@/src/components/organisms/RecentInvoicesList', () => ({
+jest.mock('@/app/components/organisms/RecentInvoicesList', () => ({
 	RecentInvoicesList: () => {
 		const React = jest.requireActual('react') as typeof import('react');
 		const { Text } = jest.requireActual('react-native') as typeof import('react-native');
 		return <Text>RecentInvoicesList</Text>;
 	},
 }));
-jest.mock('@/src/components/organisms/QuickActionsGrid', () => ({
+jest.mock('@/app/components/organisms/QuickActionsGrid', () => ({
 	QuickActionsGrid: () => {
 		const React = jest.requireActual('react') as typeof import('react');
 		const { Text } = jest.requireActual('react-native') as typeof import('react-native');
 		return <Text>QuickActionsGrid</Text>;
 	},
 }));
-jest.mock('@/src/components/organisms/DashboardHeader', () => ({
+jest.mock('@/app/components/organisms/DashboardHeader', () => ({
 	DashboardHeader: () => {
 		const React = jest.requireActual('react') as typeof import('react');
 		const { Text } = jest.requireActual('react-native') as typeof import('react-native');

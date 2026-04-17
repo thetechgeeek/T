@@ -11,8 +11,8 @@ import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useAuthStore } from '@/src/stores/authStore';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { ErrorBoundary } from '@/src/components/atoms/ErrorBoundary';
-import { OfflineBanner } from '@/src/components/atoms/OfflineBanner';
+import { ErrorBoundary } from '@/app/components/atoms/ErrorBoundary';
+import { OfflineBanner } from '@/app/components/atoms/OfflineBanner';
 
 function AuthGate({ children }: { children: React.ReactNode }) {
 	const { isAuthenticated, loading, initialize } = useAuthStore(

@@ -92,9 +92,9 @@ describe('ScanTab — manual search', () => {
 			data: [{ id: 'inv-1', design_name: 'Elite', base_item_number: 'E001' }],
 		});
 
-		const { getByPlaceholderText, getByText } = renderWithTheme(<ScanTab />);
+		const { getByLabelText, getByPlaceholderText } = renderWithTheme(<ScanTab />);
 		fireEvent.changeText(getByPlaceholderText('Enter item or design #'), 'Elite');
-		fireEvent.press(getByText(''));
+		fireEvent.press(getByLabelText('scan-search-button'));
 
 		await waitFor(() => {
 			expect(inventoryService.fetchItems).toHaveBeenCalledWith({ search: 'Elite' });
@@ -102,8 +102,8 @@ describe('ScanTab — manual search', () => {
 	});
 
 	it('does not search when input is empty', async () => {
-		const { getByText } = renderWithTheme(<ScanTab />);
-		fireEvent.press(getByText(''));
+		const { getByLabelText } = renderWithTheme(<ScanTab />);
+		fireEvent.press(getByLabelText('scan-search-button'));
 
 		await waitFor(() => {
 			expect(inventoryService.fetchItems).not.toHaveBeenCalled();
@@ -113,9 +113,9 @@ describe('ScanTab — manual search', () => {
 	it('shows Not Found alert when no items returned', async () => {
 		(inventoryService.fetchItems as jest.Mock).mockResolvedValue({ data: [] });
 
-		const { getByPlaceholderText, getByText } = renderWithTheme(<ScanTab />);
+		const { getByLabelText, getByPlaceholderText } = renderWithTheme(<ScanTab />);
 		fireEvent.changeText(getByPlaceholderText('Enter item or design #'), 'Nonexistent');
-		fireEvent.press(getByText(''));
+		fireEvent.press(getByLabelText('scan-search-button'));
 
 		await waitFor(() => {
 			expect(Alert.alert).toHaveBeenCalledWith(

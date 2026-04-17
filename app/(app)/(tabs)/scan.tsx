@@ -21,11 +21,11 @@ import { Search, Aperture } from 'lucide-react-native';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
-import { TextInput } from '@/src/components/atoms/TextInput';
-import { Button } from '@/src/components/atoms/Button';
-import { SkeletonBlock } from '@/src/components/molecules/SkeletonBlock';
-import { Screen as AtomicScreen } from '@/src/components/atoms/Screen';
-import { ThemedText } from '@/src/components/atoms/ThemedText';
+import { TextInput } from '@/src/design-system/components/atoms/TextInput';
+import { Button } from '@/src/design-system/components/atoms/Button';
+import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
+import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
+import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import logger from '@/src/utils/logger';
 import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 

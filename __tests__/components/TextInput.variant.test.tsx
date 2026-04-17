@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { TextInput } from '@/src/components/atoms/TextInput';
+import { TextInput } from '@/src/design-system/components/atoms/TextInput';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { View, Text } from 'react-native';
 
