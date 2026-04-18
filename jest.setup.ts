@@ -229,6 +229,9 @@ jest.mock('react-native', () => {
 		setString: jest.fn(),
 		getString: jest.fn().mockResolvedValue(''),
 	};
+	const Share = {
+		share: jest.fn().mockResolvedValue({ action: 'sharedAction' }),
+	};
 
 	const FlatList = ({
 		data,
@@ -409,6 +412,7 @@ jest.mock('react-native', () => {
 		Modal,
 		RefreshControl,
 		Clipboard,
+		Share,
 		FlatList,
 		SectionList,
 		AppState,
@@ -644,6 +648,15 @@ jest.mock('expo-document-picker', () => ({
 	getDocumentAsync: jest.fn(),
 }));
 
+jest.mock(
+	'expo-clipboard',
+	() => ({
+		setStringAsync: jest.fn().mockResolvedValue(true),
+		getStringAsync: jest.fn().mockResolvedValue(''),
+	}),
+	{ virtual: true },
+);
+
 jest.mock('expo-image-picker', () => ({
 	launchImageLibraryAsync: jest.fn(),
 	MediaTypeOptions: {
@@ -677,6 +690,15 @@ jest.mock('@react-native-community/datetimepicker', () => {
 });
 
 jest.mock('expo-file-system', () => ({
+	documentDirectory: 'test-dir/',
+	writeAsStringAsync: jest.fn(),
+	readAsStringAsync: jest.fn(),
+	deleteAsync: jest.fn(),
+	makeDirectoryAsync: jest.fn(),
+	getInfoAsync: jest.fn(),
+}));
+
+jest.mock('expo-file-system/legacy', () => ({
 	documentDirectory: 'test-dir/',
 	writeAsStringAsync: jest.fn(),
 	readAsStringAsync: jest.fn(),

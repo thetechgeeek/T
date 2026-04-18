@@ -116,5 +116,25 @@
 	{
 		"kind": "molecules",
 		"filePath": "src/design-system/components/molecules/VirtualizedList.tsx"
+	},
+	{
+		"kind": "organisms",
+		"filePath": "src/design-system/components/organisms/CrudWorkspace.tsx"
+	},
+	{
+		"kind": "organisms",
+		"filePath": "src/design-system/components/organisms/DataLayoutWorkspace.tsx"
+	},
+	{
+		"kind": "organisms",
+		"filePath": "src/design-system/components/organisms/FeedbackLoopWorkspace.tsx"
+	},
+	{
+		"kind": "organisms",
+		"filePath": "src/design-system/components/organisms/ProductivityWorkspace.tsx"
+	},
+	{
+		"kind": "organisms",
+		"filePath": "src/design-system/components/organisms/SearchFilterWorkspace.tsx"
 	}
 ]

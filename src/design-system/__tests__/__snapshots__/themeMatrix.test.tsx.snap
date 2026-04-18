@@ -34,6 +34,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#451A03",
           "borderColor": "#27302F",
@@ -44,17 +45,18 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -501,6 +503,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#27302F",
@@ -512,17 +515,18 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -814,6 +818,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#27302F",
@@ -825,17 +830,18 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -1128,6 +1134,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#27302F",
@@ -1138,17 +1145,18 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -1654,6 +1662,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#27302F",
@@ -1665,17 +1674,18 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -1848,6 +1858,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#27302F",
@@ -1859,17 +1870,18 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -2255,6 +2267,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#27302F",
@@ -2264,17 +2277,18 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -3209,6 +3223,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#451A03",
           "borderColor": "#38383A",
@@ -3219,17 +3234,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -3676,6 +3692,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#38383A",
@@ -3687,17 +3704,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -3989,6 +4007,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#38383A",
@@ -4000,17 +4019,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -4303,6 +4323,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#38383A",
@@ -4313,17 +4334,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -4829,6 +4851,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#38383A",
@@ -4840,17 +4863,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -5023,6 +5047,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#38383A",
@@ -5034,17 +5059,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -5430,6 +5456,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#38383A",
@@ -5439,17 +5466,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -6384,6 +6412,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FCE7DF",
           "borderColor": "#E5DDD5",
@@ -6394,17 +6423,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -6851,6 +6881,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E5DDD5",
@@ -6862,17 +6893,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -7164,6 +7196,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E5DDD5",
@@ -7175,17 +7208,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -7478,6 +7512,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FFFFFF",
           "borderColor": "#E5DDD5",
@@ -7488,17 +7523,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -8004,6 +8040,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E5DDD5",
@@ -8015,17 +8052,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -8198,6 +8236,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E5DDD5",
@@ -8209,17 +8248,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -8605,6 +8645,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FFFFFF",
           "borderColor": "#E5DDD5",
@@ -8614,17 +8655,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -9559,6 +9601,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#451A03",
           "borderColor": "#253146",
@@ -9569,17 +9612,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 7.28,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -10026,6 +10070,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#253146",
@@ -10037,17 +10082,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 7.28,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -10339,6 +10385,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#253146",
@@ -10350,17 +10397,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 7.28,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -10653,6 +10701,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#253146",
@@ -10663,17 +10712,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 7.28,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -11179,6 +11229,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#253146",
@@ -11190,17 +11241,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 7.28,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -11373,6 +11425,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#253146",
@@ -11384,17 +11437,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 7.28,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -11780,6 +11834,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#253146",
@@ -11789,17 +11844,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 7.28,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -12734,6 +12790,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FCE7DF",
           "borderColor": "#D6DFEB",
@@ -12744,17 +12801,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 7.28,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -13201,6 +13259,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#D6DFEB",
@@ -13212,17 +13271,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 7.28,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -13514,6 +13574,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#D6DFEB",
@@ -13525,17 +13586,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 7.28,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -13828,6 +13890,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FFFFFF",
           "borderColor": "#D6DFEB",
@@ -13838,17 +13901,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 7.28,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -14354,6 +14418,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#D6DFEB",
@@ -14365,17 +14430,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 7.28,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -14548,6 +14614,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#D6DFEB",
@@ -14559,17 +14626,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 7.28,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -14955,6 +15023,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FFFFFF",
           "borderColor": "#D6DFEB",
@@ -14964,17 +15033,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 7.28,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -15909,6 +15979,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#451A03",
           "borderColor": "#2A2A27",
@@ -15919,17 +15990,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -16376,6 +16448,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#2A2A27",
@@ -16387,17 +16460,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -16689,6 +16763,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#2A2A27",
@@ -16700,17 +16775,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -17003,6 +17079,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#2A2A27",
@@ -17013,17 +17090,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -17529,6 +17607,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#2A2A27",
@@ -17540,17 +17619,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -17723,6 +17803,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#2A2A27",
@@ -17734,17 +17815,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -18130,6 +18212,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#2A2A27",
@@ -18139,17 +18222,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -19084,6 +19168,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FCE7DF",
           "borderColor": "#DDDDD9",
@@ -19094,17 +19179,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -19551,6 +19637,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#DDDDD9",
@@ -19562,17 +19649,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -19864,6 +19952,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#DDDDD9",
@@ -19875,17 +19964,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -20178,6 +20268,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FFFFFF",
           "borderColor": "#DDDDD9",
@@ -20188,17 +20279,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -20704,6 +20796,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#DDDDD9",
@@ -20715,17 +20808,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -20898,6 +20992,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#DDDDD9",
@@ -20909,17 +21004,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 8.32,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -21305,6 +21401,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FFFFFF",
           "borderColor": "#DDDDD9",
@@ -21314,17 +21411,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 8.32,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -22259,6 +22357,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#451A03",
           "borderColor": "#27302F",
@@ -22269,17 +22368,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -22726,6 +22826,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#27302F",
@@ -22737,17 +22838,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -23039,6 +23141,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#27302F",
@@ -23050,17 +23153,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -23353,6 +23457,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#27302F",
@@ -23363,17 +23468,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -23879,6 +23985,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#27302F",
@@ -23890,17 +23997,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -24073,6 +24181,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#1C1C1E",
             "borderColor": "#27302F",
@@ -24084,17 +24193,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -24480,6 +24590,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#1C1C1E",
           "borderColor": "#27302F",
@@ -24489,17 +24600,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -25434,6 +25546,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FCE7DF",
           "borderColor": "#E5DDD5",
@@ -25444,17 +25557,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={
@@ -25901,6 +26015,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E5DDD5",
@@ -25912,17 +26027,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -26214,6 +26330,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E5DDD5",
@@ -26225,17 +26342,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             allowFontScaling={true}
@@ -26528,6 +26646,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FFFFFF",
           "borderColor": "#E5DDD5",
@@ -26538,17 +26657,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <Text
           accessibilityRole="header"
@@ -27054,6 +27174,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E5DDD5",
@@ -27065,17 +27186,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -27248,6 +27370,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           },
           false,
           false,
+          false,
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E5DDD5",
@@ -27259,17 +27382,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
     >
       <View
         style={
-          {
-            "flex": 1,
-          }
+          [
+            {
+              "flex": 1,
+            },
+            {
+              "gap": 9.36,
+            },
+          ]
         }
       >
         <View
-          style={
-            {
-              "marginBottom": 8,
-            }
-          }
+          style={{}}
         >
           <Text
             accessibilityRole="header"
@@ -27655,6 +27779,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
         },
         false,
         false,
+        false,
         {
           "backgroundColor": "#FFFFFF",
           "borderColor": "#E5DDD5",
@@ -27664,17 +27789,18 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
   >
     <View
       style={
-        {
-          "flex": 1,
-        }
+        [
+          {
+            "flex": 1,
+          },
+          {
+            "gap": 9.36,
+          },
+        ]
       }
     >
       <View
-        style={
-          {
-            "marginBottom": 8,
-          }
-        }
+        style={{}}
       >
         <View
           style={

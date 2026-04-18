@@ -294,6 +294,21 @@
 - [ ] Native module crash isolation (doesn't take down JS runtime)
 - [ ] Push notification service failure: app still functional without notifications
 
+### Pattern Wiring & Host-Shell Behaviors
+
+#### Common
+
+- [ ] Route-level and application-level error boundaries wrap reusable design-system section boundaries
+
+#### Mobile (React Native)
+
+- [ ] Default view per user preference is restored when a search/filter surface mounts
+- [ ] URL / deep-link serialization of view and filter state maps into the reusable search/filter pattern
+- [ ] Voice search integration (native speech-to-text) feeds the shared search/filter surface without bypassing the library contract
+- [ ] CRUD editing opens the appropriate detail screen push instead of relying on inline mobile editing
+- [ ] Master → detail screen push navigation is wired by the host app around reusable data-layout patterns
+- [ ] Collapsible header / parallax scroll behavior is applied by the host shell where a reusable data layout needs it
+
 ## 5. Product Rollout & App-Level Verification
 
 ### Product Terminology

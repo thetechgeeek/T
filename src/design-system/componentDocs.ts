@@ -3061,6 +3061,249 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			'Behavior is consistent across iOS and Android without depending on platform shell chrome.',
 		],
 	}),
+	CrudWorkspace: doc({
+		name: 'CrudWorkspace',
+		filePath: 'src/design-system/components/organisms/CrudWorkspace.tsx',
+		summary:
+			'Reusable CRUD shell that proves summary and dense views, soft and hard destructive flows, archive and restore, bulk actions, diff review, and audit history.',
+		exampleStories: [
+			'summary review surface',
+			'dense operational table',
+			'archive and purge flow',
+			'audit trail panel',
+		],
+		variants: ['summary', 'dense'],
+		sizes: ['default', 'compact row density inside dense mode'],
+		states: [
+			'default records',
+			'selection mode',
+			'bulk action progress',
+			'archive populated',
+			'standard delete',
+			'hard confirmation purge',
+		],
+		compositionExample:
+			'Operations CRUD workspace with swipe actions, bulk archive, restore, comparison review, and explicit purge separation.',
+		usage: {
+			relaxed:
+				'Use summary mode when reviewers need calmer entity scans and more narrative context before acting.',
+			operational:
+				'Switch to dense mode for bulk selection, quick compare, and queue-oriented cleanup work.',
+			noMedia:
+				'Everything remains explicit through status text, table structure, and archive affordances without hero media.',
+		},
+		propTable: [
+			prop('records', 'CrudWorkspaceRecord[]', 'Controlled records dataset.'),
+			prop(
+				'defaultRecords',
+				'CrudWorkspaceRecord[]',
+				'Uncontrolled starting dataset.',
+				'sample records',
+			),
+			prop(
+				'onRecordsChange',
+				'(records, meta?) => void',
+				'Notifies archive, restore, duplicate, and delete operations.',
+			),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Reserve hard confirmation for irreversible purge actions after archive.',
+			'Keep one clear primary action in the bulk bar and let secondary actions stay quieter.',
+		],
+		dontList: [
+			'Do not collapse archive and permanent delete into the same destructive step.',
+			'Do not force dense mode on reviewers who need summary-first context.',
+		],
+		accessibilityNotes: [
+			'Swipe actions keep accessible alternatives through action buttons and confirmation dialogs.',
+			'Selection mode and destructive outcomes are announced through shared feedback surfaces.',
+		],
+		platformNotes: [
+			'Swipe-to-archive and swipe-to-delete stay native-feeling on iOS and Android.',
+			'Long-press selection and haptics keep the mobile CRUD pattern ergonomic for touch-first devices.',
+		],
+	}),
+	DataLayoutWorkspace: doc({
+		name: 'DataLayoutWorkspace',
+		filePath: 'src/design-system/components/organisms/DataLayoutWorkspace.tsx',
+		summary:
+			'Pattern workspace for focal-region layout, metric drill-down, optional featured widgets, drag reorder, sticky sections, pull-to-refresh, and swipe gestures inside data surfaces.',
+		exampleStories: [
+			'summary-first dashboard shell',
+			'dense analysis mode',
+			'metric drill-down list',
+			'drag reorder panel',
+		],
+		variants: ['summary first', 'dense analysis'],
+		sizes: ['default', 'compact data mode'],
+		states: [
+			'featured widgets visible',
+			'featured widgets hidden',
+			'refreshing',
+			'sticky sections',
+		],
+		compositionExample:
+			'Mobile analysis surface with tappable hero metrics, sectioned records, drag handles, and removable spotlight widgets.',
+		usage: {
+			relaxed:
+				'Use summary mode for executive scans that still need a clear path into underlying records.',
+			operational:
+				'Turn on dense analysis when section headers, pull-to-refresh, and fast row scanning matter most.',
+			noMedia:
+				'The focal hierarchy relies on metrics, badges, and list structure rather than decorative media.',
+		},
+		propTable: [COMMON_STYLE_PROP, COMMON_TEST_ID_PROP],
+		doList: [
+			'Let one dominant metric or queue own the top of the surface at a time.',
+			'Keep featured insight cards removable so they never block the primary workflow.',
+		],
+		dontList: [
+			'Do not give every panel equal visual weight.',
+			'Do not swap virtualization back to generic ScrollView for long operational lists.',
+		],
+		accessibilityNotes: [
+			'Sectioned list rendering preserves explicit badges and selectable rows under large text settings.',
+			'Drag reorder retains button-based fallback controls through the shared SortableList contract.',
+		],
+		platformNotes: [
+			'Section headers and pull-to-refresh align with native mobile list expectations.',
+			'Gesture-driven reorder and swipe actions stay mobile-first instead of relying on web-only pointer patterns.',
+		],
+	}),
+	FeedbackLoopWorkspace: doc({
+		name: 'FeedbackLoopWorkspace',
+		filePath: 'src/design-system/components/organisms/FeedbackLoopWorkspace.tsx',
+		summary:
+			'Composition proving calm sync feedback, optimistic updates, job progress, new-data notices, connectivity, conflict messaging, collaborative locks, and section-level error containment.',
+		exampleStories: [
+			'stale-while-revalidate panel',
+			'optimistic approval rollback',
+			'background job tracker',
+			'section boundary fallback',
+		],
+		variants: ['tentative', 'syncing', 'stale', 'confirmed'],
+		sizes: ['default'],
+		states: [
+			'offline',
+			'reconnecting',
+			'new items available',
+			'job completed',
+			'section failure',
+		],
+		compositionExample:
+			'Shared sync and recovery surface for queues, review screens, or import jobs that need quiet but explicit progress cues.',
+		usage: {
+			relaxed:
+				'Use the calmer banners and badges when progress should stay visible without overpowering the surrounding content.',
+			operational:
+				'Lean on the job, conflict, and connectivity cards in dense workflows where state drift must stay obvious.',
+			noMedia:
+				'Status, conflict, and recovery remain readable through text hierarchy and tone alone.',
+		},
+		propTable: [COMMON_STYLE_PROP, COMMON_TEST_ID_PROP],
+		doList: [
+			'Make tentative, syncing, stale, and confirmed visually distinct without stacking loud banners.',
+			'Contain failures locally when a section can recover without taking down the whole screen.',
+		],
+		dontList: [
+			'Do not turn every background refresh into a blocking modal.',
+			'Do not hide conflict or collaborative lock states behind generic error copy.',
+		],
+		accessibilityNotes: [
+			'Toasts and alerts announce state changes without requiring users to rediscover context.',
+			'Section-level fallback keeps recovery controls close to the failed region.',
+		],
+		platformNotes: [
+			'Connectivity and refresh messaging stays consistent across iOS and Android.',
+			'Background jobs and optimistic edits remain mobile-friendly without relying on desktop notification chrome.',
+		],
+	}),
+	ProductivityWorkspace: doc({
+		name: 'ProductivityWorkspace',
+		filePath: 'src/design-system/components/organisms/ProductivityWorkspace.tsx',
+		summary:
+			'Reusable productivity pattern that combines clipboard actions, share flows, external-keyboard discoverability, and import/export wizard structure.',
+		exampleStories: [
+			'copy and share toolbar',
+			'external keyboard help card',
+			'import validation wizard',
+			'export share-sheet handoff',
+		],
+		variants: ['current view export', 'full dataset export'],
+		sizes: ['default'],
+		states: ['template ready', 'import progress', 'validation warnings', 'shortcut captured'],
+		compositionExample:
+			'Data transfer surface that keeps copy, share, file pickers, and correction guidance in one structured workspace.',
+		usage: {
+			relaxed:
+				'Use the full wizard when first-run guidance and mapping clarity matter more than raw speed.',
+			operational:
+				'Keep export scope and shortcut hints visible for tablet operators moving quickly between tasks.',
+			noMedia:
+				'The entire productivity surface works with text labels, step structure, and file metadata only.',
+		},
+		propTable: [COMMON_STYLE_PROP, COMMON_TEST_ID_PROP],
+		doList: [
+			'Keep import corrections row-specific and actionable before the final confirm step.',
+			'Use native share and clipboard affordances instead of inventing bespoke transfer UI.',
+		],
+		dontList: [
+			'Do not bury template download behind documentation-only screens.',
+			'Do not treat keyboard shortcuts as hidden power-user lore with no discoverability surface.',
+		],
+		accessibilityNotes: [
+			'Copy, share, and import controls remain explicit buttons with stable labels for automation and assistive tech.',
+			'Shortcut help is visible in the surface itself instead of assuming hover-only hints.',
+		],
+		platformNotes: [
+			'Clipboard and share flows map to native mobile APIs rather than desktop browser assumptions.',
+			'External keyboard capture is designed for iPad and Android tablet usage alongside touch input.',
+		],
+	}),
+	SearchFilterWorkspace: doc({
+		name: 'SearchFilterWorkspace',
+		filePath: 'src/design-system/components/organisms/SearchFilterWorkspace.tsx',
+		summary:
+			'Reusable search and filter composition covering welcoming entry, scalable facet and rule controls, saved views, active-filter strips, suggestions, and bottom-sheet filters.',
+		exampleStories: [
+			'premium search entry',
+			'faceted filter rules',
+			'saved view chips',
+			'mobile filter sheet',
+		],
+		variants: ['live filter', 'explicit apply'],
+		sizes: ['default'],
+		states: ['suggestions open', 'recent searches', 'saved views', 'active filter strip'],
+		compositionExample:
+			'Search-and-filter control rail for dense enterprise datasets that still wants a welcoming first touch.',
+		usage: {
+			relaxed:
+				'Let the search entry breathe when the first action should feel inviting rather than mechanical.',
+			operational:
+				'Use the facet counts, rule groups, and active chips together when many criteria are active at once.',
+			noMedia:
+				'Search clarity comes from copy, hierarchy, and chip grammar rather than illustration or large hero chrome.',
+		},
+		propTable: [COMMON_STYLE_PROP, COMMON_TEST_ID_PROP],
+		doList: [
+			'Keep active filters visible and dismissible near the dataset they affect.',
+			'Provide both live and explicit-apply modes when the domain needs different tuning.',
+		],
+		dontList: [
+			'Do not force desktop sidebar assumptions into mobile filter flows.',
+			'Do not saturate every filter pill or saved view equally.',
+		],
+		accessibilityNotes: [
+			'Facet counts, chips, and bottom-sheet controls stay readable without relying on color alone.',
+			'Suggestions and recent searches remain available through explicit press targets on mobile.',
+		],
+		platformNotes: [
+			'Search entry uses mobile-native cancel and back framing rather than web command bars.',
+			'Advanced filters collapse into a bottom sheet instead of a persistent desktop sidebar.',
+		],
+	}),
 	VirtualizedList: doc({
 		name: 'VirtualizedList',
 		filePath: 'src/design-system/components/molecules/VirtualizedList.tsx',
@@ -3096,6 +3339,12 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('onRefresh', '() => void', 'Pull-to-refresh callback.'),
 			prop('isRefreshing', 'boolean', 'Refresh state.', 'false'),
 			prop('isLoading', 'boolean', 'Initial loading state.', 'false'),
+			prop(
+				'stickySectionHeadersEnabled',
+				'boolean',
+				'Keeps section headers pinned when using grouped native lists.',
+				'true',
+			),
 			prop('density', "'compact' | 'default'", 'Skeleton and row density.', 'default'),
 			COMMON_STYLE_PROP,
 			prop(

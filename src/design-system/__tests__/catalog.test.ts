@@ -9,11 +9,11 @@ import {
 
 describe('design system catalog', () => {
 	it('tracks total and Common + Mobile checklist scope', () => {
-		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1207);
-		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(901);
-		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(640);
-		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(261);
-		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBe(512);
+		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1175);
+		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(895);
+		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(638);
+		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(257);
+		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBe(589);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBeGreaterThan(0);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed + DESIGN_LIBRARY_OVERVIEW.open).toBe(
 			DESIGN_LIBRARY_OVERVIEW.total,
@@ -21,25 +21,27 @@ describe('design system catalog', () => {
 	});
 
 	it('tracks the generated component inventory and live demo coverage', () => {
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(67);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(67);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.total).toBe(72);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.tested).toBe(72);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.atoms).toBe(14);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.molecules).toBe(51);
-		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.organisms).toBe(0);
+		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.organisms).toBe(5);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.byKind.skeletons).toBe(2);
 		expect(DESIGN_LIBRARY_COMPONENT_OVERVIEW.livePreviewCount).toBeGreaterThan(10);
 	});
 
 	it('filters checklist items by query and platform', () => {
 		const commonMobileMatches = filterLibraryItems('Date Picker', 'common-mobile');
-		const mobileOnlyMatches = filterLibraryItems('Voice search integration', 'mobile');
+		const mobileOnlyMatches = filterLibraryItems('External keyboard support', 'mobile');
 		const webOnlyMatches = filterLibraryItems('Cmd+K', 'web');
 		const completedMatches = filterLibraryItems('ThemeProvider', 'mobile', 'completed');
 
 		expect(commonMobileMatches.some((item) => item.title === 'Date Picker')).toBe(true);
 		expect(
 			mobileOnlyMatches.some((item) =>
-				item.title.includes('Voice search integration (native speech-to-text)'),
+				item.title.includes(
+					'External keyboard support (iPad, Android tablets with keyboard)',
+				),
 			),
 		).toBe(true);
 		expect(

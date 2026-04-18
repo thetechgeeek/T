@@ -480,6 +480,41 @@ export const DESIGN_SYSTEM_COMPONENTS: DesignSystemComponent[] = [
 		hasTests: true,
 	},
 	{
+		id: 'src-design-system-components-organisms-crudworkspace-tsx',
+		name: 'CrudWorkspace',
+		kind: 'organisms',
+		filePath: 'src/design-system/components/organisms/CrudWorkspace.tsx',
+		hasTests: true,
+	},
+	{
+		id: 'src-design-system-components-organisms-datalayoutworkspace-tsx',
+		name: 'DataLayoutWorkspace',
+		kind: 'organisms',
+		filePath: 'src/design-system/components/organisms/DataLayoutWorkspace.tsx',
+		hasTests: true,
+	},
+	{
+		id: 'src-design-system-components-organisms-feedbackloopworkspace-tsx',
+		name: 'FeedbackLoopWorkspace',
+		kind: 'organisms',
+		filePath: 'src/design-system/components/organisms/FeedbackLoopWorkspace.tsx',
+		hasTests: true,
+	},
+	{
+		id: 'src-design-system-components-organisms-productivityworkspace-tsx',
+		name: 'ProductivityWorkspace',
+		kind: 'organisms',
+		filePath: 'src/design-system/components/organisms/ProductivityWorkspace.tsx',
+		hasTests: true,
+	},
+	{
+		id: 'src-design-system-components-organisms-searchfilterworkspace-tsx',
+		name: 'SearchFilterWorkspace',
+		kind: 'organisms',
+		filePath: 'src/design-system/components/organisms/SearchFilterWorkspace.tsx',
+		hasTests: true,
+	},
+	{
 		id: 'src-design-system-components-molecules-skeletonblock-tsx',
 		name: 'SkeletonBlock',
 		kind: 'skeletons',
@@ -496,12 +531,12 @@ export const DESIGN_SYSTEM_COMPONENTS: DesignSystemComponent[] = [
 ] as DesignSystemComponent[];
 
 export const DESIGN_SYSTEM_COMPONENT_STATS: DesignSystemComponentStats = {
-	total: 67,
-	tested: 67,
+	total: 72,
+	tested: 72,
 	byKind: {
 		atoms: 14,
 		molecules: 51,
-		organisms: 0,
+		organisms: 5,
 		skeletons: 2,
 	},
 } as DesignSystemComponentStats;

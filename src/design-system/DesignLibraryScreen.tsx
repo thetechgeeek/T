@@ -86,6 +86,11 @@ import {
 import { TokenInput } from '@/src/design-system/components/molecules/TokenInput';
 import { ToggleButtonGroup } from '@/src/design-system/components/molecules/ToggleButtonGroup';
 import { VirtualizedList } from '@/src/design-system/components/molecules/VirtualizedList';
+import { CrudWorkspace } from '@/src/design-system/components/organisms/CrudWorkspace';
+import { DataLayoutWorkspace } from '@/src/design-system/components/organisms/DataLayoutWorkspace';
+import { FeedbackLoopWorkspace } from '@/src/design-system/components/organisms/FeedbackLoopWorkspace';
+import { ProductivityWorkspace } from '@/src/design-system/components/organisms/ProductivityWorkspace';
+import { SearchFilterWorkspace } from '@/src/design-system/components/organisms/SearchFilterWorkspace';
 import {
 	DESIGN_LIBRARY_COMPONENT_OVERVIEW,
 	DESIGN_LIBRARY_OVERVIEW,
@@ -3020,6 +3025,27 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 							testID="forms-wizard"
 						/>
 					</Card>
+				</View>
+			</PreviewSection>
+
+			<PreviewSection
+				title={copy.patternSamples.title}
+				description={copy.patternSamples.description}
+			>
+				<View style={{ gap: s.lg }}>
+					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+						<CrudWorkspace
+							style={{ flex: 1, minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}
+							testID="pattern-crud-workspace"
+						/>
+						<SearchFilterWorkspace
+							style={{ flex: 1, minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}
+							testID="pattern-search-filter-workspace"
+						/>
+					</View>
+					<DataLayoutWorkspace testID="pattern-data-layout-workspace" />
+					<FeedbackLoopWorkspace testID="pattern-feedback-loop-workspace" />
+					<ProductivityWorkspace testID="pattern-productivity-workspace" />
 				</View>
 			</PreviewSection>
 

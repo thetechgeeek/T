@@ -9,3 +9,8 @@ declare module '@shopify/flash-list' {
 
 	export class FlashList<T> extends Component<FlashListProps<T>> {}
 }
+
+declare module 'expo-clipboard' {
+	export function setStringAsync(value: string): Promise<boolean>;
+	export function getStringAsync(): Promise<string>;
+}

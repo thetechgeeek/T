@@ -37,6 +37,7 @@ export interface VirtualizedListProps<T> {
 	initialNumToRender?: number;
 	maxToRenderPerBatch?: number;
 	windowSize?: number;
+	stickySectionHeadersEnabled?: boolean;
 	emptyTitle?: string;
 	emptyDescription?: string;
 	density?: VirtualizedListDensity;
@@ -63,6 +64,7 @@ export function VirtualizedList<T>({
 	initialNumToRender = 8,
 	maxToRenderPerBatch = 8,
 	windowSize = 5,
+	stickySectionHeadersEnabled = true,
 	emptyTitle = 'No records yet',
 	emptyDescription,
 	density = 'default',
@@ -116,6 +118,7 @@ export function VirtualizedList<T>({
 				initialNumToRender={initialNumToRender}
 				maxToRenderPerBatch={maxToRenderPerBatch}
 				windowSize={windowSize}
+				stickySectionHeadersEnabled={stickySectionHeadersEnabled}
 				onEndReached={onLoadMore}
 				onEndReachedThreshold={0.35}
 				refreshControl={

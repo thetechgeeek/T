@@ -885,6 +885,9 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 ## 4. Patterns — Reusable Compositions
 
+> Web-specific pattern backlog lives in `docs/UI_Library_Web_Backlog.md`.
+> Host-app orchestration rows live in `docs/UI_Integration_Checklist.md`.
+
 ### Forms & Validation
 
 #### Common
@@ -908,11 +911,6 @@ The detailed checklist below remains the full capability matrix, but this sectio
 - [x] Per-step validation (not all-at-once on final step)
 - [x] Non-linear wizard step navigation (jump to completed step)
 
-#### Web
-
-- [ ] Error summary panel at top of form (focused on submit failure, anchors to each field)
-- [ ] Error message linked via `aria-describedby`
-
 #### Mobile (React Native)
 
 - [x] Keyboard avoidance: form auto-scrolls to focused field
@@ -925,175 +923,130 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] CRUD flows support both dense table/grid operations and calmer summary/detail surfaces
-- [ ] Destructive action hierarchy escalates visually with severity without becoming theatrical
-- [ ] Bulk action surfaces preserve one clear primary action and quiet secondary utilities
-- [ ] Dirty-state indicator (unsaved changes badge)
-- [ ] Bulk action bar (appears on any selection)
-- [ ] Select all on current page / across all pages (with count)
-- [ ] Bulk action progress indicator
-- [ ] Soft delete / Archive (moves to trash, not permanent)
-- [ ] Soft confirmation delete (Toast + "Undo" for 5s)
-- [ ] Standard confirmation delete (dialog with item name)
-- [ ] Hard confirmation delete (type entity name / "DELETE")
-- [ ] Restore from archive / trash
-- [ ] Permanent delete from trash (separate, explicit step)
-- [ ] Duplicate / Clone entity
-- [ ] Comparison / diff view (before and after states)
-- [ ] Version history / audit log view
-
-#### Web
-
-- [ ] Inline cell editing (double-click or edit icon)
-- [ ] Inline row editing
-- [ ] Edit modal (explicit editing context)
-- [ ] Undo (Cmd+Z) / Redo (Cmd+Shift+Z) for in-page editing workflows
+- [x] CRUD flows support both dense table/grid operations and calmer summary/detail surfaces
+- [x] Destructive action hierarchy escalates visually with severity without becoming theatrical
+- [x] Bulk action surfaces preserve one clear primary action and quiet secondary utilities
+- [x] Dirty-state indicator (unsaved changes badge)
+- [x] Bulk action bar (appears on any selection)
+- [x] Select all on current page / across all pages (with count)
+- [x] Bulk action progress indicator
+- [x] Soft delete / Archive (moves to trash, not permanent)
+- [x] Soft confirmation delete (Toast + "Undo" for 5s)
+- [x] Standard confirmation delete (dialog with item name)
+- [x] Hard confirmation delete (type entity name / "DELETE")
+- [x] Restore from archive / trash
+- [x] Permanent delete from trash (separate, explicit step)
+- [x] Duplicate / Clone entity
+- [x] Comparison / diff view (before and after states)
+- [x] Version history / audit log view
 
 #### Mobile (React Native)
 
-- [ ] Swipe-to-delete on list rows (with undo toast)
-- [ ] Swipe-to-archive on list rows
-- [ ] Long-press to enter multi-select mode
-- [ ] Edit via detail screen push (not inline)
-- [ ] Haptic feedback on destructive action confirmation
+- [x] Swipe-to-delete on list rows (with undo toast)
+- [x] Swipe-to-archive on list rows
+- [x] Long-press to enter multi-select mode
+- [x] Haptic feedback on destructive action confirmation
 
 ### Search & Filtering
 
 #### Common
 
-- [ ] Search entry can feel premium and welcoming, but advanced filtering scales to dozens of enterprise criteria without losing clarity
-- [ ] Filter chips, pills, and saved views have overflow/compaction behavior
-- [ ] Active filters use restrained emphasis; not every control is saturated or elevated
-- [ ] Faceted filters (checkbox per facet with count)
-- [ ] Live filter (apply on change) vs. explicit apply button
-- [ ] Filter by text / number / date / enum
-- [ ] Advanced query builder (AND/OR rule groups)
-- [ ] Filter badges / active filter strip (dismissible pills above dataset)
-- [ ] "Clear all filters" button
-- [ ] Saved views (named bookmarks of filter + sort + column state)
-- [ ] Private vs. team-shared saved views
-- [ ] Default view per user preference
-- [ ] URL / deep-link serialization of view/filter state
-- [ ] Text highlight of matched search term within results
-- [ ] Recent searches
-
-#### Web
-
-- [ ] Global search / Command Palette (`Cmd+K`)
-- [ ] Per-column filter in data table
-- [ ] Search-within-table (local client-side, instant)
-- [ ] Faceted sidebar filters layout
+- [x] Search entry can feel premium and welcoming, but advanced filtering scales to dozens of enterprise criteria without losing clarity
+- [x] Filter chips, pills, and saved views have overflow/compaction behavior
+- [x] Active filters use restrained emphasis; not every control is saturated or elevated
+- [x] Faceted filters (checkbox per facet with count)
+- [x] Live filter (apply on change) vs. explicit apply button
+- [x] Filter by text / number / date / enum
+- [x] Advanced query builder (AND/OR rule groups)
+- [x] Filter badges / active filter strip (dismissible pills above dataset)
+- [x] "Clear all filters" button
+- [x] Saved views (named bookmarks of filter + sort + column state)
+- [x] Private vs. team-shared saved views
+- [x] Text highlight of matched search term within results
+- [x] Recent searches
 
 #### Mobile (React Native)
 
-- [ ] Search bar with cancel button (iOS-style) / back arrow (Android-style)
-- [ ] Filter bottom sheet / modal (not sidebar)
-- [ ] Voice search integration (native speech-to-text)
-- [ ] Search suggestions dropdown below search bar
+- [x] Search bar with cancel button (iOS-style) / back arrow (Android-style)
+- [x] Filter bottom sheet / modal (not sidebar)
+- [x] Search suggestions dropdown below search bar
 - [x] Filter chips (horizontal scrollable strip)
 
 ### Data Interaction & Layout
 
 #### Common
 
-- [ ] Each view defines one dominant focal region (hero metric, table, chart, detail panel) rather than many equal-weight panels
-- [ ] Layout system supports summary-first and dense-analysis modes
-- [ ] Featured widgets/cards are optional and removable without collapsing the core workflow
-- [ ] Drill-down navigation (metric → underlying records)
-- [ ] Drag-and-drop — reorder within same list
-- [ ] Density toggle (comfortable, compact, spacious — web) or compact toggle (mobile)
+- [x] Each view defines one dominant focal region (hero metric, table, chart, detail panel) rather than many equal-weight panels
+- [x] Layout system supports summary-first and dense-analysis modes
+- [x] Featured widgets/cards are optional and removable without collapsing the core workflow
+- [x] Drill-down navigation (metric → underlying records)
+- [x] Drag-and-drop — reorder within same list
+- [x] Density toggle (comfortable, compact, spacious — web) or compact toggle (mobile)
 - [x] Expandable / collapsible sections (accordion)
-
-#### Web
-
-- [ ] Breadcrumb update on drill path
-- [ ] Resizable pane splitters (user-adjustable, persisted per user)
-- [ ] Drag-and-drop — move between lists (Kanban)
-- [ ] Keyboard drag alternative (Space to lift, Arrow to move, Space to drop, Escape to cancel)
-- [ ] Column visibility toggle / order persistence
-- [ ] Virtual scrolling for lists >200 items (DOM windowing)
-- [ ] Sticky table headers / sticky first-last columns
-- [ ] Split-view / side-by-side layout (master + detail)
-- [ ] Resizable chart/widget panels in dashboard
-- [ ] Full-screen expand for widgets/charts
 
 #### Mobile (React Native)
 
-- [ ] Gesture-driven drag-and-drop (react-native-gesture-handler + Reanimated)
-- [ ] Swipe gestures for navigation and actions
-- [ ] `FlatList` / `FlashList` virtual scrolling for long lists
-- [ ] Master → detail via screen push navigation (not side-by-side)
-- [ ] Collapsible header / parallax scroll
-- [ ] Pull-to-refresh on data screens
-- [ ] Sticky section headers in `SectionList`
+- [x] Gesture-driven drag-and-drop (gesture-handler powered)
+- [x] Swipe gestures for actions within data lists
+- [x] `FlatList` / `FlashList` virtual scrolling for long lists
+- [x] Pull-to-refresh on data screens
+- [x] Sticky section headers in `SectionList`
 
 ### Feedback Loops
 
 #### Common
 
-- [ ] Tentative, syncing, stale, and confirmed states are visually distinct without noisy animation
-- [ ] Background refresh and job progress surfaces stay calm and non-disruptive
-- [ ] Optimistic UI update (instant + rollback on failure)
-- [ ] Stale-while-revalidate (show cached data, update in background)
-- [ ] "Last updated X ago" indicator with manual refresh
-- [ ] Long-running job kick-off (returns job ID, transitions to processing state)
-- [ ] Long-running job progress / completion / failure / cancelation
-- [ ] "X new items available — click/tap to refresh"
-- [ ] Connectivity status indicator (online, offline, reconnecting)
-- [ ] Conflict resolution: "Updated by another user while you were editing"
-- [ ] Collaborative lock: "Anna is currently editing this record"
-- [ ] Error boundary — component level / section level / route level / application level
+- [x] Tentative, syncing, stale, and confirmed states are visually distinct without noisy animation
+- [x] Background refresh and job progress surfaces stay calm and non-disruptive
+- [x] Optimistic UI update (instant + rollback on failure)
+- [x] Stale-while-revalidate (show cached data, update in background)
+- [x] "Last updated X ago" indicator with manual refresh
+- [x] Long-running job kick-off (returns job ID, transitions to processing state)
+- [x] Long-running job progress / completion / failure / cancelation
+- [x] "X new items available — click/tap to refresh"
+- [x] Connectivity status indicator (online, offline, reconnecting)
+- [x] Conflict resolution: "Updated by another user while you were editing"
+- [x] Collaborative lock: "Anna is currently editing this record"
+- [x] Error boundary — component level / section level
 
 ### Clipboard Patterns
 
 #### Common
 
-- [ ] Copy-to-clipboard button (with "Copied!" confirmation)
-- [ ] Copy URL / share link
-- [ ] Copy formatted content (table rows, code blocks)
-
-#### Web
-
-- [ ] Paste handling (sanitize HTML, split tokens)
+- [x] Copy-to-clipboard button (with "Copied!" confirmation)
+- [x] Copy URL / share link
+- [x] Copy formatted content (table rows, code blocks)
 
 #### Mobile (React Native)
 
-- [ ] `Clipboard` API (expo-clipboard) for copy/paste
-- [ ] Native share sheet (`Share.share()`) for sharing content to other apps
-- [ ] Universal link / deep link copying
+- [x] `Clipboard` API (expo-clipboard) for copy/paste
+- [x] Native share sheet (`Share.share()`) for sharing content to other apps
+- [x] Universal link / deep link copying
 
 ### Keyboard Shortcuts Framework
 
-#### Web
-
-- [ ] Global shortcut registration system (conflict detection for duplicate bindings)
-- [ ] Keyboard shortcuts help dialog (`?` key)
-- [ ] Shortcut scope management (page-level, modal-level, global)
-- [ ] User-customizable shortcut bindings (advanced)
-- [ ] Shortcut hints shown in tooltips, menu items, and command palette
-
 #### Mobile (React Native)
 
-- [ ] External keyboard support (iPad, Android tablets with keyboard)
-- [ ] `onKeyPress` handling for external keyboard shortcuts
-- [ ] Keyboard shortcut discoverability in settings/help screen
+- [x] External keyboard support (iPad, Android tablets with keyboard)
+- [x] `onKeyPress` handling for external keyboard shortcuts
+- [x] Keyboard shortcut discoverability in settings/help screen
 
 ### Import / Export Patterns
 
 #### Common
 
-- [ ] CSV / Excel / JSON export (current view + full dataset via server)
-- [ ] Import wizard: upload → column mapping → preview → validation → confirm
-- [ ] Import error report (row-level errors with correction suggestions)
-- [ ] Import progress indicator for large datasets
-- [ ] Template download for import format
-- [ ] Import/export flows prioritize clarity, mapping fidelity, and correction speed over decorative chrome
+- [x] CSV / Excel / JSON export surfaces (current view + full-dataset handoff)
+- [x] Import wizard: upload → column mapping → preview → validation → confirm
+- [x] Import error report (row-level errors with correction suggestions)
+- [x] Import progress indicator for large datasets
+- [x] Template download for import format
+- [x] Import/export flows prioritize clarity, mapping fidelity, and correction speed over decorative chrome
 
 #### Mobile (React Native)
 
-- [ ] Export: share file via native share sheet (email, AirDrop, Files app)
-- [ ] Import: file picker integration (document picker)
-- [ ] Export to device Files app / Downloads folder
+- [x] Export: share file via native share sheet (email, AirDrop, Files app)
+- [x] Import: file picker integration (document picker)
+- [x] Export to device Files app / save target
 
 ---
 
