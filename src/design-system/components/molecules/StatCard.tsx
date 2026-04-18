@@ -3,6 +3,13 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Polyline } from 'react-native-svg';
 import type { LucideIcon } from 'lucide-react-native';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
+import {
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+	type CardDensity,
+} from '@/src/design-system/components/atoms/Card';
 import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -20,7 +27,7 @@ interface StatCardProps {
 	sparklineValues?: number[];
 	isLoading?: boolean;
 	errorMessage?: string;
-	density?: 'compact' | 'default';
+	density?: CardDensity;
 	style?: StyleProp<ViewStyle>;
 	testID?: string;
 	/** Stable English identifier for screen readers and Maestro. Overrides computed label. */
@@ -66,173 +73,179 @@ export const StatCard: React.FC<StatCardProps> = ({
 }) => {
 	const { theme } = useTheme();
 	const c = theme.colors;
-	const r = theme.borderRadius;
 	const s = theme.spacing;
 	const isCompact = density === 'compact';
+	const isRelaxed = density === 'relaxed';
+	const metricFontSize = isCompact ? theme.typography.sizes.xl : theme.typography.sizes['2xl'];
+	const iconSize = isCompact ? 18 : isRelaxed ? 22 : 20;
+	const footerContent =
+		trend || comparisonBaseline || updatedAtLabel || errorMessage ? (
+			<CardFooter>
+				<View
+					style={{
+						gap: isCompact ? s.xxs : s.xs,
+					}}
+				>
+					{trend ? (
+						<View style={styles.trendRow}>
+							<ThemedText
+								variant="caption"
+								weight="bold"
+								style={[
+									styles.trend,
+									{
+										color: trend.startsWith('+') ? c.success : c.error,
+										fontSize: theme.typography.sizes.xs,
+									},
+								]}
+							>
+								{trend}
+							</ThemedText>
+							{trendLabel ? (
+								<ThemedText
+									variant="caption"
+									style={[
+										styles.trendLabel,
+										{
+											color: c.onSurfaceVariant,
+											fontSize: theme.typography.sizes.xs,
+										},
+									]}
+								>
+									{trendLabel}
+								</ThemedText>
+							) : null}
+						</View>
+					) : null}
+
+					{comparisonBaseline ? (
+						<ThemedText
+							variant="caption"
+							style={[styles.comparisonBaseline, { color: c.onSurfaceVariant }]}
+						>
+							{comparisonBaseline}
+						</ThemedText>
+					) : null}
+
+					{updatedAtLabel ? (
+						<ThemedText
+							variant="captionSmall"
+							style={[styles.updatedAt, { color: c.onSurfaceVariant }]}
+						>
+							{updatedAtLabel}
+						</ThemedText>
+					) : null}
+
+					{errorMessage ? (
+						<ThemedText variant="caption" style={{ color: c.error }}>
+							{errorMessage}
+						</ThemedText>
+					) : null}
+				</View>
+			</CardFooter>
+		) : undefined;
 
 	if (isLoading) {
 		return (
-			<View
-				testID={testID}
-				style={[
-					styles.container,
-					{
-						backgroundColor: c.card,
-						borderRadius: r.md,
-						padding: isCompact ? s.sm : s.md,
-						...(theme.shadows.md as object),
-					},
-					style,
-				]}
-			>
-				<SkeletonBlock width="48%" height={12} />
-				<SkeletonBlock width="62%" height={24} style={{ marginTop: s.sm }} />
-				<SkeletonBlock width="54%" height={10} style={{ marginTop: s.sm }} />
-			</View>
+			<Card testID={testID} density={density} style={style}>
+				<CardBody>
+					<View style={{ gap: s.sm }}>
+						<SkeletonBlock width="48%" height={12} />
+						<SkeletonBlock width="62%" height={24} />
+						<SkeletonBlock width="54%" height={10} />
+					</View>
+				</CardBody>
+			</Card>
 		);
 	}
 
 	return (
-		<View
+		<Card
 			testID={testID}
 			accessible={true}
+			accessibilityRole="summary"
 			accessibilityLabel={
 				accessibilityLabel ??
 				[label, value, comparisonBaseline, updatedAtLabel].filter(Boolean).join('. ')
 			}
-			accessibilityRole="summary"
-			style={[
-				styles.container,
-				{
-					backgroundColor: c.card,
-					borderRadius: r.md,
-					padding: isCompact ? s.sm : s.md,
-					...(theme.shadows.md as object),
-				},
-				style,
-			]}
-		>
-			{Icon ? (
-				<View style={styles.iconContainer} importantForAccessibility="no">
-					<LucideIconGlyph
-						icon={Icon}
-						size={20}
-						color={color || c.primary}
-						strokeWidth={2}
-					/>
-				</View>
-			) : null}
-			<ThemedText
-				variant="metric"
-				numberOfLines={1}
-				adjustsFontSizeToFit
-				style={[
-					styles.value,
-					{
-						color: c.onSurface,
-						fontSize: isCompact
-							? theme.typography.sizes.xl
-							: theme.typography.sizes['2xl'],
-						fontWeight: theme.typography.weights.bold,
-						marginTop: Icon ? s.xs : 0,
-					},
-				]}
-			>
-				{value}
-			</ThemedText>
-			<ThemedText
-				variant="caption"
-				weight="semibold"
-				style={[
-					styles.label,
-					{
-						color: c.onSurfaceVariant,
-						fontSize: theme.typography.sizes.xs,
-					},
-				]}
-			>
-				{label}
-			</ThemedText>
-
-			{sparklineValues.length > 0 ? (
-				<View style={{ marginTop: s.sm }}>
-					<Svg width={88} height={28} testID="stat-card-sparkline">
-						<Polyline
-							points={buildSparklinePoints(sparklineValues)}
-							fill="none"
-							stroke={color || c.primary}
-							strokeWidth={2}
-						/>
-					</Svg>
-				</View>
-			) : null}
-
-			{trend ? (
-				<View style={styles.trendRow}>
-					<ThemedText
-						variant="caption"
-						weight="bold"
-						style={[
-							styles.trend,
-							{
-								color: trend.startsWith('+') ? c.success : c.error,
-								fontSize: theme.typography.sizes.xs,
-							},
-						]}
-					>
-						{trend}
-					</ThemedText>
-					{trendLabel ? (
+			density={density}
+			style={style}
+			header={
+				<CardHeader>
+					<View style={styles.headerRow}>
 						<ThemedText
 							variant="caption"
+							weight="semibold"
 							style={[
-								styles.trendLabel,
-								{ color: c.onSurfaceVariant, fontSize: theme.typography.sizes.xs },
+								styles.label,
+								{
+									color: c.onSurfaceVariant,
+									fontSize: theme.typography.sizes.xs,
+								},
 							]}
 						>
-							{trendLabel}
+							{label}
 						</ThemedText>
-					) : null}
-				</View>
-			) : null}
-
-			{comparisonBaseline ? (
+						{Icon ? (
+							<View style={styles.iconContainer} importantForAccessibility="no">
+								<LucideIconGlyph
+									icon={Icon}
+									size={iconSize}
+									color={color || c.primary}
+									strokeWidth={2}
+								/>
+							</View>
+						) : null}
+					</View>
+				</CardHeader>
+			}
+			footer={footerContent}
+		>
+			<CardBody>
 				<ThemedText
-					variant="caption"
-					style={[styles.comparisonBaseline, { color: c.onSurfaceVariant }]}
+					variant="metric"
+					numberOfLines={1}
+					adjustsFontSizeToFit
+					style={[
+						styles.value,
+						{
+							color: c.onSurface,
+							fontSize: metricFontSize,
+							fontWeight: theme.typography.weights.bold,
+						},
+					]}
 				>
-					{comparisonBaseline}
+					{value}
 				</ThemedText>
-			) : null}
 
-			{updatedAtLabel ? (
-				<ThemedText
-					variant="captionSmall"
-					style={[styles.updatedAt, { color: c.onSurfaceVariant }]}
-				>
-					{updatedAtLabel}
-				</ThemedText>
-			) : null}
-
-			{errorMessage ? (
-				<ThemedText variant="caption" style={{ color: c.error, marginTop: s.sm }}>
-					{errorMessage}
-				</ThemedText>
-			) : null}
-		</View>
+				{sparklineValues.length > 0 ? (
+					<View style={{ marginTop: s.sm }}>
+						<Svg width={88} height={28} testID="stat-card-sparkline">
+							<Polyline
+								points={buildSparklinePoints(sparklineValues)}
+								fill="none"
+								stroke={color || c.primary}
+								strokeWidth={2}
+							/>
+						</Svg>
+					</View>
+				) : null}
+			</CardBody>
+		</Card>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: {
-		justifyContent: 'center',
+	headerRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		gap: SPACING_PX.sm,
 	},
 	iconContainer: {
-		marginBottom: SPACING_PX.xxs,
+		alignSelf: 'flex-start',
 	},
-	label: {
-		marginTop: SPACING_PX.xxs,
-	},
+	label: {},
 	value: {},
 	trendRow: {
 		flexDirection: 'row',

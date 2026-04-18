@@ -13,7 +13,7 @@ describe('design system catalog', () => {
 		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(901);
 		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(640);
 		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(261);
-		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBe(510);
+		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBe(512);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBeGreaterThan(0);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed + DESIGN_LIBRARY_OVERVIEW.open).toBe(
 			DESIGN_LIBRARY_OVERVIEW.total,
@@ -56,10 +56,17 @@ describe('design system catalog', () => {
 			'Confirmation Dialog',
 			'common-mobile',
 		).filter(isPreviewableItem);
+		const [denseDataSurface] = filterLibraryItems(
+			'dense operational variant',
+			'common-mobile',
+		).filter(isPreviewableItem);
 
 		expect(firstPreviewable).toBeDefined();
 		expect(firstPreviewable?.title).toBe('Date Picker');
 		expect(confirmationDialog?.title).toBe('Confirmation Dialog');
+		expect(denseDataSurface?.title).toBe(
+			'Every data surface has a dense operational variant where the domain requires comparison or bulk scanning',
+		);
 	});
 
 	it('filters component inventory and identifies live demos', () => {

@@ -1718,7 +1718,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			'loading stat card',
 		],
 		variants: ['default', 'with trend', 'with icon', 'with sparkline'],
-		sizes: ['default stat spacing', 'compact'],
+		sizes: ['compact', 'default stat spacing', 'relaxed'],
 		states: ['default', 'comparison trend', 'long label', 'loading', 'stale', 'error'],
 		compositionExample:
 			'Overview metric rail with KPI, quiet comparison baseline, sparkline, and last-updated metadata.',
@@ -1741,7 +1741,12 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('updatedAtLabel', 'string', 'Stale-data or freshness metadata.'),
 			prop('isLoading', 'boolean', 'Switches to skeleton loading state.', 'false'),
 			prop('errorMessage', 'string', 'Inline error or delayed-feed note.'),
-			prop('density', "'compact' | 'default'", 'Operational spacing control.', 'default'),
+			prop(
+				'density',
+				"'compact' | 'default' | 'relaxed'",
+				'Shared card-family spacing control.',
+				'default',
+			),
 			COMMON_A11Y_PROP,
 			COMMON_STYLE_PROP,
 			COMMON_TEST_ID_PROP,
@@ -2665,8 +2670,8 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		summary:
 			'Timeline surface with date separators, load-more handling, and queued real-time injection.',
 		exampleStories: ['dated activity feed', 'feed with pending updates', 'load older events'],
-		variants: ['default', 'pending updates banner'],
-		sizes: ['default'],
+		variants: ['default', 'pending updates banner', 'compact operational feed'],
+		sizes: ['compact', 'default', 'relaxed'],
 		states: ['default', 'new items waiting', 'older events load more'],
 		compositionExample:
 			'Operational approval timeline showing who changed what and when across multiple dates.',
@@ -2694,6 +2699,12 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 				'onLoadMore',
 				'() => void',
 				'Load older events when the footer or end threshold is reached.',
+			),
+			prop(
+				'density',
+				"'compact' | 'default' | 'relaxed'",
+				'Shared timeline spacing and card density.',
+				'default',
 			),
 			COMMON_STYLE_PROP,
 			COMMON_TEST_ID_PROP,

@@ -57,6 +57,8 @@ export const DESIGN_LIBRARY_PREVIEW_LABELS = [
 	'Avatar Group',
 	'Description List / Key-Value Pairs',
 	'Charts',
+	'Card families share silhouette, spacing, header/body/footer grammar, and density variants',
+	'Every data surface has a dense operational variant where the domain requires comparison or bulk scanning',
 	'Virtualized List via `FlatList` / `FlashList`',
 	'Sortable List (drag-to-reorder)',
 	'Swipe-to-reveal actions on list rows (swipe-to-delete, swipe-to-archive)',

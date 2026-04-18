@@ -116,4 +116,26 @@ describe('Card', () => {
 			}),
 		);
 	});
+
+	it('maps compact and relaxed density to shared card spacing', () => {
+		const { getByTestId: getCompactByTestId } = renderWithTheme(
+			<Card testID="compact-card" density="compact">
+				<Text>Compact</Text>
+			</Card>,
+		);
+		const { getByTestId: getRelaxedByTestId } = renderWithTheme(
+			<Card testID="relaxed-card" density="relaxed">
+				<Text>Relaxed</Text>
+			</Card>,
+		);
+
+		const compactStyle = flattenStyle(getCompactByTestId('compact-card').props.style) as {
+			padding: number;
+		};
+		const relaxedStyle = flattenStyle(getRelaxedByTestId('relaxed-card').props.style) as {
+			padding: number;
+		};
+
+		expect(relaxedStyle.padding).toBeGreaterThan(compactStyle.padding);
+	});
 });

@@ -4,6 +4,10 @@ import { fireEvent } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
 import { ActivityFeed, type ActivityFeedItem } from '../ActivityFeed';
 
+function flattenStyle(style: unknown) {
+	return Array.isArray(style) ? Object.assign({}, ...style.filter(Boolean)) : style;
+}
+
 const baseItems: ActivityFeedItem[] = [
 	{
 		id: 'activity-1',
@@ -71,5 +75,27 @@ describe('ActivityFeed', () => {
 		expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledWith(
 			'1 new activity items added',
 		);
+	});
+
+	it('supports compact and relaxed feed density via shared card spacing', () => {
+		const { getByTestId: getCompactByTestId } = renderWithTheme(
+			<ActivityFeed items={baseItems} density="compact" testID="compact-feed" />,
+		);
+		const { getByTestId: getRelaxedByTestId } = renderWithTheme(
+			<ActivityFeed items={baseItems} density="relaxed" testID="relaxed-feed" />,
+		);
+
+		const compactStyle = flattenStyle(
+			getCompactByTestId('compact-feed-item-activity-1').props.style,
+		) as {
+			padding: number;
+		};
+		const relaxedStyle = flattenStyle(
+			getRelaxedByTestId('relaxed-feed-item-activity-1').props.style,
+		) as {
+			padding: number;
+		};
+
+		expect(relaxedStyle.padding).toBeGreaterThan(compactStyle.padding);
 	});
 });

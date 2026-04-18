@@ -2151,6 +2151,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				<View style={{ gap: s.lg }}>
 					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
 						<Card
+							density="relaxed"
 							header={
 								<CardHeader>
 									{copy.componentGallery.dataDisplay.cardHeader}
@@ -2196,6 +2197,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						<Card
 							orientation="horizontal"
 							variant="outlined"
+							density="compact"
 							header={
 								<CardHeader>
 									{copy.componentGallery.dataDisplay.cardHorizontalTitle}
@@ -2225,6 +2227,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 
 						<Card
 							featured
+							density="relaxed"
 							header={
 								<CardHeader>
 									{copy.componentGallery.dataDisplay.cardHeroTitle}
@@ -2262,6 +2265,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 							}
 							updatedAtLabel={copy.componentGallery.dataDisplay.statUpdatedAt}
 							sparklineValues={dataDisplaySparklineValues}
+							density="relaxed"
 							style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
 						/>
 						<StatCard
@@ -2471,6 +2475,8 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 								}
 								loadMoreLabel={copy.componentGallery.dataDisplay.timelineLoadMore}
 								newItemsLabel={copy.componentGallery.dataDisplay.timelineNewItems}
+								density="compact"
+								testID="data-display-activity-feed"
 							/>
 						</Card>
 
@@ -2533,6 +2539,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 							annotations={[...copy.componentGallery.dataDisplay.chartAnnotations]}
 							focusedSeriesId={chartFocusedSeries}
 							onFocusedSeriesChange={setChartFocusedSeries}
+							density="compact"
 							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
 							testID="data-chart-line"
 						/>

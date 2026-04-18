@@ -5128,7 +5128,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-card-families-share-silhouette-spacing-header-body-footer-grammar-an',
 		title: 'Card families share silhouette, spacing, header/body/footer grammar, and density variants',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -5168,7 +5168,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-data-display-common-every-data-surface-has-a-dense-operational-variant-where-the-domain-',
 		title: 'Every data surface has a dense operational variant where the domain requires comparison or bulk scanning',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Data Display',
@@ -12109,8 +12109,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 
 export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 	total: 1207,
-	completed: 510,
-	open: 697,
+	completed: 512,
+	open: 695,
 	common: 640,
 	web: 306,
 	mobile: 261,
@@ -12146,11 +12146,11 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		{
 			name: '3. Components — Reusable UI Blocks',
 			count: 402,
-			completedCount: 275,
-			openCount: 127,
+			completedCount: 277,
+			openCount: 125,
 			commonMobileCount: 283,
-			commonMobileCompletedCount: 275,
-			commonMobileOpenCount: 8,
+			commonMobileCompletedCount: 277,
+			commonMobileOpenCount: 6,
 		},
 		{
 			name: '4. Patterns — Reusable Compositions',

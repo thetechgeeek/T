@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	type AccessibilityRole,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
@@ -8,6 +14,8 @@ export interface CardSectionProps {
 	children: React.ReactNode;
 	style?: StyleProp<ViewStyle>;
 }
+
+export type CardDensity = 'compact' | 'default' | 'relaxed';
 
 export interface CardProps {
 	children?: React.ReactNode;
@@ -18,10 +26,11 @@ export interface CardProps {
 	variant?: 'elevated' | 'outlined' | 'flat';
 	orientation?: 'vertical' | 'horizontal';
 	padding?: 'none' | 'sm' | 'md' | 'lg';
-	density?: 'compact' | 'default' | 'relaxed';
+	density?: CardDensity;
 	featured?: boolean;
 	accessible?: boolean;
 	accessibilityLabel?: string;
+	accessibilityRole?: AccessibilityRole;
 	testID?: string;
 }
 
@@ -38,6 +47,7 @@ export const Card: React.FC<CardProps> = ({
 	featured = false,
 	accessible,
 	accessibilityLabel,
+	accessibilityRole,
 	testID,
 }) => {
 	const { theme } = useTheme();
@@ -50,6 +60,24 @@ export const Card: React.FC<CardProps> = ({
 				: density === 'relaxed'
 					? 'lg'
 					: padding;
+	const sectionGap =
+		density === 'compact'
+			? theme.spacing.xs
+			: density === 'relaxed'
+				? theme.spacing.md
+				: theme.spacing.sm;
+	const mediaGap =
+		density === 'compact'
+			? theme.spacing.sm
+			: density === 'relaxed'
+				? theme.spacing.lg
+				: theme.spacing.md;
+	const horizontalGap =
+		density === 'compact'
+			? theme.spacing.sm
+			: density === 'relaxed'
+				? theme.spacing.lg
+				: theme.spacing.md;
 
 	const cardStyles = [
 		styles.base,
@@ -69,6 +97,9 @@ export const Card: React.FC<CardProps> = ({
 		resolvedPadding === 'md' && { padding: cardTokens.padding.md },
 		resolvedPadding === 'lg' && { padding: cardTokens.padding.lg },
 		orientation === 'horizontal' && styles.horizontal,
+		orientation === 'horizontal' && {
+			gap: horizontalGap,
+		},
 		style,
 	];
 
@@ -78,13 +109,23 @@ export const Card: React.FC<CardProps> = ({
 			style={cardStyles as StyleProp<ViewStyle>}
 			accessible={accessible}
 			accessibilityLabel={accessibilityLabel}
+			accessibilityRole={accessibilityRole}
 		>
 			{media ? (
-				<View style={orientation === 'horizontal' ? styles.horizontalMedia : styles.media}>
+				<View
+					style={[
+						orientation === 'horizontal' ? styles.horizontalMedia : styles.media,
+						orientation === 'vertical'
+							? {
+									marginBottom: mediaGap,
+								}
+							: null,
+					]}
+				>
 					{media}
 				</View>
 			) : null}
-			<View style={styles.content}>
+			<View style={[styles.content, { gap: sectionGap }]}>
 				{header ? <View style={styles.section}>{header}</View> : null}
 				{children ? <View style={styles.section}>{children}</View> : null}
 				{footer ? <View style={styles.section}>{footer}</View> : null}
@@ -122,7 +163,6 @@ const styles = StyleSheet.create({
 	horizontal: {
 		flexDirection: 'row',
 		alignItems: 'stretch',
-		gap: SPACING_PX.md,
 	},
 	horizontalMedia: {
 		width: 128,
@@ -134,7 +174,5 @@ const styles = StyleSheet.create({
 	content: {
 		flex: 1,
 	},
-	section: {
-		marginBottom: SPACING_PX.sm,
-	},
+	section: {},
 });

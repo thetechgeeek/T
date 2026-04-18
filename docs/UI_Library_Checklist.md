@@ -747,11 +747,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
     - [x] Focus-series emphasis and muted non-focus series
     - [x] Calm grid / axis styling
     - [x] Annotation / threshold markers
-- [ ] Card families share silhouette, spacing, header/body/footer grammar, and density variants
+- [x] Card families share silhouette, spacing, header/body/footer grammar, and density variants
 - [x] Stat cards expose one dominant metric, one secondary context band, and quiet metadata
 - [x] Charts prioritize interpretation over decoration: subdued scaffolding, focused data emphasis, accessible annotations
 - [x] Media-based displays degrade gracefully to text-first layouts when imagery is missing or poor
-- [ ] Every data surface has a dense operational variant where the domain requires comparison or bulk scanning
+- [x] Every data surface has a dense operational variant where the domain requires comparison or bulk scanning
 
 #### Web
 

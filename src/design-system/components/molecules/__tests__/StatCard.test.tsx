@@ -4,6 +4,10 @@ import { TrendingUp } from 'lucide-react-native';
 import { StatCard } from '../StatCard';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
+function flattenStyle(style: unknown) {
+	return Array.isArray(style) ? Object.assign({}, ...style.filter(Boolean)) : style;
+}
+
 describe('StatCard', () => {
 	it('renders label and value', () => {
 		const { getByText } = renderWithTheme(<StatCard label="Today's Sales" value="₹12,500" />);
@@ -103,5 +107,23 @@ describe('StatCard', () => {
 		);
 		const json = JSON.stringify(toJSON());
 		expect(json).toContain(String(SPACING_PX.xl));
+	});
+
+	it('inherits the shared compact and relaxed card spacing contract', () => {
+		const { getByTestId: getCompactByTestId } = renderWithTheme(
+			<StatCard testID="compact-stat" label="Compact" value="24" density="compact" />,
+		);
+		const { getByTestId: getRelaxedByTestId } = renderWithTheme(
+			<StatCard testID="relaxed-stat" label="Relaxed" value="24" density="relaxed" />,
+		);
+
+		const compactStyle = flattenStyle(getCompactByTestId('compact-stat').props.style) as {
+			padding: number;
+		};
+		const relaxedStyle = flattenStyle(getRelaxedByTestId('relaxed-stat').props.style) as {
+			padding: number;
+		};
+
+		expect(relaxedStyle.padding).toBeGreaterThan(compactStyle.padding);
 	});
 });

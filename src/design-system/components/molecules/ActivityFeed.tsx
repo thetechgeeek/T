@@ -12,7 +12,7 @@ import { LucideIconGlyph } from '@/src/design-system/iconography';
 import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
+import { Card, type CardDensity } from '@/src/design-system/components/atoms/Card';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { announceForScreenReader } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -35,6 +35,7 @@ export interface ActivityFeedProps {
 	onLoadMore?: () => void;
 	loadMoreLabel?: string;
 	newItemsLabel?: string;
+	density?: CardDensity;
 	style?: StyleProp<ViewStyle>;
 	testID?: string;
 }
@@ -52,6 +53,7 @@ export const ActivityFeed = forwardRef<React.ElementRef<typeof View>, ActivityFe
 			onLoadMore,
 			loadMoreLabel = DEFAULT_LOAD_MORE_LABEL,
 			newItemsLabel = DEFAULT_NEW_ITEMS_LABEL,
+			density = 'default',
 			style,
 			testID,
 		},
@@ -60,6 +62,27 @@ export const ActivityFeed = forwardRef<React.ElementRef<typeof View>, ActivityFe
 		const { theme } = useTheme();
 		const [uncontrolledItems, setUncontrolledItems] = useState(defaultItems);
 		const resolvedItems = items ?? uncontrolledItems;
+		const stackGap =
+			density === 'compact'
+				? theme.spacing.sm
+				: density === 'relaxed'
+					? theme.spacing.lg
+					: theme.spacing.md;
+		const sectionPaddingHorizontal =
+			density === 'compact' ? theme.spacing.xs : theme.spacing.sm;
+		const sectionPaddingVertical = density === 'compact' ? theme.spacing.xxs : theme.spacing.xs;
+		const rowSpacing =
+			density === 'compact'
+				? theme.spacing.xs
+				: density === 'relaxed'
+					? theme.spacing.sm
+					: theme.spacing.xs;
+		const pendingPadding =
+			density === 'compact'
+				? theme.spacing.xs
+				: density === 'relaxed'
+					? theme.spacing.md
+					: theme.spacing.sm;
 
 		const sections = useMemo(() => {
 			const grouped = new Map<string, ActivityFeedItem[]>();
@@ -88,7 +111,7 @@ export const ActivityFeed = forwardRef<React.ElementRef<typeof View>, ActivityFe
 		};
 
 		return (
-			<View ref={ref} testID={testID} style={[{ gap: theme.spacing.md }, style]}>
+			<View ref={ref} testID={testID} style={[{ gap: stackGap }, style]}>
 				{pendingItems.length > 0 ? (
 					<Pressable
 						testID="activity-feed-inject"
@@ -100,7 +123,7 @@ export const ActivityFeed = forwardRef<React.ElementRef<typeof View>, ActivityFe
 							{
 								backgroundColor: theme.colors.infoLight,
 								borderRadius: theme.borderRadius.md,
-								padding: theme.spacing.sm,
+								padding: pendingPadding,
 							},
 						]}
 					>
@@ -127,8 +150,8 @@ export const ActivityFeed = forwardRef<React.ElementRef<typeof View>, ActivityFe
 								{
 									backgroundColor: theme.colors.surfaceVariant,
 									borderRadius: theme.borderRadius.full,
-									paddingHorizontal: theme.spacing.sm,
-									paddingVertical: theme.spacing.xs,
+									paddingHorizontal: sectionPaddingHorizontal,
+									paddingVertical: sectionPaddingVertical,
 								},
 							]}
 						>
@@ -141,10 +164,12 @@ export const ActivityFeed = forwardRef<React.ElementRef<typeof View>, ActivityFe
 						</View>
 					)}
 					renderItem={({ item, index }) => (
-						<View
-							style={{ marginTop: index === 0 ? theme.spacing.sm : theme.spacing.xs }}
-						>
-							<Card variant="outlined" padding="sm">
+						<View style={{ marginTop: index === 0 ? stackGap : rowSpacing }}>
+							<Card
+								variant="outlined"
+								density={density}
+								testID={testID ? `${testID}-item-${item.id}` : undefined}
+							>
 								<View style={styles.rowHeader}>
 									<View style={{ flex: 1, gap: theme.spacing.xxs }}>
 										<ThemedText
@@ -187,7 +212,7 @@ export const ActivityFeed = forwardRef<React.ElementRef<typeof View>, ActivityFe
 							<Button
 								title={loadMoreLabel}
 								variant="ghost"
-								size="sm"
+								size={density === 'compact' ? 'sm' : 'md'}
 								leftIcon={
 									<LucideIconGlyph
 										icon={ArrowDownToLine}
