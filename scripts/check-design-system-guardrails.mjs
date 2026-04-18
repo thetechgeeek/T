@@ -108,7 +108,9 @@ function parseConstStringArray(text, constName) {
 		return [];
 	}
 
-	return [...match[1].matchAll(/['"]([^'"]+)['"]/g)].map((entry) => entry[1]);
+	return [...match[1].matchAll(/'((?:\\'|[^'])*)'/g)].map((entry) =>
+		entry[1].replaceAll("\\'", "'"),
+	);
 }
 
 function parseGeneratedComponents(text) {
@@ -426,8 +428,12 @@ const uiCatalogText = fs.readFileSync(
 	'utf8',
 );
 const checklistTitleSet = new Set(
-	[...uiCatalogText.matchAll(/[\"']?title[\"']?\s*:\s*['"]([^'"]+)['"]/g)].map(
-		(match) => match[1],
+	[
+		...uiCatalogText.matchAll(
+			/[\"']?title[\"']?\s*:\s*(?:'((?:\\'|[^'])*)'|"((?:\\"|[^"])*)")/g,
+		),
+	].map((match) =>
+		(match[1] ?? match[2] ?? '').replaceAll("\\'", "'").replaceAll('\\"', '"'),
 	),
 );
 

@@ -1143,6 +1143,165 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			'Dense and relaxed spacing come from theme tokens, not platform forks.',
 		],
 	}),
+	DeclarativeForm: doc({
+		name: 'DeclarativeForm',
+		filePath: 'src/design-system/components/molecules/DeclarativeForm.tsx',
+		summary:
+			'Schema-driven mobile form surface with validation timing, async validation, conditional fields, autosave status, read-only rendering, and scroll-safe keyboard flow.',
+		exampleStories: [
+			'relaxed onboarding form',
+			'dense operational form',
+			'read-only review form',
+			'server-error recovery form',
+		],
+		variants: ['edit', 'read-only', 'relaxed density', 'dense density'],
+		sizes: ['single-column mobile form'],
+		states: [
+			'default',
+			'warning/helper/error',
+			'async validation loading',
+			'conflict banner',
+			'autosave saving/saved/error',
+		],
+		compositionExample:
+			'Workflow onboarding form with conditional reviewer notes, server-injected field errors, and autosave status.',
+		usage: {
+			relaxed:
+				'Use for onboarding, setup, and long-form editing flows where extra spacing helps comprehension.',
+			operational:
+				'Switch to dense mode for queue-oriented forms without rewriting field logic or validation behavior.',
+			noMedia:
+				'All hierarchy is carried by text structure, field chrome, and status surfaces without artwork.',
+		},
+		propTable: [
+			prop('title', 'string', 'Primary form heading.'),
+			prop('description', 'string', 'Key instruction or form summary.'),
+			prop(
+				'fields',
+				'DeclarativeFormField[]',
+				'Schema that drives form rendering and validation.',
+			),
+			prop('values', 'Record<string, string>', 'Controlled form values.'),
+			prop(
+				'defaultValues',
+				'Record<string, string>',
+				'Initial values for uncontrolled mode.',
+			),
+			prop(
+				'onValuesChange',
+				'(values: Record<string, string>) => void',
+				'Canonical callback for form state changes.',
+			),
+			prop(
+				'mode',
+				"'edit' | 'read-only'",
+				'Switches between editable inputs and plain-text review surfaces.',
+				'edit',
+			),
+			prop(
+				'density',
+				"'relaxed' | 'dense'",
+				'Controls spacing rhythm for onboarding versus operational layouts.',
+				'relaxed',
+			),
+			prop(
+				'submitLabel',
+				'string',
+				'Default primary action label when onSubmit is provided.',
+			),
+			prop(
+				'onSubmit',
+				'(values) => Promise<Record<string, string> | void> | void',
+				'Submit handler that can return server-side field errors.',
+			),
+			prop(
+				'draftStatusCopy',
+				'{ saving: string; saved: string; error: string; retry: string }',
+				'Localized autosave status labels.',
+			),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Use declarative fields for validation-heavy mobile workflows that must stay consistent across screens.',
+			'Pass localized copy for labels, helper text, and autosave status.',
+		],
+		dontList: [
+			'Do not mix raw input stacks around DeclarativeForm when the schema can own the layout.',
+			'Do not use disabled inputs as a substitute for read-only review mode.',
+		],
+		accessibilityNotes: [
+			'Field errors, async validation feedback, and autosave state changes are announced for assistive technologies.',
+			'Focused and invalid fields scroll into view for mobile keyboard and screen-reader users.',
+		],
+		platformNotes: [
+			'KeyboardAvoidingView and ScrollView behavior stay mobile-first on iOS and Android.',
+			'The form uses shared input, toggle, and banner primitives instead of platform-specific forks.',
+		],
+	}),
+	FormWizard: doc({
+		name: 'FormWizard',
+		filePath: 'src/design-system/components/molecules/FormWizard.tsx',
+		summary:
+			'Multi-step workflow wrapper around DeclarativeForm with per-step validation and completed-step navigation.',
+		exampleStories: [
+			'setup wizard',
+			'approval flow wizard',
+			'stepper with completed-step jump back',
+		],
+		variants: ['dense wizard', 'relaxed wizard'],
+		sizes: ['single-column mobile wizard'],
+		states: ['active step', 'completed step', 'error step', 'final completion'],
+		compositionExample:
+			'Three-step setup flow that validates one step at a time before allowing progression.',
+		usage: {
+			relaxed:
+				'Use for calmer setup and onboarding journeys where each step needs extra explanatory space.',
+			operational:
+				'Use dense mode for short approval or configuration flows that still require step discipline.',
+			noMedia:
+				'Stepper labels, descriptions, and buttons communicate the flow without relying on illustrations.',
+		},
+		propTable: [
+			prop('title', 'string', 'Wizard heading shown above the stepper.'),
+			prop('description', 'string', 'High-level instruction for the overall flow.'),
+			prop('steps', 'FormWizardStep[]', 'Ordered step definitions and per-step fields.'),
+			prop('values', 'Record<string, string>', 'Controlled values shared across all steps.'),
+			prop(
+				'defaultValues',
+				'Record<string, string>',
+				'Initial wizard values for uncontrolled mode.',
+			),
+			prop('step', 'string', 'Controlled active step id.'),
+			prop('defaultStep', 'string', 'Initial active step for uncontrolled mode.'),
+			prop('backLabel', 'string', 'Back button label.'),
+			prop('nextLabel', 'string', 'Next-step button label.'),
+			prop('completeLabel', 'string', 'Final-step completion button label.'),
+			prop(
+				'onComplete',
+				'(values) => Promise<void> | void',
+				'Called after the final step validates successfully.',
+			),
+			COMMON_STYLE_PROP,
+			COMMON_TEST_ID_PROP,
+		],
+		doList: [
+			'Use when each step has a clear validation boundary and users may need to revisit completed steps.',
+			'Keep step labels outcome-focused so the stepper remains scan-friendly.',
+		],
+		dontList: [
+			'Do not force a wizard for short one-step forms.',
+			'Do not allow users to skip ahead to incomplete steps without validation.',
+		],
+		accessibilityNotes: [
+			'Completed steps stay focusable for non-linear navigation while incomplete steps remain guarded.',
+			'Each active step inherits the DeclarativeForm accessibility and scroll-to-error behavior.',
+		],
+		platformNotes: [
+			'Uses the shared Stepper contract so iOS and Android stay visually aligned.',
+			'Step transitions remain data-driven rather than navigation-stack specific.',
+		],
+	}),
 	ListItem: doc({
 		name: 'ListItem',
 		filePath: 'src/design-system/components/molecules/ListItem.tsx',

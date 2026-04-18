@@ -6288,7 +6288,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-form-compositions-define-a-clear-visual-reading-order-title-key',
 		title: 'Form compositions define a clear visual reading order: title, key instruction, fields, primary action',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6298,7 +6298,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-forms-support-relaxed-onboarding-layouts-and-dense-enterprise-e',
 		title: 'Forms support relaxed onboarding layouts and dense enterprise editing layouts with the same components',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6308,7 +6308,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-long-labels-helper-copy-validation-and-permission-explanations-',
 		title: 'Long labels, helper copy, validation, and permission explanations never break layout hierarchy',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6328,7 +6328,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-field-warning-non-blocking-yellow',
 		title: 'Field warning (non-blocking, yellow)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6348,7 +6348,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-validation-timing-onchange-for-format-onblur-for-required-patte',
 		title: 'Validation timing: `onChange` for format, `onBlur` for required/pattern',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6358,7 +6358,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-server-side-error-injection-into-field-after-submission',
 		title: 'Server-side error injection into field after submission',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6368,7 +6368,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-field-level-async-validation-debounced-loading-spinner-screen-r',
 		title: 'Field-level async validation (debounced, loading spinner, screen reader announcement)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6378,7 +6378,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-conditional-dynamic-fields-appear-disappear-based-on-other-fiel',
 		title: 'Conditional / dynamic fields (appear/disappear based on other fields)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6388,7 +6388,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-schema-driven-declarative-form-generation',
 		title: 'Schema-driven / declarative form generation',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6398,7 +6398,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-draft-auto-save-with-status-indicator-saving-saved-save-failed-',
 		title: 'Draft auto-save with status indicator ("Saving…", "Saved", "Save failed — retry")',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6408,7 +6408,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-conflict-detection-on-re-open-of-a-draft',
 		title: 'Conflict detection on re-open of a draft',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6418,7 +6418,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-read-only-form-mode-plain-text-not-disabled-inputs',
 		title: 'Read-only form mode (plain text, not disabled inputs)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6428,7 +6428,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-rbac-aware-disabled-field-lock-icon-tooltip-hint-with-reason',
 		title: 'RBAC-aware disabled field (lock icon + tooltip/hint with reason)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6438,7 +6438,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-multi-step-wizard-form',
 		title: 'Multi-step / Wizard form',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6448,7 +6448,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-per-step-validation-not-all-at-once-on-final-step',
 		title: 'Per-step validation (not all-at-once on final step)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6458,7 +6458,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-common-non-linear-wizard-step-navigation-jump-to-completed-step',
 		title: 'Non-linear wizard step navigation (jump to completed step)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6488,7 +6488,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-mobile-react-native-keyboard-avoidance-form-auto-scrolls-to-focused-fi',
 		title: 'Keyboard avoidance: form auto-scrolls to focused field',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6498,7 +6498,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-mobile-react-native-returnkeytype-next-on-fields-to-advance-via-keyboa',
 		title: '`returnKeyType="next"` on fields to advance via keyboard "Next" button',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6508,7 +6508,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-mobile-react-native-programmatic-focus-textinput-focus-to-advance-to-n',
 		title: 'Programmatic focus: `TextInput.focus()` to advance to next field on submit',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6518,7 +6518,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-mobile-react-native-scroll-to-error-on-validation-failure',
 		title: 'Scroll-to-error on validation failure',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -6528,7 +6528,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '4-patterns-reusable-compositions-forms-validation-mobile-react-native-haptic-feedback-on-validation-error',
 		title: 'Haptic feedback on validation error',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '4. Patterns — Reusable Compositions',
 		subsection: 'Forms & Validation',
@@ -12109,8 +12109,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 
 export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 	total: 1207,
-	completed: 489,
-	open: 718,
+	completed: 510,
+	open: 697,
 	common: 640,
 	web: 306,
 	mobile: 261,
@@ -12155,11 +12155,11 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		{
 			name: '4. Patterns — Reusable Compositions',
 			count: 134,
-			completedCount: 4,
-			openCount: 130,
+			completedCount: 25,
+			openCount: 109,
 			commonMobileCount: 108,
-			commonMobileCompletedCount: 4,
-			commonMobileOpenCount: 104,
+			commonMobileCompletedCount: 25,
+			commonMobileOpenCount: 83,
 		},
 		{
 			name: '5. Accessibility (a11y) Architecture',

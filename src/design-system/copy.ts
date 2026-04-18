@@ -484,6 +484,73 @@ export interface DesignSystemCopy {
 			nativeAlertConfirmed: string;
 			nativeAlertCancelled: string;
 		};
+		forms: {
+			sectionTitle: string;
+			sectionDescription: string;
+			relaxedTitle: string;
+			relaxedDescription: string;
+			relaxedSubmitLabel: string;
+			relaxedSuccessMessage: string;
+			draftSaving: string;
+			draftSaved: string;
+			draftError: string;
+			draftRetry: string;
+			conflictTitle: string;
+			conflictDescription: string;
+			conflictAction: string;
+			projectNameLabel: string;
+			projectNameHelper: string;
+			projectNameRequired: string;
+			longApprovalLabel: string;
+			longApprovalHelper: string;
+			longApprovalWarning: string;
+			approverEmailLabel: string;
+			approverEmailHelper: string;
+			approverEmailRequired: string;
+			approverEmailPattern: string;
+			approverEmailAsyncTaken: string;
+			approverEmailAsyncAvailable: string;
+			reviewerToggleLabel: string;
+			reviewerToggleDescription: string;
+			reviewerNotesLabel: string;
+			reviewerNotesHelper: string;
+			accessLockedLabel: string;
+			accessLockedHint: string;
+			serverFieldLabel: string;
+			serverFieldHelper: string;
+			serverFieldServerError: string;
+			readOnlyTitle: string;
+			readOnlyDescription: string;
+			readOnlyProjectValue: string;
+			readOnlyOwnerValue: string;
+			readOnlyNotesValue: string;
+			toggleEnabledValue: string;
+			toggleDisabledValue: string;
+			wizardTitle: string;
+			wizardDescription: string;
+			wizardBackLabel: string;
+			wizardNextLabel: string;
+			wizardFinishLabel: string;
+			wizardSuccessMessage: string;
+			wizardStepScopeLabel: string;
+			wizardStepScopeDescription: string;
+			wizardStepReviewLabel: string;
+			wizardStepReviewDescription: string;
+			wizardStepConfirmLabel: string;
+			wizardStepConfirmDescription: string;
+			wizardTeamNameLabel: string;
+			wizardTeamNameRequired: string;
+			wizardOwnerEmailLabel: string;
+			wizardOwnerEmailRequired: string;
+			wizardOwnerEmailPattern: string;
+			wizardApprovalCodeLabel: string;
+			wizardApprovalCodeHelper: string;
+			wizardApprovalCodeRequired: string;
+			wizardSummaryToggleLabel: string;
+			wizardSummaryToggleDescription: string;
+			wizardNotesLabel: string;
+			wizardNotesHelper: string;
+		};
 		dialog: {
 			title: string;
 			message: string;
@@ -1395,6 +1462,123 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 				nativeAlertConfirmed: localize('Native alert confirmed'),
 				nativeAlertCancelled: localize('Native alert cancelled'),
 			},
+			forms: {
+				sectionTitle: localize('Forms & validation'),
+				sectionDescription: localize(
+					'Exercise declarative form flows, async validation, draft autosave, read-only rendering, and step-by-step validation with mobile-safe keyboard behavior.',
+				),
+				relaxedTitle: localize('Relaxed onboarding form'),
+				relaxedDescription: localize(
+					'This schema-backed form proves warnings, helper copy, conditional fields, autosave, server errors, and access-aware disabled fields in a spacious layout.',
+				),
+				relaxedSubmitLabel: localize('Submit onboarding form'),
+				relaxedSuccessMessage: localize('Declarative form submitted successfully'),
+				draftSaving: localize('Saving…'),
+				draftSaved: localize('Saved'),
+				draftError: localize('Save failed — retry'),
+				draftRetry: localize('Retry save'),
+				conflictTitle: localize('Draft conflict detected'),
+				conflictDescription: localize(
+					'This draft was reopened after a newer revision landed, so the system keeps the conflict visible before submission.',
+				),
+				conflictAction: localize('Review latest revision'),
+				projectNameLabel: localize('Project name'),
+				projectNameHelper: localize(
+					'Use a concise rollout name that still makes sense when the form is read-only.',
+				),
+				projectNameRequired: localize(
+					'Project name is required before autosave can continue.',
+				),
+				longApprovalLabel: localize(
+					'Approval routing description for teams with legal, procurement, finance, and regional operations stakeholders',
+				),
+				longApprovalHelper: localize(
+					'Long labels, helper text, and warning copy should wrap cleanly without collapsing the field rhythm or footer alignment.',
+				),
+				longApprovalWarning: localize(
+					'Keep this routing note short enough for approvers to scan in dense review queues.',
+				),
+				approverEmailLabel: localize('Approver email'),
+				approverEmailHelper: localize(
+					'Format feedback happens on change, while required and pattern rules wait for blur.',
+				),
+				approverEmailRequired: localize('Approver email is required.'),
+				approverEmailPattern: localize('Enter a valid email address.'),
+				approverEmailAsyncTaken: localize(
+					'That email is already assigned to another approval lane.',
+				),
+				approverEmailAsyncAvailable: localize('Approval lane is available.'),
+				reviewerToggleLabel: localize('Require manual reviewer notes'),
+				reviewerToggleDescription: localize(
+					'Toggling this on reveals a conditional notes field for escalated approvals.',
+				),
+				reviewerNotesLabel: localize('Manual review notes'),
+				reviewerNotesHelper: localize(
+					'Only appears when manual review is enabled, proving conditional schema rendering.',
+				),
+				accessLockedLabel: localize('Cost center override'),
+				accessLockedHint: localize(
+					'Locked because only Finance Admins can change this override after submission.',
+				),
+				serverFieldLabel: localize('Submission code'),
+				serverFieldHelper: localize(
+					'The backend can reject this field after submit and inject the returned message back into the form.',
+				),
+				serverFieldServerError: localize(
+					'Server rejected the submission code. Use a project-specific code instead.',
+				),
+				readOnlyTitle: localize('Read-only form mode'),
+				readOnlyDescription: localize(
+					'Read-only mode uses plain text surfaces instead of disabled inputs so review screens stay calm and legible.',
+				),
+				readOnlyProjectValue: localize('Northwind rollout'),
+				readOnlyOwnerValue: localize('ops.lead@example.com'),
+				readOnlyNotesValue: localize(
+					'Shared review lane with manual notes enabled for legal and procurement.',
+				),
+				toggleEnabledValue: localize('Enabled'),
+				toggleDisabledValue: localize('Disabled'),
+				wizardTitle: localize('Wizard form'),
+				wizardDescription: localize(
+					'The wizard validates one step at a time and allows users to jump back to completed steps without re-entering data.',
+				),
+				wizardBackLabel: localize('Back'),
+				wizardNextLabel: localize('Next step'),
+				wizardFinishLabel: localize('Finish setup'),
+				wizardSuccessMessage: localize('Wizard form completed successfully'),
+				wizardStepScopeLabel: localize('Scope'),
+				wizardStepScopeDescription: localize(
+					'Capture the operating team and primary owner for the workflow.',
+				),
+				wizardStepReviewLabel: localize('Review flow'),
+				wizardStepReviewDescription: localize(
+					'Collect approval routing details before the final summary step.',
+				),
+				wizardStepConfirmLabel: localize('Confirm'),
+				wizardStepConfirmDescription: localize(
+					'Confirm that the summary will be included when the workflow launches.',
+				),
+				wizardTeamNameLabel: localize('Owning team'),
+				wizardTeamNameRequired: localize('Owning team is required.'),
+				wizardOwnerEmailLabel: localize('Workflow owner email'),
+				wizardOwnerEmailRequired: localize('Workflow owner email is required.'),
+				wizardOwnerEmailPattern: localize('Enter a valid workflow owner email.'),
+				wizardApprovalCodeLabel: localize('Approval code'),
+				wizardApprovalCodeHelper: localize(
+					'This field proves per-step validation before the wizard advances.',
+				),
+				wizardApprovalCodeRequired: localize(
+					'Approval code is required before continuing.',
+				),
+				wizardSummaryToggleLabel: localize('Include executive summary'),
+				wizardSummaryToggleDescription: localize(
+					'Completed steps stay clickable so reviewers can jump back and edit earlier answers.',
+				),
+				wizardNotesLabel: localize('Launch notes'),
+				wizardNotesHelper: localize(
+					'Optional notes stay within the same declarative field schema as the rest of the wizard.',
+				),
+			},
 			dialog: {
 				title: localize('Publish checklist updates?'),
 				message: localize(
@@ -1494,7 +1678,7 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 		componentInventory: {
 			title: localize('Supported Component Catalog'),
 			description: localize(
-				'This catalog is generated from the design-system registry, not from product feature screens.',
+				'Browse the generated design-system registry here, then use the interactive preview sections above to play with the components.',
 			),
 			searchPlaceholder: localize('Search components by name, kind, or file path'),
 			kindFilters: componentKindOptions.map((option) =>

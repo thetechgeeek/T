@@ -59,6 +59,11 @@
 	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/FilterBar.tsx" },
 	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/FormField.tsx" },
 	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/FormSection.tsx" },
+	{
+		"kind": "molecules",
+		"filePath": "src/design-system/components/molecules/DeclarativeForm.tsx"
+	},
+	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/FormWizard.tsx" },
 	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/KanbanBoard.tsx" },
 	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/ListItem.tsx" },
 	{ "kind": "molecules", "filePath": "src/design-system/components/molecules/MediaViewer.tsx" },

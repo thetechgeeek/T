@@ -31,6 +31,7 @@ export const FormField = forwardRef<NativeTextInput, FormFieldProps>(
 			error,
 			required,
 			helperText,
+			warningText,
 			editable,
 			containerStyle,
 			...props
@@ -42,18 +43,27 @@ export const FormField = forwardRef<NativeTextInput, FormFieldProps>(
 
 		// Compose a full hint so required/error state is announced with the field.
 		const hint =
-			[required ? 'Required' : null, error ? `Error: ${error}` : (helperText ?? null)]
+			[
+				required ? 'Required' : null,
+				error
+					? `Error: ${error}`
+					: warningText
+						? `Warning: ${warningText}`
+						: (helperText ?? null),
+			]
 				.filter(Boolean)
 				.join('. ') || undefined;
+		const footerCopy = error || warningText || helperText;
+		const footerColor = error ? c.error : warningText ? c.warning : c.onSurfaceVariant;
 
 		return (
 			<View style={[styles.container, containerStyle]}>
 				{/* Visual label row — hidden from a11y tree; input carries the label */}
 				<View
 					importantForAccessibility="no"
-					style={[layout.row, { marginBottom: theme.spacing.xs }]}
+					style={[layout.row, styles.labelRow, { marginBottom: theme.spacing.xs }]}
 				>
-					<ThemedText variant="label" color={c.onSurfaceVariant}>
+					<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.labelText}>
 						{label}
 					</ThemedText>
 					{required && (
@@ -69,17 +79,19 @@ export const FormField = forwardRef<NativeTextInput, FormFieldProps>(
 					accessibilityLabel={accessibilityLabel ?? label}
 					accessibilityHint={hint}
 					error={undefined}
+					helperText={undefined}
 					label={undefined}
+					warningText={undefined}
 				/>
 				{/* Visual error/helper — announced via input hint, kept visual-only */}
-				{!!(error || helperText) && (
+				{!!footerCopy && (
 					<ThemedText
 						importantForAccessibility="no"
 						variant="caption"
-						color={error ? c.error : c.onSurfaceVariant}
+						color={footerColor}
 						style={{ marginTop: theme.spacing.xs }}
 					>
-						{error || helperText}
+						{footerCopy}
 					</ThemedText>
 				)}
 			</View>
@@ -92,5 +104,12 @@ FormField.displayName = 'FormField';
 const styles = StyleSheet.create({
 	container: {
 		marginBottom: SPACING_PX.lg,
+	},
+	labelRow: {
+		alignItems: 'flex-start',
+		flexWrap: 'wrap',
+	},
+	labelText: {
+		flexShrink: 1,
 	},
 });

@@ -889,24 +889,24 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Form compositions define a clear visual reading order: title, key instruction, fields, primary action
-- [ ] Forms support relaxed onboarding layouts and dense enterprise editing layouts with the same components
-- [ ] Long labels, helper copy, validation, and permission explanations never break layout hierarchy
+- [x] Form compositions define a clear visual reading order: title, key instruction, fields, primary action
+- [x] Forms support relaxed onboarding layouts and dense enterprise editing layouts with the same components
+- [x] Long labels, helper copy, validation, and permission explanations never break layout hierarchy
 - [x] Inline field error message (below field, linked to field for screen readers)
-- [ ] Field warning (non-blocking, yellow)
+- [x] Field warning (non-blocking, yellow)
 - [x] Field info / helper text (persistent, gray)
-- [ ] Validation timing: `onChange` for format, `onBlur` for required/pattern
-- [ ] Server-side error injection into field after submission
-- [ ] Field-level async validation (debounced, loading spinner, screen reader announcement)
-- [ ] Conditional / dynamic fields (appear/disappear based on other fields)
-- [ ] Schema-driven / declarative form generation
-- [ ] Draft auto-save with status indicator ("Saving…", "Saved", "Save failed — retry")
-- [ ] Conflict detection on re-open of a draft
-- [ ] Read-only form mode (plain text, not disabled inputs)
-- [ ] RBAC-aware disabled field (lock icon + tooltip/hint with reason)
-- [ ] Multi-step / Wizard form
-- [ ] Per-step validation (not all-at-once on final step)
-- [ ] Non-linear wizard step navigation (jump to completed step)
+- [x] Validation timing: `onChange` for format, `onBlur` for required/pattern
+- [x] Server-side error injection into field after submission
+- [x] Field-level async validation (debounced, loading spinner, screen reader announcement)
+- [x] Conditional / dynamic fields (appear/disappear based on other fields)
+- [x] Schema-driven / declarative form generation
+- [x] Draft auto-save with status indicator ("Saving…", "Saved", "Save failed — retry")
+- [x] Conflict detection on re-open of a draft
+- [x] Read-only form mode (plain text, not disabled inputs)
+- [x] RBAC-aware disabled field (lock icon + tooltip/hint with reason)
+- [x] Multi-step / Wizard form
+- [x] Per-step validation (not all-at-once on final step)
+- [x] Non-linear wizard step navigation (jump to completed step)
 
 #### Web
 
@@ -915,11 +915,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Keyboard avoidance: form auto-scrolls to focused field
-- [ ] `returnKeyType="next"` on fields to advance via keyboard "Next" button
-- [ ] Programmatic focus: `TextInput.focus()` to advance to next field on submit
-- [ ] Scroll-to-error on validation failure
-- [ ] Haptic feedback on validation error
+- [x] Keyboard avoidance: form auto-scrolls to focused field
+- [x] `returnKeyType="next"` on fields to advance via keyboard "Next" button
+- [x] Programmatic focus: `TextInput.focus()` to advance to next field on submit
+- [x] Scroll-to-error on validation failure
+- [x] Haptic feedback on validation error
 
 ### CRUD Patterns
 

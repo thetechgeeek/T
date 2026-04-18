@@ -179,13 +179,13 @@ const SortableListBase = forwardRef<
 			</View>
 		);
 	},
-) as <T extends SortableListItemShape>(
-	props: SortableListProps<T> & { ref?: React.Ref<React.ElementRef<typeof View>> },
-) => React.ReactElement;
+);
 
 SortableListBase.displayName = 'SortableList';
 
-export const SortableList = SortableListBase;
+export const SortableList = SortableListBase as <T extends SortableListItemShape>(
+	props: SortableListProps<T> & { ref?: React.Ref<React.ElementRef<typeof View>> },
+) => React.ReactElement;
 
 const styles = StyleSheet.create({
 	row: {

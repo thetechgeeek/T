@@ -27,6 +27,33 @@ config({ path: '.env.test' });
 
 import { ViewProps, TextProps, ScrollViewProps, TouchableOpacityProps } from 'react-native';
 
+const mockNativeRegistry = {
+	textInputs: new Map<
+		string,
+		{
+			focus: jest.Mock;
+			blur: jest.Mock;
+			clear: jest.Mock;
+			setNativeProps: jest.Mock;
+		}
+	>(),
+	scrollViews: new Map<
+		string,
+		{
+			scrollTo: jest.Mock;
+		}
+	>(),
+};
+
+(
+	global as typeof globalThis & { __RN_TEST_REGISTRY__?: typeof mockNativeRegistry }
+).__RN_TEST_REGISTRY__ = mockNativeRegistry;
+
+beforeEach(() => {
+	mockNativeRegistry.textInputs.clear();
+	mockNativeRegistry.scrollViews.clear();
+});
+
 // Consolidated mock for react-native
 jest.mock('react-native', () => {
 	const React = jest.requireActual('react');
@@ -45,8 +72,20 @@ jest.mock('react-native', () => {
 			.replace(/\s+/g, ' ');
 		return React.createElement('Text', props, content);
 	};
-	const ScrollView = ({ children, ...props }: ScrollViewProps & { children?: React.ReactNode }) =>
-		React.createElement('ScrollView', props, children);
+	const ScrollView = React.forwardRef(
+		(
+			{ children, ...props }: ScrollViewProps & { children?: React.ReactNode },
+			ref: React.ForwardedRef<{ scrollTo: jest.Mock }>,
+		) => {
+			const scrollTo = React.useRef(jest.fn()).current;
+			if (typeof props.testID === 'string') {
+				mockNativeRegistry.scrollViews.set(props.testID, { scrollTo });
+			}
+			React.useImperativeHandle(ref, () => ({ scrollTo }), [scrollTo]);
+			return React.createElement('ScrollView', { ...props, ref: null }, children);
+		},
+	);
+	ScrollView.displayName = 'MockScrollView';
 	const TouchableOpacity = ({
 		children,
 		onPress,
@@ -73,8 +112,59 @@ jest.mock('react-native', () => {
 			children,
 		);
 	};
-	const TextInput = (props: React.ComponentProps<typeof RN.TextInput>) =>
-		React.createElement('TextInput', props);
+	const TextInput = React.forwardRef(
+		(
+			props: React.ComponentProps<typeof RN.TextInput>,
+			ref: React.ForwardedRef<{
+				focus: jest.Mock;
+				blur: jest.Mock;
+				clear: jest.Mock;
+				setNativeProps: jest.Mock;
+			}>,
+		) => {
+			const focus = React.useRef(
+				jest.fn(() => {
+					props.onFocus?.({ nativeEvent: {} } as never);
+				}),
+			).current;
+			const blur = React.useRef(
+				jest.fn(() => {
+					props.onBlur?.({ nativeEvent: {} } as never);
+				}),
+			).current;
+			const clear = React.useRef(jest.fn()).current;
+			const setNativeProps = React.useRef(jest.fn()).current;
+
+			focus.mockImplementation(() => {
+				props.onFocus?.({ nativeEvent: {} } as never);
+			});
+			blur.mockImplementation(() => {
+				props.onBlur?.({ nativeEvent: {} } as never);
+			});
+			if (typeof props.testID === 'string') {
+				mockNativeRegistry.textInputs.set(props.testID, {
+					focus,
+					blur,
+					clear,
+					setNativeProps,
+				});
+			}
+
+			React.useImperativeHandle(
+				ref,
+				() => ({
+					focus,
+					blur,
+					clear,
+					setNativeProps,
+				}),
+				[blur, clear, focus, setNativeProps],
+			);
+
+			return React.createElement('TextInput', { ...props, ref: null });
+		},
+	);
+	TextInput.displayName = 'MockTextInput';
 	const ActivityIndicator = (props: React.ComponentProps<typeof RN.ActivityIndicator>) =>
 		React.createElement('ActivityIndicator', { testID: 'ActivityIndicator', ...props });
 

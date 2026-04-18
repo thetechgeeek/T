@@ -53,6 +53,14 @@ import {
 import { BottomSheetPicker } from '@/src/design-system/components/molecules/BottomSheetPicker';
 import { CollapsibleSection } from '@/src/design-system/components/molecules/CollapsibleSection';
 import { ConfirmationModal } from '@/src/design-system/components/molecules/ConfirmationModal';
+import {
+	DeclarativeForm,
+	type DeclarativeFormField,
+} from '@/src/design-system/components/molecules/DeclarativeForm';
+import {
+	FormWizard,
+	type FormWizardStep,
+} from '@/src/design-system/components/molecules/FormWizard';
 import { ListItem } from '@/src/design-system/components/molecules/ListItem';
 import { NumericStepper } from '@/src/design-system/components/molecules/NumericStepper';
 import { OtpCodeInput } from '@/src/design-system/components/molecules/OtpCodeInput';
@@ -97,7 +105,6 @@ import { getDesignSystemCopy, type DesignSystemLocale } from './copy';
 import { buildDesignSystemLocaleDiagnostics } from './formatters';
 import { useDesignSystemQualitySignals } from './useQualitySignals';
 import { WorkbenchHeader } from './components/WorkbenchHeader';
-import { DESIGN_SYSTEM_COMPONENT_DOCS } from './componentDocs';
 import { showNativeConfirmationAlert } from './nativeAlertDialog';
 import {
 	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,
@@ -116,6 +123,8 @@ const DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH = 320;
 const DATA_DISPLAY_AVATAR_CARD_MIN_WIDTH = 280;
 const DATA_DISPLAY_STAT_CARD_MIN_WIDTH = 220;
 const DATA_DISPLAY_BOARD_CARD_MIN_WIDTH = 340;
+const FORM_PREVIEW_CARD_MIN_WIDTH = 360;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 const SINGLE_SLIDER_DEFAULT = 35;
 const RANGE_SLIDER_DEFAULT: [number, number] = [20, 80];
 const SURFACE_TIER_ORDER = ['canvas', 'default', 'raised', 'overlay', 'inverse'] as const;
@@ -205,19 +214,6 @@ function ThemeModeChip({
 	onPress: () => void;
 }) {
 	return <Chip label={label} selected={selected} onPress={onPress} />;
-}
-
-function DetailBlock({ label, children }: { label: string; children: React.ReactNode }) {
-	const { c, s } = useThemeTokens();
-
-	return (
-		<View style={{ marginTop: s.sm }}>
-			<ThemedText variant="label" style={{ color: c.onSurface }}>
-				{label}
-			</ThemedText>
-			<View style={{ marginTop: s.xxs }}>{children}</View>
-		</View>
-	);
 }
 
 function WorkbenchMetricCard({
@@ -794,6 +790,182 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 		},
 		[setToastQueue],
 	);
+	const relaxedFormFields = useMemo<DeclarativeFormField[]>(
+		() => [
+			{
+				name: 'projectName',
+				label: copy.componentGallery.forms.projectNameLabel,
+				helperText: copy.componentGallery.forms.projectNameHelper,
+				required: true,
+				requiredMessage: copy.componentGallery.forms.projectNameRequired,
+				defaultValue: copy.componentGallery.forms.readOnlyProjectValue,
+			},
+			{
+				name: 'approvalRouting',
+				label: copy.componentGallery.forms.longApprovalLabel,
+				helperText: copy.componentGallery.forms.longApprovalHelper,
+				warningText: copy.componentGallery.forms.longApprovalWarning,
+				defaultValue: copy.componentGallery.forms.readOnlyNotesValue,
+			},
+			{
+				name: 'approverEmail',
+				label: copy.componentGallery.forms.approverEmailLabel,
+				helperText: copy.componentGallery.forms.approverEmailHelper,
+				required: true,
+				requiredMessage: copy.componentGallery.forms.approverEmailRequired,
+				pattern: EMAIL_PATTERN,
+				patternMessage: copy.componentGallery.forms.approverEmailPattern,
+				asyncSuccessAnnouncement: copy.componentGallery.forms.approverEmailAsyncAvailable,
+				asyncValidator: async (value) =>
+					/taken/iu.test(value)
+						? copy.componentGallery.forms.approverEmailAsyncTaken
+						: undefined,
+				defaultValue: copy.componentGallery.forms.readOnlyOwnerValue,
+			},
+			{
+				name: 'reviewerRequired',
+				type: 'toggle',
+				label: copy.componentGallery.forms.reviewerToggleLabel,
+				description: copy.componentGallery.forms.reviewerToggleDescription,
+				defaultValue: true,
+				readOnlyFormatter: (value) =>
+					value === 'true'
+						? copy.componentGallery.forms.toggleEnabledValue
+						: copy.componentGallery.forms.toggleDisabledValue,
+			},
+			{
+				name: 'reviewerNotes',
+				type: 'textarea',
+				label: copy.componentGallery.forms.reviewerNotesLabel,
+				helperText: copy.componentGallery.forms.reviewerNotesHelper,
+				defaultValue: copy.componentGallery.forms.readOnlyNotesValue,
+				visibleWhen: (values) => values.reviewerRequired === 'true',
+				maxLines: 5,
+			},
+			{
+				name: 'costCenter',
+				label: copy.componentGallery.forms.accessLockedLabel,
+				disabledReason: copy.componentGallery.forms.accessLockedHint,
+				defaultValue: 'CC-204',
+			},
+			{
+				name: 'submissionCode',
+				label: copy.componentGallery.forms.serverFieldLabel,
+				helperText: copy.componentGallery.forms.serverFieldHelper,
+				defaultValue: 'GLOBAL',
+			},
+		],
+		[copy],
+	);
+	const readOnlyFormValues = useMemo(
+		() => ({
+			projectName: copy.componentGallery.forms.readOnlyProjectValue,
+			approvalRouting: copy.componentGallery.forms.longApprovalWarning,
+			approverEmail: copy.componentGallery.forms.readOnlyOwnerValue,
+			reviewerRequired: 'true',
+			reviewerNotes: copy.componentGallery.forms.readOnlyNotesValue,
+			costCenter: 'CC-204',
+			submissionCode: 'NW-2026',
+		}),
+		[copy],
+	);
+	const wizardSteps = useMemo<FormWizardStep[]>(
+		() => [
+			{
+				id: 'scope',
+				label: copy.componentGallery.forms.wizardStepScopeLabel,
+				description: copy.componentGallery.forms.wizardStepScopeDescription,
+				fields: [
+					{
+						name: 'teamName',
+						label: copy.componentGallery.forms.wizardTeamNameLabel,
+						required: true,
+						requiredMessage: copy.componentGallery.forms.wizardTeamNameRequired,
+					},
+					{
+						name: 'ownerEmail',
+						label: copy.componentGallery.forms.wizardOwnerEmailLabel,
+						required: true,
+						requiredMessage: copy.componentGallery.forms.wizardOwnerEmailRequired,
+						pattern: EMAIL_PATTERN,
+						patternMessage: copy.componentGallery.forms.wizardOwnerEmailPattern,
+					},
+				],
+			},
+			{
+				id: 'review',
+				label: copy.componentGallery.forms.wizardStepReviewLabel,
+				description: copy.componentGallery.forms.wizardStepReviewDescription,
+				fields: [
+					{
+						name: 'approvalCode',
+						label: copy.componentGallery.forms.wizardApprovalCodeLabel,
+						helperText: copy.componentGallery.forms.wizardApprovalCodeHelper,
+						required: true,
+						requiredMessage: copy.componentGallery.forms.wizardApprovalCodeRequired,
+						defaultValue: 'APR-26',
+					},
+					{
+						name: 'launchNotes',
+						type: 'textarea',
+						label: copy.componentGallery.forms.wizardNotesLabel,
+						helperText: copy.componentGallery.forms.wizardNotesHelper,
+						defaultValue: copy.componentGallery.forms.readOnlyNotesValue,
+						maxLines: 4,
+					},
+				],
+			},
+			{
+				id: 'confirm',
+				label: copy.componentGallery.forms.wizardStepConfirmLabel,
+				description: copy.componentGallery.forms.wizardStepConfirmDescription,
+				fields: [
+					{
+						name: 'executiveSummary',
+						type: 'toggle',
+						label: copy.componentGallery.forms.wizardSummaryToggleLabel,
+						description: copy.componentGallery.forms.wizardSummaryToggleDescription,
+						defaultValue: true,
+						readOnlyFormatter: (value) =>
+							value === 'true'
+								? copy.componentGallery.forms.toggleEnabledValue
+								: copy.componentGallery.forms.toggleDisabledValue,
+					},
+				],
+			},
+		],
+		[copy],
+	);
+	const handleRelaxedDraftSave = useCallback(
+		async (values: Record<string, string>) => {
+			if (/block/iu.test(values.projectName ?? '')) {
+				throw new Error(copy.componentGallery.forms.draftError);
+			}
+		},
+		[copy],
+	);
+	const handleRelaxedFormSubmit = useCallback(
+		async (values: Record<string, string>) => {
+			if ((values.submissionCode ?? '').trim().toUpperCase() === 'GLOBAL') {
+				return {
+					submissionCode: copy.componentGallery.forms.serverFieldServerError,
+				};
+			}
+
+			pushToast({
+				message: copy.componentGallery.forms.relaxedSuccessMessage,
+				variant: 'success',
+			});
+			return undefined;
+		},
+		[copy, pushToast],
+	);
+	const handleWizardComplete = useCallback(async () => {
+		pushToast({
+			message: copy.componentGallery.forms.wizardSuccessMessage,
+			variant: 'success',
+		});
+	}, [copy, pushToast]);
 
 	const filteredItems = useMemo(
 		() => filterLibraryItems(catalogQuery, platformFilter, completionFilter),
@@ -2777,6 +2949,73 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				</View>
 			</PreviewSection>
 
+			<PreviewSection
+				title={copy.componentGallery.forms.sectionTitle}
+				description={copy.componentGallery.forms.sectionDescription}
+			>
+				<View style={{ gap: s.md }}>
+					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+						<Card
+							variant="outlined"
+							style={{ flex: 1, minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}
+						>
+							<DeclarativeForm
+								title={copy.componentGallery.forms.relaxedTitle}
+								description={copy.componentGallery.forms.relaxedDescription}
+								fields={relaxedFormFields}
+								submitLabel={copy.componentGallery.forms.relaxedSubmitLabel}
+								onSubmit={handleRelaxedFormSubmit}
+								onDraftSave={handleRelaxedDraftSave}
+								draftStatusCopy={{
+									saving: copy.componentGallery.forms.draftSaving,
+									saved: copy.componentGallery.forms.draftSaved,
+									error: copy.componentGallery.forms.draftError,
+									retry: copy.componentGallery.forms.draftRetry,
+								}}
+								draftConflict={{
+									title: copy.componentGallery.forms.conflictTitle,
+									description: copy.componentGallery.forms.conflictDescription,
+									actionLabel: copy.componentGallery.forms.conflictAction,
+									onAction: () =>
+										pushToast({
+											message: copy.componentGallery.forms.conflictAction,
+											variant: 'info',
+										}),
+								}}
+								testID="forms-relaxed"
+							/>
+						</Card>
+
+						<Card
+							variant="outlined"
+							style={{ flex: 1, minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}
+						>
+							<DeclarativeForm
+								title={copy.componentGallery.forms.readOnlyTitle}
+								description={copy.componentGallery.forms.readOnlyDescription}
+								fields={relaxedFormFields}
+								mode="read-only"
+								defaultValues={readOnlyFormValues}
+								testID="forms-read-only"
+							/>
+						</Card>
+					</View>
+
+					<Card variant="outlined" style={{ minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}>
+						<FormWizard
+							title={copy.componentGallery.forms.wizardTitle}
+							description={copy.componentGallery.forms.wizardDescription}
+							steps={wizardSteps}
+							backLabel={copy.componentGallery.forms.wizardBackLabel}
+							nextLabel={copy.componentGallery.forms.wizardNextLabel}
+							completeLabel={copy.componentGallery.forms.wizardFinishLabel}
+							onComplete={handleWizardComplete}
+							testID="forms-wizard"
+						/>
+					</Card>
+				</View>
+			</PreviewSection>
+
 			<PreviewSection title={copy.stateProof.title} description={copy.stateProof.description}>
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
 					<StateProofCard
@@ -2996,7 +3235,6 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						const previousComponent = index > 0 ? filteredComponents[index - 1] : null;
 						const showKindHeader =
 							!previousComponent || previousComponent.kind !== component.kind;
-						const docsEntry = DESIGN_SYSTEM_COMPONENT_DOCS[component.name];
 
 						return (
 							<View key={component.id}>
@@ -3028,17 +3266,6 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 									>
 										{component.name}
 									</ThemedText>
-									{docsEntry ? (
-										<ThemedText
-											variant="caption"
-											style={{
-												color: c.onSurfaceVariant,
-												marginTop: s.xs,
-											}}
-										>
-											{docsEntry.summary}
-										</ThemedText>
-									) : null}
 									<ThemedText
 										variant="caption"
 										style={{ color: c.onSurfaceVariant, marginTop: s.xxs }}
@@ -3083,213 +3310,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 											}
 											size="sm"
 										/>
-										{docsEntry ? (
-											<>
-												<Badge
-													label={copy.componentInventory.storyCount(
-														docsEntry.exampleStories.length,
-													)}
-													variant="neutral"
-													size="sm"
-												/>
-												<Badge
-													label={copy.componentInventory.variantCount(
-														docsEntry.variants.length,
-													)}
-													variant="info"
-													size="sm"
-												/>
-												<Badge
-													label={copy.componentInventory.stateCount(
-														docsEntry.states.length,
-													)}
-													variant="warning"
-													size="sm"
-												/>
-												<Badge
-													label={copy.componentInventory.propCount(
-														docsEntry.propTable.length,
-													)}
-													variant="success"
-													size="sm"
-												/>
-											</>
-										) : null}
 									</View>
-									{docsEntry ? (
-										<View style={{ marginTop: s.md }}>
-											<DetailBlock label={copy.componentInventory.summary}>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.summary}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock
-												label={copy.componentInventory.exampleStories}
-											>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.exampleStories.join(' • ')}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.variants}>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.variants.join(' • ')}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.sizes}>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.sizes.join(' • ')}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.states}>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.states.join(' • ')}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock
-												label={copy.componentInventory.composition}
-											>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.compositionExample}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.relaxed}>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.usage.relaxed}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock
-												label={copy.componentInventory.operational}
-											>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.usage.operational}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.noMedia}>
-												<ThemedText
-													variant="caption"
-													style={{ color: c.onSurfaceVariant }}
-												>
-													{docsEntry.usage.noMedia}
-												</ThemedText>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.props}>
-												<View style={{ gap: s.xs }}>
-													{docsEntry.propTable.map((prop) => (
-														<View key={`${component.id}-${prop.name}`}>
-															<ThemedText
-																variant="caption"
-																weight="semibold"
-																style={{ color: c.onSurface }}
-															>
-																{`${prop.name} • ${prop.type}`}
-															</ThemedText>
-															<ThemedText
-																variant="metadata"
-																style={{
-																	color: c.onSurfaceVariant,
-																}}
-															>
-																{prop.defaultValue
-																	? `${copy.componentInventory.defaultValue}: ${prop.defaultValue} • ${prop.description}`
-																	: prop.description}
-															</ThemedText>
-														</View>
-													))}
-												</View>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.doLabel}>
-												<View style={{ gap: s.xxs }}>
-													{docsEntry.doList.map((item) => (
-														<ThemedText
-															key={`${component.id}-do-${item}`}
-															variant="caption"
-															style={{ color: c.onSurfaceVariant }}
-														>
-															{`• ${item}`}
-														</ThemedText>
-													))}
-												</View>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.dontLabel}>
-												<View style={{ gap: s.xxs }}>
-													{docsEntry.dontList.map((item) => (
-														<ThemedText
-															key={`${component.id}-dont-${item}`}
-															variant="caption"
-															style={{ color: c.onSurfaceVariant }}
-														>
-															{`• ${item}`}
-														</ThemedText>
-													))}
-												</View>
-											</DetailBlock>
-
-											<DetailBlock
-												label={copy.componentInventory.accessibility}
-											>
-												<View style={{ gap: s.xxs }}>
-													{docsEntry.accessibilityNotes.map((item) => (
-														<ThemedText
-															key={`${component.id}-a11y-${item}`}
-															variant="caption"
-															style={{ color: c.onSurfaceVariant }}
-														>
-															{`• ${item}`}
-														</ThemedText>
-													))}
-												</View>
-											</DetailBlock>
-
-											<DetailBlock label={copy.componentInventory.platform}>
-												<View style={{ gap: s.xxs }}>
-													{docsEntry.platformNotes.map((item) => (
-														<ThemedText
-															key={`${component.id}-platform-${item}`}
-															variant="caption"
-															style={{ color: c.onSurfaceVariant }}
-														>
-															{`• ${item}`}
-														</ThemedText>
-													))}
-												</View>
-											</DetailBlock>
-										</View>
-									) : null}
 								</Card>
 							</View>
 						);

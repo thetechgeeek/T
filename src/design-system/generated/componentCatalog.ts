@@ -214,6 +214,13 @@ export const DESIGN_SYSTEM_COMPONENTS: DesignSystemComponent[] = [
 		hasTests: true,
 	},
 	{
+		id: 'src-design-system-components-molecules-declarativeform-tsx',
+		name: 'DeclarativeForm',
+		kind: 'molecules',
+		filePath: 'src/design-system/components/molecules/DeclarativeForm.tsx',
+		hasTests: true,
+	},
+	{
 		id: 'src-design-system-components-molecules-descriptionlist-tsx',
 		name: 'DescriptionList',
 		kind: 'molecules',
@@ -260,6 +267,13 @@ export const DESIGN_SYSTEM_COMPONENTS: DesignSystemComponent[] = [
 		name: 'FormSection',
 		kind: 'molecules',
 		filePath: 'src/design-system/components/molecules/FormSection.tsx',
+		hasTests: true,
+	},
+	{
+		id: 'src-design-system-components-molecules-formwizard-tsx',
+		name: 'FormWizard',
+		kind: 'molecules',
+		filePath: 'src/design-system/components/molecules/FormWizard.tsx',
 		hasTests: true,
 	},
 	{
@@ -482,11 +496,11 @@ export const DESIGN_SYSTEM_COMPONENTS: DesignSystemComponent[] = [
 ] as DesignSystemComponent[];
 
 export const DESIGN_SYSTEM_COMPONENT_STATS: DesignSystemComponentStats = {
-	total: 65,
-	tested: 65,
+	total: 67,
+	tested: 67,
 	byKind: {
 		atoms: 14,
-		molecules: 49,
+		molecules: 51,
 		organisms: 0,
 		skeletons: 2,
 	},

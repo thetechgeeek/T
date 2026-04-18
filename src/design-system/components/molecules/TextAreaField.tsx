@@ -15,6 +15,8 @@ import { SPACING_PX } from '@/src/theme/layoutMetrics';
 import { SIZE_TEXTAREA_MIN_HEIGHT } from '@/theme/uiMetrics';
 import { LINE_HEIGHT } from '@/src/theme/typographyMetrics';
 
+type NativeTextAreaProps = React.ComponentProps<typeof TextInput>;
+
 export interface TextAreaFieldProps {
 	label: string;
 	value?: string;
@@ -30,7 +32,13 @@ export interface TextAreaFieldProps {
 	error?: string;
 	testID?: string;
 	editable?: boolean;
+	readOnly?: boolean;
 	required?: boolean;
+	accessibilityHint?: string;
+	onFocus?: NativeTextAreaProps['onFocus'];
+	onBlur?: NativeTextAreaProps['onBlur'];
+	onSubmitEditing?: NativeTextAreaProps['onSubmitEditing'];
+	returnKeyType?: NativeTextAreaProps['returnKeyType'];
 	style?: StyleProp<ViewStyle>;
 }
 
@@ -55,7 +63,13 @@ export const TextAreaField = forwardRef<NativeTextInput, TextAreaFieldProps>(
 			error,
 			testID,
 			editable = true,
+			readOnly = false,
 			required = false,
+			accessibilityHint,
+			onFocus,
+			onBlur,
+			onSubmitEditing,
+			returnKeyType,
 			style,
 		},
 		ref,
@@ -119,8 +133,14 @@ export const TextAreaField = forwardRef<NativeTextInput, TextAreaFieldProps>(
 						ref={ref}
 						testID={testID}
 						value={currentValue}
-						onFocus={() => setIsFocused(true)}
-						onBlur={() => setIsFocused(false)}
+						onFocus={(event) => {
+							setIsFocused(true);
+							onFocus?.(event);
+						}}
+						onBlur={(event) => {
+							setIsFocused(false);
+							onBlur?.(event);
+						}}
 						onChangeText={(nextValue) =>
 							setCurrentValue(nextValue, { source: 'input' })
 						}
@@ -131,14 +151,17 @@ export const TextAreaField = forwardRef<NativeTextInput, TextAreaFieldProps>(
 						numberOfLines={3}
 						maxLength={maxLength}
 						editable={editable}
+						readOnly={readOnly}
 						scrollEnabled={false}
+						returnKeyType={returnKeyType}
+						onSubmitEditing={onSubmitEditing}
 						onContentSizeChange={(event) => {
 							if (!autoResize) {
 								return;
 							}
 							setMeasuredHeight(event.nativeEvent.contentSize.height);
 						}}
-						accessibilityHint={helperCopy}
+						accessibilityHint={accessibilityHint ?? helperCopy}
 						style={[
 							styles.input,
 							{
