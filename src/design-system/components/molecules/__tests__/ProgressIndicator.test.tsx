@@ -8,11 +8,17 @@ const renderWithTheme = (component: React.ReactElement) =>
 
 describe('ProgressIndicator', () => {
 	it('renders determinate circular progress', () => {
-		const { getByText } = renderWithTheme(
-			<ProgressIndicator variant="circular" value={64} label="Uploading" />,
+		const { getByTestId, getByText } = renderWithTheme(
+			<ProgressIndicator variant="circular" value={64} label="Uploading" testID="progress" />,
 		);
 		expect(getByText('64%')).toBeTruthy();
 		expect(getByText('Uploading')).toBeTruthy();
+		expect(getByTestId('progress')).toHaveProp('accessibilityValue', {
+			min: 0,
+			max: 100,
+			now: 64,
+			text: '64%',
+		});
 	});
 
 	it('renders indeterminate linear progress with the activity indicator fallback', () => {
@@ -21,5 +27,6 @@ describe('ProgressIndicator', () => {
 		);
 		expect(getByTestId('ActivityIndicator')).toBeTruthy();
 		expect(getByTestId('progress')).toBeTruthy();
+		expect(getByTestId('progress')).toHaveProp('accessibilityState', { busy: true });
 	});
 });

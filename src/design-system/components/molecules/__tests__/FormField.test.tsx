@@ -18,14 +18,33 @@ describe('FormField', () => {
 	});
 
 	it('renders error message below when error prop provided', () => {
-		const { getByText } = renderWithTheme(
+		const { getByPlaceholderText, getByText } = renderWithTheme(
 			<FormField label="Due Date" error="Date is required" placeholder="Date" />,
 		);
 		expect(getByText('Date is required')).toBeTruthy();
+		expect(getByPlaceholderText('Date').props.accessibilityLabel).toBe('Due Date');
+		expect(getByPlaceholderText('Date').props.accessibilityHint).toBe(
+			'Error: Date is required',
+		);
 	});
 
 	it('does NOT render error text when no error prop', () => {
 		const { queryByText } = renderWithTheme(<FormField label="Due Date" placeholder="Date" />);
 		expect(queryByText(/required/i)).toBeNull();
+	});
+
+	it('includes required state in the programmatic hint when needed', () => {
+		const { getByPlaceholderText } = renderWithTheme(
+			<FormField
+				label="Approver"
+				placeholder="Jane Doe"
+				required
+				helperText="Needed before publish"
+			/>,
+		);
+
+		expect(getByPlaceholderText('Jane Doe').props.accessibilityHint).toBe(
+			'Required. Needed before publish',
+		);
 	});
 });

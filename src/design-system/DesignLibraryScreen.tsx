@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Calendar, Moon, Package, Palette, Search, Sun } from 'lucide-react-native';
@@ -109,8 +109,14 @@ import type { ThemeMode, ThemePresetId } from '@/src/theme';
 import { getDesignSystemCopy, type DesignSystemLocale } from './copy';
 import { buildDesignSystemLocaleDiagnostics } from './formatters';
 import { useDesignSystemQualitySignals } from './useQualitySignals';
+import {
+	responsiveCardStyle,
+	stackOnPhoneRowStyle,
+	useResponsiveWorkbenchLayout,
+} from './useResponsiveWorkbenchLayout';
 import { WorkbenchHeader } from './components/WorkbenchHeader';
 import { showNativeConfirmationAlert } from './nativeAlertDialog';
+import { setAccessibilityFocus } from '@/src/utils/accessibility';
 import {
 	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,
 	DESIGN_SYSTEM_READ_ONLY_FIELDS,
@@ -233,6 +239,7 @@ function WorkbenchMetricCard({
 	variant?: 'default' | 'success' | 'warning' | 'info';
 }) {
 	const { c, s, visual } = useThemeTokens();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 
 	const metricColor =
 		variant === 'success'
@@ -247,8 +254,7 @@ function WorkbenchMetricCard({
 		<Card
 			variant="outlined"
 			style={{
-				flex: 1,
-				minWidth: METRIC_CARD_MIN_WIDTH,
+				...responsiveCardStyle(isCompactPhone, METRIC_CARD_MIN_WIDTH),
 				backgroundColor: visual.surfaces.default,
 				borderColor: c.border,
 			}}
@@ -276,6 +282,7 @@ function PrincipleCard({
 	variant?: 'neutral' | 'info' | 'warning';
 }) {
 	const { c, s, visual } = useThemeTokens();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 
 	const accent =
 		variant === 'warning' ? c.warning : variant === 'info' ? c.info : c.onSurfaceVariant;
@@ -284,8 +291,7 @@ function PrincipleCard({
 		<Card
 			variant="flat"
 			style={{
-				flex: 1,
-				minWidth: PRINCIPLE_CARD_MIN_WIDTH,
+				...responsiveCardStyle(isCompactPhone, PRINCIPLE_CARD_MIN_WIDTH),
 				backgroundColor: visual.surfaces.quiet,
 			}}
 		>
@@ -318,13 +324,13 @@ function SurfaceTierCard({
 	description: string;
 }) {
 	const { c, s, r, visual } = useThemeTokens();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 
 	return (
 		<Card
 			variant="outlined"
 			style={{
-				flex: 1,
-				minWidth: 180,
+				...responsiveCardStyle(isCompactPhone, 180),
 				backgroundColor: visual.surfaces.default,
 				borderColor: c.border,
 			}}
@@ -360,6 +366,7 @@ function AlertBannerPreview({
 	actionLabel: string;
 }) {
 	const { theme, c, s, r, visual } = useThemeTokens();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 
 	return (
 		<Card
@@ -386,9 +393,11 @@ function AlertBannerPreview({
 			</View>
 			<View
 				style={{
-					flexDirection: 'row',
-					alignItems: 'flex-start',
-					gap: s.md,
+					...stackOnPhoneRowStyle(isCompactPhone, {
+						gap: s.md,
+						alignItems: 'flex-start',
+						wrap: false,
+					}),
 					padding: s.md,
 				}}
 			>
@@ -442,13 +451,13 @@ function PresentationPreviewCardContent({
 	secondaryAction: string;
 }) {
 	const { theme, c, s, visual } = useThemeTokens();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 
 	return (
 		<Card
 			variant="outlined"
 			style={{
-				flex: 1,
-				minWidth: 300,
+				...responsiveCardStyle(isCompactPhone, 300),
 				backgroundColor: visual.surfaces.default,
 				borderColor: c.border,
 			}}
@@ -475,10 +484,12 @@ function PresentationPreviewCardContent({
 
 			<View
 				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-					gap: s.md,
+					...stackOnPhoneRowStyle(isCompactPhone, {
+						gap: s.md,
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						wrap: false,
+					}),
 				}}
 			>
 				<View style={{ flex: 1 }}>
@@ -590,13 +601,13 @@ function StateProofCard({
 	children: React.ReactNode;
 }) {
 	const { c, s, visual } = useThemeTokens();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 
 	return (
 		<Card
 			variant="outlined"
 			style={{
-				flex: 1,
-				minWidth: PROOF_CARD_MIN_WIDTH,
+				...responsiveCardStyle(isCompactPhone, PROOF_CARD_MIN_WIDTH),
 				backgroundColor: visual.surfaces.default,
 				borderColor: c.border,
 			}}
@@ -623,9 +634,11 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 	const { theme, c, s, r, visual } = useThemeTokens();
 	const { mode, setThemeMode, presetId, setThemePreset, cycleThemePreset, availablePresets } =
 		useTheme();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 	const [selectedLocale, setSelectedLocale] = useState<DesignSystemLocale | null>(null);
 	const activeLocale = selectedLocale ?? locale;
 	const copy = useMemo(() => getDesignSystemCopy(activeLocale), [activeLocale]);
+	const headerRef = useRef<React.ElementRef<typeof View> | null>(null);
 	const dialogTriggerRefSm = useRef<React.ElementRef<typeof Button> | null>(null);
 	const dialogTriggerRefMd = useRef<React.ElementRef<typeof Button> | null>(null);
 	const dialogTriggerRefLg = useRef<React.ElementRef<typeof Button> | null>(null);
@@ -681,6 +694,12 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 		[activeLocale],
 	);
 	const qualitySignals = useDesignSystemQualitySignals(activeLocale);
+
+	useEffect(() => {
+		void Promise.resolve().then(() => {
+			setAccessibilityFocus(headerRef);
+		});
+	}, [copy.screen.title]);
 
 	const [catalogQuery, setCatalogQuery] = useState('');
 	const [platformFilter, setPlatformFilter] = useState<LibraryPlatformFilter>('common-mobile');
@@ -1022,7 +1041,13 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					borderRadius: visual.silhouette.overlay,
 				}}
 			>
-				<View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: s.md }}>
+				<View
+					style={stackOnPhoneRowStyle(isCompactPhone, {
+						gap: s.md,
+						alignItems: 'flex-start',
+						wrap: false,
+					})}
+				>
 					<View
 						style={{
 							width: s['3xl'],
@@ -1279,7 +1304,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					<PresentationPreviewCard
 						label={copy.runtimeTheming.showcaseSurface}
 						mode={previewMode}
-						presetId="studio"
+						presetId="prism"
 						title={copy.presentationModes.relaxed.title}
 						description={copy.presentationModes.relaxed.description}
 						metricValue={DESIGN_SYSTEM_RELAXED_FIXTURE.metricValue}
@@ -2221,7 +2246,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 									status="online"
 								/>
 							}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 						>
 							<CardBody>
 								<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
@@ -2347,7 +2375,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 						>
 							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 								{copy.componentGallery.dataDisplay.keyValueTitle}
@@ -2450,7 +2481,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 						>
 							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 								{copy.componentGallery.dataDisplay.timelineTitle}
@@ -2487,7 +2521,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 						>
 							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 								{copy.componentGallery.dataDisplay.swipeTitle}
@@ -2545,7 +2582,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 							focusedSeriesId={chartFocusedSeries}
 							onFocusedSeriesChange={setChartFocusedSeries}
 							density="compact"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 							testID="data-chart-line"
 						/>
 						<DataChart
@@ -2557,7 +2597,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 								...series,
 								values: [...series.values],
 							}))}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 							testID="data-chart-bar"
 						/>
 						<DataChart
@@ -2565,7 +2608,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 							description={copy.componentGallery.dataDisplay.chartsDescription}
 							variant="pie"
 							slices={[...copy.componentGallery.dataDisplay.chartSlices]}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 							testID="data-chart-pie"
 						/>
 						<DataChart
@@ -2573,7 +2619,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 							description={copy.componentGallery.dataDisplay.chartsDescription}
 							variant="donut"
 							slices={[...copy.componentGallery.dataDisplay.chartSlices]}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 							testID="data-chart-donut"
 						/>
 						<DataChart
@@ -2585,7 +2634,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 								...series,
 								values: [...series.values],
 							}))}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 							testID="data-chart-scatter"
 						/>
 						<DataChart
@@ -2593,7 +2645,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 							description={copy.componentGallery.dataDisplay.chartsDescription}
 							variant="heatmap"
 							heatmap={[...copy.componentGallery.dataDisplay.chartHeatmap]}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 							testID="data-chart-heatmap"
 						/>
 						<DataChart
@@ -2622,7 +2677,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 						>
 							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 								{copy.componentGallery.dataDisplay.mediaTitle}
@@ -2652,7 +2710,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_BOARD_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_BOARD_CARD_MIN_WIDTH,
+							)}
 						>
 							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 								{copy.componentGallery.dataDisplay.boardTitle}
@@ -2824,7 +2885,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 						>
 							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 								{copy.componentGallery.overlays.popoverTitle}
@@ -2882,7 +2946,10 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(
+								isCompactPhone,
+								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+							)}
 						>
 							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 								{copy.componentGallery.overlays.contextMenuTitle}
@@ -2969,7 +3036,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH)}
 						>
 							<DeclarativeForm
 								title={copy.componentGallery.forms.relaxedTitle}
@@ -3000,7 +3067,7 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 
 						<Card
 							variant="outlined"
-							style={{ flex: 1, minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH)}
 						>
 							<DeclarativeForm
 								title={copy.componentGallery.forms.readOnlyTitle}
@@ -3013,7 +3080,12 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						</Card>
 					</View>
 
-					<Card variant="outlined" style={{ minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}>
+					<Card
+						variant="outlined"
+						style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH, {
+							flex: 0,
+						})}
+					>
 						<FormWizard
 							title={copy.componentGallery.forms.wizardTitle}
 							description={copy.componentGallery.forms.wizardDescription}
@@ -3035,11 +3107,11 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				<View style={{ gap: s.lg }}>
 					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
 						<CrudWorkspace
-							style={{ flex: 1, minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH)}
 							testID="pattern-crud-workspace"
 						/>
 						<SearchFilterWorkspace
-							style={{ flex: 1, minWidth: FORM_PREVIEW_CARD_MIN_WIDTH }}
+							style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH)}
 							testID="pattern-search-filter-workspace"
 						/>
 					</View>
@@ -3139,7 +3211,13 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 						title={copy.stateProof.noMedia.title}
 						description={copy.stateProof.noMedia.description}
 					>
-						<View style={{ flexDirection: 'row', gap: s.md }}>
+						<View
+							style={stackOnPhoneRowStyle(isCompactPhone, {
+								gap: s.md,
+								alignItems: 'flex-start',
+								wrap: false,
+							})}
+						>
 							<View
 								style={{
 									width: s['3xl'],
@@ -3436,7 +3514,8 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				safeAreaEdges={['bottom']}
 				withKeyboard={false}
 				contentContainerStyle={{ direction: copy.direction }}
-				header={<WorkbenchHeader title={copy.screen.title} />}
+				onMagicTap={() => cycleThemePreset()}
+				header={<WorkbenchHeader ref={headerRef} title={copy.screen.title} />}
 			>
 				<FlashList
 					data={filteredItems}

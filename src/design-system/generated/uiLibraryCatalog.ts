@@ -7308,7 +7308,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-compliance-target-common-minimum-wcag-2-2-level-aa',
 		title: 'Minimum: WCAG 2.2 Level AA',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Compliance Target',
@@ -7318,7 +7318,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-compliance-target-common-target-wcag-2-2-level-aaa-for-critical-flows-auth-account-set',
 		title: 'Target: WCAG 2.2 Level AAA for critical flows (auth, account settings, checkout)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Compliance Target',
@@ -7328,7 +7328,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-compliance-target-common-legal-compliance-documented-section-508-en-301-549-aoda-as-ap',
 		title: 'Legal compliance documented (Section 508, EN 301 549, AODA as applicable)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Compliance Target',
@@ -7338,7 +7338,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-compliance-target-common-premium-branded-surfaces-have-no-accessibility-exemptions-for',
 		title: 'Premium/branded surfaces have no accessibility exemptions for contrast, focus, motion, or readability',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Compliance Target',
@@ -7398,7 +7398,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-semantic-structure-mobile-react-native-all-interactive-elements-use-pressable-touchabl',
 		title: 'All interactive elements use `Pressable` / `TouchableOpacity` (never `View` + `onPress` without accessibility)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Semantic Structure',
@@ -7408,7 +7408,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-semantic-structure-mobile-react-native-accessibilityrole-set-correctly-button-link-hea',
 		title: '`accessibilityRole` set correctly (button, link, header, image, search, tab, etc.)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Semantic Structure',
@@ -7428,7 +7428,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-semantic-structure-mobile-react-native-heading-hierarchy-via-accessibilityrole-header-',
 		title: 'Heading hierarchy via `accessibilityRole="header"` on section titles',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Semantic Structure',
@@ -7468,7 +7468,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-aria-accessibility-api-usage-mobile-react-native-accessibilitystate-for-dynamic-states',
 		title: '`accessibilityState` for dynamic states (selected, expanded, disabled, busy, checked)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'ARIA / Accessibility API Usage',
@@ -7478,7 +7478,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-aria-accessibility-api-usage-mobile-react-native-accessibilityvalue-for-sliders-progre',
 		title: '`accessibilityValue` for sliders, progress indicators (min, max, now, text)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'ARIA / Accessibility API Usage',
@@ -7488,7 +7488,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-aria-accessibility-api-usage-mobile-react-native-accessibilityhint-for-non-obvious-act',
 		title: '`accessibilityHint` for non-obvious actions ("Double tap to open settings")',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'ARIA / Accessibility API Usage',
@@ -7498,7 +7498,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-aria-accessibility-api-usage-mobile-react-native-accessibilityliveregion-polite-assert',
 		title: '`accessibilityLiveRegion="polite"` / `"assertive"` (Android) for dynamic announcements',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'ARIA / Accessibility API Usage',
@@ -7508,7 +7508,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-aria-accessibility-api-usage-mobile-react-native-accessibilityinfo-announceforaccessib',
 		title: '`AccessibilityInfo.announceForAccessibility()` for programmatic announcements (iOS + Android)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'ARIA / Accessibility API Usage',
@@ -7628,7 +7628,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-keyboard-navigation-map-mobile-react-native-accessibilityactions-onaccessibilityaction',
 		title: '`accessibilityActions` + `onAccessibilityAction` for custom screen reader gestures',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Keyboard Navigation Map',
@@ -7658,7 +7658,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-focus-management-common-focus-restoration-on-overlay-close-returns-to-trigger-element',
 		title: 'Focus restoration on overlay close (returns to trigger element)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Focus Management',
@@ -7668,7 +7668,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-focus-management-common-logical-focus-order-no-manual-tabindex-0-or-equivalent',
 		title: 'Logical focus order (no manual tabindex > 0 or equivalent)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Focus Management',
@@ -7718,7 +7718,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-focus-management-mobile-react-native-voiceover-talkback-focus-set-to-screen-title-on-n',
 		title: 'VoiceOver/TalkBack focus set to screen title on navigation',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Focus Management',
@@ -7728,7 +7728,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-focus-management-mobile-react-native-accessibilityinfo-setaccessibilityfocus-ref-for-p',
 		title: '`AccessibilityInfo.setAccessibilityFocus(ref)` for programmatic focus',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Focus Management',
@@ -7738,7 +7738,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-focus-management-mobile-react-native-focus-order-follows-visual-layout-use-accessibili',
 		title: 'Focus order follows visual layout (use `accessibilityViewIsModal` for modals)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Focus Management',
@@ -7758,7 +7758,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-color-visual-accessibility-common-text-contrast-4-5-1-normal-text-3-1-large-text-18pt-',
 		title: 'Text contrast: 4.5:1 (normal text), 3:1 (large text ≥ 18pt / 14pt bold)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Color & Visual Accessibility',
@@ -7788,7 +7788,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-color-visual-accessibility-common-soft-pastel-themes-include-high-contrast-ink-anchors',
 		title: 'Soft/pastel themes include high-contrast ink anchors for primary actions and critical states',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Color & Visual Accessibility',
@@ -7848,7 +7848,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-color-visual-accessibility-mobile-react-native-system-font-size-scaling-tested-at-maxi',
 		title: 'System font size scaling tested at maximum scale',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Color & Visual Accessibility',
@@ -7908,7 +7908,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-reduced-motion-common-never-rely-on-animation-alone-to-communicate-state-change',
 		title: 'Never rely on animation alone to communicate state change',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Reduced Motion',
@@ -7998,7 +7998,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-forms-accessibility-common-every-input-has-an-associated-label-programmatic-not-placeh',
 		title: 'Every input has an associated label (programmatic, not placeholder-only)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Forms Accessibility',
@@ -8008,7 +8008,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-forms-accessibility-common-required-fields-indicated-visually-programmatically',
 		title: 'Required fields indicated visually + programmatically',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Forms Accessibility',
@@ -8018,7 +8018,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-forms-accessibility-common-error-messages-associated-with-field-and-announced-to-scree',
 		title: 'Error messages associated with field and announced to screen readers',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Forms Accessibility',
@@ -8078,7 +8078,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-forms-accessibility-mobile-react-native-error-announced-via-accessibilityinfo-announce',
 		title: 'Error announced via `AccessibilityInfo.announceForAccessibility()`',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Forms Accessibility',
@@ -8088,7 +8088,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-forms-accessibility-mobile-react-native-required-field-indicated-via-accessibilityhint',
 		title: 'Required field indicated via `accessibilityHint` ("required")',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Forms Accessibility',
@@ -8128,7 +8128,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-zoom-magnification-mobile-react-native-system-font-scale-tested-at-maximum-ios-300-and',
 		title: 'System font scale tested at maximum (iOS: ~300%, Android: ~200%)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Zoom & Magnification',
@@ -8138,7 +8138,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-zoom-magnification-mobile-react-native-maxfontsizemultiplier-set-on-layout-critical-te',
 		title: '`maxFontSizeMultiplier` set on layout-critical text',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Zoom & Magnification',
@@ -8148,7 +8148,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-zoom-magnification-mobile-react-native-layouts-tested-at-largest-accessibility-text-si',
 		title: 'Layouts tested at largest accessibility text size without content clipping',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Zoom & Magnification',
@@ -8158,7 +8158,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-zoom-magnification-mobile-react-native-hero-display-typography-and-featured-cards-refl',
 		title: 'Hero/display typography and featured cards reflow gracefully without losing hierarchy at max font scale',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Zoom & Magnification',
@@ -11789,8 +11789,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 
 export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 	total: 1175,
-	completed: 615,
-	open: 560,
+	completed: 646,
+	open: 529,
 	common: 638,
 	web: 280,
 	mobile: 257,
@@ -11844,11 +11844,11 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		{
 			name: '5. Accessibility (a11y) Architecture',
 			count: 86,
-			completedCount: 5,
-			openCount: 81,
+			completedCount: 36,
+			openCount: 50,
 			commonMobileCount: 48,
-			commonMobileCompletedCount: 5,
-			commonMobileOpenCount: 43,
+			commonMobileCompletedCount: 36,
+			commonMobileOpenCount: 12,
 		},
 		{
 			name: '6. Internationalization (i18n) & Localization (L10n)',

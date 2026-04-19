@@ -3,10 +3,23 @@ import { act } from '@testing-library/react-native';
 import { renderWithTheme } from '@/__tests__/utils/renderWithTheme';
 import DesignLibraryScreen from '../DesignLibraryScreen';
 import { DESIGN_LIBRARY_OVERVIEW } from '../catalog';
+import { getDesignSystemCopy } from '../copy';
+import { setAccessibilityFocus } from '@/src/utils/accessibility';
+
+jest.mock('@/src/utils/accessibility', () => {
+	const actual = jest.requireActual('@/src/utils/accessibility');
+	return {
+		...actual,
+		setAccessibilityFocus: jest.fn(),
+	};
+});
+
+const mockSetAccessibilityFocus = jest.mocked(setAccessibilityFocus);
 
 describe('DesignLibraryScreen', () => {
 	beforeEach(() => {
 		jest.useFakeTimers();
+		mockSetAccessibilityFocus.mockClear();
 	});
 
 	afterEach(() => {
@@ -32,5 +45,22 @@ describe('DesignLibraryScreen', () => {
 		expect(getByText(`All (${DESIGN_LIBRARY_OVERVIEW.total})`)).toBeTruthy();
 		expect(queryByText('Example stories')).toBeNull();
 		expect(queryByText('Prop table')).toBeNull();
+	});
+
+	it('focuses the screen header for assistive tech and exposes a magic-tap shortcut', async () => {
+		const copy = getDesignSystemCopy('en');
+		const { getByLabelText } = renderWithTheme(<DesignLibraryScreen />);
+
+		await act(async () => {
+			await Promise.resolve();
+		});
+		act(() => {
+			jest.runOnlyPendingTimers();
+		});
+
+		const screenShell = getByLabelText(copy.screen.accessibilityLabel);
+
+		expect(mockSetAccessibilityFocus).toHaveBeenCalledTimes(1);
+		expect(typeof screenShell.props.onMagicTap).toBe('function');
 	});
 });

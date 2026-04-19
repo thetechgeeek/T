@@ -20,6 +20,16 @@ const FORWARD_REF_PATTERN = /\bforwardRef\b/;
 const FOCUS_VISIBILITY_PATTERN = /\bonFocus\b|\bsetIsFocused\(true\)|buildFocusRingStyle/;
 const ANNOUNCEMENT_PATTERN = /\bannounceForScreenReader\b|accessibilityLiveRegion/;
 const ACCESSIBILITY_ACTION_PATTERN = /\baccessibilityActions=|onAccessibilityAction=/;
+const ACCESSIBILITY_ROLE_PATTERN = /\baccessibilityRole=/;
+const ACCESSIBILITY_STATE_PATTERN = /\baccessibilityState=/;
+const ACCESSIBILITY_VALUE_PATTERN = /\baccessibilityValue=/;
+const ACCESSIBILITY_HINT_PATTERN = /\baccessibilityHint=/;
+const ACCESSIBILITY_MODAL_PATTERN = /\baccessibilityViewIsModal\b|importantForAccessibility="yes"/;
+const ACCESSIBILITY_LIVE_REGION_PATTERN = /\baccessibilityLiveRegion=/;
+const NON_SEMANTIC_PRESS_HANDLER_PATTERN =
+	/<(?:View|Text|Animated\.View|Animated\.Text)[^>]*\bonPress=/;
+const MANUAL_FOCUS_ORDER_PATTERN =
+	/\b(?:tabIndex|nextFocusDown|nextFocusForward|nextFocusLeft|nextFocusRight|nextFocusUp)\b/;
 const RAW_NATIVE_TEXT_IMPORT_PATTERN = /import\s*\{[^}]*\bText\b[^}]*\}\s*from 'react-native'/;
 
 const INTERACTIVE_REF_COMPONENTS = [
@@ -141,6 +151,62 @@ const ACCESSIBILITY_ACTION_COMPONENTS = [
 	'SwipeableRow',
 ] as const;
 
+const ACCESSIBILITY_ROLE_COMPONENTS = [
+	'AvatarGroup',
+	'BottomSheetPicker',
+	'Button',
+	'Checkbox',
+	'Chip',
+	'CollapsibleSection',
+	'ConfirmationModal',
+	'DatePickerField',
+	'FilterBar',
+	'IconButton',
+	'ListItem',
+	'Popover',
+	'ProgressIndicator',
+	'Radio',
+	'RangeSlider',
+	'SearchBar',
+	'SwipeableRow',
+	'ToggleSwitch',
+] as const;
+
+const ACCESSIBILITY_STATE_COMPONENTS = [
+	'Button',
+	'Checkbox',
+	'Chip',
+	'CollapsibleSection',
+	'ConfirmationModal',
+	'DatePickerField',
+	'Radio',
+	'SearchBar',
+	'ToggleSwitch',
+] as const;
+
+const ACCESSIBILITY_VALUE_COMPONENTS = ['ProgressIndicator', 'RangeSlider'] as const;
+
+const ACCESSIBILITY_HINT_COMPONENTS = [
+	'BottomSheetPicker',
+	'Button',
+	'Checkbox',
+	'ListItem',
+	'Radio',
+	'SearchBar',
+	'TextAreaField',
+	'TextInput',
+	'ToggleSwitch',
+] as const;
+
+const ACCESSIBILITY_MODAL_COMPONENTS = [
+	'BottomSheetPicker',
+	'ConfirmationModal',
+	'DatePickerField',
+	'Popover',
+] as const;
+
+const ACCESSIBILITY_LIVE_REGION_COMPONENTS = ['Toast'] as const;
+
 function getComponentName(filePath: string) {
 	return path.basename(filePath, path.extname(filePath));
 }
@@ -203,9 +269,51 @@ describe('supported component contract', () => {
 		}
 	});
 
+	it('avoids non-semantic View/Text press handlers in supported components', () => {
+		for (const entry of registry) {
+			expect(NON_SEMANTIC_PRESS_HANDLER_PATTERN.test(readSource(entry.filePath))).toBe(false);
+		}
+	});
+
+	it('keeps native focus order logical by avoiding manual focus-order overrides', () => {
+		for (const entry of registry) {
+			expect(MANUAL_FOCUS_ORDER_PATTERN.test(readSource(entry.filePath))).toBe(false);
+		}
+	});
+
+	it('uses explicit accessibility roles on interactive controls that depend on semantic intent', () => {
+		for (const componentName of ACCESSIBILITY_ROLE_COMPONENTS) {
+			expect(ACCESSIBILITY_ROLE_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+	});
+
+	it('exposes accessibility state, value, and hint metadata on dynamic controls', () => {
+		for (const componentName of ACCESSIBILITY_STATE_COMPONENTS) {
+			expect(ACCESSIBILITY_STATE_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+
+		for (const componentName of ACCESSIBILITY_VALUE_COMPONENTS) {
+			expect(ACCESSIBILITY_VALUE_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+
+		for (const componentName of ACCESSIBILITY_HINT_COMPONENTS) {
+			expect(ACCESSIBILITY_HINT_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+	});
+
 	it('exposes accessibility actions for components that would otherwise rely on custom gestures or alternate shortcuts', () => {
 		for (const componentName of ACCESSIBILITY_ACTION_COMPONENTS) {
 			expect(ACCESSIBILITY_ACTION_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+	});
+
+	it('marks overlay content as modal and keeps live-region announcements on supported feedback surfaces', () => {
+		for (const componentName of ACCESSIBILITY_MODAL_COMPONENTS) {
+			expect(ACCESSIBILITY_MODAL_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+
+		for (const componentName of ACCESSIBILITY_LIVE_REGION_COMPONENTS) {
+			expect(ACCESSIBILITY_LIVE_REGION_PATTERN.test(getSource(componentName))).toBe(true);
 		}
 	});
 

@@ -2,11 +2,26 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { DatePickerField } from '../DatePickerField';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { setAccessibilityFocus } from '@/src/utils/accessibility';
+
+jest.mock('@/src/utils/accessibility', () => {
+	const actual = jest.requireActual('@/src/utils/accessibility');
+	return {
+		...actual,
+		setAccessibilityFocus: jest.fn(),
+	};
+});
+
+const mockSetAccessibilityFocus = jest.mocked(setAccessibilityFocus);
 
 const renderWithTheme = (component: React.ReactElement) =>
 	render(<ThemeProvider>{component}</ThemeProvider>);
 
 describe('DatePickerField', () => {
+	beforeEach(() => {
+		mockSetAccessibilityFocus.mockClear();
+	});
+
 	it('renders the label', () => {
 		const { getByText } = renderWithTheme(
 			<DatePickerField label="Invoice Date" value="2025-04-05" onChange={jest.fn()} />,
@@ -48,7 +63,7 @@ describe('DatePickerField', () => {
 	});
 
 	it('renders a locale-aware calendar sheet with disabled dates', () => {
-		const { getByLabelText, getByText, getByTestId } = renderWithTheme(
+		const { getByLabelText, getByText, getByTestId, UNSAFE_getAllByProps } = renderWithTheme(
 			<DatePickerField
 				label="Date"
 				value="2025-04-05"
@@ -61,6 +76,10 @@ describe('DatePickerField', () => {
 		fireEvent.press(getByLabelText(/Date:/));
 		expect(getByText('Sun')).toBeTruthy();
 		expect(getByTestId('calendar-day-2025-04-06')).toHaveProp('disabled', true);
+		expect(
+			UNSAFE_getAllByProps({ accessibilityViewIsModal: true })[0]?.props
+				.importantForAccessibility,
+		).toBe('yes');
 	});
 
 	it('uses the native picker when requested', () => {
@@ -81,5 +100,25 @@ describe('DatePickerField', () => {
 			new Date('2025-04-08T00:00:00.000Z'),
 		);
 		expect(onChange).toHaveBeenCalledWith('2025-04-08');
+	});
+
+	it('restores focus to the trigger after the sheet closes', async () => {
+		const { getByLabelText } = renderWithTheme(
+			<DatePickerField
+				label="Date"
+				value="2025-04-05"
+				onChange={jest.fn()}
+				presentation="sheet"
+			/>,
+		);
+
+		fireEvent.press(getByLabelText(/Date:/));
+		await Promise.resolve();
+		expect(mockSetAccessibilityFocus).toHaveBeenCalledTimes(1);
+
+		mockSetAccessibilityFocus.mockClear();
+		fireEvent.press(getByLabelText('Close date picker'));
+		await Promise.resolve();
+		expect(mockSetAccessibilityFocus).toHaveBeenCalledTimes(1);
 	});
 });

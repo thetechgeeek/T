@@ -259,4 +259,18 @@ describe('Screen', () => {
 
 		dismissSpy.mockRestore();
 	});
+
+	it('forwards magic-tap handlers to the screen shell', () => {
+		const onMagicTap = jest.fn();
+		const { toJSON } = renderWithTheme(
+			<Screen onMagicTap={onMagicTap}>
+				<Text>Magic tap surface</Text>
+			</Screen>,
+		);
+
+		const json = asSingleNode(toJSON());
+		json.props.onMagicTap?.();
+
+		expect(onMagicTap).toHaveBeenCalledTimes(1);
+	});
 });

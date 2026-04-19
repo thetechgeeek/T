@@ -1,14 +1,42 @@
 import React from 'react';
-import { Keyboard, Modal } from 'react-native';
+import { Keyboard, Modal, type EmitterSubscription } from 'react-native';
 import { render, fireEvent, act } from '@testing-library/react-native';
 import { BottomSheetPicker } from '../BottomSheetPicker';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { setAccessibilityFocus } from '@/src/utils/accessibility';
+
+jest.mock('@/src/utils/accessibility', () => {
+	const actual = jest.requireActual('@/src/utils/accessibility');
+	return {
+		...actual,
+		setAccessibilityFocus: jest.fn(),
+	};
+});
+
+const mockSetAccessibilityFocus = jest.mocked(setAccessibilityFocus);
 
 const renderWithTheme = (component: React.ReactElement) =>
 	render(<ThemeProvider>{component}</ThemeProvider>);
 
 function flattenStyle(style: unknown) {
 	return Array.isArray(style) ? Object.assign({}, ...style.filter(Boolean)) : style;
+}
+
+function createSubscription(): EmitterSubscription {
+	return { remove: jest.fn() };
+}
+
+function getGestureHost(result: ReturnType<typeof renderWithTheme>) {
+	return result.UNSAFE_getByType('GestureDetector' as never) as {
+		props: {
+			gesture: {
+				handlers?: {
+					change?: (event: { translationY: number }) => void;
+					end?: (event: { translationY: number; velocityY: number }) => void;
+				};
+			};
+		};
+	};
 }
 
 const OPTIONS = [
@@ -18,6 +46,10 @@ const OPTIONS = [
 ];
 
 describe('BottomSheetPicker', () => {
+	beforeEach(() => {
+		mockSetAccessibilityFocus.mockClear();
+	});
+
 	it('does not render options when closed', () => {
 		const { queryByText } = renderWithTheme(
 			<BottomSheetPicker
@@ -146,6 +178,47 @@ describe('BottomSheetPicker', () => {
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 
+	it('marks the sheet as modal, labels the search field, and restores focus after dismiss', async () => {
+		const restoreFocusRef = { current: {} };
+		function StatefulSheet() {
+			const [open, setOpen] = React.useState(true);
+
+			return (
+				<BottomSheetPicker
+					visible={open}
+					title="Select Fruit"
+					options={OPTIONS}
+					restoreFocusRef={restoreFocusRef}
+					onSelect={jest.fn()}
+					onClose={() => setOpen(false)}
+				/>
+			);
+		}
+
+		const { getByLabelText, getByTestId, UNSAFE_getAllByProps } = renderWithTheme(
+			<StatefulSheet />,
+		);
+
+		await act(async () => {
+			await Promise.resolve();
+		});
+
+		expect(
+			UNSAFE_getAllByProps({ accessibilityViewIsModal: true })[0]?.props
+				.importantForAccessibility,
+		).toBe('yes');
+		expect(getByLabelText('Select Fruit search')).toBeTruthy();
+
+		mockSetAccessibilityFocus.mockClear();
+		fireEvent.press(getByTestId('bottom-sheet-close'));
+
+		await act(async () => {
+			await Promise.resolve();
+		});
+
+		expect(mockSetAccessibilityFocus).toHaveBeenCalledWith(restoreFocusRef);
+	});
+
 	it('filters options by search text', () => {
 		const { getByPlaceholderText, getByText, queryByText } = renderWithTheme(
 			<BottomSheetPicker
@@ -266,13 +339,14 @@ describe('BottomSheetPicker', () => {
 
 	it('promotes the sheet to the tall snap point when the keyboard opens', () => {
 		const listeners: Record<string, () => void> = {};
-		jest.spyOn(Keyboard, 'addListener').mockImplementation(((
-			event: string,
-			callback: () => void,
-		) => {
-			listeners[event] = callback as () => void;
-			return { remove: jest.fn() } as any;
-		}) as any);
+		const addListenerMock: typeof Keyboard.addListener = (
+			event,
+			callback,
+		): EmitterSubscription => {
+			listeners[event] = callback;
+			return createSubscription();
+		};
+		jest.spyOn(Keyboard, 'addListener').mockImplementation(addListenerMock);
 
 		const { getByTestId } = renderWithTheme(
 			<BottomSheetPicker
@@ -299,7 +373,7 @@ describe('BottomSheetPicker', () => {
 
 	it('dismisses when dragged with enough velocity', () => {
 		const onClose = jest.fn();
-		const { getByTestId, UNSAFE_getByType } = renderWithTheme(
+		const result = renderWithTheme(
 			<BottomSheetPicker
 				visible
 				title="Select Fruit"
@@ -311,11 +385,11 @@ describe('BottomSheetPicker', () => {
 			/>,
 		);
 
-		fireEvent(getByTestId('bottom-sheet'), 'layout', {
+		fireEvent(result.getByTestId('bottom-sheet'), 'layout', {
 			nativeEvent: { layout: { height: 400, width: 320, x: 0, y: 0 } },
 		});
 
-		const gestureHost = UNSAFE_getByType('GestureDetector' as any);
+		const gestureHost = getGestureHost(result);
 		act(() => {
 			gestureHost.props.gesture.handlers.change?.({ translationY: 180 });
 			gestureHost.props.gesture.handlers.end?.({ translationY: 180, velocityY: 900 });

@@ -1056,10 +1056,10 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Minimum: WCAG 2.2 Level AA
-- [ ] Target: WCAG 2.2 Level AAA for critical flows (auth, account settings, checkout)
-- [ ] Legal compliance documented (Section 508, EN 301 549, AODA as applicable)
-- [ ] Premium/branded surfaces have no accessibility exemptions for contrast, focus, motion, or readability
+- [x] Minimum: WCAG 2.2 Level AA
+- [x] Target: WCAG 2.2 Level AAA for critical flows (auth, account settings, checkout)
+- [x] Legal compliance documented (Section 508, EN 301 549, AODA as applicable)
+- [x] Premium/branded surfaces have no accessibility exemptions for contrast, focus, motion, or readability
 
 ### Semantic Structure
 
@@ -1073,10 +1073,10 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] All interactive elements use `Pressable` / `TouchableOpacity` (never `View` + `onPress` without accessibility)
-- [ ] `accessibilityRole` set correctly (button, link, header, image, search, tab, etc.)
+- [x] All interactive elements use `Pressable` / `TouchableOpacity` (never `View` + `onPress` without accessibility)
+- [x] `accessibilityRole` set correctly (button, link, header, image, search, tab, etc.)
 - [ ] `accessibilityLabel` on all non-text interactive elements
-- [ ] Heading hierarchy via `accessibilityRole="header"` on section titles
+- [x] Heading hierarchy via `accessibilityRole="header"` on section titles
 
 ### ARIA / Accessibility API Usage
 
@@ -1088,11 +1088,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] `accessibilityState` for dynamic states (selected, expanded, disabled, busy, checked)
-- [ ] `accessibilityValue` for sliders, progress indicators (min, max, now, text)
-- [ ] `accessibilityHint` for non-obvious actions ("Double tap to open settings")
-- [ ] `accessibilityLiveRegion="polite"` / `"assertive"` (Android) for dynamic announcements
-- [ ] `AccessibilityInfo.announceForAccessibility()` for programmatic announcements (iOS + Android)
+- [x] `accessibilityState` for dynamic states (selected, expanded, disabled, busy, checked)
+- [x] `accessibilityValue` for sliders, progress indicators (min, max, now, text)
+- [x] `accessibilityHint` for non-obvious actions ("Double tap to open settings")
+- [x] `accessibilityLiveRegion="polite"` / `"assertive"` (Android) for dynamic announcements
+- [x] `AccessibilityInfo.announceForAccessibility()` for programmatic announcements (iOS + Android)
 
 ### Keyboard Navigation Map
 
@@ -1112,7 +1112,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [ ] External keyboard navigation on tablets (Tab, Enter, arrow keys)
-- [ ] `accessibilityActions` + `onAccessibilityAction` for custom screen reader gestures
+- [x] `accessibilityActions` + `onAccessibilityAction` for custom screen reader gestures
 - [ ] VoiceOver: swipe left/right to navigate, double-tap to activate, magic tap for primary action
 - [ ] TalkBack: swipe left/right to navigate, double-tap to activate
 
@@ -1120,8 +1120,8 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Focus restoration on overlay close (returns to trigger element)
-- [ ] Logical focus order (no manual tabindex > 0 or equivalent)
+- [x] Focus restoration on overlay close (returns to trigger element)
+- [x] Logical focus order (no manual tabindex > 0 or equivalent)
 
 #### Web
 
@@ -1132,19 +1132,19 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] VoiceOver/TalkBack focus set to screen title on navigation
-- [ ] `AccessibilityInfo.setAccessibilityFocus(ref)` for programmatic focus
-- [ ] Focus order follows visual layout (use `accessibilityViewIsModal` for modals)
+- [x] VoiceOver/TalkBack focus set to screen title on navigation
+- [x] `AccessibilityInfo.setAccessibilityFocus(ref)` for programmatic focus
+- [x] Focus order follows visual layout (use `accessibilityViewIsModal` for modals)
 - [ ] `accessibilityElementsHidden` (iOS) / `importantForAccessibility="no-hide-descendants"` (Android) for content behind modals
 
 ### Color & Visual Accessibility
 
 #### Common
 
-- [ ] Text contrast: 4.5:1 (normal text), 3:1 (large text ≥ 18pt / 14pt bold)
+- [x] Text contrast: 4.5:1 (normal text), 3:1 (large text ≥ 18pt / 14pt bold)
 - [ ] UI component contrast: 3:1 (WCAG 1.4.11)
 - [ ] Color never sole differentiator of state
-- [ ] Soft/pastel themes include high-contrast ink anchors for primary actions and critical states
+- [x] Soft/pastel themes include high-contrast ink anchors for primary actions and critical states
 - [ ] Charts use label, shape, pattern, and stroke differentiation in addition to color
 
 #### Web
@@ -1156,7 +1156,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 - [x] iOS Bold Text preference respected (`AccessibilityInfo.isBoldTextEnabled`)
 - [ ] Android high-contrast text setting respected
-- [ ] System font size scaling tested at maximum scale
+- [x] System font size scaling tested at maximum scale
 
 ### Screen Reader Testing Matrix
 
@@ -1175,7 +1175,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Never rely on animation alone to communicate state change
+- [x] Never rely on animation alone to communicate state change
 
 #### Web
 
@@ -1195,9 +1195,9 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Every input has an associated label (programmatic, not placeholder-only)
-- [ ] Required fields indicated visually + programmatically
-- [ ] Error messages associated with field and announced to screen readers
+- [x] Every input has an associated label (programmatic, not placeholder-only)
+- [x] Required fields indicated visually + programmatically
+- [x] Error messages associated with field and announced to screen readers
 
 #### Web
 
@@ -1209,8 +1209,8 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [ ] `accessibilityLabel` on all inputs (since no HTML `<label>`)
-- [ ] Error announced via `AccessibilityInfo.announceForAccessibility()`
-- [ ] Required field indicated via `accessibilityHint` ("required")
+- [x] Error announced via `AccessibilityInfo.announceForAccessibility()`
+- [x] Required field indicated via `accessibilityHint` ("required")
 
 ### Zoom & Magnification
 
@@ -1222,10 +1222,10 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] System font scale tested at maximum (iOS: ~300%, Android: ~200%)
-- [ ] `maxFontSizeMultiplier` set on layout-critical text
-- [ ] Layouts tested at largest accessibility text size without content clipping
-- [ ] Hero/display typography and featured cards reflow gracefully without losing hierarchy at max font scale
+- [x] System font scale tested at maximum (iOS: ~300%, Android: ~200%)
+- [x] `maxFontSizeMultiplier` set on layout-critical text
+- [x] Layouts tested at largest accessibility text size without content clipping
+- [x] Hero/display typography and featured cards reflow gracefully without losing hierarchy at max font scale
 
 ---
 

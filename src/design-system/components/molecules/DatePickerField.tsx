@@ -1,4 +1,11 @@
-import React, { forwardRef, useMemo, useState } from 'react';
+import React, {
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import {
 	Modal,
 	Platform,
@@ -15,6 +22,7 @@ import {
 	buildFocusRingStyle,
 	isAccessibilityAction,
 	mapAccessibilityActionNames,
+	setAccessibilityFocus,
 } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
@@ -87,6 +95,9 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 		const [isFocused, setIsFocused] = useState(false);
 		const [sheetVisible, setSheetVisible] = useState(false);
 		const [nativeVisible, setNativeVisible] = useState(false);
+		const closeButtonRef = useRef<React.ElementRef<typeof Pressable> | null>(null);
+		const triggerRef = useRef<React.ElementRef<typeof Pressable> | null>(null);
+		const wasSheetVisibleRef = useRef(false);
 		const [currentValue, setCurrentValue] = useControllableState({
 			value,
 			defaultValue,
@@ -111,6 +122,8 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 		const disabledDateSet = useMemo(() => new Set(disabledDates), [disabledDates]);
 		const usesNativePicker =
 			presentation === 'native' || (presentation === 'auto' && Platform.OS !== 'web');
+
+		useImperativeHandle(ref, () => triggerRef.current);
 
 		const isDisabledValue = (iso: string) =>
 			!isIsoDateWithinRange(iso, minDate, maxDate) ||
@@ -144,6 +157,9 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 		const handleNativeChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
 			if (Platform.OS === 'android') {
 				setNativeVisible(false);
+				void Promise.resolve().then(() => {
+					setAccessibilityFocus(triggerRef);
+				});
 			}
 
 			if (event.type === 'dismissed' || !selectedDate) {
@@ -153,6 +169,22 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 			const nextValue = selectedDate.toISOString().slice(0, 10);
 			selectValue(nextValue, 'selection');
 		};
+
+		useEffect(() => {
+			if (sheetVisible) {
+				void Promise.resolve().then(() => {
+					setAccessibilityFocus(closeButtonRef);
+				});
+			}
+
+			if (wasSheetVisibleRef.current && !sheetVisible) {
+				void Promise.resolve().then(() => {
+					setAccessibilityFocus(triggerRef);
+				});
+			}
+
+			wasSheetVisibleRef.current = sheetVisible;
+		}, [sheetVisible]);
 
 		return (
 			<View testID={testID} style={style}>
@@ -212,7 +244,7 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 				) : null}
 
 				<Pressable
-					ref={ref}
+					ref={triggerRef}
 					onPress={openPicker}
 					onFocus={() => setIsFocused(true)}
 					onBlur={() => setIsFocused(false)}
@@ -301,6 +333,8 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 								borderTopRightRadius: theme.borderRadius.xl,
 							},
 						]}
+						accessibilityViewIsModal
+						importantForAccessibility="yes"
 					>
 						<View style={styles.sheetHeader}>
 							<Pressable
@@ -397,6 +431,7 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 						</View>
 
 						<Pressable
+							ref={closeButtonRef}
 							onPress={closeSheet}
 							accessibilityRole="button"
 							accessibilityLabel="Close date picker"

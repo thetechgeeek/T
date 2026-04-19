@@ -82,4 +82,21 @@ describe('TextAreaField', () => {
 		});
 		expect(getByText('Provide context')).toBeTruthy();
 	});
+
+	it('surfaces required and error semantics through accessibility metadata', () => {
+		const { getByTestId } = renderWithTheme(
+			<TextAreaField
+				testID="textarea"
+				label="Notes"
+				value=""
+				onChange={jest.fn()}
+				required
+				error="Notes are required before submit"
+			/>,
+		);
+
+		const textarea = getByTestId('textarea');
+		expect(textarea.props.accessibilityLabel).toBe('Notes');
+		expect(textarea.props.accessibilityHint).toBe('Required. Notes are required before submit');
+	});
 });

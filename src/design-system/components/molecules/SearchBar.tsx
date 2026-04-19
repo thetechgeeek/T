@@ -116,6 +116,7 @@ export const SearchBar = forwardRef<NativeTextInput, SearchBarProps>(
 				<TextInput
 					ref={ref}
 					accessible={true}
+					accessibilityRole="search"
 					accessibilityLabel={resolvedAccessibilityLabel}
 					accessibilityHint={accessibilityHint}
 					accessibilityState={{ busy: loading }}

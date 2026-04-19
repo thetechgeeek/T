@@ -40,7 +40,7 @@ export const RangeSlider = forwardRef<View, RangeSliderProps>(
 		{
 			label,
 			value,
-			defaultValue = DEFAULT_SINGLE_VALUE,
+			defaultValue,
 			range = false,
 			min = 0,
 			max = 100,
@@ -188,6 +188,12 @@ export const RangeSlider = forwardRef<View, RangeSliderProps>(
 									testID={`${testID ?? 'range-slider'}-handle-${handle.index}`}
 									accessibilityRole="adjustable"
 									accessibilityLabel={`${label} handle ${handle.index + 1}`}
+									accessibilityValue={{
+										min,
+										max,
+										now: handle.valueLabel,
+										text: String(handle.valueLabel),
+									}}
 									style={{
 										width: theme.spacing.lg,
 										height: theme.spacing.lg,

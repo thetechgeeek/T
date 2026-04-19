@@ -23,10 +23,24 @@ export function ProgressIndicator({
 	const { theme } = useTheme();
 	const c = theme.colors;
 	const clampedValue = Math.max(0, Math.min(100, value));
+	const accessibilityLabel = label ?? 'Progress';
+	const accessibilityValue = {
+		min: 0,
+		max: 100,
+		now: clampedValue,
+		text: `${clampedValue}%`,
+	};
 
 	if (indeterminate) {
 		return (
-			<View testID={testID} style={style}>
+			<View
+				testID={testID}
+				style={style}
+				accessibilityRole="progressbar"
+				accessibilityLabel={accessibilityLabel}
+				accessibilityState={{ busy: true }}
+				accessibilityValue={{ text: 'In progress' }}
+			>
 				{label ? (
 					<ThemedText
 						variant="caption"
@@ -45,6 +59,9 @@ export function ProgressIndicator({
 			<View
 				testID={testID}
 				style={[{ alignItems: 'center', justifyContent: 'center' }, style]}
+				accessibilityRole="progressbar"
+				accessibilityLabel={accessibilityLabel}
+				accessibilityValue={accessibilityValue}
 			>
 				<View
 					style={{
@@ -74,7 +91,13 @@ export function ProgressIndicator({
 	}
 
 	return (
-		<View testID={testID} style={style}>
+		<View
+			testID={testID}
+			style={style}
+			accessibilityRole="progressbar"
+			accessibilityLabel={accessibilityLabel}
+			accessibilityValue={accessibilityValue}
+		>
 			{label ? (
 				<ThemedText
 					variant="caption"

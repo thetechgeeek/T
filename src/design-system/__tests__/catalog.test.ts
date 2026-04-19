@@ -13,7 +13,7 @@ describe('design system catalog', () => {
 		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(895);
 		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(638);
 		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(257);
-		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBe(615);
+		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBe(646);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBeGreaterThan(0);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed + DESIGN_LIBRARY_OVERVIEW.open).toBe(
 			DESIGN_LIBRARY_OVERVIEW.total,

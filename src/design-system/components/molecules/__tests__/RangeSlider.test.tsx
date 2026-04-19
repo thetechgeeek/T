@@ -11,14 +11,29 @@ describe('RangeSlider', () => {
 		const { getByTestId } = renderWithTheme(
 			<RangeSlider label="Threshold" onChange={jest.fn()} testID="slider" />,
 		);
-		expect(getByTestId('slider-handle-0')).toBeTruthy();
+		expect(getByTestId('slider-handle-0')).toHaveProp('accessibilityValue', {
+			min: 0,
+			max: 100,
+			now: 25,
+			text: '25',
+		});
 	});
 
 	it('renders dual handles in range mode', () => {
 		const { getByTestId } = renderWithTheme(
 			<RangeSlider label="Threshold" range onChange={jest.fn()} testID="slider" />,
 		);
-		expect(getByTestId('slider-handle-0')).toBeTruthy();
-		expect(getByTestId('slider-handle-1')).toBeTruthy();
+		expect(getByTestId('slider-handle-0')).toHaveProp('accessibilityValue', {
+			min: 0,
+			max: 100,
+			now: 25,
+			text: '25',
+		});
+		expect(getByTestId('slider-handle-1')).toHaveProp('accessibilityValue', {
+			min: 0,
+			max: 100,
+			now: 75,
+			text: '75',
+		});
 	});
 });

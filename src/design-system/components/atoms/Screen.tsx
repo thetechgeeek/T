@@ -29,6 +29,7 @@ export interface ScreenProps {
 	accessibilityLabel?: string;
 	testID?: string;
 	dismissKeyboardOnBackgroundTap?: boolean;
+	onMagicTap?: () => void;
 }
 
 export const Screen: React.FC<ScreenProps> = ({
@@ -46,6 +47,7 @@ export const Screen: React.FC<ScreenProps> = ({
 	accessibilityLabel,
 	testID,
 	dismissKeyboardOnBackgroundTap = false,
+	onMagicTap,
 }) => {
 	const { theme } = useTheme();
 	const insets = useSafeAreaInsets();
@@ -107,6 +109,7 @@ export const Screen: React.FC<ScreenProps> = ({
 				style={containerStyle}
 				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
 				accessibilityLabel={accessibilityLabel}
+				onMagicTap={onMagicTap}
 			>
 				{content}
 			</KeyboardAvoidingView>
@@ -114,7 +117,12 @@ export const Screen: React.FC<ScreenProps> = ({
 	}
 
 	return (
-		<View testID={testID} style={containerStyle} accessibilityLabel={accessibilityLabel}>
+		<View
+			testID={testID}
+			style={containerStyle}
+			accessibilityLabel={accessibilityLabel}
+			onMagicTap={onMagicTap}
+		>
 			{content}
 		</View>
 	);

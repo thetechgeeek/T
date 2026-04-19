@@ -16,7 +16,11 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
 import { useControllableState } from '@/src/hooks/useControllableState';
-import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
+import {
+	announceForScreenReader,
+	buildFocusRingStyle,
+	setAccessibilityFocus,
+} from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { SIZE_BUTTON_HEIGHT_SM, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
@@ -68,6 +72,7 @@ export interface BottomSheetPickerProps {
 	keyboardAware?: boolean;
 	dismissVelocityThreshold?: number;
 	density?: OverlayDensity;
+	restoreFocusRef?: React.RefObject<unknown> | { current: unknown } | null;
 	style?: StyleProp<ViewStyle>;
 	testID?: string;
 }
@@ -109,6 +114,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 			keyboardAware = true,
 			dismissVelocityThreshold = 800,
 			density = 'default',
+			restoreFocusRef,
 			style,
 			testID,
 		},
@@ -118,8 +124,10 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 		const c = theme.colors;
 		const densityStyles = resolveOverlayDensityStyles(theme, density);
 		const [search, setSearch] = useState('');
+		const closeButtonRef = useRef<React.ElementRef<typeof Pressable> | null>(null);
 		const [keyboardVisible, setKeyboardVisible] = useState(false);
 		const [focusedControl, setFocusedControl] = useState<string | null>(null);
+		const wasOpenRef = useRef(false);
 		const sheetHeightRef = useRef(0);
 		const translateY = useSharedValue(0);
 		const [isOpen, setIsOpen] = useControllableState({
@@ -230,8 +238,20 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 		useEffect(() => {
 			if (isOpen) {
 				translateY.value = 0;
+				void announceForScreenReader(`${title}. Bottom sheet open`);
+				void Promise.resolve().then(() => {
+					setAccessibilityFocus(closeButtonRef);
+				});
 			}
-		}, [isOpen, translateY]);
+
+			if (wasOpenRef.current && !isOpen) {
+				void Promise.resolve().then(() => {
+					setAccessibilityFocus(restoreFocusRef);
+				});
+			}
+
+			wasOpenRef.current = isOpen;
+		}, [isOpen, restoreFocusRef, title, translateY]);
 
 		const panGesture = Gesture.Pan()
 			.runOnJS(true)
@@ -280,6 +300,8 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 						<Animated.View
 							ref={ref}
 							testID={testID}
+							accessibilityViewIsModal
+							importantForAccessibility="yes"
 							onLayout={(event) => {
 								sheetHeightRef.current = event.nativeEvent.layout.height;
 							}}
@@ -324,6 +346,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 									{title}
 								</ThemedText>
 								<Pressable
+									ref={closeButtonRef}
 									testID="bottom-sheet-close"
 									onPress={handleDismiss}
 									onFocus={() => setFocusedControl('close')}
@@ -356,6 +379,9 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 							<TextInput
 								value={search}
 								onChangeText={setSearch}
+								accessibilityRole="search"
+								accessibilityLabel={`${title} search`}
+								accessibilityHint="Type to filter the available options."
 								placeholder="Search..."
 								placeholderTextColor={c.placeholder}
 								style={[

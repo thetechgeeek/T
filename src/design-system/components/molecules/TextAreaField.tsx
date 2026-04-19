@@ -94,6 +94,10 @@ export const TextAreaField = forwardRef<NativeTextInput, TextAreaFieldProps>(
 		);
 		const helperTone = error ? c.error : warningText ? c.warning : c.onSurfaceVariant;
 		const helperCopy = error || warningText || helperText;
+		const computedAccessibilityHint =
+			[required ? 'Required' : null, accessibilityHint ?? helperCopy ?? null]
+				.filter(Boolean)
+				.join('. ') || undefined;
 		const fieldHeight =
 			autoResize && measuredHeight
 				? Math.max(minHeight, Math.min(measuredHeight + theme.spacing.lg, maxHeight))
@@ -161,7 +165,7 @@ export const TextAreaField = forwardRef<NativeTextInput, TextAreaFieldProps>(
 							}
 							setMeasuredHeight(event.nativeEvent.contentSize.height);
 						}}
-						accessibilityHint={accessibilityHint ?? helperCopy}
+						accessibilityHint={computedAccessibilityHint}
 						style={[
 							styles.input,
 							{

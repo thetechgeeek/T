@@ -9,6 +9,14 @@ Date: April 17, 2026
 - Supported surface: [componentRegistry.json](/Users/rupesh-20594/Documents/T/src/design-system/componentRegistry.json)
 - Library contract source: [UI_Library_Checklist.md](/Users/rupesh-20594/Documents/T/docs/UI_Library_Checklist.md)
 
+## Compliance Target
+
+- Minimum supported bar: WCAG 2.2 Level AA across the registered design-system surface.
+- Critical-flow target: WCAG 2.2 Level AAA for auth, account settings, and checkout compositions that reuse the shared library primitives.
+- Compliance references stay documented alongside the library contract: Section 508, EN 301 549, and AODA.
+- Premium and branded surfaces have no accessibility exemptions for contrast, focus visibility, motion handling, or readable typography.
+- Physical-device VoiceOver and TalkBack proof remains a manual release gate beyond the automated simulator/emulator lanes documented here.
+
 ## Environment
 
 - iOS local proof run:
