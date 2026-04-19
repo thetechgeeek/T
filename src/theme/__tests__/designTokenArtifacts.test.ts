@@ -1,20 +1,39 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { execFileSync } from 'child_process';
 
 const root = path.join(__dirname, '..', '..', '..');
 const generatedRoot = path.join(root, 'src', 'theme', 'generated');
+const changelogPath = path.join(root, 'docs', 'DESIGN_TOKEN_CHANGELOG.md');
 
 function readGeneratedFile(...segments: string[]) {
 	return fs.readFileSync(path.join(generatedRoot, ...segments), 'utf8');
 }
 
 describe('generated design token artifacts', () => {
+	let backupRoot: string | null = null;
+
 	beforeAll(() => {
+		backupRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'design-token-artifacts-'));
+		fs.cpSync(generatedRoot, path.join(backupRoot, 'generated'), { recursive: true });
+		fs.copyFileSync(changelogPath, path.join(backupRoot, 'DESIGN_TOKEN_CHANGELOG.md'));
+
 		execFileSync(process.execPath, ['scripts/generate-design-tokens.mjs'], {
 			cwd: root,
 			stdio: 'pipe',
 		});
+	});
+
+	afterAll(() => {
+		if (backupRoot == null) {
+			return;
+		}
+
+		fs.rmSync(generatedRoot, { recursive: true, force: true });
+		fs.cpSync(path.join(backupRoot, 'generated'), generatedRoot, { recursive: true });
+		fs.copyFileSync(path.join(backupRoot, 'DESIGN_TOKEN_CHANGELOG.md'), changelogPath);
+		fs.rmSync(backupRoot, { recursive: true, force: true });
 	});
 
 	it('writes a W3C design tokens JSON payload with version metadata', () => {
@@ -66,10 +85,7 @@ describe('generated design token artifacts', () => {
 	});
 
 	it('writes a design token changelog document from the token source metadata', () => {
-		const changelog = fs.readFileSync(
-			path.join(root, 'docs', 'DESIGN_TOKEN_CHANGELOG.md'),
-			'utf8',
-		);
+		const changelog = fs.readFileSync(changelogPath, 'utf8');
 
 		expect(changelog).toContain('# Design Token Changelog');
 		expect(changelog).toContain('## 1.1.0 — 2026-04-16');
