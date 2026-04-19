@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { buildTheme } from '@/src/theme/colors';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
 import { Text } from 'react-native';
 import { Card, CardBody, CardFooter, CardHeader } from '../Card';
 
@@ -11,9 +12,15 @@ function flattenStyle(style: unknown) {
 	return Array.isArray(style) ? Object.assign({}, ...style.filter(Boolean)) : style;
 }
 
-const renderWithTheme = (component: React.ReactElement) => {
-	return render(<ThemeProvider>{component}</ThemeProvider>);
-};
+const renderWithTheme = (
+	component: React.ReactElement,
+	runtimeOverrides?: Partial<RuntimeQualitySignals>,
+) =>
+	render(
+		<ThemeProvider persist={false} runtimeOverrides={runtimeOverrides}>
+			{component}
+		</ThemeProvider>,
+	);
 
 describe('Card', () => {
 	it('renders children correctly', () => {
@@ -137,5 +144,57 @@ describe('Card', () => {
 		};
 
 		expect(relaxedStyle.padding).toBeGreaterThan(compactStyle.padding);
+	});
+
+	it('scales card padding up for tablet layouts without changing the content contract', () => {
+		const { getByTestId, rerender } = renderWithTheme(
+			<Card testID="adaptive-card">
+				<Text>Adaptive</Text>
+			</Card>,
+			{
+				windowWidth: 390,
+				windowHeight: 844,
+				breakpoint: 'phone',
+				deviceType: 'phone',
+				orientation: 'portrait',
+				columns: 1,
+				supportsSplitPane: false,
+				layoutScale: 1,
+				spacingScale: 1,
+				typographyScale: 1,
+			},
+		);
+
+		const phoneStyle = flattenStyle(getByTestId('adaptive-card').props.style) as {
+			padding: number;
+		};
+
+		rerender(
+			<ThemeProvider
+				persist={false}
+				runtimeOverrides={{
+					windowWidth: 1024,
+					windowHeight: 768,
+					breakpoint: 'tablet',
+					deviceType: 'tablet',
+					orientation: 'landscape',
+					columns: 2,
+					supportsSplitPane: true,
+					layoutScale: 1.08,
+					spacingScale: 1.08,
+					typographyScale: 1.04,
+				}}
+			>
+				<Card testID="adaptive-card">
+					<Text>Adaptive</Text>
+				</Card>
+			</ThemeProvider>,
+		);
+
+		const tabletStyle = flattenStyle(getByTestId('adaptive-card').props.style) as {
+			padding: number;
+		};
+
+		expect(tabletStyle.padding).toBeGreaterThan(phoneStyle.padding);
 	});
 });

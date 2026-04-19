@@ -25,7 +25,7 @@ import OnlineStoreScreen from '@/app/(app)/store/index';
 import SupplierListScreen from '@/app/(app)/suppliers/index';
 import EstimatesScreen from '@/app/(app)/transactions/estimates/index';
 import UtilitiesHubScreen from '@/app/(app)/utilities/index';
-import { renderToSnapshot } from './setup/renderToSnapshot';
+import { IPHONE_15_PRO_MAX_FRAME, renderToSnapshot } from './setup/renderToSnapshot';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useFinanceStore } from '@/src/stores/financeStore';
@@ -594,6 +594,7 @@ const mockUseOrderStore = useOrderStore as unknown as jest.Mock;
 const mockUseSyncStore = useSyncStore as unknown as jest.Mock;
 const mockUseNetworkStatus = useNetworkStatus as unknown as jest.Mock;
 const SNAPSHOT_INVOICE_CREATE_NOW = new Date('2026-04-14T00:00:00.000Z');
+const CANONICAL_SNAPSHOT_FRAME = IPHONE_15_PRO_MAX_FRAME;
 
 async function expectSnapshotMatch(
 	element: React.ReactElement,
@@ -605,7 +606,10 @@ async function expectSnapshotMatch(
 		waitForReady?: (screen: RenderAPI) => Promise<void>;
 	},
 ) {
-	const renderResult = renderToSnapshot(element, { isDark });
+	const renderResult = renderToSnapshot(element, {
+		isDark,
+		frame: CANONICAL_SNAPSHOT_FRAME,
+	});
 
 	if (waitForReady) {
 		await waitForReady(renderResult);
@@ -825,7 +829,10 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 		});
 
 		it('captures finance overview', async () => {
-			const renderResult = renderToSnapshot(<FinanceOverviewScreen />, { isDark });
+			const renderResult = renderToSnapshot(<FinanceOverviewScreen />, {
+				isDark,
+				frame: CANONICAL_SNAPSHOT_FRAME,
+			});
 			await waitFor(() => expect(renderResult.getByText('₹50000.00')).toBeTruthy());
 			expect({
 				stats: [

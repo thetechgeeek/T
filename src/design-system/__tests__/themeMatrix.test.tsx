@@ -15,12 +15,30 @@ const PRESET_MATRIX: ReadonlyArray<{ presetId: ThemePresetId; mode: ThemeMode }>
 	{ presetId: 'mono', mode: 'dark' },
 ];
 
+const CANONICAL_SNAPSHOT_RUNTIME = {
+	windowWidth: 430,
+	windowHeight: 932,
+	breakpoint: 'phone' as const,
+	deviceType: 'phone' as const,
+	orientation: 'portrait' as const,
+	columns: 1,
+	supportsSplitPane: false,
+	layoutScale: 1,
+	spacingScale: 1,
+	typographyScale: 1,
+};
+
 describe('design-system theme matrix', () => {
 	it.each(PRESET_MATRIX)(
 		'matches the preset proof snapshot for $presetId in $mode mode',
 		({ presetId, mode }) => {
 			const { toJSON } = render(
-				<ThemeProvider initialMode={mode} initialPresetId={presetId} persist={false}>
+				<ThemeProvider
+					initialMode={mode}
+					initialPresetId={presetId}
+					persist={false}
+					runtimeOverrides={CANONICAL_SNAPSHOT_RUNTIME}
+				>
 					<ThemeSnapshotPreview locale="en" />
 				</ThemeProvider>,
 			);
@@ -36,6 +54,7 @@ describe('design-system theme matrix', () => {
 				initialPresetId="studio"
 				persist={false}
 				runtimeOverrides={{
+					...CANONICAL_SNAPSHOT_RUNTIME,
 					boldTextEnabled: true,
 					fontScale: 1.6,
 					reduceMotionEnabled: true,

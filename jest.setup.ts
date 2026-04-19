@@ -376,6 +376,28 @@ jest.mock('react-native', () => {
 		addListener: jest.fn(() => ({ remove: jest.fn() })),
 		removeListener: jest.fn(),
 	};
+	const Dimensions = {
+		get: jest.fn(() => ({ width: 390, height: 844, scale: 3, fontScale: 1 })),
+		addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+	};
+	const LayoutAnimation = {
+		configureNext: jest.fn(),
+		create: jest.fn(),
+		Presets: {
+			easeInEaseOut: { duration: 200 },
+		},
+		Types: {
+			easeInEaseOut: 'easeInEaseOut',
+		},
+		Properties: {
+			opacity: 'opacity',
+			scaleXY: 'scaleXY',
+		},
+	};
+	const UIManager = {
+		...RN.UIManager,
+		setLayoutAnimationEnabledExperimental: jest.fn(),
+	};
 
 	const NativeModules = {
 		...RN.NativeModules,
@@ -405,9 +427,12 @@ jest.mock('react-native', () => {
 		AccessibilityInfo,
 		I18nManager,
 		Keyboard,
+		Dimensions,
+		LayoutAnimation,
 		KeyboardAvoidingView,
 		TouchableWithoutFeedback,
 		Touchable,
+		UIManager,
 		Pressable,
 		Modal,
 		RefreshControl,

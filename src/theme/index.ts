@@ -58,7 +58,7 @@ export interface ThemeColors {
 
 export type ThemeDensity = 'compact' | 'comfortable' | 'spacious';
 export type ThemeExpression = 'operational' | 'balanced' | 'showcase';
-export type ThemePresetId = 'baseline' | 'executive' | 'studio' | 'mono';
+export type ThemePresetId = 'baseline' | 'executive' | 'studio' | 'mono' | 'prism';
 export type ThemeContrastMode = 'default' | 'high';
 
 export interface ThemeMeta {

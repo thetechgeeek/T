@@ -3,6 +3,7 @@ import { render } from '@testing-library/react-native';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Appearance } from 'react-native';
+import { resolveResponsiveMetrics } from '@/src/theme/responsive';
 
 // Initial setup for jest-image-snapshot if used in an environment that supports it
 // In standard Jest/RNTL, this will mostly be used for structural snapshots
@@ -37,10 +38,26 @@ export function renderToSnapshot(
 ) {
 	// Force Appearance to match the desired theme for the ThemeProvider
 	jest.spyOn(Appearance, 'getColorScheme').mockReturnValue(isDark ? 'dark' : 'light');
+	const responsiveMetrics = resolveResponsiveMetrics(frame.width, frame.height);
 
 	return render(
 		<SafeAreaProvider initialMetrics={{ frame, insets }}>
-			<ThemeProvider>{component}</ThemeProvider>
+			<ThemeProvider
+				runtimeOverrides={{
+					windowWidth: frame.width,
+					windowHeight: frame.height,
+					breakpoint: responsiveMetrics.breakpoint,
+					deviceType: responsiveMetrics.deviceType,
+					orientation: responsiveMetrics.orientation,
+					columns: responsiveMetrics.columns,
+					supportsSplitPane: responsiveMetrics.supportsSplitPane,
+					layoutScale: responsiveMetrics.layoutScale,
+					spacingScale: responsiveMetrics.spacingScale,
+					typographyScale: responsiveMetrics.typographyScale,
+				}}
+			>
+				{component}
+			</ThemeProvider>
 		</SafeAreaProvider>,
 	);
 }

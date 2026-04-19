@@ -92,6 +92,29 @@ describe('theme presets', () => {
 		);
 	});
 
+	it('applies dense showcase styling for prism', () => {
+		const defaultTheme = buildTheme(false, 'baseline', { pixelRatio: 2 });
+		const prismTheme = buildTheme(false, 'prism', { pixelRatio: 2 });
+		const prismDarkTheme = buildTheme(true, 'prism', { pixelRatio: 2 });
+
+		expect(prismTheme.meta.presetId).toBe('prism');
+		expect(prismTheme.meta.presetLabel).toBe('Prism');
+		expect(prismTheme.meta.density).toBe('compact');
+		expect(prismTheme.meta.expression).toBe('showcase');
+		expect(prismTheme.meta.accentBudget).toBe(2);
+		expect(prismTheme.spacing.lg).toBeLessThan(defaultTheme.spacing.lg);
+		expect(prismTheme.borderRadius.lg).toBeGreaterThan(defaultTheme.borderRadius.lg);
+		expect(prismTheme.touchTarget).toBe(defaultTheme.touchTarget);
+		expect(prismTheme.colors.onSurface).toBe('#161B33');
+		expect(prismTheme.visual.surfaces.hero).toBe('#ECE8FF');
+		expect(prismTheme.visual.hero.stat.surface).toBe('#4D7CFE');
+		expect(prismTheme.visual.media.textGradientEnd).toBe('rgba(20, 24, 48, 0.78)');
+		expect(prismTheme.visual.presentation.showcaseDensity).toBe('compact');
+		expect(prismDarkTheme.colors.onSurface).toBe('#F7F8FF');
+		expect(prismDarkTheme.visual.surfaces.hero).toBe('#171D52');
+		expect(prismDarkTheme.visual.data.comparisonSeries).toBe('#FF7CC4');
+	});
+
 	it('keeps inverse anchor actions available for hero, media, and high-contrast surfaces', () => {
 		const highContrastTheme = buildTheme(false, 'baseline', {
 			contrastMode: 'high',
@@ -106,5 +129,26 @@ describe('theme presets', () => {
 		]);
 		expect(highContrastTheme.visual.surfaces.inverse).toBeTruthy();
 		expect(highContrastTheme.visual.surfaces.onInverse).toBeTruthy();
+	});
+
+	it('scales typography, spacing, and touch targets between phone and tablet layouts', () => {
+		const phoneTheme = buildTheme(false, 'baseline', {
+			pixelRatio: 2,
+			viewportWidth: 390,
+			viewportHeight: 844,
+		});
+		const tabletTheme = buildTheme(false, 'baseline', {
+			pixelRatio: 2,
+			viewportWidth: 1024,
+			viewportHeight: 768,
+		});
+
+		expect(tabletTheme.spacing.lg).toBeGreaterThan(phoneTheme.spacing.lg);
+		expect(tabletTheme.typography.sizes.lg).toBeGreaterThan(phoneTheme.typography.sizes.lg);
+		expect(tabletTheme.borderRadius.md).toBeGreaterThan(phoneTheme.borderRadius.md);
+		expect(tabletTheme.touchTarget).toBeGreaterThan(phoneTheme.touchTarget);
+		expect(tabletTheme.components.card.padding.md).toBeGreaterThan(
+			phoneTheme.components.card.padding.md,
+		);
 	});
 });

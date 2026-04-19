@@ -1,11 +1,28 @@
-import { AccessibilityInfo, I18nManager, PixelRatio } from 'react-native';
+import { AccessibilityInfo, Dimensions, I18nManager, PixelRatio, Platform } from 'react-native';
 import { useEffect, useState } from 'react';
 import { detectDeviceLocale } from '@/src/i18n/runtime';
 import { detectPixelRatio } from '@/src/theme/density';
+import {
+	resolveResponsiveMetrics,
+	type ResponsiveBreakpoint,
+	type ResponsiveDeviceType,
+	type ResponsiveOrientation,
+} from '@/src/theme/responsive';
 
 const FONT_SCALE_DECIMALS = 2;
+const DEFAULT_WINDOW_WIDTH = 390;
+const DEFAULT_WINDOW_HEIGHT = 844;
 
 type AccessibilitySubscription = { remove?: () => void } | undefined;
+type DimensionSubscription = { remove?: () => void } | undefined;
+
+function getWindowDimensions() {
+	const window = Dimensions.get('window');
+	return {
+		width: window?.width ?? DEFAULT_WINDOW_WIDTH,
+		height: window?.height ?? DEFAULT_WINDOW_HEIGHT,
+	};
+}
 
 export interface RuntimeQualitySignals {
 	detectedLocale: string;
@@ -14,7 +31,24 @@ export interface RuntimeQualitySignals {
 	fontScale: number;
 	reduceMotionEnabled: boolean;
 	boldTextEnabled: boolean;
+	platform: string;
+	windowWidth: number;
+	windowHeight: number;
+	orientation: ResponsiveOrientation;
+	breakpoint: ResponsiveBreakpoint;
+	deviceType: ResponsiveDeviceType;
+	columns: number;
+	supportsSplitPane: boolean;
+	layoutScale: number;
+	spacingScale: number;
+	typographyScale: number;
 }
+
+const DEFAULT_DIMENSIONS = getWindowDimensions();
+const DEFAULT_RESPONSIVE_METRICS = resolveResponsiveMetrics(
+	DEFAULT_DIMENSIONS.width,
+	DEFAULT_DIMENSIONS.height,
+);
 
 export const DEFAULT_RUNTIME_QUALITY_SIGNALS: RuntimeQualitySignals = {
 	detectedLocale: detectDeviceLocale(),
@@ -23,6 +57,17 @@ export const DEFAULT_RUNTIME_QUALITY_SIGNALS: RuntimeQualitySignals = {
 	fontScale: 1,
 	reduceMotionEnabled: false,
 	boldTextEnabled: false,
+	platform: Platform.OS,
+	windowWidth: DEFAULT_RESPONSIVE_METRICS.width,
+	windowHeight: DEFAULT_RESPONSIVE_METRICS.height,
+	orientation: DEFAULT_RESPONSIVE_METRICS.orientation,
+	breakpoint: DEFAULT_RESPONSIVE_METRICS.breakpoint,
+	deviceType: DEFAULT_RESPONSIVE_METRICS.deviceType,
+	columns: DEFAULT_RESPONSIVE_METRICS.columns,
+	supportsSplitPane: DEFAULT_RESPONSIVE_METRICS.supportsSplitPane,
+	layoutScale: DEFAULT_RESPONSIVE_METRICS.layoutScale,
+	spacingScale: DEFAULT_RESPONSIVE_METRICS.spacingScale,
+	typographyScale: DEFAULT_RESPONSIVE_METRICS.typographyScale,
 };
 
 function detectFontScale() {
@@ -54,6 +99,16 @@ function addAccessibilityListener(
 	return addEventListener?.(eventName, handler);
 }
 
+function addDimensionsListener(
+	handler: (width: number, height: number) => void,
+): DimensionSubscription {
+	const subscription = Dimensions.addEventListener?.('change', ({ window }) => {
+		handler(window.width, window.height);
+	});
+
+	return subscription;
+}
+
 export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals {
 	const [reduceMotionEnabled, setReduceMotionEnabled] = useState(
 		DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled,
@@ -64,6 +119,7 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 	const [detectedLocale] = useState(detectDeviceLocale);
 	const [pixelRatio] = useState(detectPixelRatio);
 	const [fontScale] = useState(detectFontScale);
+	const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions);
 
 	useEffect(() => {
 		if (!enabled) {
@@ -92,13 +148,22 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 			'boldTextChanged',
 			setBoldTextEnabled,
 		);
+		const dimensionsSubscription = addDimensionsListener((width, height) => {
+			setWindowDimensions({ width, height });
+		});
 
 		return () => {
 			isActive = false;
 			reduceMotionSubscription?.remove?.();
 			boldTextSubscription?.remove?.();
+			dimensionsSubscription?.remove?.();
 		};
 	}, [enabled]);
+
+	const responsiveMetrics = resolveResponsiveMetrics(
+		windowDimensions.width,
+		windowDimensions.height,
+	);
 
 	return {
 		detectedLocale,
@@ -107,5 +172,16 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 		fontScale,
 		reduceMotionEnabled,
 		boldTextEnabled,
+		platform: Platform.OS,
+		windowWidth: responsiveMetrics.width,
+		windowHeight: responsiveMetrics.height,
+		orientation: responsiveMetrics.orientation,
+		breakpoint: responsiveMetrics.breakpoint,
+		deviceType: responsiveMetrics.deviceType,
+		columns: responsiveMetrics.columns,
+		supportsSplitPane: responsiveMetrics.supportsSplitPane,
+		layoutScale: responsiveMetrics.layoutScale,
+		spacingScale: responsiveMetrics.spacingScale,
+		typographyScale: responsiveMetrics.typographyScale,
 	};
 }

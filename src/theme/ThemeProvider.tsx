@@ -79,26 +79,33 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
 	const parentThemeContext = useContext(ThemeContext);
 	const ownedRuntime = useRuntimeQualitySignals(parentThemeContext == null);
+	const inheritsParentMode = parentThemeContext != null && initialMode === undefined;
+	const inheritsParentPreset = parentThemeContext != null && initialPresetId === undefined;
 	const persistenceEnabled = persist ?? parentThemeContext == null;
 	const shouldLoadPersistedSettings =
-		persistenceEnabled && initialMode === undefined && initialPresetId === undefined;
+		persistenceEnabled &&
+		parentThemeContext == null &&
+		initialMode === undefined &&
+		initialPresetId === undefined;
 	const baseMode = initialMode ?? parentThemeContext?.mode ?? 'system';
 	const basePresetId = initialPresetId ?? parentThemeContext?.presetId ?? DEFAULT_THEME_PRESET_ID;
 
-	const [mode, setMode] = useState<ThemeMode>(baseMode);
-	const [isDark, setIsDark] = useState(resolveIsDark(baseMode, parentThemeContext?.isDark));
-	const [presetId, setPresetId] = useState<ThemePresetId>(basePresetId);
-	const modeRef = useRef(mode);
-	const presetIdRef = useRef(presetId);
-	const inheritedMode = initialMode ?? parentThemeContext?.mode;
-	const inheritedPresetId = initialPresetId ?? parentThemeContext?.presetId;
-	const resolvedMode = shouldLoadPersistedSettings ? mode : (inheritedMode ?? mode);
-	const resolvedPresetId = shouldLoadPersistedSettings
-		? presetId
-		: (inheritedPresetId ?? presetId);
+	const [ownedMode, setOwnedMode] = useState<ThemeMode>(baseMode);
+	const [systemIsDark, setSystemIsDark] = useState(
+		resolveIsDark(baseMode, parentThemeContext?.isDark),
+	);
+	const [ownedPresetId, setOwnedPresetId] = useState<ThemePresetId>(basePresetId);
+	const modeRef = useRef(baseMode);
+	const presetIdRef = useRef(basePresetId);
+	const resolvedMode =
+		inheritsParentMode && parentThemeContext != null ? parentThemeContext.mode : ownedMode;
+	const resolvedPresetId =
+		inheritsParentPreset && parentThemeContext != null
+			? parentThemeContext.presetId
+			: ownedPresetId;
 	const resolvedIsDark =
 		resolvedMode === 'system'
-			? (parentThemeContext?.isDark ?? isDark)
+			? (parentThemeContext?.isDark ?? systemIsDark)
 			: resolveIsDark(resolvedMode, parentThemeContext?.isDark);
 	const runtime = useMemo(
 		() => ({
@@ -145,9 +152,9 @@ export function ThemeProvider({
 					};
 					const normalizedPresetId = normalizeThemePresetId(parsed.presetId);
 					if (isValidThemeMode(parsed.mode) && normalizedPresetId) {
-						setMode(parsed.mode);
-						setPresetId(normalizedPresetId);
-						setIsDark(resolveIsDark(parsed.mode));
+						setOwnedMode(parsed.mode);
+						setOwnedPresetId(normalizedPresetId);
+						setSystemIsDark(resolveIsDark(parsed.mode));
 						return;
 					}
 				} catch {
@@ -156,8 +163,8 @@ export function ThemeProvider({
 			}
 
 			if (isValidThemeMode(legacyMode)) {
-				setMode(legacyMode);
-				setIsDark(resolveIsDark(legacyMode));
+				setOwnedMode(legacyMode);
+				setSystemIsDark(resolveIsDark(legacyMode));
 			}
 		});
 
@@ -172,42 +179,57 @@ export function ThemeProvider({
 	}, [resolvedMode, resolvedPresetId]);
 
 	useEffect(() => {
-		if (resolvedMode !== 'system') return;
+		if (resolvedMode !== 'system' || parentThemeContext != null) return;
 		const sub = Appearance.addChangeListener(({ colorScheme }) => {
-			setIsDark(colorScheme === 'dark');
+			setSystemIsDark(colorScheme === 'dark');
 		});
 		return () => sub.remove();
-	}, [resolvedMode]);
+	}, [parentThemeContext, resolvedMode]);
 
 	const setThemeMode = useCallback(
 		(newMode: ThemeMode) => {
-			setMode(newMode);
+			if (inheritsParentMode && parentThemeContext != null) {
+				parentThemeContext.setThemeMode(newMode);
+				return;
+			}
+
+			setOwnedMode(newMode);
 			modeRef.current = newMode;
-			setIsDark(resolveIsDark(newMode, parentThemeContext?.isDark));
+			setSystemIsDark(resolveIsDark(newMode, parentThemeContext?.isDark));
 			persistThemeSettings(newMode, presetIdRef.current);
 		},
-		[parentThemeContext?.isDark, persistThemeSettings],
+		[inheritsParentMode, parentThemeContext, persistThemeSettings],
 	);
 
 	const setThemePreset = useCallback(
 		(nextPresetId: ThemePresetId) => {
-			setPresetId(nextPresetId);
+			if (inheritsParentPreset && parentThemeContext != null) {
+				parentThemeContext.setThemePreset(nextPresetId);
+				return;
+			}
+
+			setOwnedPresetId(nextPresetId);
 			presetIdRef.current = nextPresetId;
 			persistThemeSettings(modeRef.current, nextPresetId);
 		},
-		[persistThemeSettings],
+		[inheritsParentPreset, parentThemeContext, persistThemeSettings],
 	);
 
 	const cycleThemePreset = useCallback(() => {
+		if (inheritsParentPreset && parentThemeContext != null) {
+			parentThemeContext.cycleThemePreset();
+			return;
+		}
+
 		const nextIndex =
 			(themePresetOptions.findIndex((preset) => preset.presetId === presetIdRef.current) +
 				1) %
 			themePresetOptions.length;
 		const nextPresetId = themePresetOptions[nextIndex]?.presetId ?? DEFAULT_THEME_PRESET_ID;
-		setPresetId(nextPresetId);
+		setOwnedPresetId(nextPresetId);
 		presetIdRef.current = nextPresetId;
 		persistThemeSettings(modeRef.current, nextPresetId);
-	}, [persistThemeSettings]);
+	}, [inheritsParentPreset, parentThemeContext, persistThemeSettings]);
 
 	const toggleTheme = useCallback(() => {
 		setThemeMode(resolvedIsDark ? 'light' : 'dark');
@@ -218,8 +240,17 @@ export function ThemeProvider({
 			buildTheme(resolvedIsDark, resolvedPresetId, {
 				pixelRatio: runtime.pixelRatio,
 				detectedLocale: runtime.detectedLocale,
+				viewportWidth: runtime.windowWidth,
+				viewportHeight: runtime.windowHeight,
 			}),
-		[resolvedIsDark, resolvedPresetId, runtime.detectedLocale, runtime.pixelRatio],
+		[
+			resolvedIsDark,
+			resolvedPresetId,
+			runtime.detectedLocale,
+			runtime.pixelRatio,
+			runtime.windowHeight,
+			runtime.windowWidth,
+		],
 	);
 
 	return (

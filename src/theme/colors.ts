@@ -42,7 +42,12 @@ import {
 	SIZE_SWITCH_TRACK_HEIGHT,
 	SIZE_SWITCH_TRACK_WIDTH,
 } from './uiMetrics';
-import { buildDensitySpacingSet, resolveThemePreset, THEME_PRESET_OPTIONS } from './presets';
+import {
+	buildDensitySpacingSet,
+	resolveThemePreset,
+	THEME_PRESET_OPTIONS,
+	type ResolvedThemePreset,
+} from './presets';
 import { detectPixelRatio } from './density';
 
 export const DEFAULT_THEME_PRESET_ID: ThemePresetId = 'baseline';
@@ -211,6 +216,44 @@ const buildVisualTokens = ({
 			neutralSurfaceTiers: ['canvas', 'default', 'raised', 'overlay'],
 			inverseActionSurfaces: ['hero', 'media', 'inverse'],
 		},
+	};
+};
+
+const mergeVisualTokens = (
+	base: Theme['visual'],
+	overrides?: ResolvedThemePreset['visualOverrides'],
+): Theme['visual'] => {
+	if (!overrides) {
+		return base;
+	}
+
+	return {
+		...base,
+		surfaces: overrides.surfaces ? { ...base.surfaces, ...overrides.surfaces } : base.surfaces,
+		accents: overrides.accents ? { ...base.accents, ...overrides.accents } : base.accents,
+		data: overrides.data ? { ...base.data, ...overrides.data } : base.data,
+		hero: overrides.hero
+			? {
+					...base.hero,
+					screen: overrides.hero.screen
+						? { ...base.hero.screen, ...overrides.hero.screen }
+						: base.hero.screen,
+					stat: overrides.hero.stat
+						? { ...base.hero.stat, ...overrides.hero.stat }
+						: base.hero.stat,
+					promo: overrides.hero.promo
+						? { ...base.hero.promo, ...overrides.hero.promo }
+						: base.hero.promo,
+				}
+			: base.hero,
+		media: overrides.media ? { ...base.media, ...overrides.media } : base.media,
+		silhouette: overrides.silhouette
+			? { ...base.silhouette, ...overrides.silhouette }
+			: base.silhouette,
+		depth: overrides.depth ? { ...base.depth, ...overrides.depth } : base.depth,
+		presentation: overrides.presentation
+			? { ...base.presentation, ...overrides.presentation }
+			: base.presentation,
 	};
 };
 
@@ -424,6 +467,8 @@ export function buildTheme(
 		contrastMode?: ThemeContrastMode;
 		pixelRatio?: number;
 		detectedLocale?: string;
+		viewportWidth?: number;
+		viewportHeight?: number;
 	} = {},
 ): Theme {
 	const contrastMode = options.contrastMode ?? 'default';
@@ -432,6 +477,8 @@ export function buildTheme(
 		contrastMode,
 		pixelRatio,
 		detectedLocale: options.detectedLocale,
+		viewportWidth: options.viewportWidth,
+		viewportHeight: options.viewportHeight,
 	});
 	const borderWidth: Theme['borderWidth'] = {
 		...BORDER_WIDTH_PX,
@@ -440,13 +487,16 @@ export function buildTheme(
 	const borderRadius = preset.borderRadius;
 	const opacity = buildOpacity();
 	const shadows = makeShadows(preset.colors.shadow, isDark, preset.shadowProfile);
-	const visual = buildVisualTokens({
-		colors: preset.colors,
-		borderRadius,
-		isDark,
-		meta: preset.meta,
-		shadowProfile: preset.shadowProfile,
-	});
+	const visual = mergeVisualTokens(
+		buildVisualTokens({
+			colors: preset.colors,
+			borderRadius,
+			isDark,
+			meta: preset.meta,
+			shadowProfile: preset.shadowProfile,
+		}),
+		preset.visualOverrides,
+	);
 	return {
 		isDark,
 		meta: preset.meta,

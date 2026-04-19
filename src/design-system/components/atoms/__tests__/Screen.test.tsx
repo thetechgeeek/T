@@ -192,6 +192,36 @@ describe('Screen', () => {
 		expect(footerPaddingWrapper).toBeTruthy();
 	});
 
+	it('recalculates safe area padding when the inset profile changes after rotation', () => {
+		mockUseSafeAreaInsets.mockReturnValue({ top: 44, bottom: 34, left: 0, right: 0 });
+
+		const { rerender, toJSON } = renderWithTheme(
+			<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
+				<Text>Adaptive safe area</Text>
+			</Screen>,
+		);
+
+		const portraitJson = asSingleNode(toJSON());
+		const portraitStyle = flattenStyle(portraitJson.props.style);
+
+		mockUseSafeAreaInsets.mockReturnValue({ top: 0, bottom: 21, left: 44, right: 44 });
+		rerender(
+			<ThemeProvider>
+				<Screen safeAreaEdges={['top', 'bottom']} withKeyboard={false}>
+					<Text>Adaptive safe area</Text>
+				</Screen>
+			</ThemeProvider>,
+		);
+
+		const landscapeJson = asSingleNode(toJSON());
+		const landscapeStyle = flattenStyle(landscapeJson.props.style);
+
+		expect(portraitStyle.paddingTop).toBe(44);
+		expect(portraitStyle.paddingBottom).toBe(34);
+		expect(landscapeStyle.paddingTop).toBe(0);
+		expect(landscapeStyle.paddingBottom).toBe(21);
+	});
+
 	it('forwards scrollViewProps to the internal scroll view', () => {
 		const { UNSAFE_getByType } = renderWithTheme(
 			<Screen

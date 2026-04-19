@@ -11,6 +11,7 @@ import {
 	highContrastLightColors,
 	lightColors as baseLightColors,
 	themePresetColorOverrides,
+	themePresetVisualOverrides,
 } from './palette';
 import { FONT_SIZE_TOKENS, FONT_WEIGHT_TOKENS, TOKEN_VERSION } from './designTokens';
 import { EASING_CURVES, MOTION_PROFILES } from './animations';
@@ -22,6 +23,7 @@ import {
 	resolveDensityAwareTouchTarget,
 } from './density';
 import { resolveTypographyFamiliesForLocale } from './localeTypography';
+import { resolveResponsiveMetrics, scaleResponsiveValue } from './responsive';
 import type {
 	Theme,
 	ThemeColors,
@@ -39,6 +41,14 @@ export interface ThemePresetOption extends Pick<
 	description: string;
 }
 
+type DeepPartial<T> = {
+	[K in keyof T]?: T[K] extends readonly unknown[]
+		? T[K]
+		: T[K] extends object
+			? DeepPartial<T[K]>
+			: T[K];
+};
+
 interface ThemePresetDefinition extends ThemePresetOption {
 	lightOverrides: Partial<ThemeColors>;
 	darkOverrides: Partial<ThemeColors>;
@@ -53,6 +63,8 @@ interface ThemePresetDefinition extends ThemePresetOption {
 	shadowOpacityScale: number;
 	shadowRadiusScale: number;
 	shadowElevationScale: number;
+	lightVisualOverrides?: DeepPartial<Theme['visual']>;
+	darkVisualOverrides?: DeepPartial<Theme['visual']>;
 }
 
 export interface ResolvedThemePreset {
@@ -68,6 +80,7 @@ export interface ResolvedThemePreset {
 		radiusScale: number;
 		elevationScale: number;
 	};
+	visualOverrides?: DeepPartial<Theme['visual']>;
 }
 
 const BASE_SPACING = SPACING_PX;
@@ -120,6 +133,14 @@ const STUDIO_TOUCH_TARGET = 52;
 const STUDIO_SHADOW_OPACITY_SCALE = 1.08;
 const STUDIO_SHADOW_RADIUS_SCALE = 1.12;
 const STUDIO_SHADOW_ELEVATION_SCALE = 1.1;
+const PRISM_SPACING_SCALE = 0.96;
+const PRISM_RADIUS_SCALE = 1.45;
+const PRISM_FONT_SCALE = 1;
+const PRISM_LINE_HEIGHT_SCALE = 0.98;
+const PRISM_ANIMATION_SCALE = 1.08;
+const PRISM_SHADOW_OPACITY_SCALE = 1.18;
+const PRISM_SHADOW_RADIUS_SCALE = 1.28;
+const PRISM_SHADOW_ELEVATION_SCALE = 1.2;
 const MONO_RADIUS_SCALE = 0.9;
 const MONO_ANIMATION_SCALE = 0.95;
 const MONO_SHADOW_OPACITY_SCALE = 0.9;
@@ -128,6 +149,9 @@ const MONO_SHADOW_ELEVATION_SCALE = 0.95;
 const MIN_DURATION_FAST = 120;
 const MIN_DURATION_NORMAL = 140;
 const MIN_DURATION_SLOW = 220;
+const DEFAULT_VIEWPORT_WIDTH = 430;
+const DEFAULT_VIEWPORT_HEIGHT = 932;
+const TABLET_TOUCH_TARGET_MIN = 52;
 
 function roundToken(value: number, minimum = 0) {
 	return Math.max(minimum, Math.round(value));
@@ -417,6 +441,27 @@ const THEME_PRESET_DEFINITIONS: Record<ThemePresetId, ThemePresetDefinition> = {
 		shadowRadiusScale: STUDIO_SHADOW_RADIUS_SCALE,
 		shadowElevationScale: STUDIO_SHADOW_ELEVATION_SCALE,
 	},
+	prism: {
+		presetId: 'prism',
+		presetLabel: 'Prism',
+		description: 'Luminous showcase surfaces with compact spacing for dense product data.',
+		density: 'compact',
+		expression: 'showcase',
+		accentBudget: 2,
+		lightOverrides: themePresetColorOverrides.prism.light,
+		darkOverrides: themePresetColorOverrides.prism.dark,
+		spacingScale: PRISM_SPACING_SCALE,
+		radiusScale: PRISM_RADIUS_SCALE,
+		fontScale: PRISM_FONT_SCALE,
+		lineHeightScale: PRISM_LINE_HEIGHT_SCALE,
+		animationScale: PRISM_ANIMATION_SCALE,
+		touchTarget: TOUCH_TARGET_MIN_PX,
+		shadowOpacityScale: PRISM_SHADOW_OPACITY_SCALE,
+		shadowRadiusScale: PRISM_SHADOW_RADIUS_SCALE,
+		shadowElevationScale: PRISM_SHADOW_ELEVATION_SCALE,
+		lightVisualOverrides: themePresetVisualOverrides.prism.light,
+		darkVisualOverrides: themePresetVisualOverrides.prism.dark,
+	},
 	mono: {
 		presetId: 'mono',
 		presetLabel: 'Mono',
@@ -456,11 +501,17 @@ export function resolveThemePreset(
 		contrastMode?: ThemeContrastMode;
 		pixelRatio?: number;
 		detectedLocale?: string;
+		viewportWidth?: number;
+		viewportHeight?: number;
 	} = {},
 ): ResolvedThemePreset {
 	const preset = THEME_PRESET_DEFINITIONS[presetId] ?? THEME_PRESET_DEFINITIONS.baseline;
 	const contrastMode = options.contrastMode ?? 'default';
 	const pixelRatio = options.pixelRatio ?? detectPixelRatio();
+	const responsiveMetrics = resolveResponsiveMetrics(
+		options.viewportWidth ?? DEFAULT_VIEWPORT_WIDTH,
+		options.viewportHeight ?? DEFAULT_VIEWPORT_HEIGHT,
+	);
 	const baseColors = resolvePresetBaseColors(isDark, contrastMode);
 	const colors: ThemeColors = {
 		...baseColors,
@@ -470,6 +521,20 @@ export function resolveThemePreset(
 				: preset.lightOverrides
 			: {}),
 	};
+	const responsiveFontScale = preset.fontScale * responsiveMetrics.typographyScale;
+	const responsiveLineHeightScale = preset.lineHeightScale * responsiveMetrics.typographyScale;
+	const responsiveSpacingScale = preset.spacingScale * responsiveMetrics.spacingScale;
+	const responsiveRadiusScale = preset.radiusScale * responsiveMetrics.layoutScale;
+	const responsiveTouchTarget = responsiveMetrics.isTablet
+		? Math.max(
+				TABLET_TOUCH_TARGET_MIN,
+				scaleResponsiveValue(
+					preset.touchTarget,
+					responsiveMetrics.layoutScale,
+					preset.touchTarget,
+				),
+			)
+		: preset.touchTarget;
 
 	return {
 		meta: {
@@ -483,14 +548,14 @@ export function resolveThemePreset(
 		},
 		colors,
 		typography: scaleTypography(
-			preset.fontScale,
-			preset.lineHeightScale,
+			responsiveFontScale,
+			responsiveLineHeightScale,
 			pixelRatio,
 			colors,
 			options.detectedLocale,
 		),
-		spacing: scaleSpacing(preset.spacingScale, pixelRatio),
-		borderRadius: scaleRadius(preset.radiusScale, pixelRatio),
+		spacing: scaleSpacing(responsiveSpacingScale, pixelRatio),
+		borderRadius: scaleRadius(responsiveRadiusScale, pixelRatio),
 		animation: {
 			durationInstant: ANIMATION_MS.instant,
 			durationMicro: roundToken(ANIMATION_MS.micro * preset.animationScale, 80),
@@ -550,11 +615,17 @@ export function resolveThemePreset(
 				},
 			},
 		},
-		touchTarget: resolveDensityAwareTouchTarget(preset.touchTarget, pixelRatio),
+		touchTarget: resolveDensityAwareTouchTarget(responsiveTouchTarget, pixelRatio),
 		shadowProfile: {
 			opacityScale: preset.shadowOpacityScale,
 			radiusScale: preset.shadowRadiusScale,
 			elevationScale: preset.shadowElevationScale,
 		},
+		visualOverrides:
+			contrastMode === 'default'
+				? isDark
+					? preset.darkVisualOverrides
+					: preset.lightVisualOverrides
+				: undefined,
 	};
 }
