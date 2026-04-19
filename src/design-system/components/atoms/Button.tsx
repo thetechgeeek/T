@@ -172,6 +172,7 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 			: fullWidth
 				? { width: '100%' as const }
 				: null;
+		const hitSlop = iconOnly || resolvedSize === 'xs' ? theme.spacing.xs : undefined;
 
 		return (
 			<Animated.View style={[animStyle, style]}>
@@ -184,6 +185,7 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 					accessibilityLabel={accessibilityLabel ?? title ?? 'Button'}
 					accessibilityState={{ disabled: isDisabled, busy: loading }}
 					accessibilityHint={loading ? 'Loading, please wait' : undefined}
+					hitSlop={hitSlop}
 					android_ripple={
 						Platform.OS === 'android'
 							? {

@@ -37,6 +37,7 @@ export const IconButton = forwardRef<React.ElementRef<typeof Pressable>, IconBut
 		const { theme } = useTheme();
 		const iconButtonTokens = theme.components.iconButton;
 		const [isFocused, setIsFocused] = useState(false);
+		const [isPressed, setIsPressed] = useState(false);
 
 		const handlePress = () => {
 			if (disabled) return;
@@ -54,6 +55,7 @@ export const IconButton = forwardRef<React.ElementRef<typeof Pressable>, IconBut
 				accessibilityRole="button"
 				accessibilityLabel={accessibilityLabel ?? label}
 				accessibilityState={{ disabled: !!disabled }}
+				hitSlop={theme.spacing.xs}
 				android_ripple={
 					Platform.OS === 'android'
 						? {
@@ -64,12 +66,15 @@ export const IconButton = forwardRef<React.ElementRef<typeof Pressable>, IconBut
 				}
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
+				onPressIn={() => setIsPressed(true)}
+				onPressOut={() => setIsPressed(false)}
 				style={[
 					styles.container,
 					{
 						minWidth: iconButtonTokens.minSize,
 						minHeight: iconButtonTokens.minSize,
 						borderRadius: theme.borderRadius.full,
+						opacity: isPressed && !disabled ? theme.opacity.pressed : 1,
 					},
 					isFocused
 						? buildFocusRingStyle({
@@ -124,6 +129,7 @@ export const FAB = forwardRef<React.ElementRef<typeof Pressable>, FABProps>(
 		const { theme } = useTheme();
 		const fabTokens = theme.components.fab;
 		const [isFocused, setIsFocused] = useState(false);
+		const [isPressed, setIsPressed] = useState(false);
 
 		return (
 			<Pressable
@@ -136,6 +142,7 @@ export const FAB = forwardRef<React.ElementRef<typeof Pressable>, FABProps>(
 				focusable
 				accessibilityRole="button"
 				accessibilityLabel={accessibilityLabel ?? 'Add'}
+				hitSlop={theme.spacing.xs}
 				android_ripple={
 					Platform.OS === 'android'
 						? {
@@ -146,6 +153,8 @@ export const FAB = forwardRef<React.ElementRef<typeof Pressable>, FABProps>(
 				}
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
+				onPressIn={() => setIsPressed(true)}
+				onPressOut={() => setIsPressed(false)}
 				style={[
 					{
 						width: fabTokens.size,
@@ -157,6 +166,7 @@ export const FAB = forwardRef<React.ElementRef<typeof Pressable>, FABProps>(
 						position: 'absolute',
 						bottom: theme.spacing.xl,
 						alignSelf: 'flex-end',
+						opacity: isPressed ? theme.opacity.pressed : 1,
 					},
 					theme.elevation.overlay,
 					isFocused

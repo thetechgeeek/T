@@ -1,9 +1,17 @@
 import React, { forwardRef, useState } from 'react';
-import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import {
+	Platform,
+	Pressable,
+	StyleSheet,
+	View,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
+import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { SIZE_RADIO_INNER } from '@/src/theme/uiMetrics';
 
@@ -58,6 +66,7 @@ export const Radio = forwardRef<React.ElementRef<typeof Pressable>, RadioProps>(
 		const c = theme.colors;
 		const selectionTokens = theme.components.selectionControl;
 		const [isFocused, setIsFocused] = useState(false);
+		const [isPressed, setIsPressed] = useState(false);
 		const [isSelected, setIsSelected] = useControllableState({
 			value: selected,
 			defaultValue: defaultSelected,
@@ -70,6 +79,7 @@ export const Radio = forwardRef<React.ElementRef<typeof Pressable>, RadioProps>(
 			}
 
 			setIsSelected(true, { source: 'selection' });
+			void triggerDesignSystemHaptic('selection');
 			void announceForScreenReader(`${label} selected`);
 		};
 
@@ -84,14 +94,29 @@ export const Radio = forwardRef<React.ElementRef<typeof Pressable>, RadioProps>(
 				accessibilityLabel={accessibilityLabel ?? label}
 				accessibilityHint={description}
 				accessibilityState={{ selected: isSelected, disabled }}
+				hitSlop={theme.spacing.xs}
+				android_ripple={
+					Platform.OS === 'android'
+						? {
+								color: theme.colors.surfaceVariant,
+								borderless: false,
+							}
+						: undefined
+				}
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
+				onPressIn={() => setIsPressed(true)}
+				onPressOut={() => setIsPressed(false)}
 				style={[
 					styles.row,
 					{
 						minHeight: TOUCH_TARGET_MIN_PX,
 						gap: selectionTokens.gap,
-						opacity: disabled ? theme.opacity.inactive : 1,
+						opacity: disabled
+							? theme.opacity.inactive
+							: isPressed
+								? theme.opacity.pressed
+								: 1,
 					},
 					isFocused
 						? buildFocusRingStyle({

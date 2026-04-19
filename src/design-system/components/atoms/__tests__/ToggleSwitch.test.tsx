@@ -1,5 +1,6 @@
 import React from 'react';
 import { AccessibilityInfo } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { fireEvent } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
 import { ToggleSwitch } from '../ToggleSwitch';
@@ -48,6 +49,7 @@ describe('ToggleSwitch', () => {
 		expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledWith(
 			'Auto reminders on',
 		);
+		expect(Haptics.selectionAsync).toHaveBeenCalledTimes(1);
 	});
 
 	it('does not toggle when disabled', () => {
@@ -65,5 +67,13 @@ describe('ToggleSwitch', () => {
 
 		expect(onValueChange).not.toHaveBeenCalled();
 		expect(AccessibilityInfo.announceForAccessibility).not.toHaveBeenCalled();
+	});
+
+	it('adds hitSlop for the compact thumb control', () => {
+		const { getByTestId } = renderWithTheme(
+			<ToggleSwitch label="Auto reminders" testID="toggle" />,
+		);
+
+		expect(getByTestId('toggle').props.hitSlop).toBeGreaterThanOrEqual(4);
 	});
 });

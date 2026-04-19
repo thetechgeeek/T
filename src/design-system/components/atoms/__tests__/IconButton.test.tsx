@@ -49,9 +49,13 @@ describe('IconButton', () => {
 			<IconButton testID="btn" icon={<Text>★</Text>} onPress={jest.fn()} />,
 		);
 		const btn = getByTestId('btn');
-		const style = Array.isArray(btn.props.style)
-			? Object.assign({}, ...btn.props.style.filter(Boolean))
-			: btn.props.style;
+		const resolvedStyle =
+			typeof btn.props.style === 'function'
+				? btn.props.style({ pressed: false })
+				: btn.props.style;
+		const style = Array.isArray(resolvedStyle)
+			? Object.assign({}, ...resolvedStyle.filter(Boolean))
+			: resolvedStyle;
 		expect(style.minWidth).toBeGreaterThanOrEqual(48);
 		expect(style.minHeight).toBeGreaterThanOrEqual(48);
 	});
@@ -67,6 +71,14 @@ describe('IconButton', () => {
 
 		expect(getByLabelText('Open filters')).toBeTruthy();
 	});
+
+	it('adds hitSlop to small icon actions', () => {
+		const { getByTestId } = renderWithTheme(
+			<IconButton testID="btn" icon={<Text>★</Text>} onPress={jest.fn()} />,
+		);
+
+		expect(getByTestId('btn').props.hitSlop).toBeGreaterThanOrEqual(4);
+	});
 });
 
 describe('FAB', () => {
@@ -80,9 +92,13 @@ describe('FAB', () => {
 	it('has 56dp size', () => {
 		const { getByTestId } = renderWithTheme(<FAB testID="fab" onPress={jest.fn()} />);
 		const fab = getByTestId('fab');
-		const style = Array.isArray(fab.props.style)
-			? Object.assign({}, ...fab.props.style.filter(Boolean))
-			: fab.props.style;
+		const resolvedStyle =
+			typeof fab.props.style === 'function'
+				? fab.props.style({ pressed: false })
+				: fab.props.style;
+		const style = Array.isArray(resolvedStyle)
+			? Object.assign({}, ...resolvedStyle.filter(Boolean))
+			: resolvedStyle;
 		expect(style).toEqual(expect.objectContaining({ width: 56, height: 56 }));
 	});
 });

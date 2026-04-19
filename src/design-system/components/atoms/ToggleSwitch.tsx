@@ -1,9 +1,17 @@
 import React, { forwardRef, useState } from 'react';
-import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import {
+	Platform,
+	Pressable,
+	StyleSheet,
+	View,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
+import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export interface ToggleSwitchProps {
@@ -37,6 +45,7 @@ export const ToggleSwitch = forwardRef<React.ElementRef<typeof Pressable>, Toggl
 		const c = theme.colors;
 		const toggleTokens = theme.components.toggleSwitch;
 		const [isFocused, setIsFocused] = useState(false);
+		const [isPressed, setIsPressed] = useState(false);
 		const [isOn, setIsOn] = useControllableState({
 			value,
 			defaultValue,
@@ -50,6 +59,7 @@ export const ToggleSwitch = forwardRef<React.ElementRef<typeof Pressable>, Toggl
 
 			const nextValue = !isOn;
 			setIsOn(nextValue, { source: 'toggle' });
+			void triggerDesignSystemHaptic('selection');
 			void announceForScreenReader(
 				`${label ?? accessibilityLabel ?? 'Switch'} ${nextValue ? 'on' : 'off'}`,
 			);
@@ -66,14 +76,29 @@ export const ToggleSwitch = forwardRef<React.ElementRef<typeof Pressable>, Toggl
 				accessibilityLabel={accessibilityLabel ?? label ?? 'Toggle setting'}
 				accessibilityHint={description}
 				accessibilityState={{ checked: isOn, disabled }}
+				hitSlop={theme.spacing.xs}
+				android_ripple={
+					Platform.OS === 'android'
+						? {
+								color: theme.colors.surfaceVariant,
+								borderless: false,
+							}
+						: undefined
+				}
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
+				onPressIn={() => setIsPressed(true)}
+				onPressOut={() => setIsPressed(false)}
 				style={[
 					styles.row,
 					{
 						minHeight: toggleTokens.minHeight,
 						gap: toggleTokens.gap,
-						opacity: disabled ? theme.opacity.inactive : 1,
+						opacity: disabled
+							? theme.opacity.inactive
+							: isPressed
+								? theme.opacity.pressed
+								: 1,
 					},
 					isFocused
 						? buildFocusRingStyle({

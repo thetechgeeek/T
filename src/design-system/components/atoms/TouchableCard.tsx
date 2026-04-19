@@ -1,5 +1,11 @@
 import React, { forwardRef, useState } from 'react';
-import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native';
+import {
+	Platform,
+	Pressable,
+	type PressableProps,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { buildFocusRingStyle } from '@/src/utils/accessibility';
@@ -83,6 +89,14 @@ export const TouchableCard = forwardRef<React.ElementRef<typeof Pressable>, Touc
 					testID={testID}
 					disabled={disabled}
 					focusable={!disabled}
+					android_ripple={
+						Platform.OS === 'android'
+							? {
+									color: theme.colors.surfaceVariant,
+									borderless: false,
+								}
+							: undefined
+					}
 					onPress={handlePress}
 					onPressIn={handlePressIn}
 					onPressOut={handlePressOut}

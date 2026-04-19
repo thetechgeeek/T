@@ -1,5 +1,6 @@
 import React from 'react';
 import { AccessibilityInfo } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { fireEvent } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
 import { Radio, RadioGroup } from '../Radio';
@@ -36,6 +37,7 @@ describe('Radio', () => {
 		expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledWith(
 			'Daily summary selected',
 		);
+		expect(Haptics.selectionAsync).toHaveBeenCalledTimes(1);
 	});
 
 	it('does not select when disabled', () => {
@@ -71,5 +73,11 @@ describe('Radio', () => {
 		fireEvent.press(getByTestId('radio-daily'));
 
 		expect(onValueChange).toHaveBeenCalledWith('daily', { source: 'selection' });
+	});
+
+	it('adds hitSlop for compact radio controls', () => {
+		const { getByTestId } = renderWithTheme(<Radio label="Daily summary" testID="radio" />);
+
+		expect(getByTestId('radio').props.hitSlop).toBeGreaterThanOrEqual(4);
 	});
 });

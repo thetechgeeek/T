@@ -1,5 +1,6 @@
 import React from 'react';
 import { AccessibilityInfo } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { fireEvent } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
 import { Checkbox, CheckboxGroup } from '../Checkbox';
@@ -58,6 +59,7 @@ describe('Checkbox', () => {
 		expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledWith(
 			'Apply to current and future items checked',
 		);
+		expect(Haptics.selectionAsync).toHaveBeenCalledTimes(1);
 	});
 
 	it('does not toggle when disabled', () => {
@@ -94,5 +96,13 @@ describe('Checkbox', () => {
 		fireEvent.press(getByTestId('checkbox-sms'));
 
 		expect(onValuesChange).toHaveBeenCalledWith(['email', 'sms'], { source: 'toggle' });
+	});
+
+	it('adds hitSlop for compact checkbox controls', () => {
+		const { getByTestId } = renderWithTheme(
+			<Checkbox label="Email alerts" testID="checkbox" />,
+		);
+
+		expect(getByTestId('checkbox').props.hitSlop).toBeGreaterThanOrEqual(4);
 	});
 });

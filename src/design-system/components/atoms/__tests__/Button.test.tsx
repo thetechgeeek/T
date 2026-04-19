@@ -167,4 +167,16 @@ describe('Button', () => {
 			expect.objectContaining({ width: '100%' }),
 		);
 	});
+
+	it('adds hitSlop for compact icon-only actions', () => {
+		const { getByLabelText } = renderWithTheme(
+			<>
+				<Button accessibilityLabel="Search" iconOnly leftIcon={<View />} />
+				<Button title="Quick add" size="xs" />
+			</>,
+		);
+
+		expect(getByLabelText('Search').props.hitSlop).toBeGreaterThanOrEqual(4);
+		expect(getByLabelText('Quick add').props.hitSlop).toBeGreaterThanOrEqual(4);
+	});
 });
