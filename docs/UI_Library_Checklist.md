@@ -73,8 +73,8 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Common
 
 - [x] Done means visually coherent, state-complete, accessible, density-aware, localized, and performant
-- [x] Every new component/pattern is reviewed against hierarchy, spacing rhythm, accent budget, surface calm, and fallback quality
-- [x] Every new component/pattern is reviewed with realistic content: long names, ugly data, missing media, empty values, and translated copy
+- [ ] Every new component/pattern is reviewed against hierarchy, spacing rhythm, accent budget, surface calm, and fallback quality
+- [ ] Every new component/pattern is reviewed with realistic content: long names, ugly data, missing media, empty values, and translated copy
 - [x] Every new component/pattern documents when to use relaxed/premium presentation vs compact/operational presentation
 
 ---
@@ -360,7 +360,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [x] System appearance changes handled via `Appearance` API
-- [x] Reduced motion respected via `AccessibilityInfo.isReduceMotionEnabled()`
+- [ ] Reduced motion respected via `AccessibilityInfo.isReduceMotionEnabled()`
 - [x] Bold text preference respected (iOS `isBoldTextEnabled`)
 
 ### Testing Contract (Per Component)
@@ -1132,7 +1132,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [x] VoiceOver/TalkBack focus set to screen title on navigation
+- [ ] VoiceOver/TalkBack focus set to screen title on navigation
 - [x] `AccessibilityInfo.setAccessibilityFocus(ref)` for programmatic focus
 - [x] Focus order follows visual layout (use `accessibilityViewIsModal` for modals)
 - [x] `accessibilityElementsHidden` (iOS) / `importantForAccessibility="no-hide-descendants"` (Android) for content behind modals
@@ -1186,8 +1186,8 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [x] `AccessibilityInfo.isReduceMotionEnabled()` checked before animations
-- [x] `Animated` / `Reanimated` animations disabled or instant under reduced motion
+- [ ] `AccessibilityInfo.isReduceMotionEnabled()` checked before animations
+- [ ] `Animated` / `Reanimated` animations disabled or instant under reduced motion
 - [x] `LayoutAnimation` disabled under reduced motion
 - [x] Skeleton loaders: static under reduced motion
 
@@ -1255,7 +1255,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [x] Directional icons (arrows, chevrons) mirrored in RTL
+- [ ] Directional icons (arrows, chevrons) mirrored in RTL
 - [x] RTL visual regression tests in CI pipeline
 
 #### Web
@@ -1266,11 +1266,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [x] `I18nManager.forceRTL(true)` / `I18nManager.allowRTL(true)` configured
-- [x] `writingDirection: 'rtl'` on text styles
-- [x] Flexbox `direction` property for layout mirroring
-- [x] `I18nManager.isRTL` for conditional directional logic
-- [x] App restart handling after RTL toggle (or hot-reload if supported)
+- [ ] `I18nManager.forceRTL(true)` / `I18nManager.allowRTL(true)` configured
+- [ ] `writingDirection: 'rtl'` on text styles
+- [ ] Flexbox `direction` property for layout mirroring
+- [ ] `I18nManager.isRTL` for conditional directional logic
+- [ ] App restart handling after RTL toggle (or hot-reload if supported)
 
 ### Locale-Aware Formatting
 
@@ -1294,17 +1294,17 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 - [x] UI accommodates text expansion up to 40% (German, Finnish)
 - [ ] No fixed-width containers for text labels (wrapping allowed)
-- [x] Truncation with tooltip/hint fallback for space-constrained labels
-- [x] All locales tested in visual regression (minimum: en-US, de-DE, ar-SA, ja-JP)
-- [x] Hero headings, pill controls, chips, and metric labels wrap/scale gracefully under long locales
-- [x] Dense table/card layouts preserve hierarchy when translated labels grow
+- [ ] Truncation with tooltip/hint fallback for space-constrained labels
+- [ ] All locales tested in visual regression (minimum: en-US, de-DE, ar-SA, ja-JP)
+- [ ] Hero headings, pill controls, chips, and metric labels wrap/scale gracefully under long locales
+- [ ] Dense table/card layouts preserve hierarchy when translated labels grow
 
 ### Character Set & Encoding
 
 #### Common
 
 - [x] UTF-8 encoding end-to-end
-- [x] Support for non-Latin scripts: CJK, Arabic, Hebrew, Devanagari
+- [ ] Support for non-Latin scripts: CJK, Arabic, Hebrew, Devanagari
 - [x] Font stacks include system fallbacks for scripts not covered by brand font
 - [x] Correct line-breaking rules per script
 
@@ -1376,8 +1376,8 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [x] Component library is tree-shakeable (ESM exports, no side effects)
-- [x] Per-component bundle size limits enforced
+- [ ] Component library is tree-shakeable (ESM exports, no side effects)
+- [ ] Per-component bundle size limits enforced
 - [x] No circular dependencies between component packages
 - [ ] Base component usability does not depend on optional illustration, chart, or animation packages
 
@@ -1387,7 +1387,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [x] Native dependency budget enforced (each adds binary size)
+- [ ] Native dependency budget enforced (each adds binary size)
 
 ---
 
@@ -1590,7 +1590,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [x] `AccessibilityInfo.isReduceMotionEnabled()` listener registered at app root
-- [x] All Reanimated / Animated animations conditional on reduced-motion flag
+- [ ] All Reanimated / Animated animations conditional on reduced-motion flag
 - [x] `LayoutAnimation` skipped under reduced motion
 - [x] Provide `useReducedMotion()` hook for component-level opt-out
 
