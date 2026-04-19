@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { TableRow } from '../TableRow';
 
@@ -53,5 +53,21 @@ describe('TableRow', () => {
 			? Object.assign({}, ...json.children[0].props.style)
 			: json.children[0].props.style;
 		expect(firstCellStyle.width).toBe(42);
+	});
+
+	it('shows a long-press tooltip when a dense label would otherwise truncate', () => {
+		const longLabel =
+			'Betriebsabschlussubersicht mit ausfuhrlicher Hierarchie und Eskalationshinweis';
+		const { getByTestId, getByText } = renderWithTheme(
+			<TableRow
+				testID="table-row-overflow"
+				variant="header"
+				columns={[{ label: longLabel }]}
+			/>,
+		);
+
+		fireEvent(getByText(longLabel), 'longPress');
+
+		expect(getByTestId('table-row-overflow-tooltip-0')).toBeTruthy();
 	});
 });

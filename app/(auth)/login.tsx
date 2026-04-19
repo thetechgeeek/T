@@ -9,16 +9,38 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@/src/design-system/components/atoms/Screen';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { TextInput } from '@/src/design-system/components/atoms/TextInput';
 import { PhoneInput } from '@/src/design-system/components/molecules/PhoneInput';
+import { AppError } from '@/src/errors';
 
 export default function LoginScreen() {
 	const { c, s, r, typo } = useThemeTokens();
 	const { t } = useLocale();
-	const { sendOtp, loading } = useAuthStore(
-		useShallow((s) => ({ sendOtp: s.sendOtp, loading: s.loading })),
+	const { sendOtp, login, loading } = useAuthStore(
+		useShallow((s) => ({ sendOtp: s.sendOtp, login: s.login, loading: s.loading })),
 	);
 	const router = useRouter();
 	const [phone, setPhone] = useState('');
+	const [devEmail, setDevEmail] = useState('');
+	const [devPassword, setDevPassword] = useState('');
+	const [devError, setDevError] = useState('');
+
+	const showDevLogin = __DEV__;
+	const canSubmitDevLogin = devEmail.trim().length > 0 && devPassword.length > 0;
+
+	const handleDevEmailChange = (value: string) => {
+		setDevEmail(value);
+		if (devError) {
+			setDevError('');
+		}
+	};
+
+	const handleDevPasswordChange = (value: string) => {
+		setDevPassword(value);
+		if (devError) {
+			setDevError('');
+		}
+	};
 
 	const handleSendOtp = async () => {
 		if (phone.length < 10) {
@@ -35,7 +57,30 @@ export default function LoginScreen() {
 		} catch (e: unknown) {
 			Alert.alert(
 				t('auth.errorOtpFailed'),
-				e instanceof Error ? e.message : t('common.unexpectedError'),
+				e instanceof AppError
+					? e.userMessage
+					: e instanceof Error
+						? e.message
+						: t('common.unexpectedError'),
+			);
+		}
+	};
+
+	const handleDevLogin = async () => {
+		if (!canSubmitDevLogin || loading) {
+			return;
+		}
+
+		setDevError('');
+		try {
+			await login(devEmail.trim(), devPassword);
+		} catch (e: unknown) {
+			setDevError(
+				e instanceof AppError
+					? e.userMessage
+					: e instanceof Error
+						? e.message
+						: t('common.unexpectedError'),
 			);
 		}
 	};
@@ -115,6 +160,79 @@ export default function LoginScreen() {
 					style={{ marginTop: s.xl }}
 				/>
 
+				{showDevLogin ? (
+					<View
+						testID="dev-login-panel"
+						style={[
+							styles.devPanel,
+							{
+								marginTop: s['2xl'],
+								padding: s.lg,
+								borderRadius: r.lg,
+								borderColor: c.border,
+								backgroundColor: c.surface,
+							},
+						]}
+					>
+						<ThemedText variant="label" weight="bold" style={{ color: c.primary }}>
+							Dev only
+						</ThemedText>
+						<ThemedText
+							variant="caption"
+							style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
+						>
+							Use email and password in simulator or local development builds when SMS
+							OTP is unavailable.
+						</ThemedText>
+
+						<TextInput
+							testID="dev-email-input"
+							label="Email"
+							placeholder="dev@example.com"
+							value={devEmail}
+							onChangeText={handleDevEmailChange}
+							autoCapitalize="none"
+							autoCorrect={false}
+							keyboardType="email-address"
+							textContentType="emailAddress"
+							containerStyle={{ marginTop: s.lg }}
+						/>
+
+						<TextInput
+							testID="dev-password-input"
+							label="Password"
+							placeholder="Enter password"
+							value={devPassword}
+							onChangeText={handleDevPasswordChange}
+							secureTextEntry
+							textContentType="password"
+							containerStyle={{ marginTop: s.md }}
+						/>
+
+						{devError ? (
+							<ThemedText
+								testID="dev-login-error"
+								variant="caption"
+								style={{ color: c.error, marginTop: s.sm }}
+							>
+								{devError}
+							</ThemedText>
+						) : null}
+
+						<Button
+							title="Dev Sign In"
+							accessibilityLabel="Dev sign in"
+							testID="dev-login-button"
+							onPress={handleDevLogin}
+							loading={loading}
+							disabled={!canSubmitDevLogin}
+							variant="secondary"
+							size="md"
+							style={{ marginTop: s.lg }}
+						/>
+					</View>
+				) : null}
+
 				{/* Help text */}
 				<View style={[styles.helpBlock, { marginTop: s['3xl'] }]}>
 					<ThemedText variant="caption" color={c.onSurfaceVariant}>
@@ -144,5 +262,6 @@ const styles = StyleSheet.create({
 	appName: { fontWeight: '800' },
 	subtitle: { textAlign: 'center' },
 	form: { flex: 1 },
+	devPanel: { borderWidth: 1 },
 	helpBlock: { alignItems: 'center' },
 });

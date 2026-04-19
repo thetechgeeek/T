@@ -42,6 +42,7 @@ module.exports = {
 		'^@/i18n/(.*)$': '<rootDir>/src/i18n/$1',
 		'^@/src/(.*)$': '<rootDir>/src/$1',
 		'^@/(.*)$': '<rootDir>/$1',
+		'^@formatjs/(.*)$': '<rootDir>/src/__mocks__/noop.ts',
 		'^expo-file-system$': '<rootDir>/src/__mocks__/expo-file-system.ts',
 		'^expo-file-system/legacy$': '<rootDir>/src/__mocks__/expo-file-system.ts',
 		'^expo-sharing$': '<rootDir>/src/__mocks__/expo-sharing.ts',
@@ -49,7 +50,7 @@ module.exports = {
 		'^expo-document-picker$': '<rootDir>/src/__mocks__/expo-document-picker.ts',
 	},
 	transformIgnorePatterns: [
-		'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|immer|zustand|lucide-react-native)',
+		'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@formatjs/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|immer|zustand|lucide-react-native)',
 	],
 	// Minimal setup — NO Supabase mock, NO RN component mocks
 	// Integration tests only need basic env, not React Native UI mocks

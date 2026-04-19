@@ -108,7 +108,7 @@
   --ds-color-semantic-light-on-info: #FFFFFF;
   --ds-color-semantic-light-info-light: #DBEAFE;
   --ds-color-semantic-light-border: #E5DDD5;
-  --ds-color-semantic-light-border-strong: #B0A49C;
+  --ds-color-semantic-light-border-strong: #8D8078;
   --ds-color-semantic-light-separator: #EDE8E4;
   --ds-color-semantic-light-overlay: rgba(0,0,0,0.4);
   --ds-color-semantic-light-scrim: rgba(0,0,0,0.6);
@@ -154,7 +154,7 @@
   --ds-color-semantic-dark-on-info: #000000;
   --ds-color-semantic-dark-info-light: #1E3A8A;
   --ds-color-semantic-dark-border: #38383A;
-  --ds-color-semantic-dark-border-strong: #5D4838;
+  --ds-color-semantic-dark-border-strong: #7A6A60;
   --ds-color-semantic-dark-separator: #302820;
   --ds-color-semantic-dark-overlay: rgba(0,0,0,0.6);
   --ds-color-semantic-dark-scrim: rgba(0,0,0,0.8);

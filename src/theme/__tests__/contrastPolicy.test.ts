@@ -1,4 +1,5 @@
 import { buildTheme } from '../colors';
+import type { ThemePresetId } from '../index';
 
 function hexToLinearRgb(hex: string) {
 	const normalized = hex.replace('#', '').slice(0, 6);
@@ -22,12 +23,31 @@ function contrastRatio(foreground: string, background: string) {
 	return (lightest + 0.05) / (darkest + 0.05);
 }
 
-const THEME_MATRIX = [
-	{ label: 'light default', theme: buildTheme(false) },
-	{ label: 'dark default', theme: buildTheme(true) },
-	{ label: 'light high contrast', theme: buildTheme(false, { contrastMode: 'high' }) },
-	{ label: 'dark high contrast', theme: buildTheme(true, { contrastMode: 'high' }) },
+const PRESET_IDS: readonly ThemePresetId[] = [
+	'baseline',
+	'executive',
+	'studio',
+	'prism',
+	'mono',
 ] as const;
+
+const PRESET_THEME_MATRIX = PRESET_IDS.flatMap(
+	(presetId) =>
+		[
+			{ label: `${presetId} light`, theme: buildTheme(false, presetId) },
+			{ label: `${presetId} dark`, theme: buildTheme(true, presetId) },
+		] satisfies ReadonlyArray<{
+			label: string;
+			theme: ReturnType<typeof buildTheme>;
+		}>,
+);
+
+const HIGH_CONTRAST_MATRIX = (['light', 'dark'] as const).map((mode) => ({
+	label: `${mode} high contrast`,
+	theme: buildTheme(mode === 'dark', 'baseline', { contrastMode: 'high' }),
+}));
+
+const THEME_MATRIX = [...PRESET_THEME_MATRIX, ...HIGH_CONTRAST_MATRIX] as const;
 
 describe('theme contrast policy', () => {
 	it.each(THEME_MATRIX)('keeps text tokens at or above WCAG AA in $label', ({ theme }) => {
@@ -51,6 +71,9 @@ describe('theme contrast policy', () => {
 			expect(contrastRatio(theme.colors.error, theme.colors.surface)).toBeGreaterThanOrEqual(
 				3,
 			);
+			expect(
+				contrastRatio(theme.colors.borderStrong, theme.colors.surface),
+			).toBeGreaterThanOrEqual(3);
 		},
 	);
 });

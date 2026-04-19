@@ -1,7 +1,12 @@
 import React, { forwardRef, useState } from 'react';
 import { Modal, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, {
+	runOnJS,
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+} from 'react-native-reanimated';
 import { Image as ExpoImage } from 'expo-image';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react-native';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
@@ -95,7 +100,6 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 		};
 
 		const pinchGesture = Gesture.Pinch()
-			.runOnJS(true)
 			.onUpdate((event) => {
 				scale.value = clamp(event.scale, 1, 3);
 			})
@@ -103,22 +107,20 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 				scale.value = withSpring(1);
 			});
 
-		const panGesture = Gesture.Pan()
-			.runOnJS(true)
-			.onFinalize((event) => {
-				if (event.translationY > DISMISS_SWIPE_THRESHOLD_Y) {
-					setViewerOpen(false);
-					return;
-				}
-				if (event.translationX < -GALLERY_NAVIGATION_THRESHOLD_X) {
-					void triggerDesignSystemHaptic('selection');
-					void setViewerIndex(currentIndex + 1);
-				}
-				if (event.translationX > GALLERY_NAVIGATION_THRESHOLD_X) {
-					void triggerDesignSystemHaptic('selection');
-					void setViewerIndex(currentIndex - 1);
-				}
-			});
+		const panGesture = Gesture.Pan().onFinalize((event) => {
+			if (event.translationY > DISMISS_SWIPE_THRESHOLD_Y) {
+				runOnJS(setViewerOpen)(false);
+				return;
+			}
+			if (event.translationX < -GALLERY_NAVIGATION_THRESHOLD_X) {
+				runOnJS(triggerDesignSystemHaptic)('selection');
+				runOnJS(setViewerIndex)(currentIndex + 1);
+			}
+			if (event.translationX > GALLERY_NAVIGATION_THRESHOLD_X) {
+				runOnJS(triggerDesignSystemHaptic)('selection');
+				runOnJS(setViewerIndex)(currentIndex - 1);
+			}
+		});
 
 		const loadedSet = new Set(loadedIds);
 		const failedSet = new Set(failedIds);
@@ -133,7 +135,11 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 					animationType="fade"
 					onRequestClose={() => setViewerOpen(false)}
 				>
-					<View style={[styles.overlay, { backgroundColor: theme.colors.scrim }]}>
+					<View
+						style={[styles.overlay, { backgroundColor: theme.colors.scrim }]}
+						accessibilityViewIsModal
+						importantForAccessibility="yes"
+					>
 						<View style={styles.header}>
 							<ThemedText variant="captionBold" style={{ color: theme.colors.white }}>
 								{`${currentIndex + 1} / ${items.length}`}
@@ -179,6 +185,9 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 											source={{ uri: currentItem.thumbnailUri }}
 											style={styles.image}
 											contentFit="cover"
+											cachePolicy="memory-disk"
+											priority="high"
+											recyclingKey={`${currentItem.id}-thumbnail`}
 											accessible={false}
 										/>
 									) : null}
@@ -187,6 +196,9 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 											source={{ uri: currentItem.uri }}
 											style={styles.image}
 											contentFit="contain"
+											cachePolicy="memory-disk"
+											priority="high"
+											recyclingKey={currentItem.id}
 											onLoad={() =>
 												setLoadedIds((current) =>
 													currentItem && !current.includes(currentItem.id)

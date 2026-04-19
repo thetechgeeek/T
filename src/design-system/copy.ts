@@ -6,7 +6,7 @@ import {
 	type LibraryPlatformFilter,
 } from './catalog';
 
-export type DesignSystemLocale = 'en' | 'pseudo' | 'ar';
+export type DesignSystemLocale = 'en' | 'de' | 'ja' | 'pseudo' | 'ar';
 export type DesignSystemDirection = 'ltr' | 'rtl';
 
 type Localizer = (value: string) => string;
@@ -68,6 +68,10 @@ const PSEUDO_CHAR_MAP: Record<string, string> = {
 
 const RTL_EMBED = '\u202B';
 const RTL_POP = '\u202C';
+const IDEOGRAPHIC_SPACE = '\u3000';
+const FULL_WIDTH_CODE_POINT_OFFSET = 0xfee0;
+const FULL_WIDTH_ASCII_START = '!'.codePointAt(0)!;
+const FULL_WIDTH_ASCII_END = '~'.codePointAt(0)!;
 
 function pseudoLocalize(value: string) {
 	const transformed = value
@@ -77,7 +81,54 @@ function pseudoLocalize(value: string) {
 	return `[~ ${transformed} ~]`;
 }
 
+function stretchLocalize(value: string) {
+	return value.replace(/\b([A-Za-z]{4,})\b/g, (_match, word: string) => {
+		if (word.endsWith('ing')) {
+			return `${word}en`;
+		}
+
+		if (word.endsWith('ion') || word.endsWith('ment')) {
+			return `${word}sbereich`;
+		}
+
+		if (word.endsWith('y')) {
+			return `${word.slice(0, -1)}ische`;
+		}
+
+		return `${word}raum`;
+	});
+}
+
+function toFullWidth(char: string) {
+	if (char === ' ') {
+		return IDEOGRAPHIC_SPACE;
+	}
+
+	const codePoint = char.codePointAt(0);
+	if (codePoint == null) {
+		return char;
+	}
+
+	if (codePoint >= FULL_WIDTH_ASCII_START && codePoint <= FULL_WIDTH_ASCII_END) {
+		return String.fromCodePoint(codePoint + FULL_WIDTH_CODE_POINT_OFFSET);
+	}
+
+	return char;
+}
+
+function fullWidthLocalize(value: string) {
+	return value.split('').map(toFullWidth).join('');
+}
+
 function createLocalizer(locale: DesignSystemLocale): Localizer {
+	if (locale === 'de') {
+		return stretchLocalize;
+	}
+
+	if (locale === 'ja') {
+		return fullWidthLocalize;
+	}
+
 	if (locale === 'pseudo') {
 		return pseudoLocalize;
 	}
@@ -727,6 +778,8 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 	];
 	const localeOptions: ReadonlyArray<{ label: string; value: DesignSystemLocale }> = [
 		{ label: 'English', value: 'en' },
+		{ label: 'German (Long)', value: 'de' },
+		{ label: 'Japanese (CJK)', value: 'ja' },
 		{ label: 'Pseudo', value: 'pseudo' },
 		{ label: 'Arabic (RTL)', value: 'ar' },
 	];

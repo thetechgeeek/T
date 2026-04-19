@@ -238,6 +238,7 @@ export function ThemeProvider({
 	const theme = useMemo(
 		() =>
 			buildTheme(resolvedIsDark, resolvedPresetId, {
+				contrastMode: runtime.highTextContrastEnabled ? 'high' : 'default',
 				pixelRatio: runtime.pixelRatio,
 				detectedLocale: runtime.detectedLocale,
 				viewportWidth: runtime.windowWidth,
@@ -247,6 +248,7 @@ export function ThemeProvider({
 			resolvedIsDark,
 			resolvedPresetId,
 			runtime.detectedLocale,
+			runtime.highTextContrastEnabled,
 			runtime.pixelRatio,
 			runtime.windowHeight,
 			runtime.windowWidth,

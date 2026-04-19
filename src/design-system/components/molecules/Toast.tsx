@@ -148,11 +148,34 @@ export function Toast({
 			]}
 			accessibilityLiveRegion="polite"
 			accessibilityRole="alert"
+			accessibilityLabel={`${
+				variant === 'success'
+					? 'Success'
+					: variant === 'warning'
+						? 'Warning'
+						: variant === 'error'
+							? 'Error'
+							: 'Info'
+			}: ${message}`}
 		>
 			<View style={styles.row}>
-				<ThemedText variant="caption" style={{ color: c.onSurface, flex: 1 }}>
-					{message}
-				</ThemedText>
+				<View style={{ flex: 1 }}>
+					<ThemedText variant="captionBold" style={{ color: borderColor }}>
+						{variant === 'success'
+							? 'Success'
+							: variant === 'warning'
+								? 'Warning'
+								: variant === 'error'
+									? 'Error'
+									: 'Info'}
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						style={{ color: c.onSurface, marginTop: theme.spacing.xxs }}
+					>
+						{message}
+					</ThemedText>
+				</View>
 				{actionLabel && onAction ? (
 					<Pressable
 						testID={`${testID ?? 'toast'}-action`}

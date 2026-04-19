@@ -521,6 +521,7 @@ type Selector<TState> = ((state: TState) => unknown) | undefined;
 
 let authStoreState: {
 	sendOtp: jest.Mock;
+	login: jest.Mock;
 	loading: boolean;
 	user: { phone: string };
 };
@@ -625,6 +626,7 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 
 		authStoreState = {
 			sendOtp: jest.fn().mockResolvedValue(undefined),
+			login: jest.fn().mockResolvedValue(undefined),
 			loading: false,
 			user: { phone: '+919876543210' },
 		};

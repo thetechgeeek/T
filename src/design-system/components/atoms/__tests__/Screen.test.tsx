@@ -13,6 +13,7 @@ interface RenderedRootNode {
 	props: {
 		style?: StyleProp<ViewStyle>;
 		behavior?: string;
+		onMagicTap?: () => void;
 	};
 }
 

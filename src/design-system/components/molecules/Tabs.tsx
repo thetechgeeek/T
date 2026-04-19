@@ -22,6 +22,12 @@ export interface TabsProps {
 	style?: StyleProp<ViewStyle>;
 }
 
+type PressableKeyEvent = {
+	nativeEvent: {
+		key: string;
+	};
+};
+
 export const Tabs = forwardRef<View, TabsProps>(
 	({ options, value, defaultValue, onChange, onValueChange, testID, style }, ref) => {
 		const { theme } = useTheme();
@@ -34,6 +40,35 @@ export const Tabs = forwardRef<View, TabsProps>(
 				onValueChange?.(nextValue, { source: 'selection' });
 			},
 		});
+		const selectOptionAtIndex = (nextIndex: number) => {
+			const nextOption = options[nextIndex];
+			if (!nextOption) {
+				return;
+			}
+
+			setCurrentValue(nextOption.value, { source: 'selection' });
+		};
+		const handleKeyPress = (key: string, currentIndex: number) => {
+			if (key === 'ArrowRight' || key === 'ArrowDown') {
+				selectOptionAtIndex(Math.min(options.length - 1, currentIndex + 1));
+				return;
+			}
+			if (key === 'ArrowLeft' || key === 'ArrowUp') {
+				selectOptionAtIndex(Math.max(0, currentIndex - 1));
+				return;
+			}
+			if (key === 'Home') {
+				selectOptionAtIndex(0);
+				return;
+			}
+			if (key === 'End') {
+				selectOptionAtIndex(options.length - 1);
+				return;
+			}
+			if (key === 'Enter' || key === ' ') {
+				selectOptionAtIndex(currentIndex);
+			}
+		};
 
 		return (
 			<View ref={ref} testID={testID} style={style}>
@@ -47,15 +82,25 @@ export const Tabs = forwardRef<View, TabsProps>(
 					}}
 				>
 					{options.map((option) => {
+						const optionIndex = options.findIndex(
+							(entry) => entry.value === option.value,
+						);
 						const selected = option.value === currentValue;
+						const keyboardProps = {
+							onKeyPress: (event: PressableKeyEvent) =>
+								handleKeyPress(event.nativeEvent.key, optionIndex),
+						} as unknown as React.ComponentProps<typeof Pressable>;
 						return (
 							<Pressable
+								{...keyboardProps}
 								key={option.value}
 								testID={`${testID ?? 'tabs'}-${option.value}`}
 								onPress={() =>
 									setCurrentValue(option.value, { source: 'selection' })
 								}
+								focusable
 								accessibilityRole="tab"
+								accessibilityLabel={option.label}
 								accessibilityState={{ selected }}
 								style={{
 									minHeight: theme.touchTarget,

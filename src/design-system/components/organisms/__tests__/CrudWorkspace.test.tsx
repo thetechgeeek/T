@@ -17,4 +17,18 @@ describe('CrudWorkspace', () => {
 		expect(getByText('Permanently delete')).toBeTruthy();
 		expect(getByText('Version history / audit log')).toBeTruthy();
 	});
+
+	it('keeps dense rows screen-reader addressable', () => {
+		const { getAllByLabelText, getByText } = renderWithTheme(<CrudWorkspace />);
+
+		fireEvent.press(getByText('Dense'));
+
+		const denseRow = getAllByLabelText('Northwind supplier import').find(
+			(element) => element.props.accessibilityHint === 'Double tap to compare this record',
+		);
+
+		expect(denseRow).toBeTruthy();
+		expect(denseRow).toHaveProp('accessibilityRole', 'button');
+		expect(denseRow).toHaveProp('accessibilityHint', 'Double tap to compare this record');
+	});
 });

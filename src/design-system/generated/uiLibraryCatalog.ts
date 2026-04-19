@@ -7418,7 +7418,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-semantic-structure-mobile-react-native-accessibilitylabel-on-all-non-text-interactive-',
 		title: '`accessibilityLabel` on all non-text interactive elements',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Semantic Structure',
@@ -7618,7 +7618,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-keyboard-navigation-map-mobile-react-native-external-keyboard-navigation-on-tablets-ta',
 		title: 'External keyboard navigation on tablets (Tab, Enter, arrow keys)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Keyboard Navigation Map',
@@ -7748,7 +7748,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-focus-management-mobile-react-native-accessibilityelementshidden-ios-importantforacces',
 		title: '`accessibilityElementsHidden` (iOS) / `importantForAccessibility="no-hide-descendants"` (Android) for content behind modals',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Focus Management',
@@ -7768,7 +7768,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-color-visual-accessibility-common-ui-component-contrast-3-1-wcag-1-4-11',
 		title: 'UI component contrast: 3:1 (WCAG 1.4.11)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Color & Visual Accessibility',
@@ -7778,7 +7778,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-color-visual-accessibility-common-color-never-sole-differentiator-of-state',
 		title: 'Color never sole differentiator of state',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Color & Visual Accessibility',
@@ -7798,7 +7798,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-color-visual-accessibility-common-charts-use-label-shape-pattern-and-stroke-differenti',
 		title: 'Charts use label, shape, pattern, and stroke differentiation in addition to color',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Color & Visual Accessibility',
@@ -7838,7 +7838,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-color-visual-accessibility-mobile-react-native-android-high-contrast-text-setting-resp',
 		title: 'Android high-contrast text setting respected',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Color & Visual Accessibility',
@@ -8068,7 +8068,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '5-accessibility-a11y-architecture-forms-accessibility-mobile-react-native-accessibilitylabel-on-all-inputs-since-no-html',
 		title: '`accessibilityLabel` on all inputs (since no HTML `<label>`)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '5. Accessibility (a11y) Architecture',
 		subsection: 'Forms Accessibility',
@@ -8228,7 +8228,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-string-externalization-mobile-react-native-i18n-library-integrated-i18next',
 		title: 'i18n library integrated (i18next + react-i18next, expo-localization, or equivalent)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'String Externalization',
@@ -8238,7 +8238,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-string-externalization-mobile-react-native-device-locale-detection-expo-lo',
 		title: 'Device locale detection (`expo-localization` / `react-native-localize`)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'String Externalization',
@@ -8258,7 +8258,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-rtl-right-to-left-layout-support-common-directional-icons-arrows-chevrons-',
 		title: 'Directional icons (arrows, chevrons) mirrored in RTL',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'RTL (Right-to-Left) Layout Support',
@@ -8268,7 +8268,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-rtl-right-to-left-layout-support-common-rtl-visual-regression-tests-in-ci-',
 		title: 'RTL visual regression tests in CI pipeline',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'RTL (Right-to-Left) Layout Support',
@@ -8308,7 +8308,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-rtl-right-to-left-layout-support-mobile-react-native-i18nmanager-forcertl-',
 		title: '`I18nManager.forceRTL(true)` / `I18nManager.allowRTL(true)` configured',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'RTL (Right-to-Left) Layout Support',
@@ -8318,7 +8318,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-rtl-right-to-left-layout-support-mobile-react-native-writingdirection-rtl-',
 		title: "`writingDirection: 'rtl'` on text styles",
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'RTL (Right-to-Left) Layout Support',
@@ -8348,7 +8348,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-rtl-right-to-left-layout-support-mobile-react-native-app-restart-handling-',
 		title: 'App restart handling after RTL toggle (or hot-reload if supported)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'RTL (Right-to-Left) Layout Support',
@@ -8416,9 +8416,9 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '6-internationalization-i18n-localization-l10n-locale-aware-formatting-mobile-react-native-hermes-intl-polyfill-enabled-h',
-		title: 'Hermes `Intl` polyfill enabled (Hermes has limited Intl by default)',
-		completed: false,
+		id: '6-internationalization-i18n-localization-l10n-locale-aware-formatting-mobile-react-native-hermes-intl-polyfill-bundle-en',
+		title: 'Hermes `Intl` polyfill bundle enabled for device + stress locales',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Locale-Aware Formatting',
@@ -8428,7 +8428,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-locale-aware-formatting-mobile-react-native-timezone-handling-device-timez',
 		title: 'Timezone handling: device timezone via `expo-localization` or `react-native-localize`',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Locale-Aware Formatting',
@@ -8438,7 +8438,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-text-expansion-layout-common-ui-accommodates-text-expansion-up-to-40-germa',
 		title: 'UI accommodates text expansion up to 40% (German, Finnish)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Text Expansion & Layout',
@@ -8458,7 +8458,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-text-expansion-layout-common-truncation-with-tooltip-hint-fallback-for-spa',
 		title: 'Truncation with tooltip/hint fallback for space-constrained labels',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Text Expansion & Layout',
@@ -8468,7 +8468,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-text-expansion-layout-common-all-locales-tested-in-visual-regression-minim',
 		title: 'All locales tested in visual regression (minimum: en-US, de-DE, ar-SA, ja-JP)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Text Expansion & Layout',
@@ -8478,7 +8478,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-text-expansion-layout-common-hero-headings-pill-controls-chips-and-metric-',
 		title: 'Hero headings, pill controls, chips, and metric labels wrap/scale gracefully under long locales',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Text Expansion & Layout',
@@ -8488,7 +8488,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-text-expansion-layout-common-dense-table-card-layouts-preserve-hierarchy-w',
 		title: 'Dense table/card layouts preserve hierarchy when translated labels grow',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Text Expansion & Layout',
@@ -8498,7 +8498,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-character-set-encoding-common-utf-8-encoding-end-to-end',
 		title: 'UTF-8 encoding end-to-end',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Character Set & Encoding',
@@ -8508,7 +8508,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-character-set-encoding-common-support-for-non-latin-scripts-cjk-arabic-heb',
 		title: 'Support for non-Latin scripts: CJK, Arabic, Hebrew, Devanagari',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Character Set & Encoding',
@@ -8518,7 +8518,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-character-set-encoding-common-font-stacks-include-system-fallbacks-for-scr',
 		title: 'Font stacks include system fallbacks for scripts not covered by brand font',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Character Set & Encoding',
@@ -8528,7 +8528,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '6-internationalization-i18n-localization-l10n-character-set-encoding-common-correct-line-breaking-rules-per-script',
 		title: 'Correct line-breaking rules per script',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '6. Internationalization (i18n) & Localization (L10n)',
 		subsection: 'Character Set & Encoding',
@@ -8538,7 +8538,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-common-skeleton-loaders-shapes-match-loaded-content-eliminate-layout-shi',
 		title: 'Skeleton loaders: shapes match loaded content (eliminate layout shift)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8548,7 +8548,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-common-optimistic-ui-update-immediately-for-high-success-rate-actions',
 		title: 'Optimistic UI: update immediately for high-success-rate actions',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8558,7 +8558,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-common-stale-while-revalidate-show-cached-data-immediately-refresh-in-ba',
 		title: 'Stale-while-revalidate: show cached data immediately, refresh in background',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8568,7 +8568,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-common-progressive-loading-critical-content-first-secondary-lazy-loaded',
 		title: 'Progressive loading: critical content first, secondary lazy-loaded',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8578,7 +8578,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-common-first-meaningful-hierarchy-screen-title-primary-cta-key-metric-or',
 		title: 'First meaningful hierarchy (screen title, primary CTA, key metric or key task input) appears before decorative enhancements',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8588,7 +8588,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-common-hero-media-illustrations-and-brand-motion-never-block-core-task-r',
 		title: 'Hero media, illustrations, and brand motion never block core task readiness',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8626,9 +8626,9 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '7-performance-ux-perceived-performance-patterns-mobile-react-native-flatlist-flashlist-for-all-scrollable-lists-never-sc',
-		title: '`FlatList` / `FlashList` for all scrollable lists (never `ScrollView` with many children)',
-		completed: false,
+		id: '7-performance-ux-perceived-performance-patterns-mobile-react-native-flatlist-flashlist-sectionlist-for-all-scrollable-li',
+		title: '`FlatList` / `FlashList` / `SectionList` for all scrollable lists (never `ScrollView` with many children)',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8638,7 +8638,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-mobile-react-native-interactionmanager-runafterinteractions-for-deferred',
 		title: '`InteractionManager.runAfterInteractions()` for deferred work after navigation',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8648,7 +8648,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-mobile-react-native-placeholder-shimmer-components-while-screens-mount',
 		title: 'Placeholder / shimmer components while screens mount',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8658,7 +8658,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-perceived-performance-patterns-mobile-react-native-preload-next-screen-data-during-current-screen-inter',
 		title: 'Preload next screen data during current screen interaction',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Perceived Performance Patterns',
@@ -8716,9 +8716,9 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '7-performance-ux-asset-optimization-mobile-react-native-images-react-native-fast-image-for-caching-priority-loading',
-		title: 'Images: `react-native-fast-image` for caching + priority loading',
-		completed: false,
+		id: '7-performance-ux-asset-optimization-mobile-react-native-images-expo-image-react-native-fast-image-for-caching-priority-l',
+		title: 'Images: `expo-image` / `react-native-fast-image` for caching + priority loading',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Asset Optimization',
@@ -8728,7 +8728,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-asset-optimization-mobile-react-native-images-progressive-loading-low-res-placeholder-full-resolution',
 		title: 'Images: progressive loading (low-res placeholder → full resolution)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Asset Optimization',
@@ -8738,7 +8738,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-asset-optimization-mobile-react-native-icons-tree-shaken-svg-components-or-selective-vector-icon-import',
 		title: 'Icons: tree-shaken SVG components or selective vector icon imports',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Asset Optimization',
@@ -8748,7 +8748,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-interaction-responsiveness-common-search-inputs-300ms-debounce',
 		title: 'Search inputs: 300ms debounce',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Interaction Responsiveness',
@@ -8758,7 +8758,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-interaction-responsiveness-common-100ms-no-indicator-100-1000ms-loading-indicator-1000ms-progress-with-',
 		title: '≤ 100ms: no indicator; 100–1000ms: loading indicator; > 1000ms: progress with estimate',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Interaction Responsiveness',
@@ -8818,7 +8818,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-interaction-responsiveness-mobile-react-native-gesture-handler-animations-on-ui-thread-reanimated-usean',
 		title: 'Gesture handler animations on UI thread (Reanimated `useAnimatedGestureHandler`)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Interaction Responsiveness',
@@ -8828,7 +8828,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-interaction-responsiveness-mobile-react-native-list-scroll-performance-removeclippedsubviews-proper-key',
 		title: 'List scroll performance: `removeClippedSubviews`, proper `keyExtractor`',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Interaction Responsiveness',
@@ -8838,7 +8838,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-bundle-performance-common-component-library-is-tree-shakeable-esm-exports-no-side-effects',
 		title: 'Component library is tree-shakeable (ESM exports, no side effects)',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Bundle Performance',
@@ -8848,7 +8848,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-bundle-performance-common-per-component-bundle-size-limits-enforced',
 		title: 'Per-component bundle size limits enforced',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Bundle Performance',
@@ -8858,7 +8858,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '7-performance-ux-bundle-performance-common-no-circular-dependencies-between-component-packages',
 		title: 'No circular dependencies between component packages',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '7. Performance UX',
 		subsection: 'Bundle Performance',
@@ -8886,9 +8886,9 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 		parentId: null,
 	},
 	{
-		id: '7-performance-ux-bundle-performance-mobile-react-native-native-dependency-count-minimized-each-adds-binary-size',
-		title: 'Native dependency count minimized (each adds binary size)',
-		completed: false,
+		id: '7-performance-ux-bundle-performance-mobile-react-native-native-dependency-budget-enforced-each-adds-binary-size',
+		title: 'Native dependency budget enforced (each adds binary size)',
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '7. Performance UX',
 		subsection: 'Bundle Performance',
@@ -11789,8 +11789,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 
 export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 	total: 1175,
-	completed: 646,
-	open: 529,
+	completed: 693,
+	open: 482,
 	common: 638,
 	web: 280,
 	mobile: 257,
@@ -11844,29 +11844,29 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		{
 			name: '5. Accessibility (a11y) Architecture',
 			count: 86,
-			completedCount: 36,
-			openCount: 50,
+			completedCount: 44,
+			openCount: 42,
 			commonMobileCount: 48,
-			commonMobileCompletedCount: 36,
-			commonMobileOpenCount: 12,
+			commonMobileCompletedCount: 44,
+			commonMobileOpenCount: 4,
 		},
 		{
 			name: '6. Internationalization (i18n) & Localization (L10n)',
 			count: 37,
-			completedCount: 9,
-			openCount: 28,
+			completedCount: 27,
+			openCount: 10,
 			commonMobileCount: 33,
-			commonMobileCompletedCount: 9,
-			commonMobileOpenCount: 24,
+			commonMobileCompletedCount: 27,
+			commonMobileOpenCount: 6,
 		},
 		{
 			name: '7. Performance UX',
 			count: 36,
-			completedCount: 0,
-			openCount: 36,
+			completedCount: 21,
+			openCount: 15,
 			commonMobileCount: 23,
-			commonMobileCompletedCount: 0,
-			commonMobileOpenCount: 23,
+			commonMobileCompletedCount: 21,
+			commonMobileOpenCount: 2,
 		},
 		{
 			name: '8. Responsive & Adaptive Design',

@@ -66,7 +66,8 @@
 					"photosPermission": "Allow TileMaster to access your photos to add tile images.",
 					"cameraPermission": "Allow TileMaster to use your camera."
 				}
-			]
+			],
+			"expo-localization"
 		],
 		"experiments": {
 			"typedRoutes": true

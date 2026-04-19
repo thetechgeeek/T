@@ -36,17 +36,25 @@ function getPanGesture(instance: { props: { gesture: unknown } }) {
 
 describe('MediaViewer', () => {
 	it('supports progressive image loading and graceful text fallback', () => {
-		const { UNSAFE_getAllByType, getAllByText, rerender } = renderWithTheme(
-			<MediaViewer items={items} open defaultIndex={0} />,
-		);
+		const { UNSAFE_getAllByProps, UNSAFE_getAllByType, getAllByText, rerender } =
+			renderWithTheme(<MediaViewer items={items} open defaultIndex={0} />);
 
+		expect(
+			UNSAFE_getAllByProps({ accessibilityViewIsModal: true })[0]?.props
+				.importantForAccessibility,
+		).toBe('yes');
 		expect(UNSAFE_getAllByType('Image' as any)).toHaveLength(2);
+		expect(UNSAFE_getAllByType('Image' as any)[0]?.props.cachePolicy).toBe('memory-disk');
+		expect(UNSAFE_getAllByType('Image' as any)[0]?.props.priority).toBe('high');
+		expect(UNSAFE_getAllByType('Image' as any)[1]?.props.cachePolicy).toBe('memory-disk');
+		expect(UNSAFE_getAllByType('Image' as any)[1]?.props.priority).toBe('high');
 
 		act(() => {
 			fireEvent(UNSAFE_getAllByType('Image' as any)[1]!, 'load');
 		});
 
 		expect(UNSAFE_getAllByType('Image' as any)).toHaveLength(1);
+		expect(UNSAFE_getAllByType('Image' as any)[0]?.props.recyclingKey).toBe('media-1');
 
 		rerender(
 			<MediaViewer

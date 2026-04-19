@@ -62,7 +62,6 @@ export const SwipeableRow = forwardRef<React.ElementRef<typeof View>, SwipeableR
 		};
 
 		const swipeGesture = Gesture.Pan()
-			.runOnJS(true)
 			.onUpdate((event) => {
 				translateX.value = Math.max(-revealWidth, Math.min(0, event.translationX));
 			})

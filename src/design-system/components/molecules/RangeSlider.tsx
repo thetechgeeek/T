@@ -1,6 +1,7 @@
 import React, { forwardRef, useMemo, useState } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
+import { runOnJS } from 'react-native-reanimated';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
@@ -56,11 +57,13 @@ export const RangeSlider = forwardRef<View, RangeSliderProps>(
 		const { theme } = useTheme();
 		const c = theme.colors;
 		const [activeHandle, setActiveHandle] = useState<number | null>(null);
-		const [currentValue, setCurrentValue] = useControllableState({
+		const [currentValue, setCurrentValue] = useControllableState<SliderValue>({
 			value,
 			defaultValue:
 				defaultValue ??
-				(range ? [DEFAULT_RANGE_START, DEFAULT_RANGE_END] : DEFAULT_SINGLE_VALUE),
+				(range
+					? ([DEFAULT_RANGE_START, DEFAULT_RANGE_END] as [number, number])
+					: DEFAULT_SINGLE_VALUE),
 			onChange: (nextValue) => {
 				onChange(nextValue);
 				onValueChange?.(nextValue, { source: 'selection' });
@@ -86,20 +89,29 @@ export const RangeSlider = forwardRef<View, RangeSliderProps>(
 
 			if (handleIndex === 0) {
 				const nextStart = clamp(snap(startValue + deltaValue, step), min, endValue);
-				setCurrentValue([nextStart, endValue], { source: 'selection' });
+				setCurrentValue([nextStart, endValue] as [number, number], {
+					source: 'selection',
+				});
 				return;
 			}
 
 			const nextEnd = clamp(snap(endValue + deltaValue, step), startValue, max);
-			setCurrentValue([startValue, nextEnd], { source: 'selection' });
+			setCurrentValue([startValue, nextEnd] as [number, number], {
+				source: 'selection',
+			});
 		};
 
 		const buildHandleGesture = (handleIndex: number) =>
 			Gesture.Pan()
-				.runOnJS(true)
-				.onBegin(() => setActiveHandle(handleIndex))
-				.onChange((event) => updateHandle(handleIndex, event.changeX))
-				.onFinalize(() => setActiveHandle(null));
+				.onBegin(() => {
+					runOnJS(setActiveHandle)(handleIndex);
+				})
+				.onChange((event) => {
+					runOnJS(updateHandle)(handleIndex, event.changeX);
+				})
+				.onFinalize(() => {
+					runOnJS(setActiveHandle)(null);
+				});
 
 		const selectedTrackStyle = useMemo(
 			() => ({

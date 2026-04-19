@@ -191,6 +191,7 @@ jest.mock('react-native', () => {
 	const AccessibilityInfo = {
 		isReduceMotionEnabled: jest.fn().mockResolvedValue(false),
 		isBoldTextEnabled: jest.fn().mockResolvedValue(false),
+		isHighTextContrastEnabled: jest.fn().mockResolvedValue(false),
 		addEventListener: jest.fn(() => ({ remove: jest.fn() })),
 		announceForAccessibility: jest.fn(),
 		setAccessibilityFocus: jest.fn(),
@@ -394,6 +395,18 @@ jest.mock('react-native', () => {
 			scaleXY: 'scaleXY',
 		},
 	};
+	const InteractionManager = {
+		runAfterInteractions: jest.fn((callback?: () => void) => {
+			const timer = setTimeout(() => {
+				callback?.();
+			}, 0);
+			return {
+				cancel: jest.fn(() => clearTimeout(timer)),
+			};
+		}),
+		createInteractionHandle: jest.fn(() => 1),
+		clearInteractionHandle: jest.fn(),
+	};
 	const UIManager = {
 		...RN.UIManager,
 		setLayoutAnimationEnabledExperimental: jest.fn(),
@@ -428,6 +441,7 @@ jest.mock('react-native', () => {
 		I18nManager,
 		Keyboard,
 		Dimensions,
+		InteractionManager,
 		LayoutAnimation,
 		KeyboardAvoidingView,
 		TouchableWithoutFeedback,
@@ -903,6 +917,11 @@ jest.mock('react-native-keyboard-controller', () => {
 	};
 });
 
+jest.mock('expo-localization', () =>
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
+	require('expo-localization/mocks/ExpoLocalization'),
+);
+
 // NOTE: Supabase is intentionally NOT mocked globally (QA issue 3.1).
 // Each test file must declare its own mock via createSupabaseMock() from
 // __tests__/utils/supabaseMock.ts to avoid mock/prod divergence.
@@ -922,6 +941,7 @@ jest.mock('react-native-svg', () => {
 		Text: ({ children, ...props }: any) => React.createElement('Text', props, children),
 		TSpan: ({ children, ...props }: any) => React.createElement('TSpan', props, children),
 		Defs: ({ children, ...props }: any) => React.createElement('Defs', props, children),
+		Pattern: ({ children, ...props }: any) => React.createElement('Pattern', props, children),
 		LinearGradient: ({ children, ...props }: any) =>
 			React.createElement('LinearGradient', props, children),
 		Stop: (props: any) => React.createElement('Stop', props),

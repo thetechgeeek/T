@@ -3,6 +3,7 @@ import { View, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import { useAuthStore } from '@/src/stores/authStore';
+import { AppError } from '@/src/errors';
 import {
 	GLASS_WHITE_LIGHT,
 	OPACITY_HOVER,
@@ -42,7 +43,13 @@ export default function PhoneLoginScreen() {
 				params: { phone: fullPhone },
 			});
 		} catch (e: unknown) {
-			setError(e instanceof Error ? e.message : 'OTP भेजने में समस्या हुई। फिर से try करें।');
+			setError(
+				e instanceof AppError
+					? e.userMessage
+					: e instanceof Error
+						? e.message
+						: 'OTP भेजने में समस्या हुई। फिर से try करें।',
+			);
 		}
 	};
 

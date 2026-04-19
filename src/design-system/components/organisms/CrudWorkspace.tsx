@@ -20,6 +20,11 @@ import { SegmentedControl } from '@/src/design-system/components/molecules/Segme
 import { SwipeableRow } from '@/src/design-system/components/molecules/SwipeableRow';
 import { TableRow } from '@/src/design-system/components/molecules/TableRow';
 import { ToastViewport, type ToastStackItem } from '@/src/design-system/components/molecules/Toast';
+import {
+	responsiveCardStyle,
+	stackOnPhoneRowStyle,
+	useResponsiveWorkbenchLayout,
+} from '@/src/design-system/useResponsiveWorkbenchLayout';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
 export interface CrudWorkspaceRecord {
@@ -138,6 +143,7 @@ function buildDuplicate(record: CrudWorkspaceRecord): CrudWorkspaceRecord {
 export const CrudWorkspace = forwardRef<React.ElementRef<typeof View>, CrudWorkspaceProps>(
 	({ records, defaultRecords = DEFAULT_RECORDS, onRecordsChange, style, testID }, ref) => {
 		const { theme } = useTheme();
+		const { isCompactPhone } = useResponsiveWorkbenchLayout();
 		const [currentRecords, setCurrentRecords] = useControllableState({
 			value: records,
 			defaultValue: defaultRecords,
@@ -335,6 +341,12 @@ export const CrudWorkspace = forwardRef<React.ElementRef<typeof View>, CrudWorks
 									onLongPress={() => void toggleSelected(record.id, 'long-press')}
 									accessibilityRole="button"
 									accessibilityLabel={record.name}
+									accessibilityHint={
+										selectionMode
+											? 'Double tap to select this record'
+											: 'Double tap to compare this record'
+									}
+									accessibilityState={{ selected }}
 									style={{
 										padding: theme.spacing.md,
 										borderWidth: theme.borderWidth.sm,
@@ -345,9 +357,11 @@ export const CrudWorkspace = forwardRef<React.ElementRef<typeof View>, CrudWorks
 										backgroundColor: selected
 											? theme.colors.surfaceVariant
 											: theme.visual.surfaces.default,
-										flexDirection: 'row',
-										alignItems: 'center',
-										gap: theme.spacing.md,
+										...stackOnPhoneRowStyle(isCompactPhone, {
+											gap: theme.spacing.md,
+											alignItems: 'center',
+											wrap: false,
+										}),
 									}}
 								>
 									<Checkbox
@@ -401,6 +415,14 @@ export const CrudWorkspace = forwardRef<React.ElementRef<typeof View>, CrudWorks
 										setComparisonRecordId(record.id);
 									}}
 									onLongPress={() => void toggleSelected(record.id, 'long-press')}
+									accessibilityRole="button"
+									accessibilityLabel={record.name}
+									accessibilityHint={
+										selectionMode
+											? 'Double tap to select this record'
+											: 'Double tap to compare this record'
+									}
+									accessibilityState={{ selected }}
 									style={{
 										backgroundColor: selected
 											? theme.colors.surfaceVariant
@@ -415,11 +437,14 @@ export const CrudWorkspace = forwardRef<React.ElementRef<typeof View>, CrudWorks
 												flex: 2,
 												value: (
 													<View
-														style={{
-															flexDirection: 'row',
-															alignItems: 'center',
-															gap: theme.spacing.sm,
-														}}
+														style={stackOnPhoneRowStyle(
+															isCompactPhone,
+															{
+																gap: theme.spacing.sm,
+																alignItems: 'center',
+																wrap: false,
+															},
+														)}
 													>
 														<Checkbox
 															label="Select record"
@@ -619,7 +644,7 @@ export const CrudWorkspace = forwardRef<React.ElementRef<typeof View>, CrudWorks
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.md }}>
 					<Card
 						variant="outlined"
-						style={{ flex: 1, minWidth: DETAIL_PANEL_MIN_WIDTH }}
+						style={responsiveCardStyle(isCompactPhone, DETAIL_PANEL_MIN_WIDTH)}
 						testID={`${testID ?? 'crud-workspace'}-comparison`}
 					>
 						<CardHeader>Comparison / diff view</CardHeader>
@@ -653,7 +678,7 @@ export const CrudWorkspace = forwardRef<React.ElementRef<typeof View>, CrudWorks
 
 					<Card
 						variant="outlined"
-						style={{ flex: 1, minWidth: DETAIL_PANEL_MIN_WIDTH }}
+						style={responsiveCardStyle(isCompactPhone, DETAIL_PANEL_MIN_WIDTH)}
 						testID={`${testID ?? 'crud-workspace'}-archive`}
 					>
 						<CardHeader>Archive / trash</CardHeader>

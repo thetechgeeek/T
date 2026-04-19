@@ -15,6 +15,19 @@ describe('AlertBanner', () => {
 		expect(getByText('Review the imported data.')).toBeTruthy();
 	});
 
+	it('surfaces a visible tone label so state is not conveyed by color alone', () => {
+		const { getByText } = renderWithTheme(
+			<AlertBanner
+				title="Import blocked"
+				description="Resolve the duplicate customer IDs first."
+				variant="error"
+			/>,
+		);
+
+		expect(getByText('Error')).toBeTruthy();
+		expect(getByText('Import blocked')).toBeTruthy();
+	});
+
 	it('supports inline actions and dismiss', () => {
 		const onAction = jest.fn();
 		const onDismiss = jest.fn();

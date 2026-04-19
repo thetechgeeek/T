@@ -80,6 +80,10 @@ describe('DatePickerField', () => {
 			UNSAFE_getAllByProps({ accessibilityViewIsModal: true })[0]?.props
 				.importantForAccessibility,
 		).toBe('yes');
+		expect(getByTestId('date-picker-backdrop', { includeHiddenElements: true })).toHaveProp(
+			'importantForAccessibility',
+			'no-hide-descendants',
+		);
 	});
 
 	it('uses the native picker when requested', () => {

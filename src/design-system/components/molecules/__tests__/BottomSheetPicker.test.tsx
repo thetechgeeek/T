@@ -1,5 +1,10 @@
 import React from 'react';
-import { Keyboard, Modal, type EmitterSubscription } from 'react-native';
+import {
+	Keyboard,
+	Modal,
+	type EmitterSubscription,
+	type KeyboardEventListener,
+} from 'react-native';
 import { render, fireEvent, act } from '@testing-library/react-native';
 import { BottomSheetPicker } from '../BottomSheetPicker';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
@@ -23,7 +28,7 @@ function flattenStyle(style: unknown) {
 }
 
 function createSubscription(): EmitterSubscription {
-	return { remove: jest.fn() };
+	return { remove: jest.fn() } as unknown as EmitterSubscription;
 }
 
 function getGestureHost(result: ReturnType<typeof renderWithTheme>) {
@@ -207,6 +212,10 @@ describe('BottomSheetPicker', () => {
 			UNSAFE_getAllByProps({ accessibilityViewIsModal: true })[0]?.props
 				.importantForAccessibility,
 		).toBe('yes');
+		expect(getByTestId('bottom-sheet-backdrop', { includeHiddenElements: true })).toHaveProp(
+			'importantForAccessibility',
+			'no-hide-descendants',
+		);
 		expect(getByLabelText('Select Fruit search')).toBeTruthy();
 
 		mockSetAccessibilityFocus.mockClear();
@@ -333,12 +342,12 @@ describe('BottomSheetPicker', () => {
 			expect.objectContaining({ height: '90%' }),
 		);
 
-		fireEvent.press(getByTestId('bottom-sheet-backdrop'));
+		fireEvent.press(getByTestId('bottom-sheet-backdrop', { includeHiddenElements: true }));
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 
 	it('promotes the sheet to the tall snap point when the keyboard opens', () => {
-		const listeners: Record<string, () => void> = {};
+		const listeners: Record<string, KeyboardEventListener> = {};
 		const addListenerMock: typeof Keyboard.addListener = (
 			event,
 			callback,
@@ -363,7 +372,7 @@ describe('BottomSheetPicker', () => {
 		);
 
 		act(() => {
-			listeners.keyboardDidShow?.();
+			listeners.keyboardDidShow?.({} as Parameters<KeyboardEventListener>[0]);
 		});
 
 		expect(flattenStyle(getByTestId('bottom-sheet').props.style)).toEqual(
@@ -391,8 +400,11 @@ describe('BottomSheetPicker', () => {
 
 		const gestureHost = getGestureHost(result);
 		act(() => {
-			gestureHost.props.gesture.handlers.change?.({ translationY: 180 });
-			gestureHost.props.gesture.handlers.end?.({ translationY: 180, velocityY: 900 });
+			gestureHost.props.gesture.handlers?.change?.({ translationY: 180 });
+			gestureHost.props.gesture.handlers?.end?.({
+				translationY: 180,
+				velocityY: 900,
+			});
 		});
 
 		expect(onClose).toHaveBeenCalledTimes(1);

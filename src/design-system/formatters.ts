@@ -2,6 +2,8 @@ import type { DesignSystemLocale } from './copy';
 
 const DEFAULT_INTL_LOCALE = 'en-US';
 const ARABIC_INTL_LOCALE = 'ar-SA';
+const GERMAN_INTL_LOCALE = 'de-DE';
+const JAPANESE_INTL_LOCALE = 'ja-JP';
 const DEFAULT_CURRENCY_CODE = 'INR';
 const SAMPLE_NUMBER = 1234567.89;
 const SAMPLE_CURRENCY_VALUE = 125000;
@@ -29,6 +31,14 @@ export function resolveIntlLocale(locale: DesignSystemLocale | string) {
 
 	if (locale === 'ar') {
 		return ARABIC_INTL_LOCALE;
+	}
+
+	if (locale === 'de') {
+		return GERMAN_INTL_LOCALE;
+	}
+
+	if (locale === 'ja') {
+		return JAPANESE_INTL_LOCALE;
 	}
 
 	if (locale === 'en') {

@@ -1075,7 +1075,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 - [x] All interactive elements use `Pressable` / `TouchableOpacity` (never `View` + `onPress` without accessibility)
 - [x] `accessibilityRole` set correctly (button, link, header, image, search, tab, etc.)
-- [ ] `accessibilityLabel` on all non-text interactive elements
+- [x] `accessibilityLabel` on all non-text interactive elements
 - [x] Heading hierarchy via `accessibilityRole="header"` on section titles
 
 ### ARIA / Accessibility API Usage
@@ -1111,7 +1111,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] External keyboard navigation on tablets (Tab, Enter, arrow keys)
+- [x] External keyboard navigation on tablets (Tab, Enter, arrow keys)
 - [x] `accessibilityActions` + `onAccessibilityAction` for custom screen reader gestures
 - [ ] VoiceOver: swipe left/right to navigate, double-tap to activate, magic tap for primary action
 - [ ] TalkBack: swipe left/right to navigate, double-tap to activate
@@ -1135,17 +1135,17 @@ The detailed checklist below remains the full capability matrix, but this sectio
 - [x] VoiceOver/TalkBack focus set to screen title on navigation
 - [x] `AccessibilityInfo.setAccessibilityFocus(ref)` for programmatic focus
 - [x] Focus order follows visual layout (use `accessibilityViewIsModal` for modals)
-- [ ] `accessibilityElementsHidden` (iOS) / `importantForAccessibility="no-hide-descendants"` (Android) for content behind modals
+- [x] `accessibilityElementsHidden` (iOS) / `importantForAccessibility="no-hide-descendants"` (Android) for content behind modals
 
 ### Color & Visual Accessibility
 
 #### Common
 
 - [x] Text contrast: 4.5:1 (normal text), 3:1 (large text ≥ 18pt / 14pt bold)
-- [ ] UI component contrast: 3:1 (WCAG 1.4.11)
-- [ ] Color never sole differentiator of state
+- [x] UI component contrast: 3:1 (WCAG 1.4.11)
+- [x] Color never sole differentiator of state
 - [x] Soft/pastel themes include high-contrast ink anchors for primary actions and critical states
-- [ ] Charts use label, shape, pattern, and stroke differentiation in addition to color
+- [x] Charts use label, shape, pattern, and stroke differentiation in addition to color
 
 #### Web
 
@@ -1155,7 +1155,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [x] iOS Bold Text preference respected (`AccessibilityInfo.isBoldTextEnabled`)
-- [ ] Android high-contrast text setting respected
+- [x] Android high-contrast text setting respected
 - [x] System font size scaling tested at maximum scale
 
 ### Screen Reader Testing Matrix
@@ -1208,7 +1208,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] `accessibilityLabel` on all inputs (since no HTML `<label>`)
+- [x] `accessibilityLabel` on all inputs (since no HTML `<label>`)
 - [x] Error announced via `AccessibilityInfo.announceForAccessibility()`
 - [x] Required field indicated via `accessibilityHint` ("required")
 
@@ -1247,16 +1247,16 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] i18n library integrated (i18next + react-i18next, expo-localization, or equivalent)
-- [ ] Device locale detection (`expo-localization` / `react-native-localize`)
+- [x] i18n library integrated (i18next + react-i18next, expo-localization, or equivalent)
+- [x] Device locale detection (`expo-localization` / `react-native-localize`)
 - [x] Language change without app restart
 
 ### RTL (Right-to-Left) Layout Support
 
 #### Common
 
-- [ ] Directional icons (arrows, chevrons) mirrored in RTL
-- [ ] RTL visual regression tests in CI pipeline
+- [x] Directional icons (arrows, chevrons) mirrored in RTL
+- [x] RTL visual regression tests in CI pipeline
 
 #### Web
 
@@ -1266,11 +1266,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] `I18nManager.forceRTL(true)` / `I18nManager.allowRTL(true)` configured
-- [ ] `writingDirection: 'rtl'` on text styles
+- [x] `I18nManager.forceRTL(true)` / `I18nManager.allowRTL(true)` configured
+- [x] `writingDirection: 'rtl'` on text styles
 - [x] Flexbox `direction` property for layout mirroring
 - [x] `I18nManager.isRTL` for conditional directional logic
-- [ ] App restart handling after RTL toggle (or hot-reload if supported)
+- [x] App restart handling after RTL toggle (or hot-reload if supported)
 
 ### Locale-Aware Formatting
 
@@ -1285,28 +1285,28 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Hermes `Intl` polyfill enabled (Hermes has limited Intl by default)
-- [ ] Timezone handling: device timezone via `expo-localization` or `react-native-localize`
+- [x] Hermes `Intl` polyfill bundle enabled for device + stress locales
+- [x] Timezone handling: device timezone via `expo-localization` or `react-native-localize`
 
 ### Text Expansion & Layout
 
 #### Common
 
-- [ ] UI accommodates text expansion up to 40% (German, Finnish)
+- [x] UI accommodates text expansion up to 40% (German, Finnish)
 - [ ] No fixed-width containers for text labels (wrapping allowed)
-- [ ] Truncation with tooltip/hint fallback for space-constrained labels
-- [ ] All locales tested in visual regression (minimum: en-US, de-DE, ar-SA, ja-JP)
-- [ ] Hero headings, pill controls, chips, and metric labels wrap/scale gracefully under long locales
-- [ ] Dense table/card layouts preserve hierarchy when translated labels grow
+- [x] Truncation with tooltip/hint fallback for space-constrained labels
+- [x] All locales tested in visual regression (minimum: en-US, de-DE, ar-SA, ja-JP)
+- [x] Hero headings, pill controls, chips, and metric labels wrap/scale gracefully under long locales
+- [x] Dense table/card layouts preserve hierarchy when translated labels grow
 
 ### Character Set & Encoding
 
 #### Common
 
-- [ ] UTF-8 encoding end-to-end
-- [ ] Support for non-Latin scripts: CJK, Arabic, Hebrew, Devanagari
-- [ ] Font stacks include system fallbacks for scripts not covered by brand font
-- [ ] Correct line-breaking rules per script
+- [x] UTF-8 encoding end-to-end
+- [x] Support for non-Latin scripts: CJK, Arabic, Hebrew, Devanagari
+- [x] Font stacks include system fallbacks for scripts not covered by brand font
+- [x] Correct line-breaking rules per script
 
 ---
 
@@ -1316,12 +1316,12 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Skeleton loaders: shapes match loaded content (eliminate layout shift)
-- [ ] Optimistic UI: update immediately for high-success-rate actions
-- [ ] Stale-while-revalidate: show cached data immediately, refresh in background
-- [ ] Progressive loading: critical content first, secondary lazy-loaded
-- [ ] First meaningful hierarchy (screen title, primary CTA, key metric or key task input) appears before decorative enhancements
-- [ ] Hero media, illustrations, and brand motion never block core task readiness
+- [x] Skeleton loaders: shapes match loaded content (eliminate layout shift)
+- [x] Optimistic UI: update immediately for high-success-rate actions
+- [x] Stale-while-revalidate: show cached data immediately, refresh in background
+- [x] Progressive loading: critical content first, secondary lazy-loaded
+- [x] First meaningful hierarchy (screen title, primary CTA, key metric or key task input) appears before decorative enhancements
+- [x] Hero media, illustrations, and brand motion never block core task readiness
 
 #### Web
 
@@ -1331,10 +1331,10 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] `FlatList` / `FlashList` for all scrollable lists (never `ScrollView` with many children)
-- [ ] `InteractionManager.runAfterInteractions()` for deferred work after navigation
-- [ ] Placeholder / shimmer components while screens mount
-- [ ] Preload next screen data during current screen interaction
+- [x] `FlatList` / `FlashList` / `SectionList` for all scrollable lists (never `ScrollView` with many children)
+- [x] `InteractionManager.runAfterInteractions()` for deferred work after navigation
+- [x] Placeholder / shimmer components while screens mount
+- [x] Preload next screen data during current screen interaction
 
 ### Asset Optimization
 
@@ -1348,16 +1348,16 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Images: `react-native-fast-image` for caching + priority loading
-- [ ] Images: progressive loading (low-res placeholder → full resolution)
-- [ ] Icons: tree-shaken SVG components or selective vector icon imports
+- [x] Images: `expo-image` / `react-native-fast-image` for caching + priority loading
+- [x] Images: progressive loading (low-res placeholder → full resolution)
+- [x] Icons: tree-shaken SVG components or selective vector icon imports
 
 ### Interaction Responsiveness
 
 #### Common
 
-- [ ] Search inputs: 300ms debounce
-- [ ] ≤ 100ms: no indicator; 100–1000ms: loading indicator; > 1000ms: progress with estimate
+- [x] Search inputs: 300ms debounce
+- [x] ≤ 100ms: no indicator; 100–1000ms: loading indicator; > 1000ms: progress with estimate
 
 #### Web
 
@@ -1369,16 +1369,16 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [ ] Heavy computation offloaded from JS thread (native module or web worker via JSI)
-- [ ] Gesture handler animations on UI thread (Reanimated `useAnimatedGestureHandler`)
-- [ ] List scroll performance: `removeClippedSubviews`, proper `keyExtractor`
+- [x] Gesture handler animations on UI thread (Reanimated `useAnimatedGestureHandler`)
+- [x] List scroll performance: `removeClippedSubviews`, proper `keyExtractor`
 
 ### Bundle Performance
 
 #### Common
 
-- [ ] Component library is tree-shakeable (ESM exports, no side effects)
-- [ ] Per-component bundle size limits enforced
-- [ ] No circular dependencies between component packages
+- [x] Component library is tree-shakeable (ESM exports, no side effects)
+- [x] Per-component bundle size limits enforced
+- [x] No circular dependencies between component packages
 - [ ] Base component usability does not depend on optional illustration, chart, or animation packages
 
 #### Web
@@ -1387,7 +1387,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Native dependency count minimized (each adds binary size)
+- [x] Native dependency budget enforced (each adds binary size)
 
 ---
 

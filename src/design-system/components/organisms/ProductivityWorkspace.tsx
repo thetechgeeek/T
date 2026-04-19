@@ -19,6 +19,10 @@ import { Stepper, type StepperStep } from '@/src/design-system/components/molecu
 import { TextInput } from '@/src/design-system/components/atoms/TextInput';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { ToastViewport, type ToastStackItem } from '@/src/design-system/components/molecules/Toast';
+import {
+	responsiveCardStyle,
+	useResponsiveWorkbenchLayout,
+} from '@/src/design-system/useResponsiveWorkbenchLayout';
 
 type ExportScope = 'current-view' | 'full-dataset';
 type ExportFormat = 'csv' | 'xlsx' | 'json';
@@ -108,6 +112,7 @@ export const ProductivityWorkspace = forwardRef<
 	ProductivityWorkspaceProps
 >(({ style, testID }, ref) => {
 	const { theme } = useTheme();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 	const [files, setFiles] = useState<UploadItem[]>(DEFAULT_IMPORT_FILES);
 	const [exportScope, setExportScope] = useState<ExportScope>('current-view');
 	const [wizardStep, setWizardStep] = useState(3);
@@ -290,7 +295,7 @@ export const ProductivityWorkspace = forwardRef<
 			</Card>
 
 			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.md }}>
-				<Card variant="outlined" style={{ flex: 1, minWidth: 300 }}>
+				<Card variant="outlined" style={responsiveCardStyle(isCompactPhone, 300)}>
 					<CardHeader>Clipboard & share</CardHeader>
 					<CardBody>
 						<View style={{ gap: theme.spacing.sm }}>
@@ -353,7 +358,7 @@ export const ProductivityWorkspace = forwardRef<
 					</CardBody>
 				</Card>
 
-				<Card variant="outlined" style={{ flex: 1, minWidth: 300 }}>
+				<Card variant="outlined" style={responsiveCardStyle(isCompactPhone, 300)}>
 					<CardHeader>External keyboard shortcuts</CardHeader>
 					<CardBody>
 						<View style={{ gap: theme.spacing.sm }}>
@@ -470,7 +475,7 @@ export const ProductivityWorkspace = forwardRef<
 							<Card
 								variant="flat"
 								density="compact"
-								style={{ flex: 1, minWidth: DETAIL_CARD_MIN_WIDTH }}
+								style={responsiveCardStyle(isCompactPhone, DETAIL_CARD_MIN_WIDTH)}
 							>
 								<CardHeader>Column mapping preview</CardHeader>
 								<CardBody>
@@ -498,7 +503,7 @@ export const ProductivityWorkspace = forwardRef<
 							<Card
 								variant="flat"
 								density="compact"
-								style={{ flex: 1, minWidth: DETAIL_CARD_MIN_WIDTH }}
+								style={responsiveCardStyle(isCompactPhone, DETAIL_CARD_MIN_WIDTH)}
 							>
 								<CardHeader>Validation report</CardHeader>
 								<CardBody>

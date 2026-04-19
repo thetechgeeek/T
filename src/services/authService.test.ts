@@ -7,6 +7,8 @@ jest.mock('@/src/config/supabase', () => ({
 		auth: {
 			signUp: jest.fn(),
 			signInWithPassword: jest.fn(),
+			signInWithOtp: jest.fn(),
+			verifyOtp: jest.fn(),
 			signOut: jest.fn(),
 			getSession: jest.fn(),
 			refreshSession: jest.fn(),
@@ -99,6 +101,19 @@ describe('authService', () => {
 		});
 
 		await expect(authService.signUp('a@b.com', 'pw')).rejects.toBeInstanceOf(NetworkError);
+	});
+
+	it('sendOtp maps unsupported phone provider to a helpful user message', async () => {
+		(supabase.auth.signInWithOtp as jest.Mock).mockResolvedValue({
+			error: { message: 'Unsupported phone provider' },
+		});
+
+		await expect(authService.sendOtp('+919876543210')).rejects.toMatchObject({
+			message: 'Unsupported phone provider',
+			code: 'AUTH_ERROR',
+			userMessage:
+				'Phone OTP is not enabled for this Supabase project. Enable Phone auth and configure an SMS provider in Supabase before trying again.',
+		});
 	});
 
 	it('signOut calls supabase.auth.signOut and resolves void', async () => {

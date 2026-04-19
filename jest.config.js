@@ -70,6 +70,7 @@ module.exports = {
 		'^@/i18n/(.*)$': '<rootDir>/src/i18n/$1',
 		'^@/src/(.*)$': '<rootDir>/src/$1',
 		'^@/(.*)$': '<rootDir>/$1',
+		'^@formatjs/(.*)$': '<rootDir>/src/__mocks__/noop.ts',
 		// Module stubs for native-only packages not available in Jest
 		'^expo-file-system$': '<rootDir>/src/__mocks__/expo-file-system.ts',
 		'^expo-file-system/legacy$': '<rootDir>/src/__mocks__/expo-file-system.ts',
@@ -79,7 +80,7 @@ module.exports = {
 	},
 
 	transformIgnorePatterns: [
-		'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|immer|zustand|lucide-react-native|color|color-string)',
+		'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@formatjs/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|immer|zustand|lucide-react-native|color|color-string)',
 	],
 	setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };

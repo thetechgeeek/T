@@ -19,6 +19,7 @@ describe('design-system quality signals', () => {
 		jest.spyOn(PixelRatio, 'getFontScale').mockReturnValue(1.8);
 		jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
 		jest.spyOn(AccessibilityInfo, 'isBoldTextEnabled').mockResolvedValue(true);
+		jest.spyOn(AccessibilityInfo, 'isHighTextContrastEnabled').mockResolvedValue(true);
 		jest.spyOn(AccessibilityInfo, 'addEventListener').mockImplementation((() => ({
 			remove: jest.fn(),
 		})) as unknown as typeof AccessibilityInfo.addEventListener);
@@ -28,6 +29,7 @@ describe('design-system quality signals', () => {
 		await waitFor(() => {
 			expect(result.current.reduceMotionEnabled).toBe(true);
 			expect(result.current.boldTextEnabled).toBe(true);
+			expect(result.current.highTextContrastEnabled).toBe(true);
 		});
 		expect(result.current.intlLocale).toBe('ar-SA');
 		expect(result.current.direction).toBe('rtl');
@@ -42,6 +44,7 @@ describe('design-system quality signals', () => {
 
 		jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(false);
 		jest.spyOn(AccessibilityInfo, 'isBoldTextEnabled').mockResolvedValue(false);
+		jest.spyOn(AccessibilityInfo, 'isHighTextContrastEnabled').mockResolvedValue(false);
 		jest.spyOn(AccessibilityInfo, 'addEventListener').mockImplementation(((
 			event: string,
 			listener: unknown,
@@ -55,14 +58,17 @@ describe('design-system quality signals', () => {
 		await waitFor(() => {
 			expect(result.current.reduceMotionEnabled).toBe(false);
 			expect(result.current.boldTextEnabled).toBe(false);
+			expect(result.current.highTextContrastEnabled).toBe(false);
 		});
 
 		act(() => {
 			listeners.get('reduceMotionChanged')?.(true);
 			listeners.get('boldTextChanged')?.(true);
+			listeners.get('highTextContrastChanged')?.(true);
 		});
 
 		expect(result.current.reduceMotionEnabled).toBe(true);
 		expect(result.current.boldTextEnabled).toBe(true);
+		expect(result.current.highTextContrastEnabled).toBe(true);
 	});
 });

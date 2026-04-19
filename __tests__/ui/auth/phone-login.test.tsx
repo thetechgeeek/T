@@ -2,6 +2,7 @@ import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react-native';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import PhoneLoginScreen from '@/app/(auth)/phone-login';
+import { AppError } from '@/src/errors';
 
 const mockPush = jest.fn();
 const mockReplace = jest.fn();
@@ -75,5 +76,19 @@ describe('PhoneLoginScreen', () => {
 	it('shows support link', () => {
 		const { getByText } = renderWithTheme(<PhoneLoginScreen />);
 		expect(getByText(/support|Contact/i)).toBeTruthy();
+	});
+
+	it('shows AppError userMessage when OTP send fails', async () => {
+		const friendlyMessage =
+			'Phone OTP is not enabled for this Supabase project. Enable Phone auth and configure an SMS provider in Supabase before trying again.';
+		mockSendOtp.mockRejectedValue(
+			new AppError('Unsupported phone provider', 'AUTH_ERROR', friendlyMessage),
+		);
+
+		const { getByTestId, findByText } = renderWithTheme(<PhoneLoginScreen />);
+		fireEvent.changeText(getByTestId('phone-input'), '9876543210');
+		fireEvent.press(getByTestId('send-otp-button'));
+
+		expect(await findByText(friendlyMessage)).toBeTruthy();
 	});
 });

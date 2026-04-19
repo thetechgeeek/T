@@ -1,8 +1,10 @@
 import React from 'react';
+import { render } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
 import { TrendingUp } from 'lucide-react-native';
 import { StatCard } from '../StatCard';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { ThemeProvider } from '@/src/theme/ThemeProvider';
 
 function flattenStyle(style: unknown) {
 	return Array.isArray(style) ? Object.assign({}, ...style.filter(Boolean)) : style;
@@ -125,5 +127,27 @@ describe('StatCard', () => {
 		};
 
 		expect(relaxedStyle.padding).toBeGreaterThan(compactStyle.padding);
+	});
+
+	it('preserves dense hierarchy when long localized labels grow under max font scale', () => {
+		const longLabel = 'Betriebsabschlussubersicht fur verspachtelte Eskalationskennzahlen';
+		const longTrendLabel = 'gegenuber dem gestrigen Betriebsabschluss';
+		const { getByText } = render(
+			<ThemeProvider
+				persist={false}
+				runtimeOverrides={{ detectedLocale: 'de-DE', fontScale: 3 }}
+			>
+				<StatCard
+					density="compact"
+					label={longLabel}
+					value="124"
+					trend="+12%"
+					trendLabel={longTrendLabel}
+				/>
+			</ThemeProvider>,
+		);
+
+		expect(getByText(longLabel)).toBeTruthy();
+		expect(getByText(longTrendLabel)).toBeTruthy();
 	});
 });

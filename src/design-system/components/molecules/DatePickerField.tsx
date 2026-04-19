@@ -123,7 +123,7 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 		const usesNativePicker =
 			presentation === 'native' || (presentation === 'auto' && Platform.OS !== 'web');
 
-		useImperativeHandle(ref, () => triggerRef.current);
+		useImperativeHandle(ref, () => triggerRef.current as React.ElementRef<typeof Pressable>);
 
 		const isDisabledValue = (iso: string) =>
 			!isIsoDateWithinRange(iso, minDate, maxDate) ||
@@ -321,6 +321,10 @@ export const DatePickerField = forwardRef<React.ElementRef<typeof Pressable>, Da
 					onRequestClose={closeSheet}
 				>
 					<Pressable
+						testID="date-picker-backdrop"
+						accessible={false}
+						accessibilityElementsHidden
+						importantForAccessibility="no-hide-descendants"
 						style={[styles.backdrop, { backgroundColor: c.scrim }]}
 						onPress={closeSheet}
 					/>

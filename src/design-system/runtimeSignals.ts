@@ -31,6 +31,7 @@ export interface RuntimeQualitySignals {
 	fontScale: number;
 	reduceMotionEnabled: boolean;
 	boldTextEnabled: boolean;
+	highTextContrastEnabled: boolean;
 	platform: string;
 	windowWidth: number;
 	windowHeight: number;
@@ -57,6 +58,7 @@ export const DEFAULT_RUNTIME_QUALITY_SIGNALS: RuntimeQualitySignals = {
 	fontScale: 1,
 	reduceMotionEnabled: false,
 	boldTextEnabled: false,
+	highTextContrastEnabled: false,
 	platform: Platform.OS,
 	windowWidth: DEFAULT_RESPONSIVE_METRICS.width,
 	windowHeight: DEFAULT_RESPONSIVE_METRICS.height,
@@ -116,6 +118,9 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 	const [boldTextEnabled, setBoldTextEnabled] = useState(
 		DEFAULT_RUNTIME_QUALITY_SIGNALS.boldTextEnabled,
 	);
+	const [highTextContrastEnabled, setHighTextContrastEnabled] = useState(
+		DEFAULT_RUNTIME_QUALITY_SIGNALS.highTextContrastEnabled,
+	);
 	const [detectedLocale] = useState(detectDeviceLocale);
 	const [pixelRatio] = useState(detectPixelRatio);
 	const [fontScale] = useState(detectFontScale);
@@ -131,13 +136,20 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 		void Promise.all([
 			readAccessibilityBoolean(AccessibilityInfo.isReduceMotionEnabled),
 			readAccessibilityBoolean(AccessibilityInfo.isBoldTextEnabled),
-		]).then(([reduceMotion, boldText]) => {
+			readAccessibilityBoolean(
+				AccessibilityInfo.isHighTextContrastEnabled as
+					| (() => Promise<boolean>)
+					| (() => boolean)
+					| undefined,
+			),
+		]).then(([reduceMotion, boldText, highTextContrast]) => {
 			if (!isActive) {
 				return;
 			}
 
 			setReduceMotionEnabled(reduceMotion);
 			setBoldTextEnabled(boldText);
+			setHighTextContrastEnabled(highTextContrast);
 		});
 
 		const reduceMotionSubscription = addAccessibilityListener(
@@ -148,6 +160,10 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 			'boldTextChanged',
 			setBoldTextEnabled,
 		);
+		const highTextContrastSubscription = addAccessibilityListener(
+			'highTextContrastChanged',
+			setHighTextContrastEnabled,
+		);
 		const dimensionsSubscription = addDimensionsListener((width, height) => {
 			setWindowDimensions({ width, height });
 		});
@@ -156,6 +172,7 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 			isActive = false;
 			reduceMotionSubscription?.remove?.();
 			boldTextSubscription?.remove?.();
+			highTextContrastSubscription?.remove?.();
 			dimensionsSubscription?.remove?.();
 		};
 	}, [enabled]);
@@ -172,6 +189,7 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 		fontScale,
 		reduceMotionEnabled,
 		boldTextEnabled,
+		highTextContrastEnabled,
 		platform: Platform.OS,
 		windowWidth: responsiveMetrics.width,
 		windowHeight: responsiveMetrics.height,

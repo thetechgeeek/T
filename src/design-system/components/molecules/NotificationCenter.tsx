@@ -110,6 +110,11 @@ export const NotificationCenter = forwardRef<View, NotificationCenterProps>(
 									{ source: 'selection' },
 								)
 							}
+							accessibilityRole="button"
+							accessibilityLabel={`${
+								item.read ? 'Read' : 'Unread'
+							} notification: ${[item.title, item.description].filter(Boolean).join(', ')}`}
+							accessibilityHint="Double tap to mark this notification as read"
 							style={{
 								paddingVertical: theme.spacing.sm,
 								flexDirection: 'row',
@@ -142,7 +147,11 @@ export const NotificationCenter = forwardRef<View, NotificationCenterProps>(
 									</ThemedText>
 								) : null}
 							</View>
-							{item.read ? <Badge label="Read" variant="neutral" size="sm" /> : null}
+							<Badge
+								label={item.read ? 'Read' : 'Unread'}
+								variant={item.read ? 'neutral' : 'info'}
+								size="sm"
+							/>
 						</Pressable>
 					)}
 				/>

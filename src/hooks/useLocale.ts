@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { resolveSupportedLanguage, type SupportedLanguage } from '@/src/i18n';
+import { syncI18nRtlPreference } from '@/src/i18n/rtl';
 import { formatINR, formatINRShort } from '@/src/utils/currency';
 import { formatDate, formatRelativeDate, formatShortDate } from '@/src/utils/dateUtils';
 
@@ -14,12 +15,14 @@ export function useLocale() {
 	const toggleLanguage = useCallback(async () => {
 		const next: SupportedLanguage = currentLanguage === 'hi' ? 'en' : 'hi';
 		await i18n.changeLanguage(next);
+		syncI18nRtlPreference(next);
 		await AsyncStorage.setItem(STORAGE_KEY, next);
 	}, [currentLanguage, i18n]);
 
 	const setLanguage = useCallback(
 		async (lang: SupportedLanguage) => {
 			await i18n.changeLanguage(lang);
+			syncI18nRtlPreference(lang);
 			await AsyncStorage.setItem(STORAGE_KEY, lang);
 		},
 		[i18n],

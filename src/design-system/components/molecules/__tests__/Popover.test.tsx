@@ -55,6 +55,10 @@ describe('Popover', () => {
 		expect(flattenStyle(getByTestId('popover-surface').props.style)).toEqual(
 			expect.objectContaining({ maxWidth: 280 }),
 		);
+		expect(getByTestId('popover-surface-backdrop', { includeHiddenElements: true })).toHaveProp(
+			'importantForAccessibility',
+			'no-hide-descendants',
+		);
 
 		fireEvent.press(UNSAFE_getAllByType(Pressable)[1]);
 		expect(queryByText('Quick edit')).toBeNull();

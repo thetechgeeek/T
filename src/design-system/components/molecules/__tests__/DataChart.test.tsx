@@ -55,6 +55,36 @@ describe('DataChart', () => {
 			lightTheme.collections.chartQualitativeColors[0] ?? '',
 		);
 		expect(JSON.stringify(toJSON())).toContain('"opacity":0.28');
+		expect(JSON.stringify(toJSON())).toContain('"strokeDasharray":"8 4"');
+	});
+
+	it('uses patterns, stroke changes, and shape changes so charts do not rely on color alone', () => {
+		const { toJSON } = renderWithTheme(
+			<>
+				<DataChart
+					title="Pattern bars"
+					variant="bar"
+					categories={categories}
+					series={series}
+					testID="pattern-bars"
+				/>
+				<DataChart title="Pattern pie" variant="pie" slices={slices} testID="pattern-pie" />
+				<DataChart
+					title="Marker scatter"
+					variant="scatter"
+					points={points}
+					series={series}
+					testID="marker-scatter"
+				/>
+			</>,
+		);
+
+		const renderedTree = JSON.stringify(toJSON());
+
+		expect(renderedTree).toContain('url(#pattern-bars-pattern-primary-series)');
+		expect(renderedTree).toContain('url(#pattern-pie-pattern-paid)');
+		expect(renderedTree).toContain('"width":10');
+		expect(renderedTree).toContain('"strokeWidth":1.5');
 	});
 
 	it('renders every supported chart family through the shared SVG surface', () => {

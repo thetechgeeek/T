@@ -18,6 +18,10 @@ import {
 } from '@/src/design-system/components/molecules/VirtualizedList';
 import { TouchableCard } from '@/src/design-system/components/atoms/TouchableCard';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import {
+	responsiveCardStyle,
+	useResponsiveWorkbenchLayout,
+} from '@/src/design-system/useResponsiveWorkbenchLayout';
 
 type LayoutMode = 'summary' | 'dense';
 type MetricId = 'late-payments' | 'blocked-orders' | 'at-risk-suppliers';
@@ -197,6 +201,7 @@ export const DataLayoutWorkspace = forwardRef<
 	DataLayoutWorkspaceProps
 >(({ style, testID }, ref) => {
 	const { theme } = useTheme();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 	const [layoutMode, setLayoutMode] = useState<LayoutMode>('summary');
 	const [featuredWidgetsVisible, setFeaturedWidgetsVisible] = useState(true);
 	const [activeMetricId, setActiveMetricId] = useState<MetricId>('late-payments');
@@ -291,8 +296,7 @@ export const DataLayoutWorkspace = forwardRef<
 							testID={`${testID ?? 'data-layout-workspace'}-metric-${metric.id}`}
 							onPress={() => setActiveMetricId(metric.id)}
 							style={{
-								flex: 1,
-								minWidth: METRIC_CARD_MIN_WIDTH,
+								...responsiveCardStyle(isCompactPhone, METRIC_CARD_MIN_WIDTH),
 								borderWidth: theme.borderWidth.sm,
 								borderColor: selected ? theme.colors.primary : theme.colors.border,
 								backgroundColor: selected
@@ -316,7 +320,10 @@ export const DataLayoutWorkspace = forwardRef<
 
 			{featuredWidgetsVisible ? (
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.md }}>
-					<Card variant="outlined" style={{ flex: 1, minWidth: FEATURED_CARD_MIN_WIDTH }}>
+					<Card
+						variant="outlined"
+						style={responsiveCardStyle(isCompactPhone, FEATURED_CARD_MIN_WIDTH)}
+					>
 						<CardHeader>Featured spotlight</CardHeader>
 						<CardBody>
 							<ThemedText variant="bodyStrong">{activeMetric.label}</ThemedText>
@@ -332,7 +339,10 @@ export const DataLayoutWorkspace = forwardRef<
 							</ThemedText>
 						</CardBody>
 					</Card>
-					<Card variant="outlined" style={{ flex: 1, minWidth: FEATURED_CARD_MIN_WIDTH }}>
+					<Card
+						variant="outlined"
+						style={responsiveCardStyle(isCompactPhone, FEATURED_CARD_MIN_WIDTH)}
+					>
 						<CardHeader>Optional insight widget</CardHeader>
 						<CardBody>
 							<ThemedText
@@ -356,7 +366,10 @@ export const DataLayoutWorkspace = forwardRef<
 			) : null}
 
 			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.md }}>
-				<Card variant="outlined" style={{ flex: 2, minWidth: DETAIL_PANEL_MIN_WIDTH }}>
+				<Card
+					variant="outlined"
+					style={responsiveCardStyle(isCompactPhone, DETAIL_PANEL_MIN_WIDTH, { flex: 2 })}
+				>
 					<CardHeader>
 						<View
 							style={{
@@ -450,7 +463,7 @@ export const DataLayoutWorkspace = forwardRef<
 					</CardBody>
 				</Card>
 
-				<Card variant="outlined" style={{ flex: 1, minWidth: 300 }}>
+				<Card variant="outlined" style={responsiveCardStyle(isCompactPhone, 300)}>
 					<CardHeader>Reorder within the same list</CardHeader>
 					<CardBody>
 						<SortableList

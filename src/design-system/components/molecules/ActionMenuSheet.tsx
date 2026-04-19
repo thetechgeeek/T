@@ -62,6 +62,10 @@ export const ActionMenuSheet = forwardRef<View, ActionMenuSheetProps>(
 		return (
 			<Modal transparent visible={isOpen} animationType="slide" onRequestClose={close}>
 				<Pressable
+					testID={testID ? `${testID}-backdrop` : 'action-menu-backdrop'}
+					accessible={false}
+					accessibilityElementsHidden
+					importantForAccessibility="no-hide-descendants"
 					style={{
 						flex: 1,
 						backgroundColor: c.scrim,
@@ -85,6 +89,8 @@ export const ActionMenuSheet = forwardRef<View, ActionMenuSheetProps>(
 						},
 						style,
 					]}
+					accessibilityViewIsModal
+					importantForAccessibility="yes"
 				>
 					<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 						{title}

@@ -3,11 +3,21 @@ import { AppError, NetworkError } from '../errors';
 import { withRetry } from '../utils/retry';
 import logger from '../utils/logger';
 
+function getAuthUserMessage(error: { message: string }, fallback: string): string {
+	const normalizedMessage = error.message.toLowerCase();
+
+	if (normalizedMessage.includes('unsupported phone provider')) {
+		return 'Phone OTP is not enabled for this Supabase project. Enable Phone auth and configure an SMS provider in Supabase before trying again.';
+	}
+
+	return fallback;
+}
+
 function wrapAuthError(error: { message: string; status?: number }, fallback: string): AppError {
 	if (error.status === 0 || error.message.toLowerCase().includes('network')) {
 		return new NetworkError(error.message, error);
 	}
-	return new AppError(error.message, 'AUTH_ERROR', fallback, error);
+	return new AppError(error.message, 'AUTH_ERROR', getAuthUserMessage(error, fallback), error);
 }
 
 export const authService = {

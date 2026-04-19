@@ -20,6 +20,7 @@ import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { SIZE_INPUT_HEIGHT } from '@/src/theme/uiMetrics';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { AppError } from '@/src/errors';
 
 export default function VerifyOtpScreen() {
 	const { theme, c, s, r, typo } = useThemeTokens();
@@ -81,7 +82,11 @@ export default function VerifyOtpScreen() {
 		} catch (e: unknown) {
 			Alert.alert(
 				t('auth.errorVerifyFailed'),
-				e instanceof Error ? e.message : t('common.unexpectedError'),
+				e instanceof AppError
+					? e.userMessage
+					: e instanceof Error
+						? e.message
+						: t('common.unexpectedError'),
 			);
 		}
 	};
@@ -95,7 +100,11 @@ export default function VerifyOtpScreen() {
 		} catch (e: unknown) {
 			Alert.alert(
 				t('common.error'),
-				e instanceof Error ? e.message : t('common.unexpectedError'),
+				e instanceof AppError
+					? e.userMessage
+					: e instanceof Error
+						? e.message
+						: t('common.unexpectedError'),
 			);
 		}
 	};

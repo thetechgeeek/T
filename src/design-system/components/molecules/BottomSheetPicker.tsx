@@ -5,15 +5,20 @@ import {
 	Modal,
 	View,
 	Pressable,
-	ScrollView,
 	SectionList,
 	TextInput,
 	StyleSheet,
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, {
+	runOnJS,
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+} from 'react-native-reanimated';
 import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import {
@@ -128,8 +133,8 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 		const [keyboardVisible, setKeyboardVisible] = useState(false);
 		const [focusedControl, setFocusedControl] = useState<string | null>(null);
 		const wasOpenRef = useRef(false);
-		const sheetHeightRef = useRef(0);
 		const translateY = useSharedValue(0);
+		const sheetHeight = useSharedValue(0);
 		const [isOpen, setIsOpen] = useControllableState({
 			value: open ?? visible,
 			defaultValue: defaultOpen || visible === true,
@@ -254,7 +259,6 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 		}, [isOpen, restoreFocusRef, title, translateY]);
 
 		const panGesture = Gesture.Pan()
-			.runOnJS(true)
 			.onChange((event) => {
 				if (!dragToDismiss) {
 					return;
@@ -270,11 +274,11 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 
 				const shouldDismiss =
 					event.velocityY > dismissVelocityThreshold ||
-					event.translationY > sheetHeightRef.current * DISMISS_DISTANCE_RATIO;
+					event.translationY > sheetHeight.value * DISMISS_DISTANCE_RATIO;
 
 				if (shouldDismiss) {
-					translateY.value = withSpring(sheetHeightRef.current || 360);
-					handleDismiss();
+					translateY.value = withSpring(sheetHeight.value || 360);
+					runOnJS(handleDismiss)();
 					return;
 				}
 
@@ -292,6 +296,9 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 			>
 				<Pressable
 					testID="bottom-sheet-backdrop"
+					accessible={false}
+					accessibilityElementsHidden
+					importantForAccessibility="no-hide-descendants"
 					style={[styles.backdrop, { backgroundColor: c.scrim }]}
 					onPress={handleDismiss}
 				/>
@@ -303,7 +310,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 							accessibilityViewIsModal
 							importantForAccessibility="yes"
 							onLayout={(event) => {
-								sheetHeightRef.current = event.nativeEvent.layout.height;
+								sheetHeight.value = event.nativeEvent.layout.height;
 							}}
 							style={[
 								styles.sheet,
@@ -456,14 +463,16 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 									}
 								/>
 							) : (
-								<ScrollView
+								<FlashList
+									data={filteredOptions}
 									style={styles.list}
 									keyboardShouldPersistTaps="handled"
 									nestedScrollEnabled
-								>
-									{filteredOptions.map((option) =>
+									estimatedItemSize={TOUCH_TARGET_MIN_PX}
+									keyExtractor={(item) => item.value}
+									renderItem={({ item }) =>
 										renderPickerOption({
-											option,
+											option: item,
 											currentValue,
 											currentValues,
 											multiple,
@@ -474,19 +483,21 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 											setFocusedControl,
 											onSingleSelect: handleSingleSelect,
 											onToggleMultiValue: toggleMultiValue,
-										}),
-									)}
-									{noMatches ? (
-										<View style={styles.emptyState}>
-											<ThemedText
-												variant="body"
-												style={{ color: c.onSurfaceVariant }}
-											>
-												{emptyLabel}
-											</ThemedText>
-										</View>
-									) : null}
-								</ScrollView>
+										})
+									}
+									ListEmptyComponent={
+										noMatches ? (
+											<View style={styles.emptyState}>
+												<ThemedText
+													variant="body"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{emptyLabel}
+												</ThemedText>
+											</View>
+										) : null
+									}
+								/>
 							)}
 
 							{/* Add New */}

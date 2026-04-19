@@ -21,6 +21,12 @@ export interface ToggleButtonGroupProps {
 	style?: StyleProp<ViewStyle>;
 }
 
+type PressableKeyEvent = {
+	nativeEvent: {
+		key: string;
+	};
+};
+
 export const ToggleButtonGroup = forwardRef<View, ToggleButtonGroupProps>(
 	(
 		{
@@ -51,6 +57,47 @@ export const ToggleButtonGroup = forwardRef<View, ToggleButtonGroupProps>(
 			Array.isArray(currentValue)
 				? currentValue.includes(optionValue)
 				: currentValue === optionValue;
+		const selectOptionAtIndex = (nextIndex: number) => {
+			const nextOption = options[nextIndex];
+			if (!nextOption) {
+				return;
+			}
+
+			setCurrentValue(nextOption.value, { source: 'selection' });
+		};
+		const handleKeyPress = (key: string, optionIndex: number, optionValue: string) => {
+			if (!multiple) {
+				if (key === 'ArrowRight' || key === 'ArrowDown') {
+					selectOptionAtIndex(Math.min(options.length - 1, optionIndex + 1));
+					return;
+				}
+				if (key === 'ArrowLeft' || key === 'ArrowUp') {
+					selectOptionAtIndex(Math.max(0, optionIndex - 1));
+					return;
+				}
+				if (key === 'Home') {
+					selectOptionAtIndex(0);
+					return;
+				}
+				if (key === 'End') {
+					selectOptionAtIndex(options.length - 1);
+					return;
+				}
+			}
+
+			if (key === 'Enter' || key === ' ') {
+				if (multiple) {
+					const values = Array.isArray(currentValue) ? currentValue : [];
+					const nextValue = values.includes(optionValue)
+						? values.filter((valueEntry) => valueEntry !== optionValue)
+						: [...values, optionValue];
+					setCurrentValue(nextValue, { source: 'toggle' });
+					return;
+				}
+
+				setCurrentValue(optionValue, { source: 'selection' });
+			}
+		};
 
 		return (
 			<View ref={ref} testID={testID} style={style}>
@@ -64,9 +111,17 @@ export const ToggleButtonGroup = forwardRef<View, ToggleButtonGroupProps>(
 				) : null}
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm }}>
 					{options.map((option) => {
+						const optionIndex = options.findIndex(
+							(entry) => entry.value === option.value,
+						);
 						const selected = isSelected(option.value);
+						const keyboardProps = {
+							onKeyPress: (event: PressableKeyEvent) =>
+								handleKeyPress(event.nativeEvent.key, optionIndex, option.value),
+						} as unknown as React.ComponentProps<typeof Pressable>;
 						return (
 							<Pressable
+								{...keyboardProps}
 								key={option.value}
 								testID={`${testID ?? 'toggle-group'}-${option.value}`}
 								onPress={() => {
@@ -85,7 +140,9 @@ export const ToggleButtonGroup = forwardRef<View, ToggleButtonGroupProps>(
 
 									setCurrentValue(option.value, { source: 'selection' });
 								}}
+								focusable
 								accessibilityRole="button"
+								accessibilityLabel={option.label}
 								accessibilityState={{ selected }}
 								style={{
 									minHeight: theme.touchTarget,

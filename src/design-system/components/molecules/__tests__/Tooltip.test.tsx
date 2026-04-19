@@ -37,8 +37,12 @@ describe('Tooltip', () => {
 		expect(flattenStyle(getByTestId('tooltip-surface').props.style)).toEqual(
 			expect.objectContaining({ maxWidth: 180 }),
 		);
+		expect(getByTestId('tooltip-surface-backdrop', { includeHiddenElements: true })).toHaveProp(
+			'importantForAccessibility',
+			'no-hide-descendants',
+		);
 
-		fireEvent.press(getByTestId('tooltip-surface-backdrop'));
+		fireEvent.press(getByTestId('tooltip-surface-backdrop', { includeHiddenElements: true }));
 		expect(queryByText('Shared helper copy')).toBeNull();
 	});
 

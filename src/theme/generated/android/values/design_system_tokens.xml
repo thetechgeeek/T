@@ -109,7 +109,7 @@
   <color name="ds_semantic_light_on_info">#FFFFFF</color>
   <color name="ds_semantic_light_info_light">#DBEAFE</color>
   <color name="ds_semantic_light_border">#E5DDD5</color>
-  <color name="ds_semantic_light_border_strong">#B0A49C</color>
+  <color name="ds_semantic_light_border_strong">#8D8078</color>
   <color name="ds_semantic_light_separator">#EDE8E4</color>
   <color name="ds_semantic_light_white">#FFFFFF</color>
   <color name="ds_semantic_light_shadow">#4A3828</color>
@@ -153,7 +153,7 @@
   <color name="ds_semantic_dark_on_info">#000000</color>
   <color name="ds_semantic_dark_info_light">#1E3A8A</color>
   <color name="ds_semantic_dark_border">#38383A</color>
-  <color name="ds_semantic_dark_border_strong">#5D4838</color>
+  <color name="ds_semantic_dark_border_strong">#7A6A60</color>
   <color name="ds_semantic_dark_separator">#302820</color>
   <color name="ds_semantic_dark_white">#FFFFFF</color>
   <color name="ds_semantic_dark_shadow">#000000</color>

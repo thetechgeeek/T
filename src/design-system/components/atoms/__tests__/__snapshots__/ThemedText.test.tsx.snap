@@ -5,6 +5,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -20,12 +21,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     display
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -41,12 +44,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     screenTitle
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -62,12 +67,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     sectionTitle
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -83,12 +90,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     h1
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -104,12 +113,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     h2
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -125,11 +136,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     h3
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -145,11 +158,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     body
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -165,11 +180,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     bodyMedium
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -185,11 +202,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     bodyStrong
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -205,11 +224,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     bodyBold
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -225,11 +246,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     metadata
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -245,11 +268,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     metric
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -265,11 +290,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     code
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -285,11 +312,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     caption
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -305,11 +334,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     captionBold
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -325,11 +356,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     amount
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -345,11 +378,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     amountLarge
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -365,11 +400,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     amountNegative
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -385,11 +422,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     label
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -405,6 +444,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     captionSmall
   </Text>
@@ -416,6 +456,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -431,12 +472,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     display
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -452,12 +495,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     screenTitle
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -473,12 +518,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     sectionTitle
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -494,12 +541,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     h1
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -515,12 +564,14 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     h2
   </Text>
   <Text
     accessibilityRole="header"
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -536,11 +587,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     h3
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -556,11 +609,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     body
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -576,11 +631,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     bodyMedium
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -596,11 +653,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     bodyStrong
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -616,11 +675,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     bodyBold
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -636,11 +697,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     metadata
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -656,11 +719,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     metric
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -676,11 +741,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     code
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -696,11 +763,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     caption
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -716,11 +785,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     captionBold
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -736,11 +807,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     amount
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -756,11 +829,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     amountLarge
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -776,11 +851,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     amountNegative
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -796,11 +873,13 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     label
   </Text>
   <Text
     allowFontScaling={true}
+    lineBreakStrategyIOS="standard"
     maxFontSizeMultiplier={1.3}
     style={
       [
@@ -816,6 +895,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
         undefined,
       ]
     }
+    textBreakStrategy="highQuality"
   >
     captionSmall
   </Text>

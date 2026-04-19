@@ -93,6 +93,9 @@ export const Avatar = forwardRef<React.ElementRef<typeof View>, AvatarProps>(
 						source={{ uri: source }}
 						style={{ width: sizePx, height: sizePx, borderRadius: sizePx / 2 }}
 						contentFit="cover"
+						cachePolicy="memory-disk"
+						priority="high"
+						recyclingKey={source}
 						onError={() => setImageFailed(true)}
 						accessible={false}
 					/>

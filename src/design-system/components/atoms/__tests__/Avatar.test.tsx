@@ -28,6 +28,18 @@ describe('Avatar', () => {
 		expect(getByText('SR')).toBeTruthy();
 	});
 
+	it('uses expo-image caching and high-priority loading for remote avatars', () => {
+		const { UNSAFE_getByType } = renderWithTheme(
+			<Avatar name="Sam Rivera" source="https://example.com/avatar.png" />,
+		);
+
+		const image = UNSAFE_getByType('Image' as any);
+
+		expect(image.props.cachePolicy).toBe('memory-disk');
+		expect(image.props.priority).toBe('high');
+		expect(image.props.recyclingKey).toBe('https://example.com/avatar.png');
+	});
+
 	it('supports tokenized sizes and renders a status indicator', () => {
 		const { getByLabelText, toJSON } = renderWithTheme(
 			<>

@@ -3,7 +3,7 @@
 	"$metadata": {
 		"version": "1.1.0",
 		"source": "src/theme/designTokens.ts",
-		"generatedAt": "2026-04-18T20:20:54.328Z"
+		"generatedAt": "2026-04-19T17:55:46.041Z"
 	},
 	"color": {
 		"primitive": {
@@ -458,7 +458,7 @@
 				},
 				"borderStrong": {
 					"$type": "color",
-					"$value": "#B0A49C"
+					"$value": "#8D8078"
 				},
 				"separator": {
 					"$type": "color",
@@ -644,7 +644,7 @@
 				},
 				"borderStrong": {
 					"$type": "color",
-					"$value": "#5D4838"
+					"$value": "#7A6A60"
 				},
 				"separator": {
 					"$type": "color",

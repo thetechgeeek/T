@@ -21,6 +21,7 @@ describe('Toast', () => {
 		const { getByText } = renderWithTheme(
 			<Toast visible message="Item saved" variant="success" onDismiss={jest.fn()} />,
 		);
+		expect(getByText('Success')).toBeTruthy();
 		expect(getByText('Item saved')).toBeTruthy();
 	});
 

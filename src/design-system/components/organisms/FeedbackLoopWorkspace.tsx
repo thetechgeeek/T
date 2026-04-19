@@ -9,6 +9,10 @@ import { ErrorState } from '@/src/design-system/components/molecules/ErrorState'
 import { ProgressIndicator } from '@/src/design-system/components/molecules/ProgressIndicator';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { ToastViewport, type ToastStackItem } from '@/src/design-system/components/molecules/Toast';
+import {
+	responsiveCardStyle,
+	useResponsiveWorkbenchLayout,
+} from '@/src/design-system/useResponsiveWorkbenchLayout';
 
 type SyncState = 'tentative' | 'syncing' | 'stale' | 'confirmed';
 type ConnectivityState = 'online' | 'offline' | 'reconnecting';
@@ -94,6 +98,7 @@ export const FeedbackLoopWorkspace = forwardRef<
 	FeedbackLoopWorkspaceProps
 >(({ style, testID }, ref) => {
 	const { theme } = useTheme();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 	const [syncState, setSyncState] = useState<SyncState>('stale');
 	const [connectivity, setConnectivity] = useState<ConnectivityState>('reconnecting');
 	const [lastUpdatedLabel, setLastUpdatedLabel] = useState('Updated 9m ago');
@@ -276,7 +281,7 @@ export const FeedbackLoopWorkspace = forwardRef<
 			) : null}
 
 			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.md }}>
-				<Card variant="outlined" style={{ flex: 1, minWidth: 300 }}>
+				<Card variant="outlined" style={responsiveCardStyle(isCompactPhone, 300)}>
 					<CardHeader>Optimistic update with rollback</CardHeader>
 					<CardBody>
 						<View style={{ gap: theme.spacing.sm }}>
@@ -319,7 +324,7 @@ export const FeedbackLoopWorkspace = forwardRef<
 					</CardBody>
 				</Card>
 
-				<Card variant="outlined" style={{ flex: 1, minWidth: 300 }}>
+				<Card variant="outlined" style={responsiveCardStyle(isCompactPhone, 300)}>
 					<CardHeader>Background job progress</CardHeader>
 					<CardBody>
 						<View style={{ gap: theme.spacing.sm }}>

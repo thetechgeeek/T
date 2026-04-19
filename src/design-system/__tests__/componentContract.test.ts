@@ -18,6 +18,8 @@ const NATIVE_PROP_EXTENSION_PATTERN =
 const POLYMORPHIC_AS_PATTERN = /\bas\??:|asChild/;
 const FORWARD_REF_PATTERN = /\bforwardRef\b/;
 const FOCUS_VISIBILITY_PATTERN = /\bonFocus\b|\bsetIsFocused\(true\)|buildFocusRingStyle/;
+const FOCUSABLE_PATTERN = /\bfocusable\b/;
+const KEYBOARD_HANDLER_PATTERN = /\bonKeyPress\b/;
 const ANNOUNCEMENT_PATTERN = /\bannounceForScreenReader\b|accessibilityLiveRegion/;
 const ACCESSIBILITY_ACTION_PATTERN = /\baccessibilityActions=|onAccessibilityAction=/;
 const ACCESSIBILITY_ROLE_PATTERN = /\baccessibilityRole=/;
@@ -26,6 +28,7 @@ const ACCESSIBILITY_VALUE_PATTERN = /\baccessibilityValue=/;
 const ACCESSIBILITY_HINT_PATTERN = /\baccessibilityHint=/;
 const ACCESSIBILITY_MODAL_PATTERN = /\baccessibilityViewIsModal\b|importantForAccessibility="yes"/;
 const ACCESSIBILITY_LIVE_REGION_PATTERN = /\baccessibilityLiveRegion=/;
+const ACCESSIBILITY_LABEL_PATTERN = /\baccessibilityLabel=|\baccessibilityLabel\??:/;
 const NON_SEMANTIC_PRESS_HANDLER_PATTERN =
 	/<(?:View|Text|Animated\.View|Animated\.Text)[^>]*\bonPress=/;
 const MANUAL_FOCUS_ORDER_PATTERN =
@@ -62,6 +65,7 @@ const INTERACTIVE_REF_COMPONENTS = [
 const FOCUS_VISIBLE_COMPONENTS = INTERACTIVE_REF_COMPONENTS.filter(
 	(componentName) => componentName !== 'FormField',
 );
+const KEYBOARD_NAV_COMPONENTS = ['Tabs', 'ToggleButtonGroup'] as const;
 
 const CONTROLLED_COMPONENT_PATTERNS: Readonly<Record<string, RegExp[]>> = {
 	Checkbox: [/\bchecked\??:/, /\bdefaultChecked\??:/, /\bonCheckedChange\??:/],
@@ -207,6 +211,26 @@ const ACCESSIBILITY_MODAL_COMPONENTS = [
 
 const ACCESSIBILITY_LIVE_REGION_COMPONENTS = ['Toast'] as const;
 
+const NON_TEXT_ACCESSIBILITY_COMPONENTS = [
+	'AlertBanner',
+	'AvatarGroup',
+	'BottomSheetPicker',
+	'Button',
+	'DatePickerField',
+	'DescriptionList',
+	'FileUploadField',
+	'IconButton',
+	'MediaViewer',
+	'NotificationCenter',
+	'NumericStepper',
+	'RangeSlider',
+	'SearchBar',
+	'SortableList',
+	'TextInput',
+	'TimePickerField',
+	'Toast',
+] as const;
+
 function getComponentName(filePath: string) {
 	return path.basename(filePath, path.extname(filePath));
 }
@@ -263,6 +287,15 @@ describe('supported component contract', () => {
 		}
 	});
 
+	it('keeps tablet keyboard-navigation affordances on focusable segmented controls and tab lists', () => {
+		for (const componentName of KEYBOARD_NAV_COMPONENTS) {
+			const source = getSource(componentName);
+
+			expect(FOCUSABLE_PATTERN.test(source)).toBe(true);
+			expect(KEYBOARD_HANDLER_PATTERN.test(source)).toBe(true);
+		}
+	});
+
 	it('announces meaningful state changes for dynamic feedback surfaces', () => {
 		for (const componentName of ANNOUNCEMENT_COMPONENTS) {
 			expect(ANNOUNCEMENT_PATTERN.test(getSource(componentName))).toBe(true);
@@ -314,6 +347,12 @@ describe('supported component contract', () => {
 
 		for (const componentName of ACCESSIBILITY_LIVE_REGION_COMPONENTS) {
 			expect(ACCESSIBILITY_LIVE_REGION_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+	});
+
+	it('keeps non-text interactive affordances explicitly labeled for assistive technologies', () => {
+		for (const componentName of NON_TEXT_ACCESSIBILITY_COMPONENTS) {
+			expect(ACCESSIBILITY_LABEL_PATTERN.test(getSource(componentName))).toBe(true);
 		}
 	});
 

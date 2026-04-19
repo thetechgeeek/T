@@ -23,8 +23,11 @@ describe('design-system quality matrix', () => {
 		jest.useFakeTimers();
 	});
 
-	afterEach(() => {
-		jest.runOnlyPendingTimers();
+	afterEach(async () => {
+		await act(async () => {
+			jest.runOnlyPendingTimers();
+			await Promise.resolve();
+		});
 		jest.useRealTimers();
 	});
 

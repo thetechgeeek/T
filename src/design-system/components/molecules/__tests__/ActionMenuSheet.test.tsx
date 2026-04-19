@@ -82,14 +82,24 @@ describe('ActionMenuSheet', () => {
 
 	it('dismisses through the native back or escape request-close path', () => {
 		const onOpenChange = jest.fn();
-		const { UNSAFE_getByType } = renderWithTheme(
+		const { getByTestId, UNSAFE_getAllByProps, UNSAFE_getByType } = renderWithTheme(
 			<ActionMenuSheet
 				title="More actions"
 				open
+				testID="action-sheet"
 				actions={[{ label: 'Archive', value: 'archive' }]}
 				onOpenChange={onOpenChange}
 				onSelect={jest.fn()}
 			/>,
+		);
+
+		expect(
+			UNSAFE_getAllByProps({ accessibilityViewIsModal: true })[0]?.props
+				.importantForAccessibility,
+		).toBe('yes');
+		expect(getByTestId('action-sheet-backdrop', { includeHiddenElements: true })).toHaveProp(
+			'importantForAccessibility',
+			'no-hide-descendants',
 		);
 
 		UNSAFE_getByType(Modal).props.onRequestClose();

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { InteractionManager, ScrollView, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Calendar, Moon, Package, Palette, Search, Sun } from 'lucide-react-native';
 import { LucideIconGlyph, MaterialIconGlyph } from '@/src/design-system/iconography';
@@ -135,6 +135,7 @@ const DATA_DISPLAY_AVATAR_CARD_MIN_WIDTH = 280;
 const DATA_DISPLAY_STAT_CARD_MIN_WIDTH = 220;
 const DATA_DISPLAY_BOARD_CARD_MIN_WIDTH = 340;
 const FORM_PREVIEW_CARD_MIN_WIDTH = 360;
+const DEFERRED_WORKBENCH_PLACEHOLDER_TEST_ID = 'design-library-deferred-placeholder';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 const SINGLE_SLIDER_DEFAULT = 35;
 const RANGE_SLIDER_DEFAULT: [number, number] = [20, 80];
@@ -268,6 +269,35 @@ function WorkbenchMetricCard({
 			<ThemedText variant="caption" style={{ color: c.onSurfaceVariant, marginTop: s.xs }}>
 				{detail}
 			</ThemedText>
+		</Card>
+	);
+}
+
+function DeferredWorkbenchPlaceholder({ testID }: { testID?: string }) {
+	const { c, s, r, visual } = useThemeTokens();
+
+	return (
+		<Card
+			variant="outlined"
+			testID={testID}
+			style={{
+				backgroundColor: visual.surfaces.raised,
+				borderColor: c.border,
+			}}
+		>
+			<View style={{ gap: s.md }}>
+				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm }}>
+					<SkeletonBlock width="34%" height={18} borderRadius={r.full} />
+					<SkeletonBlock width="18%" height={18} borderRadius={r.full} />
+				</View>
+				<SkeletonRow withAvatar lines={2} />
+				<SkeletonRow lines={1} />
+				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm }}>
+					<SkeletonBlock width="26%" height={34} borderRadius={r.full} />
+					<SkeletonBlock width="30%" height={34} borderRadius={r.full} />
+					<SkeletonBlock width="22%" height={34} borderRadius={r.full} />
+				</View>
+			</View>
 		</Card>
 	);
 }
@@ -694,12 +724,23 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 		[activeLocale],
 	);
 	const qualitySignals = useDesignSystemQualitySignals(activeLocale);
+	const [deferredWorkbenchReady, setDeferredWorkbenchReady] = useState(false);
 
 	useEffect(() => {
 		void Promise.resolve().then(() => {
 			setAccessibilityFocus(headerRef);
 		});
 	}, [copy.screen.title]);
+
+	useEffect(() => {
+		const task = InteractionManager.runAfterInteractions(() => {
+			setDeferredWorkbenchReady(true);
+		});
+
+		return () => {
+			task.cancel?.();
+		};
+	}, []);
 
 	const [catalogQuery, setCatalogQuery] = useState('');
 	const [platformFilter, setPlatformFilter] = useState<LibraryPlatformFilter>('common-mobile');
@@ -1480,66 +1521,2252 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 				</View>
 			</PreviewSection>
 
-			<PreviewSection
-				title={copy.componentGallery.title}
-				description={copy.componentGallery.description}
-			>
-				<View
-					style={{
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-						gap: s.sm,
-						marginBottom: s.md,
-					}}
-				>
-					<Badge label={copy.componentGallery.categoryBadges.inputs} variant="info" />
-					<Badge label={copy.componentGallery.categoryBadges.actions} variant="success" />
-					<Badge
-						label={copy.componentGallery.categoryBadges.feedback}
-						variant="warning"
-					/>
-					<Badge
-						label={copy.componentGallery.categoryBadges.dataDisplay}
-						variant="default"
-					/>
-				</View>
-
-				<View style={{ gap: s.lg }}>
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<Button
-							title={copy.componentGallery.buttons.primary}
-							onPress={() => setToastVisible(true)}
-						/>
-						<Button
-							title={copy.componentGallery.buttons.secondary}
-							variant="secondary"
-							onPress={() => setToastVisible(true)}
-						/>
-						<Button
-							title={copy.componentGallery.buttons.outline}
-							variant="outline"
-							onPress={() => setToastVisible(true)}
-						/>
-						<Button
-							title={copy.componentGallery.buttons.danger}
-							variant="danger"
-							onPress={() => setToastVisible(true)}
-						/>
-					</View>
-
-					<Card
-						variant="outlined"
-						style={{
-							backgroundColor: theme.visual.surfaces.hero,
-							borderColor: c.border,
-						}}
+			{deferredWorkbenchReady ? (
+				<>
+					<PreviewSection
+						title={copy.componentGallery.title}
+						description={copy.componentGallery.description}
 					>
-						<ThemedText
-							variant="metadata"
-							style={{ color: theme.visual.surfaces.onHero }}
+						<View
+							style={{
+								flexDirection: 'row',
+								flexWrap: 'wrap',
+								gap: s.sm,
+								marginBottom: s.md,
+							}}
 						>
-							{copy.componentGallery.buttons.inverseHint}
-						</ThemedText>
+							<Badge
+								label={copy.componentGallery.categoryBadges.inputs}
+								variant="info"
+							/>
+							<Badge
+								label={copy.componentGallery.categoryBadges.actions}
+								variant="success"
+							/>
+							<Badge
+								label={copy.componentGallery.categoryBadges.feedback}
+								variant="warning"
+							/>
+							<Badge
+								label={copy.componentGallery.categoryBadges.dataDisplay}
+								variant="default"
+							/>
+						</View>
+
+						<View style={{ gap: s.lg }}>
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<Button
+									title={copy.componentGallery.buttons.primary}
+									onPress={() => setToastVisible(true)}
+								/>
+								<Button
+									title={copy.componentGallery.buttons.secondary}
+									variant="secondary"
+									onPress={() => setToastVisible(true)}
+								/>
+								<Button
+									title={copy.componentGallery.buttons.outline}
+									variant="outline"
+									onPress={() => setToastVisible(true)}
+								/>
+								<Button
+									title={copy.componentGallery.buttons.danger}
+									variant="danger"
+									onPress={() => setToastVisible(true)}
+								/>
+							</View>
+
+							<Card
+								variant="outlined"
+								style={{
+									backgroundColor: theme.visual.surfaces.hero,
+									borderColor: c.border,
+								}}
+							>
+								<ThemedText
+									variant="metadata"
+									style={{ color: theme.visual.surfaces.onHero }}
+								>
+									{copy.componentGallery.buttons.inverseHint}
+								</ThemedText>
+								<View
+									style={{
+										flexDirection: 'row',
+										flexWrap: 'wrap',
+										gap: s.sm,
+										marginTop: s.sm,
+									}}
+								>
+									<Button
+										title={copy.componentGallery.buttons.inverse}
+										variant="inverse"
+										onPress={() => setToastVisible(true)}
+									/>
+									<Button
+										title={copy.componentGallery.buttons.secondary}
+										variant="outline"
+										onPress={() => setToastVisible(true)}
+									/>
+								</View>
+							</Card>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.lg }}>
+								<IconButton
+									icon={
+										<LucideIconGlyph
+											icon={Search}
+											size={20}
+											color={c.primary}
+										/>
+									}
+									label={copy.componentGallery.iconButtons.search}
+									onPress={() => setToastVisible(true)}
+								/>
+								<IconButton
+									icon={
+										<MaterialIconGlyph
+											name="calendar-month"
+											size={20}
+											color={c.primary}
+										/>
+									}
+									label={copy.componentGallery.iconButtons.calendar}
+									onPress={() => setToastVisible(true)}
+								/>
+								<IconButton
+									icon={
+										mode === 'dark' ? (
+											<LucideIconGlyph
+												icon={Sun}
+												size={20}
+												color={c.primary}
+											/>
+										) : (
+											<LucideIconGlyph
+												icon={Moon}
+												size={20}
+												color={c.primary}
+											/>
+										)
+									}
+									label={copy.componentGallery.iconButtons.mode}
+									onPress={() => setThemeMode(mode === 'dark' ? 'light' : 'dark')}
+								/>
+							</View>
+
+							<TextInput
+								label={copy.componentGallery.fields.textField}
+								value={noteValue}
+								onChangeText={setNoteValue}
+								helperText={copy.componentGallery.fields.textFieldHelper}
+							/>
+
+							<TextInput
+								label={copy.componentGallery.fields.counterField}
+								value={noteValue}
+								onChangeText={setNoteValue}
+								helperText={copy.componentGallery.fields.counterFieldHelper}
+								clearable
+								showCharacterCount
+								maxLength={80}
+							/>
+
+							<TextInput
+								label={copy.componentGallery.fields.errorField}
+								value={approvalEmailValue}
+								onChangeText={setApprovalEmailValue}
+								error={copy.componentGallery.fields.errorFieldError}
+								keyboardType="email-address"
+								autoCapitalize="none"
+							/>
+
+							<TextInput
+								label={copy.componentGallery.fields.asyncField}
+								defaultValue="team-ops"
+								helperText={copy.componentGallery.fields.asyncFieldHelper}
+								loading
+							/>
+
+							<TextInput
+								label={copy.componentGallery.fields.disabledField}
+								value="Managed by library policy"
+								editable={false}
+							/>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<TextInput
+										label={copy.componentGallery.fields.emailField}
+										defaultValue="owner@example.com"
+										keyboardType="email-address"
+										returnKeyType="next"
+										autoComplete="email"
+										textContentType="emailAddress"
+										autoCapitalize="none"
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<TextInput
+										label={copy.componentGallery.fields.numericField}
+										defaultValue="42"
+										keyboardType="numeric"
+										returnKeyType="next"
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<TextInput
+										label={copy.componentGallery.fields.phoneKeyboardField}
+										defaultValue="9876543210"
+										keyboardType="phone-pad"
+										returnKeyType="next"
+										autoComplete="tel"
+										textContentType="telephoneNumber"
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<TextInput
+										label={copy.componentGallery.fields.urlField}
+										defaultValue="https://example.com"
+										keyboardType="url"
+										returnKeyType="go"
+										autoCapitalize="none"
+										autoCorrect={false}
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<TextInput
+										label={copy.componentGallery.fields.decimalField}
+										defaultValue="1250.50"
+										keyboardType="decimal-pad"
+										returnKeyType="done"
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<TextInput
+										label={copy.componentGallery.fields.passwordField}
+										defaultValue="hunter2"
+										helperText={
+											copy.componentGallery.fields.passwordFieldHelper
+										}
+										secureTextEntry
+										autoComplete="password"
+										textContentType="password"
+										returnKeyType="send"
+									/>
+								</View>
+							</View>
+
+							<TextAreaField
+								label={copy.componentGallery.fields.textarea}
+								value={textareaValue}
+								onChange={setTextareaValue}
+								placeholder={copy.componentGallery.notesSeed}
+								maxLength={280}
+							/>
+
+							<SearchBar
+								value={searchValue}
+								onChangeText={setSearchValue}
+								onDebouncedChange={setDebouncedSearchValue}
+								debounceMs={350}
+								loading={searchValue !== debouncedSearchValue}
+								placeholder={copy.componentGallery.fields.searchPlaceholder}
+							/>
+							<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
+								{copy.componentGallery.fields.searchDebouncedLabel}:{' '}
+								{debouncedSearchValue ||
+									copy.componentGallery.fields.searchDebouncedIdle}
+							</ThemedText>
+
+							<FilterBar
+								filters={[...copy.componentGallery.filterOptions]}
+								activeValue={filterValue}
+								defaultValue="all"
+								onSelect={setFilterValue}
+								onClear={() => setFilterValue('all')}
+							/>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<Checkbox
+										label={copy.componentGallery.selectionControls.checkbox}
+										description={
+											copy.componentGallery.selectionControls
+												.checkboxDescription
+										}
+										checked={emailSummaryEnabled}
+										onCheckedChange={setEmailSummaryEnabled}
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<Checkbox
+										label={
+											copy.componentGallery.selectionControls
+												.checkboxIndeterminate
+										}
+										description={
+											copy.componentGallery.selectionControls
+												.checkboxIndeterminateDescription
+										}
+										indeterminate
+										defaultChecked={false}
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<Checkbox
+										label={
+											copy.componentGallery.selectionControls.checkboxDisabled
+										}
+										disabled
+										defaultChecked
+									/>
+								</View>
+							</View>
+
+							<CheckboxGroup
+								label={copy.componentGallery.selectionControls.checkboxGroup}
+								description={
+									copy.componentGallery.selectionControls.checkboxGroupDescription
+								}
+								values={selectedChannels}
+								onValuesChange={setSelectedChannels}
+								options={[
+									...copy.componentGallery.selectionControls.checkboxOptions,
+								]}
+							/>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<Radio
+										label={copy.componentGallery.selectionControls.radio}
+										defaultSelected
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<Radio
+										label={
+											copy.componentGallery.selectionControls.radioDisabled
+										}
+										disabled
+									/>
+								</View>
+							</View>
+
+							<RadioGroup
+								label={copy.componentGallery.selectionControls.radioGroup}
+								description={
+									copy.componentGallery.selectionControls.radioGroupDescription
+								}
+								value={digestCadence}
+								onValueChange={setDigestCadence}
+								options={[
+									...copy.componentGallery.selectionControls.radioOptions.slice(
+										0,
+										2,
+									),
+									{
+										label: copy.componentGallery.selectionControls
+											.radioDisabled,
+										value: 'monthly',
+										disabled: true,
+									},
+								]}
+							/>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<ToggleSwitch
+										accessibilityLabel={
+											copy.componentGallery.selectionControls.toggleBareLabel
+										}
+										value={approvalRuleEnabled}
+										onValueChange={setApprovalRuleEnabled}
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<ToggleSwitch
+										label={copy.componentGallery.selectionControls.toggle}
+										description={
+											copy.componentGallery.selectionControls
+												.toggleDescription
+										}
+										value={autoRemindersEnabled}
+										onValueChange={setAutoRemindersEnabled}
+									/>
+								</View>
+								<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
+									<ToggleSwitch
+										label={
+											copy.componentGallery.selectionControls.toggleDisabled
+										}
+										description={
+											copy.componentGallery.selectionControls
+												.toggleDisabledDescription
+										}
+										disabled
+										defaultValue={true}
+									/>
+								</View>
+							</View>
+
+							<PhoneInput
+								label={copy.componentGallery.fields.phoneInput}
+								value={phoneValue}
+								onChange={setPhoneValue}
+							/>
+
+							<AmountInput
+								label={copy.componentGallery.fields.amountInput}
+								value={amountValue}
+								onChange={setAmountValue}
+							/>
+
+							<DatePickerField
+								label={copy.componentGallery.fields.datePicker}
+								value={dateValue}
+								onChange={setDateValue}
+								showShortcuts
+							/>
+
+							<DatePickerField
+								label={copy.componentGallery.fields.datePicker}
+								value={dateValue}
+								onChange={setDateValue}
+								presentation="sheet"
+								locale="en-US"
+								disabledDates={['2026-04-18']}
+							/>
+
+							<TimePickerField
+								label={copy.componentGallery.advanced.timePicker}
+								value={timeValue}
+								onChange={setTimeValue}
+							/>
+
+							<DateRangePickerField
+								label={copy.componentGallery.advanced.dateRangePicker}
+								value={dateRangeValue}
+								onChange={setDateRangeValue}
+							/>
+
+							<AutocompleteField
+								label={copy.componentGallery.advanced.autocomplete}
+								options={autocompleteOptions}
+								value={autocompleteValue}
+								multiple
+								allowCreate
+								onAsyncSearch={async (query) => {
+									if (!query.trim()) {
+										return autocompleteOptions;
+									}
+
+									return autocompleteOptions.filter((option) =>
+										option.label
+											.toLowerCase()
+											.includes(query.trim().toLowerCase()),
+									);
+								}}
+								onChange={(nextValue) =>
+									setAutocompleteValue(nextValue as string[])
+								}
+							/>
+
+							<TokenInput
+								label={copy.componentGallery.advanced.tokenInput}
+								values={tokenValues}
+								onChange={setTokenValues}
+							/>
+
+							<FileUploadField
+								label={copy.componentGallery.advanced.fileUpload}
+								files={uploadItems}
+								onChange={setUploadItems}
+							/>
+
+							<RangeSlider
+								label={copy.componentGallery.advanced.rangeSlider}
+								value={singleSliderValue}
+								onChange={setSingleSliderValue}
+								testID="component-gallery-single-slider"
+							/>
+
+							<RangeSlider
+								label={copy.componentGallery.advanced.rangeSlider}
+								range
+								value={rangeSliderValue}
+								onChange={setRangeSliderValue}
+								testID="component-gallery-range-slider"
+							/>
+
+							<NumericStepper
+								label={copy.componentGallery.advanced.numericStepper}
+								value={stepperValue}
+								onChange={setStepperValue}
+								min={1}
+								max={10}
+							/>
+
+							<OtpCodeInput
+								label={copy.componentGallery.advanced.otp}
+								value={otpValue}
+								onChange={setOtpValue}
+								masked
+							/>
+
+							<ColorPicker
+								label={copy.componentGallery.advanced.colorPicker}
+								value={colorValue}
+								onChange={setColorValue}
+							/>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<Button
+									title={copy.componentGallery.buttons.primary}
+									size="xs"
+									onPress={() => setToastVisible(true)}
+								/>
+								<Button
+									accessibilityLabel={copy.componentGallery.iconButtons.search}
+									iconOnly
+									leftIcon={
+										<LucideIconGlyph
+											icon={Search}
+											size={16}
+											color={c.onPrimary}
+										/>
+									}
+									onPress={() => setToastVisible(true)}
+									hapticFeedback="selection"
+								/>
+								<Button
+									title={copy.componentGallery.buttons.primary}
+									fullWidth
+									onPress={() => setToastVisible(true)}
+								/>
+							</View>
+
+							<View style={{ minHeight: theme.components.fab.size + s.xl }}>
+								<FAB
+									accessibilityLabel={copy.componentGallery.advanced.fabLabel}
+									onPress={() => setToastVisible(true)}
+									hapticFeedback="success"
+								/>
+							</View>
+
+							<SplitButton
+								label={copy.componentGallery.advanced.splitButton}
+								onPress={() => setToastVisible(true)}
+								secondaryActions={actionMenuItems}
+								onSecondaryAction={(value) => {
+									pushToast({ message: `Queued ${value}`, variant: 'info' });
+								}}
+							/>
+
+							<ToggleButtonGroup
+								label={copy.componentGallery.advanced.toggleGroup}
+								options={toggleOptions}
+								value={toggleGroupValues}
+								multiple
+								onChange={(nextValue) =>
+									setToggleGroupValues(nextValue as string[])
+								}
+							/>
+
+							<SegmentedControl
+								label={copy.componentGallery.advanced.segmentedControl}
+								options={toggleOptions}
+								value={segmentedValue}
+								onChange={setSegmentedValue}
+							/>
+
+							<Button
+								title={copy.componentGallery.advanced.actionSheet}
+								variant="secondary"
+								onPress={() => setActionSheetOpen(true)}
+								hapticFeedback="selection"
+							/>
+
+							<ActionMenuSheet
+								title={copy.componentGallery.advanced.actionSheet}
+								open={actionSheetOpen}
+								onOpenChange={setActionSheetOpen}
+								actions={actionMenuItems}
+								onSelect={(value) =>
+									pushToast({ message: `Ran ${value}`, variant: 'success' })
+								}
+							/>
+
+							<View style={{ gap: s.sm }}>
+								<AlertBanner
+									title={copy.componentGallery.feedbackBanner.title}
+									description={copy.componentGallery.feedbackBanner.description}
+									actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
+									onAction={() => setToastVisible(true)}
+									variant="info"
+								/>
+								<AlertBanner
+									title={copy.componentGallery.feedbackBanner.title}
+									description={copy.componentGallery.feedbackBanner.description}
+									actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
+									onAction={() => setToastVisible(true)}
+									variant="success"
+								/>
+								<AlertBanner
+									title={copy.componentGallery.feedbackBanner.title}
+									description={copy.componentGallery.feedbackBanner.description}
+									actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
+									onAction={() => setToastVisible(true)}
+									dismissible
+									onDismiss={() => setToastVisible(false)}
+									variant="warning"
+								/>
+								<AlertBanner
+									title={copy.componentGallery.feedbackBanner.title}
+									description={copy.componentGallery.feedbackBanner.description}
+									actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
+									onAction={() => setToastVisible(true)}
+									dismissible
+									onDismiss={() => setToastVisible(false)}
+									persistent
+									variant="error"
+								/>
+							</View>
+
+							<View style={{ gap: s.md }}>
+								<ProgressIndicator
+									variant="linear"
+									value={64}
+									label={copy.componentGallery.advanced.progressUpload}
+								/>
+								<ProgressIndicator
+									variant="linear"
+									indeterminate
+									label={copy.componentGallery.advanced.progressRefresh}
+								/>
+								<ProgressIndicator
+									variant="circular"
+									value={82}
+									label={copy.componentGallery.advanced.progressCoverage}
+								/>
+								<ProgressIndicator
+									variant="circular"
+									indeterminate
+									label={copy.componentGallery.advanced.progressExport}
+								/>
+							</View>
+
+							<ErrorState
+								variant="server"
+								actionLabel={copy.componentGallery.advanced.errorRetry}
+								onAction={() => setToastVisible(true)}
+							/>
+
+							<NotificationCenter
+								items={notificationItems}
+								onChange={setNotificationItems}
+							/>
+
+							<Tabs options={tabOptions} value={tabValue} onChange={setTabValue} />
+
+							<View style={{ gap: s.sm }}>
+								<Stepper
+									steps={stepperSteps}
+									onStepPress={(value) =>
+										pushToast({
+											message: `${copy.componentGallery.advanced.stepperReturnPrefix}${value}`,
+											variant: 'info',
+										})
+									}
+								/>
+								<Stepper orientation="vertical" steps={stepperSteps} />
+							</View>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm }}>
+								<Button
+									title={copy.componentGallery.advanced.toastQueueSuccess}
+									variant="secondary"
+									onPress={() =>
+										pushToast({
+											message:
+												copy.componentGallery.advanced.toastSuccessMessage,
+											variant: 'success',
+										})
+									}
+								/>
+								<Button
+									title={copy.componentGallery.advanced.toastQueueWarning}
+									variant="outline"
+									onPress={() =>
+										pushToast({
+											message:
+												copy.componentGallery.advanced.toastWarningMessage,
+											variant: 'warning',
+											actionLabel:
+												copy.componentGallery.advanced.toastWarningAction,
+											onAction: () => setToastVisible(true),
+										})
+									}
+								/>
+								<Button
+									title={copy.componentGallery.advanced.toastQueueError}
+									variant="danger"
+									onPress={() =>
+										pushToast({
+											message:
+												copy.componentGallery.advanced.toastErrorMessage,
+											variant: 'error',
+											dismissLabel:
+												copy.componentGallery.advanced.toastDismiss,
+										})
+									}
+								/>
+							</View>
+
+							<StatCard
+								label={copy.stateProof.uglyData.metricLabel}
+								value={DESIGN_SYSTEM_OPERATIONAL_FIXTURE.metricValue}
+								icon={Palette}
+								color={c.primary}
+								trend="+4"
+								trendLabel={copy.stats.completed}
+							/>
+
+							<CollapsibleSection
+								title={copy.componentGallery.accordion.title}
+								subtitle={copy.componentGallery.accordion.subtitle}
+								collapsedLabel={copy.componentGallery.accordion.collapsedLabel}
+								expandedLabel={copy.componentGallery.accordion.expandedLabel}
+								testID="component-gallery-collapsible"
+								contentTestID="component-gallery-collapsible-content"
+							>
+								<View style={{ gap: s.xs }}>
+									<ThemedText variant="body">
+										{copy.componentGallery.accordion.body}
+									</ThemedText>
+									<Badge
+										label={copy.componentGallery.accordion.badge}
+										variant="info"
+										size="sm"
+									/>
+								</View>
+							</CollapsibleSection>
+
+							<Button
+								title={copy.componentGallery.buttons.openPicker}
+								variant="secondary"
+								onPress={() => setPickerVisible(true)}
+								leftIcon={
+									<LucideIconGlyph
+										icon={Package}
+										size={16}
+										color={c.onSurfaceVariant}
+									/>
+								}
+							/>
+
+							<Button
+								title={copy.componentGallery.buttons.openDialog}
+								variant="outline"
+								onPress={() => setConfirmationVisible(true)}
+							/>
+
+							<AlertBannerPreview
+								label={copy.componentGallery.feedbackBanner.label}
+								title={copy.componentGallery.feedbackBanner.title}
+								description={copy.componentGallery.feedbackBanner.description}
+								actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
+							/>
+						</View>
+					</PreviewSection>
+
+					<PreviewSection
+						title={copy.componentGallery.dataDisplay.sectionTitle}
+						description={copy.componentGallery.dataDisplay.sectionDescription}
+					>
+						<View style={{ gap: s.lg }}>
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<Card
+									density="relaxed"
+									header={
+										<CardHeader>
+											{copy.componentGallery.dataDisplay.cardHeader}
+										</CardHeader>
+									}
+									footer={
+										<CardFooter>
+											<View
+												style={{
+													flexDirection: 'row',
+													flexWrap: 'wrap',
+													gap: s.sm,
+												}}
+											>
+												<Button
+													title={
+														copy.componentGallery.dataDisplay
+															.cardFooterPrimary
+													}
+													size="sm"
+													onPress={() => setToastVisible(true)}
+												/>
+												<Button
+													title={
+														copy.componentGallery.dataDisplay
+															.cardFooterSecondary
+													}
+													variant="secondary"
+													size="sm"
+													onPress={() => setToastVisible(true)}
+												/>
+											</View>
+										</CardFooter>
+									}
+									style={{ flex: 1, minWidth: DATA_DISPLAY_CARD_MIN_WIDTH }}
+								>
+									<CardBody>
+										<ThemedText
+											variant="body"
+											style={{ color: c.onSurfaceVariant }}
+										>
+											{copy.componentGallery.dataDisplay.listDescription}
+										</ThemedText>
+									</CardBody>
+								</Card>
+
+								<Card
+									orientation="horizontal"
+									variant="outlined"
+									density="compact"
+									header={
+										<CardHeader>
+											{copy.componentGallery.dataDisplay.cardHorizontalTitle}
+										</CardHeader>
+									}
+									media={
+										<Avatar
+											name={
+												copy.componentGallery.dataDisplay.avatarItems[0]
+													?.name ?? ''
+											}
+											source={
+												copy.componentGallery.dataDisplay.mediaItems[0]
+													?.thumbnailUri
+											}
+											size="xl"
+											status="online"
+										/>
+									}
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+								>
+									<CardBody>
+										<ThemedText
+											variant="caption"
+											style={{ color: c.onSurfaceVariant }}
+										>
+											{
+												copy.componentGallery.dataDisplay
+													.cardHorizontalDescription
+											}
+										</ThemedText>
+									</CardBody>
+								</Card>
+
+								<Card
+									featured
+									density="relaxed"
+									header={
+										<CardHeader>
+											{copy.componentGallery.dataDisplay.cardHeroTitle}
+										</CardHeader>
+									}
+									footer={
+										<CardFooter>
+											<Badge
+												label={
+													copy.componentGallery.dataDisplay.statUpdatedAt
+												}
+												variant="info"
+											/>
+										</CardFooter>
+									}
+									style={{ flex: 1, minWidth: DATA_DISPLAY_CARD_MIN_WIDTH }}
+								>
+									<CardBody>
+										<ThemedText
+											variant="body"
+											style={{ color: theme.visual.hero.promo.onSurface }}
+										>
+											{copy.componentGallery.dataDisplay.cardHeroDescription}
+										</ThemedText>
+									</CardBody>
+								</Card>
+							</View>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<StatCard
+									label={copy.stateProof.uglyData.metricLabel}
+									value={DESIGN_SYSTEM_OPERATIONAL_FIXTURE.metricValue}
+									trend="+4.8%"
+									trendLabel={copy.stats.completed}
+									comparisonBaseline={
+										copy.componentGallery.dataDisplay.statComparisonBaseline
+									}
+									updatedAtLabel={copy.componentGallery.dataDisplay.statUpdatedAt}
+									sparklineValues={dataDisplaySparklineValues}
+									density="relaxed"
+									style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
+								/>
+								<StatCard
+									label={copy.patternSamples.previewReadyComponents}
+									value={DESIGN_LIBRARY_COMPONENT_OVERVIEW.total}
+									isLoading
+									style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
+								/>
+								<StatCard
+									label={copy.patternSamples.accessibilityCoverage}
+									value={`${Math.round(
+										(DESIGN_LIBRARY_OVERVIEW.completed /
+											DESIGN_LIBRARY_OVERVIEW.total) *
+											100,
+									)}%`}
+									trend="+2"
+									trendLabel={copy.stats.completed}
+									errorMessage={
+										copy.componentGallery.dataDisplay.statErrorMessage
+									}
+									density="compact"
+									style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
+								/>
+							</View>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<Card
+									variant="outlined"
+									style={{
+										flex: 1,
+										minWidth: DATA_DISPLAY_AVATAR_CARD_MIN_WIDTH,
+									}}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.dataDisplay.avatarsTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.dataDisplay.avatarsDescription}
+									</ThemedText>
+									<View
+										style={{
+											flexDirection: 'row',
+											flexWrap: 'wrap',
+											gap: s.md,
+										}}
+									>
+										{copy.componentGallery.dataDisplay.avatarItems
+											.slice(0, 2)
+											.map((item, index) => (
+												<Avatar
+													key={item.id}
+													name={item.name}
+													source={
+														copy.componentGallery.dataDisplay
+															.mediaItems[index]?.thumbnailUri
+													}
+													size={index === 0 ? 'lg' : 'md'}
+													status={item.status}
+												/>
+											))}
+										<AvatarGroup
+											items={copy.componentGallery.dataDisplay.avatarItems.map(
+												(item, index) => ({
+													...item,
+													source:
+														index <
+														copy.componentGallery.dataDisplay.mediaItems
+															.length
+															? copy.componentGallery.dataDisplay
+																	.mediaItems[index]?.thumbnailUri
+															: undefined,
+												}),
+											)}
+											maxVisible={3}
+										/>
+									</View>
+								</Card>
+
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.dataDisplay.keyValueTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.dataDisplay.keyValueDescription}
+									</ThemedText>
+									<DescriptionList
+										items={[...copy.componentGallery.dataDisplay.keyValueItems]}
+										layout="horizontal"
+										density="compact"
+									/>
+								</Card>
+							</View>
+
+							<Card variant="outlined">
+								<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
+									{copy.componentGallery.dataDisplay.listTitle}
+								</ThemedText>
+								<ThemedText
+									variant="caption"
+									style={{
+										color: c.onSurfaceVariant,
+										marginTop: s.xxs,
+										marginBottom: s.md,
+									}}
+								>
+									{copy.componentGallery.dataDisplay.listDescription}
+								</ThemedText>
+								<VirtualizedList
+									sections={dataDisplayListSections}
+									keyExtractor={(item) => item.id}
+									selectedKeys={selectedListRows}
+									onSelectedKeysChange={setSelectedListRows}
+									itemHeight={72}
+									renderSectionHeader={(section) => (
+										<Badge label={section.title} variant="default" size="sm" />
+									)}
+									onLoadMore={() =>
+										pushToast({
+											message:
+												copy.componentGallery.dataDisplay.timelineLoadMore,
+											variant: 'info',
+										})
+									}
+									onRefresh={() =>
+										pushToast({
+											message: copy.componentGallery.dataDisplay.listTitle,
+											variant: 'success',
+										})
+									}
+									renderItem={({ item, selected, toggleSelected }) => (
+										<ListItem
+											title={item.title}
+											subtitle={item.subtitle}
+											density="compact"
+											showChevron={false}
+											onPress={toggleSelected}
+											leftIcon={
+												<Checkbox
+													label={
+														copy.componentGallery.dataDisplay
+															.listSelectionLabel
+													}
+													checked={selected}
+													onCheckedChange={() => toggleSelected()}
+													accessibilityLabel={item.title}
+													style={{
+														width: theme.components.selectionControl
+															.size,
+														overflow: 'hidden',
+													}}
+												/>
+											}
+											rightElement={
+												<Badge
+													label={item.status}
+													variant={
+														item.id === 'list-1' ? 'warning' : 'success'
+													}
+													size="sm"
+												/>
+											}
+											style={{
+												backgroundColor: selected
+													? theme.colors.surfaceVariant
+													: theme.colors.card,
+											}}
+										/>
+									)}
+									emptyTitle={copy.componentGallery.dataDisplay.listEmptyTitle}
+									emptyDescription={
+										copy.componentGallery.dataDisplay.listEmptyDescription
+									}
+								/>
+							</Card>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.dataDisplay.timelineTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.dataDisplay.timelineDescription}
+									</ThemedText>
+									<ActivityFeed
+										items={activityItems}
+										pendingItems={activityPendingItems}
+										onItemsChange={(nextItems) => {
+											setActivityItems(nextItems);
+											setActivityPendingItems([]);
+										}}
+										onLoadMore={() =>
+											pushToast({
+												message:
+													copy.componentGallery.dataDisplay
+														.timelineLoadMore,
+												variant: 'info',
+											})
+										}
+										loadMoreLabel={
+											copy.componentGallery.dataDisplay.timelineLoadMore
+										}
+										newItemsLabel={
+											copy.componentGallery.dataDisplay.timelineNewItems
+										}
+										density="compact"
+										testID="data-display-activity-feed"
+									/>
+								</Card>
+
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.dataDisplay.swipeTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.dataDisplay.swipeDescription}
+									</ThemedText>
+									<SwipeableRow
+										onArchive={() => setToastVisible(true)}
+										onDelete={() => setToastVisible(true)}
+										onEdit={() => setToastVisible(true)}
+									>
+										<ListItem
+											title={
+												copy.componentGallery.dataDisplay.listItems[0]
+													?.title ?? ''
+											}
+											subtitle={
+												copy.componentGallery.dataDisplay.listItems[0]
+													?.subtitle ?? ''
+											}
+											showChevron={false}
+											style={{ backgroundColor: theme.colors.card }}
+											rightElement={
+												<Badge
+													label={
+														copy.componentGallery.dataDisplay
+															.listItems[0]?.status ?? ''
+													}
+													size="sm"
+												/>
+											}
+										/>
+									</SwipeableRow>
+								</Card>
+							</View>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<DataChart
+									title={copy.componentGallery.dataDisplay.chartsTitle}
+									description={
+										copy.componentGallery.dataDisplay.chartsDescription
+									}
+									variant="line"
+									categories={[
+										...copy.componentGallery.dataDisplay.chartCategories,
+									]}
+									series={copy.componentGallery.dataDisplay.chartSeries.map(
+										(series) => ({
+											...series,
+											values: [...series.values],
+										}),
+									)}
+									annotations={[
+										...copy.componentGallery.dataDisplay.chartAnnotations,
+									]}
+									focusedSeriesId={chartFocusedSeries}
+									onFocusedSeriesChange={setChartFocusedSeries}
+									density="compact"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+									testID="data-chart-line"
+								/>
+								<DataChart
+									title={copy.componentGallery.dataDisplay.chartsTitle}
+									description={
+										copy.componentGallery.dataDisplay.chartsDescription
+									}
+									variant="bar"
+									categories={[
+										...copy.componentGallery.dataDisplay.chartCategories,
+									]}
+									series={copy.componentGallery.dataDisplay.chartSeries.map(
+										(series) => ({
+											...series,
+											values: [...series.values],
+										}),
+									)}
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+									testID="data-chart-bar"
+								/>
+								<DataChart
+									title={copy.componentGallery.dataDisplay.chartsTitle}
+									description={
+										copy.componentGallery.dataDisplay.chartsDescription
+									}
+									variant="pie"
+									slices={[...copy.componentGallery.dataDisplay.chartSlices]}
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+									testID="data-chart-pie"
+								/>
+								<DataChart
+									title={copy.componentGallery.dataDisplay.chartsTitle}
+									description={
+										copy.componentGallery.dataDisplay.chartsDescription
+									}
+									variant="donut"
+									slices={[...copy.componentGallery.dataDisplay.chartSlices]}
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+									testID="data-chart-donut"
+								/>
+								<DataChart
+									title={copy.componentGallery.dataDisplay.chartsTitle}
+									description={
+										copy.componentGallery.dataDisplay.chartsDescription
+									}
+									variant="scatter"
+									points={[...copy.componentGallery.dataDisplay.chartPoints]}
+									series={copy.componentGallery.dataDisplay.chartSeries.map(
+										(series) => ({
+											...series,
+											values: [...series.values],
+										}),
+									)}
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+									testID="data-chart-scatter"
+								/>
+								<DataChart
+									title={copy.componentGallery.dataDisplay.chartsTitle}
+									description={
+										copy.componentGallery.dataDisplay.chartsDescription
+									}
+									variant="heatmap"
+									heatmap={[...copy.componentGallery.dataDisplay.chartHeatmap]}
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+									testID="data-chart-heatmap"
+								/>
+								<DataChart
+									title={copy.componentGallery.dataDisplay.chartsTitle}
+									description={
+										copy.componentGallery.dataDisplay.chartsDescription
+									}
+									variant="sparkline"
+									series={[
+										{
+											id:
+												copy.componentGallery.dataDisplay.chartSeries[0]
+													?.id ?? 'series',
+											label:
+												copy.componentGallery.dataDisplay.chartSeries[0]
+													?.label ?? '',
+											values: [
+												...(copy.componentGallery.dataDisplay.chartSeries[0]
+													?.values ?? []),
+											],
+										},
+									]}
+									style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
+									testID="data-chart-sparkline"
+								/>
+							</View>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.dataDisplay.mediaTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.dataDisplay.mediaDescription}
+									</ThemedText>
+									<View style={{ gap: s.sm }}>
+										<Button
+											title={copy.componentGallery.dataDisplay.mediaOpen}
+											onPress={() => setMediaViewerOpen(true)}
+										/>
+										<MediaViewer
+											items={[
+												...copy.componentGallery.dataDisplay.mediaItems,
+											]}
+											open={mediaViewerOpen}
+											onOpenChange={setMediaViewerOpen}
+										/>
+									</View>
+								</Card>
+
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_BOARD_CARD_MIN_WIDTH,
+									)}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.dataDisplay.boardTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.dataDisplay.boardDescription}
+									</ThemedText>
+									<KanbanBoard
+										columns={kanbanColumns}
+										onColumnsChange={setKanbanColumns}
+									/>
+								</Card>
+							</View>
+
+							<Card variant="outlined">
+								<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
+									{copy.componentGallery.dataDisplay.boardTitle}
+								</ThemedText>
+								<ThemedText
+									variant="caption"
+									style={{
+										color: c.onSurfaceVariant,
+										marginTop: s.xxs,
+										marginBottom: s.md,
+									}}
+								>
+									{copy.componentGallery.dataDisplay.boardDescription}
+								</ThemedText>
+								<SortableList
+									items={kanbanColumns[0]?.items ?? []}
+									onItemsChange={(nextItems) =>
+										setKanbanColumns((currentColumns) =>
+											currentColumns.map((column, index) =>
+												index === 0
+													? { ...column, items: nextItems }
+													: column,
+											),
+										)
+									}
+									renderItem={(item) => (
+										<View style={{ gap: s.xxs }}>
+											<ThemedText
+												variant="bodyStrong"
+												style={{ color: c.onSurface }}
+											>
+												{item.title}
+											</ThemedText>
+											{item.description ? (
+												<ThemedText
+													variant="caption"
+													style={{ color: c.onSurfaceVariant }}
+												>
+													{item.description}
+												</ThemedText>
+											) : null}
+										</View>
+									)}
+								/>
+							</Card>
+						</View>
+					</PreviewSection>
+
+					<PreviewSection
+						title={copy.componentGallery.overlays.sectionTitle}
+						description={copy.componentGallery.overlays.sectionDescription}
+					>
+						<View style={{ gap: s.lg }}>
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm }}>
+								<Button
+									ref={dialogTriggerRefSm}
+									title={copy.componentGallery.overlays.sizeSmall}
+									size="sm"
+									variant="outline"
+									onPress={() => {
+										setConfirmationSize('sm');
+										setConfirmationRestoreTarget('sm');
+										setConfirmationVisible(true);
+									}}
+								/>
+								<Button
+									ref={dialogTriggerRefMd}
+									title={copy.componentGallery.overlays.sizeMedium}
+									size="sm"
+									variant="secondary"
+									onPress={() => {
+										setConfirmationSize('md');
+										setConfirmationRestoreTarget('md');
+										setConfirmationVisible(true);
+									}}
+								/>
+								<Button
+									ref={dialogTriggerRefLg}
+									title={copy.componentGallery.overlays.sizeLarge}
+									size="sm"
+									variant="ghost"
+									onPress={() => {
+										setConfirmationSize('lg');
+										setConfirmationRestoreTarget('lg');
+										setConfirmationVisible(true);
+									}}
+								/>
+								<Button
+									ref={dialogTriggerRefHard}
+									title={copy.componentGallery.overlays.hardConfirmation}
+									size="sm"
+									onPress={() => setHardConfirmationVisible(true)}
+								/>
+								<Button
+									title={copy.componentGallery.overlays.nativeAlertButton}
+									size="sm"
+									variant="outline"
+									onPress={() =>
+										showNativeConfirmationAlert({
+											title: copy.componentGallery.overlays.nativeAlertTitle,
+											message:
+												copy.componentGallery.overlays.nativeAlertMessage,
+											confirmLabel:
+												copy.componentGallery.overlays.nativeAlertConfirm,
+											cancelLabel:
+												copy.componentGallery.overlays.nativeAlertCancel,
+											onConfirm: () =>
+												pushToast({
+													message:
+														copy.componentGallery.overlays
+															.nativeAlertConfirmed,
+													variant: 'success',
+												}),
+											onCancel: () =>
+												pushToast({
+													message:
+														copy.componentGallery.overlays
+															.nativeAlertCancelled,
+													variant: 'info',
+												}),
+										})
+									}
+								/>
+							</View>
+
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<Card
+									variant="outlined"
+									style={{ flex: 1, minWidth: DATA_DISPLAY_CARD_MIN_WIDTH }}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.overlays.tooltipTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.overlays.tooltipDescription}
+									</ThemedText>
+									<Tooltip
+										triggerLabel={copy.componentGallery.overlays.tooltipTrigger}
+										content={copy.componentGallery.overlays.tooltipContent}
+										testID="overlay-tooltip"
+										trigger={
+											<View style={{ alignSelf: 'flex-start' }}>
+												<Badge
+													label={
+														copy.componentGallery.overlays
+															.tooltipTrigger
+													}
+													variant="info"
+												/>
+											</View>
+										}
+									/>
+								</Card>
+
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.overlays.popoverTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.overlays.popoverDescription}
+									</ThemedText>
+									<Popover
+										open={quickEditPopoverOpen}
+										onOpenChange={setQuickEditPopoverOpen}
+										triggerLabel={copy.componentGallery.overlays.popoverTrigger}
+										title={copy.componentGallery.overlays.popoverTitle}
+										description={
+											copy.componentGallery.overlays.popoverDescription
+										}
+										testID="overlay-popover"
+										trigger={
+											<View style={{ alignSelf: 'flex-start' }}>
+												<Badge
+													label={
+														copy.componentGallery.overlays
+															.popoverTrigger
+													}
+													variant="default"
+												/>
+											</View>
+										}
+									>
+										<View style={{ gap: s.sm }}>
+											<TextInput
+												label={
+													copy.componentGallery.overlays.popoverFieldLabel
+												}
+												helperText={
+													copy.componentGallery.overlays
+														.popoverFieldHelper
+												}
+												value={quickEditValue}
+												onValueChange={setQuickEditValue}
+											/>
+											<Button
+												title={copy.componentGallery.overlays.popoverAction}
+												size="sm"
+												onPress={() => {
+													setQuickEditPopoverOpen(false);
+													pushToast({
+														message:
+															copy.componentGallery.overlays
+																.popoverSaved,
+														variant: 'success',
+													});
+												}}
+											/>
+										</View>
+									</Popover>
+								</Card>
+
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
+									)}
+								>
+									<ThemedText
+										variant="sectionTitle"
+										style={{ color: c.onSurface }}
+									>
+										{copy.componentGallery.overlays.contextMenuTitle}
+									</ThemedText>
+									<ThemedText
+										variant="caption"
+										style={{
+											color: c.onSurfaceVariant,
+											marginTop: s.xxs,
+											marginBottom: s.md,
+										}}
+									>
+										{copy.componentGallery.overlays.contextMenuDescription}
+									</ThemedText>
+									<Popover
+										open={contextMenuOpen}
+										onOpenChange={setContextMenuOpen}
+										triggerMode="longPress"
+										hapticFeedback="selection"
+										triggerLabel={
+											copy.componentGallery.overlays.contextMenuTriggerTitle
+										}
+										title={copy.componentGallery.overlays.contextMenuTitle}
+										description={
+											copy.componentGallery.overlays.contextMenuDescription
+										}
+										testID="overlay-context-menu"
+										trigger={
+											<Card variant="flat" padding="sm">
+												<CardBody>
+													<ThemedText
+														variant="bodyStrong"
+														style={{ color: c.onSurface }}
+													>
+														{
+															copy.componentGallery.overlays
+																.contextMenuTriggerTitle
+														}
+													</ThemedText>
+													<ThemedText
+														variant="caption"
+														style={{
+															color: c.onSurfaceVariant,
+															marginTop: s.xxs,
+														}}
+													>
+														{
+															copy.componentGallery.overlays
+																.contextMenuTriggerDescription
+														}
+													</ThemedText>
+												</CardBody>
+											</Card>
+										}
+									>
+										<View style={{ gap: s.xs }}>
+											{actionMenuItems.map((action) => (
+												<Button
+													key={action.value}
+													title={action.label}
+													size="sm"
+													variant={
+														action.destructive ? 'danger' : 'ghost'
+													}
+													onPress={() => {
+														setContextMenuOpen(false);
+														pushToast({
+															message: `${copy.componentGallery.overlays.contextActionPrefix} ${action.label}`,
+															variant: action.destructive
+																? 'warning'
+																: 'info',
+														});
+													}}
+												/>
+											))}
+										</View>
+									</Popover>
+								</Card>
+							</View>
+						</View>
+					</PreviewSection>
+
+					<PreviewSection
+						title={copy.componentGallery.forms.sectionTitle}
+						description={copy.componentGallery.forms.sectionDescription}
+					>
+						<View style={{ gap: s.md }}>
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										FORM_PREVIEW_CARD_MIN_WIDTH,
+									)}
+								>
+									<DeclarativeForm
+										title={copy.componentGallery.forms.relaxedTitle}
+										description={copy.componentGallery.forms.relaxedDescription}
+										fields={relaxedFormFields}
+										submitLabel={copy.componentGallery.forms.relaxedSubmitLabel}
+										onSubmit={handleRelaxedFormSubmit}
+										onDraftSave={handleRelaxedDraftSave}
+										draftStatusCopy={{
+											saving: copy.componentGallery.forms.draftSaving,
+											saved: copy.componentGallery.forms.draftSaved,
+											error: copy.componentGallery.forms.draftError,
+											retry: copy.componentGallery.forms.draftRetry,
+										}}
+										draftConflict={{
+											title: copy.componentGallery.forms.conflictTitle,
+											description:
+												copy.componentGallery.forms.conflictDescription,
+											actionLabel: copy.componentGallery.forms.conflictAction,
+											onAction: () =>
+												pushToast({
+													message:
+														copy.componentGallery.forms.conflictAction,
+													variant: 'info',
+												}),
+										}}
+										testID="forms-relaxed"
+									/>
+								</Card>
+
+								<Card
+									variant="outlined"
+									style={responsiveCardStyle(
+										isCompactPhone,
+										FORM_PREVIEW_CARD_MIN_WIDTH,
+									)}
+								>
+									<DeclarativeForm
+										title={copy.componentGallery.forms.readOnlyTitle}
+										description={
+											copy.componentGallery.forms.readOnlyDescription
+										}
+										fields={relaxedFormFields}
+										mode="read-only"
+										defaultValues={readOnlyFormValues}
+										testID="forms-read-only"
+									/>
+								</Card>
+							</View>
+
+							<Card
+								variant="outlined"
+								style={responsiveCardStyle(
+									isCompactPhone,
+									FORM_PREVIEW_CARD_MIN_WIDTH,
+									{
+										flex: 0,
+									},
+								)}
+							>
+								<FormWizard
+									title={copy.componentGallery.forms.wizardTitle}
+									description={copy.componentGallery.forms.wizardDescription}
+									steps={wizardSteps}
+									backLabel={copy.componentGallery.forms.wizardBackLabel}
+									nextLabel={copy.componentGallery.forms.wizardNextLabel}
+									completeLabel={copy.componentGallery.forms.wizardFinishLabel}
+									onComplete={handleWizardComplete}
+									testID="forms-wizard"
+								/>
+							</Card>
+						</View>
+					</PreviewSection>
+
+					<PreviewSection
+						title={copy.patternSamples.title}
+						description={copy.patternSamples.description}
+					>
+						<View style={{ gap: s.lg }}>
+							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+								<CrudWorkspace
+									style={responsiveCardStyle(
+										isCompactPhone,
+										FORM_PREVIEW_CARD_MIN_WIDTH,
+									)}
+									testID="pattern-crud-workspace"
+								/>
+								<SearchFilterWorkspace
+									style={responsiveCardStyle(
+										isCompactPhone,
+										FORM_PREVIEW_CARD_MIN_WIDTH,
+									)}
+									testID="pattern-search-filter-workspace"
+								/>
+							</View>
+							<DataLayoutWorkspace testID="pattern-data-layout-workspace" />
+							<FeedbackLoopWorkspace testID="pattern-feedback-loop-workspace" />
+							<ProductivityWorkspace testID="pattern-productivity-workspace" />
+						</View>
+					</PreviewSection>
+
+					<PreviewSection
+						title={copy.stateProof.title}
+						description={copy.stateProof.description}
+					>
+						<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
+							<StateProofCard
+								title={copy.stateProof.loading.title}
+								description={copy.stateProof.loading.description}
+							>
+								<View style={{ gap: s.sm }}>
+									<SkeletonRow
+										withAvatar
+										lines={2}
+										testID="state-proof-loading-primary"
+									/>
+									<SkeletonRow lines={1} />
+									<SkeletonBlock width="48%" height={12} />
+								</View>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.empty.title}
+								description={copy.stateProof.empty.description}
+							>
+								<EmptyState
+									title={copy.stateProof.empty.title}
+									description={copy.stateProof.empty.description}
+									actionLabel={copy.stateProof.empty.actionLabel}
+									onAction={() => setToastVisible(true)}
+									style={{ flex: 0, padding: 0 }}
+								/>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.error.title}
+								description={copy.stateProof.error.description}
+							>
+								<View style={{ gap: s.sm }}>
+									<Badge label={copy.stateProof.error.title} variant="warning" />
+									<ThemedText
+										variant="caption"
+										style={{ color: c.onSurfaceVariant }}
+									>
+										{copy.stateProof.error.description}
+									</ThemedText>
+									<View
+										style={{
+											flexDirection: 'row',
+											flexWrap: 'wrap',
+											gap: s.sm,
+										}}
+									>
+										<Button
+											title={copy.stateProof.error.retryLabel}
+											onPress={() => setToastVisible(true)}
+										/>
+										<Button
+											title={copy.stateProof.error.supportLabel}
+											variant="secondary"
+											onPress={() => setToastVisible(true)}
+										/>
+									</View>
+								</View>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.readOnly.title}
+								description={copy.stateProof.readOnly.description}
+							>
+								<View style={{ gap: s.xs }}>
+									{DESIGN_SYSTEM_READ_ONLY_FIELDS.map((field) => (
+										<ListItem
+											key={field.label}
+											title={field.label}
+											subtitle={`${field.value} • ${field.meta}`}
+											showChevron={false}
+										/>
+									))}
+								</View>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.denied.title}
+								description={copy.stateProof.denied.description}
+							>
+								<View style={{ gap: s.sm }}>
+									<Badge label={copy.stateProof.denied.title} variant="warning" />
+									<ThemedText variant="body" style={{ color: c.onSurface }}>
+										{copy.stateProof.denied.description}
+									</ThemedText>
+									<Button
+										title={copy.stateProof.denied.actionLabel}
+										variant="outline"
+										onPress={() => setToastVisible(true)}
+									/>
+								</View>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.noMedia.title}
+								description={copy.stateProof.noMedia.description}
+							>
+								<View
+									style={stackOnPhoneRowStyle(isCompactPhone, {
+										gap: s.md,
+										alignItems: 'flex-start',
+										wrap: false,
+									})}
+								>
+									<View
+										style={{
+											width: s['3xl'],
+											height: s['3xl'],
+											borderRadius: r.full,
+											backgroundColor: visual.surfaces.quiet,
+											alignItems: 'center',
+											justifyContent: 'center',
+										}}
+									>
+										<ThemedText
+											variant="bodyStrong"
+											style={{ color: c.onSurface }}
+										>
+											{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.monogram}
+										</ThemedText>
+									</View>
+									<View style={{ flex: 1 }}>
+										<ThemedText
+											variant="bodyStrong"
+											style={{ color: c.onSurface }}
+										>
+											{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.title}
+										</ThemedText>
+										<ThemedText
+											variant="caption"
+											style={{ color: c.onSurfaceVariant, marginTop: s.xxs }}
+										>
+											{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.meta}
+										</ThemedText>
+										<ThemedText
+											variant="caption"
+											style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
+										>
+											{copy.stateProof.noMedia.description}
+										</ThemedText>
+									</View>
+								</View>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.uglyData.title}
+								description={copy.stateProof.uglyData.description}
+							>
+								<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
+									{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.title}
+								</ThemedText>
+								<ThemedText
+									variant="caption"
+									style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
+								>
+									{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.detail}
+								</ThemedText>
+								<View
+									style={{
+										flexDirection: 'row',
+										flexWrap: 'wrap',
+										gap: s.sm,
+										marginTop: s.md,
+									}}
+								>
+									<Badge
+										label={copy.stateProof.uglyData.metricLabel}
+										variant="info"
+									/>
+									<Badge
+										label={copy.stateProof.uglyData.metaLabel}
+										variant="warning"
+									/>
+								</View>
+								<ThemedText
+									variant="metric"
+									style={{ color: c.onSurface, marginTop: s.md }}
+								>
+									{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue}
+								</ThemedText>
+								<ThemedText
+									variant="metadata"
+									style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
+								>
+									{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricContext}
+								</ThemedText>
+							</StateProofCard>
+						</View>
+					</PreviewSection>
+
+					<PreviewSection
+						title={copy.componentInventory.title}
+						description={copy.componentInventory.description}
+					>
+						<SearchBar
+							value={componentQuery}
+							onChangeText={setComponentQuery}
+							placeholder={copy.componentInventory.searchPlaceholder}
+						/>
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={{
+								gap: s.sm,
+								paddingTop: s.md,
+								paddingBottom: s.sm,
+							}}
+						>
+							{copy.componentInventory.kindFilters.map((filter) => (
+								<Chip
+									key={filter.value}
+									label={filter.label}
+									selected={componentKindFilter === filter.value}
+									onPress={() => setComponentKindFilter(filter.value)}
+								/>
+							))}
+						</ScrollView>
+						<View
+							style={{
+								flexDirection: 'row',
+								flexWrap: 'wrap',
+								gap: s.sm,
+								marginBottom: s.md,
+							}}
+						>
+							<Badge
+								label={copy.componentInventory.componentsCount(
+									filteredComponents.length,
+								)}
+								variant="default"
+							/>
+							<Badge
+								label={copy.componentInventory.testedCount(testedComponentCount)}
+								variant="success"
+							/>
+							<Badge
+								label={copy.componentInventory.liveDemoCount(
+									liveDemoComponentCount,
+								)}
+								variant="info"
+							/>
+							<Badge
+								label={copy.componentInventory.groupCount(componentGroupCount)}
+								variant="neutral"
+							/>
+						</View>
+
+						<View style={{ gap: s.sm }}>
+							{filteredComponents.map((component, index) => {
+								const previousComponent =
+									index > 0 ? filteredComponents[index - 1] : null;
+								const showKindHeader =
+									!previousComponent || previousComponent.kind !== component.kind;
+
+								return (
+									<View key={component.id}>
+										{showKindHeader ? (
+											<View
+												style={{
+													paddingTop: index === 0 ? 0 : s.md,
+													paddingBottom: s.xs,
+												}}
+											>
+												<ThemedText
+													variant="label"
+													style={{ color: c.primary }}
+												>
+													{
+														copy.componentInventory.kindLabels[
+															component.kind
+														]
+													}
+												</ThemedText>
+											</View>
+										) : null}
+										<Card
+											variant="outlined"
+											style={{
+												marginBottom: s.xs,
+												borderRadius: r.md,
+												backgroundColor: visual.surfaces.default,
+												borderColor: c.border,
+												minWidth: COMPONENT_CARD_MIN_WIDTH,
+											}}
+										>
+											<ThemedText
+												variant="sectionTitle"
+												style={{ color: c.onSurface }}
+											>
+												{component.name}
+											</ThemedText>
+											<Tooltip
+												trigger={
+													<ThemedText
+														variant="caption"
+														style={{
+															color: c.onSurfaceVariant,
+															marginTop: s.xxs,
+														}}
+														numberOfLines={1}
+														accessibilityLabel={component.filePath}
+													>
+														{component.filePath}
+													</ThemedText>
+												}
+												triggerLabel={component.filePath}
+												content={component.filePath}
+												testID={`component-file-path-${component.name}`}
+											/>
+											<View
+												style={{
+													flexDirection: 'row',
+													flexWrap: 'wrap',
+													gap: s.sm,
+													marginTop: s.sm,
+												}}
+											>
+												<Badge
+													label={
+														copy.componentInventory.kindLabels[
+															component.kind
+														]
+													}
+													variant={COMPONENT_KIND_VARIANT[component.kind]}
+													size="sm"
+												/>
+												<Badge
+													label={
+														component.hasTests
+															? copy.componentInventory.tested
+															: copy.componentInventory.needsTests
+													}
+													variant={
+														component.hasTests ? 'success' : 'warning'
+													}
+													size="sm"
+												/>
+												<Badge
+													label={
+														isLivePreviewComponent(component)
+															? copy.componentInventory.liveDemo
+															: copy.componentInventory.registryOnly
+													}
+													variant={
+														isLivePreviewComponent(component)
+															? 'info'
+															: 'neutral'
+													}
+													size="sm"
+												/>
+											</View>
+										</Card>
+									</View>
+								);
+							})}
+						</View>
+					</PreviewSection>
+
+					<PreviewSection
+						title={copy.checklistExplorer.title}
+						description={copy.checklistExplorer.description}
+					>
+						<SearchBar
+							value={catalogQuery}
+							onChangeText={setCatalogQuery}
+							placeholder={copy.checklistExplorer.searchPlaceholder}
+						/>
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={{
+								gap: s.sm,
+								paddingTop: s.md,
+								paddingBottom: s.sm,
+							}}
+						>
+							{copy.checklistExplorer.platformFilters.map((filter) => (
+								<Chip
+									key={filter.value}
+									label={filter.label}
+									selected={platformFilter === filter.value}
+									onPress={() => setPlatformFilter(filter.value)}
+								/>
+							))}
+						</ScrollView>
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={{ gap: s.sm, paddingBottom: s.sm }}
+						>
+							{copy.checklistExplorer.statusFilters.map((filter) => (
+								<Chip
+									key={filter.value}
+									label={filter.label}
+									selected={completionFilter === filter.value}
+									onPress={() => setCompletionFilter(filter.value)}
+								/>
+							))}
+						</ScrollView>
 						<View
 							style={{
 								flexDirection: 'row',
@@ -1548,1962 +3775,47 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 								marginTop: s.sm,
 							}}
 						>
-							<Button
-								title={copy.componentGallery.buttons.inverse}
-								variant="inverse"
-								onPress={() => setToastVisible(true)}
-							/>
-							<Button
-								title={copy.componentGallery.buttons.secondary}
-								variant="outline"
-								onPress={() => setToastVisible(true)}
-							/>
-						</View>
-					</Card>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.lg }}>
-						<IconButton
-							icon={<LucideIconGlyph icon={Search} size={20} color={c.primary} />}
-							label={copy.componentGallery.iconButtons.search}
-							onPress={() => setToastVisible(true)}
-						/>
-						<IconButton
-							icon={
-								<MaterialIconGlyph
-									name="calendar-month"
-									size={20}
-									color={c.primary}
-								/>
-							}
-							label={copy.componentGallery.iconButtons.calendar}
-							onPress={() => setToastVisible(true)}
-						/>
-						<IconButton
-							icon={
-								mode === 'dark' ? (
-									<LucideIconGlyph icon={Sun} size={20} color={c.primary} />
-								) : (
-									<LucideIconGlyph icon={Moon} size={20} color={c.primary} />
-								)
-							}
-							label={copy.componentGallery.iconButtons.mode}
-							onPress={() => setThemeMode(mode === 'dark' ? 'light' : 'dark')}
-						/>
-					</View>
-
-					<TextInput
-						label={copy.componentGallery.fields.textField}
-						value={noteValue}
-						onChangeText={setNoteValue}
-						helperText={copy.componentGallery.fields.textFieldHelper}
-					/>
-
-					<TextInput
-						label={copy.componentGallery.fields.counterField}
-						value={noteValue}
-						onChangeText={setNoteValue}
-						helperText={copy.componentGallery.fields.counterFieldHelper}
-						clearable
-						showCharacterCount
-						maxLength={80}
-					/>
-
-					<TextInput
-						label={copy.componentGallery.fields.errorField}
-						value={approvalEmailValue}
-						onChangeText={setApprovalEmailValue}
-						error={copy.componentGallery.fields.errorFieldError}
-						keyboardType="email-address"
-						autoCapitalize="none"
-					/>
-
-					<TextInput
-						label={copy.componentGallery.fields.asyncField}
-						defaultValue="team-ops"
-						helperText={copy.componentGallery.fields.asyncFieldHelper}
-						loading
-					/>
-
-					<TextInput
-						label={copy.componentGallery.fields.disabledField}
-						value="Managed by library policy"
-						editable={false}
-					/>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<TextInput
-								label={copy.componentGallery.fields.emailField}
-								defaultValue="owner@example.com"
-								keyboardType="email-address"
-								returnKeyType="next"
-								autoComplete="email"
-								textContentType="emailAddress"
-								autoCapitalize="none"
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<TextInput
-								label={copy.componentGallery.fields.numericField}
-								defaultValue="42"
-								keyboardType="numeric"
-								returnKeyType="next"
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<TextInput
-								label={copy.componentGallery.fields.phoneKeyboardField}
-								defaultValue="9876543210"
-								keyboardType="phone-pad"
-								returnKeyType="next"
-								autoComplete="tel"
-								textContentType="telephoneNumber"
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<TextInput
-								label={copy.componentGallery.fields.urlField}
-								defaultValue="https://example.com"
-								keyboardType="url"
-								returnKeyType="go"
-								autoCapitalize="none"
-								autoCorrect={false}
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<TextInput
-								label={copy.componentGallery.fields.decimalField}
-								defaultValue="1250.50"
-								keyboardType="decimal-pad"
-								returnKeyType="done"
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<TextInput
-								label={copy.componentGallery.fields.passwordField}
-								defaultValue="hunter2"
-								helperText={copy.componentGallery.fields.passwordFieldHelper}
-								secureTextEntry
-								autoComplete="password"
-								textContentType="password"
-								returnKeyType="send"
-							/>
-						</View>
-					</View>
-
-					<TextAreaField
-						label={copy.componentGallery.fields.textarea}
-						value={textareaValue}
-						onChange={setTextareaValue}
-						placeholder={copy.componentGallery.notesSeed}
-						maxLength={280}
-					/>
-
-					<SearchBar
-						value={searchValue}
-						onChangeText={setSearchValue}
-						onDebouncedChange={setDebouncedSearchValue}
-						debounceMs={350}
-						loading={searchValue !== debouncedSearchValue}
-						placeholder={copy.componentGallery.fields.searchPlaceholder}
-					/>
-					<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
-						{copy.componentGallery.fields.searchDebouncedLabel}:{' '}
-						{debouncedSearchValue || copy.componentGallery.fields.searchDebouncedIdle}
-					</ThemedText>
-
-					<FilterBar
-						filters={[...copy.componentGallery.filterOptions]}
-						activeValue={filterValue}
-						defaultValue="all"
-						onSelect={setFilterValue}
-						onClear={() => setFilterValue('all')}
-					/>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<Checkbox
-								label={copy.componentGallery.selectionControls.checkbox}
-								description={
-									copy.componentGallery.selectionControls.checkboxDescription
-								}
-								checked={emailSummaryEnabled}
-								onCheckedChange={setEmailSummaryEnabled}
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<Checkbox
-								label={
-									copy.componentGallery.selectionControls.checkboxIndeterminate
-								}
-								description={
-									copy.componentGallery.selectionControls
-										.checkboxIndeterminateDescription
-								}
-								indeterminate
-								defaultChecked={false}
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<Checkbox
-								label={copy.componentGallery.selectionControls.checkboxDisabled}
-								disabled
-								defaultChecked
-							/>
-						</View>
-					</View>
-
-					<CheckboxGroup
-						label={copy.componentGallery.selectionControls.checkboxGroup}
-						description={
-							copy.componentGallery.selectionControls.checkboxGroupDescription
-						}
-						values={selectedChannels}
-						onValuesChange={setSelectedChannels}
-						options={[...copy.componentGallery.selectionControls.checkboxOptions]}
-					/>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<Radio
-								label={copy.componentGallery.selectionControls.radio}
-								defaultSelected
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<Radio
-								label={copy.componentGallery.selectionControls.radioDisabled}
-								disabled
-							/>
-						</View>
-					</View>
-
-					<RadioGroup
-						label={copy.componentGallery.selectionControls.radioGroup}
-						description={copy.componentGallery.selectionControls.radioGroupDescription}
-						value={digestCadence}
-						onValueChange={setDigestCadence}
-						options={[
-							...copy.componentGallery.selectionControls.radioOptions.slice(0, 2),
-							{
-								label: copy.componentGallery.selectionControls.radioDisabled,
-								value: 'monthly',
-								disabled: true,
-							},
-						]}
-					/>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<ToggleSwitch
-								accessibilityLabel={
-									copy.componentGallery.selectionControls.toggleBareLabel
-								}
-								value={approvalRuleEnabled}
-								onValueChange={setApprovalRuleEnabled}
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<ToggleSwitch
-								label={copy.componentGallery.selectionControls.toggle}
-								description={
-									copy.componentGallery.selectionControls.toggleDescription
-								}
-								value={autoRemindersEnabled}
-								onValueChange={setAutoRemindersEnabled}
-							/>
-						</View>
-						<View style={{ minWidth: COMPONENT_CARD_MIN_WIDTH, flex: 1 }}>
-							<ToggleSwitch
-								label={copy.componentGallery.selectionControls.toggleDisabled}
-								description={
-									copy.componentGallery.selectionControls
-										.toggleDisabledDescription
-								}
-								disabled
-								defaultValue={true}
-							/>
-						</View>
-					</View>
-
-					<PhoneInput
-						label={copy.componentGallery.fields.phoneInput}
-						value={phoneValue}
-						onChange={setPhoneValue}
-					/>
-
-					<AmountInput
-						label={copy.componentGallery.fields.amountInput}
-						value={amountValue}
-						onChange={setAmountValue}
-					/>
-
-					<DatePickerField
-						label={copy.componentGallery.fields.datePicker}
-						value={dateValue}
-						onChange={setDateValue}
-						showShortcuts
-					/>
-
-					<DatePickerField
-						label={copy.componentGallery.fields.datePicker}
-						value={dateValue}
-						onChange={setDateValue}
-						presentation="sheet"
-						locale="en-US"
-						disabledDates={['2026-04-18']}
-					/>
-
-					<TimePickerField
-						label={copy.componentGallery.advanced.timePicker}
-						value={timeValue}
-						onChange={setTimeValue}
-					/>
-
-					<DateRangePickerField
-						label={copy.componentGallery.advanced.dateRangePicker}
-						value={dateRangeValue}
-						onChange={setDateRangeValue}
-					/>
-
-					<AutocompleteField
-						label={copy.componentGallery.advanced.autocomplete}
-						options={autocompleteOptions}
-						value={autocompleteValue}
-						multiple
-						allowCreate
-						onAsyncSearch={async (query) => {
-							if (!query.trim()) {
-								return autocompleteOptions;
-							}
-
-							return autocompleteOptions.filter((option) =>
-								option.label.toLowerCase().includes(query.trim().toLowerCase()),
-							);
-						}}
-						onChange={(nextValue) => setAutocompleteValue(nextValue as string[])}
-					/>
-
-					<TokenInput
-						label={copy.componentGallery.advanced.tokenInput}
-						values={tokenValues}
-						onChange={setTokenValues}
-					/>
-
-					<FileUploadField
-						label={copy.componentGallery.advanced.fileUpload}
-						files={uploadItems}
-						onChange={setUploadItems}
-					/>
-
-					<RangeSlider
-						label={copy.componentGallery.advanced.rangeSlider}
-						value={singleSliderValue}
-						onChange={setSingleSliderValue}
-						testID="component-gallery-single-slider"
-					/>
-
-					<RangeSlider
-						label={copy.componentGallery.advanced.rangeSlider}
-						range
-						value={rangeSliderValue}
-						onChange={setRangeSliderValue}
-						testID="component-gallery-range-slider"
-					/>
-
-					<NumericStepper
-						label={copy.componentGallery.advanced.numericStepper}
-						value={stepperValue}
-						onChange={setStepperValue}
-						min={1}
-						max={10}
-					/>
-
-					<OtpCodeInput
-						label={copy.componentGallery.advanced.otp}
-						value={otpValue}
-						onChange={setOtpValue}
-						masked
-					/>
-
-					<ColorPicker
-						label={copy.componentGallery.advanced.colorPicker}
-						value={colorValue}
-						onChange={setColorValue}
-					/>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<Button
-							title={copy.componentGallery.buttons.primary}
-							size="xs"
-							onPress={() => setToastVisible(true)}
-						/>
-						<Button
-							accessibilityLabel={copy.componentGallery.iconButtons.search}
-							iconOnly
-							leftIcon={
-								<LucideIconGlyph icon={Search} size={16} color={c.onPrimary} />
-							}
-							onPress={() => setToastVisible(true)}
-							hapticFeedback="selection"
-						/>
-						<Button
-							title={copy.componentGallery.buttons.primary}
-							fullWidth
-							onPress={() => setToastVisible(true)}
-						/>
-					</View>
-
-					<View style={{ minHeight: theme.components.fab.size + s.xl }}>
-						<FAB
-							accessibilityLabel={copy.componentGallery.advanced.fabLabel}
-							onPress={() => setToastVisible(true)}
-							hapticFeedback="success"
-						/>
-					</View>
-
-					<SplitButton
-						label={copy.componentGallery.advanced.splitButton}
-						onPress={() => setToastVisible(true)}
-						secondaryActions={actionMenuItems}
-						onSecondaryAction={(value) => {
-							pushToast({ message: `Queued ${value}`, variant: 'info' });
-						}}
-					/>
-
-					<ToggleButtonGroup
-						label={copy.componentGallery.advanced.toggleGroup}
-						options={toggleOptions}
-						value={toggleGroupValues}
-						multiple
-						onChange={(nextValue) => setToggleGroupValues(nextValue as string[])}
-					/>
-
-					<SegmentedControl
-						label={copy.componentGallery.advanced.segmentedControl}
-						options={toggleOptions}
-						value={segmentedValue}
-						onChange={setSegmentedValue}
-					/>
-
-					<Button
-						title={copy.componentGallery.advanced.actionSheet}
-						variant="secondary"
-						onPress={() => setActionSheetOpen(true)}
-						hapticFeedback="selection"
-					/>
-
-					<ActionMenuSheet
-						title={copy.componentGallery.advanced.actionSheet}
-						open={actionSheetOpen}
-						onOpenChange={setActionSheetOpen}
-						actions={actionMenuItems}
-						onSelect={(value) =>
-							pushToast({ message: `Ran ${value}`, variant: 'success' })
-						}
-					/>
-
-					<View style={{ gap: s.sm }}>
-						<AlertBanner
-							title={copy.componentGallery.feedbackBanner.title}
-							description={copy.componentGallery.feedbackBanner.description}
-							actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
-							onAction={() => setToastVisible(true)}
-							variant="info"
-						/>
-						<AlertBanner
-							title={copy.componentGallery.feedbackBanner.title}
-							description={copy.componentGallery.feedbackBanner.description}
-							actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
-							onAction={() => setToastVisible(true)}
-							variant="success"
-						/>
-						<AlertBanner
-							title={copy.componentGallery.feedbackBanner.title}
-							description={copy.componentGallery.feedbackBanner.description}
-							actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
-							onAction={() => setToastVisible(true)}
-							dismissible
-							onDismiss={() => setToastVisible(false)}
-							variant="warning"
-						/>
-						<AlertBanner
-							title={copy.componentGallery.feedbackBanner.title}
-							description={copy.componentGallery.feedbackBanner.description}
-							actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
-							onAction={() => setToastVisible(true)}
-							dismissible
-							onDismiss={() => setToastVisible(false)}
-							persistent
-							variant="error"
-						/>
-					</View>
-
-					<View style={{ gap: s.md }}>
-						<ProgressIndicator
-							variant="linear"
-							value={64}
-							label={copy.componentGallery.advanced.progressUpload}
-						/>
-						<ProgressIndicator
-							variant="linear"
-							indeterminate
-							label={copy.componentGallery.advanced.progressRefresh}
-						/>
-						<ProgressIndicator
-							variant="circular"
-							value={82}
-							label={copy.componentGallery.advanced.progressCoverage}
-						/>
-						<ProgressIndicator
-							variant="circular"
-							indeterminate
-							label={copy.componentGallery.advanced.progressExport}
-						/>
-					</View>
-
-					<ErrorState
-						variant="server"
-						actionLabel={copy.componentGallery.advanced.errorRetry}
-						onAction={() => setToastVisible(true)}
-					/>
-
-					<NotificationCenter items={notificationItems} onChange={setNotificationItems} />
-
-					<Tabs options={tabOptions} value={tabValue} onChange={setTabValue} />
-
-					<View style={{ gap: s.sm }}>
-						<Stepper
-							steps={stepperSteps}
-							onStepPress={(value) =>
-								pushToast({
-									message: `${copy.componentGallery.advanced.stepperReturnPrefix}${value}`,
-									variant: 'info',
-								})
-							}
-						/>
-						<Stepper orientation="vertical" steps={stepperSteps} />
-					</View>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm }}>
-						<Button
-							title={copy.componentGallery.advanced.toastQueueSuccess}
-							variant="secondary"
-							onPress={() =>
-								pushToast({
-									message: copy.componentGallery.advanced.toastSuccessMessage,
-									variant: 'success',
-								})
-							}
-						/>
-						<Button
-							title={copy.componentGallery.advanced.toastQueueWarning}
-							variant="outline"
-							onPress={() =>
-								pushToast({
-									message: copy.componentGallery.advanced.toastWarningMessage,
-									variant: 'warning',
-									actionLabel: copy.componentGallery.advanced.toastWarningAction,
-									onAction: () => setToastVisible(true),
-								})
-							}
-						/>
-						<Button
-							title={copy.componentGallery.advanced.toastQueueError}
-							variant="danger"
-							onPress={() =>
-								pushToast({
-									message: copy.componentGallery.advanced.toastErrorMessage,
-									variant: 'error',
-									dismissLabel: copy.componentGallery.advanced.toastDismiss,
-								})
-							}
-						/>
-					</View>
-
-					<StatCard
-						label={copy.stateProof.uglyData.metricLabel}
-						value={DESIGN_SYSTEM_OPERATIONAL_FIXTURE.metricValue}
-						icon={Palette}
-						color={c.primary}
-						trend="+4"
-						trendLabel={copy.stats.completed}
-					/>
-
-					<CollapsibleSection
-						title={copy.componentGallery.accordion.title}
-						subtitle={copy.componentGallery.accordion.subtitle}
-						collapsedLabel={copy.componentGallery.accordion.collapsedLabel}
-						expandedLabel={copy.componentGallery.accordion.expandedLabel}
-						testID="component-gallery-collapsible"
-						contentTestID="component-gallery-collapsible-content"
-					>
-						<View style={{ gap: s.xs }}>
-							<ThemedText variant="body">
-								{copy.componentGallery.accordion.body}
-							</ThemedText>
 							<Badge
-								label={copy.componentGallery.accordion.badge}
+								label={copy.checklistExplorer.rowsCount(filteredItems.length)}
+								variant="default"
+							/>
+							<Badge
+								label={copy.checklistExplorer.completedCount(
+									filteredCompletedCount,
+								)}
+								variant="success"
+							/>
+							<Badge
+								label={copy.checklistExplorer.openCount(filteredOpenCount)}
+								variant="warning"
+							/>
+							<Badge
+								label={copy.checklistExplorer.sectionGroups(sectionCount)}
+								variant="neutral"
+							/>
+							<Badge
+								label={
+									platformFilter === 'all'
+										? copy.checklistExplorer.viewingAllPlatforms
+										: platformFilter === 'common'
+											? copy.checklistExplorer.viewingCommonOnly
+											: platformFilter === 'mobile'
+												? copy.checklistExplorer.viewingMobileOnly
+												: copy.checklistExplorer.viewingCommonMobile
+								}
 								variant="info"
-								size="sm"
 							/>
 						</View>
-					</CollapsibleSection>
-
-					<Button
-						title={copy.componentGallery.buttons.openPicker}
-						variant="secondary"
-						onPress={() => setPickerVisible(true)}
-						leftIcon={
-							<LucideIconGlyph icon={Package} size={16} color={c.onSurfaceVariant} />
-						}
-					/>
-
-					<Button
-						title={copy.componentGallery.buttons.openDialog}
-						variant="outline"
-						onPress={() => setConfirmationVisible(true)}
-					/>
-
-					<AlertBannerPreview
-						label={copy.componentGallery.feedbackBanner.label}
-						title={copy.componentGallery.feedbackBanner.title}
-						description={copy.componentGallery.feedbackBanner.description}
-						actionLabel={copy.componentGallery.feedbackBanner.actionLabel}
-					/>
-				</View>
-			</PreviewSection>
-
-			<PreviewSection
-				title={copy.componentGallery.dataDisplay.sectionTitle}
-				description={copy.componentGallery.dataDisplay.sectionDescription}
-			>
-				<View style={{ gap: s.lg }}>
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<Card
-							density="relaxed"
-							header={
-								<CardHeader>
-									{copy.componentGallery.dataDisplay.cardHeader}
-								</CardHeader>
-							}
-							footer={
-								<CardFooter>
-									<View
-										style={{
-											flexDirection: 'row',
-											flexWrap: 'wrap',
-											gap: s.sm,
-										}}
-									>
-										<Button
-											title={
-												copy.componentGallery.dataDisplay.cardFooterPrimary
-											}
-											size="sm"
-											onPress={() => setToastVisible(true)}
-										/>
-										<Button
-											title={
-												copy.componentGallery.dataDisplay
-													.cardFooterSecondary
-											}
-											variant="secondary"
-											size="sm"
-											onPress={() => setToastVisible(true)}
-										/>
-									</View>
-								</CardFooter>
-							}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_CARD_MIN_WIDTH }}
-						>
-							<CardBody>
-								<ThemedText variant="body" style={{ color: c.onSurfaceVariant }}>
-									{copy.componentGallery.dataDisplay.listDescription}
-								</ThemedText>
-							</CardBody>
-						</Card>
-
-						<Card
-							orientation="horizontal"
-							variant="outlined"
-							density="compact"
-							header={
-								<CardHeader>
-									{copy.componentGallery.dataDisplay.cardHorizontalTitle}
-								</CardHeader>
-							}
-							media={
-								<Avatar
-									name={
-										copy.componentGallery.dataDisplay.avatarItems[0]?.name ?? ''
-									}
-									source={
-										copy.componentGallery.dataDisplay.mediaItems[0]
-											?.thumbnailUri
-									}
-									size="xl"
-									status="online"
-								/>
-							}
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-						>
-							<CardBody>
-								<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
-									{copy.componentGallery.dataDisplay.cardHorizontalDescription}
-								</ThemedText>
-							</CardBody>
-						</Card>
-
-						<Card
-							featured
-							density="relaxed"
-							header={
-								<CardHeader>
-									{copy.componentGallery.dataDisplay.cardHeroTitle}
-								</CardHeader>
-							}
-							footer={
-								<CardFooter>
-									<Badge
-										label={copy.componentGallery.dataDisplay.statUpdatedAt}
-										variant="info"
-									/>
-								</CardFooter>
-							}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_CARD_MIN_WIDTH }}
-						>
-							<CardBody>
-								<ThemedText
-									variant="body"
-									style={{ color: theme.visual.hero.promo.onSurface }}
-								>
-									{copy.componentGallery.dataDisplay.cardHeroDescription}
-								</ThemedText>
-							</CardBody>
-						</Card>
-					</View>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<StatCard
-							label={copy.stateProof.uglyData.metricLabel}
-							value={DESIGN_SYSTEM_OPERATIONAL_FIXTURE.metricValue}
-							trend="+4.8%"
-							trendLabel={copy.stats.completed}
-							comparisonBaseline={
-								copy.componentGallery.dataDisplay.statComparisonBaseline
-							}
-							updatedAtLabel={copy.componentGallery.dataDisplay.statUpdatedAt}
-							sparklineValues={dataDisplaySparklineValues}
-							density="relaxed"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
-						/>
-						<StatCard
-							label={copy.patternSamples.previewReadyComponents}
-							value={DESIGN_LIBRARY_COMPONENT_OVERVIEW.total}
-							isLoading
-							style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
-						/>
-						<StatCard
-							label={copy.patternSamples.accessibilityCoverage}
-							value={`${Math.round(
-								(DESIGN_LIBRARY_OVERVIEW.completed /
-									DESIGN_LIBRARY_OVERVIEW.total) *
-									100,
-							)}%`}
-							trend="+2"
-							trendLabel={copy.stats.completed}
-							errorMessage={copy.componentGallery.dataDisplay.statErrorMessage}
-							density="compact"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
-						/>
-					</View>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<Card
-							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_AVATAR_CARD_MIN_WIDTH }}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.dataDisplay.avatarsTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.dataDisplay.avatarsDescription}
-							</ThemedText>
-							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-								{copy.componentGallery.dataDisplay.avatarItems
-									.slice(0, 2)
-									.map((item, index) => (
-										<Avatar
-											key={item.id}
-											name={item.name}
-											source={
-												copy.componentGallery.dataDisplay.mediaItems[index]
-													?.thumbnailUri
-											}
-											size={index === 0 ? 'lg' : 'md'}
-											status={item.status}
-										/>
-									))}
-								<AvatarGroup
-									items={copy.componentGallery.dataDisplay.avatarItems.map(
-										(item, index) => ({
-											...item,
-											source:
-												index <
-												copy.componentGallery.dataDisplay.mediaItems.length
-													? copy.componentGallery.dataDisplay.mediaItems[
-															index
-														]?.thumbnailUri
-													: undefined,
-										}),
-									)}
-									maxVisible={3}
-								/>
-							</View>
-						</Card>
-
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.dataDisplay.keyValueTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.dataDisplay.keyValueDescription}
-							</ThemedText>
-							<DescriptionList
-								items={[...copy.componentGallery.dataDisplay.keyValueItems]}
-								layout="horizontal"
-								density="compact"
-							/>
-						</Card>
-					</View>
-
-					<Card variant="outlined">
-						<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-							{copy.componentGallery.dataDisplay.listTitle}
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							style={{
-								color: c.onSurfaceVariant,
-								marginTop: s.xxs,
-								marginBottom: s.md,
-							}}
-						>
-							{copy.componentGallery.dataDisplay.listDescription}
-						</ThemedText>
-						<VirtualizedList
-							sections={dataDisplayListSections}
-							keyExtractor={(item) => item.id}
-							selectedKeys={selectedListRows}
-							onSelectedKeysChange={setSelectedListRows}
-							itemHeight={72}
-							renderSectionHeader={(section) => (
-								<Badge label={section.title} variant="default" size="sm" />
-							)}
-							onLoadMore={() =>
-								pushToast({
-									message: copy.componentGallery.dataDisplay.timelineLoadMore,
-									variant: 'info',
-								})
-							}
-							onRefresh={() =>
-								pushToast({
-									message: copy.componentGallery.dataDisplay.listTitle,
-									variant: 'success',
-								})
-							}
-							renderItem={({ item, selected, toggleSelected }) => (
-								<ListItem
-									title={item.title}
-									subtitle={item.subtitle}
-									density="compact"
-									showChevron={false}
-									onPress={toggleSelected}
-									leftIcon={
-										<Checkbox
-											label={
-												copy.componentGallery.dataDisplay.listSelectionLabel
-											}
-											checked={selected}
-											onCheckedChange={() => toggleSelected()}
-											accessibilityLabel={item.title}
-											style={{
-												width: theme.components.selectionControl.size,
-												overflow: 'hidden',
-											}}
-										/>
-									}
-									rightElement={
-										<Badge
-											label={item.status}
-											variant={item.id === 'list-1' ? 'warning' : 'success'}
-											size="sm"
-										/>
-									}
-									style={{
-										backgroundColor: selected
-											? theme.colors.surfaceVariant
-											: theme.colors.card,
-									}}
-								/>
-							)}
-							emptyTitle={copy.componentGallery.dataDisplay.listEmptyTitle}
-							emptyDescription={
-								copy.componentGallery.dataDisplay.listEmptyDescription
-							}
-						/>
-					</Card>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.dataDisplay.timelineTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.dataDisplay.timelineDescription}
-							</ThemedText>
-							<ActivityFeed
-								items={activityItems}
-								pendingItems={activityPendingItems}
-								onItemsChange={(nextItems) => {
-									setActivityItems(nextItems);
-									setActivityPendingItems([]);
-								}}
-								onLoadMore={() =>
-									pushToast({
-										message: copy.componentGallery.dataDisplay.timelineLoadMore,
-										variant: 'info',
-									})
-								}
-								loadMoreLabel={copy.componentGallery.dataDisplay.timelineLoadMore}
-								newItemsLabel={copy.componentGallery.dataDisplay.timelineNewItems}
-								density="compact"
-								testID="data-display-activity-feed"
-							/>
-						</Card>
-
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.dataDisplay.swipeTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.dataDisplay.swipeDescription}
-							</ThemedText>
-							<SwipeableRow
-								onArchive={() => setToastVisible(true)}
-								onDelete={() => setToastVisible(true)}
-								onEdit={() => setToastVisible(true)}
-							>
-								<ListItem
-									title={
-										copy.componentGallery.dataDisplay.listItems[0]?.title ?? ''
-									}
-									subtitle={
-										copy.componentGallery.dataDisplay.listItems[0]?.subtitle ??
-										''
-									}
-									showChevron={false}
-									style={{ backgroundColor: theme.colors.card }}
-									rightElement={
-										<Badge
-											label={
-												copy.componentGallery.dataDisplay.listItems[0]
-													?.status ?? ''
-											}
-											size="sm"
-										/>
-									}
-								/>
-							</SwipeableRow>
-						</Card>
-					</View>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<DataChart
-							title={copy.componentGallery.dataDisplay.chartsTitle}
-							description={copy.componentGallery.dataDisplay.chartsDescription}
-							variant="line"
-							categories={[...copy.componentGallery.dataDisplay.chartCategories]}
-							series={copy.componentGallery.dataDisplay.chartSeries.map((series) => ({
-								...series,
-								values: [...series.values],
-							}))}
-							annotations={[...copy.componentGallery.dataDisplay.chartAnnotations]}
-							focusedSeriesId={chartFocusedSeries}
-							onFocusedSeriesChange={setChartFocusedSeries}
-							density="compact"
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-							testID="data-chart-line"
-						/>
-						<DataChart
-							title={copy.componentGallery.dataDisplay.chartsTitle}
-							description={copy.componentGallery.dataDisplay.chartsDescription}
-							variant="bar"
-							categories={[...copy.componentGallery.dataDisplay.chartCategories]}
-							series={copy.componentGallery.dataDisplay.chartSeries.map((series) => ({
-								...series,
-								values: [...series.values],
-							}))}
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-							testID="data-chart-bar"
-						/>
-						<DataChart
-							title={copy.componentGallery.dataDisplay.chartsTitle}
-							description={copy.componentGallery.dataDisplay.chartsDescription}
-							variant="pie"
-							slices={[...copy.componentGallery.dataDisplay.chartSlices]}
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-							testID="data-chart-pie"
-						/>
-						<DataChart
-							title={copy.componentGallery.dataDisplay.chartsTitle}
-							description={copy.componentGallery.dataDisplay.chartsDescription}
-							variant="donut"
-							slices={[...copy.componentGallery.dataDisplay.chartSlices]}
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-							testID="data-chart-donut"
-						/>
-						<DataChart
-							title={copy.componentGallery.dataDisplay.chartsTitle}
-							description={copy.componentGallery.dataDisplay.chartsDescription}
-							variant="scatter"
-							points={[...copy.componentGallery.dataDisplay.chartPoints]}
-							series={copy.componentGallery.dataDisplay.chartSeries.map((series) => ({
-								...series,
-								values: [...series.values],
-							}))}
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-							testID="data-chart-scatter"
-						/>
-						<DataChart
-							title={copy.componentGallery.dataDisplay.chartsTitle}
-							description={copy.componentGallery.dataDisplay.chartsDescription}
-							variant="heatmap"
-							heatmap={[...copy.componentGallery.dataDisplay.chartHeatmap]}
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-							testID="data-chart-heatmap"
-						/>
-						<DataChart
-							title={copy.componentGallery.dataDisplay.chartsTitle}
-							description={copy.componentGallery.dataDisplay.chartsDescription}
-							variant="sparkline"
-							series={[
-								{
-									id:
-										copy.componentGallery.dataDisplay.chartSeries[0]?.id ??
-										'series',
-									label:
-										copy.componentGallery.dataDisplay.chartSeries[0]?.label ??
-										'',
-									values: [
-										...(copy.componentGallery.dataDisplay.chartSeries[0]
-											?.values ?? []),
-									],
-								},
-							]}
-							style={{ flex: 1, minWidth: DATA_DISPLAY_STAT_CARD_MIN_WIDTH }}
-							testID="data-chart-sparkline"
-						/>
-					</View>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.dataDisplay.mediaTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.dataDisplay.mediaDescription}
-							</ThemedText>
-							<View style={{ gap: s.sm }}>
-								<Button
-									title={copy.componentGallery.dataDisplay.mediaOpen}
-									onPress={() => setMediaViewerOpen(true)}
-								/>
-								<MediaViewer
-									items={[...copy.componentGallery.dataDisplay.mediaItems]}
-									open={mediaViewerOpen}
-									onOpenChange={setMediaViewerOpen}
-								/>
-							</View>
-						</Card>
-
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_BOARD_CARD_MIN_WIDTH,
-							)}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.dataDisplay.boardTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.dataDisplay.boardDescription}
-							</ThemedText>
-							<KanbanBoard
-								columns={kanbanColumns}
-								onColumnsChange={setKanbanColumns}
-							/>
-						</Card>
-					</View>
-
-					<Card variant="outlined">
-						<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-							{copy.componentGallery.dataDisplay.boardTitle}
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							style={{
-								color: c.onSurfaceVariant,
-								marginTop: s.xxs,
-								marginBottom: s.md,
-							}}
-						>
-							{copy.componentGallery.dataDisplay.boardDescription}
-						</ThemedText>
-						<SortableList
-							items={kanbanColumns[0]?.items ?? []}
-							onItemsChange={(nextItems) =>
-								setKanbanColumns((currentColumns) =>
-									currentColumns.map((column, index) =>
-										index === 0 ? { ...column, items: nextItems } : column,
-									),
-								)
-							}
-							renderItem={(item) => (
-								<View style={{ gap: s.xxs }}>
-									<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
-										{item.title}
-									</ThemedText>
-									{item.description ? (
-										<ThemedText
-											variant="caption"
-											style={{ color: c.onSurfaceVariant }}
-										>
-											{item.description}
-										</ThemedText>
-									) : null}
-								</View>
-							)}
-						/>
-					</Card>
-				</View>
-			</PreviewSection>
-
-			<PreviewSection
-				title={copy.componentGallery.overlays.sectionTitle}
-				description={copy.componentGallery.overlays.sectionDescription}
-			>
-				<View style={{ gap: s.lg }}>
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm }}>
-						<Button
-							ref={dialogTriggerRefSm}
-							title={copy.componentGallery.overlays.sizeSmall}
-							size="sm"
-							variant="outline"
-							onPress={() => {
-								setConfirmationSize('sm');
-								setConfirmationRestoreTarget('sm');
-								setConfirmationVisible(true);
-							}}
-						/>
-						<Button
-							ref={dialogTriggerRefMd}
-							title={copy.componentGallery.overlays.sizeMedium}
-							size="sm"
-							variant="secondary"
-							onPress={() => {
-								setConfirmationSize('md');
-								setConfirmationRestoreTarget('md');
-								setConfirmationVisible(true);
-							}}
-						/>
-						<Button
-							ref={dialogTriggerRefLg}
-							title={copy.componentGallery.overlays.sizeLarge}
-							size="sm"
-							variant="ghost"
-							onPress={() => {
-								setConfirmationSize('lg');
-								setConfirmationRestoreTarget('lg');
-								setConfirmationVisible(true);
-							}}
-						/>
-						<Button
-							ref={dialogTriggerRefHard}
-							title={copy.componentGallery.overlays.hardConfirmation}
-							size="sm"
-							onPress={() => setHardConfirmationVisible(true)}
-						/>
-						<Button
-							title={copy.componentGallery.overlays.nativeAlertButton}
-							size="sm"
-							variant="outline"
-							onPress={() =>
-								showNativeConfirmationAlert({
-									title: copy.componentGallery.overlays.nativeAlertTitle,
-									message: copy.componentGallery.overlays.nativeAlertMessage,
-									confirmLabel: copy.componentGallery.overlays.nativeAlertConfirm,
-									cancelLabel: copy.componentGallery.overlays.nativeAlertCancel,
-									onConfirm: () =>
-										pushToast({
-											message:
-												copy.componentGallery.overlays.nativeAlertConfirmed,
-											variant: 'success',
-										}),
-									onCancel: () =>
-										pushToast({
-											message:
-												copy.componentGallery.overlays.nativeAlertCancelled,
-											variant: 'info',
-										}),
-								})
-							}
-						/>
-					</View>
-
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<Card
-							variant="outlined"
-							style={{ flex: 1, minWidth: DATA_DISPLAY_CARD_MIN_WIDTH }}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.overlays.tooltipTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.overlays.tooltipDescription}
-							</ThemedText>
-							<Tooltip
-								triggerLabel={copy.componentGallery.overlays.tooltipTrigger}
-								content={copy.componentGallery.overlays.tooltipContent}
-								testID="overlay-tooltip"
-								trigger={
-									<View style={{ alignSelf: 'flex-start' }}>
-										<Badge
-											label={copy.componentGallery.overlays.tooltipTrigger}
-											variant="info"
-										/>
-									</View>
-								}
-							/>
-						</Card>
-
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.overlays.popoverTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.overlays.popoverDescription}
-							</ThemedText>
-							<Popover
-								open={quickEditPopoverOpen}
-								onOpenChange={setQuickEditPopoverOpen}
-								triggerLabel={copy.componentGallery.overlays.popoverTrigger}
-								title={copy.componentGallery.overlays.popoverTitle}
-								description={copy.componentGallery.overlays.popoverDescription}
-								testID="overlay-popover"
-								trigger={
-									<View style={{ alignSelf: 'flex-start' }}>
-										<Badge
-											label={copy.componentGallery.overlays.popoverTrigger}
-											variant="default"
-										/>
-									</View>
-								}
-							>
-								<View style={{ gap: s.sm }}>
-									<TextInput
-										label={copy.componentGallery.overlays.popoverFieldLabel}
-										helperText={
-											copy.componentGallery.overlays.popoverFieldHelper
-										}
-										value={quickEditValue}
-										onValueChange={setQuickEditValue}
-									/>
-									<Button
-										title={copy.componentGallery.overlays.popoverAction}
-										size="sm"
-										onPress={() => {
-											setQuickEditPopoverOpen(false);
-											pushToast({
-												message:
-													copy.componentGallery.overlays.popoverSaved,
-												variant: 'success',
-											});
-										}}
-									/>
-								</View>
-							</Popover>
-						</Card>
-
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(
-								isCompactPhone,
-								DATA_DISPLAY_VISUAL_CARD_MIN_WIDTH,
-							)}
-						>
-							<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
-								{copy.componentGallery.overlays.contextMenuTitle}
-							</ThemedText>
-							<ThemedText
-								variant="caption"
-								style={{
-									color: c.onSurfaceVariant,
-									marginTop: s.xxs,
-									marginBottom: s.md,
-								}}
-							>
-								{copy.componentGallery.overlays.contextMenuDescription}
-							</ThemedText>
-							<Popover
-								open={contextMenuOpen}
-								onOpenChange={setContextMenuOpen}
-								triggerMode="longPress"
-								hapticFeedback="selection"
-								triggerLabel={
-									copy.componentGallery.overlays.contextMenuTriggerTitle
-								}
-								title={copy.componentGallery.overlays.contextMenuTitle}
-								description={copy.componentGallery.overlays.contextMenuDescription}
-								testID="overlay-context-menu"
-								trigger={
-									<Card variant="flat" padding="sm">
-										<CardBody>
-											<ThemedText
-												variant="bodyStrong"
-												style={{ color: c.onSurface }}
-											>
-												{
-													copy.componentGallery.overlays
-														.contextMenuTriggerTitle
-												}
-											</ThemedText>
-											<ThemedText
-												variant="caption"
-												style={{
-													color: c.onSurfaceVariant,
-													marginTop: s.xxs,
-												}}
-											>
-												{
-													copy.componentGallery.overlays
-														.contextMenuTriggerDescription
-												}
-											</ThemedText>
-										</CardBody>
-									</Card>
-								}
-							>
-								<View style={{ gap: s.xs }}>
-									{actionMenuItems.map((action) => (
-										<Button
-											key={action.value}
-											title={action.label}
-											size="sm"
-											variant={action.destructive ? 'danger' : 'ghost'}
-											onPress={() => {
-												setContextMenuOpen(false);
-												pushToast({
-													message: `${copy.componentGallery.overlays.contextActionPrefix} ${action.label}`,
-													variant: action.destructive
-														? 'warning'
-														: 'info',
-												});
-											}}
-										/>
-									))}
-								</View>
-							</Popover>
-						</Card>
-					</View>
-				</View>
-			</PreviewSection>
-
-			<PreviewSection
-				title={copy.componentGallery.forms.sectionTitle}
-				description={copy.componentGallery.forms.sectionDescription}
-			>
-				<View style={{ gap: s.md }}>
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH)}
-						>
-							<DeclarativeForm
-								title={copy.componentGallery.forms.relaxedTitle}
-								description={copy.componentGallery.forms.relaxedDescription}
-								fields={relaxedFormFields}
-								submitLabel={copy.componentGallery.forms.relaxedSubmitLabel}
-								onSubmit={handleRelaxedFormSubmit}
-								onDraftSave={handleRelaxedDraftSave}
-								draftStatusCopy={{
-									saving: copy.componentGallery.forms.draftSaving,
-									saved: copy.componentGallery.forms.draftSaved,
-									error: copy.componentGallery.forms.draftError,
-									retry: copy.componentGallery.forms.draftRetry,
-								}}
-								draftConflict={{
-									title: copy.componentGallery.forms.conflictTitle,
-									description: copy.componentGallery.forms.conflictDescription,
-									actionLabel: copy.componentGallery.forms.conflictAction,
-									onAction: () =>
-										pushToast({
-											message: copy.componentGallery.forms.conflictAction,
-											variant: 'info',
-										}),
-								}}
-								testID="forms-relaxed"
-							/>
-						</Card>
-
-						<Card
-							variant="outlined"
-							style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH)}
-						>
-							<DeclarativeForm
-								title={copy.componentGallery.forms.readOnlyTitle}
-								description={copy.componentGallery.forms.readOnlyDescription}
-								fields={relaxedFormFields}
-								mode="read-only"
-								defaultValues={readOnlyFormValues}
-								testID="forms-read-only"
-							/>
-						</Card>
-					</View>
-
-					<Card
-						variant="outlined"
-						style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH, {
-							flex: 0,
-						})}
-					>
-						<FormWizard
-							title={copy.componentGallery.forms.wizardTitle}
-							description={copy.componentGallery.forms.wizardDescription}
-							steps={wizardSteps}
-							backLabel={copy.componentGallery.forms.wizardBackLabel}
-							nextLabel={copy.componentGallery.forms.wizardNextLabel}
-							completeLabel={copy.componentGallery.forms.wizardFinishLabel}
-							onComplete={handleWizardComplete}
-							testID="forms-wizard"
-						/>
-					</Card>
-				</View>
-			</PreviewSection>
-
-			<PreviewSection
-				title={copy.patternSamples.title}
-				description={copy.patternSamples.description}
-			>
-				<View style={{ gap: s.lg }}>
-					<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-						<CrudWorkspace
-							style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH)}
-							testID="pattern-crud-workspace"
-						/>
-						<SearchFilterWorkspace
-							style={responsiveCardStyle(isCompactPhone, FORM_PREVIEW_CARD_MIN_WIDTH)}
-							testID="pattern-search-filter-workspace"
-						/>
-					</View>
-					<DataLayoutWorkspace testID="pattern-data-layout-workspace" />
-					<FeedbackLoopWorkspace testID="pattern-feedback-loop-workspace" />
-					<ProductivityWorkspace testID="pattern-productivity-workspace" />
-				</View>
-			</PreviewSection>
-
-			<PreviewSection title={copy.stateProof.title} description={copy.stateProof.description}>
-				<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.md }}>
-					<StateProofCard
-						title={copy.stateProof.loading.title}
-						description={copy.stateProof.loading.description}
-					>
-						<View style={{ gap: s.sm }}>
-							<SkeletonRow
-								withAvatar
-								lines={2}
-								testID="state-proof-loading-primary"
-							/>
-							<SkeletonRow lines={1} />
-							<SkeletonBlock width="48%" height={12} />
-						</View>
-					</StateProofCard>
-
-					<StateProofCard
-						title={copy.stateProof.empty.title}
-						description={copy.stateProof.empty.description}
-					>
-						<EmptyState
-							title={copy.stateProof.empty.title}
-							description={copy.stateProof.empty.description}
-							actionLabel={copy.stateProof.empty.actionLabel}
-							onAction={() => setToastVisible(true)}
-							style={{ flex: 0, padding: 0 }}
-						/>
-					</StateProofCard>
-
-					<StateProofCard
-						title={copy.stateProof.error.title}
-						description={copy.stateProof.error.description}
-					>
-						<View style={{ gap: s.sm }}>
-							<Badge label={copy.stateProof.error.title} variant="warning" />
-							<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
-								{copy.stateProof.error.description}
-							</ThemedText>
-							<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.sm }}>
-								<Button
-									title={copy.stateProof.error.retryLabel}
-									onPress={() => setToastVisible(true)}
-								/>
-								<Button
-									title={copy.stateProof.error.supportLabel}
-									variant="secondary"
-									onPress={() => setToastVisible(true)}
-								/>
-							</View>
-						</View>
-					</StateProofCard>
-
-					<StateProofCard
-						title={copy.stateProof.readOnly.title}
-						description={copy.stateProof.readOnly.description}
-					>
-						<View style={{ gap: s.xs }}>
-							{DESIGN_SYSTEM_READ_ONLY_FIELDS.map((field) => (
-								<ListItem
-									key={field.label}
-									title={field.label}
-									subtitle={`${field.value} • ${field.meta}`}
-									showChevron={false}
-								/>
-							))}
-						</View>
-					</StateProofCard>
-
-					<StateProofCard
-						title={copy.stateProof.denied.title}
-						description={copy.stateProof.denied.description}
-					>
-						<View style={{ gap: s.sm }}>
-							<Badge label={copy.stateProof.denied.title} variant="warning" />
-							<ThemedText variant="body" style={{ color: c.onSurface }}>
-								{copy.stateProof.denied.description}
-							</ThemedText>
-							<Button
-								title={copy.stateProof.denied.actionLabel}
-								variant="outline"
-								onPress={() => setToastVisible(true)}
-							/>
-						</View>
-					</StateProofCard>
-
-					<StateProofCard
-						title={copy.stateProof.noMedia.title}
-						description={copy.stateProof.noMedia.description}
-					>
-						<View
-							style={stackOnPhoneRowStyle(isCompactPhone, {
-								gap: s.md,
-								alignItems: 'flex-start',
-								wrap: false,
-							})}
-						>
-							<View
-								style={{
-									width: s['3xl'],
-									height: s['3xl'],
-									borderRadius: r.full,
-									backgroundColor: visual.surfaces.quiet,
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
-							>
-								<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
-									{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.monogram}
-								</ThemedText>
-							</View>
-							<View style={{ flex: 1 }}>
-								<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
-									{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.title}
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									style={{ color: c.onSurfaceVariant, marginTop: s.xxs }}
-								>
-									{DESIGN_SYSTEM_STATE_FIXTURES.noMedia.meta}
-								</ThemedText>
-								<ThemedText
-									variant="caption"
-									style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
-								>
-									{copy.stateProof.noMedia.description}
-								</ThemedText>
-							</View>
-						</View>
-					</StateProofCard>
-
-					<StateProofCard
-						title={copy.stateProof.uglyData.title}
-						description={copy.stateProof.uglyData.description}
-					>
-						<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
-							{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.title}
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
-						>
-							{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.detail}
-						</ThemedText>
-						<View
-							style={{
-								flexDirection: 'row',
-								flexWrap: 'wrap',
-								gap: s.sm,
-								marginTop: s.md,
-							}}
-						>
-							<Badge label={copy.stateProof.uglyData.metricLabel} variant="info" />
-							<Badge label={copy.stateProof.uglyData.metaLabel} variant="warning" />
-						</View>
-						<ThemedText
-							variant="metric"
-							style={{ color: c.onSurface, marginTop: s.md }}
-						>
-							{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue}
-						</ThemedText>
-						<ThemedText
-							variant="metadata"
-							style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
-						>
-							{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricContext}
-						</ThemedText>
-					</StateProofCard>
-				</View>
-			</PreviewSection>
-
-			<PreviewSection
-				title={copy.componentInventory.title}
-				description={copy.componentInventory.description}
-			>
-				<SearchBar
-					value={componentQuery}
-					onChangeText={setComponentQuery}
-					placeholder={copy.componentInventory.searchPlaceholder}
-				/>
-				<ScrollView
-					horizontal
-					showsHorizontalScrollIndicator={false}
-					contentContainerStyle={{ gap: s.sm, paddingTop: s.md, paddingBottom: s.sm }}
+					</PreviewSection>
+				</>
+			) : (
+				<PreviewSection
+					title={copy.componentGallery.title}
+					description={copy.componentGallery.description}
 				>
-					{copy.componentInventory.kindFilters.map((filter) => (
-						<Chip
-							key={filter.value}
-							label={filter.label}
-							selected={componentKindFilter === filter.value}
-							onPress={() => setComponentKindFilter(filter.value)}
-						/>
-					))}
-				</ScrollView>
-				<View
-					style={{
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-						gap: s.sm,
-						marginBottom: s.md,
-					}}
-				>
-					<Badge
-						label={copy.componentInventory.componentsCount(filteredComponents.length)}
-						variant="default"
-					/>
-					<Badge
-						label={copy.componentInventory.testedCount(testedComponentCount)}
-						variant="success"
-					/>
-					<Badge
-						label={copy.componentInventory.liveDemoCount(liveDemoComponentCount)}
-						variant="info"
-					/>
-					<Badge
-						label={copy.componentInventory.groupCount(componentGroupCount)}
-						variant="neutral"
-					/>
-				</View>
-
-				<View style={{ gap: s.sm }}>
-					{filteredComponents.map((component, index) => {
-						const previousComponent = index > 0 ? filteredComponents[index - 1] : null;
-						const showKindHeader =
-							!previousComponent || previousComponent.kind !== component.kind;
-
-						return (
-							<View key={component.id}>
-								{showKindHeader ? (
-									<View
-										style={{
-											paddingTop: index === 0 ? 0 : s.md,
-											paddingBottom: s.xs,
-										}}
-									>
-										<ThemedText variant="label" style={{ color: c.primary }}>
-											{copy.componentInventory.kindLabels[component.kind]}
-										</ThemedText>
-									</View>
-								) : null}
-								<Card
-									variant="outlined"
-									style={{
-										marginBottom: s.xs,
-										borderRadius: r.md,
-										backgroundColor: visual.surfaces.default,
-										borderColor: c.border,
-										minWidth: COMPONENT_CARD_MIN_WIDTH,
-									}}
-								>
-									<ThemedText
-										variant="sectionTitle"
-										style={{ color: c.onSurface }}
-									>
-										{component.name}
-									</ThemedText>
-									<ThemedText
-										variant="caption"
-										style={{ color: c.onSurfaceVariant, marginTop: s.xxs }}
-										numberOfLines={1}
-									>
-										{component.filePath}
-									</ThemedText>
-									<View
-										style={{
-											flexDirection: 'row',
-											flexWrap: 'wrap',
-											gap: s.sm,
-											marginTop: s.sm,
-										}}
-									>
-										<Badge
-											label={
-												copy.componentInventory.kindLabels[component.kind]
-											}
-											variant={COMPONENT_KIND_VARIANT[component.kind]}
-											size="sm"
-										/>
-										<Badge
-											label={
-												component.hasTests
-													? copy.componentInventory.tested
-													: copy.componentInventory.needsTests
-											}
-											variant={component.hasTests ? 'success' : 'warning'}
-											size="sm"
-										/>
-										<Badge
-											label={
-												isLivePreviewComponent(component)
-													? copy.componentInventory.liveDemo
-													: copy.componentInventory.registryOnly
-											}
-											variant={
-												isLivePreviewComponent(component)
-													? 'info'
-													: 'neutral'
-											}
-											size="sm"
-										/>
-									</View>
-								</Card>
-							</View>
-						);
-					})}
-				</View>
-			</PreviewSection>
-
-			<PreviewSection
-				title={copy.checklistExplorer.title}
-				description={copy.checklistExplorer.description}
-			>
-				<SearchBar
-					value={catalogQuery}
-					onChangeText={setCatalogQuery}
-					placeholder={copy.checklistExplorer.searchPlaceholder}
-				/>
-				<ScrollView
-					horizontal
-					showsHorizontalScrollIndicator={false}
-					contentContainerStyle={{ gap: s.sm, paddingTop: s.md, paddingBottom: s.sm }}
-				>
-					{copy.checklistExplorer.platformFilters.map((filter) => (
-						<Chip
-							key={filter.value}
-							label={filter.label}
-							selected={platformFilter === filter.value}
-							onPress={() => setPlatformFilter(filter.value)}
-						/>
-					))}
-				</ScrollView>
-				<ScrollView
-					horizontal
-					showsHorizontalScrollIndicator={false}
-					contentContainerStyle={{ gap: s.sm, paddingBottom: s.sm }}
-				>
-					{copy.checklistExplorer.statusFilters.map((filter) => (
-						<Chip
-							key={filter.value}
-							label={filter.label}
-							selected={completionFilter === filter.value}
-							onPress={() => setCompletionFilter(filter.value)}
-						/>
-					))}
-				</ScrollView>
-				<View
-					style={{
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-						gap: s.sm,
-						marginTop: s.sm,
-					}}
-				>
-					<Badge
-						label={copy.checklistExplorer.rowsCount(filteredItems.length)}
-						variant="default"
-					/>
-					<Badge
-						label={copy.checklistExplorer.completedCount(filteredCompletedCount)}
-						variant="success"
-					/>
-					<Badge
-						label={copy.checklistExplorer.openCount(filteredOpenCount)}
-						variant="warning"
-					/>
-					<Badge
-						label={copy.checklistExplorer.sectionGroups(sectionCount)}
-						variant="neutral"
-					/>
-					<Badge
-						label={
-							platformFilter === 'all'
-								? copy.checklistExplorer.viewingAllPlatforms
-								: platformFilter === 'common'
-									? copy.checklistExplorer.viewingCommonOnly
-									: platformFilter === 'mobile'
-										? copy.checklistExplorer.viewingMobileOnly
-										: copy.checklistExplorer.viewingCommonMobile
-						}
-						variant="info"
-					/>
-				</View>
-			</PreviewSection>
+					<DeferredWorkbenchPlaceholder testID={DEFERRED_WORKBENCH_PLACEHOLDER_TEST_ID} />
+				</PreviewSection>
+			)}
 		</View>
 	);
 

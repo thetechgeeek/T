@@ -35,4 +35,30 @@ describe('ToggleButtonGroup', () => {
 		fireEvent.press(getByText('Week'));
 		expect(onChange).toHaveBeenCalledWith(['day', 'week']);
 	});
+
+	it('supports external-keyboard arrows and Enter for single-select groups', () => {
+		const onChange = jest.fn();
+		const { getByTestId } = renderWithTheme(
+			<ToggleButtonGroup testID="toggle-group" options={OPTIONS} onChange={onChange} />,
+		);
+
+		fireEvent(getByTestId('toggle-group-day'), 'keyPress', {
+			nativeEvent: { key: 'ArrowRight' },
+		});
+		fireEvent(getByTestId('toggle-group-week'), 'keyPress', {
+			nativeEvent: { key: 'End' },
+		});
+		fireEvent(getByTestId('toggle-group-month'), 'keyPress', {
+			nativeEvent: { key: 'Home' },
+		});
+		fireEvent(getByTestId('toggle-group-day'), 'keyPress', {
+			nativeEvent: { key: 'Enter' },
+		});
+
+		expect(getByTestId('toggle-group-day').props.focusable).toBe(true);
+		expect(onChange).toHaveBeenNthCalledWith(1, 'week');
+		expect(onChange).toHaveBeenNthCalledWith(2, 'month');
+		expect(onChange).toHaveBeenNthCalledWith(3, 'day');
+		expect(onChange).toHaveBeenCalledTimes(3);
+	});
 });

@@ -130,6 +130,26 @@ describe('ThemedText (P0.2)', () => {
 		);
 	});
 
+	it('uses script-aware line-breaking defaults for CJK and latin text', () => {
+		const { getByText, rerender } = render(
+			<ThemeProvider persist={false} runtimeOverrides={{ detectedLocale: 'ja-JP' }}>
+				<ThemedText variant="body">レイアウト品質</ThemedText>
+			</ThemeProvider>,
+		);
+
+		expect(getByText('レイアウト品質').props.textBreakStrategy).toBe('balanced');
+		expect(getByText('レイアウト品質').props.lineBreakStrategyIOS).toBe('push-out');
+
+		rerender(
+			<ThemeProvider persist={false} runtimeOverrides={{ detectedLocale: 'en-US' }}>
+				<ThemedText variant="body">Layout quality</ThemedText>
+			</ThemeProvider>,
+		);
+
+		expect(getByText('Layout quality').props.textBreakStrategy).toBe('highQuality');
+		expect(getByText('Layout quality').props.lineBreakStrategyIOS).toBe('standard');
+	});
+
 	it('applies 1.5x line height for body text', () => {
 		const theme = buildTheme(false);
 		const { getByText } = renderWithColorScheme(

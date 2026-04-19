@@ -1,6 +1,16 @@
 import React, { forwardRef, useMemo, useState } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
-import Svg, { Circle, G, Line, Path, Polyline, Rect, Text as SvgText } from 'react-native-svg';
+import Svg, {
+	Circle,
+	Defs,
+	G,
+	Line,
+	Path,
+	Pattern,
+	Polyline,
+	Rect,
+	Text as SvgText,
+} from 'react-native-svg';
 import { Chip } from '@/src/design-system/components/atoms/Chip';
 import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
 import { ErrorState } from '@/src/design-system/components/molecules/ErrorState';
@@ -93,6 +103,16 @@ const HEATMAP_MIN_OPACITY = 0.18;
 const POLAR_CHART_RADIUS = 58;
 // eslint-disable-next-line @typescript-eslint/no-magic-numbers -- the donut hole leaves enough room for segment readability.
 const DONUT_INNER_RADIUS = 34;
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- dotted pattern swatches need quarter-step spacing to stay legible at small sizes.
+const PATTERN_DOT_OFFSET_START = 0.25;
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- dotted pattern swatches need the opposite quarter-step anchor for balance.
+const PATTERN_DOT_OFFSET_END = 0.75;
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- bar pattern swatches keep the second column slightly past center for visual separation.
+const PATTERN_BAR_OFFSET = 0.55;
+const SERIES_DASH_PATTERNS = [undefined, '8 4', '2 4', '10 4 2 4'] as const;
+const PATTERN_VARIANTS = ['diagonal', 'crosshatch', 'dots', 'bars'] as const;
+
+type ChartPatternVariant = (typeof PATTERN_VARIANTS)[number];
 
 function clamp(value: number, minimum: number, maximum: number) {
 	return Math.min(Math.max(value, minimum), maximum);
@@ -170,6 +190,92 @@ function buildPolylinePoints(
 		.join(' ');
 }
 
+function getPatternId(baseId: string, seriesId: string) {
+	return `${baseId}-pattern-${seriesId}`;
+}
+
+function getPatternVariant(index: number): ChartPatternVariant {
+	return PATTERN_VARIANTS[index % PATTERN_VARIANTS.length] ?? 'diagonal';
+}
+
+function renderPatternOverlay(variant: ChartPatternVariant, strokeColor: string, size: number) {
+	switch (variant) {
+		case 'crosshatch':
+			return (
+				<>
+					<Line
+						x1={0}
+						y1={0}
+						x2={size}
+						y2={size}
+						stroke={strokeColor}
+						strokeWidth={1.5}
+					/>
+					<Line
+						x1={size}
+						y1={0}
+						x2={0}
+						y2={size}
+						stroke={strokeColor}
+						strokeWidth={1.5}
+					/>
+				</>
+			);
+		case 'dots':
+			return (
+				<>
+					<Circle
+						cx={size * PATTERN_DOT_OFFSET_START}
+						cy={size * PATTERN_DOT_OFFSET_START}
+						r={1.3}
+						fill={strokeColor}
+					/>
+					<Circle
+						cx={size * PATTERN_DOT_OFFSET_END}
+						cy={size * PATTERN_DOT_OFFSET_END}
+						r={1.3}
+						fill={strokeColor}
+					/>
+				</>
+			);
+		case 'bars':
+			return (
+				<>
+					<Rect x={1} y={0} width={2} height={size} fill={strokeColor} />
+					<Rect
+						x={size * PATTERN_BAR_OFFSET}
+						y={0}
+						width={2}
+						height={size}
+						fill={strokeColor}
+					/>
+				</>
+			);
+		case 'diagonal':
+		default:
+			return (
+				<>
+					<Line
+						x1={-2}
+						y1={size - 2}
+						x2={size - 2}
+						y2={-2}
+						stroke={strokeColor}
+						strokeWidth={1.5}
+					/>
+					<Line
+						x1={2}
+						y1={size + 2}
+						x2={size + 2}
+						y2={2}
+						stroke={strokeColor}
+						strokeWidth={1.5}
+					/>
+				</>
+			);
+	}
+}
+
 export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProps>(
 	(
 		{
@@ -201,6 +307,7 @@ export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProp
 		);
 
 		const palette = theme.collections.chartQualitativeColors;
+		const patternBaseId = testID ?? 'data-chart';
 		const resolvedFocusedSeriesId = focusedSeriesId ?? uncontrolledFocusedSeriesId;
 		const height = variant === 'sparkline' ? SPARKLINE_HEIGHT : CHART_HEIGHT;
 
@@ -328,6 +435,40 @@ export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProp
 					height={height}
 					testID={testID ? `${testID}-svg` : 'data-chart-svg'}
 				>
+					<Defs>
+						{chartSeries.map((entry, index) => {
+							const patternId = getPatternId(patternBaseId, entry.id);
+							const patternVariant = getPatternVariant(index);
+							return (
+								<Pattern
+									key={patternId}
+									id={patternId}
+									width={12}
+									height={12}
+									patternUnits="userSpaceOnUse"
+								>
+									<Rect width={12} height={12} fill={entry.color} />
+									{renderPatternOverlay(patternVariant, theme.colors.surface, 12)}
+								</Pattern>
+							);
+						})}
+						{chartSlices.map((slice, index) => {
+							const patternId = getPatternId(patternBaseId, slice.id);
+							const patternVariant = getPatternVariant(index);
+							return (
+								<Pattern
+									key={patternId}
+									id={patternId}
+									width={12}
+									height={12}
+									patternUnits="userSpaceOnUse"
+								>
+									<Rect width={12} height={12} fill={slice.color} />
+									{renderPatternOverlay(patternVariant, theme.colors.surface, 12)}
+								</Pattern>
+							);
+						})}
+					</Defs>
 					{variant !== 'pie' && variant !== 'donut' ? (
 						<>
 							{Array.from({ length: 4 }, (_, index) => {
@@ -379,11 +520,13 @@ export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProp
 					) : null}
 
 					{(variant === 'line' || variant === 'area' || variant === 'sparkline') &&
-						chartSeries.map((entry) => {
+						chartSeries.map((entry, seriesIndex) => {
 							const lineOpacity =
 								resolvedFocusedSeriesId && resolvedFocusedSeriesId !== entry.id
 									? MUTED_SERIES_OPACITY
 									: 1;
+							const strokeDasharray =
+								SERIES_DASH_PATTERNS[seriesIndex % SERIES_DASH_PATTERNS.length];
 							const pointsString = buildPolylinePoints(
 								entry.values,
 								CHART_WIDTH,
@@ -413,6 +556,7 @@ export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProp
 										fill="none"
 										stroke={entry.color}
 										strokeWidth={variant === 'sparkline' ? 2 : 3}
+										strokeDasharray={strokeDasharray}
 									/>
 								</G>
 							);
@@ -441,7 +585,9 @@ export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProp
 										width={barWidth - 4}
 										height={barHeight}
 										rx={4}
-										fill={entry.color}
+										fill={`url(#${getPatternId(patternBaseId, entry.id)})`}
+										stroke={entry.color}
+										strokeWidth={1}
 										opacity={lineOpacity}
 									/>
 								);
@@ -469,6 +615,38 @@ export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProp
 								resolvedFocusedSeriesId !== point.seriesId
 									? MUTED_SERIES_OPACITY
 									: 1;
+							const pointSeriesIndex = point.seriesId
+								? chartSeries.findIndex((entry) => entry.id === point.seriesId)
+								: index;
+							const markerVariant = pointSeriesIndex % 3;
+							if (markerVariant === 1) {
+								return (
+									<Rect
+										key={point.id ?? index}
+										x={x - 5}
+										y={y - 5}
+										width={10}
+										height={10}
+										rx={2}
+										fill={color}
+										stroke={theme.colors.surface}
+										strokeWidth={1.5}
+										opacity={pointOpacity}
+									/>
+								);
+							}
+							if (markerVariant === 2) {
+								return (
+									<Path
+										key={point.id ?? index}
+										d={`M ${x} ${y - 6} L ${x + 6} ${y} L ${x} ${y + 6} L ${x - 6} ${y} Z`}
+										fill={color}
+										stroke={theme.colors.surface}
+										strokeWidth={1.5}
+										opacity={pointOpacity}
+									/>
+								);
+							}
 							return (
 								<Circle
 									key={point.id ?? index}
@@ -476,6 +654,8 @@ export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProp
 									cy={y}
 									r={5}
 									fill={color}
+									stroke={theme.colors.surface}
+									strokeWidth={1.5}
 									opacity={pointOpacity}
 								/>
 							);
@@ -534,7 +714,15 @@ export const DataChart = forwardRef<React.ElementRef<typeof View>, DataChartProp
 												endAngle,
 											);
 								startAngle = endAngle;
-								return <Path key={slice.id} d={path} fill={slice.color} />;
+								return (
+									<Path
+										key={slice.id}
+										d={path}
+										fill={`url(#${getPatternId(patternBaseId, slice.id)})`}
+										stroke={slice.color}
+										strokeWidth={1}
+									/>
+								);
 							});
 						})()}
 

@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
@@ -14,6 +14,11 @@ import { DatePickerField } from '@/src/design-system/components/molecules/DatePi
 import { FilterBar } from '@/src/design-system/components/molecules/FilterBar';
 import { SearchBar } from '@/src/design-system/components/molecules/SearchBar';
 import { SegmentedControl } from '@/src/design-system/components/molecules/SegmentedControl';
+import { ProgressIndicator } from '@/src/design-system/components/molecules/ProgressIndicator';
+import {
+	responsiveCardStyle,
+	useResponsiveWorkbenchLayout,
+} from '@/src/design-system/useResponsiveWorkbenchLayout';
 
 interface SearchFilterResult {
 	id: string;
@@ -39,6 +44,17 @@ const SAMPLE_RESULT_AMOUNTS = {
 } as const;
 const DEFAULT_AMOUNT_FLOOR = 50000;
 const FILTER_PANEL_MIN_WIDTH = 320;
+const SEARCH_DEBOUNCE_MS = 300;
+const FAST_SEARCH_LATENCY_MAX_MS = 100;
+const FAST_SEARCH_LATENCY_MS = 80;
+const MEDIUM_SEARCH_LATENCY_MAX_MS = 1000;
+const MEDIUM_SEARCH_LATENCY_MS = 240;
+const LONG_SEARCH_LATENCY_MS = 1400;
+const LONG_SEARCH_INITIAL_PROGRESS = 18;
+const LONG_SEARCH_PROGRESS_CEILING = 88;
+const LONG_SEARCH_PROGRESS_STEP_MS = 220;
+const LONG_SEARCH_PROGRESS_STEP_VALUE = 12;
+const LONG_SEARCH_COMPLETE_PROGRESS = 100;
 
 const RESULTS: SearchFilterResult[] = [
 	{
@@ -114,16 +130,33 @@ function renderHighlightedText(text: string, query: string, color: string, highl
 	);
 }
 
+function resolveSearchLatencyMs(query: string) {
+	const normalizedQuery = query.trim();
+	if (normalizedQuery.length === 0) {
+		return 0;
+	}
+	if (normalizedQuery.length <= 4) {
+		return FAST_SEARCH_LATENCY_MS;
+	}
+	if (normalizedQuery.length <= 10) {
+		return MEDIUM_SEARCH_LATENCY_MS;
+	}
+	return LONG_SEARCH_LATENCY_MS;
+}
+
 export const SearchFilterWorkspace = forwardRef<
 	React.ElementRef<typeof View>,
 	SearchFilterWorkspaceProps
 >(({ style, testID }, ref) => {
 	const { theme } = useTheme();
+	const { isCompactPhone } = useResponsiveWorkbenchLayout();
 	const [query, setQuery] = useState('');
+	const [debouncedQuery, setDebouncedQuery] = useState('');
 	const [applyMode, setApplyMode] = useState<'live' | 'apply'>('live');
 	const [topFilter, setTopFilter] = useState('all');
 	const [draftStatus, setDraftStatus] = useState('Open');
 	const [appliedStatus, setAppliedStatus] = useState('Open');
+	const [appliedQuery, setAppliedQuery] = useState('');
 	const [amountFloor, setAmountFloor] = useState(DEFAULT_AMOUNT_FLOOR);
 	const [appliedAmountFloor, setAppliedAmountFloor] = useState(DEFAULT_AMOUNT_FLOOR);
 	const [dateAfter, setDateAfter] = useState('2026-04-01');
@@ -136,11 +169,126 @@ export const SearchFilterWorkspace = forwardRef<
 		'renewal',
 		'supplier onboarding',
 	]);
+	const [searchStatus, setSearchStatus] = useState<'idle' | 'loading' | 'progress'>('idle');
+	const [searchProgress, setSearchProgress] = useState(0);
+	const [searchEstimateMs, setSearchEstimateMs] = useState<number | null>(null);
 
-	const appliedQuery = query;
+	const resetSearchFeedback = useCallback(() => {
+		setSearchStatus('idle');
+		setSearchProgress(0);
+		setSearchEstimateMs(null);
+	}, []);
+
+	const startLoadingFeedback = useCallback(() => {
+		setSearchStatus('loading');
+		setSearchProgress(0);
+		setSearchEstimateMs(null);
+	}, []);
+
+	const startProgressFeedback = useCallback((latencyMs: number) => {
+		setSearchStatus('progress');
+		setSearchProgress(LONG_SEARCH_INITIAL_PROGRESS);
+		setSearchEstimateMs(latencyMs);
+	}, []);
+
+	const applySearchResult = useCallback(
+		(nextQuery: string) => {
+			setAppliedQuery(nextQuery);
+			resetSearchFeedback();
+		},
+		[resetSearchFeedback],
+	);
+
 	const activeStatus = applyMode === 'live' ? draftStatus : appliedStatus;
 	const activeAmountFloor = applyMode === 'live' ? amountFloor : appliedAmountFloor;
 	const activeDateAfter = applyMode === 'live' ? dateAfter : appliedDateAfter;
+
+	useEffect(() => {
+		if (applyMode === 'apply') {
+			let cancelled = false;
+			queueMicrotask(() => {
+				if (!cancelled) {
+					resetSearchFeedback();
+				}
+			});
+			return () => {
+				cancelled = true;
+			};
+		}
+
+		const latencyMs = resolveSearchLatencyMs(debouncedQuery);
+		if (latencyMs === 0) {
+			let cancelled = false;
+			queueMicrotask(() => {
+				if (!cancelled) {
+					applySearchResult('');
+				}
+			});
+			return () => {
+				cancelled = true;
+			};
+		}
+
+		if (latencyMs <= FAST_SEARCH_LATENCY_MAX_MS) {
+			let cancelled = false;
+			queueMicrotask(() => {
+				if (!cancelled) {
+					applySearchResult(debouncedQuery);
+				}
+			});
+			return () => {
+				cancelled = true;
+			};
+		}
+
+		if (latencyMs <= MEDIUM_SEARCH_LATENCY_MAX_MS) {
+			let cancelled = false;
+			queueMicrotask(() => {
+				if (!cancelled) {
+					startLoadingFeedback();
+				}
+			});
+			const timer = setTimeout(() => {
+				applySearchResult(debouncedQuery);
+			}, latencyMs);
+
+			return () => {
+				cancelled = true;
+				clearTimeout(timer);
+			};
+		}
+
+		let cancelled = false;
+		queueMicrotask(() => {
+			if (!cancelled) {
+				startProgressFeedback(latencyMs);
+			}
+		});
+		const progressInterval = setInterval(() => {
+			setSearchProgress((current) =>
+				Math.min(current + LONG_SEARCH_PROGRESS_STEP_VALUE, LONG_SEARCH_PROGRESS_CEILING),
+			);
+		}, LONG_SEARCH_PROGRESS_STEP_MS);
+		const finishTimer = setTimeout(() => {
+			clearInterval(progressInterval);
+			setSearchProgress(LONG_SEARCH_COMPLETE_PROGRESS);
+			setAppliedQuery(debouncedQuery);
+			resetSearchFeedback();
+		}, latencyMs);
+
+		return () => {
+			cancelled = true;
+			clearInterval(progressInterval);
+			clearTimeout(finishTimer);
+		};
+	}, [
+		applyMode,
+		applySearchResult,
+		debouncedQuery,
+		resetSearchFeedback,
+		startLoadingFeedback,
+		startProgressFeedback,
+	]);
 
 	const suggestions = useMemo(
 		() =>
@@ -159,7 +307,7 @@ export const SearchFilterWorkspace = forwardRef<
 	const results = useMemo(() => {
 		return RESULTS.filter((result) => {
 			const matchesQuery =
-				query.trim().length === 0 ||
+				appliedQuery.trim().length === 0 ||
 				result.title.toLowerCase().includes(appliedQuery.trim().toLowerCase());
 			const matchesTopFilter =
 				topFilter === 'all' ||
@@ -170,7 +318,7 @@ export const SearchFilterWorkspace = forwardRef<
 			const matchesAmount = result.amount >= activeAmountFloor;
 			return matchesQuery && matchesTopFilter && matchesStatus && matchesAmount;
 		});
-	}, [activeAmountFloor, activeStatus, appliedQuery, query, topFilter]);
+	}, [activeAmountFloor, activeStatus, appliedQuery, topFilter]);
 
 	const activeFilterPills = [
 		`Status: ${activeStatus}`,
@@ -180,6 +328,7 @@ export const SearchFilterWorkspace = forwardRef<
 	];
 
 	const applyDraftFilters = () => {
+		setAppliedQuery(query);
 		setAppliedStatus(draftStatus);
 		setAppliedAmountFloor(amountFloor);
 		setAppliedDateAfter(dateAfter);
@@ -208,34 +357,73 @@ export const SearchFilterWorkspace = forwardRef<
 				</CardHeader>
 				<CardBody>
 					<View style={{ gap: theme.spacing.md }}>
-						<View
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								gap: theme.spacing.sm,
-							}}
-						>
-							<Button
-								title="Back"
-								variant="ghost"
-								size="sm"
-								onPress={() => setQuery('')}
-							/>
-							<View style={{ flex: 1 }}>
+						{isCompactPhone ? (
+							<View style={{ gap: theme.spacing.sm }}>
 								<SearchBar
 									value={query}
 									onChangeText={setQuery}
+									onDebouncedChange={setDebouncedQuery}
+									debounceMs={SEARCH_DEBOUNCE_MS}
 									placeholder="Search customers, projects, or approval packs"
+									loading={searchStatus === 'loading'}
+									loadingAccessibilityLabel="Search loading"
 									testID={`${testID ?? 'search-filter-workspace'}-search`}
 								/>
+								<View
+									style={{
+										flexDirection: 'row',
+										flexWrap: 'wrap',
+										gap: theme.spacing.sm,
+									}}
+								>
+									<Button
+										title="Back"
+										variant="ghost"
+										size="sm"
+										onPress={() => setQuery('')}
+									/>
+									<Button
+										title="Cancel"
+										variant="ghost"
+										size="sm"
+										onPress={() => setQuery('')}
+									/>
+								</View>
 							</View>
-							<Button
-								title="Cancel"
-								variant="ghost"
-								size="sm"
-								onPress={() => setQuery('')}
-							/>
-						</View>
+						) : (
+							<View
+								style={{
+									flexDirection: 'row',
+									alignItems: 'center',
+									gap: theme.spacing.sm,
+								}}
+							>
+								<Button
+									title="Back"
+									variant="ghost"
+									size="sm"
+									onPress={() => setQuery('')}
+								/>
+								<View style={{ flex: 1 }}>
+									<SearchBar
+										value={query}
+										onChangeText={setQuery}
+										onDebouncedChange={setDebouncedQuery}
+										debounceMs={SEARCH_DEBOUNCE_MS}
+										placeholder="Search customers, projects, or approval packs"
+										loading={searchStatus === 'loading'}
+										loadingAccessibilityLabel="Search loading"
+										testID={`${testID ?? 'search-filter-workspace'}-search`}
+									/>
+								</View>
+								<Button
+									title="Cancel"
+									variant="ghost"
+									size="sm"
+									onPress={() => setQuery('')}
+								/>
+							</View>
+						)}
 
 						{query.trim().length > 0 && suggestions.length > 0 ? (
 							<Card variant="outlined" density="compact">
@@ -253,6 +441,9 @@ export const SearchFilterWorkspace = forwardRef<
 														);
 													}
 												}}
+												accessibilityRole="button"
+												accessibilityLabel={suggestion}
+												accessibilityHint="Double tap to use this suggested search"
 											>
 												<ThemedText variant="caption">
 													{suggestion}
@@ -289,6 +480,27 @@ export const SearchFilterWorkspace = forwardRef<
 							value={applyMode}
 							onChange={(value) => setApplyMode(value as 'live' | 'apply')}
 						/>
+						{searchStatus === 'progress' ? (
+							<Card variant="outlined" density="compact">
+								<CardHeader>Large query progress</CardHeader>
+								<CardBody>
+									<View style={{ gap: theme.spacing.sm }}>
+										<ProgressIndicator
+											variant="linear"
+											value={searchProgress}
+											label={`About ${Math.ceil((searchEstimateMs ?? 0) / 1000)}s remaining`}
+										/>
+										<ThemedText
+											variant="caption"
+											style={{ color: theme.colors.onSurfaceVariant }}
+										>
+											Searches longer than one second show progress with an
+											estimate instead of an indeterminate spinner.
+										</ThemedText>
+									</View>
+								</CardBody>
+							</Card>
+						) : null}
 					</View>
 				</CardBody>
 			</Card>
@@ -321,7 +533,10 @@ export const SearchFilterWorkspace = forwardRef<
 			</View>
 
 			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.md }}>
-				<Card variant="outlined" style={{ flex: 1, minWidth: FILTER_PANEL_MIN_WIDTH }}>
+				<Card
+					variant="outlined"
+					style={responsiveCardStyle(isCompactPhone, FILTER_PANEL_MIN_WIDTH)}
+				>
 					<CardHeader>Facets & rules</CardHeader>
 					<CardBody>
 						<View style={{ gap: theme.spacing.md }}>
@@ -381,7 +596,10 @@ export const SearchFilterWorkspace = forwardRef<
 					</CardBody>
 				</Card>
 
-				<Card variant="outlined" style={{ flex: 1, minWidth: FILTER_PANEL_MIN_WIDTH }}>
+				<Card
+					variant="outlined"
+					style={responsiveCardStyle(isCompactPhone, FILTER_PANEL_MIN_WIDTH)}
+				>
 					<CardHeader>Advanced query builder</CardHeader>
 					<CardBody>
 						<View style={{ gap: theme.spacing.sm }}>
@@ -422,7 +640,10 @@ export const SearchFilterWorkspace = forwardRef<
 			</View>
 
 			<View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.md }}>
-				<Card variant="outlined" style={{ flex: 1, minWidth: FILTER_PANEL_MIN_WIDTH }}>
+				<Card
+					variant="outlined"
+					style={responsiveCardStyle(isCompactPhone, FILTER_PANEL_MIN_WIDTH)}
+				>
 					<CardHeader>Saved views</CardHeader>
 					<CardBody>
 						<View
@@ -454,7 +675,10 @@ export const SearchFilterWorkspace = forwardRef<
 					</CardBody>
 				</Card>
 
-				<Card variant="outlined" style={{ flex: 1, minWidth: FILTER_PANEL_MIN_WIDTH }}>
+				<Card
+					variant="outlined"
+					style={responsiveCardStyle(isCompactPhone, FILTER_PANEL_MIN_WIDTH)}
+				>
 					<CardHeader>Active filters</CardHeader>
 					<CardBody>
 						<View

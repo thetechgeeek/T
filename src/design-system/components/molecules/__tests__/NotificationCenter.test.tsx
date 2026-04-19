@@ -26,4 +26,13 @@ describe('NotificationCenter', () => {
 		fireEvent.press(getByText('Mark all as read'));
 		expect(onChange).toHaveBeenCalled();
 	});
+
+	it('pairs unread state with visible text and accessibility labels', () => {
+		const { getAllByText, getByLabelText } = renderWithTheme(
+			<NotificationCenter defaultItems={ITEMS} />,
+		);
+
+		expect(getAllByText('Unread').length).toBeGreaterThan(0);
+		expect(getByLabelText('Unread notification: Stock updated')).toBeTruthy();
+	});
 });

@@ -2,6 +2,7 @@ import React, { forwardRef, useState } from 'react';
 import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { ArrowDown, ArrowUp, GripVertical } from 'lucide-react-native';
+import { runOnJS } from 'react-native-reanimated';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
 import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { Button } from '@/src/design-system/components/atoms/Button';
@@ -56,6 +57,11 @@ const SortableListBase = forwardRef<
 			onItemsChange?.(nextItems);
 		};
 
+		const handleGestureStart = (itemId: string) => {
+			setActiveId(itemId);
+			void triggerDesignSystemHaptic('light');
+		};
+
 		const moveItem = async (fromIndex: number, toIndex: number) => {
 			if (toIndex < 0 || toIndex >= resolvedItems.length || fromIndex === toIndex) {
 				return;
@@ -67,26 +73,28 @@ const SortableListBase = forwardRef<
 			await announceForScreenReader(`Moved item to position ${toIndex + 1}`);
 		};
 
+		const handleGestureFinalize = (fromIndex: number, translationY: number) => {
+			const nextIndex = Math.max(
+				0,
+				Math.min(
+					resolvedItems.length - 1,
+					fromIndex + Math.round(translationY / itemHeight),
+				),
+			);
+			void moveItem(fromIndex, nextIndex);
+			setActiveId(null);
+		};
+
 		return (
 			<View ref={ref} testID={testID} style={[{ gap: theme.spacing.sm }, style]}>
 				{resolvedItems.map((item, index) => {
 					const gesture = Gesture.Pan()
 						.activateAfterLongPress(180)
-						.runOnJS(true)
 						.onBegin(() => {
-							setActiveId(item.id);
-							void triggerDesignSystemHaptic('light');
+							runOnJS(handleGestureStart)(item.id);
 						})
 						.onFinalize((event) => {
-							const nextIndex = Math.max(
-								0,
-								Math.min(
-									resolvedItems.length - 1,
-									index + Math.round(event.translationY / itemHeight),
-								),
-							);
-							void moveItem(index, nextIndex);
-							setActiveId(null);
+							runOnJS(handleGestureFinalize)(index, event.translationY);
 						});
 
 					return (

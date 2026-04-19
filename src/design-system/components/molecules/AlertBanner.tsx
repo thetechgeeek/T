@@ -67,6 +67,18 @@ export function AlertBanner({
 					}}
 				/>
 				<View style={{ flex: 1 }}>
+					<ThemedText
+						variant="captionBold"
+						style={{ color: accent, marginBottom: theme.spacing.xxs }}
+					>
+						{variant === 'success'
+							? 'Success'
+							: variant === 'warning'
+								? 'Warning'
+								: variant === 'error'
+									? 'Error'
+									: 'Info'}
+					</ThemedText>
 					<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
 						{title}
 					</ThemedText>

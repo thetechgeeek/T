@@ -138,6 +138,9 @@ export const Tooltip = forwardRef<React.ElementRef<typeof View>, TooltipProps>(
 					<Modal transparent visible onRequestClose={closeTooltip}>
 						<Pressable
 							testID={testID ? `${testID}-backdrop` : undefined}
+							accessible={false}
+							accessibilityElementsHidden
+							importantForAccessibility="no-hide-descendants"
 							style={styles.backdrop}
 							onPress={closeTooltip}
 						/>
@@ -156,6 +159,8 @@ export const Tooltip = forwardRef<React.ElementRef<typeof View>, TooltipProps>(
 							]}
 							accessibilityRole="text"
 							accessibilityLabel={content}
+							accessibilityViewIsModal
+							importantForAccessibility="yes"
 						>
 							<ThemedText
 								variant="caption"

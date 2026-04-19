@@ -3,6 +3,7 @@ import { View, StyleSheet, type ViewStyle, type StyleProp } from 'react-native';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
 import { layout } from '@/src/theme/layout';
+import { Tooltip } from './Tooltip';
 
 export type TableRowVariant = 'default' | 'header' | 'total';
 
@@ -23,6 +24,10 @@ export interface TableRowProps {
 	testID?: string;
 }
 
+const HEADER_TEXT_MAX_LINES = 2;
+const CELL_TEXT_MAX_LINES = 1;
+const TRUNCATION_TOOLTIP_MIN_LENGTH = 24;
+
 export function TableRow({
 	columns,
 	variant = 'default',
@@ -39,6 +44,35 @@ export function TableRow({
 	const textVariant = isHeader ? 'caption' : 'body';
 	const weight = isHeader ? 'semibold' : isTotal ? 'bold' : undefined;
 	const color = textColor ?? (isHeader ? c.onSurfaceVariant : c.onSurface);
+	const numberOfLines = isHeader ? HEADER_TEXT_MAX_LINES : CELL_TEXT_MAX_LINES;
+
+	const renderCellText = (value: string, align: TableColumn['align'], tooltipTestId?: string) => {
+		const textNode = (
+			<ThemedText
+				variant={textVariant}
+				weight={weight}
+				color={color}
+				align={align}
+				numberOfLines={numberOfLines}
+				accessibilityLabel={value}
+			>
+				{value}
+			</ThemedText>
+		);
+
+		if (value.length < TRUNCATION_TOOLTIP_MIN_LENGTH) {
+			return textNode;
+		}
+
+		return (
+			<Tooltip
+				trigger={textNode}
+				triggerLabel={value}
+				content={value}
+				testID={tooltipTestId}
+			/>
+		);
+	};
 
 	return (
 		<View
@@ -60,29 +94,19 @@ export function TableRow({
 					key={`${col.label}-${idx}`}
 					style={col.width ? { width: col.width } : { flex: col.flex ?? 1 }}
 				>
-					{typeof (isHeader ? col.label : col.value) === 'string' ? (
-						<ThemedText
-							variant={textVariant}
-							weight={weight}
-							color={color}
-							align={col.align}
-							numberOfLines={1}
-						>
-							{(isHeader ? col.label : (col.value as string)) ?? ''}
-						</ThemedText>
-					) : isHeader ? (
-						<ThemedText
-							variant={textVariant}
-							weight={weight}
-							color={color}
-							align={col.align}
-							numberOfLines={1}
-						>
-							{col.label}
-						</ThemedText>
-					) : (
-						(col.value ?? null)
-					)}
+					{typeof (isHeader ? col.label : col.value) === 'string'
+						? renderCellText(
+								(isHeader ? col.label : (col.value as string)) ?? '',
+								col.align,
+								testID ? `${testID}-tooltip-${idx}` : undefined,
+							)
+						: isHeader
+							? renderCellText(
+									col.label,
+									col.align,
+									testID ? `${testID}-tooltip-${idx}` : undefined,
+								)
+							: (col.value ?? null)}
 				</View>
 			))}
 		</View>

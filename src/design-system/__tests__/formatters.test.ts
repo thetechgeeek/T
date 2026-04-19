@@ -15,6 +15,8 @@ describe('design-system locale formatters', () => {
 		expect(resolveIntlLocale('en')).toBe('en-US');
 		expect(resolveIntlLocale('pseudo')).toBe('en-US');
 		expect(resolveIntlLocale('ar')).toBe('ar-SA');
+		expect(resolveIntlLocale('de')).toBe('de-DE');
+		expect(resolveIntlLocale('ja')).toBe('ja-JP');
 		expect(resolveIntlLocale('de-DE')).toBe('de-DE');
 	});
 
@@ -65,6 +67,8 @@ describe('design-system locale formatters', () => {
 	it('builds diagnostics for the design-system dashboard', () => {
 		const english = buildDesignSystemLocaleDiagnostics('en');
 		const arabic = buildDesignSystemLocaleDiagnostics('ar');
+		const german = buildDesignSystemLocaleDiagnostics('de');
+		const japanese = buildDesignSystemLocaleDiagnostics('ja');
 
 		expect(english.dashboardLocale).toBe('en');
 		expect(english.intlLocale).toBe('en-US');
@@ -72,5 +76,7 @@ describe('design-system locale formatters', () => {
 		expect(arabic.dashboardLocale).toBe('ar');
 		expect(arabic.intlLocale).toBe('ar-SA');
 		expect(arabic.number).not.toBe(english.number);
+		expect(german.intlLocale).toBe('de-DE');
+		expect(japanese.intlLocale).toBe('ja-JP');
 	});
 });

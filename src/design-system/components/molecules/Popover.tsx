@@ -177,6 +177,9 @@ export const Popover = forwardRef<React.ElementRef<typeof View>, PopoverProps>(
 					<Modal transparent visible onRequestClose={closePopover}>
 						<Pressable
 							testID={testID ? `${testID}-backdrop` : undefined}
+							accessible={false}
+							accessibilityElementsHidden
+							importantForAccessibility="no-hide-descendants"
 							style={styles.backdrop}
 							onPress={closePopover}
 						/>

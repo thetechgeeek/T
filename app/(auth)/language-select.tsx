@@ -10,6 +10,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { syncI18nRtlPreference } from '@/src/i18n/rtl';
 import { Screen } from '@/src/design-system/components/atoms/Screen';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { withOpacity } from '@/src/utils/color';
@@ -43,6 +44,7 @@ export default function LanguageSelectScreen() {
 	const handleSelect = async (lang: Lang) => {
 		setSelected(lang);
 		await i18n.changeLanguage(lang);
+		syncI18nRtlPreference(lang);
 		await AsyncStorage.setItem(LANG_KEY, lang);
 	};
 

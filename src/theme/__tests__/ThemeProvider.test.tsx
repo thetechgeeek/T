@@ -47,6 +47,7 @@ describe('ThemeProvider', () => {
 		jest.spyOn(PixelRatio, 'getFontScale').mockReturnValue(1);
 		jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(false);
 		jest.spyOn(AccessibilityInfo, 'isBoldTextEnabled').mockResolvedValue(false);
+		jest.spyOn(AccessibilityInfo, 'isHighTextContrastEnabled').mockResolvedValue(false);
 		jest.spyOn(AccessibilityInfo, 'addEventListener').mockImplementation((() => ({
 			remove: jest.fn(),
 		})) as unknown as typeof AccessibilityInfo.addEventListener);
@@ -189,6 +190,7 @@ describe('ThemeProvider', () => {
 		} as ReturnType<typeof Dimensions.get>);
 		jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
 		jest.spyOn(AccessibilityInfo, 'isBoldTextEnabled').mockResolvedValue(true);
+		jest.spyOn(AccessibilityInfo, 'isHighTextContrastEnabled').mockResolvedValue(true);
 		(I18nManager as typeof I18nManager).isRTL = true;
 
 		const { result } = renderHook(() => useTheme(), { wrapper: rootWrapper });
@@ -196,6 +198,7 @@ describe('ThemeProvider', () => {
 		await waitFor(() => {
 			expect(result.current.runtime.reduceMotionEnabled).toBe(true);
 			expect(result.current.runtime.boldTextEnabled).toBe(true);
+			expect(result.current.runtime.highTextContrastEnabled).toBe(true);
 		});
 		expect(result.current.runtime.pixelRatio).toBe(3);
 		expect(result.current.runtime.fontScale).toBe(1.8);
@@ -245,6 +248,17 @@ describe('ThemeProvider', () => {
 		expect(result.current.runtime.runtimeRtl).toBe(true);
 		expect(result.current.runtime.breakpoint).toBe('wide');
 		expect(result.current.runtime.columns).toBe(3);
+	});
+
+	it('switches the active theme into high contrast when Android high text contrast is enabled', async () => {
+		jest.spyOn(AccessibilityInfo, 'isHighTextContrastEnabled').mockResolvedValue(true);
+
+		const { result } = renderHook(() => useTheme(), { wrapper: rootWrapper });
+
+		await waitFor(() => {
+			expect(result.current.runtime.highTextContrastEnabled).toBe(true);
+			expect(result.current.theme.meta.contrastMode).toBe('high');
+		});
 	});
 
 	it('updates runtime layout metrics when dimensions change', () => {

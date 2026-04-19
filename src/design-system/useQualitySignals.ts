@@ -11,6 +11,7 @@ export interface DesignSystemQualitySignals {
 	fontScale: number;
 	reduceMotionEnabled: boolean;
 	boldTextEnabled: boolean;
+	highTextContrastEnabled: boolean;
 }
 
 export function useDesignSystemQualitySignals(
