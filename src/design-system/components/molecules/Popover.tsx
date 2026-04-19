@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { triggerDesignSystemHaptic, type DesignSystemHaptic } from '@/src/design-system/haptics';
 import {
@@ -25,7 +26,6 @@ const DEFAULT_ANCHOR_FRAME: AnchorFrame = {
 	width: 0,
 	height: 0,
 };
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- popovers need a minimum readable width for short forms and action groups.
 const POPOVER_MIN_WIDTH = 220;
 
 export interface PopoverProps {
@@ -41,6 +41,7 @@ export interface PopoverProps {
 	placement?: 'top' | 'bottom';
 	hapticFeedback?: DesignSystemHaptic;
 	maxWidth?: number;
+	density?: OverlayDensity;
 	style?: StyleProp<ViewStyle>;
 	testID?: string;
 }
@@ -60,6 +61,7 @@ export const Popover = forwardRef<React.ElementRef<typeof View>, PopoverProps>(
 			placement = 'bottom',
 			hapticFeedback = 'none',
 			maxWidth = 320,
+			density = 'default',
 			style,
 			testID,
 		},
@@ -69,6 +71,7 @@ export const Popover = forwardRef<React.ElementRef<typeof View>, PopoverProps>(
 		const c = theme.colors;
 		const triggerRef = useRef<React.ElementRef<typeof Pressable> | null>(null);
 		const contentRef = useRef<React.ElementRef<typeof View> | null>(null);
+		const wasOpenRef = useRef(false);
 		const [anchorFrame, setAnchorFrame] = useState<AnchorFrame>(DEFAULT_ANCHOR_FRAME);
 		const [isFocused, setIsFocused] = useState(false);
 		const [isOpen, setIsOpen] = useControllableState({
@@ -84,6 +87,7 @@ export const Popover = forwardRef<React.ElementRef<typeof View>, PopoverProps>(
 								: 'dismiss',
 				}),
 		});
+		const densityStyles = resolveOverlayDensityStyles(theme, density);
 
 		useEffect(() => {
 			if (!isOpen) {
@@ -93,6 +97,16 @@ export const Popover = forwardRef<React.ElementRef<typeof View>, PopoverProps>(
 			void Promise.resolve().then(() => {
 				setAccessibilityFocus(contentRef);
 			});
+		}, [isOpen]);
+
+		useEffect(() => {
+			if (wasOpenRef.current && !isOpen) {
+				void Promise.resolve().then(() => {
+					setAccessibilityFocus(triggerRef);
+				});
+			}
+
+			wasOpenRef.current = isOpen;
 		}, [isOpen]);
 
 		const popoverPosition = useMemo(() => {
@@ -177,6 +191,8 @@ export const Popover = forwardRef<React.ElementRef<typeof View>, PopoverProps>(
 									backgroundColor: c.surface,
 									borderColor: c.borderStrong,
 									borderRadius: theme.borderRadius.lg,
+									paddingHorizontal: densityStyles.paddingHorizontal,
+									paddingVertical: densityStyles.paddingVertical,
 								},
 								theme.elevation.overlay,
 							]}
@@ -188,7 +204,11 @@ export const Popover = forwardRef<React.ElementRef<typeof View>, PopoverProps>(
 									variant="bodyStrong"
 									style={[
 										styles.title,
-										{ color: c.onSurface, fontSize: theme.typography.sizes.md },
+										{
+											color: c.onSurface,
+											fontSize: theme.typography.sizes.md,
+											marginBottom: densityStyles.headerGap,
+										},
 									]}
 								>
 									{title}
@@ -202,6 +222,7 @@ export const Popover = forwardRef<React.ElementRef<typeof View>, PopoverProps>(
 										{
 											color: c.onSurfaceVariant,
 											fontSize: theme.typography.sizes.sm,
+											marginBottom: densityStyles.sectionGap,
 										},
 									]}
 								>
@@ -226,15 +247,9 @@ const styles = StyleSheet.create({
 	surface: {
 		position: 'absolute',
 		minWidth: POPOVER_MIN_WIDTH,
-		paddingHorizontal: SPACING_PX.md,
-		paddingVertical: SPACING_PX.md,
 		borderWidth: 1,
 		zIndex: Z_INDEX.overlay,
 	},
-	title: {
-		marginBottom: SPACING_PX.xxs,
-	},
-	description: {
-		marginBottom: SPACING_PX.sm,
-	},
+	title: {},
+	description: {},
 });

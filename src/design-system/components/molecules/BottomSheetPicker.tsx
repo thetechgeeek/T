@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -23,7 +24,6 @@ import { FONT_SIZE } from '@/src/theme/typographyMetrics';
 import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 
 const SNAP_POINT_OPTIONS = ['25%', '50%', '90%'] as const;
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- drag dismissal should require roughly one quarter of the sheet height.
 const DISMISS_DISTANCE_RATIO = 0.25;
 
 export type BottomSheetSnapPoint = (typeof SNAP_POINT_OPTIONS)[number];
@@ -67,6 +67,7 @@ export interface BottomSheetPickerProps {
 	dragToDismiss?: boolean;
 	keyboardAware?: boolean;
 	dismissVelocityThreshold?: number;
+	density?: OverlayDensity;
 	style?: StyleProp<ViewStyle>;
 	testID?: string;
 }
@@ -107,6 +108,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 			dragToDismiss = true,
 			keyboardAware = true,
 			dismissVelocityThreshold = 800,
+			density = 'default',
 			style,
 			testID,
 		},
@@ -114,6 +116,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 	) => {
 		const { theme } = useTheme();
 		const c = theme.colors;
+		const densityStyles = resolveOverlayDensityStyles(theme, density);
 		const [search, setSearch] = useState('');
 		const [keyboardVisible, setKeyboardVisible] = useState(false);
 		const [focusedControl, setFocusedControl] = useState<string | null>(null);
@@ -287,6 +290,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 									borderTopLeftRadius: theme.borderRadius.xl,
 									borderTopRightRadius: theme.borderRadius.xl,
 									height: activeSnapPoint,
+									paddingBottom: densityStyles.paddingVertical,
 								},
 								theme.elevation.modal,
 								animatedSheetStyle,
@@ -314,6 +318,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 										fontSize: theme.typography.sizes.lg,
 										color: c.onSurface,
 										flex: 1,
+										marginEnd: densityStyles.headerGap,
 									}}
 								>
 									{title}
@@ -360,6 +365,9 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 										borderRadius: theme.borderRadius.full,
 										color: c.onSurface,
 										fontSize: theme.typography.sizes.md,
+										marginHorizontal: densityStyles.paddingHorizontal,
+										marginBottom: densityStyles.headerGap,
+										paddingHorizontal: densityStyles.paddingHorizontal,
 									},
 								]}
 							/>
@@ -386,8 +394,8 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 											variant="captionBold"
 											style={{
 												color: c.onSurfaceVariant,
-												paddingHorizontal: SPACING_PX.lg,
-												paddingTop: SPACING_PX.sm,
+												paddingHorizontal: densityStyles.paddingHorizontal,
+												paddingTop: densityStyles.headerGap,
 											}}
 										>
 											{section.title}
@@ -401,6 +409,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 											multiple,
 											c,
 											theme,
+											densityStyles,
 											focusedControl,
 											setFocusedControl,
 											onSingleSelect: handleSingleSelect,
@@ -434,6 +443,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 											multiple,
 											c,
 											theme,
+											densityStyles,
 											focusedControl,
 											setFocusedControl,
 											onSingleSelect: handleSingleSelect,
@@ -465,6 +475,8 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 										styles.addNew,
 										{
 											borderTopColor: c.border,
+											paddingHorizontal: densityStyles.paddingHorizontal,
+											paddingVertical: densityStyles.paddingVertical,
 										},
 										focusedControl === 'add'
 											? buildFocusRingStyle({
@@ -500,6 +512,8 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 										styles.addNew,
 										{
 											borderTopColor: c.border,
+											paddingHorizontal: densityStyles.paddingHorizontal,
+											paddingVertical: densityStyles.paddingVertical,
 										},
 									]}
 								>
@@ -532,6 +546,7 @@ function renderPickerOption({
 	multiple,
 	c,
 	theme,
+	densityStyles,
 	focusedControl,
 	setFocusedControl,
 	onSingleSelect,
@@ -543,6 +558,7 @@ function renderPickerOption({
 	multiple: boolean;
 	c: ReturnType<typeof useTheme>['theme']['colors'];
 	theme: ReturnType<typeof useTheme>['theme'];
+	densityStyles: ReturnType<typeof resolveOverlayDensityStyles>;
 	focusedControl: string | null;
 	setFocusedControl: (value: string | null) => void;
 	onSingleSelect: (option: PickerOption) => void;
@@ -563,7 +579,11 @@ function renderPickerOption({
 			accessibilityState={{ selected: isSelected }}
 			style={[
 				styles.option,
-				{ borderBottomColor: c.separator },
+				{
+					borderBottomColor: c.separator,
+					paddingHorizontal: densityStyles.paddingHorizontal,
+					paddingVertical: densityStyles.actionGap,
+				},
 				focusedControl === `option-${option.value}`
 					? buildFocusRingStyle({
 							color: c.primary,

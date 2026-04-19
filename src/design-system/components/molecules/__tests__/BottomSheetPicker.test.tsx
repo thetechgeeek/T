@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Modal } from 'react-native';
 import { render, fireEvent, act } from '@testing-library/react-native';
 import { BottomSheetPicker } from '../BottomSheetPicker';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
@@ -59,6 +59,47 @@ describe('BottomSheetPicker', () => {
 		expect(getByText('Select Fruit')).toBeTruthy();
 	});
 
+	it('supports compact and relaxed density spacing', () => {
+		const { getByPlaceholderText, rerender } = renderWithTheme(
+			<BottomSheetPicker
+				visible
+				title="Select Fruit"
+				options={OPTIONS}
+				density="compact"
+				onSelect={jest.fn()}
+				onClose={jest.fn()}
+			/>,
+		);
+
+		const compactStyle = flattenStyle(getByPlaceholderText('Search...').props.style) as {
+			marginHorizontal: number;
+			paddingHorizontal: number;
+		};
+
+		rerender(
+			<ThemeProvider>
+				<BottomSheetPicker
+					visible
+					title="Select Fruit"
+					options={OPTIONS}
+					density="relaxed"
+					onSelect={jest.fn()}
+					onClose={jest.fn()}
+				/>
+			</ThemeProvider>,
+		);
+
+		const relaxedStyle = flattenStyle(getByPlaceholderText('Search...').props.style) as {
+			marginHorizontal: number;
+			paddingHorizontal: number;
+		};
+
+		expect(compactStyle.marginHorizontal).toBeGreaterThan(0);
+		expect(compactStyle.paddingHorizontal).toBeGreaterThan(0);
+		expect(compactStyle.marginHorizontal).toBeLessThan(relaxedStyle.marginHorizontal);
+		expect(compactStyle.paddingHorizontal).toBeLessThan(relaxedStyle.paddingHorizontal);
+	});
+
 	it('calls onSelect with correct value when option pressed', () => {
 		const onSelect = jest.fn();
 		const { getByText } = renderWithTheme(
@@ -86,6 +127,22 @@ describe('BottomSheetPicker', () => {
 			/>,
 		);
 		fireEvent.press(getByTestId('bottom-sheet-close'));
+		expect(onClose).toHaveBeenCalledTimes(1);
+	});
+
+	it('dismisses through the native back or escape request-close path', () => {
+		const onClose = jest.fn();
+		const { UNSAFE_getByType } = renderWithTheme(
+			<BottomSheetPicker
+				visible
+				title="Select Fruit"
+				options={OPTIONS}
+				onSelect={jest.fn()}
+				onClose={onClose}
+			/>,
+		);
+
+		UNSAFE_getByType(Modal).props.onRequestClose();
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 

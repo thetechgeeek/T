@@ -829,22 +829,22 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Overlays create depth through surface contrast, spacing, and focus management before relying on shadow
-- [ ] Dialogs, drawers, and sheets define one dominant action and quiet secondary actions
-- [ ] Overlay layouts support relaxed and dense content compositions without losing hierarchy
+- [x] Overlays create depth through surface contrast, spacing, and focus management before relying on shadow
+- [x] Dialogs, drawers, and sheets define one dominant action and quiet secondary actions
+- [x] Overlay layouts support relaxed and dense content compositions without losing hierarchy
 - [x] Modal / Dialog
     - [x] Focus trap / accessibility focus
-    - [ ] Dismiss on Escape / back gesture
+    - [x] Dismiss on Escape / back gesture
     - [x] Focus restore to trigger on close
     - [x] Small / Medium / Large size variants
     - [x] Confirmation dialog variant (with Danger button)
-    - [ ] Stacking limited to 2 deep
+    - [x] Stacking limited to 2 deep
 - [x] Tooltip
     - [x] Max-width enforced
     - [x] Never contains interactive elements
 - [x] Popover
     - [x] With interactive content (forms, links)
-    - [ ] Dismisses on Escape / back + outside tap
+    - [x] Dismisses on Escape / back + outside tap
     - [x] Focus moves inside on open
 - [x] Confirmation Dialog
     - [x] Standard (cancel + confirm)
@@ -1432,7 +1432,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [x] Minimum touch target 44×44px on all interactive elements
+- [ ] Minimum touch target 44×44px on all interactive elements
 
 #### Web
 
@@ -1442,14 +1442,14 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [x] `hitSlop` on small interactive elements to expand touch target
+- [ ] `hitSlop` on small interactive elements to expand touch target
 - [x] Gesture-driven interactions (`react-native-gesture-handler`)
     - [x] Swipe to delete / archive
     - [x] Swipe to navigate back (iOS)
     - [x] Pinch to zoom
     - [x] Long press for context actions
 - [x] Haptic feedback on key interactions (toggle, delete confirm, success)
-- [x] `activeOpacity` / `android_ripple` visual press feedback on all Pressables
+- [ ] `activeOpacity` / `android_ripple` visual press feedback on all Pressables
 
 ### Typography & Spacing
 
@@ -1481,7 +1481,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [x] No content loss on orientation change
+- [ ] No content loss on orientation change
 
 #### Web
 

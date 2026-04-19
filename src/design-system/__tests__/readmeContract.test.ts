@@ -31,6 +31,9 @@ describe('design-system README contract', () => {
 			'The qualitative chart palette must remain distinguishable under deuteranopia and protanopia simulation',
 		);
 		expect(readme).toContain(
+			'Overlay depth should read through surface contrast, spacing, and focus management before any shadow is asked to do the work alone.',
+		);
+		expect(readme).toContain(
 			'Large text, pseudo-localization, RTL, reduced motion, and bold-text behavior are part of the component contract',
 		);
 		expect(readme).toContain('npm run test:design-system:ios');

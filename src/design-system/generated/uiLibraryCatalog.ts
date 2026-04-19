@@ -5838,7 +5838,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-overlays-create-depth-through-surface-contrast-spacing-and-focus-managem',
 		title: 'Overlays create depth through surface contrast, spacing, and focus management before relying on shadow',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -5848,7 +5848,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-dialogs-drawers-and-sheets-define-one-dominant-action-and-quiet-secondar',
 		title: 'Dialogs, drawers, and sheets define one dominant action and quiet secondary actions',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -5858,7 +5858,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-overlay-layouts-support-relaxed-and-dense-content-compositions-without-l',
 		title: 'Overlay layouts support relaxed and dense content compositions without losing hierarchy',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -5888,7 +5888,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-modal-dialog-dismiss-on-',
 		title: 'Dismiss on Escape / back gesture',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -5928,7 +5928,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-modal-dialog-stacking-li',
 		title: 'Stacking limited to 2 deep',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -5988,7 +5988,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '3-components-reusable-ui-blocks-overlays-common-3-components-reusable-ui-blocks-overlays-common-popover-dismisses-on-esc',
 		title: 'Dismisses on Escape / back + outside tap',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '3. Components — Reusable UI Blocks',
 		subsection: 'Overlays',
@@ -9088,7 +9088,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-common-minimum-touch-target-44-44px-on-all-interactive-elements',
 		title: 'Minimum touch target 44×44px on all interactive elements',
-		completed: true,
+		completed: false,
 		platform: 'Common',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9128,7 +9128,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-hitslop-on-small-interactive-elements-to-expand-touch-tar',
 		title: '`hitSlop` on small interactive elements to expand touch target',
-		completed: true,
+		completed: false,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9198,7 +9198,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-activeopacity-android-ripple-visual-press-feedback-on-all',
 		title: '`activeOpacity` / `android_ripple` visual press feedback on all Pressables',
-		completed: true,
+		completed: false,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9338,7 +9338,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-orientation-common-no-content-loss-on-orientation-change',
 		title: 'No content loss on orientation change',
-		completed: true,
+		completed: false,
 		platform: 'Common',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Orientation',
@@ -11789,8 +11789,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 
 export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 	total: 1175,
-	completed: 613,
-	open: 562,
+	completed: 615,
+	open: 560,
 	common: 638,
 	web: 280,
 	mobile: 257,
@@ -11826,11 +11826,11 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		{
 			name: '3. Components — Reusable UI Blocks',
 			count: 402,
-			completedCount: 277,
-			openCount: 125,
+			completedCount: 283,
+			openCount: 119,
 			commonMobileCount: 283,
-			commonMobileCompletedCount: 277,
-			commonMobileOpenCount: 6,
+			commonMobileCompletedCount: 283,
+			commonMobileOpenCount: 0,
 		},
 		{
 			name: '4. Patterns — Reusable Compositions',
@@ -11871,11 +11871,11 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		{
 			name: '8. Responsive & Adaptive Design',
 			count: 51,
-			completedCount: 24,
-			openCount: 27,
+			completedCount: 20,
+			openCount: 31,
 			commonMobileCount: 24,
-			commonMobileCompletedCount: 24,
-			commonMobileOpenCount: 0,
+			commonMobileCompletedCount: 20,
+			commonMobileOpenCount: 4,
 		},
 		{
 			name: '9. Motion & Animation System',

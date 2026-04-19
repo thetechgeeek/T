@@ -769,7 +769,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		name: 'BottomSheetPicker',
 		filePath: 'src/design-system/components/molecules/BottomSheetPicker.tsx',
 		summary:
-			'Searchable selection sheet with controlled or uncontrolled open/value state, snap-point sizing, drag-to-dismiss, keyboard-aware height promotion, selection announcements, and forwarded sheet ref.',
+			'Searchable selection sheet with controlled or uncontrolled open/value state, density-aware spacing, snap-point sizing, drag-to-dismiss, keyboard-aware height promotion, selection announcements, and forwarded sheet ref.',
 		exampleStories: [
 			'single-select picker',
 			'searchable options',
@@ -777,7 +777,14 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			'drag-dismissable 90% sheet',
 		],
 		variants: ['default', 'searchable', 'allow add new', 'drag dismiss'],
-		sizes: ['25% snap point', '50% snap point', '90% snap point'],
+		sizes: [
+			'compact density',
+			'default density',
+			'relaxed density',
+			'25% snap point',
+			'50% snap point',
+			'90% snap point',
+		],
 		states: ['closed', 'open', 'search filtered', 'selected option', 'keyboard raised'],
 		compositionExample: 'Entity selector used from a form field or command button.',
 		usage: {
@@ -805,9 +812,16 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 				'Allows the handle area to dismiss with downward drag velocity.',
 				'true',
 			),
+			prop(
+				'density',
+				"'compact' | 'default' | 'relaxed'",
+				'Adjusts overlay spacing for dense or showcase compositions.',
+				"'default'",
+			),
 		],
 		doList: [
 			'Use for option sets that benefit from search or add-new affordances.',
+			'Keep one dominant confirm action and treat add-new or dismiss affordances as secondary.',
 			'Close the sheet immediately after selection unless workflow requires confirmation.',
 		],
 		dontList: [
@@ -886,14 +900,21 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		name: 'ConfirmationModal',
 		filePath: 'src/design-system/components/molecules/ConfirmationModal.tsx',
 		summary:
-			'Decision modal with controlled or uncontrolled open state, size variants, focus handoff and restore, optional hard confirmation field, screen-reader announcement, and confirm/cancel accessibility actions.',
+			'Decision modal with controlled or uncontrolled open state, density-aware spacing, size variants, two-level stack guard, focus handoff and restore, optional hard confirmation field, screen-reader announcement, and confirm/cancel accessibility actions.',
 		exampleStories: [
 			'default confirm dialog',
 			'destructive delete dialog',
 			'hard confirmation publish dialog',
 		],
 		variants: ['default', 'destructive'],
-		sizes: ['small', 'medium', 'large'],
+		sizes: [
+			'compact density',
+			'default density',
+			'relaxed density',
+			'small',
+			'medium',
+			'large',
+		],
 		states: ['closed', 'open', 'focused cancel', 'focused confirm', 'hard confirm gated'],
 		compositionExample: 'Delete, archive, or permission-sensitive confirmation checkpoint.',
 		usage: {
@@ -913,6 +934,12 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 				'Affects confirm action emphasis.',
 				'default',
 			),
+			prop(
+				'density',
+				"'compact' | 'default' | 'relaxed'",
+				'Adjusts dialog spacing without changing the action hierarchy.',
+				"'default'",
+			),
 			prop('confirmLabel', 'string', 'Visible confirm action label.', 'Confirm'),
 			prop(
 				'hardConfirmValue',
@@ -922,6 +949,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		],
 		doList: [
 			'Place the safe cancel path first.',
+			'Keep confirm as the single dominant action and leave cancel visually quieter.',
 			'Use destructive tone only when the action cannot be easily undone.',
 		],
 		dontList: [
@@ -935,6 +963,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		platformNotes: [
 			'Android back maps to cancel via onRequestClose.',
 			'VoiceOver and TalkBack stay trapped inside the modal through accessibilityViewIsModal, and focus can be restored to the trigger on close.',
+			'Modal stacking is intentionally limited to two levels so confirmation flows do not turn into depth traps.',
 		],
 	}),
 	DatePickerField: doc({
@@ -1439,10 +1468,10 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		name: 'Popover',
 		filePath: 'src/design-system/components/molecules/Popover.tsx',
 		summary:
-			'Anchored overlay with controlled or uncontrolled open state, press or long-press trigger modes, optional haptic feedback, focus handoff, and interactive content support.',
+			'Anchored overlay with controlled or uncontrolled open state, density-aware spacing, press or long-press trigger modes, optional haptic feedback, focus handoff and restore, and interactive content support.',
 		exampleStories: ['quick-edit popover', 'anchored action menu', 'long-press context menu'],
 		variants: ['press trigger', 'long-press trigger', 'with title and description'],
-		sizes: ['default max-width 320'],
+		sizes: ['compact density', 'default density', 'relaxed density', 'default max-width 320'],
 		states: ['closed', 'open', 'focus moved inside'],
 		compositionExample:
 			'Anchored secondary editing or action surface launched from a nearby card, chip, or toolbar trigger.',
@@ -1470,6 +1499,12 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 				'Optional haptic feedback when the popover opens.',
 				"'none'",
 			),
+			prop(
+				'density',
+				"'compact' | 'default' | 'relaxed'",
+				'Adjusts overlay spacing for dense menus or roomier helper panels.',
+				"'default'",
+			),
 			prop('maxWidth', 'number', 'Maximum anchored surface width.', '320'),
 			COMMON_TEST_ID_PROP,
 		],
@@ -1484,6 +1519,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		accessibilityNotes: [
 			'Moves accessibility focus into the anchored surface when opened.',
 			'Outside tap and native back both dismiss the popover.',
+			'Focus returns to the trigger when the popover closes.',
 		],
 		platformNotes: [
 			'Anchor position is derived from trigger layout measurements for mobile-safe placement.',
@@ -1997,10 +2033,10 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		name: 'ActionMenuSheet',
 		filePath: 'src/design-system/components/molecules/ActionMenuSheet.tsx',
 		summary:
-			'Bottom-sheet secondary action menu for mobile-safe destructive and supporting actions.',
+			'Bottom-sheet secondary action menu for mobile-safe destructive and supporting actions with density-aware spacing and a quiet cancel path.',
 		exampleStories: ['secondary action sheet', 'destructive menu item'],
 		variants: ['default', 'destructive action'],
-		sizes: ['default bottom sheet'],
+		sizes: ['compact density', 'default density', 'relaxed density', 'default bottom sheet'],
 		states: ['closed', 'open', 'disabled action'],
 		compositionExample: 'Overflow action menu from a row toolbar or split button.',
 		usage: {
@@ -2015,9 +2051,18 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('open', 'boolean', 'Controlled open state.'),
 			prop('defaultOpen', 'boolean', 'Uncontrolled open state.', 'false'),
 			prop('onOpenChange', '(open: boolean) => void', 'Canonical open-state callback.'),
+			prop(
+				'density',
+				"'compact' | 'default' | 'relaxed'",
+				'Adjusts sheet spacing for dense or showcase action menus.',
+				"'default'",
+			),
 			COMMON_TEST_ID_PROP,
 		],
-		doList: ['Group secondary actions here instead of adding more high-emphasis buttons.'],
+		doList: [
+			'Group secondary actions here instead of adding more high-emphasis buttons.',
+			'Keep the primary commit action outside the sheet and reserve the cancel affordance for a quiet escape path.',
+		],
 		dontList: ['Do not hide primary save/confirm actions inside the sheet.'],
 		accessibilityNotes: [
 			'Menu actions remain exposed as standard buttons with stable labels.',
@@ -2025,6 +2070,7 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 		],
 		platformNotes: [
 			'Presentation matches mobile bottom-sheet expectations on iOS and Android.',
+			'Native back dismissal flows through onRequestClose on both platforms.',
 			'Destructive action styling stays semantic across themes.',
 		],
 	}),

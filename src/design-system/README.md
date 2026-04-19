@@ -188,6 +188,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 ### Elevation
 
 - Elevation is limited to five semantic levels: flat, raised, overlay, modal, tooltip.
+- Overlay depth should read through surface contrast, spacing, and focus management before any shadow is asked to do the work alone.
 - Ambient shadow recipes are documented by blur, y-offset, opacity, and Android elevation so the system avoids harsh drop shadows.
 - Low-contrast surfaces should combine soft border and ambient shadow, not rely on one alone.
 - Elevated surfaces must remain distinguishable in dark mode, high contrast, and tinted themes.

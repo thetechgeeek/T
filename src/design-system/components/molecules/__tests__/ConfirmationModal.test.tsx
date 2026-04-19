@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { Modal } from 'react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { ConfirmationModal } from '../ConfirmationModal';
+import { resetModalStackForTests } from '@/src/design-system/modalStack';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { buildTheme } from '@/src/theme/colors';
 
@@ -25,6 +27,10 @@ describe('ConfirmationModal', () => {
 		onConfirm: jest.fn(),
 		onCancel: jest.fn(),
 	};
+
+	beforeEach(() => {
+		resetModalStackForTests();
+	});
 
 	it('renders title and message when visible', () => {
 		const { getByText } = renderWithTheme(<ConfirmationModal {...defaultProps} />);
@@ -106,6 +112,65 @@ describe('ConfirmationModal', () => {
 		expect(flattenStyle(getByTestId('modal-overlay-card').props.style)).toEqual(
 			expect.objectContaining({ maxWidth: 640 }),
 		);
+	});
+
+	it('dismisses through the native back or escape request-close path', () => {
+		const onCancel = jest.fn();
+		const { UNSAFE_getByType } = renderWithTheme(
+			<ConfirmationModal {...defaultProps} onCancel={onCancel} />,
+		);
+
+		UNSAFE_getByType(Modal).props.onRequestClose();
+
+		expect(onCancel).toHaveBeenCalledTimes(1);
+	});
+
+	it('supports compact and relaxed density layouts', () => {
+		const { getByTestId, rerender } = renderWithTheme(
+			<ConfirmationModal {...defaultProps} density="compact" testID="modal-overlay" />,
+		);
+
+		const compactStyle = flattenStyle(getByTestId('modal-overlay-card').props.style) as {
+			paddingHorizontal: number;
+			paddingVertical: number;
+		};
+
+		rerender(
+			<ThemeProvider initialMode="light" persist={false}>
+				<ConfirmationModal {...defaultProps} density="relaxed" testID="modal-overlay" />
+			</ThemeProvider>,
+		);
+
+		const relaxedStyle = flattenStyle(getByTestId('modal-overlay-card').props.style) as {
+			paddingHorizontal: number;
+			paddingVertical: number;
+		};
+
+		expect(compactStyle.paddingHorizontal).toBeGreaterThan(0);
+		expect(compactStyle.paddingVertical).toBeGreaterThan(0);
+		expect(compactStyle.paddingHorizontal).toBeLessThan(relaxedStyle.paddingHorizontal);
+		expect(compactStyle.paddingVertical).toBeLessThan(relaxedStyle.paddingVertical);
+	});
+
+	it('blocks a third modal from stacking above the supported depth', async () => {
+		const blockedCancel = jest.fn();
+		const { queryByText } = renderWithTheme(
+			<>
+				<ConfirmationModal {...defaultProps} title="First" message="One" />
+				<ConfirmationModal {...defaultProps} title="Second" message="Two" />
+				<ConfirmationModal
+					{...defaultProps}
+					title="Third"
+					message="Three"
+					onCancel={blockedCancel}
+				/>
+			</>,
+		);
+
+		expect(queryByText('First')).toBeTruthy();
+		expect(queryByText('Second')).toBeTruthy();
+		await waitFor(() => expect(queryByText('Third')).toBeNull());
+		expect(blockedCancel).toHaveBeenCalledTimes(1);
 	});
 
 	it('requires exact hard-confirmation text before enabling confirm', () => {

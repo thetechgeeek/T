@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Modal, Pressable, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { fireEvent, render } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { Popover } from '../Popover';
@@ -56,7 +56,34 @@ describe('Popover', () => {
 			expect.objectContaining({ maxWidth: 280 }),
 		);
 
-		fireEvent.press(UNSAFE_getAllByType('Pressable' as any)[1]);
+		fireEvent.press(UNSAFE_getAllByType(Pressable)[1]);
+		expect(queryByText('Quick edit')).toBeNull();
+	});
+
+	it('dismisses through the native back or escape request-close path and supports relaxed density', () => {
+		const { getByLabelText, getByTestId, queryByText, UNSAFE_getByType } = renderWithTheme(
+			<Popover
+				triggerLabel="Open popover"
+				title="Quick edit"
+				density="relaxed"
+				testID="popover-surface"
+				trigger={<View />}
+			>
+				<View />
+			</Popover>,
+		);
+
+		fireEvent.press(getByLabelText('Open popover'));
+		const relaxedStyle = flattenStyle(getByTestId('popover-surface').props.style) as {
+			paddingHorizontal: number;
+			paddingVertical: number;
+		};
+		expect(relaxedStyle.paddingHorizontal).toBeGreaterThan(0);
+		expect(relaxedStyle.paddingVertical).toBeGreaterThan(0);
+
+		act(() => {
+			UNSAFE_getByType(Modal).props.onRequestClose();
+		});
 		expect(queryByText('Quick edit')).toBeNull();
 	});
 

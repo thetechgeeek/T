@@ -1,5 +1,13 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Modal, View, StyleSheet, Pressable, type StyleProp, type ViewStyle } from 'react-native';
+import {
+	createModalStackId,
+	claimModalStackSlot,
+	getModalStackSnapshot,
+	releaseModalStackSlot,
+	subscribeModalStack,
+} from '@/src/design-system/modalStack';
+import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import {
 	announceForScreenReader,
@@ -39,6 +47,7 @@ export interface ConfirmationModalProps {
 	hardConfirmLabel?: string;
 	hardConfirmPlaceholder?: string;
 	hardConfirmHelperText?: string;
+	density?: OverlayDensity;
 	testID?: string;
 	style?: StyleProp<ViewStyle>;
 }
@@ -68,6 +77,7 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 			hardConfirmLabel = 'Type to confirm',
 			hardConfirmPlaceholder,
 			hardConfirmHelperText,
+			density = 'default',
 			testID,
 			style,
 		},
@@ -77,8 +87,13 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 		const c = theme.colors;
 		const cancelButtonRef = useRef<React.ElementRef<typeof Pressable> | null>(null);
 		const wasOpenRef = useRef(false);
+		const [stackId] = useState(() => createModalStackId('confirmation-modal'));
+		const stackRegisteredRef = useRef(false);
+		const stackBlockedRef = useRef(false);
+		const onCancelRef = useRef(onCancel);
 		const [focusedAction, setFocusedAction] = useState<'cancel' | 'confirm' | null>(null);
 		const [confirmationInput, setConfirmationInput] = useState('');
+		const activeModalStack = useSyncExternalStore(subscribeModalStack, getModalStackSnapshot);
 		const [isOpen, setIsOpen] = useControllableState({
 			value: open ?? visible,
 			defaultValue: defaultOpen || visible === true,
@@ -87,10 +102,31 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 					source: meta?.source === 'confirm' ? 'confirm' : 'cancel',
 				}),
 		});
+		const setIsOpenRef = useRef(setIsOpen);
 		const requiresHardConfirmation = Boolean(hardConfirmValue?.trim());
 		const expectedConfirmationValue = hardConfirmValue?.trim() ?? '';
 		const hardConfirmationMatches =
 			!requiresHardConfirmation || confirmationInput.trim() === expectedConfirmationValue;
+		const densityStyles = resolveOverlayDensityStyles(theme, density);
+		const stackAccepted = !isOpen || activeModalStack.includes(stackId);
+		const resetConfirmationInput = () => {
+			if (confirmationInput.length > 0) {
+				setConfirmationInput('');
+			}
+		};
+		const closeModal = (source: 'confirm' | 'cancel', callback?: () => void) => {
+			resetConfirmationInput();
+			setIsOpen(false, { source });
+			callback?.();
+		};
+
+		useEffect(() => {
+			onCancelRef.current = onCancel;
+		}, [onCancel]);
+
+		useEffect(() => {
+			setIsOpenRef.current = setIsOpen;
+		}, [setIsOpen]);
 
 		useEffect(() => {
 			if (!isOpen) {
@@ -99,7 +135,6 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 
 			void announceForScreenReader(`${title}. ${message}`);
 			void Promise.resolve().then(() => {
-				setConfirmationInput('');
 				setAccessibilityFocus(cancelButtonRef);
 			});
 		}, [isOpen, message, title]);
@@ -114,7 +149,35 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 			wasOpenRef.current = isOpen;
 		}, [isOpen, restoreFocusRef]);
 
-		if (!isOpen) {
+		useEffect(() => {
+			if (!isOpen) {
+				stackBlockedRef.current = false;
+				return;
+			}
+
+			if (stackBlockedRef.current || stackRegisteredRef.current) {
+				return;
+			}
+
+			const claim = claimModalStackSlot(stackId);
+			if (!claim.accepted) {
+				stackBlockedRef.current = true;
+				setIsOpenRef.current(false, { source: 'cancel' });
+				onCancelRef.current();
+				return;
+			}
+
+			stackRegisteredRef.current = true;
+
+			return () => {
+				if (stackRegisteredRef.current) {
+					releaseModalStackSlot(stackId);
+					stackRegisteredRef.current = false;
+				}
+			};
+		}, [isOpen, stackId]);
+
+		if (!isOpen || !stackAccepted) {
 			return null;
 		}
 
@@ -123,10 +186,7 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 				visible={isOpen}
 				transparent
 				animationType="fade"
-				onRequestClose={() => {
-					setIsOpen(false, { source: 'cancel' });
-					onCancel();
-				}}
+				onRequestClose={() => closeModal('cancel', onCancel)}
 				statusBarTranslucent
 			>
 				<View
@@ -141,13 +201,14 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 					])}
 					onAccessibilityAction={(event) => {
 						if (event.nativeEvent.actionName === 'confirm') {
-							onConfirm();
-							setIsOpen(false, { source: 'confirm' });
+							if (!hardConfirmationMatches) {
+								return;
+							}
+							closeModal('confirm', onConfirm);
 							return;
 						}
 						if (event.nativeEvent.actionName === 'cancel') {
-							onCancel();
-							setIsOpen(false, { source: 'cancel' });
+							closeModal('cancel', onCancel);
 						}
 					}}
 				>
@@ -160,6 +221,8 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 								backgroundColor: c.surface,
 								borderRadius: theme.borderRadius.lg,
 								maxWidth: MODAL_MAX_WIDTH[size],
+								paddingHorizontal: densityStyles.paddingHorizontal,
+								paddingVertical: densityStyles.paddingVertical,
 							},
 							style,
 						]}
@@ -168,7 +231,11 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 							variant="sectionTitle"
 							style={[
 								styles.title,
-								{ color: c.onSurface, fontSize: theme.typography.sizes.lg },
+								{
+									color: c.onSurface,
+									fontSize: theme.typography.sizes.lg,
+									marginBottom: densityStyles.headerGap,
+								},
 							]}
 						>
 							{title}
@@ -181,6 +248,7 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 									color: c.onSurfaceVariant,
 									fontSize: theme.typography.sizes.md,
 									lineHeight: theme.typography.variants.body.lineHeight,
+									marginBottom: densityStyles.sectionGap,
 								},
 							]}
 						>
@@ -200,16 +268,22 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 								autoCapitalize="none"
 								autoCorrect={false}
 								testID={testID ? `${testID}-hard-confirm` : undefined}
-								containerStyle={styles.hardConfirmField}
+								containerStyle={{
+									marginBottom: densityStyles.sectionGap,
+								}}
 							/>
 						) : null}
-						<View style={styles.actions}>
+						<View
+							style={[
+								styles.actions,
+								{
+									columnGap: densityStyles.actionGap,
+								},
+							]}
+						>
 							<Pressable
 								ref={cancelButtonRef}
-								onPress={() => {
-									setIsOpen(false, { source: 'cancel' });
-									onCancel();
-								}}
+								onPress={() => closeModal('cancel', onCancel)}
 								onFocus={() => setFocusedAction('cancel')}
 								onBlur={() => setFocusedAction(null)}
 								accessibilityRole="button"
@@ -244,8 +318,7 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 									if (!hardConfirmationMatches) {
 										return;
 									}
-									onConfirm();
-									setIsOpen(false, { source: 'confirm' });
+									closeModal('confirm', onConfirm);
 								}}
 								onFocus={() => setFocusedAction('confirm')}
 								onBlur={() => setFocusedAction(null)}
@@ -262,7 +335,6 @@ export const ConfirmationModal = forwardRef<React.ElementRef<typeof View>, Confi
 												: c.primary
 											: c.surfaceVariant,
 										borderRadius: theme.borderRadius.md,
-										marginStart: theme.spacing.sm,
 									},
 									hardConfirmationMatches && focusedAction === 'confirm'
 										? buildFocusRingStyle({
@@ -309,23 +381,18 @@ const styles = StyleSheet.create({
 	},
 	card: {
 		width: '100%',
-		padding: SPACING_PX.xl,
 	},
 	title: {
 		fontWeight: '700',
-		marginBottom: SPACING_PX.sm,
 	},
 	message: {
-		marginBottom: SPACING_PX.xl,
-	},
-	hardConfirmField: {
-		marginBottom: SPACING_PX.xl,
+		flexShrink: 1,
 	},
 	actions: {
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
 	},
 	button: {
+		flex: 1,
 		minHeight: TOUCH_TARGET_MIN_PX,
 		paddingHorizontal: SPACING_PX.lg,
 		alignItems: 'center',

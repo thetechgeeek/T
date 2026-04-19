@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { Modal, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
+import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
@@ -20,14 +21,29 @@ export interface ActionMenuSheetProps {
 	defaultOpen?: boolean;
 	onOpenChange?: (open: boolean, meta?: { source: 'selection' | 'dismiss' }) => void;
 	onSelect: (value: string) => void;
+	density?: OverlayDensity;
 	testID?: string;
 	style?: StyleProp<ViewStyle>;
 }
 
 export const ActionMenuSheet = forwardRef<View, ActionMenuSheetProps>(
-	({ title, actions, open, defaultOpen = false, onOpenChange, onSelect, testID, style }, ref) => {
+	(
+		{
+			title,
+			actions,
+			open,
+			defaultOpen = false,
+			onOpenChange,
+			onSelect,
+			density = 'default',
+			testID,
+			style,
+		},
+		ref,
+	) => {
 		const { theme } = useTheme();
 		const c = theme.colors;
+		const densityStyles = resolveOverlayDensityStyles(theme, density);
 		const [isOpen, setIsOpen] = useControllableState({
 			value: open,
 			defaultValue: defaultOpen,
@@ -60,21 +76,20 @@ export const ActionMenuSheet = forwardRef<View, ActionMenuSheetProps>(
 							position: 'absolute',
 							bottom: 0,
 							width: '100%',
-							padding: theme.spacing.lg,
+							paddingHorizontal: densityStyles.paddingHorizontal,
+							paddingVertical: densityStyles.paddingVertical,
 							backgroundColor: c.surface,
 							borderTopLeftRadius: theme.borderRadius.xl,
 							borderTopRightRadius: theme.borderRadius.xl,
+							gap: densityStyles.sectionGap,
 						},
 						style,
 					]}
 				>
-					<ThemedText
-						variant="sectionTitle"
-						style={{ color: c.onSurface, marginBottom: theme.spacing.sm }}
-					>
+					<ThemedText variant="sectionTitle" style={{ color: c.onSurface }}>
 						{title}
 					</ThemedText>
-					<View style={{ gap: theme.spacing.sm }}>
+					<View style={{ gap: densityStyles.actionGap }}>
 						{actions.map((action) => (
 							<Pressable
 								key={action.value}
@@ -90,7 +105,7 @@ export const ActionMenuSheet = forwardRef<View, ActionMenuSheetProps>(
 								accessibilityRole="button"
 								accessibilityLabel={action.label}
 								style={{
-									paddingVertical: theme.spacing.sm,
+									paddingVertical: densityStyles.actionGap,
 								}}
 							>
 								<ThemedText
@@ -106,7 +121,7 @@ export const ActionMenuSheet = forwardRef<View, ActionMenuSheetProps>(
 										variant="caption"
 										style={{
 											color: c.onSurfaceVariant,
-											marginTop: theme.spacing.xxs,
+											marginTop: densityStyles.headerGap,
 										}}
 									>
 										{action.description}
@@ -119,7 +134,7 @@ export const ActionMenuSheet = forwardRef<View, ActionMenuSheetProps>(
 						title="Cancel"
 						variant="ghost"
 						onPress={close}
-						style={{ marginTop: theme.spacing.md }}
+						style={{ marginTop: densityStyles.headerGap }}
 					/>
 				</View>
 			</Modal>
