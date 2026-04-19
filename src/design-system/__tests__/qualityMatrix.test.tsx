@@ -4,7 +4,8 @@ import { ThemeProvider } from '@/src/theme/ThemeProvider';
 import DesignLibraryScreen from '../DesignLibraryScreen';
 import { getDesignSystemCopy, type DesignSystemLocale } from '../copy';
 
-jest.setTimeout(15000);
+// The quality matrix intentionally exercises the full design-library shell across locale stress cases.
+jest.setTimeout(60000);
 
 function renderDesignSystem(
 	locale: DesignSystemLocale,

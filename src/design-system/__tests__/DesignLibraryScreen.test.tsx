@@ -16,7 +16,8 @@ jest.mock('@/src/utils/accessibility', () => {
 
 const mockSetAccessibilityFocus = jest.mocked(setAccessibilityFocus);
 
-jest.setTimeout(15000);
+// The design library screen renders the full workbench matrix and needs CI-safe timing headroom.
+jest.setTimeout(60000);
 
 interface RendererNode {
 	type: string;

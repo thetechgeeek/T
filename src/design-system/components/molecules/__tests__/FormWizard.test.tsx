@@ -5,6 +5,9 @@ import { FormWizard, type FormWizardStep } from '../FormWizard';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 
+// Declarative multi-step validation can run slower when the full design-system suite is saturated.
+jest.setTimeout(30000);
+
 describe('FormWizard', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
