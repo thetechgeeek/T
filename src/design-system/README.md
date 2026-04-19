@@ -97,6 +97,15 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - New locale/RTL/accessibility work should land here before it spreads to product screens. If it cannot survive pseudo-localization, RTL, and max-font-scale diagnostics here, it is not ready for the app.
 - Keep the proof matrix healthy: `qualityMatrix.test.tsx` covers locale/accessibility affordances plus the premium-quality sections, and `themeMatrix.test.tsx` covers the curated preset-proof surface across all supported presets plus an accessibility stress profile.
 
+## Adaptive Layout Rules
+
+- Phone-first by default: reusable surfaces collapse to a single-column, touch-first stack until the responsive runtime reports tablet width.
+- Tablet layouts may expand into two-column or split-pane compositions only when both columns preserve hierarchy, scan order, and minimum touch targets.
+- Responsive changes should come from the shared runtime/theme contract in `runtimeSignals.ts`, `ThemeProvider.tsx`, and `useResponsiveWorkbenchLayout.ts` rather than ad hoc screen math.
+- Width changes should adjust spacing, card padding, and typographic emphasis gradually; large screens are allowed to breathe, but they should not feel inflated.
+- Large-screen shells should keep readable line lengths, preserve safe-area padding after rotation, and avoid stretching a single card or form into an oversized empty canvas.
+- Edge gestures remain deliberate: swipe/archive, long-press context actions, and pinch-to-zoom are allowed when they have visible affordances or accessible alternatives, but they must not block native navigation ergonomics.
+
 ## Enterprise x Premium Quality Contract
 
 ### Core Doctrine

@@ -1403,10 +1403,10 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] `useWindowDimensions` / `Dimensions` API for responsive layouts
-- [ ] Device type detection (phone vs. tablet) for layout switching
-- [ ] `Platform.select()` / `Platform.OS` for platform-specific values
-- [ ] Responsive hook/utility that maps dimensions to breakpoint tokens
+- [x] `useWindowDimensions` / `Dimensions` API for responsive layouts
+- [x] Device type detection (phone vs. tablet) for layout switching
+- [x] `Platform.select()` / `Platform.OS` for platform-specific values
+- [x] Responsive hook/utility that maps dimensions to breakpoint tokens
 
 ### Adaptive Component Variants
 
@@ -1425,14 +1425,14 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Phone components collapse to single-column, touch-first layouts without losing hierarchy
-- [ ] Tablet components expand to multi-column or split-pane layouts when the pattern benefits from extra space
+- [x] Phone components collapse to single-column, touch-first layouts without losing hierarchy
+- [x] Tablet components expand to multi-column or split-pane layouts when the pattern benefits from extra space
 
 ### Touch & Pointer
 
 #### Common
 
-- [ ] Minimum touch target 44×44px on all interactive elements
+- [x] Minimum touch target 44×44px on all interactive elements
 
 #### Web
 
@@ -1442,14 +1442,14 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] `hitSlop` on small interactive elements to expand touch target
-- [ ] Gesture-driven interactions (`react-native-gesture-handler`)
-    - [ ] Swipe to delete / archive
-    - [ ] Swipe to navigate back (iOS)
-    - [ ] Pinch to zoom
-    - [ ] Long press for context actions
-- [ ] Haptic feedback on key interactions (toggle, delete confirm, success)
-- [ ] `activeOpacity` / `android_ripple` visual press feedback on all Pressables
+- [x] `hitSlop` on small interactive elements to expand touch target
+- [x] Gesture-driven interactions (`react-native-gesture-handler`)
+    - [x] Swipe to delete / archive
+    - [x] Swipe to navigate back (iOS)
+    - [x] Pinch to zoom
+    - [x] Long press for context actions
+- [x] Haptic feedback on key interactions (toggle, delete confirm, success)
+- [x] `activeOpacity` / `android_ripple` visual press feedback on all Pressables
 
 ### Typography & Spacing
 
@@ -1462,10 +1462,10 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] Responsive font sizes via scale factor utility (based on screen width)
-- [ ] Font sizes respect system accessibility scaling (`allowFontScaling`)
-- [ ] Spacing scales appropriately between phone and tablet layouts
-- [ ] Card padding, hero spacing, and CTA hierarchy adapt between phone and tablet without bloating or crowding
+- [x] Responsive font sizes via scale factor utility (based on screen width)
+- [x] Font sizes respect system accessibility scaling (`allowFontScaling`)
+- [x] Spacing scales appropriately between phone and tablet layouts
+- [x] Card padding, hero spacing, and CTA hierarchy adapt between phone and tablet without bloating or crowding
 
 ### Print
 
@@ -1481,7 +1481,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] No content loss on orientation change
+- [x] No content loss on orientation change
 
 #### Web
 
@@ -1490,15 +1490,15 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Mobile (React Native)
 
-- [ ] `Dimensions` event listener for orientation changes
-- [ ] Layout transitions animated on rotation
-- [ ] Safe area insets recalculated on orientation change
+- [x] `Dimensions` event listener for orientation changes
+- [x] Layout transitions animated on rotation
+- [x] Safe area insets recalculated on orientation change
 
 ### Platform-Specific Adaptive Patterns
 
 #### Mobile (React Native)
 
-- [ ] Large screen optimization guidelines (min touch target, readable line lengths, no stretched layouts)
+- [x] Large screen optimization guidelines (min touch target, readable line lengths, no stretched layouts)
 
 ---
 

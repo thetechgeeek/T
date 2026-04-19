@@ -8928,7 +8928,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-breakpoints-responsive-strategy-mobile-react-native-usewindowdimensions-dimensions-api-for-',
 		title: '`useWindowDimensions` / `Dimensions` API for responsive layouts',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Breakpoints & Responsive Strategy',
@@ -8938,7 +8938,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-breakpoints-responsive-strategy-mobile-react-native-device-type-detection-phone-vs-tablet-f',
 		title: 'Device type detection (phone vs. tablet) for layout switching',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Breakpoints & Responsive Strategy',
@@ -8948,7 +8948,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-breakpoints-responsive-strategy-mobile-react-native-platform-select-platform-os-for-platfor',
 		title: '`Platform.select()` / `Platform.OS` for platform-specific values',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Breakpoints & Responsive Strategy',
@@ -8958,7 +8958,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-breakpoints-responsive-strategy-mobile-react-native-responsive-hook-utility-that-maps-dimen',
 		title: 'Responsive hook/utility that maps dimensions to breakpoint tokens',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Breakpoints & Responsive Strategy',
@@ -9068,7 +9068,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-adaptive-component-variants-mobile-react-native-phone-components-collapse-to-single-column-',
 		title: 'Phone components collapse to single-column, touch-first layouts without losing hierarchy',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Adaptive Component Variants',
@@ -9078,7 +9078,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-adaptive-component-variants-mobile-react-native-tablet-components-expand-to-multi-column-or',
 		title: 'Tablet components expand to multi-column or split-pane layouts when the pattern benefits from extra space',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Adaptive Component Variants',
@@ -9088,7 +9088,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-common-minimum-touch-target-44-44px-on-all-interactive-elements',
 		title: 'Minimum touch target 44×44px on all interactive elements',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9128,7 +9128,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-hitslop-on-small-interactive-elements-to-expand-touch-tar',
 		title: '`hitSlop` on small interactive elements to expand touch target',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9138,7 +9138,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-gesture-driven-interactions-react-native-gesture-handler',
 		title: 'Gesture-driven interactions (`react-native-gesture-handler`)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9148,7 +9148,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-8-responsive-adaptive-design-touch-pointer-mobile-react-n',
 		title: 'Swipe to delete / archive',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9158,7 +9158,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-8-responsive-adaptive-design-touch-pointer-mobile-react-n-2',
 		title: 'Swipe to navigate back (iOS)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9168,7 +9168,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-8-responsive-adaptive-design-touch-pointer-mobile-react-n-3',
 		title: 'Pinch to zoom',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9178,7 +9178,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-8-responsive-adaptive-design-touch-pointer-mobile-react-n-4',
 		title: 'Long press for context actions',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9188,7 +9188,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-haptic-feedback-on-key-interactions-toggle-delete-confirm',
 		title: 'Haptic feedback on key interactions (toggle, delete confirm, success)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9198,7 +9198,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-touch-pointer-mobile-react-native-activeopacity-android-ripple-visual-press-feedback-on-all',
 		title: '`activeOpacity` / `android_ripple` visual press feedback on all Pressables',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Touch & Pointer',
@@ -9248,7 +9248,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-typography-spacing-mobile-react-native-responsive-font-sizes-via-scale-factor-utility-based',
 		title: 'Responsive font sizes via scale factor utility (based on screen width)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Typography & Spacing',
@@ -9258,7 +9258,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-typography-spacing-mobile-react-native-font-sizes-respect-system-accessibility-scaling-allo',
 		title: 'Font sizes respect system accessibility scaling (`allowFontScaling`)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Typography & Spacing',
@@ -9268,7 +9268,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-typography-spacing-mobile-react-native-spacing-scales-appropriately-between-phone-and-table',
 		title: 'Spacing scales appropriately between phone and tablet layouts',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Typography & Spacing',
@@ -9278,7 +9278,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-typography-spacing-mobile-react-native-card-padding-hero-spacing-and-cta-hierarchy-adapt-be',
 		title: 'Card padding, hero spacing, and CTA hierarchy adapt between phone and tablet without bloating or crowding',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Typography & Spacing',
@@ -9338,7 +9338,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-orientation-common-no-content-loss-on-orientation-change',
 		title: 'No content loss on orientation change',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Orientation',
@@ -9368,7 +9368,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-orientation-mobile-react-native-dimensions-event-listener-for-orientation-changes',
 		title: '`Dimensions` event listener for orientation changes',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Orientation',
@@ -9378,7 +9378,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-orientation-mobile-react-native-layout-transitions-animated-on-rotation',
 		title: 'Layout transitions animated on rotation',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Orientation',
@@ -9388,7 +9388,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-orientation-mobile-react-native-safe-area-insets-recalculated-on-orientation-change',
 		title: 'Safe area insets recalculated on orientation change',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Orientation',
@@ -9398,7 +9398,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '8-responsive-adaptive-design-platform-specific-adaptive-patterns-mobile-react-native-large-screen-optimization-guideline',
 		title: 'Large screen optimization guidelines (min touch target, readable line lengths, no stretched layouts)',
-		completed: false,
+		completed: true,
 		platform: 'Mobile (React Native)',
 		section: '8. Responsive & Adaptive Design',
 		subsection: 'Platform-Specific Adaptive Patterns',
@@ -11789,8 +11789,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 
 export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 	total: 1175,
-	completed: 589,
-	open: 586,
+	completed: 613,
+	open: 562,
 	common: 638,
 	web: 280,
 	mobile: 257,
@@ -11871,11 +11871,11 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		{
 			name: '8. Responsive & Adaptive Design',
 			count: 51,
-			completedCount: 0,
-			openCount: 51,
+			completedCount: 24,
+			openCount: 27,
 			commonMobileCount: 24,
-			commonMobileCompletedCount: 0,
-			commonMobileOpenCount: 24,
+			commonMobileCompletedCount: 24,
+			commonMobileOpenCount: 0,
 		},
 		{
 			name: '9. Motion & Animation System',
