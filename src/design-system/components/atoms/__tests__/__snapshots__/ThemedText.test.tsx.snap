@@ -17,6 +17,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 46.800000000000004,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -40,6 +41,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 37.44,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -63,6 +65,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 29.12,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -86,6 +89,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 37.44,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -109,6 +113,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 31.200000000000003,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -132,6 +137,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 29.12,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -154,6 +160,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 24.96,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -176,6 +183,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 24.96,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -198,6 +206,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 24.96,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -220,6 +229,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 24.96,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -242,6 +252,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 21.84,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -264,6 +275,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 43.68,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -286,6 +298,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 21.84,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -308,6 +321,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 21.84,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -330,6 +344,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 21.84,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -352,6 +367,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 31.200000000000003,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -374,6 +390,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 43.68,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -396,6 +413,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 31.200000000000003,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -418,6 +436,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 18.72,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -440,6 +459,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
           "lineHeight": 16.64,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -468,6 +488,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 46.800000000000004,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -491,6 +512,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 37.44,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -514,6 +536,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 29.12,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -537,6 +560,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 37.44,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -560,6 +584,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 31.200000000000003,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -583,6 +608,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 29.12,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -605,6 +631,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 24.96,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -627,6 +654,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 24.96,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -649,6 +677,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 24.96,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -671,6 +700,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 24.96,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -693,6 +723,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 21.84,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -715,6 +746,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 43.68,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -737,6 +769,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 21.84,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -759,6 +792,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 21.84,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -781,6 +815,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 21.84,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -803,6 +838,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 31.200000000000003,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -825,6 +861,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 43.68,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -847,6 +884,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 31.200000000000003,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -869,6 +907,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 18.72,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]
@@ -891,6 +930,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
           "lineHeight": 16.64,
           "opacity": undefined,
           "textAlign": undefined,
+          "writingDirection": "ltr",
         },
         undefined,
       ]

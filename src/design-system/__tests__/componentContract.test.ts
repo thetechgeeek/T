@@ -34,6 +34,12 @@ const NON_SEMANTIC_PRESS_HANDLER_PATTERN =
 const MANUAL_FOCUS_ORDER_PATTERN =
 	/\b(?:tabIndex|nextFocusDown|nextFocusForward|nextFocusLeft|nextFocusRight|nextFocusUp)\b/;
 const RAW_NATIVE_TEXT_IMPORT_PATTERN = /import\s*\{[^}]*\bText\b[^}]*\}\s*from 'react-native'/;
+const WRITING_DIRECTION_PATTERN = /\bwritingDirection\s*:/;
+const LAYOUT_DIRECTION_PATTERN = /\bdirection\s*:/;
+const DIRECTIONAL_ICON_PATTERN = /\bdirectional\b|scaleX:\s*-1/;
+const TOUCH_TARGET_PATTERN = /\bTOUCH_TARGET_MIN_PX\b|\btheme\.touchTarget\b|\bhitSlop=/;
+const PRESS_FEEDBACK_PATTERN =
+	/\bandroid_ripple=|\bactiveOpacity=|\bonPressIn=|\bonPressOut=|style=\{\(\s*\{\s*pressed/;
 
 const INTERACTIVE_REF_COMPONENTS = [
 	'Button',
@@ -231,6 +237,34 @@ const NON_TEXT_ACCESSIBILITY_COMPONENTS = [
 	'Toast',
 ] as const;
 
+const RTL_TEXT_COMPONENTS = ['ThemedText', 'TextInput', 'SearchBar'] as const;
+const RTL_LAYOUT_COMPONENTS = ['Screen'] as const;
+const DIRECTIONAL_ICON_COMPONENTS = ['ListItem', 'MediaViewer'] as const;
+
+const TOUCH_TARGET_COMPONENTS = [
+	'Button',
+	'Checkbox',
+	'Chip',
+	'IconButton',
+	'Radio',
+	'Tabs',
+	'ToggleButtonGroup',
+	'ToggleSwitch',
+	'TouchableCard',
+] as const;
+
+const PRESS_FEEDBACK_COMPONENTS = [
+	'Button',
+	'Checkbox',
+	'Chip',
+	'IconButton',
+	'Radio',
+	'Tabs',
+	'ToggleButtonGroup',
+	'ToggleSwitch',
+	'TouchableCard',
+] as const;
+
 function getComponentName(filePath: string) {
 	return path.basename(filePath, path.extname(filePath));
 }
@@ -364,6 +398,30 @@ describe('supported component contract', () => {
 			}
 
 			expect(RAW_NATIVE_TEXT_IMPORT_PATTERN.test(readSource(entry.filePath))).toBe(false);
+		}
+	});
+
+	it('keeps shared text, layout, and directional-icon primitives RTL-aware', () => {
+		for (const componentName of RTL_TEXT_COMPONENTS) {
+			expect(WRITING_DIRECTION_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+
+		for (const componentName of RTL_LAYOUT_COMPONENTS) {
+			expect(LAYOUT_DIRECTION_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+
+		for (const componentName of DIRECTIONAL_ICON_COMPONENTS) {
+			expect(DIRECTIONAL_ICON_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+	});
+
+	it('preserves touch-target and press-feedback contracts on core interactive controls', () => {
+		for (const componentName of TOUCH_TARGET_COMPONENTS) {
+			expect(TOUCH_TARGET_PATTERN.test(getSource(componentName))).toBe(true);
+		}
+
+		for (const componentName of PRESS_FEEDBACK_COMPONENTS) {
+			expect(PRESS_FEEDBACK_PATTERN.test(getSource(componentName))).toBe(true);
 		}
 	});
 });

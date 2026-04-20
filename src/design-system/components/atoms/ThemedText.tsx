@@ -3,7 +3,7 @@ import { Text, type TextProps, type TextStyle, type AccessibilityRole } from 're
 import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import type { ThemeTypography } from '@/src/theme/index';
-import { detectLocaleScript } from '@/src/theme/localeTypography';
+import { detectLocaleScript, resolveWritingDirection } from '@/src/theme/localeTypography';
 
 export interface ThemedTextProps extends TextProps {
 	variant?: keyof ThemeTypography['variants'];
@@ -57,6 +57,10 @@ export const ThemedText: React.FC<ThemedTextProps> = ({
 	const resolvedScript = detectLocaleScript(resolvedRuntime.detectedLocale);
 	const resolvedTextBreakStrategy = resolvedScript === 'cjk' ? 'balanced' : 'highQuality';
 	const resolvedLineBreakStrategyIOS = resolvedScript === 'cjk' ? 'push-out' : 'standard';
+	const resolvedWritingDirection = resolveWritingDirection(
+		resolvedRuntime.detectedLocale,
+		resolvedRuntime.runtimeRtl,
+	);
 
 	const textStyle: TextStyle = {
 		...variantStyle,
@@ -65,6 +69,7 @@ export const ThemedText: React.FC<ThemedTextProps> = ({
 		opacity,
 		fontWeight: resolvedFontWeight,
 		fontFamily: resolvedFontFamily,
+		writingDirection: resolvedWritingDirection,
 	};
 
 	const resolvedRole: AccessibilityRole | undefined =

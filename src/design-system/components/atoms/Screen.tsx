@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
 import { useTheme } from '@/src/theme/ThemeProvider';
 
 export interface ScreenProps {
@@ -49,18 +50,23 @@ export const Screen: React.FC<ScreenProps> = ({
 	dismissKeyboardOnBackgroundTap = false,
 	onMagicTap,
 }) => {
-	const { theme } = useTheme();
+	const { theme, runtime } = useTheme();
+	const resolvedRuntime = runtime ?? DEFAULT_RUNTIME_QUALITY_SIGNALS;
 	const insets = useSafeAreaInsets();
 
 	const bg = backgroundColor || theme.colors.background;
 	const topInset = safeAreaEdges.includes('top') ? insets.top : 0;
 	const bottomInset = safeAreaEdges.includes('bottom') ? insets.bottom : 0;
 	const { style: scrollStyle, ...restScrollViewProps } = scrollViewProps ?? {};
+	const writingDirection: NonNullable<ViewStyle['direction']> = resolvedRuntime.runtimeRtl
+		? 'rtl'
+		: 'ltr';
 
 	const containerStyle = [
 		styles.container,
 		{
 			backgroundColor: bg,
+			direction: writingDirection,
 			// Default to 0 if edge is not in safeAreaEdges, but most screens should include 'top'
 			paddingTop: topInset,
 			paddingBottom: footer ? 0 : bottomInset,

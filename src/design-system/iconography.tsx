@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import type { LucideIcon } from 'lucide-react-native';
 import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
@@ -31,10 +32,45 @@ export interface LucideIconGlyphProps {
 	color: string;
 	strokeWidth?: number;
 	allowFontScaling?: boolean;
+	directional?: boolean;
 	decorative?: boolean;
 	accessibilityLabel?: string;
 	testID?: string;
-	style?: React.ComponentProps<LucideIcon>['style'];
+	style?: StyleProp<ViewStyle>;
+}
+
+function resolveDirectionalViewStyle(
+	style: StyleProp<ViewStyle>,
+	mirror: boolean,
+): StyleProp<ViewStyle> {
+	if (!mirror) {
+		return style;
+	}
+
+	const flattenedStyle = StyleSheet.flatten(style);
+	const transform = Array.isArray(flattenedStyle?.transform) ? flattenedStyle.transform : [];
+
+	return {
+		...flattenedStyle,
+		transform: [...transform, { scaleX: -1 }],
+	};
+}
+
+function resolveDirectionalTextStyle(
+	style: StyleProp<TextStyle>,
+	mirror: boolean,
+): StyleProp<TextStyle> {
+	if (!mirror) {
+		return style;
+	}
+
+	const flattenedStyle = StyleSheet.flatten(style);
+	const transform = Array.isArray(flattenedStyle?.transform) ? flattenedStyle.transform : [];
+
+	return {
+		...flattenedStyle,
+		transform: [...transform, { scaleX: -1 }],
+	};
 }
 
 export function LucideIconGlyph({
@@ -43,12 +79,19 @@ export function LucideIconGlyph({
 	color,
 	strokeWidth = 2,
 	allowFontScaling = true,
+	directional = false,
 	decorative = true,
 	accessibilityLabel,
 	testID,
 	style,
 }: LucideIconGlyphProps) {
 	const scaledSize = useAccessibleIconSize(size, allowFontScaling);
+	const { runtime } = useTheme();
+	const resolvedRuntime = runtime ?? DEFAULT_RUNTIME_QUALITY_SIGNALS;
+	const resolvedStyle = resolveDirectionalViewStyle(
+		style,
+		directional && resolvedRuntime.runtimeRtl,
+	);
 
 	return (
 		<Icon
@@ -56,11 +99,11 @@ export function LucideIconGlyph({
 			size={scaledSize}
 			color={color}
 			strokeWidth={strokeWidth}
-			style={style}
 			accessible={!decorative}
 			accessibilityRole={decorative ? undefined : 'image'}
 			accessibilityLabel={decorative ? undefined : accessibilityLabel}
 			importantForAccessibility={decorative ? 'no' : 'yes'}
+			style={resolvedStyle}
 		/>
 	);
 }
@@ -70,9 +113,11 @@ export interface MaterialIconGlyphProps {
 	size: number;
 	color: string;
 	allowFontScaling?: boolean;
+	directional?: boolean;
 	decorative?: boolean;
 	accessibilityLabel?: string;
 	testID?: string;
+	style?: StyleProp<TextStyle>;
 }
 
 export function MaterialIconGlyph({
@@ -80,11 +125,19 @@ export function MaterialIconGlyph({
 	size,
 	color,
 	allowFontScaling = true,
+	directional = false,
 	decorative = true,
 	accessibilityLabel,
 	testID,
+	style,
 }: MaterialIconGlyphProps) {
 	const scaledSize = useAccessibleIconSize(size, allowFontScaling);
+	const { runtime } = useTheme();
+	const resolvedRuntime = runtime ?? DEFAULT_RUNTIME_QUALITY_SIGNALS;
+	const resolvedStyle = resolveDirectionalTextStyle(
+		style,
+		directional && resolvedRuntime.runtimeRtl,
+	);
 
 	return (
 		<MaterialIcons
@@ -97,6 +150,7 @@ export function MaterialIconGlyph({
 			accessibilityRole={decorative ? undefined : 'image'}
 			accessibilityLabel={decorative ? undefined : accessibilityLabel}
 			importantForAccessibility={decorative ? 'no' : 'yes'}
+			style={resolvedStyle}
 		/>
 	);
 }

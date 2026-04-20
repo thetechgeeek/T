@@ -174,6 +174,7 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 										icon={ChevronLeft}
 										size={20}
 										color={theme.colors.white}
+										directional
 									/>
 								}
 								onPress={() => void setViewerIndex(currentIndex - 1)}
@@ -256,6 +257,7 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 										icon={ChevronRight}
 										size={20}
 										color={theme.colors.white}
+										directional
 									/>
 								}
 								onPress={() => void setViewerIndex(currentIndex + 1)}

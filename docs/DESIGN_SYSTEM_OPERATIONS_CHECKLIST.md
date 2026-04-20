@@ -32,3 +32,15 @@
 
 - [ ] Custom font loading via `expo-font` or React Native asset linking
 - [ ] Font weight mapping to platform-specific font files (iOS vs Android font naming)
+
+## Packaging & Distribution
+
+### Common
+
+- [ ] Tree-shakeable library package surface when the design system is extracted for multi-repo consumption
+- [ ] Per-component bundle size limits enforced in packaging CI
+- [ ] Base component usability stays independent from optional illustration, chart, and animation bundles
+
+### Mobile (React Native)
+
+- [ ] Native dependency budget enforced and reviewed before each new library/runtime package is added

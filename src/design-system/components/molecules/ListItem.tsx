@@ -155,6 +155,7 @@ export const ListItem = forwardRef<React.ElementRef<typeof Pressable>, ListItemP
 								icon={ChevronRight}
 								size={20}
 								color={theme.colors.onSurfaceVariant}
+								directional
 								style={styles.chevron}
 							/>
 						)}

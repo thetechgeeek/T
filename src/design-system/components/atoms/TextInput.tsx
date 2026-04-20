@@ -15,6 +15,7 @@ import { LucideIconGlyph } from '@/src/design-system/iconography';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { resolveWritingDirection } from '@/src/theme/localeTypography';
 import { ThemedText } from './ThemedText';
 
 export interface TextInputProps extends RNTextInputProps {
@@ -66,9 +67,13 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 		},
 		ref,
 	) => {
-		const { theme } = useTheme();
+		const { theme, runtime } = useTheme();
 		const c = theme.colors;
 		const inputTokens = theme.components.input;
+		const resolvedWritingDirection = resolveWritingDirection(
+			runtime.detectedLocale,
+			runtime.runtimeRtl,
+		);
 
 		const [isFocused, setIsFocused] = useState(false);
 		const isDisabled = !editable;
@@ -165,6 +170,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 								fontSize: theme.typography.sizes.md,
 								fontFamily: theme.typography.fontFamily,
 								paddingVertical: inputTokens.paddingY,
+								writingDirection: resolvedWritingDirection,
 							},
 							inputStyle,
 						]}

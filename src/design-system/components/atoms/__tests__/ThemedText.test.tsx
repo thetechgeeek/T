@@ -130,6 +130,28 @@ describe('ThemedText (P0.2)', () => {
 		);
 	});
 
+	it('sets logical writing direction for RTL locales and runtime overrides', () => {
+		const { getByText, rerender } = render(
+			<ThemeProvider persist={false} runtimeOverrides={{ detectedLocale: 'ar-SA' }}>
+				<ThemedText variant="body">مرحبا</ThemedText>
+			</ThemeProvider>,
+		);
+
+		expect(getByText('مرحبا').props.style).toContainEqual(
+			expect.objectContaining({ writingDirection: 'rtl' }),
+		);
+
+		rerender(
+			<ThemeProvider persist={false} runtimeOverrides={{ detectedLocale: 'en-US' }}>
+				<ThemedText variant="body">Hello</ThemedText>
+			</ThemeProvider>,
+		);
+
+		expect(getByText('Hello').props.style).toContainEqual(
+			expect.objectContaining({ writingDirection: 'ltr' }),
+		);
+	});
+
 	it('uses script-aware line-breaking defaults for CJK and latin text', () => {
 		const { getByText, rerender } = render(
 			<ThemeProvider persist={false} runtimeOverrides={{ detectedLocale: 'ja-JP' }}>

@@ -1,5 +1,12 @@
 import React, { forwardRef } from 'react';
-import { ScrollView, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
+import {
+	ScrollView,
+	Pressable,
+	View,
+	Platform,
+	type StyleProp,
+	type ViewStyle,
+} from 'react-native';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
@@ -102,7 +109,15 @@ export const Tabs = forwardRef<View, TabsProps>(
 								accessibilityRole="tab"
 								accessibilityLabel={option.label}
 								accessibilityState={{ selected }}
-								style={{
+								android_ripple={
+									Platform.OS === 'android'
+										? {
+												color: c.surfaceVariant,
+												borderless: false,
+											}
+										: undefined
+								}
+								style={({ pressed }) => ({
 									minHeight: theme.touchTarget,
 									paddingHorizontal: theme.spacing.md,
 									paddingVertical: theme.spacing.sm,
@@ -111,7 +126,8 @@ export const Tabs = forwardRef<View, TabsProps>(
 									alignItems: 'center',
 									flexDirection: 'row',
 									gap: theme.spacing.xs,
-								}}
+									opacity: pressed ? theme.opacity.pressed : 1,
+								})}
 							>
 								{option.icon ? <View>{option.icon}</View> : null}
 								<ThemedText

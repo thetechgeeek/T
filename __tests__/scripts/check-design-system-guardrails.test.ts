@@ -16,6 +16,20 @@ function writeFiles(root: string, files: Record<string, string>) {
 function createFixture(componentSource: string) {
 	const root = fs.mkdtempSync(path.join(os.tmpdir(), 'check-design-system-guardrails-'));
 	writeFiles(root, {
+		'docs/UI_Library_Web_Backlog.md': [
+			'# UI Library Web Backlog',
+			'',
+			'## 5. Accessibility (a11y) Architecture',
+			'',
+			'## 6. Internationalization (i18n) & Localization (L10n)',
+			'',
+			'## 7. Performance UX',
+			'',
+			'## 8. Responsive & Adaptive Design',
+			'',
+		].join('\n'),
+		'docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md':
+			'Manual release gate on physical-device screen readers.\n',
 		'src/design-system/README.md': [
 			'# Design System',
 			'',
@@ -25,8 +39,14 @@ function createFixture(componentSource: string) {
 			'',
 		].join('\n'),
 		'src/design-system/fixtures.ts': 'export const fixtures = [];\n',
+		'src/design-system/iconography.tsx':
+			'export function LucideIconGlyph() { return { transform: [{ scaleX: -1 }] }; }\n',
 		'src/design-system/components/ThemeSnapshotPreview.tsx':
 			'export function ThemeSnapshotPreview() { return null; }\n',
+		'src/design-system/components/atoms/ThemedText.tsx':
+			'export function ThemedText() { return { writingDirection: "rtl" }; }\n',
+		'src/design-system/components/atoms/Screen.tsx':
+			'export function Screen() { return { direction: "rtl" }; }\n',
 		'src/design-system/__tests__/boundary.test.ts':
 			"describe('boundary', () => it('exists', () => expect(true).toBe(true)));\n",
 		'src/design-system/__tests__/fixtures.test.ts':
@@ -132,5 +152,34 @@ describe('check-design-system-guardrails', () => {
 
 		expect(output).toContain('reduced-motion-animation-gate');
 		expect(output).toContain('MotionCard.tsx');
+	});
+
+	it('fails when the shared RTL directionality contracts disappear', () => {
+		const root = createFixture(`
+			import { withSpring } from 'react-native-reanimated';
+			import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+
+			export function MotionCard() {
+				const reduceMotionEnabled = useReducedMotion();
+				const opacity = reduceMotionEnabled ? 1 : withSpring(1);
+
+				return opacity ? null : null;
+			}
+		`);
+		writeFiles(root, {
+			'src/design-system/components/atoms/ThemedText.tsx':
+				'export function ThemedText() { return null; }\n',
+			'src/design-system/components/atoms/Screen.tsx':
+				'export function Screen() { return null; }\n',
+			'src/design-system/iconography.tsx':
+				'export function LucideIconGlyph() { return null; }\n',
+		});
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('rtl-writing-direction');
+		expect(output).toContain('rtl-layout-direction');
+		expect(output).toContain('rtl-directional-icons');
 	});
 });

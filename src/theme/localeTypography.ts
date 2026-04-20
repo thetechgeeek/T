@@ -1,7 +1,7 @@
-import { Platform } from 'react-native';
+import { Platform, type TextStyle } from 'react-native';
 import { FONT_FAMILY_TOKENS } from './designTokens';
 
-export type DesignSystemScript = 'latin' | 'arabic' | 'devanagari' | 'cjk';
+export type DesignSystemScript = 'latin' | 'arabic' | 'hebrew' | 'devanagari' | 'cjk';
 
 export interface TypographyFamilySet {
 	script: DesignSystemScript;
@@ -18,6 +18,12 @@ const SCRIPT_FALLBACK_FAMILIES = {
 		android: 'sans-serif',
 		web: '"Noto Naskh Arabic", Inter, system-ui, sans-serif',
 		default: 'Geeza Pro',
+	},
+	hebrew: {
+		ios: 'Arial Hebrew',
+		android: 'sans-serif',
+		web: '"Noto Sans Hebrew", Inter, system-ui, sans-serif',
+		default: 'Arial Hebrew',
 	},
 	devanagari: {
 		ios: 'Kohinoor Devanagari',
@@ -54,6 +60,10 @@ export function detectLocaleScript(locale = DEFAULT_LOCALE): DesignSystemScript 
 		return 'arabic';
 	}
 
+	if (normalizedLocale.startsWith('he') || normalizedLocale.includes('-hebr')) {
+		return 'hebrew';
+	}
+
 	if (
 		normalizedLocale.startsWith('hi') ||
 		normalizedLocale.startsWith('mr') ||
@@ -76,6 +86,17 @@ export function detectLocaleScript(locale = DEFAULT_LOCALE): DesignSystemScript 
 	}
 
 	return 'latin';
+}
+
+export function isRtlScript(script: DesignSystemScript) {
+	return script === 'arabic' || script === 'hebrew';
+}
+
+export function resolveWritingDirection(
+	locale = DEFAULT_LOCALE,
+	runtimeRtl = false,
+): TextStyle['writingDirection'] {
+	return runtimeRtl || isRtlScript(detectLocaleScript(locale)) ? 'rtl' : 'ltr';
 }
 
 export function resolveTypographyFamiliesForLocale(locale = DEFAULT_LOCALE): TypographyFamilySet {

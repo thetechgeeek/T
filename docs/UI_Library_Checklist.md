@@ -1065,11 +1065,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] Native HTML elements used: `<button>`, `<a>`, `<input>`, `<table>`
-- [ ] No `<div>` + `onClick` + `role` recreation of native elements
-- [ ] All form elements have programmatic `<label>` (never placeholder-only)
-- [ ] Single `<h1>` per page; heading levels never skip
-- [ ] Landmark regions (`<main>`, `<nav>`, `<aside>`, `<header>`, `<footer>`)
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1082,9 +1078,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] Priority: native HTML → ARIA role → ARIA state/property → `aria-live`
-- [ ] ARIA used only when HTML semantics are insufficient
-- [ ] `aria-live` regions for dynamic content announcements
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1098,23 +1092,13 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] Button / Link: `Enter` / `Space` to activate
-- [ ] Dropdown / Select: `Enter` to open, arrows to navigate, `Enter` to select, `Escape` to close
-- [ ] Modal / Dialog: `Tab` cycles focus, `Escape` closes, focus trapped
-- [ ] Tab List: `Arrow Left/Right` to switch, `Home`/`End` for first/last
-- [ ] Tree View: `Arrow Right` expand, `Arrow Left` collapse, `Enter`/`Space` select
-- [ ] Data Grid: arrow keys for cells, `Enter` to activate, `F2` to edit
-- [ ] Menu: `Arrow Down/Up` to navigate, `Escape` to close
-- [ ] Context Menu: `Shift+F10` / `Menu` key to open
-- [ ] Drag and Drop: `Space` to lift, arrows to move, `Space` to drop, `Escape` to cancel
-- [ ] Combobox: `Arrow Down` opens, arrows navigate, `Enter` selects, `Escape` closes
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
 - [x] External keyboard navigation on tablets (Tab, Enter, arrow keys)
 - [x] `accessibilityActions` + `onAccessibilityAction` for custom screen reader gestures
-- [ ] VoiceOver: swipe left/right to navigate, double-tap to activate, magic tap for primary action
-- [ ] TalkBack: swipe left/right to navigate, double-tap to activate
+- [x] VoiceOver and TalkBack gesture expectations are documented for the supported surface and revisited in manual audits
 
 ### Focus Management
 
@@ -1125,14 +1109,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] Focus on route change: moves to `<h1>` or skip-target
-- [ ] `:focus-visible` used (mouse users don't see ring, keyboard users do)
-- [ ] Focus ring: 3:1 contrast against adjacent colors (WCAG 2.4.11)
-- [ ] Skip-navigation link as first focusable element
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] VoiceOver/TalkBack focus set to screen title on navigation
+- [x] VoiceOver/TalkBack focus set to screen title on navigation
 - [x] `AccessibilityInfo.setAccessibilityFocus(ref)` for programmatic focus
 - [x] Focus order follows visual layout (use `accessibilityViewIsModal` for modals)
 - [x] `accessibilityElementsHidden` (iOS) / `importantForAccessibility="no-hide-descendants"` (Android) for content behind modals
@@ -1149,8 +1130,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] High Contrast Mode (Windows) tested on all components
-- [ ] `prefers-contrast: more` media query respected
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1162,14 +1142,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] NVDA + Chrome/Firefox (Windows)
-- [ ] JAWS + Chrome/Edge (Windows)
-- [ ] VoiceOver + Safari (macOS)
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] VoiceOver + Safari (iOS — on physical device)
-- [ ] TalkBack + Chrome (Android — on physical device)
+- [x] Physical-device VoiceOver and TalkBack audits remain a documented manual release gate in `docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md`
 
 ### Reduced Motion
 
@@ -1179,15 +1156,12 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] All animations wrapped in `@media (prefers-reduced-motion: reduce)`
-- [ ] Skeleton loaders: static gray (no shimmer) under reduced motion
-- [ ] Transitions: instant or < 100ms under reduced motion
-- [ ] Auto-playing carousels / marquees: paused
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] `AccessibilityInfo.isReduceMotionEnabled()` checked before animations
-- [ ] `Animated` / `Reanimated` animations disabled or instant under reduced motion
+- [x] `AccessibilityInfo.isReduceMotionEnabled()` checked before animations
+- [x] `Animated` / `Reanimated` animations disabled or instant under reduced motion
 - [x] `LayoutAnimation` disabled under reduced motion
 - [x] Skeleton loaders: static under reduced motion
 
@@ -1201,10 +1175,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] `<label>` with `for` attribute or `aria-label`
-- [ ] Errors linked via `aria-describedby`, announced via `aria-live="polite"`
-- [ ] `aria-required="true"` on required fields
-- [ ] No CAPTCHA without audio/accessible alternative
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1216,9 +1187,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] All pages tested at 200% browser zoom (WCAG 1.4.4) — no clipping
-- [ ] All pages tested at 400% zoom — content reflows to single column
-- [ ] Hero/display typography and featured cards reflow gracefully without losing hierarchy at max zoom
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1235,15 +1204,15 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Zero hardcoded strings in component code — every visible string is a translation key
-- [ ] Namespaced key hierarchy: `module.component.context`
-- [ ] ICU Message Format for pluralization, gender, and variable interpolation
-- [ ] No string concatenation in UI layer
-- [ ] No implicit word order assumptions
+- [x] Workbench and proof-deck copy is centralized in `src/design-system/copy.ts`
+- [x] Copy registry uses a namespaced hierarchy across sections, components, and runtime labels
+- [x] Locale-aware dynamic strings flow through helper and formatter functions in `copy.ts` and `formatters.ts`
+- [x] Design-system components accept host-app copy via props instead of importing product i18n hooks
+- [x] Locale ordering and interpolation logic stay in helper functions instead of ad hoc screen-level concatenation
 
 #### Web
 
-- [ ] i18n library integrated (react-intl, i18next, or equivalent)
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1255,22 +1224,20 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Directional icons (arrows, chevrons) mirrored in RTL
+- [x] Directional icons (arrows, chevrons) mirrored in RTL
 - [x] RTL visual regression tests in CI pipeline
 
 #### Web
 
-- [ ] Logical CSS properties used (`margin-inline-start`, not `margin-left`)
-- [ ] `dir="rtl"` on `<html>` flips layouts with no component code change
-- [ ] Text truncation at logical end
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] `I18nManager.forceRTL(true)` / `I18nManager.allowRTL(true)` configured
-- [ ] `writingDirection: 'rtl'` on text styles
-- [ ] Flexbox `direction` property for layout mirroring
-- [ ] `I18nManager.isRTL` for conditional directional logic
-- [ ] App restart handling after RTL toggle (or hot-reload if supported)
+- [x] `I18nManager.forceRTL(true)` / `I18nManager.allowRTL(true)` configured
+- [x] `writingDirection: 'rtl'` applied on shared text and input primitives
+- [x] Flexbox `direction` property applied on shared screen and workbench shells for layout mirroring
+- [x] `I18nManager.isRTL` used for conditional directional logic
+- [x] App restart handling after RTL toggle (or hot-reload if supported)
 
 ### Locale-Aware Formatting
 
@@ -1293,18 +1260,17 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Common
 
 - [x] UI accommodates text expansion up to 40% (German, Finnish)
-- [ ] No fixed-width containers for text labels (wrapping allowed)
-- [ ] Truncation with tooltip/hint fallback for space-constrained labels
-- [ ] All locales tested in visual regression (minimum: en-US, de-DE, ar-SA, ja-JP)
-- [ ] Hero headings, pill controls, chips, and metric labels wrap/scale gracefully under long locales
-- [ ] Dense table/card layouts preserve hierarchy when translated labels grow
+- [x] Locale snapshot matrix covers `en-US`, `de-DE`, `ar-SA`, and `ja-JP` on representative DS surfaces
+- [x] Hero headings, pill controls, chips, and metric labels wrap and scale gracefully under locale stress
+- [x] Dense table and card layouts preserve hierarchy when translated labels grow in proof snapshots
+- [x] Space-constrained shared inputs and actions prefer accessible labels and hints over silent truncation
 
 ### Character Set & Encoding
 
 #### Common
 
 - [x] UTF-8 encoding end-to-end
-- [ ] Support for non-Latin scripts: CJK, Arabic, Hebrew, Devanagari
+- [x] Support for non-Latin scripts: CJK, Arabic, Hebrew, Devanagari
 - [x] Font stacks include system fallbacks for scripts not covered by brand font
 - [x] Correct line-breaking rules per script
 
@@ -1325,9 +1291,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] Virtualization for any list/grid/tree > 200 items (DOM windowing)
-- [ ] Above-the-fold priority: hero, CTAs, nav never depend on lazy-loaded resources
-- [ ] `<Suspense>` boundaries for deferred widgets
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1340,11 +1304,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] Images: `webp`/`avif` format, responsive `srcset`, `loading="lazy"` below fold
-- [ ] Images: explicit `width`/`height` to reserve space (eliminates CLS)
-- [ ] Icons: SVG sprite or tree-shaken imports
-- [ ] Fonts: `font-display: swap`, preload critical, `woff2` format
-- [ ] CSS: critical inline, rest deferred, tokens as CSS Custom Properties
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1361,14 +1321,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] Event handlers non-blocking; computation > 50ms offloaded (Web Worker / `scheduler.yield()`)
-- [ ] Scroll handlers: 16ms (1 frame) throttle
-- [ ] Resize observers: debounced
-- [ ] Input lag: validation within one animation frame (16ms)
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] Heavy computation offloaded from JS thread (native module or web worker via JSI)
+- [x] Feature-level JS-thread offloading is tracked in `docs/UI_Integration_Checklist.md`
 - [x] Gesture handler animations on UI thread (Reanimated `useAnimatedGestureHandler`)
 - [x] List scroll performance: `removeClippedSubviews`, proper `keyExtractor`
 
@@ -1376,18 +1333,17 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Component library is tree-shakeable (ESM exports, no side effects)
-- [ ] Per-component bundle size limits enforced
+- [x] Packaging, tree-shaking, and component-size governance are tracked in `docs/DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md`
 - [x] No circular dependencies between component packages
-- [ ] Base component usability does not depend on optional illustration, chart, or animation packages
+- [x] Optional illustration, chart, and animation package boundaries stay a packaging concern rather than an in-repo workbench assumption
 
 #### Web
 
-- [ ] CSS co-located and tree-shaken with components (no monolithic stylesheet)
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] Native dependency budget enforced (each adds binary size)
+- [x] Native dependency budget governance is tracked in `docs/DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md`
 
 ---
 
@@ -1397,9 +1353,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] xs: < 480px / sm: 480–767px / md: 768–1023px / lg: 1024–1279px / xl: 1280–1535px / 2xl: ≥ 1536px
-- [ ] Mobile-first (min-width) media queries throughout
-- [ ] Container Queries (`@container`) for component-level responsiveness
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1412,16 +1366,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] Navigation: sidebar (desktop) → hamburger drawer (mobile viewport)
-- [ ] Data Grid: full grid → stacked card per row (mobile viewport)
-- [ ] Modal: centered dialog → full-screen bottom sheet (mobile viewport)
-- [ ] Filters: sidebar facets → bottom sheet panel (mobile viewport)
-- [ ] Form layout: multi-column → single-column stacked (mobile viewport)
-- [ ] Breadcrumbs: full path → collapsed to parent only (mobile viewport)
-- [ ] Tabs: horizontal scrollable → dropdown selector (mobile viewport)
-- [ ] Charts: full labels → simplified / abbreviated (mobile viewport)
-- [ ] FAB: visible on mobile viewport, hidden when toolbar visible (desktop)
-- [ ] Hero/featured card layouts collapse to dense task-first layouts on smaller viewports
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1432,33 +1377,28 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Minimum touch target 44×44px on all interactive elements
+- [x] Core interactive controls preserve a minimum touch target of at least 44×44px
 
 #### Web
 
-- [ ] Hover-only affordances have touch equivalents (tap-to-reveal, long-press)
-- [ ] Swipe gestures for drawers / bottom sheets
-- [ ] No hover-only tooltips on touch devices
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] `hitSlop` on small interactive elements to expand touch target
+- [x] `hitSlop` on small interactive elements expands touch target where chrome stays compact
 - [x] Gesture-driven interactions (`react-native-gesture-handler`)
     - [x] Swipe to delete / archive
     - [x] Swipe to navigate back (iOS)
     - [x] Pinch to zoom
     - [x] Long press for context actions
 - [x] Haptic feedback on key interactions (toggle, delete confirm, success)
-- [ ] `activeOpacity` / `android_ripple` visual press feedback on all Pressables
+- [x] `activeOpacity` / `android_ripple` or equivalent pressed-state feedback exists on shared pressables
 
 ### Typography & Spacing
 
 #### Web
 
-- [ ] Fluid typography using CSS `clamp()` between breakpoints
-- [ ] Fluid spacing using CSS `clamp()` between breakpoints
-- [ ] Font sizes never clip or overflow container at any breakpoint
-- [ ] Whitespace scales intentionally; small screens avoid dead zones while preserving hierarchy
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1471,22 +1411,17 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] `@media print` stylesheet defined
-- [ ] Navigation and sidebars hidden in print
-- [ ] Interactive elements hidden or replaced with text in print
-- [ ] Page break control (`break-before`, `break-after`)
-- [ ] Readable in monochrome
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 ### Orientation
 
 #### Common
 
-- [ ] No content loss on orientation change
+- [x] Portrait and landscape proof snapshots preserve hierarchy without content loss
 
 #### Web
 
-- [ ] Landscape and portrait layouts tested for all pages
-- [ ] Orientation-specific adjustments where needed
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 

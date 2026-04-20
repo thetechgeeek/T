@@ -114,6 +114,7 @@ export const TouchableCard = forwardRef<React.ElementRef<typeof Pressable>, Touc
 						{
 							backgroundColor: theme.colors.card,
 							borderRadius: theme.borderRadius.md,
+							minHeight: theme.touchTarget,
 						},
 						isFocused
 							? buildFocusRingStyle({

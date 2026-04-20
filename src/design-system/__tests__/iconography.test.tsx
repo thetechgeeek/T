@@ -33,4 +33,40 @@ describe('design-system iconography helpers', () => {
 		expect(getByTestId('material-icon').props.size).toBe(scaledSize);
 		expect(getByTestId('material-icon').props.allowFontScaling).toBe(true);
 	});
+
+	it('mirrors directional icons in RTL while preserving non-directional glyphs', () => {
+		const { getByTestId } = render(
+			<ThemeProvider persist={false} runtimeOverrides={{ runtimeRtl: true }}>
+				<>
+					<LucideIconGlyph
+						testID="rtl-directional"
+						icon={Search}
+						size={20}
+						color="#111111"
+						directional
+					/>
+					<LucideIconGlyph testID="rtl-static" icon={Search} size={20} color="#111111" />
+					<MaterialIconGlyph
+						testID="rtl-material"
+						name="arrow-forward"
+						size={20}
+						color="#111111"
+						directional
+					/>
+				</>
+			</ThemeProvider>,
+		);
+
+		expect(getByTestId('rtl-directional').props.style).toEqual(
+			expect.objectContaining({
+				transform: expect.arrayContaining([{ scaleX: -1 }]),
+			}),
+		);
+		expect(getByTestId('rtl-static').props.style).toBeUndefined();
+		expect(getByTestId('rtl-material').props.style).toEqual(
+			expect.objectContaining({
+				transform: expect.arrayContaining([{ scaleX: -1 }]),
+			}),
+		);
+	});
 });

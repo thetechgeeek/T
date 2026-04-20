@@ -15,6 +15,7 @@ import { useControllableState } from '@/src/hooks/useControllableState';
 import { useDebounce } from '@/src/hooks/useDebounce';
 import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { resolveWritingDirection } from '@/src/theme/localeTypography';
 
 interface SearchBarProps {
 	value?: string;
@@ -56,10 +57,14 @@ export const SearchBar = forwardRef<NativeTextInput, SearchBarProps>(
 		},
 		ref,
 	) => {
-		const { theme } = useTheme();
+		const { theme, runtime } = useTheme();
 		const searchTokens = theme.components.searchBar;
 		const resolvedPlaceholder = placeholder ?? 'Search';
 		const resolvedAccessibilityLabel = accessibilityLabel ?? resolvedPlaceholder;
+		const resolvedWritingDirection = resolveWritingDirection(
+			runtime.detectedLocale,
+			runtime.runtimeRtl,
+		);
 		const [isFocused, setIsFocused] = useState(false);
 		const skipInitialDebounce = useRef(true);
 		const [currentValue, setCurrentValue] = useControllableState({
@@ -126,6 +131,7 @@ export const SearchBar = forwardRef<NativeTextInput, SearchBarProps>(
 							color: theme.colors.onSurface,
 							fontSize: theme.typography.sizes.md,
 							fontFamily: theme.typography.fontFamily,
+							writingDirection: resolvedWritingDirection,
 						},
 					]}
 					value={currentValue}

@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Pressable, View, Platform, type StyleProp, type ViewStyle } from 'react-native';
 import { useControllableState } from '@/src/hooks/useControllableState';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
@@ -144,7 +144,15 @@ export const ToggleButtonGroup = forwardRef<View, ToggleButtonGroupProps>(
 								accessibilityRole="button"
 								accessibilityLabel={option.label}
 								accessibilityState={{ selected }}
-								style={{
+								android_ripple={
+									Platform.OS === 'android'
+										? {
+												color: c.surfaceVariant,
+												borderless: false,
+											}
+										: undefined
+								}
+								style={({ pressed }) => ({
 									minHeight: theme.touchTarget,
 									paddingHorizontal: theme.spacing.md,
 									paddingVertical: theme.spacing.sm,
@@ -155,7 +163,8 @@ export const ToggleButtonGroup = forwardRef<View, ToggleButtonGroupProps>(
 										? c.primary
 										: theme.visual.surfaces.default,
 									justifyContent: 'center',
-								}}
+									opacity: pressed ? theme.opacity.pressed : 1,
+								})}
 							>
 								<ThemedText
 									variant="bodyStrong"

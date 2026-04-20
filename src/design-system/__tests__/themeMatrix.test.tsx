@@ -67,4 +67,30 @@ describe('design-system theme matrix', () => {
 
 		expect(toJSON()).toMatchSnapshot();
 	});
+
+	it('matches the tablet-landscape snapshot without losing hierarchy', () => {
+		const { toJSON } = render(
+			<ThemeProvider
+				initialMode="light"
+				initialPresetId="executive"
+				persist={false}
+				runtimeOverrides={{
+					windowWidth: 1180,
+					windowHeight: 820,
+					breakpoint: 'wide',
+					deviceType: 'tablet',
+					orientation: 'landscape',
+					columns: 3,
+					supportsSplitPane: true,
+					layoutScale: 1.12,
+					spacingScale: 1.12,
+					typographyScale: 1.08,
+				}}
+			>
+				<ThemeSnapshotPreview locale="en" />
+			</ThemeProvider>,
+		);
+
+		expect(toJSON()).toMatchSnapshot();
+	});
 });

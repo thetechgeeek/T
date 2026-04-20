@@ -53,6 +53,7 @@
 - [ ] Screen-level lazy loading (lazy-load heavy screens)
 - [ ] Fabric (New Architecture) enabled for concurrent features and improved threading
 - [ ] Progressive enhancement order: screen shell → key data/action → secondary media
+- [ ] Screen-level heavy computation is moved off the JS thread when interaction latency would otherwise regress
 
 ### Asset & Bundle Delivery
 

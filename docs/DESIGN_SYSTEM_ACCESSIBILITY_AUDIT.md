@@ -17,6 +17,14 @@ Date: April 17, 2026
 - Premium and branded surfaces have no accessibility exemptions for contrast, focus visibility, motion handling, or readable typography.
 - Physical-device VoiceOver and TalkBack proof remains a manual release gate beyond the automated simulator/emulator lanes documented here.
 
+## Manual Release Gates
+
+- VoiceOver and TalkBack gesture expectations for the supported surface are reviewed during manual audit passes, not inferred from simulator smoke tests alone.
+- Physical-device proof is required before release for:
+    - VoiceOver + Safari on iOS
+    - TalkBack + Chrome on Android
+- The in-repo checklist stays focused on what CI and documented workbench proofs can verify; these manual lanes remain explicit release gates rather than silent assumptions.
+
 ## Environment
 
 - iOS local proof run:

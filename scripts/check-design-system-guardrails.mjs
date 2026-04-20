@@ -33,6 +33,44 @@ const REQUIRED_README_PHRASES = [
 	'Operational dense',
 	'loading, empty, error, read-only, denied, no-media, and ugly-data',
 ];
+const FILE_CONTRACT_RULES = [
+	{
+		file: 'src/design-system/components/atoms/ThemedText.tsx',
+		rule: 'rtl-writing-direction',
+		pattern: /\bwritingDirection\s*:/,
+		message:
+			'The shared text primitive must set writingDirection so RTL locales and accessibility previews stay representative.',
+	},
+	{
+		file: 'src/design-system/components/atoms/Screen.tsx',
+		rule: 'rtl-layout-direction',
+		pattern: /\bdirection\s*:/,
+		message:
+			'The shared screen shell must set layout direction so responsive previews mirror correctly under RTL.',
+	},
+	{
+		file: 'src/design-system/iconography.tsx',
+		rule: 'rtl-directional-icons',
+		pattern: /scaleX:\s*-1/,
+		message:
+			'The shared iconography helpers must support mirroring directional glyphs in RTL.',
+	},
+	{
+		file: 'docs/UI_Library_Web_Backlog.md',
+		rule: 'web-backlog-scope',
+		pattern:
+			/## 5\. Accessibility \(a11y\) Architecture[\s\S]*## 6\. Internationalization \(i18n\) & Localization \(L10n\)[\s\S]*## 7\. Performance UX[\s\S]*## 8\. Responsive & Adaptive Design/,
+		message:
+			'Web-only checklist scope for sections 5-8 must stay documented in docs/UI_Library_Web_Backlog.md.',
+	},
+	{
+		file: 'docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md',
+		rule: 'manual-accessibility-release-gate',
+		pattern: /manual release gate|physical-device/i,
+		message:
+			'Manual VoiceOver/TalkBack release gates must stay documented in docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md.',
+	},
+];
 const MOTION_ANIMATION_RE =
 	/\b(withSpring|withTiming|withRepeat|withDecay|withSequence)\s*\(|\bAnimated\.(?:timing|spring|decay)\s*\(/g;
 const REDUCED_MOTION_HOOK_RE = /\buseReducedMotion\s*\(\)/;
@@ -340,6 +378,29 @@ if (!fs.existsSync(path.join(root, README_PATH))) {
 			});
 			break;
 		}
+	}
+}
+
+for (const contractRule of FILE_CONTRACT_RULES) {
+	const absolutePath = path.join(root, contractRule.file);
+	if (!fs.existsSync(absolutePath)) {
+		violations.push({
+			file: contractRule.file,
+			line: 1,
+			rule: contractRule.rule,
+			message: contractRule.message,
+		});
+		continue;
+	}
+
+	const text = fs.readFileSync(absolutePath, 'utf8');
+	if (!contractRule.pattern.test(text)) {
+		violations.push({
+			file: contractRule.file,
+			line: 1,
+			rule: contractRule.rule,
+			message: contractRule.message,
+		});
 	}
 }
 
