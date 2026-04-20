@@ -16,9 +16,12 @@ describe('design-system proof fixtures', () => {
 	it('keeps realistic fallback-state content for no-media and ugly-data review', () => {
 		expect(DESIGN_SYSTEM_STATE_FIXTURES.noMedia.title).toContain('Logistics');
 		expect(DESIGN_SYSTEM_STATE_FIXTURES.noMedia.monogram).toHaveLength(2);
+		expect(DESIGN_SYSTEM_STATE_FIXTURES.partial.failedCount).toBeGreaterThan(0);
+		expect(DESIGN_SYSTEM_STATE_FIXTURES.stale.visibleRows).toBeGreaterThan(0);
 		expect(DESIGN_SYSTEM_STATE_FIXTURES.uglyData.title.length).toBeGreaterThan(50);
 		expect(DESIGN_SYSTEM_STATE_FIXTURES.uglyData.detail).toContain('null');
-		expect(DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue).toContain('₹');
+		expect(DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue).toBeGreaterThan(1_000_000);
+		expect(DESIGN_SYSTEM_STATE_FIXTURES.uglyData.owner).toBeNull();
 	});
 
 	it('retains read-only fixture rows with metadata context', () => {

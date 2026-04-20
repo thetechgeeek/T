@@ -646,6 +646,16 @@ export interface DesignSystemCopy {
 			retryLabel: string;
 			supportLabel: string;
 		};
+		partial: {
+			title: string;
+			description: string;
+			retryLabel: string;
+		};
+		stale: {
+			title: string;
+			description: string;
+			refreshLabel: string;
+		};
 		readOnly: {
 			title: string;
 			description: string;
@@ -654,6 +664,16 @@ export interface DesignSystemCopy {
 			title: string;
 			description: string;
 			actionLabel: string;
+		};
+		notFound: {
+			title: string;
+			description: string;
+			actionLabel: string;
+		};
+		offline: {
+			title: string;
+			description: string;
+			retryLabel: string;
 		};
 		noMedia: {
 			title: string;
@@ -736,6 +756,7 @@ export interface DesignSystemCopy {
 		runtimeRtl: (enabled: boolean) => string;
 		sampleLabels: {
 			number: string;
+			percent: string;
 			currency: string;
 			dateTime: string;
 			relativeTime: string;
@@ -1677,7 +1698,7 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 		stateProof: {
 			title: localize('State Proof Deck'),
 			description: localize(
-				'Representative loading, empty, error, read-only, denied, no-media, and ugly-data states should all preserve the same visual composure as the default path.',
+				'Representative loading, empty, error, partial, stale, read-only, denied, not-found, offline, no-media, and ugly-data states should all preserve the same visual composure as the default path.',
 			),
 			loading: {
 				title: localize('Loading proof'),
@@ -1700,6 +1721,20 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 				retryLabel: localize('Retry sync'),
 				supportLabel: localize('Contact support'),
 			},
+			partial: {
+				title: localize('Partial recovery'),
+				description: localize(
+					'Show what loaded, what failed, and the one next recovery action without collapsing the surface hierarchy.',
+				),
+				retryLabel: localize('Retry failed items'),
+			},
+			stale: {
+				title: localize('Stale but still usable'),
+				description: localize(
+					'Cached data should remain readable while the surface clearly signals the last successful refresh.',
+				),
+				refreshLabel: localize('Refresh now'),
+			},
 			readOnly: {
 				title: localize('Read-only quality'),
 				description: localize(
@@ -1712,6 +1747,20 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 					'Denied states should keep the same layout quality and hierarchy as the default state.',
 				),
 				actionLabel: localize('Request access'),
+			},
+			notFound: {
+				title: localize('Not-found recovery'),
+				description: localize(
+					'When a record disappears, the fallback should explain what happened and where the user can go next.',
+				),
+				actionLabel: localize('Browse records'),
+			},
+			offline: {
+				title: localize('Offline recovery'),
+				description: localize(
+					'Offline states should preserve layout and present a calm retry path instead of turning the whole surface into a dead end.',
+				),
+				retryLabel: localize('Retry when connected'),
 			},
 			noMedia: {
 				title: localize('No-media fallback'),
@@ -1817,6 +1866,7 @@ export function getDesignSystemCopy(locale: DesignSystemLocale = 'en'): DesignSy
 			runtimeRtl: (enabled) => localize(`RTL runtime: ${enabled ? 'On' : 'Off'}`),
 			sampleLabels: {
 				number: localize('Number'),
+				percent: localize('Percent'),
 				currency: localize('Currency'),
 				dateTime: localize('Date and time'),
 				relativeTime: localize('Relative time'),

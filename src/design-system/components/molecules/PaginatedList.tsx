@@ -3,16 +3,16 @@ import {
 	View,
 	FlatList,
 	ActivityIndicator,
-	StyleSheet,
 	type ListRenderItem,
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { PAGINATED_LIST_COPY } from '@/src/design-system/microcopy';
 import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
+import { ErrorState } from '@/src/design-system/components/molecules/ErrorState';
+import { SPACING_PX } from '@/src/theme/layoutMetrics';
 
 export interface PaginatedListProps<T> {
 	data: T[];
@@ -26,6 +26,11 @@ export interface PaginatedListProps<T> {
 	isRefreshing?: boolean;
 	emptyTitle?: string;
 	emptyDescription?: string;
+	emptyActionLabel?: string;
+	onEmptyAction?: () => void;
+	errorTitle?: string;
+	errorDescription?: string;
+	retryLabel?: string;
 	ListHeaderComponent?: React.ReactElement | null;
 	skeletonCount?: number;
 	style?: StyleProp<ViewStyle>;
@@ -47,8 +52,13 @@ export function PaginatedList<T>({
 	onLoadMore,
 	onRefresh,
 	isRefreshing = false,
-	emptyTitle = 'No data found',
+	emptyTitle = PAGINATED_LIST_COPY.emptyTitle,
 	emptyDescription,
+	emptyActionLabel,
+	onEmptyAction,
+	errorTitle = PAGINATED_LIST_COPY.errorTitle,
+	errorDescription = PAGINATED_LIST_COPY.errorDescription,
+	retryLabel = PAGINATED_LIST_COPY.retryLabel,
 	ListHeaderComponent,
 	skeletonCount = 3,
 	style,
@@ -73,27 +83,16 @@ export function PaginatedList<T>({
 	// Error state
 	if (hasError) {
 		return (
-			<View style={styles.center}>
+			<View style={{ padding: SPACING_PX.xl }}>
 				{ListHeaderComponent}
-				<ThemedText
-					variant="body"
-					align="center"
-					style={{
-						color: c.error,
-						fontSize: theme.typography.sizes.md,
-						marginBottom: SPACING_PX.lg,
-					}}
-				>
-					Something went wrong. Please try again.
-				</ThemedText>
-				{onRetry ? (
-					<Button
-						testID="error-retry-btn"
-						onPress={onRetry}
-						title="Retry"
-						style={styles.retryBtn}
-					/>
-				) : null}
+				<ErrorState
+					testID="error-state"
+					variant="server"
+					title={errorTitle}
+					description={errorDescription}
+					actionLabel={onRetry ? retryLabel : undefined}
+					onAction={onRetry}
+				/>
 			</View>
 		);
 	}
@@ -112,32 +111,13 @@ export function PaginatedList<T>({
 			contentContainerStyle={contentContainerStyle}
 			ListHeaderComponent={ListHeaderComponent}
 			ListEmptyComponent={
-				<View testID="empty-state" style={styles.center}>
-					<ThemedText
-						variant="sectionTitle"
-						align="center"
-						style={{
-							fontSize: theme.typography.sizes.lg,
-							fontWeight: '700',
-							color: c.onSurface,
-							marginBottom: SPACING_PX.sm,
-						}}
-					>
-						{emptyTitle}
-					</ThemedText>
-					{emptyDescription ? (
-						<ThemedText
-							variant="body"
-							align="center"
-							style={{
-								fontSize: theme.typography.sizes.md,
-								color: c.onSurfaceVariant,
-							}}
-						>
-							{emptyDescription}
-						</ThemedText>
-					) : null}
-				</View>
+				<EmptyState
+					testID="empty-state"
+					title={emptyTitle}
+					description={emptyDescription}
+					actionLabel={emptyActionLabel}
+					onAction={onEmptyAction}
+				/>
 			}
 			ListFooterComponent={
 				isLoading && data.length > 0 ? (
@@ -151,15 +131,3 @@ export function PaginatedList<T>({
 		/>
 	);
 }
-
-const styles = StyleSheet.create({
-	center: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		padding: SPACING_PX.xl,
-	},
-	retryBtn: {
-		minHeight: TOUCH_TARGET_MIN_PX,
-	},
-});

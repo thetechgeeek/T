@@ -7,6 +7,11 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - Give product and engineering a live in-app component gallery instead of depending on Figma first.
 - Track the pure library contract from [UI_Library_Checklist.md](../../docs/UI_Library_Checklist.md); host-app responsibilities live in [UI_Integration_Checklist.md](../../docs/UI_Integration_Checklist.md).
 - Track external design-tool and asset-delivery workflow in [DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md](../../docs/DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md) instead of mixing it into the core library contract.
+- Track motion, copy, governance, and state-resilience rules in their companion docs:
+    - [DESIGN_SYSTEM_MOTION_GUIDELINES.md](../../docs/DESIGN_SYSTEM_MOTION_GUIDELINES.md)
+    - [DESIGN_SYSTEM_COPY_STANDARDS.md](../../docs/DESIGN_SYSTEM_COPY_STANDARDS.md)
+    - [DESIGN_SYSTEM_GOVERNANCE.md](../../docs/DESIGN_SYSTEM_GOVERNANCE.md)
+    - [DESIGN_SYSTEM_STATE_RESILIENCE.md](../../docs/DESIGN_SYSTEM_STATE_RESILIENCE.md)
 - Keep the supported component catalog tied to an explicit design-system registry instead of product feature screens.
 - Support runtime look-and-feel switching through theme presets, not only light/dark colors.
 
@@ -78,6 +83,10 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
     - pixel-compares captured Maestro screenshots against the committed baseline set
 - [DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md](../../docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md)
     - records the current accessibility audit scope, findings, and follow-up rules for the supported library surface
+- [DESIGN_SYSTEM_GOVERNANCE.md](../../docs/DESIGN_SYSTEM_GOVERNANCE.md)
+    - records SemVer, deprecation, contribution, and living-documentation policy for the shared surface
+- [DESIGN_SYSTEM_STATE_RESILIENCE.md](../../docs/DESIGN_SYSTEM_STATE_RESILIENCE.md)
+    - captures the state matrix and the ownership split between reusable fallback surfaces and app orchestration
 
 ## Working Rules
 
@@ -89,8 +98,10 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - Keep the workbench representative, not exhaustive at the prop-matrix level. It should show the supported patterns clearly and fast.
 - Treat the checklist explorer as the target-state backlog. Treat the supported component catalog as the current implementation contract.
 - Keep user-facing workbench copy in `copy.ts`, not inline in `DesignLibraryScreen.tsx`.
+- Keep reusable fallback microcopy in `microcopy.ts`, and keep locale-sensitive number/date helpers in `formatters.ts`.
 - The workbench must always show both `Relaxed showcase` and `Operational dense` expressions so new presets prove they can handle premium and operational surfaces with the same primitives.
 - Keep fallback states first-class: loading, empty, error, read-only, denied, no-media, and ugly-data proofs belong in the design-system before they spread into product screens.
+- Motion rules, copy standards, governance policy, and state resilience must stay documented beside the code instead of drifting into product-only knowledge.
 - Prefer neutral enterprise surfaces as the default bias. Brand-heavy or inverse surfaces should be deliberate exceptions, not the ambient default.
 - Prefer `paddingStart` / `paddingEnd` and other logical-direction-safe styles so RTL checks stay green.
 - Treat `src/design-system` as the tightest-guarded UI zone in the repo: this folder should be where we prove i18n, localization stress, RTL safety, accessibility labels, and design-system automation first.

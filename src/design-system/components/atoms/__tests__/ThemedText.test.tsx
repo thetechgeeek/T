@@ -184,6 +184,19 @@ describe('ThemedText (P0.2)', () => {
 		);
 	});
 
+	it('passes through truncation props for composed surfaces', () => {
+		const { getByText } = renderWithColorScheme(
+			<ThemedText numberOfLines={2} ellipsizeMode="tail">
+				Extremely long but intentionally clamped piece of text
+			</ThemedText>,
+			'light',
+		);
+		const text = getByText('Extremely long but intentionally clamped piece of text');
+
+		expect(text.props.numberOfLines).toBe(2);
+		expect(text.props.ellipsizeMode).toBe('tail');
+	});
+
 	it.each(THEME_MATRIX)(
 		'renders every variant with live theme tokens in $label mode',
 		({ colorScheme }) => {

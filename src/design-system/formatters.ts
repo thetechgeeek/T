@@ -1,4 +1,5 @@
 import type { DesignSystemLocale } from './copy';
+import { MISSING_VALUE_PLACEHOLDER, formatOptionalCopy } from './microcopy';
 
 const DEFAULT_INTL_LOCALE = 'en-US';
 const ARABIC_INTL_LOCALE = 'ar-SA';
@@ -7,21 +8,32 @@ const JAPANESE_INTL_LOCALE = 'ja-JP';
 const DEFAULT_CURRENCY_CODE = 'INR';
 const SAMPLE_NUMBER = 1234567.89;
 const SAMPLE_CURRENCY_VALUE = 125000;
+const SAMPLE_PERCENT_VALUE = 0.94;
 const SAMPLE_DATE = new Date('2026-04-15T09:30:00.000Z');
 const SAMPLE_RELATIVE_DAY_DELTA = -3;
 const SAMPLE_LIST = ['Tokens', 'Patterns', 'Accessibility'] as const;
 const SAMPLE_SORT_VALUES = ['zebra', 'apple', 'angstrom'] as const;
+const HOURS_PER_DAY = 24;
+const MINUTES_PER_HOUR = 60;
+const SECONDS_PER_MINUTE = 60;
+const MILLISECONDS_PER_SECOND = 1000;
 
 export interface DesignSystemLocaleDiagnostics {
 	dashboardLocale: DesignSystemLocale;
 	intlLocale: string;
 	number: string;
+	percent: string;
 	currency: string;
 	date: string;
 	relativeTime: string;
 	list: string;
 	plural: string;
 	sorted: string;
+}
+
+export interface RelativeAbsoluteTimestampLabel {
+	absolute: string;
+	relative: string;
 }
 
 export function resolveIntlLocale(locale: DesignSystemLocale | string) {
@@ -82,6 +94,17 @@ export function formatLocaleCurrency(
 	}).format(value);
 }
 
+export function formatLocalePercent(
+	locale: DesignSystemLocale | string,
+	value: number,
+	maximumFractionDigits = 0,
+) {
+	return new Intl.NumberFormat(resolveIntlLocale(locale), {
+		style: 'percent',
+		maximumFractionDigits,
+	}).format(value);
+}
+
 export function formatLocaleDateTime(locale: DesignSystemLocale | string, value: Date) {
 	return new Intl.DateTimeFormat(resolveIntlLocale(locale), {
 		dateStyle: 'medium',
@@ -101,6 +124,22 @@ export function formatLocaleRelativeTime(
 	}
 
 	return `${value} ${unit}${Math.abs(value) === 1 ? '' : 's'}`;
+}
+
+export function buildRelativeAbsoluteTimestampLabel(
+	locale: DesignSystemLocale | string,
+	value: Date,
+	referenceDate = SAMPLE_DATE,
+): RelativeAbsoluteTimestampLabel {
+	const dayDelta = Math.round(
+		(value.getTime() - referenceDate.getTime()) /
+			(HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND),
+	);
+
+	return {
+		absolute: formatLocaleDateTime(locale, value),
+		relative: formatLocaleRelativeTime(locale, dayDelta, 'day'),
+	};
 }
 
 export function formatLocaleList(locale: DesignSystemLocale | string, values: readonly string[]) {
@@ -156,6 +195,13 @@ export function sortLabelsWithLocale(
 	return sortedValues.join(' | ');
 }
 
+export function formatMissingValue(
+	value: string | number | null | undefined,
+	placeholder = MISSING_VALUE_PLACEHOLDER,
+) {
+	return formatOptionalCopy(value, placeholder);
+}
+
 export function buildDesignSystemLocaleDiagnostics(
 	locale: DesignSystemLocale,
 ): DesignSystemLocaleDiagnostics {
@@ -165,6 +211,7 @@ export function buildDesignSystemLocaleDiagnostics(
 		dashboardLocale: locale,
 		intlLocale,
 		number: formatLocaleNumber(intlLocale, SAMPLE_NUMBER),
+		percent: formatLocalePercent(intlLocale, SAMPLE_PERCENT_VALUE),
 		currency: formatLocaleCurrency(intlLocale, SAMPLE_CURRENCY_VALUE),
 		date: formatLocaleDateTime(intlLocale, SAMPLE_DATE),
 		relativeTime: formatLocaleRelativeTime(intlLocale, SAMPLE_RELATIVE_DAY_DELTA, 'day'),

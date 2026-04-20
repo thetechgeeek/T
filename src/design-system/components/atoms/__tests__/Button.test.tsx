@@ -121,20 +121,21 @@ describe('Button', () => {
 		expect(largeStyle.height).toBeGreaterThanOrEqual(56);
 	});
 
-	it('shows a loading spinner, marks the button busy, and blocks presses while loading', () => {
+	it('shows a loading spinner, in-progress label, marks the button busy, and blocks presses while loading', () => {
 		const onPress = jest.fn();
-		const { getByLabelText, getByTestId, queryByText } = renderWithTheme(
-			<Button title="Saving" loading onPress={onPress} />,
+		const { getByLabelText, getByTestId, queryByText, getByText } = renderWithTheme(
+			<Button title="Save changes" loading onPress={onPress} />,
 		);
 
 		expect(getByTestId('loading-indicator')).toBeTruthy();
-		expect(queryByText('Saving')).toBeNull();
-		expect(getByLabelText('Saving')).toHaveProp('accessibilityState', {
+		expect(getByText('Saving changes...')).toBeTruthy();
+		expect(queryByText('Save changes')).toBeNull();
+		expect(getByLabelText('Saving changes...')).toHaveProp('accessibilityState', {
 			disabled: true,
 			busy: true,
 		});
 
-		fireEvent.press(getByLabelText('Saving'));
+		fireEvent.press(getByLabelText('Saving changes...'));
 		expect(onPress).not.toHaveBeenCalled();
 	});
 

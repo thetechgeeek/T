@@ -78,7 +78,7 @@ describe('DesignLibraryScreen', () => {
 	});
 
 	it('renders the premium-quality workbench sections and generated counts', async () => {
-		const { getByText, queryByText } = renderWithTheme(<DesignLibraryScreen />);
+		const { getAllByText, getByText, queryByText } = renderWithTheme(<DesignLibraryScreen />);
 		await act(async () => {
 			jest.runOnlyPendingTimers();
 		});
@@ -88,6 +88,8 @@ describe('DesignLibraryScreen', () => {
 		expect(getByText('Relaxed vs Operational Presentation')).toBeTruthy();
 		expect(getByText('Forms & validation')).toBeTruthy();
 		expect(getByText('State Proof Deck')).toBeTruthy();
+		expect(getAllByText('Partial recovery').length).toBeGreaterThan(0);
+		expect(getAllByText('Stale but still usable').length).toBeGreaterThan(0);
 		expect(getByText(String(DESIGN_LIBRARY_OVERVIEW.total))).toBeTruthy();
 		expect(getByText(String(DESIGN_LIBRARY_OVERVIEW.commonMobile))).toBeTruthy();
 		expect(getByText('Supported Component Catalog')).toBeTruthy();

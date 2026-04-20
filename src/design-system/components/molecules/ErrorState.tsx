@@ -2,6 +2,7 @@ import React from 'react';
 import { WifiOff, AlertTriangle, FileQuestion } from 'lucide-react-native';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
+import { DEFAULT_RETRY_LABEL, ERROR_STATE_COPY } from '@/src/design-system/microcopy';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
@@ -18,33 +19,18 @@ export interface ErrorStateProps {
 	style?: StyleProp<ViewStyle>;
 }
 
-const DEFAULT_COPY: Record<ErrorStateVariant, { title: string; description: string }> = {
-	server: {
-		title: 'Server error',
-		description: 'We could not load this information right now.',
-	},
-	'not-found': {
-		title: 'Not found',
-		description: 'This record is no longer available.',
-	},
-	offline: {
-		title: 'Offline',
-		description: 'Reconnect to refresh this content.',
-	},
-};
-
 export function ErrorState({
 	variant,
 	title,
 	description,
-	actionLabel = 'Retry',
+	actionLabel = DEFAULT_RETRY_LABEL,
 	onAction,
 	testID,
 	style,
 }: ErrorStateProps) {
 	const { theme } = useTheme();
 	const c = theme.colors;
-	const copy = DEFAULT_COPY[variant];
+	const copy = ERROR_STATE_COPY[variant];
 	const Icon =
 		variant === 'server' ? AlertTriangle : variant === 'offline' ? WifiOff : FileQuestion;
 

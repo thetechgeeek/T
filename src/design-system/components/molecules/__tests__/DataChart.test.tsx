@@ -1,6 +1,7 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
+import { ERROR_STATE_COPY } from '@/src/design-system/microcopy';
 import { buildTheme } from '@/src/theme/colors';
 import { DataChart } from '../DataChart';
 
@@ -154,7 +155,7 @@ describe('DataChart', () => {
 		expect(getByTestId('empty-chart-empty')).toBeTruthy();
 
 		rerender(<DataChart title="Chart error" variant="line" hasError testID="error-chart" />);
-		expect(getByText('Server error')).toBeTruthy();
+		expect(getByText(ERROR_STATE_COPY.server.title)).toBeTruthy();
 		expect(getByText('Retry chart')).toBeTruthy();
 	});
 });

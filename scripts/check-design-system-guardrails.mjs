@@ -59,9 +59,9 @@ const FILE_CONTRACT_RULES = [
 		file: 'docs/UI_Library_Web_Backlog.md',
 		rule: 'web-backlog-scope',
 		pattern:
-			/## 5\. Accessibility \(a11y\) Architecture[\s\S]*## 6\. Internationalization \(i18n\) & Localization \(L10n\)[\s\S]*## 7\. Performance UX[\s\S]*## 8\. Responsive & Adaptive Design/,
+			/## 5\. Accessibility \(a11y\) Architecture[\s\S]*## 6\. Internationalization \(i18n\) & Localization \(L10n\)[\s\S]*## 7\. Performance UX[\s\S]*## 8\. Responsive & Adaptive Design[\s\S]*## 9\. Motion & Animation System[\s\S]*## 10\. Copy & Microcopy Standards[\s\S]*## 12\. State Resilience & Graceful Degradation/,
 		message:
-			'Web-only checklist scope for sections 5-8 must stay documented in docs/UI_Library_Web_Backlog.md.',
+			'Web-only checklist scope for sections 5-10 and 12 must stay documented in docs/UI_Library_Web_Backlog.md.',
 	},
 	{
 		file: 'docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md',
@@ -69,6 +69,35 @@ const FILE_CONTRACT_RULES = [
 		pattern: /manual release gate|physical-device/i,
 		message:
 			'Manual VoiceOver/TalkBack release gates must stay documented in docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md.',
+	},
+	{
+		file: 'docs/DESIGN_SYSTEM_MOTION_GUIDELINES.md',
+		rule: 'motion-guidelines-doc',
+		pattern: /Reanimated[\s\S]*useReducedMotion\(\)[\s\S]*UI_Integration_Checklist/i,
+		message:
+			'Design-system motion guidelines must document Reanimated ownership, reduced motion, and the app-integration boundary.',
+	},
+	{
+		file: 'docs/DESIGN_SYSTEM_COPY_STANDARDS.md',
+		rule: 'copy-standards-doc',
+		pattern: /microcopy\.ts[\s\S]*formatters\.ts[\s\S]*action-framed/i,
+		message:
+			'Design-system copy standards must document shared fallback microcopy, formatting helpers, and action-framed wording rules.',
+	},
+	{
+		file: 'docs/DESIGN_SYSTEM_GOVERNANCE.md',
+		rule: 'governance-doc',
+		pattern: /Semantic Versioning[\s\S]*two minor releases[\s\S]*\.github\/workflows\/ci\.yml/i,
+		message:
+			'Design-system governance must document SemVer, deprecation windows, and CI-backed living documentation.',
+	},
+	{
+		file: 'docs/DESIGN_SYSTEM_STATE_RESILIENCE.md',
+		rule: 'state-resilience-doc',
+		pattern:
+			/DesignLibraryScreen\.tsx[\s\S]*ThemeSnapshotPreview\.tsx[\s\S]*UI_Integration_Checklist/i,
+		message:
+			'Design-system state resilience docs must describe the DS proof surfaces and the app-integration handoff.',
 	},
 ];
 const MOTION_ANIMATION_RE =
@@ -102,6 +131,12 @@ const FILE_TEXT_RULES = [
 		name: 'react-native-text',
 		pattern: /import\s*\{[^}]*\bText\b[^}]*\}\s*from\s*['"]react-native['"]/g,
 		message: 'Use ThemedText instead of raw react-native Text in design-system UI code.',
+	},
+	{
+		name: 'react-native-animated',
+		pattern: /import\s*\{[^}]*\bAnimated\b[^}]*\}\s*from\s*['"]react-native['"]/g,
+		message:
+			'Use Reanimated for supported design-system motion so shared interactions stay on the UI thread.',
 	},
 ];
 

@@ -107,7 +107,12 @@ import type { DesignSystemComponentKind } from './generated/componentCatalog';
 import type { UiLibraryChecklistItem } from './generated/uiLibraryCatalog';
 import type { ThemeMode, ThemePresetId } from '@/src/theme';
 import { getDesignSystemCopy, type DesignSystemLocale } from './copy';
-import { buildDesignSystemLocaleDiagnostics } from './formatters';
+import {
+	buildDesignSystemLocaleDiagnostics,
+	buildRelativeAbsoluteTimestampLabel,
+	formatLocaleCurrency,
+	formatMissingValue,
+} from './formatters';
 import { useDesignSystemQualitySignals } from './useQualitySignals';
 import {
 	responsiveCardStyle,
@@ -721,6 +726,30 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 	);
 	const localeDiagnostics = useMemo(
 		() => buildDesignSystemLocaleDiagnostics(activeLocale),
+		[activeLocale],
+	);
+	const partialTimestamp = useMemo(
+		() =>
+			buildRelativeAbsoluteTimestampLabel(
+				activeLocale,
+				DESIGN_SYSTEM_STATE_FIXTURES.partial.lastSuccessfulSyncAt,
+			),
+		[activeLocale],
+	);
+	const staleTimestamp = useMemo(
+		() =>
+			buildRelativeAbsoluteTimestampLabel(
+				activeLocale,
+				DESIGN_SYSTEM_STATE_FIXTURES.stale.lastUpdatedAt,
+			),
+		[activeLocale],
+	);
+	const uglyDataTimestamp = useMemo(
+		() =>
+			buildRelativeAbsoluteTimestampLabel(
+				activeLocale,
+				DESIGN_SYSTEM_STATE_FIXTURES.uglyData.lastUpdatedAt,
+			),
 		[activeLocale],
 	);
 	const qualitySignals = useDesignSystemQualitySignals(activeLocale);
@@ -1486,6 +1515,11 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 					<ListItem
 						title={copy.localization.sampleLabels.number}
 						subtitle={localeDiagnostics.number}
+						showChevron={false}
+					/>
+					<ListItem
+						title={copy.localization.sampleLabels.percent}
+						subtitle={localeDiagnostics.percent}
 						showChevron={false}
 					/>
 					<ListItem
@@ -3429,6 +3463,32 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 							</StateProofCard>
 
 							<StateProofCard
+								title={copy.stateProof.partial.title}
+								description={copy.stateProof.partial.description}
+							>
+								<AlertBanner
+									title={copy.stateProof.partial.title}
+									description={`${DESIGN_SYSTEM_STATE_FIXTURES.partial.loadedCount} loaded, ${DESIGN_SYSTEM_STATE_FIXTURES.partial.failedCount} waiting for retry. ${partialTimestamp.relative} • ${partialTimestamp.absolute}`}
+									variant="warning"
+									actionLabel={copy.stateProof.partial.retryLabel}
+									onAction={() => setToastVisible(true)}
+								/>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.stale.title}
+								description={copy.stateProof.stale.description}
+							>
+								<AlertBanner
+									title={copy.stateProof.stale.title}
+									description={`${DESIGN_SYSTEM_STATE_FIXTURES.stale.visibleRows} rows visible from cache. ${staleTimestamp.relative} • ${staleTimestamp.absolute}`}
+									variant="info"
+									actionLabel={copy.stateProof.stale.refreshLabel}
+									onAction={() => setToastVisible(true)}
+								/>
+							</StateProofCard>
+
+							<StateProofCard
 								title={copy.stateProof.readOnly.title}
 								description={copy.stateProof.readOnly.description}
 							>
@@ -3459,6 +3519,32 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 										onPress={() => setToastVisible(true)}
 									/>
 								</View>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.notFound.title}
+								description={copy.stateProof.notFound.description}
+							>
+								<ErrorState
+									variant="not-found"
+									title={copy.stateProof.notFound.title}
+									description={copy.stateProof.notFound.description}
+									actionLabel={copy.stateProof.notFound.actionLabel}
+									onAction={() => setToastVisible(true)}
+								/>
+							</StateProofCard>
+
+							<StateProofCard
+								title={copy.stateProof.offline.title}
+								description={copy.stateProof.offline.description}
+							>
+								<ErrorState
+									variant="offline"
+									title={copy.stateProof.offline.title}
+									description={copy.stateProof.offline.description}
+									actionLabel={copy.stateProof.offline.retryLabel}
+									onAction={() => setToastVisible(true)}
+								/>
 							</StateProofCard>
 
 							<StateProofCard
@@ -3546,13 +3632,18 @@ export default function DesignLibraryScreen({ locale = 'en' }: DesignLibraryScre
 									variant="metric"
 									style={{ color: c.onSurface, marginTop: s.md }}
 								>
-									{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue}
+									{formatLocaleCurrency(
+										activeLocale,
+										DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue,
+									)}
 								</ThemedText>
 								<ThemedText
 									variant="metadata"
 									style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
 								>
-									{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricContext}
+									{`${copy.stateProof.uglyData.metaLabel}: ${formatMissingValue(
+										DESIGN_SYSTEM_STATE_FIXTURES.uglyData.owner,
+									)} • ${uglyDataTimestamp.relative} • ${uglyDataTimestamp.absolute}`}
 								</ThemedText>
 							</StateProofCard>
 						</View>

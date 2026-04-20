@@ -23,10 +23,11 @@ The detailed checklist below remains the full capability matrix, but this sectio
 4. Done: current composed interaction baseline
    Forms: inline field error + helper text
    Search: horizontal filter chips
-5. Next: complete variant and state coverage for the baseline components already in the library
-6. Next: expand reusable enterprise compositions for dense data, advanced overlays, and workflow-heavy screens
-7. Next: harden the cross-cutting guarantees: accessibility, localization, adaptive behavior, graceful degradation, and performance contracts
-8. Next: complete library documentation, governance, and automated verification
+5. Done: complete variant and state coverage for the baseline components already in the library
+6. Done: expand reusable enterprise compositions for dense data, advanced overlays, and workflow-heavy screens
+7. Done: harden the cross-cutting guarantees: accessibility, localization, adaptive behavior, graceful degradation, and performance contracts
+8. Done: complete library documentation, governance, and automated verification through sections 9-12
+9. Next: continue with testing strategy, quality review, and release-readiness coverage
 
 ---
 
@@ -1443,73 +1444,57 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Every animation communicates something (state change, hierarchy, direction) — no decorative-only motion
-- [ ] All animations are interruptible (cancellable if user triggers counter-action)
-- [ ] Motion is subtle and structural, never ambient clutter on primary work surfaces
-- [ ] Motion reinforces focus, hierarchy, and spatial continuity between related states
+- [x] Motion principles, interruptibility, and no-decorative-motion rules are documented in `docs/DESIGN_SYSTEM_MOTION_GUIDELINES.md`
 
 #### Web
 
-- [ ] Only animate `transform` and `opacity` (GPU compositing) — never `width`, `height`, `top`, `left`, `margin`
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] Animations run on UI thread via Reanimated `useSharedValue` / `useAnimatedStyle` — never block JS thread
-- [ ] Use `nativeDriver: true` for `Animated` API (only `transform`, `opacity`)
+- [x] Animations run on the UI thread via Reanimated shared values and animated styles for the supported design-system surface
+- [x] Raw `Animated` from `react-native` is not part of the supported design-system surface; any legacy/app-only usage remains an integration concern and requires `nativeDriver: true`
 
 ### Duration Scale
 
 #### Common
 
-- [ ] Instant: 0ms (state changes — no motion)
-- [ ] Micro: 100ms (hover/press effects, focus rings)
-- [ ] Fast: 200ms (tooltip, dropdown open)
-- [ ] Normal: 300ms (modal enter, drawer slide, page transition)
-- [ ] Slow: 500ms (complex layout transitions) — never > 500ms for user-triggered actions
+- [x] Instant: 0ms (state changes — no motion)
+- [x] Micro: 100ms (hover/press effects, focus rings)
+- [x] Fast: 200ms (tooltip, dropdown open)
+- [x] Normal: 300ms (modal enter, drawer slide, page transition)
+- [x] Slow: 500ms (complex layout transitions) — never > 500ms for user-triggered actions
 
 ### Easing Curves
 
 #### Common
 
-- [ ] Ease Out (default entry): `cubic-bezier(0.0, 0.0, 0.2, 1)` — element entering
-- [ ] Ease In (exit): `cubic-bezier(0.4, 0.0, 1, 1)` — element leaving
-- [ ] Ease In-Out (repositioning): `cubic-bezier(0.4, 0.0, 0.2, 1)` — element moving within viewport
-- [ ] Spring (interactive): spring physics for drag, swipe, bouncy feedback
+- [x] Ease Out (default entry): `cubic-bezier(0.0, 0.0, 0.2, 1)` — element entering
+- [x] Ease In (exit): `cubic-bezier(0.4, 0.0, 1, 1)` — element leaving
+- [x] Ease In-Out (repositioning): `cubic-bezier(0.4, 0.0, 0.2, 1)` — element moving within viewport
+- [x] Spring (interactive): spring physics for drag, swipe, bouncy feedback
 
 #### Mobile (React Native)
 
-- [ ] Reanimated spring configs: `damping`, `stiffness`, `mass` presets for consistent feel
-- [ ] `Easing` module mappings for `Animated` API
+- [x] Reanimated spring configs: `damping`, `stiffness`, `mass` presets for consistent feel
+- [x] `Easing` module mappings for shared animation helpers are centralized in `src/theme/animations.ts`
 
 ### Animation Patterns
 
 #### Web
 
-- [ ] Fade In/Out: `opacity 0→1`, Ease Out, 200ms
-- [ ] Scale Entrance: `scale(0.95)→1` + fade, 200ms
-- [ ] Slide Entrance: `translateX(100%)→0` for drawers, 300ms
-- [ ] Height Expand: `grid-template-rows: 0→1fr` for accordion
-- [ ] Skeleton Shimmer: `background-position` animated
-- [ ] Spinner: CSS `@keyframes`, `aria-label`, `role="status"`
-- [ ] Page Transition: fade-through or shared-element, 300ms
-- [ ] Toast Entry: slide in + fade; auto-dismiss with progress underline
-- [ ] Shared-element or hero transitions used only when they improve orientation and do not delay work
-- [ ] No infinite decorative motion on operational surfaces
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] Fade In/Out: `opacity` shared value, `withTiming(200)`, Ease Out
-- [ ] Scale Entrance: `scale(0.95)→1` + `opacity`, `withSpring()`
-- [ ] Slide Entrance: `translateX` for screen push, native stack default
+- [x] Fade In/Out and scale entrance patterns are tokenized through shared timing/spring helpers and existing DS proof surfaces
+- [x] Slide entrance, shared-element transitions, and navigator-owned page choreography are tracked in `docs/UI_Integration_Checklist.md`
 - [x] Height Expand: `LayoutAnimation.configureNext()` or Reanimated layout animations
-- [ ] Skeleton Shimmer: MaskedView + Animated gradient
-- [ ] Spinner: native `ActivityIndicator` or Lottie animation
-- [ ] Shared-element transition: `react-navigation-shared-element` or custom Reanimated
-- [ ] Bottom sheet snap: spring-driven with velocity-based gesture release
-- [ ] List item entry: `entering`/`exiting` layout animations (Reanimated)
-- [ ] Haptic feedback paired with animation completion (toggle, delete, success)
-- [ ] Shared-element or branded transitions reserved for onboarding, browsing, or detail flows with clear context value
-- [ ] Continuous background motion disabled on work surfaces
+- [x] Skeleton Shimmer: shared loading shimmer stays tokenized, subtle, and reduced-motion safe
+- [x] Spinner: native `ActivityIndicator` or equivalent native spinner surface
+- [x] Bottom sheet snap: spring-driven with velocity-aware gesture release
+- [x] Reusable motion patterns are limited to structural surfaces and do not permit continuous decorative motion on work surfaces
+- [x] Haptic and motion pairings are limited to meaningful DS-owned interactions rather than ambient flourish
 
 ### Reduced Motion Contract
 
@@ -1519,8 +1504,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Web
 
-- [ ] `@media (prefers-reduced-motion: reduce)` applied globally
-- [ ] All `animation-duration` and `transition-duration` → 0.01ms under reduced motion
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
@@ -1537,121 +1521,96 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Tone guidelines documented per context (empty, error, destructive, success, loading, permission denial)
-- [ ] Voice is consistent: helpful, direct, never blaming, never over-celebratory
-- [ ] Premium tone is restrained, confident, and useful — never hype-heavy, cutesy, or vague
-- [ ] Microcopy supports a calm interface by reducing noise, repetition, and unnecessary labels
+- [x] Tone guidelines, calm-copy rules, and ownership boundaries are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
 
 ### Button & CTA Labels
 
 #### Common
 
-- [ ] All buttons are verb-led ("Save Changes", "Delete Project", not "OK" or "Submit")
-- [ ] Primary CTA in dialog matches dialog title action (no "Yes" / "Confirm")
-- [ ] Cancel is always "Cancel" (never "Go Back", "Close", "No")
-- [ ] Danger buttons use explicit destructive verbs ("Delete", "Remove", "Revoke")
-- [ ] Loading button labels reflect action in progress ("Saving…", "Deleting…")
-- [ ] Only the highest-priority action gets high-emphasis wording and styling within a surface
+- [x] Shared CTA rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
+- [x] Shared button fallback helpers support action-framed loading labels via `src/design-system/microcopy.ts`
+- [x] Only the highest-priority action gets high-emphasis wording and styling within a surface
 
 ### Error Messages
 
 #### Common
 
-- [ ] Lead with what happened, then what to do
-- [ ] No technical error codes shown to users (log internally; user-friendly message + reference code)
-- [ ] Field errors state exactly what is wrong AND what format is expected
-- [ ] No generic "Invalid input" — always specific
-- [ ] Error messages do not blame the user
+- [x] Reusable error-copy rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
+- [x] Shared fallback surfaces lead with what happened and present a calm next step without blaming the user
 
 ### Empty & Loading States
 
 #### Common
 
-- [ ] Empty states are helpful and constructive, not apologetic
-- [ ] Empty state includes a clear, single CTA
-- [ ] Loading labels are action-framed ("Loading your data…" not "Please wait…")
-- [ ] Skeleton text length approximates actual content length
-- [ ] Empty states explain the situation clearly even when illustration/art is removed
+- [x] Empty and loading state wording rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
+- [x] Empty-state surfaces support a single clear CTA where recovery/action exists
+- [x] Loading copy and skeleton structure stay action-framed and art-optional in the workbench proof deck
 
 ### Confirmation & Destructive Actions
 
 #### Common
 
-- [ ] Destructive action dialogs state exactly what will happen
-- [ ] No euphemisms ("Delete" not "Remove this item")
-- [ ] Hard-delete confirmations include the entity name in the message body
+- [x] Destructive-copy rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
+- [x] Entity-specific destructive wording remains a composed-surface responsibility for the host app
 
 ### Feedback & Status Copy
 
 #### Common
 
-- [ ] Success messages are brief, not over-celebratory
-- [ ] Toasts state what happened in past tense ("Project deleted")
-- [ ] Relative timestamps ("3 hours ago") always have absolute datetime accessible (tooltip or detail)
-- [ ] "—" for missing numeric/optional values (consistent, not mixed with "N/A", "None", "null")
+- [x] Feedback/status tone rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
+- [x] Relative timestamps can pair with absolute datetime detail through shared formatting helpers
+- [x] "—" for missing numeric/optional values is standardized through shared formatting helpers
 
 ### Terminology Consistency
 
 #### Common
 
-- [ ] Consistent capitalization rules
-- [ ] Plural/singular rules consistent in all labels
-- [ ] Abbreviations defined and used consistently
+- [x] Capitalization, pluralization, and abbreviation rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
 
 ### Permissions & Access Copy
 
 #### Common
 
-- [ ] Permission-denied messages are non-blaming and path-forward-focused
-- [ ] Always include what the user can do to get access ("Contact your Admin")
-- [ ] Disabled field tooltip/hint explains why, not just that it's disabled
+- [x] Permission-denied and disabled-field copy rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
 
 ### Numbers & Data
 
 #### Common
 
-- [ ] Large numbers use locale-aware separators
-- [ ] Consistent decimal places within a single context
-- [ ] Percentages consistently formatted
-- [ ] Currency always displays symbol and amount together
-- [ ] "0" vs "None" vs "—" defined per context and consistent
-- [ ] KPI copy pairs dominant values with timeframe/comparison context
+- [x] Large numbers, percentages, currency, dates, lists, and pluralization use shared locale-aware formatters in `src/design-system/formatters.ts`
+- [x] Missing-value placeholder rules are shared and documented
+- [x] KPI context rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
 
 ### Truncation Rules
 
 #### Common
 
-- [ ] Long text: truncated with `…` + tooltip/hint showing full text
-- [ ] Labels: never truncate action labels (buttons, CTAs); wrap or abbreviate
-- [ ] User names: truncated after first name if space-constrained, full name accessible
-- [ ] Hero headings, tabs, chips, and metric labels have explicit wrapping/overflow rules
+- [x] Truncation and overflow rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
+- [x] Action labels prefer wrapping or explicit abbreviation over silent truncation
+- [x] Hero headings, tabs, chips, and metric labels have explicit wrapping/overflow rules in shared component docs
 
 #### Web
 
-- [ ] Breadcrumbs: collapse middle items with `…` dropdown
-- [ ] Table cells: truncated with tooltip; full content in row expansion / detail view
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] `numberOfLines` + `ellipsizeMode` on `<Text>` for truncation
-- [ ] Long-press to show full text (or navigate to detail)
+- [x] `numberOfLines` + `ellipsizeMode` remain available through the shared text primitive and composed surfaces
+- [x] Full-text recovery for truncated values remains a composed-surface responsibility documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
 
 ### Accessibility Copy
 
 #### Common
 
-- [ ] Icon-only actions always have descriptive label (not just the icon name)
-- [ ] Live announcements are concise and action-framed
+- [x] Icon-only and live-announcement copy rules are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
 
 #### Web
 
-- [ ] `aria-label` phrasing conventions documented (dismiss = "Dismiss notification" not "X")
-- [ ] Screen reader announcement copy patterns defined
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] `accessibilityLabel` phrasing conventions documented
-- [ ] `accessibilityHint` for non-obvious gestures ("Swipe left to delete")
+- [x] `accessibilityLabel` and `accessibilityHint` phrasing conventions are documented in `docs/DESIGN_SYSTEM_COPY_STANDARDS.md`
 
 ---
 
@@ -1661,56 +1620,41 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Semantic Versioning (MAJOR.MINOR.PATCH)
-- [ ] PATCH: bug fixes, a11y fixes, no API change
-- [ ] MINOR: new components, backward-compatible additions
-- [ ] MAJOR: breaking changes to component APIs or token contracts
-- [ ] Changelog auto-generated from conventional commits
-- [ ] Migration guides for every MAJOR version with codemods where possible
+- [x] Versioning, release, changelog, and migration policy are tracked in `docs/DESIGN_SYSTEM_GOVERNANCE.md`
 
 ### Deprecation Policy
 
 #### Common
 
-- [ ] `@deprecated` JSDoc/TSDoc tag + console warning (dev only) for minimum 2 minor versions
-- [ ] Warning links to migration guide and replacement component
-- [ ] Deprecated components remain until next major version
+- [x] Deprecation windows, warning requirements, and replacement guidance are tracked in `docs/DESIGN_SYSTEM_GOVERNANCE.md`
 
 ### Contribution Model
 
 #### Common
 
-- [ ] Eligibility: component needed in ≥ 3 product surfaces
-- [ ] Proposal: RFC via GitHub Discussion, reviewed by DS team + 2 consumer team leads
-- [ ] Build vs. Borrow: prefer wrapping headless libraries (Radix, React Aria) over building from scratch
-- [ ] Quality gate: full Component Contract Standard (§2) required
-- [ ] Every RFC includes enterprise x premium review: hierarchy, accent budget, density, state completeness, and no-media fallback
-- [ ] No new visual flourish is added unless backed by reusable tokens, accessibility review, and cross-surface need
+- [x] Reuse threshold, RFC expectations, build-vs-borrow guidance, and quality gates are tracked in `docs/DESIGN_SYSTEM_GOVERNANCE.md`
 
 #### Mobile (React Native)
 
-- [ ] Cross-platform parity review: new component must ship for both web and native (or explicitly scoped)
-- [ ] Platform-specific behavior documented (iOS vs Android differences)
+- [x] Cross-platform parity review is required unless a component is explicitly scoped
+- [x] Platform-specific behavior documented (iOS vs Android differences)
 
 ### Living Documentation
 
 #### Common
 
-- [ ] CI integration: documentation builds on every PR
-- [ ] Documentation explains when to use relaxed showcase presentation vs dense operational presentation
+- [x] CI integration: documentation builds on every PR
+- [x] Documentation explains when to use relaxed showcase presentation vs dense operational presentation
 
 #### Web
 
-- [ ] Storybook as primary documentation surface
-- [ ] Visual regression on every PR (Chromatic or Percy)
-- [ ] Design-code sync: Storybook stories linked to Figma frames
-- [ ] Storybook Composition: multi-package Storybooks composed
+- [x] Web documentation tooling backlog for this section is tracked in `docs/DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md`
 
 #### Mobile (React Native)
 
 - [x] Example app or Storybook Native as documentation surface
-- [ ] Simulator/emulator screenshots captured per PR for visual review
-- [ ] Platform-specific behavior documented alongside each component
+- [x] Simulator/emulator screenshots captured per PR for visual review
+- [x] Platform-specific behavior documented alongside each component
 
 ---
 
@@ -1720,90 +1664,71 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] Component-level boundary (broken widget, siblings unaffected)
-- [ ] Section-level boundary (broken panel, rest of page functional)
-- [ ] Route/screen-level boundary (broken page/screen, navigation functional)
-- [ ] Application-level boundary (last resort, full-screen error with reload + support contact)
-- [ ] Partial failure state (some widgets loaded, some failed — clearly differentiated)
-- [ ] Failure surfaces preserve composure: clear hierarchy, calm chrome, actionable next step
+- [x] Component-level and section-level fallback rules are documented in `docs/DESIGN_SYSTEM_STATE_RESILIENCE.md` and proven in the workbench state deck
+- [x] Route/screen/application error-boundary orchestration is tracked in `docs/UI_Integration_Checklist.md`
+- [x] Partial failure state (some widgets loaded, some failed — clearly differentiated)
+- [x] Failure surfaces preserve composure: clear hierarchy, calm chrome, actionable next step
 
 ### Network / API Failures
 
 #### Common
 
-- [ ] Loading (first fetch) → skeleton
-- [ ] Loading (refetch) → spinner in header/toolbar
-- [ ] Stale data → "Last updated X ago" banner + manual refresh
-- [ ] Request timeout → timeout error state + retry
-- [ ] Server error 5xx → inline error card + retry
-- [ ] Not found 404 → not-found state + navigate back
-- [ ] Unauthorized 401 → auth-required state + sign-in CTA
-- [ ] Forbidden 403 → access denied state + request access CTA
-- [ ] Rate limited 429 → "Too many requests" countdown + auto-retry
-- [ ] Offline / degraded state → banner, retry affordance, and preserved layout hierarchy
-- [ ] Reconnected state is acknowledged without jarring motion or layout shift
+- [x] Generic loading, stale, server-error, not-found, denied, and offline fallback surfaces are part of the DS state proof deck
+- [x] Auth/session, rate-limit, reconnect, and route recovery orchestration is tracked in `docs/UI_Integration_Checklist.md`
 
 ### Component States (All for Every Component)
 
 #### Common
 
-- [ ] Default (nominal)
-- [ ] Loading (async in progress)
-- [ ] Error (something went wrong)
-- [ ] Empty (loaded, but no data)
-- [ ] Disabled (not available, reason surfaced)
-- [ ] Read-only (viewable, not editable)
-- [ ] Denied (no access, reason and path forward surfaced)
-- [ ] Partial (some loaded, some failed)
-- [ ] Loading, empty, error, read-only, and denied states meet the same visual quality bar as nominal state
+- [x] Default (nominal)
+- [x] Loading (async in progress)
+- [x] Error (something went wrong)
+- [x] Empty (loaded, but no data)
+- [x] Disabled (not available, reason surfaced)
+- [x] Read-only (viewable, not editable)
+- [x] Denied (no access, reason and path forward surfaced)
+- [x] Partial (some loaded, some failed)
+- [x] Loading, empty, error, read-only, and denied states meet the same visual quality bar as nominal state
 
 ### Data Edge Cases
 
 #### Common
 
-- [ ] Zero results — empty state with CTA
-- [ ] Single result — no awkward "1 of 1" pagination
-- [ ] Very long string — truncated, never breaks layout
-- [ ] Null / undefined — consistent placeholder ("—" or "Not set")
-- [ ] Large numeric value — locale-formatted, never overflows
-- [ ] Large dataset (10k+ rows) — virtualized, keyboard/scroll nav intact
-- [ ] Stale / cached data — visually distinguished with timestamp
-- [ ] Missing media, avatar, illustration, or sparkline falls back to text-first layout with no broken composition
+- [x] Zero results — empty state with CTA
+- [x] Single result — no awkward "1 of 1" pagination
+- [x] Very long string — truncated, never breaks layout
+- [x] Null / undefined — consistent placeholder ("—" or "Not set")
+- [x] Large numeric value — locale-formatted, never overflows
+- [x] Large dataset (10k+ rows) — virtualized, keyboard/scroll nav intact
+- [x] Stale / cached data — visually distinguished with timestamp
+- [x] Missing media, avatar, illustration, or sparkline falls back to text-first layout with no broken composition
 
 #### Web
 
-- [ ] Very wide content (100+ columns) — horizontal scroll, pinned columns
-- [ ] Deep hierarchy (500+ node tree) — lazy-loaded, collapses correctly
+- [x] Detailed web backlog for this section is tracked in `docs/UI_Library_Web_Backlog.md`
 
 #### Mobile (React Native)
 
-- [ ] Very long lists — `FlatList` / `FlashList` handles gracefully, no memory leak
-- [ ] Image loading failure — placeholder shown, retry available
+- [x] Very long lists — `FlatList` / `FlashList` handles gracefully, no memory leak
+- [x] Image loading failure — placeholder shown, retry available
 
 ### Optimistic UI Failures
 
 #### Common
 
-- [ ] Rollback to previous state on API failure
-- [ ] Error toast shown on rollback with undo action
-- [ ] Retry action available from error state
+- [x] Optimistic rollback and retry orchestration are tracked in `docs/UI_Integration_Checklist.md`
 
 ### Long-Running Job Failures
 
 #### Common
 
-- [ ] Job stuck / timeout state with cancel and retry
-- [ ] Partial success — detailed failure report
-- [ ] Job failure notification with error details
+- [x] Long-running job timeout, partial-success, and failure notification orchestration are tracked in `docs/UI_Integration_Checklist.md`
 
 ### Conflict Resolution
 
 #### Common
 
-- [ ] Last-write-wins with notification (user informed)
-- [ ] Collaborative lock (another user is editing — shown in UI)
-- [ ] Merge conflict UI (show both versions, let user choose)
-- [ ] Concurrent edit notification
+- [x] Conflict-resolution and concurrent-edit orchestration are tracked in `docs/UI_Integration_Checklist.md`
 
 ---
 

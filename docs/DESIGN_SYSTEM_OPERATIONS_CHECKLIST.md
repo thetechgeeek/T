@@ -44,3 +44,12 @@
 ### Mobile (React Native)
 
 - [ ] Native dependency budget enforced and reviewed before each new library/runtime package is added
+
+## Documentation Tooling
+
+### Web
+
+- [ ] Storybook as primary documentation surface once a true web surface exists
+- [ ] Visual regression on every PR via Chromatic, Percy, or equivalent
+- [ ] Design-code sync from docs tooling into Figma references
+- [ ] Multi-package documentation composition when the DS is extracted

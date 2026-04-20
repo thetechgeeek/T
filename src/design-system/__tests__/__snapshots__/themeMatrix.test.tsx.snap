@@ -2585,6 +2585,118 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
               ‫[~ Þëřɱïššïõñ-ďëñïëď ʠüáľïťÿ ~]‬
             </Text>
           </View>
+          <View
+            accessibilityLabel="‫[~ Þářťïáľ řëçõṽëřÿ ~]‬"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#451A03",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "700",
+                    "lineHeight": 22.880000000000003,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "rtl",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#FBBF24",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              ‫[~ Þářťïáľ řëçõṽëřÿ ~]‬
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="‫[~ Šťáľë ƀüť šťïľľ üšáƀľë ~]‬"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#1F2826",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "700",
+                    "lineHeight": 22.880000000000003,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "rtl",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#98989E",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              ‫[~ Šťáľë ƀüť šťïľľ üšáƀľë ~]‬
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -2662,7 +2774,33 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ‏١٢٥٬٨٤٠٬٩٩١٫٤٢ ₹
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#F2EDE8",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "500",
+                "lineHeight": 22.880000000000003,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "rtl",
+              },
+              {
+                "color": "#98989E",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          ‫[~ Ďáťá áñõɱáľïëš ~]‬: — • قبل ٤ أيام • ٢٣ شوال ١٤٤٧ هـ، ٩:٣٠ ص
         </Text>
         <View
           style={
@@ -2702,6 +2840,353 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 9.36,
+              "marginTop": 13.52,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#FBBF24",
+                  "borderRadius": 11.22,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 13.52,
+                  "paddingVertical": 13.52,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 9.36,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#FBBF24",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "rtl",
+                      },
+                      {
+                        "color": "#FBBF24",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "700",
+                        "lineHeight": 26,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "rtl",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  ‫[~ Þářťïáľ řëçõṽëřÿ ~]‬
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "500",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "rtl",
+                      },
+                      {
+                        "color": "#98989E",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. أمس • ٢٦ شوال ١٤٤٧ هـ، ٩:٣٠ ص
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 9.36,
+                      "marginTop": 9.36,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="‫[~ Řëťřÿ ƒáïľëď ïťëɱš ~]‬"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 56.160000000000004,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 22.880000000000003,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "rtl",
+                          },
+                          {
+                            "color": "#FBBF24",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      ‫[~ Řëťřÿ ƒáïľëď ïťëɱš ~]‬
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#38BDF8",
+                  "borderRadius": 11.22,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 13.52,
+                  "paddingVertical": 13.52,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 9.36,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#38BDF8",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "rtl",
+                      },
+                      {
+                        "color": "#38BDF8",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "700",
+                        "lineHeight": 26,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "rtl",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  ‫[~ Šťáľë ƀüť šťïľľ üšáƀľë ~]‬
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "500",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "rtl",
+                      },
+                      {
+                        "color": "#98989E",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  ‫[~ Çáçħëď ďáťá šħõüľď řëɱáïñ řëáďáƀľë ŵħïľë ťħë šüřƒáçë çľëářľÿ šïğñáľš ťħë ľášť šüççëššƒüľ řëƒřëšħ. ~]‬ قبل ٤ أيام • ٢٣ شوال ١٤٤٧ هـ، ٩:٣٠ ص
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 9.36,
+                      "marginTop": 9.36,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="‫[~ Řëƒřëšħ ñõŵ ~]‬"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 56.160000000000004,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 22.880000000000003,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "rtl",
+                          },
+                          {
+                            "color": "#38BDF8",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      ‫[~ Řëƒřëšħ ñõŵ ~]‬
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -5937,6 +6422,118 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#451A03",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#F59E0B",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#38383A",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#98989E",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -6014,7 +6611,33 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#F2EDE8",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "400",
+                "lineHeight": 21.84,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#98989E",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -6054,6 +6677,353 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 8.32,
+              "marginTop": 12.48,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#F59E0B",
+                  "borderRadius": 8.16,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#F59E0B",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F59E0B",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#98989E",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#F59E0B",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#60A5FA",
+                  "borderRadius": 8.16,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#60A5FA",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#60A5FA",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#98989E",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#60A5FA",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -9289,6 +10259,118 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#FEF3C7",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#B45309",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#E5DDD5",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#6B5E52",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -9366,7 +10448,33 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#1A1412",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "400",
+                "lineHeight": 21.84,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#6B5E52",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -9406,6 +10514,353 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 8.32,
+              "marginTop": 12.48,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#B45309",
+                  "borderRadius": 8.16,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#B45309",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#B45309",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#6B5E52",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#B45309",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#1D4ED8",
+                  "borderRadius": 8.16,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#1D4ED8",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1D4ED8",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#6B5E52",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#1D4ED8",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -12641,6 +14096,118 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#451A03",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#F59E0B",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#1C2635",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#93A3B8",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -12718,7 +14285,33 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#F2EDE8",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "400",
+                "lineHeight": 21.84,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#93A3B8",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -12758,6 +14351,353 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 7.28,
+              "marginTop": 11.440000000000001,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#F59E0B",
+                  "borderRadius": 6.12,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 11.440000000000001,
+                  "paddingVertical": 11.440000000000001,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 7.28,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#F59E0B",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F59E0B",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#93A3B8",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 7.28,
+                      "marginTop": 7.28,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#F59E0B",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#93C5FD",
+                  "borderRadius": 6.12,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 11.440000000000001,
+                  "paddingVertical": 11.440000000000001,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 7.28,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#93C5FD",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#93C5FD",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#93A3B8",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 7.28,
+                      "marginTop": 7.28,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#93C5FD",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -15993,6 +17933,118 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#FEF3C7",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#B45309",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#E6ECF5",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#556579",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -16070,7 +18122,33 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#1A1412",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "400",
+                "lineHeight": 21.84,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#556579",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -16110,6 +18188,353 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 7.28,
+              "marginTop": 11.440000000000001,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#B45309",
+                  "borderRadius": 6.12,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 11.440000000000001,
+                  "paddingVertical": 11.440000000000001,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 7.28,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#B45309",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#B45309",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#556579",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 7.28,
+                      "marginTop": 7.28,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#B45309",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#2563EB",
+                  "borderRadius": 6.12,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 11.440000000000001,
+                  "paddingVertical": 11.440000000000001,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 7.28,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#2563EB",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#2563EB",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#556579",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 7.28,
+                      "marginTop": 7.28,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#2563EB",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -19345,6 +21770,118 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#451A03",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#F59E0B",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#1D1D1B",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#A6A6A1",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -19422,7 +21959,33 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#F2EDE8",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "400",
+                "lineHeight": 21.84,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#A6A6A1",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -19462,6 +22025,353 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 8.32,
+              "marginTop": 12.48,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#F59E0B",
+                  "borderRadius": 7.140000000000001,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#F59E0B",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F59E0B",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#A6A6A1",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#F59E0B",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#60A5FA",
+                  "borderRadius": 7.140000000000001,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#60A5FA",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#60A5FA",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#A6A6A1",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#60A5FA",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -22697,6 +25607,118 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#FEF3C7",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#B45309",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#ECECEA",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 21.84,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#6B5E52",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -22774,7 +25796,33 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#1A1412",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "400",
+                "lineHeight": 21.84,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#6B5E52",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -22814,6 +25862,353 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 8.32,
+              "marginTop": 12.48,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#B45309",
+                  "borderRadius": 7.140000000000001,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#B45309",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#B45309",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#6B5E52",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#B45309",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#1D4ED8",
+                  "borderRadius": 7.140000000000001,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#1D4ED8",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1D4ED8",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 24.96,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 21.84,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#6B5E52",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 51.84,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 21.84,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#1D4ED8",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -26049,6 +29444,118 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#451A03",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 22.880000000000003,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#FBBF24",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#1F2826",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#F2EDE8",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 22.880000000000003,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#98989E",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -26126,7 +29633,33 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#F2EDE8",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "400",
+                "lineHeight": 22.880000000000003,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#98989E",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -26166,6 +29699,353 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 9.36,
+              "marginTop": 13.52,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#FBBF24",
+                  "borderRadius": 11.22,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 13.52,
+                  "paddingVertical": 13.52,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 9.36,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#FBBF24",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#FBBF24",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 26,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#98989E",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 9.36,
+                      "marginTop": 9.36,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 56.160000000000004,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 22.880000000000003,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#FBBF24",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#1C1C1E",
+                  "borderColor": "#38BDF8",
+                  "borderRadius": 11.22,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 13.52,
+                  "paddingVertical": 13.52,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 9.36,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#38BDF8",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#38BDF8",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 26,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#F2EDE8",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#F2EDE8",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#98989E",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 9.36,
+                      "marginTop": 9.36,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 56.160000000000004,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#F2EDE8",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 22.880000000000003,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#38BDF8",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -29401,6 +33281,118 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#FEF3C7",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 22.880000000000003,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#C67C00",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#F5E7DA",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 13.52,
+                    "fontWeight": "600",
+                    "lineHeight": 22.880000000000003,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#6B5E52",
+                      "fontFamily": "System",
+                      "fontSize": 13.52,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -29478,7 +33470,33 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#1A1412",
+                "fontFamily": "System",
+                "fontSize": 13.52,
+                "fontWeight": "400",
+                "lineHeight": 22.880000000000003,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#6B5E52",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -29518,6 +33536,353 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 9.36,
+              "marginTop": 13.52,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#C67C00",
+                  "borderRadius": 11.22,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 13.52,
+                  "paddingVertical": 13.52,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 9.36,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#C67C00",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#C67C00",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 26,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#6B5E52",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 9.36,
+                      "marginTop": 9.36,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 56.160000000000004,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 22.880000000000003,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#C67C00",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#0EA5E9",
+                  "borderRadius": 11.22,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 13.52,
+                  "paddingVertical": 13.52,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 9.36,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#0EA5E9",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "700",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#0EA5E9",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 16.64,
+                        "fontWeight": "600",
+                        "lineHeight": 26,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 13.52,
+                        "fontWeight": "400",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#6B5E52",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 9.36,
+                      "marginTop": 9.36,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 56.160000000000004,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 13.52,
+                            "fontWeight": "700",
+                            "lineHeight": 22.880000000000003,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#0EA5E9",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -32753,6 +37118,118 @@ exports[`design-system theme matrix matches the tablet-landscape snapshot withou
               Permission-denied quality
             </Text>
           </View>
+          <View
+            accessibilityLabel="Partial recovery"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#FEF3C7",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 14.56,
+                    "fontWeight": "600",
+                    "lineHeight": 22.880000000000003,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#B45309",
+                      "fontFamily": "System",
+                      "fontSize": 14.56,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Partial recovery
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="Stale but still usable"
+            accessible={true}
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "alignSelf": "flex-start",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "backgroundColor": "#E6ECF5",
+                  "borderRadius": 9999,
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 4,
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              allowFontScaling={true}
+              importantForAccessibility="no"
+              lineBreakStrategyIOS="standard"
+              maxFontSizeMultiplier={1.3}
+              style={
+                [
+                  {
+                    "color": "#1A1412",
+                    "fontFamily": "System",
+                    "fontSize": 14.56,
+                    "fontWeight": "600",
+                    "lineHeight": 22.880000000000003,
+                    "opacity": undefined,
+                    "textAlign": undefined,
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "textAlign": "center",
+                    },
+                    {
+                      "color": "#556579",
+                      "fontFamily": "System",
+                      "fontSize": 14.56,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              textBreakStrategy="highQuality"
+            >
+              Stale but still usable
+            </Text>
+          </View>
         </View>
         <Text
           allowFontScaling={true}
@@ -32830,7 +37307,33 @@ exports[`design-system theme matrix matches the tablet-landscape snapshot withou
           }
           textBreakStrategy="highQuality"
         >
-          ₹ 12,58,40,991.42
+          ₹125,840,991.42
+        </Text>
+        <Text
+          allowFontScaling={true}
+          lineBreakStrategyIOS="standard"
+          maxFontSizeMultiplier={1.3}
+          style={
+            [
+              {
+                "color": "#1A1412",
+                "fontFamily": "System",
+                "fontSize": 14.56,
+                "fontWeight": "400",
+                "lineHeight": 22.880000000000003,
+                "opacity": undefined,
+                "textAlign": undefined,
+                "writingDirection": "ltr",
+              },
+              {
+                "color": "#556579",
+                "marginTop": 4.16,
+              },
+            ]
+          }
+          textBreakStrategy="highQuality"
+        >
+          Data anomalies: — • 4 days ago • Apr 11, 2026, 9:30 AM
         </Text>
         <View
           style={
@@ -32870,6 +37373,353 @@ exports[`design-system theme matrix matches the tablet-landscape snapshot withou
               }
             }
           />
+        </View>
+        <View
+          style={
+            {
+              "gap": 8.32,
+              "marginTop": 12.48,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#B45309",
+                  "borderRadius": 6.12,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#B45309",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 14.56,
+                        "fontWeight": "700",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#B45309",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Warning
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 17.68,
+                        "fontWeight": "600",
+                        "lineHeight": 26,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Partial recovery
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 14.56,
+                        "fontWeight": "400",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#556579",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  18 loaded, 2 waiting for retry. yesterday • Apr 14, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Retry failed items"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 58.32000000000001,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 14.56,
+                            "fontWeight": "700",
+                            "lineHeight": 22.880000000000003,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#B45309",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Retry failed items
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#2563EB",
+                  "borderRadius": 6.12,
+                  "borderWidth": 1,
+                  "paddingHorizontal": 12.48,
+                  "paddingVertical": 12.48,
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "flex-start",
+                  "flexDirection": "row",
+                  "gap": 8.32,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#2563EB",
+                    "borderRadius": 9999,
+                    "width": 4.16,
+                  }
+                }
+              />
+              <View
+                style={
+                  {
+                    "flex": 1,
+                  }
+                }
+              >
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 14.56,
+                        "fontWeight": "700",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#2563EB",
+                        "marginBottom": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Info
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 17.68,
+                        "fontWeight": "600",
+                        "lineHeight": 26,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#1A1412",
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Stale but still usable
+                </Text>
+                <Text
+                  allowFontScaling={true}
+                  lineBreakStrategyIOS="standard"
+                  maxFontSizeMultiplier={1.3}
+                  style={
+                    [
+                      {
+                        "color": "#1A1412",
+                        "fontFamily": "System",
+                        "fontSize": 14.56,
+                        "fontWeight": "400",
+                        "lineHeight": 22.880000000000003,
+                        "opacity": undefined,
+                        "textAlign": undefined,
+                        "writingDirection": "ltr",
+                      },
+                      {
+                        "color": "#556579",
+                        "marginTop": 2.08,
+                      },
+                    ]
+                  }
+                  textBreakStrategy="highQuality"
+                >
+                  Cached data should remain readable while the surface clearly signals the last successful refresh. 4 days ago • Apr 11, 2026, 9:30 AM
+                </Text>
+                <View
+                  style={
+                    {
+                      "flexDirection": "row",
+                      "flexWrap": "wrap",
+                      "gap": 8.32,
+                      "marginTop": 8.32,
+                    }
+                  }
+                >
+                  <Pressable
+                    accessibilityLabel="Refresh now"
+                    accessibilityRole="button"
+                    onPress={[Function]}
+                    style={
+                      {
+                        "justifyContent": "center",
+                        "minHeight": 58.32000000000001,
+                      }
+                    }
+                  >
+                    <Text
+                      allowFontScaling={true}
+                      lineBreakStrategyIOS="standard"
+                      maxFontSizeMultiplier={1.3}
+                      style={
+                        [
+                          {
+                            "color": "#1A1412",
+                            "fontFamily": "System",
+                            "fontSize": 14.56,
+                            "fontWeight": "700",
+                            "lineHeight": 22.880000000000003,
+                            "opacity": undefined,
+                            "textAlign": undefined,
+                            "writingDirection": "ltr",
+                          },
+                          {
+                            "color": "#2563EB",
+                          },
+                        ]
+                      }
+                      textBreakStrategy="highQuality"
+                    >
+                      Refresh now
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={

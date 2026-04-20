@@ -9,6 +9,42 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { supabase as singletonSupabase } from '@/src/config/supabase';
+import { withRetry } from '@/src/utils/retry';
+
+const INTEGRATION_AUTH_RETRIES = 2;
+const INTEGRATION_AUTH_RETRY_DELAY_MS = 750;
+
+function extractErrorMessage(error: unknown): string {
+	if (typeof error === 'string') {
+		return error;
+	}
+
+	if (error instanceof Error) {
+		const causeMessage =
+			error.cause instanceof Error
+				? error.cause.message
+				: typeof error.cause === 'string'
+					? error.cause
+					: '';
+
+		return [error.message, causeMessage].filter(Boolean).join(' ');
+	}
+
+	return '';
+}
+
+function isTransientIntegrationAuthError(error: unknown): boolean {
+	const message = extractErrorMessage(error).toLowerCase();
+
+	return (
+		message.includes('fetch failed') ||
+		message.includes('network') ||
+		message.includes('timeout') ||
+		message.includes('enotfound') ||
+		message.includes('eai_again') ||
+		message.includes('getaddrinfo')
+	);
+}
 
 /** Creates a Supabase client pointing at the TEST project (from .env.test). */
 export function createTestSupabaseClient() {
@@ -70,18 +106,31 @@ export async function signInTestUser(
 	const email = process.env.INTEGRATION_TEST_EMAIL ?? 'test@tilemaster.dev';
 	const password = process.env.INTEGRATION_TEST_PASSWORD ?? 'TestPass123!';
 
-	// Sign in both the passed client and the app's singleton client
-	const [res1, res2] = await Promise.all([
-		supabase.auth.signInWithPassword({ email, password }),
-		singletonSupabase.auth.signInWithPassword({ email, password }),
-	]);
+	await withRetry(
+		async () => {
+			// Sign in both the passed client and the app's singleton client.
+			// The singleton is used by repositories/services under test, while the local
+			// client handles direct cleanup and verification queries.
+			const [res1, res2] = await Promise.all([
+				supabase.auth.signInWithPassword({ email, password }),
+				singletonSupabase.auth.signInWithPassword({ email, password }),
+			]);
 
-	if (res1.error) {
-		throw new Error(`Integration test sign-in failed (test client): ${res1.error.message}`);
-	}
-	if (res2.error) {
-		throw new Error(
-			`Integration test sign-in failed (singleton client): ${res2.error.message}`,
-		);
-	}
+			if (res1.error) {
+				throw new Error(
+					`Integration test sign-in failed (test client): ${res1.error.message}`,
+				);
+			}
+			if (res2.error) {
+				throw new Error(
+					`Integration test sign-in failed (singleton client): ${res2.error.message}`,
+				);
+			}
+		},
+		{
+			retries: INTEGRATION_AUTH_RETRIES,
+			delay: INTEGRATION_AUTH_RETRY_DELAY_MS,
+			shouldRetry: isTransientIntegrationAuthError,
+		},
+	);
 }

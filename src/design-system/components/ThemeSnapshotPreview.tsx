@@ -6,6 +6,7 @@ import { Button } from '@/src/design-system/components/atoms/Button';
 import { Chip } from '@/src/design-system/components/atoms/Chip';
 import { TextInput } from '@/src/design-system/components/atoms/TextInput';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
 import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
 import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
 import { useThemeTokens } from '@/src/hooks/useThemeTokens';
@@ -16,6 +17,11 @@ import {
 	DESIGN_SYSTEM_STATE_FIXTURES,
 } from '../fixtures';
 import { getDesignSystemCopy, type DesignSystemLocale } from '../copy';
+import {
+	buildRelativeAbsoluteTimestampLabel,
+	formatLocaleCurrency,
+	formatMissingValue,
+} from '../formatters';
 import { useDesignSystemQualitySignals } from '../useQualitySignals';
 
 const SURFACE_TIER_KEYS = ['canvas', 'default', 'raised', 'overlay', 'inverse'] as const;
@@ -96,6 +102,18 @@ export function ThemeSnapshotPreview({ locale = 'en' }: { locale?: DesignSystemL
 	const { theme, meta, c, s, r, visual, typo } = useThemeTokens();
 	const copy = getDesignSystemCopy(locale);
 	const signals = useDesignSystemQualitySignals(locale);
+	const staleTimestamp = buildRelativeAbsoluteTimestampLabel(
+		locale,
+		DESIGN_SYSTEM_STATE_FIXTURES.stale.lastUpdatedAt,
+	);
+	const partialTimestamp = buildRelativeAbsoluteTimestampLabel(
+		locale,
+		DESIGN_SYSTEM_STATE_FIXTURES.partial.lastSuccessfulSyncAt,
+	);
+	const uglyDataTimestamp = buildRelativeAbsoluteTimestampLabel(
+		locale,
+		DESIGN_SYSTEM_STATE_FIXTURES.uglyData.lastUpdatedAt,
+	);
 
 	return (
 		<View
@@ -279,6 +297,8 @@ export function ThemeSnapshotPreview({ locale = 'en' }: { locale?: DesignSystemL
 					<Badge label={copy.stateProof.noMedia.title} variant="warning" />
 					<Badge label={copy.stateProof.uglyData.title} variant="error" />
 					<Badge label={copy.stateProof.denied.title} variant="info" />
+					<Badge label={copy.stateProof.partial.title} variant="warning" />
+					<Badge label={copy.stateProof.stale.title} variant="neutral" />
 				</View>
 				<ThemedText variant="bodyStrong" style={{ color: c.onSurface, marginTop: s.md }}>
 					{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.title}
@@ -290,7 +310,18 @@ export function ThemeSnapshotPreview({ locale = 'en' }: { locale?: DesignSystemL
 					{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.detail}
 				</ThemedText>
 				<ThemedText variant="metric" style={{ color: c.success, marginTop: s.sm }}>
-					{DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue}
+					{formatLocaleCurrency(
+						locale,
+						DESIGN_SYSTEM_STATE_FIXTURES.uglyData.metricValue,
+					)}
+				</ThemedText>
+				<ThemedText
+					variant="caption"
+					style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
+				>
+					{`${copy.stateProof.uglyData.metaLabel}: ${formatMissingValue(
+						DESIGN_SYSTEM_STATE_FIXTURES.uglyData.owner,
+					)} • ${uglyDataTimestamp.relative} • ${uglyDataTimestamp.absolute}`}
 				</ThemedText>
 				<View style={{ gap: s.xs, marginTop: s.md }}>
 					{DATA_SERIES_KEYS.map((seriesKey, index) => (
@@ -306,6 +337,22 @@ export function ThemeSnapshotPreview({ locale = 'en' }: { locale?: DesignSystemL
 							}}
 						/>
 					))}
+				</View>
+				<View style={{ gap: s.sm, marginTop: s.md }}>
+					<AlertBanner
+						title={copy.stateProof.partial.title}
+						description={`${DESIGN_SYSTEM_STATE_FIXTURES.partial.loadedCount} loaded, ${DESIGN_SYSTEM_STATE_FIXTURES.partial.failedCount} waiting for retry. ${partialTimestamp.relative} • ${partialTimestamp.absolute}`}
+						variant="warning"
+						actionLabel={copy.stateProof.partial.retryLabel}
+						onAction={() => undefined}
+					/>
+					<AlertBanner
+						title={copy.stateProof.stale.title}
+						description={`${copy.stateProof.stale.description} ${staleTimestamp.relative} • ${staleTimestamp.absolute}`}
+						variant="info"
+						actionLabel={copy.stateProof.stale.refreshLabel}
+						onAction={() => undefined}
+					/>
 				</View>
 				<View
 					style={{ flexDirection: 'row', flexWrap: 'wrap', gap: s.xs, marginTop: s.md }}

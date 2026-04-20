@@ -21,6 +21,10 @@ describe('design-system README contract', () => {
 			'Product typography is capped at two families: the core UI family plus an optional display/brand family.',
 		);
 		expect(readme).toContain('DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md');
+		expect(readme).toContain('DESIGN_SYSTEM_MOTION_GUIDELINES.md');
+		expect(readme).toContain('DESIGN_SYSTEM_COPY_STANDARDS.md');
+		expect(readme).toContain('DESIGN_SYSTEM_GOVERNANCE.md');
+		expect(readme).toContain('DESIGN_SYSTEM_STATE_RESILIENCE.md');
 		expect(readme).toContain(
 			'Non-Latin locales must fall back to script-safe families for Arabic, Devanagari, and CJK',
 		);

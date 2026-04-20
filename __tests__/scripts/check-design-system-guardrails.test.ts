@@ -27,9 +27,23 @@ function createFixture(componentSource: string) {
 			'',
 			'## 8. Responsive & Adaptive Design',
 			'',
+			'## 9. Motion & Animation System',
+			'',
+			'## 10. Copy & Microcopy Standards',
+			'',
+			'## 12. State Resilience & Graceful Degradation',
+			'',
 		].join('\n'),
 		'docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md':
 			'Manual release gate on physical-device screen readers.\n',
+		'docs/DESIGN_SYSTEM_MOTION_GUIDELINES.md':
+			'Reanimated motion rules with useReducedMotion() and UI_Integration_Checklist references.\n',
+		'docs/DESIGN_SYSTEM_COPY_STANDARDS.md':
+			'Shared fallback copy lives in microcopy.ts, locale helpers live in formatters.ts, and labels stay action-framed.\n',
+		'docs/DESIGN_SYSTEM_GOVERNANCE.md':
+			'Semantic Versioning with two minor releases before removal and CI in .github/workflows/ci.yml.\n',
+		'docs/DESIGN_SYSTEM_STATE_RESILIENCE.md':
+			'DesignLibraryScreen.tsx and ThemeSnapshotPreview.tsx prove fallback surfaces before handoff to UI_Integration_Checklist.\n',
 		'src/design-system/README.md': [
 			'# Design System',
 			'',
@@ -181,5 +195,21 @@ describe('check-design-system-guardrails', () => {
 		expect(output).toContain('rtl-writing-direction');
 		expect(output).toContain('rtl-layout-direction');
 		expect(output).toContain('rtl-directional-icons');
+	});
+
+	it('fails when a shared component imports Animated from react-native', () => {
+		const root = createFixture(`
+			import { Animated } from 'react-native';
+
+			export function MotionCard() {
+				return Animated ? null : null;
+			}
+		`);
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('react-native-animated');
+		expect(output).toContain('MotionCard.tsx');
 	});
 });

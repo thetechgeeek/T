@@ -8,6 +8,7 @@ import {
 	type ViewStyle,
 } from 'react-native';
 import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
+import { DEFAULT_DISMISS_LABEL, FEEDBACK_TONE_LABELS } from '@/src/design-system/microcopy';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SIZE_TOAST_BOTTOM_OFFSET } from '@/theme/uiMetrics';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
@@ -62,7 +63,7 @@ export function Toast({
 	duration,
 	actionLabel,
 	onAction,
-	dismissLabel = 'Dismiss',
+	dismissLabel = DEFAULT_DISMISS_LABEL,
 	placement = 'bottom',
 	testID,
 	style,
@@ -148,26 +149,12 @@ export function Toast({
 			]}
 			accessibilityLiveRegion="polite"
 			accessibilityRole="alert"
-			accessibilityLabel={`${
-				variant === 'success'
-					? 'Success'
-					: variant === 'warning'
-						? 'Warning'
-						: variant === 'error'
-							? 'Error'
-							: 'Info'
-			}: ${message}`}
+			accessibilityLabel={`${FEEDBACK_TONE_LABELS[variant]}: ${message}`}
 		>
 			<View style={styles.row}>
 				<View style={{ flex: 1 }}>
 					<ThemedText variant="captionBold" style={{ color: borderColor }}>
-						{variant === 'success'
-							? 'Success'
-							: variant === 'warning'
-								? 'Warning'
-								: variant === 'error'
-									? 'Error'
-									: 'Info'}
+						{FEEDBACK_TONE_LABELS[variant]}
 					</ThemedText>
 					<ThemedText
 						variant="caption"

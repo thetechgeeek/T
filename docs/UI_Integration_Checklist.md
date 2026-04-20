@@ -104,6 +104,8 @@
 - [ ] Deep linking / universal links (maps URLs to screens)
 - [ ] Nested navigators (tab within stack, modal over tab)
 - [ ] Screen transition animations (slide, fade, modal lift)
+- [ ] Interruptible native transitions remain responsive when the user reverses a back swipe or closes a modal mid-motion
+- [ ] Shared-element or branded transitions are limited to onboarding, browse, or detail flows with clear orientation value
 - [ ] Navigation state persistence (restore screen on app reopen)
 
 ## 2. Identity, Access & Tenant Context
@@ -255,6 +257,20 @@
 - [ ] Queued action count indicator
 - [ ] Auto-sync on reconnect
 - [ ] Conflict detection post-sync
+
+### Failure-State Orchestration
+
+#### Common
+
+- [ ] 401 / session-expired flow routes the user to sign-in while preserving intended destination
+- [ ] 403 / access-denied flow preserves layout quality and offers request-access guidance
+- [ ] 404 / not-found flow returns the user to a safe list, parent screen, or search context
+- [ ] 429 / rate-limited flow shows countdown or retry guidance tied to real policy
+- [ ] Timeout and offline retry policy is wired to real cache and queue semantics
+- [ ] Reconnected acknowledgement is calm and does not cause jarring layout shift
+- [ ] Optimistic updates roll back safely on server failure and surface the retry path
+- [ ] Long-running job completion, partial success, and failure notifications are wired to real job state
+- [ ] Concurrent-edit and merge-conflict handling is implemented where the domain allows multi-actor mutation
 
 #### Web
 

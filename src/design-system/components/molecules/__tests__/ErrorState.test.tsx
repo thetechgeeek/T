@@ -9,7 +9,8 @@ const renderWithTheme = (component: React.ReactElement) =>
 describe('ErrorState', () => {
 	it('renders the built-in offline variant copy', () => {
 		const { getByText } = renderWithTheme(<ErrorState variant="offline" />);
-		expect(getByText('Offline')).toBeTruthy();
+		expect(getByText('You are offline')).toBeTruthy();
+		expect(getByText('Reconnect and retry when you are ready.')).toBeTruthy();
 	});
 
 	it('supports a retry CTA', () => {

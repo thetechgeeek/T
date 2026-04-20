@@ -122,6 +122,11 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 				'default',
 			),
 			prop('loading', 'boolean', 'Shows busy state and suppresses press handling.', 'false'),
+			prop(
+				'loadingLabel',
+				'string',
+				'Optional override for the in-progress label shown beside the spinner.',
+			),
 			COMMON_A11Y_PROP,
 		],
 		doList: [
@@ -1396,7 +1401,9 @@ export const DESIGN_SYSTEM_COMPONENT_DOCS: Record<string, ComponentDocsEntry> = 
 			prop('data', 'T[]', 'Visible list data.'),
 			prop('isLoading', 'boolean', 'Controls initial and footer loading states.'),
 			prop('hasError', 'boolean', 'Switches to error state.'),
+			prop('emptyActionLabel', 'string', 'Optional recovery CTA for the empty state.'),
 			prop('onRetry', '() => void', 'Retry handler for error state.'),
+			prop('errorTitle', 'string', 'Optional calm error-state heading override.'),
 			COMMON_TEST_ID_PROP,
 		],
 		doList: [

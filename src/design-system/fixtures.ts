@@ -1,3 +1,5 @@
+const UGLY_DATA_METRIC_VALUE = 125840991.42;
+
 export const DESIGN_SYSTEM_RELAXED_FIXTURE = {
 	metricValue: '94%',
 	metricContext: 'across flagship mobile flows',
@@ -17,6 +19,17 @@ export const DESIGN_SYSTEM_READ_ONLY_FIELDS = [
 ] as const;
 
 export const DESIGN_SYSTEM_STATE_FIXTURES = {
+	partial: {
+		title: 'Northern distribution rollout',
+		loadedCount: 18,
+		failedCount: 2,
+		lastSuccessfulSyncAt: new Date('2026-04-14T09:30:00.000Z'),
+	},
+	stale: {
+		title: 'Cached approval queue',
+		visibleRows: 24,
+		lastUpdatedAt: new Date('2026-04-11T09:30:00.000Z'),
+	},
 	noMedia: {
 		title: 'Northwest Regional Logistics Cooperative',
 		monogram: 'NR',
@@ -25,7 +38,8 @@ export const DESIGN_SYSTEM_STATE_FIXTURES = {
 	uglyData: {
 		title: 'International Spare Parts Consortium for Heavy Mobility and Municipal Recovery',
 		detail: 'Missing tax id, null owner, 0-day terms',
-		metricValue: '₹ 12,58,40,991.42',
-		metricContext: 'Stale by 4 days',
+		owner: null,
+		metricValue: UGLY_DATA_METRIC_VALUE,
+		lastUpdatedAt: new Date('2026-04-11T09:30:00.000Z'),
 	},
 } as const;

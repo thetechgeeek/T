@@ -238,6 +238,53 @@
 
 - [ ] Fluid typography using CSS `clamp()` between breakpoints
 - [ ] Fluid spacing using CSS `clamp()` between breakpoints
+
+## 9. Motion & Animation System
+
+### Principles
+
+#### Web
+
+- [ ] Only animate `transform` and `opacity` for shared UI motion
+- [ ] Motion remains interruptible and reduced-motion safe
+- [ ] No continuous decorative motion on operational work surfaces
+
+### Animation Patterns
+
+#### Web
+
+- [ ] Fade in/out motion tokens applied consistently
+- [ ] Scale entrance pattern for compact overlays and menus
+- [ ] Drawer and sheet slide transitions
+- [ ] Shared reduced-motion fallback for shimmer, toast entry, and page transition patterns
+- [ ] Shared-element transitions used only where orientation value is clear
+
+### Reduced Motion
+
+#### Web
+
+- [ ] `@media (prefers-reduced-motion: reduce)` applied globally
+- [ ] `animation-duration` and `transition-duration` collapse to near-instant values under reduced motion
+
+## 10. Copy & Microcopy Standards
+
+### Truncation And Accessibility Copy
+
+#### Web
+
+- [ ] Breadcrumb truncation collapses middle items into an explicit overflow affordance
+- [ ] Table-cell truncation reveals the full value through tooltip, expansion, or detail view
+- [ ] `aria-label` phrasing conventions documented for icon-only and dismiss actions
+- [ ] Screen-reader live-region copy patterns documented for async feedback and state announcements
+
+## 12. State Resilience & Graceful Degradation
+
+### Data Edge Cases
+
+#### Web
+
+- [ ] Very wide content (100+ columns) preserves horizontal-scroll and pinned-column ergonomics
+- [ ] Deep hierarchy (500+ nodes) remains lazy-loaded, collapsible, and keyboard navigable
 - [ ] Font sizes never clip or overflow container at any breakpoint
 - [ ] Whitespace scales intentionally; small screens avoid dead zones while preserving hierarchy
 

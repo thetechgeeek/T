@@ -1,8 +1,11 @@
 import {
 	buildDesignSystemLocaleDiagnostics,
+	buildRelativeAbsoluteTimestampLabel,
+	formatLocalePercent,
 	formatLocaleCurrency,
 	formatLocaleDateTime,
 	formatLocaleList,
+	formatMissingValue,
 	formatLocaleNumber,
 	formatLocalePlural,
 	formatLocaleRelativeTime,
@@ -26,6 +29,12 @@ describe('design-system locale formatters', () => {
 		);
 		expect(formatLocaleNumber('de-DE', 1234567.89)).toBe(
 			new Intl.NumberFormat('de-DE', { maximumFractionDigits: 2 }).format(1234567.89),
+		);
+		expect(formatLocalePercent('en-US', 0.94)).toBe(
+			new Intl.NumberFormat('en-US', {
+				style: 'percent',
+				maximumFractionDigits: 0,
+			}).format(0.94),
 		);
 		expect(formatLocaleCurrency('ar-SA', 125000)).toBe(
 			new Intl.NumberFormat('ar-SA', {
@@ -64,6 +73,27 @@ describe('design-system locale formatters', () => {
 		expect(sortLabelsWithLocale('de-DE', values)).toBe(expected);
 	});
 
+	it('formats missing values and paired relative/absolute timestamps', () => {
+		expect(formatMissingValue(undefined)).toBe('—');
+		expect(formatMissingValue('')).toBe('—');
+		expect(formatMissingValue('  assigned  ')).toBe('assigned');
+
+		expect(
+			buildRelativeAbsoluteTimestampLabel(
+				'en-US',
+				new Date('2026-04-12T09:30:00.000Z'),
+				new Date('2026-04-15T09:30:00.000Z'),
+			),
+		).toEqual({
+			absolute: new Intl.DateTimeFormat('en-US', {
+				dateStyle: 'medium',
+				timeStyle: 'short',
+				timeZone: 'UTC',
+			}).format(new Date('2026-04-12T09:30:00.000Z')),
+			relative: new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' }).format(-3, 'day'),
+		});
+	});
+
 	it('builds diagnostics for the design-system dashboard', () => {
 		const english = buildDesignSystemLocaleDiagnostics('en');
 		const arabic = buildDesignSystemLocaleDiagnostics('ar');
@@ -72,6 +102,7 @@ describe('design-system locale formatters', () => {
 
 		expect(english.dashboardLocale).toBe('en');
 		expect(english.intlLocale).toBe('en-US');
+		expect(english.percent).toBe('94%');
 		expect(english.currency).toContain('₹');
 		expect(arabic.dashboardLocale).toBe('ar');
 		expect(arabic.intlLocale).toBe('ar-SA');

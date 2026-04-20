@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { triggerDesignSystemHaptic, type DesignSystemHaptic } from '@/src/design-system/haptics';
+import { buildInProgressLabel, DEFAULT_ACTION_LABEL } from '@/src/design-system/microcopy';
 import { buildFocusRingStyle } from '@/src/utils/accessibility';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useTheme } from '@/src/theme/ThemeProvider';
@@ -26,6 +27,7 @@ export interface ButtonProps extends Omit<PressableProps, 'style'> {
 	emphasis?: 'high' | 'medium' | 'low';
 	density?: 'compact' | 'default' | 'relaxed';
 	loading?: boolean;
+	loadingLabel?: string;
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
 	iconOnly?: boolean;
@@ -45,6 +47,7 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 			emphasis = 'high',
 			density = 'default',
 			loading = false,
+			loadingLabel,
 			leftIcon,
 			rightIcon,
 			iconOnly = false,
@@ -159,6 +162,10 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 		const isOutline = resolvedVariant === 'outline';
 		const isGhost = resolvedVariant === 'ghost';
 		const isDisabled = disabled || loading;
+		const resolvedLabel = accessibilityLabel ?? title ?? DEFAULT_ACTION_LABEL;
+		const resolvedLoadingLabel =
+			loadingLabel ?? buildInProgressLabel(title ?? accessibilityLabel);
+		const loadingTextColor = isOutline || isGhost ? c.primary : v.text;
 
 		const handlePress = (e: GestureResponderEvent) => {
 			if (isDisabled) return;
@@ -182,9 +189,11 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 					disabled={isDisabled}
 					focusable={!isDisabled}
 					accessibilityRole="button"
-					accessibilityLabel={accessibilityLabel ?? title ?? 'Button'}
+					accessibilityLabel={
+						loading && hasTextLabel ? resolvedLoadingLabel : resolvedLabel
+					}
 					accessibilityState={{ disabled: isDisabled, busy: loading }}
-					accessibilityHint={loading ? 'Loading, please wait' : undefined}
+					accessibilityHint={loading ? resolvedLoadingLabel : undefined}
 					hitSlop={hitSlop}
 					android_ripple={
 						Platform.OS === 'android'
@@ -251,10 +260,29 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 					onPress={handlePress}
 				>
 					{loading ? (
-						<ActivityIndicator
-							testID="loading-indicator"
-							color={isOutline || isGhost ? c.primary : v.text}
-						/>
+						<>
+							<ActivityIndicator
+								testID="loading-indicator"
+								color={loadingTextColor}
+							/>
+							{hasTextLabel ? (
+								<ThemedText
+									allowFontScaling
+									variant="label"
+									weight="semibold"
+									style={[
+										styles.label,
+										{
+											color: loadingTextColor,
+											fontSize: s.fontSize,
+											marginStart: buttonTokens.iconGap,
+										},
+									]}
+								>
+									{resolvedLoadingLabel}
+								</ThemedText>
+							) : null}
+						</>
 					) : (
 						<>
 							{leftIcon}

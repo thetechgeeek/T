@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
+import { DEFAULT_DISMISS_LABEL, FEEDBACK_TONE_LABELS } from '@/src/design-system/microcopy';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 
@@ -71,13 +72,7 @@ export function AlertBanner({
 						variant="captionBold"
 						style={{ color: accent, marginBottom: theme.spacing.xxs }}
 					>
-						{variant === 'success'
-							? 'Success'
-							: variant === 'warning'
-								? 'Warning'
-								: variant === 'error'
-									? 'Error'
-									: 'Info'}
+						{FEEDBACK_TONE_LABELS[variant]}
 					</ThemedText>
 					<ThemedText variant="bodyStrong" style={{ color: c.onSurface }}>
 						{title}
@@ -120,7 +115,7 @@ export function AlertBanner({
 							<Pressable
 								onPress={onDismiss}
 								accessibilityRole="button"
-								accessibilityLabel="Dismiss banner"
+								accessibilityLabel={`${DEFAULT_DISMISS_LABEL} banner`}
 								style={{
 									minHeight: theme.touchTarget,
 									justifyContent: 'center',
@@ -130,7 +125,7 @@ export function AlertBanner({
 									variant="captionBold"
 									style={{ color: c.onSurfaceVariant }}
 								>
-									{persistent ? 'Hide' : 'Dismiss'}
+									{persistent ? 'Hide' : DEFAULT_DISMISS_LABEL}
 								</ThemedText>
 							</Pressable>
 						) : null}

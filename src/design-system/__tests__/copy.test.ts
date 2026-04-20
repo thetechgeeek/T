@@ -10,6 +10,8 @@ describe('design-system copy registry', () => {
 		expect(copy.qualityBar.title).toBe('Enterprise x Premium Quality Bar');
 		expect(copy.presentationModes.operational.title).toBe('Operational dense');
 		expect(copy.stateProof.title).toBe('State Proof Deck');
+		expect(copy.stateProof.partial.title).toBe('Partial recovery');
+		expect(copy.localization.sampleLabels.percent).toBe('Percent');
 	});
 
 	it('produces pseudo-localized stress copy', () => {

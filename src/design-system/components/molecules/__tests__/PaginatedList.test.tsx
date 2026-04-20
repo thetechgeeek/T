@@ -41,7 +41,7 @@ describe('PaginatedList', () => {
 	});
 
 	it('renders empty state when no data and not loading', () => {
-		const { getByTestId } = renderWithTheme(
+		const { getByTestId, getByText } = renderWithTheme(
 			<PaginatedList
 				data={[]}
 				renderItem={() => <Text>x</Text>}
@@ -52,11 +52,12 @@ describe('PaginatedList', () => {
 			/>,
 		);
 		expect(getByTestId('empty-state')).toBeTruthy();
+		expect(getByText('No items found')).toBeTruthy();
 	});
 
 	it('renders error state with retry button when hasError', () => {
 		const onRetry = jest.fn();
-		const { getByTestId } = renderWithTheme(
+		const { getByTestId, getByText } = renderWithTheme(
 			<PaginatedList
 				data={[]}
 				renderItem={() => <Text>x</Text>}
@@ -66,9 +67,27 @@ describe('PaginatedList', () => {
 				onRetry={onRetry}
 			/>,
 		);
-		const retryBtn = getByTestId('error-retry-btn');
-		fireEvent.press(retryBtn);
+		expect(getByTestId('error-state')).toBeTruthy();
+		fireEvent.press(getByText('Retry'));
 		expect(onRetry).toHaveBeenCalledTimes(1);
+	});
+
+	it('supports a single empty-state CTA when provided', () => {
+		const onEmptyAction = jest.fn();
+		const { getByText } = renderWithTheme(
+			<PaginatedList
+				data={[]}
+				renderItem={() => <Text>x</Text>}
+				keyExtractor={(item) => String(item)}
+				isLoading={false}
+				hasError={false}
+				emptyActionLabel="Create record"
+				onEmptyAction={onEmptyAction}
+			/>,
+		);
+
+		fireEvent.press(getByText('Create record'));
+		expect(onEmptyAction).toHaveBeenCalledTimes(1);
 	});
 
 	it('renders header component', () => {
