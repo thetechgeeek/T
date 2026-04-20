@@ -7,6 +7,7 @@ import {
 	buildFocusRingStyle,
 	mapAccessibilityActionNames,
 } from '@/src/utils/accessibility';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
 import { FONT_SIZE } from '@/src/theme/typographyMetrics';
@@ -50,6 +51,7 @@ export const SwipeableRow = forwardRef<React.ElementRef<typeof View>, SwipeableR
 	) => {
 		const { theme } = useTheme();
 		const c = theme.colors;
+		const reduceMotionEnabled = useReducedMotion();
 		const [focusedAction, setFocusedAction] = useState<string | null>(null);
 		const translateX = useSharedValue(0);
 		const actionsCount = [onShare, onEdit, onArchive, onDelete].filter(Boolean).length;
@@ -57,7 +59,7 @@ export const SwipeableRow = forwardRef<React.ElementRef<typeof View>, SwipeableR
 
 		const triggerAction = (actionLabel: string, handler?: () => void) => {
 			handler?.();
-			translateX.value = withSpring(0);
+			translateX.value = reduceMotionEnabled ? 0 : withSpring(0);
 			void announceForScreenReader(`${actionLabel} action triggered`);
 		};
 
@@ -68,8 +70,12 @@ export const SwipeableRow = forwardRef<React.ElementRef<typeof View>, SwipeableR
 			.onFinalize((event) => {
 				translateX.value =
 					event.translationX <= -SIZE_SWIPE_ACTION_WIDTH / 2
-						? withSpring(-revealWidth)
-						: withSpring(0);
+						? reduceMotionEnabled
+							? -revealWidth
+							: withSpring(-revealWidth)
+						: reduceMotionEnabled
+							? 0
+							: withSpring(0);
 			});
 
 		const animatedContentStyle = useAnimatedStyle(() => ({

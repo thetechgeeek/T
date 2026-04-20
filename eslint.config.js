@@ -44,7 +44,14 @@ const testGlobals = {
 module.exports = [
 	js.configs.recommended,
 	{
-		ignores: ['supabase/functions/**', 'node_modules/**', 'dist/**', '.expo/**', 'scripts/**'],
+		ignores: [
+			'supabase/functions/**',
+			'node_modules/**',
+			'dist/**',
+			'.expo/**',
+			'scripts/**',
+			'T_Design/**',
+		],
 	},
 	{
 		files: ['*.js', 'supabase/migrations/*.js'],

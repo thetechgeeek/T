@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, '..');
+const DEFAULT_ROOT = path.join(__dirname, '..');
 const TARGET_DIRS = ['src/design-system', 'app/design-system'];
 const SKIP_SEGMENTS = new Set(['generated', '__tests__']);
 const SKIP_FILES = new Set(['src/design-system/copy.ts']);
@@ -33,6 +33,10 @@ const REQUIRED_README_PHRASES = [
 	'Operational dense',
 	'loading, empty, error, read-only, denied, no-media, and ugly-data',
 ];
+const MOTION_ANIMATION_RE =
+	/\b(withSpring|withTiming|withRepeat|withDecay|withSequence)\s*\(|\bAnimated\.(?:timing|spring|decay)\s*\(/g;
+const REDUCED_MOTION_HOOK_RE = /\buseReducedMotion\s*\(\)/;
+const REDUCED_MOTION_FLAG_RE = /\breduceMotionEnabled\b/;
 
 const FILE_TEXT_RULES = [
 	{
@@ -97,6 +101,32 @@ const DISALLOWED_IMPORT_RULES = [
 			'Design-system code must import shared UI from src/design-system/components instead of the retired src/components tree.',
 	},
 ];
+
+function parseCliOptions() {
+	const args = process.argv.slice(2);
+	const options = {
+		root: process.env.CHECK_DESIGN_SYSTEM_GUARDRAILS_ROOT || DEFAULT_ROOT,
+	};
+
+	for (let index = 0; index < args.length; index += 1) {
+		const arg = args[index];
+		if (arg === '--root') {
+			const next = args[index + 1];
+			if (!next) {
+				throw new Error('Missing value for --root.');
+			}
+			options.root = path.resolve(next);
+			index += 1;
+			continue;
+		}
+
+		throw new Error(`Unknown argument: ${arg}`);
+	}
+
+	return options;
+}
+
+const { root } = parseCliOptions();
 
 function normalize(relPath) {
 	return relPath.split(path.sep).join('/');
@@ -242,6 +272,23 @@ for (const relPath of files) {
 				line: indexToLine(text, match.index),
 				rule: rule.name,
 				message: rule.message,
+			});
+		}
+	}
+
+	if (isSharedComponentFile) {
+		MOTION_ANIMATION_RE.lastIndex = 0;
+		const motionMatch = MOTION_ANIMATION_RE.exec(text);
+		if (
+			motionMatch?.index != null &&
+			(!REDUCED_MOTION_HOOK_RE.test(text) || !REDUCED_MOTION_FLAG_RE.test(text))
+		) {
+			violations.push({
+				file: relPath,
+				line: indexToLine(text, motionMatch.index),
+				rule: 'reduced-motion-animation-gate',
+				message:
+					'Design-system components using Animated or Reanimated motion must read reduceMotionEnabled via useReducedMotion() and gate animation calls so state changes still work with reduced motion enabled.',
 			});
 		}
 	}

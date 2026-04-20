@@ -21,6 +21,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
 import { useControllableState } from '@/src/hooks/useControllableState';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import {
 	announceForScreenReader,
 	buildFocusRingStyle,
@@ -127,6 +128,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 	) => {
 		const { theme } = useTheme();
 		const c = theme.colors;
+		const reduceMotionEnabled = useReducedMotion();
 		const densityStyles = resolveOverlayDensityStyles(theme, density);
 		const [search, setSearch] = useState('');
 		const closeButtonRef = useRef<React.ElementRef<typeof Pressable> | null>(null);
@@ -268,7 +270,7 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 			})
 			.onEnd((event) => {
 				if (!dragToDismiss) {
-					translateY.value = withSpring(0);
+					translateY.value = reduceMotionEnabled ? 0 : withSpring(0);
 					return;
 				}
 
@@ -277,12 +279,14 @@ export const BottomSheetPicker = forwardRef<React.ElementRef<typeof View>, Botto
 					event.translationY > sheetHeight.value * DISMISS_DISTANCE_RATIO;
 
 				if (shouldDismiss) {
-					translateY.value = withSpring(sheetHeight.value || 360);
+					if (!reduceMotionEnabled) {
+						translateY.value = withSpring(sheetHeight.value || 360);
+					}
 					runOnJS(handleDismiss)();
 					return;
 				}
 
-				translateY.value = withSpring(0);
+				translateY.value = reduceMotionEnabled ? 0 : withSpring(0);
 			});
 
 		if (!isOpen) return null;

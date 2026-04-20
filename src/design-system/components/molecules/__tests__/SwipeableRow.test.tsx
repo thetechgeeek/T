@@ -1,12 +1,33 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, act } from '@testing-library/react-native';
 import { AccessibilityInfo } from 'react-native';
+import * as Reanimated from 'react-native-reanimated';
 import { SwipeableRow } from '../SwipeableRow';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
 
-const renderWithTheme = (component: React.ReactElement) =>
-	render(<ThemeProvider>{component}</ThemeProvider>);
+const renderWithTheme = (
+	component: React.ReactElement,
+	runtimeOverrides?: Partial<RuntimeQualitySignals>,
+) =>
+	render(
+		<ThemeProvider persist={false} runtimeOverrides={runtimeOverrides}>
+			{component}
+		</ThemeProvider>,
+	);
+
+function getGestureHost(result: ReturnType<typeof renderWithTheme>) {
+	return result.UNSAFE_getByType('GestureDetector' as never) as {
+		props: {
+			gesture: {
+				handlers?: {
+					finalize?: (event: { translationX: number }) => void;
+				};
+			};
+		};
+	};
+}
 
 describe('SwipeableRow', () => {
 	it('renders children', () => {
@@ -79,5 +100,25 @@ describe('SwipeableRow', () => {
 		expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledWith(
 			'Delete action triggered',
 		);
+	});
+
+	it('keeps swipe actions functional while skipping spring motion under reduced motion', () => {
+		const onDelete = jest.fn();
+		const springSpy = jest.spyOn(Reanimated, 'withSpring');
+		const result = renderWithTheme(
+			<SwipeableRow testID="swipe-row" onDelete={onDelete}>
+				<Text>Item</Text>
+			</SwipeableRow>,
+			{ reduceMotionEnabled: true },
+		);
+
+		const gestureHost = getGestureHost(result);
+		act(() => {
+			gestureHost.props.gesture.handlers?.finalize?.({ translationX: -80 });
+		});
+		fireEvent.press(result.getByTestId('swipeable-delete-btn'));
+
+		expect(onDelete).toHaveBeenCalledTimes(1);
+		expect(springSpy).not.toHaveBeenCalled();
 	});
 });

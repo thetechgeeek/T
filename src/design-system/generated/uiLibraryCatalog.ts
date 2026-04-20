@@ -9808,7 +9808,7 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 	{
 		id: '9-motion-animation-system-reduced-motion-contract-common-state-changes-still-happen-only-motion-is-removed-never-functio',
 		title: 'State changes still happen — only motion is removed, never functionality',
-		completed: false,
+		completed: true,
 		platform: 'Common',
 		section: '9. Motion & Animation System',
 		subsection: 'Reduced Motion Contract',
@@ -11789,8 +11789,8 @@ export const UI_LIBRARY_ITEMS: UiLibraryChecklistItem[] = [
 
 export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 	total: 1175,
-	completed: 693,
-	open: 482,
+	completed: 694,
+	open: 481,
 	common: 638,
 	web: 280,
 	mobile: 257,
@@ -11880,11 +11880,11 @@ export const UI_LIBRARY_STATS: UiLibraryCatalogStats = {
 		{
 			name: '9. Motion & Animation System',
 			count: 47,
-			completedCount: 5,
-			openCount: 42,
+			completedCount: 6,
+			openCount: 41,
 			commonMobileCount: 34,
-			commonMobileCompletedCount: 5,
-			commonMobileOpenCount: 29,
+			commonMobileCompletedCount: 6,
+			commonMobileOpenCount: 28,
 		},
 		{
 			name: '10. Copy & Microcopy Standards',

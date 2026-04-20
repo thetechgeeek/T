@@ -1,7 +1,9 @@
 import React from 'react';
-import { act, fireEvent } from '@testing-library/react-native';
-import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
+import { act, fireEvent, render } from '@testing-library/react-native';
+import * as Reanimated from 'react-native-reanimated';
 import { MediaViewer, type MediaViewerItem } from '../MediaViewer';
+import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
 
 const items: MediaViewerItem[] = [
 	{
@@ -33,6 +35,37 @@ function getPanGesture(instance: { props: { gesture: unknown } }) {
 		? gesture.gestures?.[1]
 		: gesture;
 }
+
+function getPinchGesture(instance: { props: { gesture: unknown } }) {
+	const gesture = instance.props.gesture as
+		| {
+				type?: string;
+				gestures?: Array<{
+					handlers?: {
+						update?: (event?: any) => void;
+						end?: (event?: any) => void;
+					};
+				}>;
+				handlers?: { update?: (event?: any) => void; end?: (event?: any) => void };
+		  }
+		| { handlers?: { update?: (event?: any) => void; end?: (event?: any) => void } };
+
+	return gesture && 'type' in gesture && gesture.type === 'simultaneous'
+		? gesture.gestures?.[0]
+		: gesture;
+}
+
+const renderWithTheme = (
+	component: React.ReactElement,
+	runtimeOverrides?: Partial<RuntimeQualitySignals>,
+) =>
+	render(component, {
+		wrapper: ({ children }: { children: React.ReactNode }) => (
+			<ThemeProvider persist={false} runtimeOverrides={runtimeOverrides}>
+				{children}
+			</ThemeProvider>
+		),
+	});
 
 describe('MediaViewer', () => {
 	it('supports progressive image loading and graceful text fallback', () => {
@@ -104,5 +137,25 @@ describe('MediaViewer', () => {
 
 		fireEvent.press(getByLabelText('Close media viewer'));
 		expect(onOpenChange).toHaveBeenCalledWith(false);
+	});
+
+	it('keeps navigation functional while skipping pinch reset springs under reduced motion', () => {
+		const onIndexChange = jest.fn();
+		const springSpy = jest.spyOn(Reanimated, 'withSpring');
+		const { getByLabelText, UNSAFE_getByType } = renderWithTheme(
+			<MediaViewer items={items} defaultIndex={0} open onIndexChange={onIndexChange} />,
+			{ reduceMotionEnabled: true },
+		);
+
+		fireEvent.press(getByLabelText('Next media item'));
+		expect(onIndexChange).toHaveBeenCalledWith(1);
+
+		const pinchGesture = getPinchGesture(UNSAFE_getByType('GestureDetector' as any));
+		act(() => {
+			pinchGesture?.handlers?.update?.({ scale: 1.8 });
+			pinchGesture?.handlers?.end?.();
+		});
+
+		expect(springSpy).not.toHaveBeenCalled();
 	});
 });

@@ -14,6 +14,7 @@ import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { Card } from '@/src/design-system/components/atoms/Card';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import { announceForScreenReader } from '@/src/utils/accessibility';
 import { useTheme } from '@/src/theme/ThemeProvider';
 import { SPACING_PX } from '@/src/theme/layoutMetrics';
@@ -70,6 +71,7 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 		ref,
 	) => {
 		const { theme } = useTheme();
+		const reduceMotionEnabled = useReducedMotion();
 		const [uncontrolledIndex, setUncontrolledIndex] = useState(defaultIndex);
 		const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
 		const [loadedIds, setLoadedIds] = useState<string[]>([]);
@@ -104,7 +106,7 @@ export const MediaViewer = forwardRef<React.ElementRef<typeof View>, MediaViewer
 				scale.value = clamp(event.scale, 1, 3);
 			})
 			.onEnd(() => {
-				scale.value = withSpring(1);
+				scale.value = reduceMotionEnabled ? 1 : withSpring(1);
 			});
 
 		const panGesture = Gesture.Pan().onFinalize((event) => {

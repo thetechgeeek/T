@@ -1580,7 +1580,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [ ] State changes still happen — only motion is removed, never functionality
+- [x] State changes still happen — only motion is removed, never functionality
 
 #### Web
 
@@ -1590,7 +1590,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 #### Mobile (React Native)
 
 - [x] `AccessibilityInfo.isReduceMotionEnabled()` listener registered at app root
-- [ ] All Reanimated / Animated animations conditional on reduced-motion flag
+- [x] All Reanimated / Animated animations conditional on reduced-motion flag
 - [x] `LayoutAnimation` skipped under reduced motion
 - [x] Provide `useReducedMotion()` hook for component-level opt-out
 

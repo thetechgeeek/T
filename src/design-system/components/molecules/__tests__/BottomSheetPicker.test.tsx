@@ -6,8 +6,10 @@ import {
 	type KeyboardEventListener,
 } from 'react-native';
 import { render, fireEvent, act } from '@testing-library/react-native';
+import * as Reanimated from 'react-native-reanimated';
 import { BottomSheetPicker } from '../BottomSheetPicker';
 import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
 import { setAccessibilityFocus } from '@/src/utils/accessibility';
 
 jest.mock('@/src/utils/accessibility', () => {
@@ -20,8 +22,15 @@ jest.mock('@/src/utils/accessibility', () => {
 
 const mockSetAccessibilityFocus = jest.mocked(setAccessibilityFocus);
 
-const renderWithTheme = (component: React.ReactElement) =>
-	render(<ThemeProvider>{component}</ThemeProvider>);
+const renderWithTheme = (
+	component: React.ReactElement,
+	runtimeOverrides?: Partial<RuntimeQualitySignals>,
+) =>
+	render(
+		<ThemeProvider persist={false} runtimeOverrides={runtimeOverrides}>
+			{component}
+		</ThemeProvider>,
+	);
 
 function flattenStyle(style: unknown) {
 	return Array.isArray(style) ? Object.assign({}, ...style.filter(Boolean)) : style;
@@ -408,5 +417,38 @@ describe('BottomSheetPicker', () => {
 		});
 
 		expect(onClose).toHaveBeenCalledTimes(1);
+	});
+
+	it('keeps dismiss interactions functional while skipping spring motion under reduced motion', () => {
+		const onClose = jest.fn();
+		const springSpy = jest.spyOn(Reanimated, 'withSpring');
+		const result = renderWithTheme(
+			<BottomSheetPicker
+				visible
+				title="Select Fruit"
+				options={OPTIONS}
+				dragToDismiss
+				testID="bottom-sheet"
+				onSelect={jest.fn()}
+				onClose={onClose}
+			/>,
+			{ reduceMotionEnabled: true },
+		);
+
+		fireEvent(result.getByTestId('bottom-sheet'), 'layout', {
+			nativeEvent: { layout: { height: 400, width: 320, x: 0, y: 0 } },
+		});
+
+		const gestureHost = getGestureHost(result);
+		act(() => {
+			gestureHost.props.gesture.handlers?.change?.({ translationY: 180 });
+			gestureHost.props.gesture.handlers?.end?.({
+				translationY: 180,
+				velocityY: 900,
+			});
+		});
+
+		expect(onClose).toHaveBeenCalledTimes(1);
+		expect(springSpy).not.toHaveBeenCalled();
 	});
 });
