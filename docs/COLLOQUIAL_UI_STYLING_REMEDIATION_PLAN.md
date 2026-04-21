@@ -1,6 +1,6 @@
 # Colloquial UI Styling — Remediation Checklist
 
-**EasyDesign — eliminate ad-hoc visual styling ("colloquial" issues)**
+**EasyStock — eliminate ad-hoc visual styling ("colloquial" issues)**
 
 > Granular checklist derived from the original remediation plan. Each item verified against the live codebase on 2026-04-14.
 

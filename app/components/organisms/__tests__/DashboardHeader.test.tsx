@@ -17,9 +17,8 @@ describe('DashboardHeader', () => {
 	});
 
 	it('renders greeting text', () => {
-		const { getAllByText } = renderWithTheme(<DashboardHeader businessName="My Tiles" />);
-		// Renders both English (Good...) and Hindi (नमस्ते)
-		expect(getAllByText(/Good|Namaste|Welcome|नमस्ते|🙏/i).length).toBeGreaterThan(0);
+		const { getByText } = renderWithTheme(<DashboardHeader businessName="My Tiles" />);
+		expect(getByText(/Good Morning|Good Afternoon|Good Evening/i)).toBeTruthy();
 	});
 
 	it('renders date in the header', () => {

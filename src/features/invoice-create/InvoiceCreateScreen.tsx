@@ -5,6 +5,8 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@easydesign/design-system';
 import { Button } from '@easydesign/design-system';
 import { Screen } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { Badge } from '@easydesign/design-system';
 import { ScreenHeader } from '@easydesign/ui-shell';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
 import { FONT_SIZE } from '@easydesign/design-system/foundation';
@@ -14,8 +16,8 @@ import { LineItemsStep } from './LineItemsStep';
 import { PaymentStep } from './PaymentStep';
 
 const STEP_BORDER_WIDTH = 1.5;
-const STEP_ACTIVE_DOT_SIZE = SPACING_PX.md;
-const STEP_INACTIVE_DOT_SIZE = SPACING_PX.sm + SPACING_PX.xxs;
+const STEP_PILL_SIZE = SPACING_PX.xl + SPACING_PX.xs;
+const STEP_COUNT = 3;
 
 export default function InvoiceCreateScreen() {
 	const { c, s } = useThemeTokens();
@@ -31,80 +33,145 @@ export default function InvoiceCreateScreen() {
 	return (
 		<Screen withKeyboard safeAreaEdges={['bottom']}>
 			<ScreenHeader title={t('invoice.createInvoice')} />
-			{/* Stepper — announced as a progress indicator */}
-			<View
-				style={[styles.stepper, { borderBottomColor: c.border }]}
-				accessibilityRole="progressbar"
-				accessibilityValue={{ now: flow.step, min: 1, max: 3 }}
-				accessibilityLabel={t('common.stepIndicator', {
-					current: flow.step,
-					total: 3,
-					label: steps[flow.step - 1],
-				})}
-			>
-				{steps.map((label, i) => {
-					const stepNum = i + 1;
-					const isActive = flow.step === stepNum;
-					const isCompleted = flow.step > stepNum;
+			<View style={[styles.headerSection, { paddingHorizontal: s.lg }]}>
+				<Card
+					variant="outlined"
+					padding="none"
+					style={[styles.metaCard, { backgroundColor: c.surface }]}
+				>
+					<View style={[styles.metaCardHeader, { borderBottomColor: c.border }]}>
+						<View style={{ flex: 1 }}>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{t('invoice.invoiceNumber')}
+							</ThemedText>
+							<ThemedText weight="semibold" style={{ marginTop: SPACING_PX.xxs }}>
+								{flow.invoiceNumber}
+							</ThemedText>
+						</View>
+						<Badge label={`${flow.step}/${STEP_COUNT}`} variant="neutral" size="sm" />
+					</View>
+					<View style={styles.metaCardBody}>
+						<View
+							style={[
+								styles.metaCell,
+								{
+									borderRightColor: c.border,
+								},
+							]}
+						>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{t('invoice.invoiceDate')}
+							</ThemedText>
+							<ThemedText weight="semibold" style={{ marginTop: SPACING_PX.xxs }}>
+								{flow.invoiceDate}
+							</ThemedText>
+						</View>
+						<View style={styles.metaCell}>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{t('common.stepIndicator', {
+									current: flow.step,
+									total: STEP_COUNT,
+									label: steps[flow.step - 1],
+								})}
+							</ThemedText>
+						</View>
+					</View>
+				</Card>
 
-					const dotSize = isActive ? STEP_ACTIVE_DOT_SIZE : STEP_INACTIVE_DOT_SIZE;
-					const dotStyle = isActive
-						? { backgroundColor: c.primary, borderWidth: 0 }
-						: isCompleted
-							? {
-									backgroundColor: 'transparent',
-									borderWidth: STEP_BORDER_WIDTH,
-									borderColor: c.primary,
-								}
-							: {
-									backgroundColor: c.surfaceVariant,
-									borderWidth: STEP_BORDER_WIDTH,
-									borderColor: c.borderStrong,
-								};
+				<Card
+					variant="outlined"
+					padding="md"
+					style={[styles.stepperCard, { backgroundColor: c.surface }]}
+				>
+					<View
+						style={styles.stepper}
+						accessibilityRole="progressbar"
+						accessibilityValue={{ now: flow.step, min: 1, max: STEP_COUNT }}
+						accessibilityLabel={t('common.stepIndicator', {
+							current: flow.step,
+							total: STEP_COUNT,
+							label: steps[flow.step - 1],
+						})}
+					>
+						{steps.map((label, i) => {
+							const stepNum = i + 1;
+							const isActive = flow.step === stepNum;
+							const isCompleted = flow.step > stepNum;
+							const circleBackgroundColor =
+								isActive || isCompleted ? c.primary : c.surfaceVariant;
+							const circleBorderColor = isCompleted
+								? c.primary
+								: isActive
+									? c.primary
+									: c.borderStrong;
+							const circleTextColor =
+								isActive || isCompleted ? c.onPrimary : c.onSurfaceVariant;
 
-					return (
-						<React.Fragment key={label}>
-							{i > 0 && (
-								<View
-									style={{
-										flex: 1,
-										height: StyleSheet.hairlineWidth,
-										backgroundColor: c.borderStrong,
-										alignSelf: 'center',
-										marginBottom: FONT_SIZE.h3,
-									}}
-								/>
-							)}
-							<View style={{ alignItems: 'center' }}>
-								<View
-									accessibilityLabel={`invoice-step-${stepNum}`}
-									importantForAccessibility={isActive ? 'yes' : 'no'}
-									style={[
-										{
-											width: dotSize,
-											height: dotSize,
-											borderRadius: dotSize / 2,
-										},
-										dotStyle,
-									]}
-								/>
-								<ThemedText
-									variant="caption"
-									style={{
-										fontSize: FONT_SIZE.captionSmall,
-										marginTop: SPACING_PX.xs,
-									}}
-									color={isActive ? c.primary : c.onSurfaceVariant}
-								>
-									{label}
-								</ThemedText>
-							</View>
-						</React.Fragment>
-					);
-				})}
+							return (
+								<React.Fragment key={label}>
+									{i > 0 && (
+										<View
+											style={[
+												styles.stepConnector,
+												{
+													backgroundColor:
+														flow.step > stepNum ? c.primary : c.border,
+													marginBottom: FONT_SIZE.h3,
+												},
+											]}
+										/>
+									)}
+									<View style={styles.stepItem}>
+										<View
+											accessibilityLabel={`invoice-step-${stepNum}`}
+											importantForAccessibility={isActive ? 'yes' : 'no'}
+											style={[
+												styles.stepPill,
+												{
+													width: STEP_PILL_SIZE,
+													height: STEP_PILL_SIZE,
+													borderRadius: STEP_PILL_SIZE / 2,
+													backgroundColor: circleBackgroundColor,
+													borderWidth: isActive ? 0 : STEP_BORDER_WIDTH,
+													borderColor: circleBorderColor,
+												},
+											]}
+										>
+											<ThemedText
+												variant="caption"
+												weight="semibold"
+												color={circleTextColor}
+											>
+												{stepNum}
+											</ThemedText>
+										</View>
+										<ThemedText
+											variant="caption"
+											style={{
+												fontSize: FONT_SIZE.captionSmall,
+												marginTop: SPACING_PX.sm,
+											}}
+											color={isActive ? c.onSurface : c.onSurfaceVariant}
+											weight={isActive ? 'semibold' : 'regular'}
+										>
+											{label}
+										</ThemedText>
+									</View>
+								</React.Fragment>
+							);
+						})}
+					</View>
+				</Card>
 			</View>
 
-			<ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: s.lg }}>
+			<ScrollView
+				style={{ flex: 1 }}
+				contentContainerStyle={{
+					paddingHorizontal: s.lg,
+					paddingBottom: s.xl,
+					gap: s.lg,
+				}}
+			>
 				{flow.step === 1 && (
 					<CustomerStep
 						customer={flow.customer}
@@ -153,8 +220,15 @@ export default function InvoiceCreateScreen() {
 				)}
 			</ScrollView>
 
-			{/* Footer nav */}
-			<View style={[styles.footer, { borderTopColor: c.border, backgroundColor: c.surface }]}>
+			<View
+				style={[
+					styles.footer,
+					{
+						borderTopColor: c.border,
+						backgroundColor: c.surface,
+					},
+				]}
+			>
 				<Button
 					title={t('common.back')}
 					accessibilityLabel="invoice-back-button"
@@ -164,9 +238,11 @@ export default function InvoiceCreateScreen() {
 							: undefined
 					}
 					variant="ghost"
+					tone="neutral"
+					emphasis="medium"
 					onPress={flow.handleBack}
 					disabled={flow.step === 1 || flow.submitting}
-					style={{ flex: 1, marginRight: s.xs }}
+					style={{ flex: 1 }}
 				/>
 				{flow.step < 3 ? (
 					<Button
@@ -175,14 +251,14 @@ export default function InvoiceCreateScreen() {
 						accessibilityHint={t('common.proceedToStep', { step: flow.step + 1 })}
 						onPress={flow.handleNext}
 						disabled={!flow.canGoNext}
-						style={{ flex: 1, marginLeft: s.xs }}
+						style={{ flex: 1 }}
 					/>
 				) : (
 					<Button
 						title={flow.submitting ? t('invoice.generating') : t('invoice.generatePDF')}
 						onPress={flow.submitInvoice}
 						loading={flow.submitting}
-						style={{ flex: 1, marginLeft: s.xs }}
+						style={{ flex: 1 }}
 					/>
 				)}
 			</View>
@@ -191,17 +267,59 @@ export default function InvoiceCreateScreen() {
 }
 
 const styles = StyleSheet.create({
-	stepper: {
+	headerSection: {
+		paddingBottom: SPACING_PX.md,
+		gap: SPACING_PX.sm,
+	},
+	metaCard: {
+		overflow: 'hidden',
+	},
+	metaCardHeader: {
 		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingHorizontal: SPACING_PX['2xl'],
+		alignItems: 'center',
+		gap: SPACING_PX.md,
+		paddingHorizontal: SPACING_PX.lg,
 		paddingVertical: SPACING_PX.md,
 		borderBottomWidth: 1,
 	},
+	metaCardBody: {
+		flexDirection: 'row',
+	},
+	metaCell: {
+		flex: 1,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingVertical: SPACING_PX.md,
+		borderRightWidth: 1,
+	},
+	stepperCard: {
+		overflow: 'hidden',
+	},
+	stepper: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'flex-start',
+	},
+	stepItem: {
+		alignItems: 'center',
+		flexShrink: 1,
+	},
+	stepConnector: {
+		flex: 1,
+		height: 2,
+		alignSelf: 'center',
+		borderRadius: SPACING_PX.xxs,
+		marginHorizontal: SPACING_PX.xs,
+	},
+	stepPill: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 	footer: {
 		flexDirection: 'row',
-		padding: SPACING_PX.lg,
+		gap: SPACING_PX.sm,
+		paddingHorizontal: SPACING_PX.lg,
+		paddingTop: SPACING_PX.md,
+		paddingBottom: SPACING_PX.lg,
 		borderTopWidth: 1,
 	},
 });

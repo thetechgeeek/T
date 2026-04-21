@@ -3,7 +3,6 @@ import { AppState, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { ThemeProvider, useTheme } from '@easydesign/design-system/foundation';
 import { ShellAssetGate } from './ShellAssetGate';
 import { ErrorBoundary } from './components/atoms/ErrorBoundary';
@@ -81,13 +80,11 @@ export function ShellRootProviders({
 				<ErrorBoundary fallback={errorFallback}>
 					<ShellSessionLifecycleBridge />
 					<ShellAssetGate fallback={assetFallback}>
-						<KeyboardProvider>
-							<ShellOverlayProvider>
-								<ShellViewport hideOfflineBanner={hideOfflineBanner}>
-									{children}
-								</ShellViewport>
-							</ShellOverlayProvider>
-						</KeyboardProvider>
+						<ShellOverlayProvider>
+							<ShellViewport hideOfflineBanner={hideOfflineBanner}>
+								{children}
+							</ShellViewport>
+						</ShellOverlayProvider>
 					</ShellAssetGate>
 				</ErrorBoundary>
 			</ShellEnvironmentProvider>

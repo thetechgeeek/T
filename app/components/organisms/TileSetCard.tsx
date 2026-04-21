@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { Package, AlertCircle } from 'lucide-react-native';
 import { useTheme } from '@easydesign/design-system/foundation';
@@ -14,6 +14,9 @@ import type { ViewStyle } from 'react-native';
 import type { TileSetGroup, InventoryItem } from '@/src/types/inventory';
 import { getThumbUrl } from '@/src/utils/imageTransform';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { Card, ThemedText } from '@easydesign/design-system';
+
+const LOW_BADGE_HORIZONTAL_PADDING = SPACING_PX.xs + SPACING_PX.xxs;
 
 interface TileSetCardProps {
 	group: TileSetGroup;
@@ -28,252 +31,230 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 	const s = theme.spacing;
 	const r = theme.borderRadius;
 
-	// We'll show the main image as the first item's image, or placeholder
-
-	// Total stock across all variants in this set
 	const totalStock = group.items.reduce((sum, item) => sum + item.box_count, 0);
-	const lowStock = group.items.some((i) => i.box_count <= i.low_stock_threshold);
+	const lowStock = group.items.some((item) => item.box_count <= item.low_stock_threshold);
 
 	return (
-		<View
+		<Card
+			padding="none"
 			style={[
 				styles.card,
-				{ backgroundColor: c.card, borderRadius: r.lg, ...(theme.shadows.sm as object) },
+				{
+					borderRadius: r.xl,
+					overflow: 'hidden',
+				},
 				style,
 			]}
+			variant="outlined"
 		>
-			{/* Set Header */}
 			<View
 				style={[
 					styles.header,
 					{
-						borderBottomColor: c.border,
+						borderBottomColor: c.separator,
 						borderBottomWidth: StyleSheet.hairlineWidth,
-						padding: s.md,
+						paddingHorizontal: s.md,
+						paddingVertical: s.md,
 					},
 				]}
 			>
 				<View style={styles.headerTitleRow}>
-					<Text
-						style={[
-							{
-								color: c.onSurface,
-								fontSize: theme.typography.sizes.lg,
-								fontWeight: theme.typography.weights.bold,
-							},
-						]}
-						numberOfLines={1}
-					>
+					<ThemedText variant="bodyStrong" numberOfLines={1}>
 						{group.baseItemNumber}
-					</Text>
-					{lowStock && (
+					</ThemedText>
+					{lowStock ? (
 						<View
 							accessible={true}
 							accessibilityLabel={t('inventory.lowStockWarning')}
 							style={[
 								styles.lowStockBadge,
-								{ backgroundColor: c.errorLight, borderRadius: r.sm },
+								{
+									backgroundColor: c.errorLight,
+									borderRadius: r.full,
+								},
 							]}
 						>
 							<AlertCircle
 								size={12}
 								color={c.error}
-								strokeWidth={2.5}
+								strokeWidth={2.25}
 								importantForAccessibility="no"
 							/>
-							<Text
-								importantForAccessibility="no"
-								style={[
-									{
-										color: c.error,
-										fontSize: theme.typography.sizes.xs,
-										fontWeight: theme.typography.weights.bold,
-										marginLeft: s.xs,
-									},
-								]}
+							<ThemedText
+								variant="captionSmall"
+								color={c.error}
+								weight="bold"
+								style={{ marginLeft: s.xxs }}
 							>
 								{t('common.low').toUpperCase()}
-							</Text>
+							</ThemedText>
 						</View>
-					)}
+					) : null}
 				</View>
-				<Text
-					style={[
-						{
-							color: c.onSurfaceVariant,
-							fontSize: theme.typography.sizes.sm,
-							marginTop: s.xxs,
-						},
-					]}
+				<ThemedText
+					variant="caption"
+					color={c.onSurfaceVariant}
+					style={{ marginTop: s.xxs }}
 				>
 					{group.items.length}{' '}
 					{group.items.length === 1 ? t('inventory.variant') : t('inventory.variants')} •{' '}
 					{totalStock} {t('inventory.boxesTotal')}
-				</Text>
+				</ThemedText>
 			</View>
 
-			{/* Variants List */}
-			<View style={{ padding: s.md }}>
-				{group.items.map((item, index) => {
-					const isLow = item.box_count <= item.low_stock_threshold;
-					return (
-						<TouchableOpacity
-							key={item.id}
-							activeOpacity={0.7}
-							accessibilityRole="button"
-							accessibilityLabel={`${item.design_name}, ${item.box_count} boxes in stock`}
-							accessibilityHint={
-								isLow
-									? `${t('inventory.lowStockWarning')}. ${t('common.doubleTapToView')}`
-									: t('common.doubleTapToView')
-							}
-							style={[styles.variantRow, { marginTop: index > 0 ? s.md : 0 }]}
-							onPress={() => onPressItem(item)}
+			{group.items.map((item, index) => {
+				const isLow = item.box_count <= item.low_stock_threshold;
+				const isOut = item.box_count <= 0;
+				const rowBorderWidth =
+					index === group.items.length - 1 ? 0 : StyleSheet.hairlineWidth;
+				const metadataParts = [
+					item.size_name || t('inventory.itemNotFound'),
+					item.category && item.category !== 'OTHER'
+						? t(`inventory.categories.${item.category.toLowerCase()}`)
+						: null,
+				].filter(Boolean);
+
+				return (
+					<Pressable
+						key={item.id}
+						onPress={() => onPressItem(item)}
+						accessibilityRole="button"
+						accessibilityLabel={`${item.design_name}, ${item.box_count} boxes in stock`}
+						accessibilityHint={
+							isLow
+								? `${t('inventory.lowStockWarning')}. ${t('common.doubleTapToView')}`
+								: t('common.doubleTapToView')
+						}
+						style={({ pressed }) => [
+							styles.variantRow,
+							{
+								backgroundColor: pressed ? c.surfaceVariant : c.card,
+								borderBottomColor: c.separator,
+								borderBottomWidth: rowBorderWidth,
+								paddingHorizontal: s.md,
+								paddingVertical: s.md,
+							},
+						]}
+					>
+						<View
+							style={[
+								styles.thumbnail,
+								{
+									backgroundColor: c.surfaceVariant,
+									borderRadius: r.md,
+									marginRight: s.md,
+								},
+							]}
 						>
-							{/* Image thumbnail */}
-							<View
-								style={[
-									styles.thumbnail,
-									{ backgroundColor: c.surface, borderRadius: r.md },
-								]}
+							{item.tile_image_url ? (
+								<Image
+									source={{
+										uri: getThumbUrl(item.tile_image_url, SIZE_TILE_IMAGE),
+									}}
+									style={styles.image}
+									contentFit="cover"
+									accessible={true}
+									accessibilityLabel={item.design_name}
+								/>
+							) : (
+								<Package
+									size={20}
+									color={c.placeholder}
+									strokeWidth={1.5}
+									importantForAccessibility="no"
+								/>
+							)}
+						</View>
+
+						<View style={styles.variantInfo}>
+							<ThemedText variant="body" weight="semibold" numberOfLines={1}>
+								{item.design_name}
+							</ThemedText>
+							<ThemedText
+								variant="caption"
+								color={c.onSurfaceVariant}
+								numberOfLines={1}
+								style={{ marginTop: s.xxs }}
 							>
-								{item.tile_image_url ? (
-									<Image
-										source={{
-											uri: getThumbUrl(item.tile_image_url, SIZE_TILE_IMAGE),
-										}}
-										style={styles.image}
-										contentFit="cover"
-										accessible={true}
-										accessibilityLabel={item.design_name}
-									/>
-								) : (
-									<Package
-										size={20}
-										color={c.placeholder}
-										strokeWidth={1.5}
-										importantForAccessibility="no"
-									/>
-								)}
-							</View>
+								{metadataParts.join(' • ')}
+							</ThemedText>
+						</View>
 
-							{/* Variant Info */}
-							<View style={styles.variantInfo}>
-								<Text
+						<View style={styles.stockCol}>
+							<ThemedText
+								variant="bodyStrong"
+								color={isOut ? c.error : isLow ? c.warning : c.onSurface}
+							>
+								{t('inventory.boxCount', { count: item.box_count })}
+							</ThemedText>
+							<ThemedText
+								variant="caption"
+								color={c.onSurfaceVariant}
+								style={{ marginTop: s.xxs }}
+							>
+								{formatCurrency(item.selling_price)}
+							</ThemedText>
+							{item.category !== 'OTHER' ? (
+								<View
 									style={[
+										styles.categoryDot,
 										{
-											color: c.onSurface,
-											fontSize: theme.typography.sizes.md,
-											fontWeight: theme.typography.weights.semibold,
+											backgroundColor: withOpacity(
+												c.primary,
+												OPACITY_SKELETON_BASE,
+											),
+											borderRadius: r.full,
 										},
 									]}
-									numberOfLines={1}
-								>
-									{item.design_name}
-								</Text>
-								<View style={styles.metaRow}>
-									<Text
-										style={[
-											{
-												color: c.onSurfaceVariant,
-												fontSize: theme.typography.sizes.xs,
-											},
-										]}
-									>
-										{item.size_name || t('inventory.itemNotFound')}
-									</Text>
-									{item.category !== 'OTHER' && (
-										<View
-											importantForAccessibility="no"
-											style={[
-												styles.catBadge,
-												{
-													backgroundColor: withOpacity(
-														c.primary,
-														OPACITY_SKELETON_BASE,
-													),
-													borderRadius: r.sm,
-												},
-											]}
-										>
-											<Text
-												style={[
-													{
-														color: c.primary,
-														fontSize: theme.typography.sizes.xs,
-														fontWeight: theme.typography.weights.bold,
-													},
-												]}
-											>
-												{t(
-													`inventory.categories.${(item.category || 'OTHER').toLowerCase()}`,
-												)}
-											</Text>
-										</View>
-									)}
-								</View>
-							</View>
-
-							{/* Variant Stock & Price */}
-							<View style={styles.stockCol}>
-								<Text
-									style={[
-										{
-											color: isLow ? c.error : c.success,
-											fontSize: theme.typography.sizes.sm,
-											fontWeight: theme.typography.weights.bold,
-										},
-									]}
-								>
-									{t('inventory.boxCount', { count: item.box_count })}
-								</Text>
-								<Text
-									style={[
-										{
-											color: c.onSurface,
-											fontSize: theme.typography.sizes.xs,
-											fontWeight: theme.typography.weights.medium,
-											marginTop: s.xxs,
-										},
-									]}
-								>
-									{formatCurrency(item.selling_price)}
-								</Text>
-							</View>
-						</TouchableOpacity>
-					);
-				})}
-			</View>
-		</View>
+								/>
+							) : null}
+						</View>
+					</Pressable>
+				);
+			})}
+		</Card>
 	);
 }
 
 const styles = StyleSheet.create({
 	card: {},
 	header: {},
-	headerTitleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-	lowStockBadge: {
-		flexDirection: 'row',
+	headerTitleRow: {
 		alignItems: 'center',
-		paddingHorizontal: SPACING_PX.xs + SPACING_PX.xxs,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	lowStockBadge: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		paddingHorizontal: LOW_BADGE_HORIZONTAL_PADDING,
 		paddingVertical: SPACING_PX.xxs,
 	},
-	variantRow: { flexDirection: 'row', alignItems: 'center' },
-	thumbnail: {
-		width: SIZE_THUMBNAIL_MD,
-		height: SIZE_THUMBNAIL_MD,
+	variantRow: {
 		alignItems: 'center',
+		flexDirection: 'row',
+	},
+	thumbnail: {
+		alignItems: 'center',
+		height: SIZE_THUMBNAIL_MD,
 		justifyContent: 'center',
 		overflow: 'hidden',
-		marginRight: SPACING_PX.md,
+		width: SIZE_THUMBNAIL_MD,
 	},
 	image: { width: '100%', height: '100%' },
-	variantInfo: { flex: 1, justifyContent: 'center' },
-	metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: SPACING_PX.xs },
-	catBadge: {
-		paddingHorizontal: SPACING_PX.xs + SPACING_PX.xxs,
-		paddingVertical: SPACING_PX.xxs,
-		marginLeft: SPACING_PX.sm,
+	variantInfo: {
+		flex: 1,
+		justifyContent: 'center',
 	},
-	stockCol: { alignItems: 'flex-end', justifyContent: 'center', marginLeft: SPACING_PX.md },
+	stockCol: {
+		alignItems: 'flex-end',
+		justifyContent: 'center',
+		marginLeft: SPACING_PX.md,
+		minWidth: 72,
+	},
+	categoryDot: {
+		height: 6,
+		marginTop: SPACING_PX.xs,
+		width: 6,
+	},
 });

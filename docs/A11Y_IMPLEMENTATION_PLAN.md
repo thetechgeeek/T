@@ -1,6 +1,6 @@
 # Accessibility (A11y) Implementation Plan
 
-**Goal:** Reach FAANG-level accessibility across the entire EasyDesign React Native codebase.
+**Goal:** Reach FAANG-level accessibility across the entire EasyStock React Native codebase.
 **Standard:** WCAG 2.1 AA + React Native best practices (Apple HIG / Android Material accessibility guidelines).
 **Side effect:** All `accessibilityLabel` values are stable English identifiers → Maestro e2e tests become locale-independent by using `label:` selectors instead of visible text.
 
@@ -1030,7 +1030,7 @@ const menuItems = [
 <TouchableOpacity
   accessibilityRole="button"
   accessibilityLabel="sign-out-button"
-  accessibilityHint="Logs you out of EasyDesign"
+  accessibilityHint="Logs you out of EasyStock"
   ...
 >
 ```
@@ -1144,7 +1144,7 @@ const quickActions = [
 <Button
   title="Grant Permission"
   accessibilityLabel="grant-camera-permission"
-  accessibilityHint="Allow EasyDesign to use your camera for scanning"
+  accessibilityHint="Allow EasyStock to use your camera for scanning"
   ...
 />
 

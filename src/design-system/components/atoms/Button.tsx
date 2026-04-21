@@ -108,14 +108,14 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 			switch (resolvedVariant) {
 				case 'secondary':
 					return {
-						bg: c.surfaceVariant,
-						text: c.onSurfaceVariant,
-						border: 'transparent',
+						bg: c.surface,
+						text: c.onSurface,
+						border: c.border,
 					};
 				case 'outline':
-					return { bg: 'transparent', text: c.primary, border: c.primary };
+					return { bg: 'transparent', text: c.primary, border: c.border };
 				case 'ghost':
-					return { bg: 'transparent', text: c.primary, border: 'transparent' };
+					return { bg: 'transparent', text: c.onSurface, border: 'transparent' };
 				case 'danger':
 					return { bg: c.error, text: c.onError, border: 'transparent' };
 				case 'inverse':
@@ -198,7 +198,10 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 					android_ripple={
 						Platform.OS === 'android'
 							? {
-									color: c.surfaceVariant,
+									color:
+										resolvedVariant === 'primary'
+											? c.primaryLight
+											: c.surfaceVariant,
 									borderless: false,
 								}
 							: undefined
@@ -239,7 +242,7 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 								isDisabled && !isOutline && !isGhost ? c.surfaceVariant : v.bg,
 							borderColor: isFocused
 								? c.primary
-								: isDisabled && isOutline
+								: isDisabled && (isOutline || resolvedVariant === 'secondary')
 									? c.border
 									: v.border,
 							borderWidth:
@@ -248,7 +251,7 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 											color: c.primary,
 											radius: buttonTokens.radius,
 										}).borderWidth
-									: isOutline
+									: isOutline || resolvedVariant === 'secondary'
 										? buttonTokens.outlineWidth
 										: 0,
 							borderRadius: buttonTokens.radius,

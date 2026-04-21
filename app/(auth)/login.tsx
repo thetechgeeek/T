@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	Alert,
+	TouchableOpacity,
+	Platform,
+	TextInput as NativeTextInput,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import {
@@ -13,7 +20,6 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@easydesign/design-system';
 import { Button } from '@easydesign/design-system';
 import { ThemedText } from '@easydesign/design-system';
-import { TextInput } from '@easydesign/design-system';
 import { PhoneInput } from '@easydesign/design-system';
 import { AppError } from '@/src/errors';
 
@@ -31,6 +37,8 @@ export default function LoginScreen() {
 
 	const showDevLogin = __DEV__;
 	const canSubmitDevLogin = devEmail.trim().length > 0 && devPassword.length > 0;
+	const hideDevPasswordOnThisPlatform = Platform.OS !== 'ios';
+	const useStaticDevAuthLayout = showDevLogin && Platform.OS === 'ios';
 
 	const handleDevEmailChange = (value: string) => {
 		setDevEmail(value);
@@ -90,7 +98,18 @@ export default function LoginScreen() {
 	};
 
 	return (
-		<Screen scrollable safeAreaEdges={['top']}>
+		<Screen
+			scrollable={!useStaticDevAuthLayout}
+			safeAreaEdges={['top']}
+			scrollViewProps={
+				useStaticDevAuthLayout
+					? undefined
+					: {
+							keyboardShouldPersistTaps: 'always',
+							keyboardDismissMode: 'none',
+						}
+			}
+		>
 			{/* Header */}
 			<View
 				style={[
@@ -115,7 +134,7 @@ export default function LoginScreen() {
 						variant="display"
 						style={{ color: c.onPrimary, fontWeight: '800', letterSpacing: -1 }}
 					>
-						T
+						{t('branding.appShortName')}
 					</ThemedText>
 				</View>
 				<ThemedText
@@ -189,29 +208,75 @@ export default function LoginScreen() {
 							OTP is unavailable.
 						</ThemedText>
 
-						<TextInput
-							testID="dev-email-input"
-							label="Email"
-							placeholder="dev@example.com"
-							value={devEmail}
-							onChangeText={handleDevEmailChange}
-							autoCapitalize="none"
-							autoCorrect={false}
-							keyboardType="email-address"
-							textContentType="emailAddress"
-							containerStyle={{ marginTop: s.lg }}
-						/>
+						<View style={{ marginTop: s.lg }}>
+							<ThemedText
+								variant="label"
+								style={{ color: c.onSurface, marginBottom: s.xs }}
+							>
+								Email
+							</ThemedText>
+							<NativeTextInput
+								testID="dev-email-input"
+								placeholder="dev@example.com"
+								placeholderTextColor={c.placeholder}
+								value={devEmail}
+								onChangeText={handleDevEmailChange}
+								autoCapitalize="none"
+								autoCorrect={false}
+								spellCheck={false}
+								keyboardType="email-address"
+								autoComplete="off"
+								textContentType="none"
+								importantForAutofill="no"
+								style={[
+									styles.devInput,
+									{
+										color: c.onSurface,
+										borderColor: c.border,
+										backgroundColor: c.surface,
+										borderRadius: r.md,
+										fontSize: typo.sizes.md,
+										paddingHorizontal: s.md,
+										paddingVertical: s.sm,
+									},
+								]}
+							/>
+						</View>
 
-						<TextInput
-							testID="dev-password-input"
-							label="Password"
-							placeholder="Enter password"
-							value={devPassword}
-							onChangeText={handleDevPasswordChange}
-							secureTextEntry
-							textContentType="password"
-							containerStyle={{ marginTop: s.md }}
-						/>
+						<View style={{ marginTop: s.md }}>
+							<ThemedText
+								variant="label"
+								style={{ color: c.onSurface, marginBottom: s.xs }}
+							>
+								Password
+							</ThemedText>
+							<NativeTextInput
+								testID="dev-password-input"
+								placeholder="Enter password"
+								placeholderTextColor={c.placeholder}
+								value={devPassword}
+								onChangeText={handleDevPasswordChange}
+								autoCapitalize="none"
+								autoCorrect={false}
+								spellCheck={false}
+								autoComplete="off"
+								textContentType="none"
+								importantForAutofill="no"
+								secureTextEntry={hideDevPasswordOnThisPlatform}
+								style={[
+									styles.devInput,
+									{
+										color: c.onSurface,
+										borderColor: c.border,
+										backgroundColor: c.surface,
+										borderRadius: r.md,
+										fontSize: typo.sizes.md,
+										paddingHorizontal: s.md,
+										paddingVertical: s.sm,
+									},
+								]}
+							/>
+						</View>
 
 						{devError ? (
 							<ThemedText
@@ -267,5 +332,8 @@ const styles = StyleSheet.create({
 	subtitle: { textAlign: 'center' },
 	form: { flex: 1 },
 	devPanel: { borderWidth: 1 },
+	devInput: {
+		borderWidth: 1,
+	},
 	helpBlock: { alignItems: 'center' },
 });

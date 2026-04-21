@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Treasury — Mobile DS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="tokens/base.css">
+<style>
+  html, body { height: 100%; margin: 0; background: #08090a; overflow: hidden; font-family: "Geist", sans-serif; }
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(94,106,210,0.08), transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,92,246,0.08), transparent 50%),
+      #08090a;
+    padding: 20px;
+  }
+  .tweak-toggle {
+    position: fixed; top: 14px; right: 14px; z-index: 300;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #111113; color: #f2f2f5;
+    border: 1px solid #26272b; padding: 8px 12px;
+    border-radius: 8px; cursor: pointer; font-family: "Geist", sans-serif; font-size: 12px; font-weight: 600;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  }
+  .tweak-toggle:hover { background: #1a1b1e; }
+  .screen-label {
+    position: fixed; top: 16px; left: 16px; z-index: 300;
+    color: #8a8f98; font-size: 11px; font-family: "Geist Mono", monospace;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="tokens/themes.js"></script>
+</head>
+<body>
+<div class="screen-label" id="screen-label"></div>
+<button class="tweak-toggle" id="tweak-toggle">⚙ Tweaks</button>
+<div class="stage" id="stage"></div>
+
+<script type="text/babel" src="frames/ios-frame.jsx"></script>
+<script type="text/babel" src="components/icons.jsx"></script>
+<script type="text/babel" src="components/illustrations.jsx"></script>
+<script type="text/babel" src="components/ui.jsx"></script>
+<script type="text/babel" src="components/tweaks.jsx"></script>
+<script type="text/babel" src="screens/portfolio.jsx"></script>
+<script type="text/babel" src="screens/ledger.jsx"></script>
+<script type="text/babel" src="screens/approvals.jsx"></script>
+<script type="text/babel" src="screens/gallery.jsx"></script>
+
+<script type="text/babel">
+const DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "linear",
+  "mode": "dark",
+  "accent": "rose",
+  "density": "spacious",
+  "radius": "soft",
+  "font": "theme",
+  "illustration": "geometric",
+  "motion": "full",
+  "screen": "portfolio"
+}/*EDITMODE-END*/;
+
+const STORAGE = 'treasury-ds-v1';
+
+function App() {
+  const [config, setConfigRaw] = React.useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE) || 'null');
+      return { ...DEFAULTS, ...(saved || {}) };
+    } catch { return DEFAULTS; }
+  });
+  const [tweaksOpen, setTweaksOpen] = React.useState(false);
+
+  const setConfig = (c) => {
+    setConfigRaw(c);
+    try { localStorage.setItem(STORAGE, JSON.stringify(c)); } catch {}
+  };
+
+  React.useEffect(() => {
+    window.applyTheme(config);
+    document.getElementById('screen-label').textContent =
+      `${window.THEMES[config.theme].name} · ${config.mode} · ${config.density} · ${config.screen}`;
+  }, [config]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const d = e.data || {};
+      if (d.type === '__activate_edit_mode') setTweaksOpen(true);
+      if (d.type === '__deactivate_edit_mode') setTweaksOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent?.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  React.useEffect(() => {
+    window.parent?.postMessage({
+      type: '__edit_mode_set_keys', edits: config
+    }, '*');
+  }, [config]);
+
+  const isDark = config.mode === 'dark';
+  const Screen = {
+    portfolio: window.ScreenPortfolio,
+    ledger: window.ScreenLedger,
+    approvals: window.ScreenApprovals,
+    gallery: window.ScreenGallery,
+  }[config.screen];
+
+  const titles = {
+    portfolio: 'Portfolio', ledger: 'Ledger', approvals: 'Approvals', gallery: 'Components'
+  };
+
+  const navItems = [
+    { id: 'portfolio', label: 'Portfolio', icon: <I.pie size={20}/> },
+    { id: 'ledger',    label: 'Ledger',    icon: <I.inbox size={20}/> },
+    { id: 'approvals', label: 'Approvals', icon: <I.shield size={20}/> },
+    { id: 'gallery',   label: 'Components', icon: <I.grid size={20}/> },
+  ];
+
+  return (
+    <>
+      <IOSDevice width={402} height={874} dark={isDark} title={titles[config.screen]}>
+        <div className="app" data-screen-label={titles[config.screen]}>
+          {Screen ? <Screen/> : <div style={{padding:16}}>Loading…</div>}
+          <div style={{position:'absolute',bottom:0,left:0,right:0}}>
+            <div className="tabbar-bottom">
+              {navItems.map(it => (
+                <button key={it.id} data-active={config.screen === it.id ? '1' : '0'}
+                  onClick={() => setConfig({ ...config, screen: it.id })}>
+                  {it.icon}<span>{it.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </IOSDevice>
+      {tweaksOpen && <TweaksPanel config={config} setConfig={setConfig} onClose={() => setTweaksOpen(false)}/>}
+    </>
+  );
+}
+
+document.getElementById('tweak-toggle').addEventListener('click', () => {
+  window.__setTweaks && window.__setTweaks(true);
+});
+
+function Boot() {
+  const [open, setOpen] = React.useState(false);
+  React.useEffect(() => { window.__setTweaks = setOpen; }, []);
+  return (
+    <>
+      <App/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('stage')).render(<App/>);
+
+// Wire up the header tweak toggle via a custom event → re-render by toggling a bit on window.
+document.getElementById('tweak-toggle').addEventListener('click', () => {
+  // Fake an activate_edit_mode so the App's message listener flips state.
+  window.postMessage({ type: '__activate_edit_mode' }, '*');
+});
+</script>
+</body>
+</html>

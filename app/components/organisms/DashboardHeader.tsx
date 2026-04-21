@@ -6,39 +6,29 @@ import { ThemedText } from '@easydesign/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@easydesign/design-system/foundation';
 import { Cloud } from 'lucide-react-native';
-import {
-	OPACITY_PRESSED,
-	OPACITY_HOVER,
-	GLASS_WHITE_CARD,
-	OPACITY_PANEL,
-	SIZE_BUTTON_HEIGHT_SM,
-} from '@easydesign/design-system/foundation';
 import { withOpacity } from '@easydesign/design-system/foundation';
 import { FINANCIAL_YEAR_SHORT_YEAR_DIGITS } from '@/utils/dateUtils';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 /** Hour boundaries for greeting copy (local day, 24h clock) */
 const HOUR_NOON = 12;
 const HOUR_AFTERNOON_END = 17;
-
-const HEADER_INNER_GAP = SPACING_PX.xs + SPACING_PX.xxs;
-const HEADER_AVATAR_HIT_AREA = SIZE_BUTTON_HEIGHT_SM;
-
-/** Opacity for secondary text (greeting translation) */
-const DASHBOARD_HEADER_FY_BAR_OPACITY = OPACITY_PANEL;
-const DASHBOARD_HEADER_DATE_OPACITY = 0.75;
-const DASHBOARD_HEADER_LETTER_SPACING = 0.3;
+const HEADER_ACTION_SIZE = 40;
+const HEADER_ACTION_GAP = SPACING_PX.xs + SPACING_PX.xxs;
+const HEADER_LETTER_SPACING = 0.6;
+const HEADER_AVATAR_TINT = 0.14;
+const HEADER_ACTION_PRESSED_OPACITY = 0.82;
 
 export interface DashboardHeaderProps {
 	businessName: string;
 	onSyncPress?: () => void;
 }
 
-function getGreeting(): { en: string; hi: string } {
+function getGreeting(): string {
 	const hour = new Date().getHours();
-	if (hour < HOUR_NOON) return { en: 'Good Morning', hi: 'नमस्ते' };
-	if (hour < HOUR_AFTERNOON_END) return { en: 'Good Afternoon', hi: 'नमस्ते' };
-	return { en: 'Good Evening', hi: 'नमस्ते' };
+	if (hour < HOUR_NOON) return 'Good Morning';
+	if (hour < HOUR_AFTERNOON_END) return 'Good Afternoon';
+	return 'Good Evening';
 }
 
 function getFinancialYearLabel(): string {
@@ -47,8 +37,7 @@ function getFinancialYearLabel(): string {
 	const year = now.getFullYear();
 	const fyStart = month >= 4 ? year : year - 1;
 	const fyEnd = fyStart + 1;
-	// e.g. "FY 2024-25 · Apr – Mar"
-	return `FY ${fyStart}-${String(fyEnd).slice(-FINANCIAL_YEAR_SHORT_YEAR_DIGITS)} · Apr – Mar`;
+	return `FY ${fyStart}-${String(fyEnd).slice(-FINANCIAL_YEAR_SHORT_YEAR_DIGITS)}`;
 }
 
 function getFormattedDate(): string {
@@ -77,101 +66,87 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 	const fyLabel = useMemo(() => getFinancialYearLabel(), []);
 	const formattedDate = useMemo(() => getFormattedDate(), []);
 	const initial = useMemo(() => getBusinessInitial(businessName), [businessName]);
+	const resolvedBusinessName = businessName.trim() || 'Business';
 
 	return (
 		<View
 			accessibilityRole="header"
-			accessibilityLabel={`${greeting.en}, ${businessName}`}
+			accessibilityLabel={`${greeting}, ${resolvedBusinessName}`}
 			style={[
 				styles.headerWrap,
 				{
-					backgroundColor: c.primary,
+					backgroundColor: c.background,
+					borderBottomColor: c.separator,
+					borderBottomWidth: StyleSheet.hairlineWidth,
+					paddingHorizontal: s.lg,
 					paddingTop: insets.top + s.sm,
+					paddingBottom: s.lg,
 				},
 			]}
 		>
-			{/* Main header row */}
-			<View
-				style={[
-					layout.rowBetween,
-					{
-						paddingHorizontal: s.lg,
-						paddingBottom: s.lg,
-						alignItems: 'center',
-					},
-				]}
-			>
-				{/* Left: avatar */}
-				<View
-					style={[styles.avatar, { backgroundColor: GLASS_WHITE_CARD }]}
-					accessible
-					accessibilityLabel={`Business initial: ${initial}`}
-				>
-					<ThemedText variant="h3" color={c.primary} style={styles.avatarText}>
-						{initial}
-					</ThemedText>
-				</View>
-
-				{/* Centre: greeting + date */}
-				<View style={styles.centreBlock} importantForAccessibility="no">
-					<View style={[layout.row, { alignItems: 'center', gap: HEADER_INNER_GAP }]}>
-						<ThemedText
-							variant="bodyBold"
-							color={c.onPrimary}
-							importantForAccessibility="no"
-						>
-							{greeting.en}
-						</ThemedText>
-						<ThemedText
-							variant="body"
-							color={c.onPrimary}
-							style={{ opacity: OPACITY_PRESSED }}
-							importantForAccessibility="no"
-						>
-							{greeting.hi}
-						</ThemedText>
-					</View>
+			<View style={[layout.rowBetween, styles.row]}>
+				<View style={styles.copyBlock} importantForAccessibility="no">
 					<ThemedText
 						variant="caption"
-						color={c.onPrimary}
-						style={{ opacity: DASHBOARD_HEADER_DATE_OPACITY, marginTop: s.xxs }}
-						importantForAccessibility="no"
+						color={c.onSurfaceVariant}
+						style={{
+							letterSpacing: HEADER_LETTER_SPACING,
+							textTransform: 'uppercase',
+						}}
+					>
+						{`Quickstart · ${fyLabel}`}
+					</ThemedText>
+					<ThemedText variant="screenTitle" numberOfLines={2} style={{ marginTop: s.xs }}>
+						{`${greeting}, ${resolvedBusinessName}`}
+					</ThemedText>
+					<ThemedText
+						variant="caption"
+						color={c.onSurfaceVariant}
+						style={{ marginTop: s.xxs }}
 					>
 						{formattedDate}
 					</ThemedText>
 				</View>
 
-				{/* Right: sync icon */}
-				<Pressable
-					onPress={onSyncPress}
-					accessibilityRole="button"
-					accessibilityLabel={t('common.sync') ?? 'Sync'}
-					style={styles.syncBtn}
-					hitSlop={8}
-				>
-					<Cloud size={22} color={c.onPrimary} opacity={OPACITY_HOVER} />
-				</Pressable>
-			</View>
-
-			{/* Financial year bar */}
-			<View
-				style={[
-					styles.fyBar,
-					{ backgroundColor: withOpacity(c.overlay, DASHBOARD_HEADER_FY_BAR_OPACITY) },
-				]}
-				accessible
-				accessibilityLabel={`Financial year: ${fyLabel}`}
-			>
-				<ThemedText
-					variant="caption"
-					color={c.onPrimary}
-					style={{
-						opacity: OPACITY_PRESSED,
-						letterSpacing: DASHBOARD_HEADER_LETTER_SPACING,
-					}}
-				>
-					{fyLabel}
-				</ThemedText>
+				<View style={[layout.row, styles.actionCluster]}>
+					<Pressable
+						onPress={onSyncPress}
+						accessibilityRole="button"
+						accessibilityLabel={t('common.sync') ?? 'Sync'}
+						style={({ pressed }) => [
+							styles.actionButton,
+							{
+								backgroundColor: c.surface,
+								borderColor: c.border,
+								borderRadius: theme.borderRadius.md,
+								height: HEADER_ACTION_SIZE,
+								width: HEADER_ACTION_SIZE,
+								opacity: pressed ? HEADER_ACTION_PRESSED_OPACITY : 1,
+							},
+						]}
+						hitSlop={8}
+					>
+						<Cloud size={18} color={c.onSurface} strokeWidth={2.1} />
+					</Pressable>
+					<View
+						style={[
+							styles.avatar,
+							{
+								backgroundColor: withOpacity(c.primary, HEADER_AVATAR_TINT),
+								borderColor: withOpacity(c.primary, HEADER_AVATAR_TINT),
+								borderRadius: theme.borderRadius.full,
+								height: HEADER_ACTION_SIZE,
+								width: HEADER_ACTION_SIZE,
+							},
+						]}
+						accessible
+						accessibilityLabel={`Business initial: ${initial}`}
+					>
+						<ThemedText variant="label" color={c.primary} weight="semibold">
+							{initial}
+						</ThemedText>
+					</View>
+				</View>
 			</View>
 		</View>
 	);
@@ -179,34 +154,27 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ businessName, 
 
 const styles = StyleSheet.create({
 	headerWrap: {
-		borderBottomLeftRadius: BORDER_RADIUS_PX.xl,
-		borderBottomRightRadius: BORDER_RADIUS_PX.xl,
 		overflow: 'hidden',
 	},
-	avatar: {
-		width: HEADER_AVATAR_HIT_AREA,
-		height: HEADER_AVATAR_HIT_AREA,
-		borderRadius: BORDER_RADIUS_PX.full,
-		alignItems: 'center',
-		justifyContent: 'center',
+	row: {
+		alignItems: 'flex-start',
 	},
-	avatarText: {
-		lineHeight: HEADER_AVATAR_HIT_AREA,
-		textAlign: 'center',
-	},
-	centreBlock: {
+	copyBlock: {
 		flex: 1,
-		alignItems: 'center',
-		paddingHorizontal: SPACING_PX.sm,
+		paddingRight: SPACING_PX.md,
 	},
-	syncBtn: {
-		width: HEADER_AVATAR_HIT_AREA,
-		height: HEADER_AVATAR_HIT_AREA,
+	actionCluster: {
 		alignItems: 'center',
+		gap: HEADER_ACTION_GAP,
+	},
+	actionButton: {
+		alignItems: 'center',
+		borderWidth: StyleSheet.hairlineWidth,
 		justifyContent: 'center',
 	},
-	fyBar: {
+	avatar: {
 		alignItems: 'center',
-		paddingVertical: SPACING_PX.xs,
+		borderWidth: StyleSheet.hairlineWidth,
+		justifyContent: 'center',
 	},
 });

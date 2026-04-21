@@ -33,9 +33,8 @@ import {
 import type { RecentTransaction } from '@/src/types/finance';
 import {
 	OPACITY_TINT_LIGHT,
-	SIZE_BUSINESS_TILE_MIN_HEIGHT,
 	SIZE_CHIP_HEIGHT,
-	SIZE_FAB_ICON,
+	SPACING_PX,
 } from '@easydesign/design-system/foundation';
 
 // ---------------------------------------------------------------------------
@@ -143,6 +142,13 @@ export default function DashboardScreen() {
 			icon: AlertTriangle,
 			color: c.warning,
 		},
+		{
+			label: 'Today Collection',
+			accessibilityLabel: 'stat-today-collection',
+			value: formatCurrency(stats?.today_collection ?? 0),
+			icon: ArrowDownCircle,
+			color: c.info,
+		},
 	];
 
 	const hasAlerts = (stats?.low_stock_count ?? 0) > 0;
@@ -182,8 +188,7 @@ export default function DashboardScreen() {
 				<DashboardSkeleton />
 			) : (
 				<>
-					{/* ── Main Stats Cards ── */}
-					<View style={[layout.row, { paddingHorizontal: s.md, marginTop: -s.lg }]}>
+					<View style={[styles.statsGrid, { paddingHorizontal: s.lg, marginTop: s.md }]}>
 						{dashboardStats.map((stat) => (
 							<StatCard
 								key={stat.accessibilityLabel}
@@ -192,99 +197,9 @@ export default function DashboardScreen() {
 								value={stat.value}
 								icon={stat.icon}
 								color={stat.color}
-								style={{ flex: 1, marginHorizontal: s.xs }}
+								style={styles.statCard}
 							/>
 						))}
-					</View>
-
-					{/* ── Today's Business ── */}
-					<SectionHeader
-						title="Today's Business"
-						style={{
-							marginTop: s.lg,
-							marginBottom: s.sm,
-							paddingHorizontal: s.md,
-							paddingVertical: 0,
-						}}
-					/>
-					<View style={[layout.row, { paddingHorizontal: s.md, gap: s.sm }]}>
-						{/* Today's Sale */}
-						<Card
-							style={[styles.businessTile, { flex: 1 }]}
-							padding="md"
-							accessibilityLabel="stat-today-sale-tile"
-						>
-							<View
-								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
-							>
-								<View
-									style={[
-										styles.tileIcon,
-										{
-											borderRadius: r.full,
-											backgroundColor: withOpacity(
-												c.success,
-												OPACITY_TINT_LIGHT,
-											),
-										},
-									]}
-								>
-									<TrendingUp size={16} color={c.success} />
-								</View>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={{ marginLeft: s.xs }}
-								>
-									Today&apos;s Sale
-								</ThemedText>
-							</View>
-							<ThemedText variant="h3" color={c.success}>
-								{formatCurrency(stats?.today_sales ?? 0)}
-							</ThemedText>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{stats?.today_invoice_count ?? 0} invoices
-							</ThemedText>
-						</Card>
-
-						{/* Today's Collection */}
-						<Card
-							style={[styles.businessTile, { flex: 1 }]}
-							padding="md"
-							accessibilityLabel="stat-today-collection-tile"
-						>
-							<View
-								style={[layout.row, { alignItems: 'center', marginBottom: s.xs }]}
-							>
-								<View
-									style={[
-										styles.tileIcon,
-										{
-											borderRadius: r.full,
-											backgroundColor: withOpacity(
-												c.info,
-												OPACITY_TINT_LIGHT,
-											),
-										},
-									]}
-								>
-									<ArrowDownCircle size={16} color={c.info} />
-								</View>
-								<ThemedText
-									variant="caption"
-									color={c.onSurfaceVariant}
-									style={{ marginLeft: s.xs }}
-								>
-									Today&apos;s Collection
-								</ThemedText>
-							</View>
-							<ThemedText variant="h3" color={c.info}>
-								{formatCurrency(stats?.today_collection ?? 0)}
-							</ThemedText>
-							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								Payments received
-							</ThemedText>
-						</Card>
 					</View>
 
 					<QuickActionsGrid actions={quickActions} />
@@ -339,14 +254,15 @@ export default function DashboardScreen() {
 								onActionPress={() =>
 									router.push('/(app)/reports/all-transactions' as never)
 								}
+								variant="uppercase"
 								style={{
-									marginBottom: s.sm,
-									paddingHorizontal: s.md,
+									marginBottom: s.xs,
+									paddingHorizontal: s.lg,
 									paddingVertical: 0,
 								}}
 							/>
 
-							<Card style={{ marginHorizontal: s.md }} padding="none">
+							<Card style={{ marginHorizontal: s.lg }} padding="none">
 								{recentTransactions.slice(0, 5).map((tx, idx) => {
 									const incoming = isIncoming(tx.type);
 									const iconColor = incoming ? c.success : c.error;
@@ -425,14 +341,14 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-	businessTile: {
-		minHeight: SIZE_BUSINESS_TILE_MIN_HEIGHT,
+	statsGrid: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		gap: SPACING_PX.sm,
 	},
-	tileIcon: {
-		width: SIZE_FAB_ICON,
-		height: SIZE_FAB_ICON,
-		alignItems: 'center',
-		justifyContent: 'center',
+	statCard: {
+		flexBasis: '48%',
+		flexGrow: 1,
 	},
 	txRow: {
 		alignItems: 'center',

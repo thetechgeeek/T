@@ -678,7 +678,7 @@ it('PaymentModal clears Android navigation bar (bottom inset 48px)')
 
 ```
 .maestro/
-  config.yaml          # appId: com.easydesign.app
+  config.yaml          # appId: com.easystock.app
   helpers/
     signIn.yaml        # reusable sign-in subflow
     createInvoice.yaml # reusable invoice creation subflow

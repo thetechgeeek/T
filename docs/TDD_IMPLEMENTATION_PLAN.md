@@ -1,4 +1,4 @@
-# TDD Implementation Plan — EasyDesign (React Native / Expo)
+# TDD Implementation Plan — EasyStock (React Native / Expo)
 
 > Based on: TDD_QA_REVIEW.md (reviewed 2026-03-29)
 > Target: Close all P0/P1/P2 gaps, harden configuration, achieve production-ready test suite

@@ -18,7 +18,7 @@ function createFixture(overrides: Record<string, string> = {}) {
 	writeFiles(root, {
 		'package.json': JSON.stringify(
 			{
-				name: '@easydesign/inventory-app',
+				name: '@easystock/app',
 				version: '1.0.0',
 				private: true,
 				workspaces: ['src/design-system', 'src/ui-shell', 'examples/*'],

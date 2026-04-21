@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react-native';
-import { Alert } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
 
 import LoginScreen from '@/app/(auth)/login';
 import { useAuthStore } from '@/src/stores/authStore';
@@ -39,6 +39,21 @@ describe('LoginScreen', () => {
 
 		expect(getByTestId('dev-login-panel')).toBeTruthy();
 		expect(getByText('Dev Sign In')).toBeTruthy();
+	});
+
+	it('uses a static layout for the iOS dev helper so the simulator keeps text focus', () => {
+		const { UNSAFE_queryByType } = renderWithTheme(<LoginScreen />);
+
+		expect(UNSAFE_queryByType(ScrollView)).toBeNull();
+	});
+
+	it('opts the dev helper inputs out of autofill and credential suggestions', () => {
+		const { getByTestId } = renderWithTheme(<LoginScreen />);
+
+		expect(getByTestId('dev-email-input')).toHaveProp('autoComplete', 'off');
+		expect(getByTestId('dev-email-input')).toHaveProp('textContentType', 'none');
+		expect(getByTestId('dev-password-input')).toHaveProp('autoComplete', 'off');
+		expect(getByTestId('dev-password-input')).toHaveProp('textContentType', 'none');
 	});
 
 	it('calls sendOtp on submit with +91 prefix', async () => {

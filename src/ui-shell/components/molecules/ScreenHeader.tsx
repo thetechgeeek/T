@@ -14,9 +14,12 @@ import { SyncIndicator, type SyncStatus } from '../atoms/SyncIndicator';
 import { useShellEnvironment } from '../../ShellEnvironment';
 
 const MINS_PER_HOUR = 60;
+const SCREEN_HEADER_EYEBROW_LETTER_SPACING = 0.4;
 
 export interface ScreenHeaderProps {
 	title: string | React.ReactNode;
+	eyebrow?: string;
+	subtitle?: string;
 	onBack?: () => void;
 	rightElement?: React.ReactNode;
 	style?: ViewStyle;
@@ -30,13 +33,15 @@ export interface ScreenHeaderProps {
  */
 export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 	title,
+	eyebrow,
+	subtitle,
 	onBack,
 	rightElement,
 	style,
 	showBackButton = true,
 	showSyncStatus = true,
 }) => {
-	const { c, s } = useThemeTokens();
+	const { c, s, r } = useThemeTokens();
 	const insets = useSafeAreaInsets();
 	const router = useRouter();
 	const { isConnected, syncStatus, translate } = useShellEnvironment();
@@ -73,6 +78,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 
 	// Determine sync status for indicator
 	const indicatorStatus: SyncStatus = isSyncing ? 'syncing' : isConnected ? 'synced' : 'offline';
+	const secondaryText = subtitle ?? (showSyncStatus ? lastSyncedText : '');
 
 	return (
 		<View
@@ -80,37 +86,57 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 				styles.header,
 				layout.rowBetween,
 				{
-					borderBottomColor: c.border,
-					borderBottomWidth: 1,
+					backgroundColor: c.background,
+					borderBottomColor: c.separator,
+					borderBottomWidth: StyleSheet.hairlineWidth,
 					paddingHorizontal: s.lg,
 					paddingBottom: s.md,
-					paddingTop: Math.max(insets.top, s.sm),
+					paddingTop: Math.max(insets.top + s.xs, s.md),
 				},
 				style,
 			]}
 		>
-			<View style={[layout.row, { flex: 1 }]}>
+			<View style={[layout.row, { flex: 1, alignItems: 'center' }]}>
 				{showBackButton && (
 					<TouchableOpacity
 						onPress={handleBack}
-						style={styles.back}
+						style={[
+							styles.back,
+							{
+								backgroundColor: c.surface,
+								borderColor: c.border,
+								borderRadius: r.md,
+							},
+						]}
 						accessibilityRole="button"
 						accessibilityLabel="Go back"
 					>
-						<ArrowLeft size={22} color={c.primary} strokeWidth={2} />
+						<ArrowLeft size={18} color={c.onSurface} strokeWidth={2.25} />
 					</TouchableOpacity>
 				)}
 				<View style={{ marginLeft: showBackButton ? s.md : 0, flex: 1 }}>
-					<ThemedText variant="h2" numberOfLines={1}>
-						{title}
-					</ThemedText>
-					{showSyncStatus && lastSyncedText ? (
+					{eyebrow ? (
 						<ThemedText
 							variant="caption"
 							color={c.onSurfaceVariant}
-							style={{ marginTop: -s.xxs }}
+							style={{
+								letterSpacing: SCREEN_HEADER_EYEBROW_LETTER_SPACING,
+								textTransform: 'uppercase',
+							}}
 						>
-							{lastSyncedText}
+							{eyebrow}
+						</ThemedText>
+					) : null}
+					<ThemedText variant="screenTitle" numberOfLines={1}>
+						{title}
+					</ThemedText>
+					{secondaryText ? (
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: s.xxs }}
+						>
+							{secondaryText}
 						</ThemedText>
 					) : null}
 				</View>
@@ -133,7 +159,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	back: {
-		padding: SPACING_PX.md,
-		marginLeft: -SPACING_PX.md,
+		padding: SPACING_PX.sm,
+		borderWidth: StyleSheet.hairlineWidth,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 });

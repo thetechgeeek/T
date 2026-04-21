@@ -44,7 +44,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 
 function mockTranslate(key: string, options?: Record<string, unknown>) {
 	const map: Record<string, string> = {
-		'branding.appName': 'EasyDesign',
+		'branding.appName': 'EasyStock',
 		'auth.sendOtp': 'Send OTP',
 		'auth.welcome': 'Welcome back',
 		'auth.loginHelpText': 'We will send a verification code to this number.',

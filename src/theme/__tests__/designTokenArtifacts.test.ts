@@ -44,18 +44,16 @@ describe('generated design token artifacts', () => {
 		};
 
 		expect(payload.$schema).toContain('designtokens.org');
-		expect(payload.$metadata.version).toBe('1.1.0');
-		expect(payload.color.primitive.primary[500].$value).toBe('#E8622A');
+		expect(payload.$metadata.version).toBe('1.2.0');
+		expect(payload.color.primitive.primary[500].$value).toBe('#5E6AD2');
 	});
 
 	it('writes web token transforms for CSS custom properties and SCSS variables', () => {
 		const css = readGeneratedFile('web', 'design-system.tokens.css');
 		const scss = readGeneratedFile('web', 'design-system.tokens.scss');
 
-		expect(css).toContain('--ds-color-primary-500: #E8622A;');
-		expect(css).toContain(
-			'--ds-font-family-brand-web: "IBM Plex Sans", Inter, system-ui, sans-serif;',
-		);
+		expect(css).toContain('--ds-color-primary-500: #5E6AD2;');
+		expect(css).toContain('--ds-font-family-brand-web: "Geist", system-ui, sans-serif;');
 		expect(scss).toContain('$ds-space-md: 12px;');
 		expect(scss).toContain('$ds-icon-size-dense: 16px;');
 		expect(scss).toContain('$ds-z-index-modal: 200;');
@@ -66,7 +64,7 @@ describe('generated design token artifacts', () => {
 		const iosSwift = readGeneratedFile('ios', 'DesignSystemTokens.swift');
 		const iosCatalogRoot = path.join(generatedRoot, 'ios', 'DesignSystemColors.xcassets');
 
-		expect(android).toContain('<color name="ds_color_primary_500">#E8622A</color>');
+		expect(android).toContain('<color name="ds_color_primary_500">#5E6AD2</color>');
 		expect(android).toContain('<dimen name="ds_font_size_display_2xl">60sp</dimen>');
 		expect(android).toContain('<dimen name="ds_icon_size_standalone">24dp</dimen>');
 		expect(iosSwift).toContain('public enum DesignSystemTokens');
@@ -88,8 +86,8 @@ describe('generated design token artifacts', () => {
 		const changelog = fs.readFileSync(changelogPath, 'utf8');
 
 		expect(changelog).toContain('# Design Token Changelog');
-		expect(changelog).toContain('## 1.1.0 — 2026-04-16');
-		expect(changelog).toContain('Full spacing step scale');
-		expect(changelog).toContain('Generated W3C/Style Dictionary JSON');
+		expect(changelog).toContain('## 1.2.0 — 2026-04-21');
+		expect(changelog).toContain('Linear-inspired grayscale and indigo core palette');
+		expect(changelog).toContain('Geist-first web typography tokens');
 	});
 });

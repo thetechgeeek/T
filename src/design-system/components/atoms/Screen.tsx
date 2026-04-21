@@ -5,12 +5,12 @@ import {
 	ScrollView,
 	Platform,
 	Keyboard,
+	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
 	type ViewStyle,
 	type StyleProp,
 	type ScrollViewProps,
 } from 'react-native';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '../../runtimeSignals';
 import { useTheme } from '../../foundation/theme/ThemeProvider';

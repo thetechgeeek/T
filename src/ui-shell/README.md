@@ -18,11 +18,10 @@ This folder is the package-style source of truth for `@easydesign/ui-shell`, the
 3. `ErrorBoundary`
 4. session resume bridge
 5. `ShellAssetGate`
-6. `KeyboardProvider`
-7. `ShellOverlayProvider`
-8. gesture root, safe area, status bar, and offline banner viewport
+6. `ShellOverlayProvider`
+7. gesture root, safe area, status bar, and offline banner viewport
 
-This is the shell contract for theme, locale/RTL, reduced motion, safe-area, gesture, keyboard, overlay, and accessibility-safe hosting.
+Keyboard handling remains opt-in at the screen or modal level; the shell root no longer mounts a global `KeyboardProvider`.
 
 ## Adapter Contract
 

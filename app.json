@@ -1,8 +1,8 @@
 {
 	"expo": {
-		"name": "EasyDesign",
-		"slug": "easydesign",
-		"scheme": "easydesign",
+		"name": "EasyStock",
+		"slug": "easystock",
+		"scheme": "easystock",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/images/icon.png",
@@ -14,11 +14,11 @@
 		},
 		"ios": {
 			"supportsTablet": true,
-			"bundleIdentifier": "com.easydesign.app",
+			"bundleIdentifier": "com.easystock.app",
 			"infoPlist": {
-				"NSCameraUsageDescription": "EasyDesign needs camera access to scan tile barcodes and take product photos.",
-				"NSPhotoLibraryUsageDescription": "EasyDesign needs photo library access to select tile images.",
-				"NSFaceIDUsageDescription": "EasyDesign uses Face ID to secure your business data."
+				"NSCameraUsageDescription": "EasyStock needs camera access to scan tile barcodes and take product photos.",
+				"NSPhotoLibraryUsageDescription": "EasyStock needs photo library access to select tile images.",
+				"NSFaceIDUsageDescription": "EasyStock uses Face ID to secure your business data."
 			}
 		},
 		"android": {
@@ -26,7 +26,7 @@
 				"foregroundImage": "./assets/images/adaptive-icon.png",
 				"backgroundColor": "#C1440E"
 			},
-			"package": "com.easydesign.app",
+			"package": "com.easystock.app",
 			"permissions": [
 				"CAMERA",
 				"READ_EXTERNAL_STORAGE",
@@ -45,7 +45,7 @@
 			[
 				"expo-camera",
 				{
-					"cameraPermission": "Allow EasyDesign to access your camera to scan barcodes and take photos."
+					"cameraPermission": "Allow EasyStock to access your camera to scan barcodes and take photos."
 				}
 			],
 			[
@@ -57,14 +57,14 @@
 			[
 				"expo-local-authentication",
 				{
-					"faceIDPermission": "Allow EasyDesign to use Face ID to secure your business data."
+					"faceIDPermission": "Allow EasyStock to use Face ID to secure your business data."
 				}
 			],
 			[
 				"expo-image-picker",
 				{
-					"photosPermission": "Allow EasyDesign to access your photos to add tile images.",
-					"cameraPermission": "Allow EasyDesign to use your camera."
+					"photosPermission": "Allow EasyStock to access your photos to add tile images.",
+					"cameraPermission": "Allow EasyStock to use your camera."
 				}
 			],
 			"expo-localization"

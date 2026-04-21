@@ -1,26 +1,15 @@
-import {
-	FAB_OFFSET_BOTTOM,
-	FAB_OFFSET_RIGHT,
-	GLASS_WHITE_STRONG,
-	OVERLAY_COLOR_MEDIUM,
-	RADIUS_FAB,
-	SIZE_BUTTON_HEIGHT_SM,
-	SIZE_FAB,
-	SIZE_MENU_SHEET_WIDTH,
-	Z_INDEX,
-} from '@easydesign/design-system/foundation';
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
 	View,
 	StyleSheet,
 	FlatList,
-	TouchableOpacity,
 	RefreshControl,
 	Alert,
 	ActivityIndicator,
 	Modal,
 	Pressable,
+	ScrollView,
 } from 'react-native';
 import { useRouter as useExpoRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system/legacy';
@@ -29,26 +18,31 @@ import * as XLSX from 'xlsx';
 import {
 	Plus,
 	Package,
-	Search,
 	SlidersHorizontal,
-	MoreVertical,
 	FileDown,
 	FileUp,
+	ArrowUpDown,
 } from 'lucide-react-native';
-import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { useThemeTokens, withOpacity } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { TileSetCard } from '@/app/components/organisms/TileSetCard';
-import { ThemedText } from '@easydesign/design-system';
+import { ThemedText, Card, SearchBar } from '@easydesign/design-system';
 import { InventoryListSkeleton } from '@/app/components/molecules/skeletons/InventoryListSkeleton';
 import { SkeletonBlock } from '@easydesign/design-system';
 import { Screen as AtomicScreen } from '@easydesign/design-system';
-import { TextInput } from '@easydesign/design-system';
-import { Chip } from '@easydesign/design-system';
 import { inventoryService } from '@/src/services/inventoryService';
 import type { TileSetGroup, TileCategory, InventoryFilters } from '@/src/types/inventory';
 import { layout } from '@easydesign/design-system/foundation';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@easydesign/design-system/foundation';
+import {
+	SPACING_PX,
+	TOUCH_TARGET_MIN_PX,
+	OVERLAY_COLOR_MEDIUM,
+	GLASS_WHITE_STRONG,
+	SIZE_MENU_SHEET_WIDTH,
+	Z_INDEX,
+} from '@easydesign/design-system/foundation';
+import { ScreenHeader } from '@easydesign/ui-shell';
 
 interface SortOption {
 	label: string;
@@ -57,10 +51,10 @@ interface SortOption {
 }
 
 const SORT_OPTIONS: SortOption[] = [
-	{ label: 'A–Z', sortBy: 'design_name', sortDir: 'asc' },
-	{ label: 'Z–A', sortBy: 'design_name', sortDir: 'desc' },
-	{ label: 'Stock: Low→High', sortBy: 'box_count', sortDir: 'asc' },
-	{ label: 'Stock: High→Low', sortBy: 'box_count', sortDir: 'desc' },
+	{ label: 'A-Z', sortBy: 'design_name', sortDir: 'asc' },
+	{ label: 'Z-A', sortBy: 'design_name', sortDir: 'desc' },
+	{ label: 'Stock: Low to High', sortBy: 'box_count', sortDir: 'asc' },
+	{ label: 'Stock: High to Low', sortBy: 'box_count', sortDir: 'desc' },
 	{ label: 'Recently Added', sortBy: 'created_at', sortDir: 'desc' },
 ];
 
@@ -75,24 +69,37 @@ const CATEGORIES: ('ALL' | TileCategory)[] = [
 	'OTHER',
 ];
 
-const FiltersIcon = SlidersHorizontal;
+const FILTER_PILL_ACTIVE_OPACITY = 0.08;
+const FILTER_PILL_TOUCH_MIN_WIDTH = 72;
+const HEADER_ACTION_ICON_SIZE = 18;
+const HEADER_ACTION_SIZE = 40;
+const MENU_TOP_OFFSET = 84;
+const SORT_SHEET_MAX_HEIGHT = '60%';
+const SUMMARY_SEGMENTS = 3;
+const SUMMARY_OUT_OF_STOCK_LABEL = 'Out of stock';
+const SUMMARY_LOW_STOCK_LABEL = 'Low stock';
+const SUMMARY_STOCK_VALUE_LABEL = 'Stock value';
+const ACTION_IMPORT_EXPORT_LABEL = 'inventory-actions-button';
+const ACTION_IMPORT_EXPORT_HINT = 'Open import and export options';
+const ADD_INVENTORY_HINT = 'Add a new inventory item';
+const INVENTORY_SCREEN_ACCESSIBILITY_LABEL = 'inventory-screen';
+const INVENTORY_SEARCH_HINT = 'Search by design name or item number';
+const LOW_STOCK_ACCESSIBILITY_LABEL = 'category-chip-lowstock';
 
 export default function InventoryTab() {
 	const { theme, c, s, r } = useThemeTokens();
 	const { t, formatCurrency } = useLocale();
 	const router = useExpoRouter();
-	const listBottomPadding = FAB_OFFSET_BOTTOM + SIZE_FAB + s.xl;
-	const sortSheetHeaderPadding = s.lg + s.xs;
+	const listBottomPadding = s['3xl'];
 
 	const { items, loading, hasMore, filters, fetchItems, setFilters } = useInventoryStore(
-		useShallow((s) => ({
-			items: s.items,
-			loading: s.loading,
-			hasMore: s.hasMore,
-			filters: s.filters,
-			page: s.page,
-			fetchItems: s.fetchItems,
-			setFilters: s.setFilters,
+		useShallow((state) => ({
+			items: state.items,
+			loading: state.loading,
+			hasMore: state.hasMore,
+			filters: state.filters,
+			fetchItems: state.fetchItems,
+			setFilters: state.setFilters,
 		})),
 	);
 	const [refreshing, setRefreshing] = useState(false);
@@ -102,16 +109,14 @@ export default function InventoryTab() {
 	const [exporting, setExporting] = useState(false);
 	const initialized = useRef(false);
 
-	const totalValue = useMemo(
-		() => items.reduce((acc, item) => acc + (item.box_count || 0) * (item.cost_price || 0), 0),
-		[items],
-	);
+	useEffect(() => {
+		setSearchInput(filters.search || '');
+	}, [filters.search]);
 
 	useEffect(() => {
-		// Only auto-fetch on first mount; after that, setFilters drives fetches
 		if (!initialized.current) {
 			initialized.current = true;
-			Promise.resolve(fetchItems(true)).catch((_e) => {
+			Promise.resolve(fetchItems(true)).catch(() => {
 				Alert.alert(t('common.errorTitle'), t('inventory.loadError'), [
 					{ text: t('common.ok') },
 				]);
@@ -119,18 +124,59 @@ export default function InventoryTab() {
 		}
 	}, [fetchItems, t]);
 
+	const groupedSets = useMemo(() => {
+		const map: Record<string, TileSetGroup> = {};
+		items.forEach((item) => {
+			const groupKey = item.base_item_number || 'UNKNOWN';
+			if (!map[groupKey]) {
+				map[groupKey] = { baseItemNumber: groupKey, items: [] };
+			}
+			map[groupKey].items.push(item);
+		});
+		return Object.values(map);
+	}, [items]);
+
+	const totalValue = useMemo(
+		() => items.reduce((acc, item) => acc + (item.box_count || 0) * (item.cost_price || 0), 0),
+		[items],
+	);
+	const lowStockSetCount = useMemo(
+		() =>
+			groupedSets.filter((group) =>
+				group.items.some((item) => item.box_count <= item.low_stock_threshold),
+			).length,
+		[groupedSets],
+	);
+	const outOfStockSetCount = useMemo(
+		() =>
+			groupedSets.filter((group) => group.items.every((item) => item.box_count <= 0)).length,
+		[groupedSets],
+	);
+	const inventorySubtitle =
+		groupedSets.length > 0
+			? `${groupedSets.length} sets in catalog`
+			: loading
+				? t('common.loading')
+				: t('inventory.addFirstItem');
+
 	const handleRefresh = async () => {
 		setRefreshing(true);
 		await fetchItems(true);
 		setRefreshing(false);
 	};
 
-	const handleSearchSubmit = () => {
-		setFilters({ search: searchInput });
+	const handleCategorySelect = (category: 'ALL' | TileCategory) => {
+		if (filters.lowStockOnly) {
+			setFilters({ lowStockOnly: false });
+		}
+		setFilters({ category });
 	};
 
-	const handleCategorySelect = (cat: 'ALL' | TileCategory) => {
-		setFilters({ category: cat });
+	const handleLowStockToggle = () => {
+		setFilters({
+			category: 'ALL',
+			lowStockOnly: !filters.lowStockOnly,
+		});
 	};
 
 	const handleExport = async () => {
@@ -139,18 +185,20 @@ export default function InventoryTab() {
 			setExporting(true);
 			const data = await inventoryService.exportToExcel();
 
-			const ws = XLSX.utils.json_to_sheet(data);
-			const wb = XLSX.utils.book_new();
-			XLSX.utils.book_append_sheet(wb, ws, 'Inventory');
-			const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
+			const worksheet = XLSX.utils.json_to_sheet(data);
+			const workbook = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(workbook, worksheet, 'Inventory');
+			const workbookOutput = XLSX.write(workbook, { type: 'base64', bookType: 'xlsx' });
 
-			const base = FileSystem.documentDirectory;
-			if (!base) {
+			const baseDirectory = FileSystem.documentDirectory;
+			if (!baseDirectory) {
 				Alert.alert(t('common.errorTitle'), 'Storage unavailable');
 				return;
 			}
-			const uri = base + `Inventory_Export_${new Date().toISOString().split('T')[0]}.xlsx`;
-			await FileSystem.writeAsStringAsync(uri, wbout, {
+
+			const uri =
+				baseDirectory + `Inventory_Export_${new Date().toISOString().split('T')[0]}.xlsx`;
+			await FileSystem.writeAsStringAsync(uri, workbookOutput, {
 				encoding: FileSystem.EncodingType.Base64,
 			});
 			await Sharing.shareAsync(uri);
@@ -161,15 +209,44 @@ export default function InventoryTab() {
 		}
 	};
 
-	const groupedSets = useMemo(() => {
-		const map: Record<string, TileSetGroup> = {};
-		items.forEach((item) => {
-			const g = item.base_item_number || 'UNKNOWN';
-			if (!map[g]) map[g] = { baseItemNumber: g, items: [] };
-			map[g].items.push(item);
-		});
-		return Object.values(map);
-	}, [items]);
+	const renderInventoryFilter = (
+		label: string,
+		selected: boolean,
+		onPress: () => void,
+		accessibilityLabel: string,
+	) => (
+		<Pressable
+			key={accessibilityLabel}
+			onPress={onPress}
+			accessibilityRole="button"
+			accessibilityLabel={accessibilityLabel}
+			style={({ pressed }) => [
+				styles.filterPill,
+				{
+					backgroundColor: selected ? c.onSurface : c.surface,
+					borderColor: selected ? c.onSurface : c.border,
+					borderRadius: r.full,
+					minWidth: FILTER_PILL_TOUCH_MIN_WIDTH,
+					opacity: pressed ? theme.opacity.pressed : 1,
+					paddingHorizontal: s.md,
+					paddingVertical: s.xs,
+				},
+				pressed && !selected
+					? {
+							backgroundColor: withOpacity(c.onSurface, FILTER_PILL_ACTIVE_OPACITY),
+						}
+					: null,
+			]}
+		>
+			<ThemedText
+				variant="caption"
+				weight="medium"
+				style={{ color: selected ? c.surface : c.onSurface }}
+			>
+				{label}
+			</ThemedText>
+		</Pressable>
+	);
 
 	const renderEmpty = () => {
 		if (loading && items.length === 0) {
@@ -180,129 +257,106 @@ export default function InventoryTab() {
 				</View>
 			);
 		}
+
 		return (
-			<View style={[styles.centerFlex, { marginTop: listBottomPadding }]}>
-				<Package size={64} color={c.placeholder} strokeWidth={1} />
-				<ThemedText variant="h3" style={{ marginTop: s.md }}>
-					{t('inventory.noItems')}
-				</ThemedText>
-				<ThemedText
-					variant="body"
-					color={c.onSurfaceVariant}
-					style={{ marginTop: s.sm, textAlign: 'center' }}
-				>
-					{filters.search || filters.category !== 'ALL'
-						? t('inventory.emptyFilterHint')
-						: t('inventory.addFirstItem')}
-				</ThemedText>
-			</View>
+			<Card
+				style={{
+					marginTop: s.lg,
+					padding: s.xl,
+				}}
+				variant="outlined"
+			>
+				<View style={styles.emptyState}>
+					<Package size={56} color={c.placeholder} strokeWidth={1.25} />
+					<ThemedText variant="h3" style={{ marginTop: s.md }}>
+						{t('inventory.noItems')}
+					</ThemedText>
+					<ThemedText
+						variant="body"
+						color={c.onSurfaceVariant}
+						style={{ marginTop: s.sm, textAlign: 'center' }}
+					>
+						{filters.search || filters.category !== 'ALL' || filters.lowStockOnly
+							? t('inventory.emptyFilterHint')
+							: t('inventory.addFirstItem')}
+					</ThemedText>
+				</View>
+			</Card>
 		);
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={['top']} withKeyboard={false}>
-			{/* Header */}
+		<AtomicScreen safeAreaEdges={[]} withKeyboard={false}>
 			<View
-				style={[
-					{
-						borderBottomColor: c.border,
-						borderBottomWidth: StyleSheet.hairlineWidth,
-						paddingHorizontal: s.lg,
-						paddingBottom: s.md,
-					},
-				]}
-			>
-				<View style={[layout.rowBetween, { marginBottom: s.lg }]}>
-					<ThemedText variant="h1" accessibilityLabel="inventory-screen">
-						{t('inventory.title')}
-					</ThemedText>
-					<TouchableOpacity
-						onPress={() => setMenuOpen(true)}
-						accessibilityRole="button"
-						accessibilityLabel="inventory-more-options"
-					>
-						<MoreVertical size={24} color={c.onSurface} />
-					</TouchableOpacity>
-				</View>
+				accessible
+				accessibilityLabel={INVENTORY_SCREEN_ACCESSIBILITY_LABEL}
+				style={styles.a11yOnly}
+			/>
 
-				{/* Search Bar */}
-				<View style={[layout.row, { gap: s.md }]}>
-					<View style={{ flex: 1 }}>
-						<TextInput
-							accessibilityLabel="inventory-search-input"
-							accessibilityHint="Search by design name or item number"
-							placeholder={t('inventory.placeholders.designName')}
-							value={searchInput}
-							onChangeText={setSearchInput}
-							leftIcon={<Search size={18} color={c.placeholder} />}
-							containerStyle={{ marginBottom: 0 }}
-							returnKeyType="search"
-							onSubmitEditing={handleSearchSubmit}
-						/>
-					</View>
-					<TouchableOpacity
-						style={[
-							styles.filterBtn,
-							{ backgroundColor: c.surfaceVariant, borderRadius: r.md },
-						]}
-						onPress={() => setSortSheetOpen(true)}
-						accessibilityRole="button"
-						accessibilityLabel="inventory-filter-button"
-						accessibilityHint={t('inventory.filterHint')}
-					>
-						<FiltersIcon
-							size={20}
-							color={c.onSurfaceVariant}
-							importantForAccessibility="no"
-						/>
-					</TouchableOpacity>
-				</View>
-
-				{/* Categories (Horizontal Scroll) + Low Stock */}
-				<View style={styles.chipScrollWrap}>
-					<FlatList
-						horizontal
-						showsHorizontalScrollIndicator={false}
-						data={CATEGORIES}
-						keyExtractor={(item) => item}
-						contentContainerStyle={{ paddingVertical: s.sm }}
-						renderItem={({ item }) => {
-							const isActive = filters.category === item;
-							const categoryLabel = t(`inventory.categories.${item.toLowerCase()}`);
-							return (
-								<Chip
-									label={categoryLabel}
-									accessibilityLabel={`category-chip-${item}`}
-									selected={isActive}
-									onPress={() => handleCategorySelect(item)}
-									style={{ marginRight: s.sm }}
-								/>
-							);
-						}}
-						ListFooterComponent={
-							<Chip
-								label="Low Stock"
-								accessibilityLabel="category-chip-lowstock"
-								selected={!!filters.lowStockOnly}
-								onPress={() => setFilters({ lowStockOnly: !filters.lowStockOnly })}
-								style={{ marginRight: s.sm }}
+			<ScreenHeader
+				eyebrow="Stock"
+				title={t('inventory.title')}
+				subtitle={inventorySubtitle}
+				showBackButton={false}
+				showSyncStatus={false}
+				rightElement={
+					<View style={styles.headerActionRow}>
+						<Pressable
+							onPress={() => setMenuOpen(true)}
+							accessibilityRole="button"
+							accessibilityLabel={ACTION_IMPORT_EXPORT_LABEL}
+							accessibilityHint={ACTION_IMPORT_EXPORT_HINT}
+							style={({ pressed }) => [
+								styles.headerAction,
+								{
+									backgroundColor: c.surface,
+									borderColor: c.border,
+									borderRadius: r.md,
+									height: HEADER_ACTION_SIZE,
+									width: HEADER_ACTION_SIZE,
+									opacity: pressed ? theme.opacity.pressed : 1,
+								},
+							]}
+						>
+							<FileUp
+								size={HEADER_ACTION_ICON_SIZE}
+								color={c.onSurface}
+								strokeWidth={2}
 							/>
-						}
-					/>
-				</View>
-			</View>
+						</Pressable>
+						<Pressable
+							onPress={() => router.push('/(app)/inventory/add')}
+							accessibilityRole="button"
+							accessibilityLabel="add-inventory-button"
+							accessibilityHint={ADD_INVENTORY_HINT}
+							style={({ pressed }) => [
+								styles.headerAction,
+								{
+									backgroundColor: c.surface,
+									borderColor: c.border,
+									borderRadius: r.md,
+									height: HEADER_ACTION_SIZE,
+									width: HEADER_ACTION_SIZE,
+									opacity: pressed ? theme.opacity.pressed : 1,
+								},
+							]}
+						>
+							<Plus
+								size={HEADER_ACTION_ICON_SIZE}
+								color={c.onSurface}
+								strokeWidth={2.2}
+							/>
+						</Pressable>
+					</View>
+				}
+			/>
 
-			{/* Exporting Loader Overlay */}
-			{exporting && (
+			{exporting ? (
 				<View
 					style={[
 						StyleSheet.absoluteFill,
-						{
-							backgroundColor: GLASS_WHITE_STRONG,
-							zIndex: Z_INDEX.max,
-							alignItems: 'center',
-							justifyContent: 'center',
-						},
+						styles.exportOverlay,
+						{ backgroundColor: GLASS_WHITE_STRONG, zIndex: Z_INDEX.max },
 					]}
 				>
 					<ActivityIndicator size="large" color={c.primary} />
@@ -310,21 +364,108 @@ export default function InventoryTab() {
 						{t('inventory.exportingItems')}
 					</ThemedText>
 				</View>
-			)}
+			) : null}
 
-			{/* Summary Bar */}
-			<View
-				style={[
-					styles.summaryBar,
-					{ backgroundColor: c.surfaceVariant, borderBottomColor: c.border },
-				]}
-			>
-				<ThemedText variant="caption" color={c.onSurfaceVariant}>
-					{`${items.length} items · Stock value: ${formatCurrency(totalValue)}`}
-				</ThemedText>
+			<View style={{ paddingHorizontal: s.lg, paddingTop: s.lg }}>
+				<Card accessibilityLabel="inventory-summary-card" padding="none" variant="outlined">
+					<View style={styles.summaryRow}>
+						<View style={[styles.summaryCell, { padding: s.md }]}>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{SUMMARY_STOCK_VALUE_LABEL}
+							</ThemedText>
+							<ThemedText variant="h3" style={{ marginTop: s.xxs }}>
+								{formatCurrency(totalValue)}
+							</ThemedText>
+						</View>
+						<View
+							style={[
+								styles.summaryCell,
+								styles.summaryDivider,
+								{ borderLeftColor: c.separator, padding: s.md },
+							]}
+						>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{SUMMARY_LOW_STOCK_LABEL}
+							</ThemedText>
+							<ThemedText variant="h3" color={c.warning} style={{ marginTop: s.xxs }}>
+								{lowStockSetCount}
+							</ThemedText>
+						</View>
+						<View
+							style={[
+								styles.summaryCell,
+								styles.summaryDivider,
+								{ borderLeftColor: c.separator, padding: s.md },
+							]}
+						>
+							<ThemedText variant="caption" color={c.onSurfaceVariant}>
+								{SUMMARY_OUT_OF_STOCK_LABEL}
+							</ThemedText>
+							<ThemedText variant="h3" color={c.error} style={{ marginTop: s.xxs }}>
+								{outOfStockSetCount}
+							</ThemedText>
+						</View>
+					</View>
+				</Card>
+
+				<View style={[layout.row, { gap: s.sm, marginTop: s.md }]}>
+					<SearchBar
+						accessibilityLabel="inventory-search-input"
+						accessibilityHint={INVENTORY_SEARCH_HINT}
+						placeholder="SKU, name, HSN code..."
+						value={searchInput}
+						onChangeText={setSearchInput}
+						onDebouncedChange={(value) => setFilters({ search: value })}
+						style={{ flex: 1 }}
+					/>
+					<Pressable
+						style={({ pressed }) => [
+							styles.sortButton,
+							{
+								backgroundColor: c.surface,
+								borderColor: c.border,
+								borderRadius: r.md,
+								height: 40,
+								width: 40,
+								opacity: pressed ? theme.opacity.pressed : 1,
+							},
+						]}
+						onPress={() => setSortSheetOpen(true)}
+						accessibilityRole="button"
+						accessibilityLabel="inventory-filter-button"
+						accessibilityHint={t('inventory.filterHint')}
+					>
+						<SlidersHorizontal size={18} color={c.onSurface} strokeWidth={2} />
+					</Pressable>
+				</View>
+
+				<ScrollView
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					contentContainerStyle={{ gap: s.sm, paddingVertical: s.md }}
+				>
+					{CATEGORIES.map((category) => {
+						const isSelected = filters.category === category && !filters.lowStockOnly;
+						const label =
+							category === 'ALL'
+								? t(`inventory.categories.${category.toLowerCase()}`)
+								: t(`inventory.categories.${category.toLowerCase()}`);
+						return renderInventoryFilter(
+							label,
+							isSelected,
+							() => handleCategorySelect(category),
+							`category-chip-${category}`,
+						);
+					})}
+					{renderInventoryFilter(
+						`${SUMMARY_LOW_STOCK_LABEL} · ${lowStockSetCount}`,
+						Boolean(filters.lowStockOnly),
+						handleLowStockToggle,
+						LOW_STOCK_ACCESSIBILITY_LABEL,
+					)}
+				</ScrollView>
 			</View>
 
-			{/* More Options Modal */}
 			<Modal
 				visible={menuOpen}
 				transparent
@@ -332,7 +473,7 @@ export default function InventoryTab() {
 				onRequestClose={() => setMenuOpen(false)}
 			>
 				<Pressable
-					style={[styles.sortBackdrop, { backgroundColor: OVERLAY_COLOR_MEDIUM }]}
+					style={[styles.modalBackdrop, { backgroundColor: OVERLAY_COLOR_MEDIUM }]}
 					onPress={() => setMenuOpen(false)}
 				/>
 				<View
@@ -340,10 +481,12 @@ export default function InventoryTab() {
 						styles.menuSheet,
 						{
 							backgroundColor: c.surface,
+							borderColor: c.border,
 							borderRadius: r.lg,
-							margin: s.lg,
-							...(theme.shadows.lg as object),
+							right: s.lg,
+							top: MENU_TOP_OFFSET,
 						},
+						theme.shadows.lg,
 					]}
 				>
 					<Pressable
@@ -351,19 +494,27 @@ export default function InventoryTab() {
 							setMenuOpen(false);
 							router.push('/(app)/inventory/import');
 						}}
-						style={styles.menuRow}
+						style={({ pressed }) => [
+							styles.menuRow,
+							{ opacity: pressed ? theme.opacity.pressed : 1 },
+						]}
 					>
-						<FileUp size={20} color={c.onSurface} style={{ marginRight: s.md }} />
+						<FileUp size={18} color={c.onSurface} style={{ marginRight: s.md }} />
 						<ThemedText variant="body">{t('inventory.importItems')}</ThemedText>
 					</Pressable>
-					<Pressable onPress={handleExport} style={styles.menuRow}>
-						<FileDown size={20} color={c.onSurface} style={{ marginRight: s.md }} />
+					<Pressable
+						onPress={handleExport}
+						style={({ pressed }) => [
+							styles.menuRow,
+							{ opacity: pressed ? theme.opacity.pressed : 1 },
+						]}
+					>
+						<FileDown size={18} color={c.onSurface} style={{ marginRight: s.md }} />
 						<ThemedText variant="body">{t('inventory.exportItems')}</ThemedText>
 					</Pressable>
 				</View>
 			</Modal>
 
-			{/* Sort Bottom Sheet */}
 			<Modal
 				visible={sortSheetOpen}
 				transparent
@@ -371,7 +522,7 @@ export default function InventoryTab() {
 				onRequestClose={() => setSortSheetOpen(false)}
 			>
 				<Pressable
-					style={[styles.sortBackdrop, { backgroundColor: OVERLAY_COLOR_MEDIUM }]}
+					style={[styles.modalBackdrop, { backgroundColor: OVERLAY_COLOR_MEDIUM }]}
 					onPress={() => setSortSheetOpen(false)}
 				/>
 				<View
@@ -381,69 +532,113 @@ export default function InventoryTab() {
 							backgroundColor: c.surface,
 							borderTopLeftRadius: r.xl,
 							borderTopRightRadius: r.xl,
+							paddingBottom: s.xl,
 						},
 					]}
 				>
-					<ThemedText
-						variant="h3"
-						style={{
-							paddingHorizontal: sortSheetHeaderPadding,
-							paddingTop: sortSheetHeaderPadding,
-							paddingBottom: s.md,
-						}}
+					<View
+						style={[
+							styles.sheetHandle,
+							{ backgroundColor: c.borderStrong, borderRadius: r.full },
+						]}
+					/>
+					<View
+						style={{ paddingHorizontal: s.lg, paddingBottom: s.md, paddingTop: s.md }}
 					>
-						Sort By
-					</ThemedText>
-					<View>
-						{SORT_OPTIONS.map((opt) => {
-							const isActive =
-								filters.sortBy === opt.sortBy && filters.sortDir === opt.sortDir;
-							return (
-								<Pressable
-									key={opt.label}
-									onPress={() => {
-										setFilters({
-											sortBy: opt.sortBy as InventoryFilters['sortBy'],
-											sortDir: opt.sortDir,
-										});
-										setSortSheetOpen(false);
-									}}
-									style={[
-										styles.sortOption,
-										{ borderBottomColor: c.border },
-										isActive
-											? { backgroundColor: c.surfaceVariant }
-											: undefined,
-									]}
-								>
+						<ThemedText variant="sectionTitle">Sort inventory</ThemedText>
+						<ThemedText
+							variant="caption"
+							color={c.onSurfaceVariant}
+							style={{ marginTop: s.xxs }}
+						>
+							Choose how inventory sets should be ordered
+						</ThemedText>
+					</View>
+					{SORT_OPTIONS.map((option, index) => {
+						const isActive =
+							filters.sortBy === option.sortBy && filters.sortDir === option.sortDir;
+						return (
+							<Pressable
+								key={option.label}
+								onPress={() => {
+									setFilters({
+										sortBy: option.sortBy as InventoryFilters['sortBy'],
+										sortDir: option.sortDir,
+									});
+									setSortSheetOpen(false);
+								}}
+								style={({ pressed }) => [
+									styles.sortOption,
+									{
+										backgroundColor: pressed
+											? c.surfaceVariant
+											: isActive
+												? c.surfaceVariant
+												: c.surface,
+										borderBottomColor: c.separator,
+										borderBottomWidth:
+											index === SORT_OPTIONS.length - 1
+												? 0
+												: StyleSheet.hairlineWidth,
+										paddingHorizontal: s.lg,
+										paddingVertical: s.md,
+									},
+								]}
+							>
+								<View style={[layout.row, styles.sortOptionContent]}>
+									<View
+										style={[
+											styles.sortIconWrap,
+											{
+												backgroundColor: c.surface,
+												borderColor: c.border,
+												borderRadius: r.md,
+											},
+										]}
+									>
+										<ArrowUpDown
+											size={16}
+											color={isActive ? c.primary : c.onSurfaceVariant}
+											strokeWidth={2}
+										/>
+									</View>
 									<ThemedText
 										variant="body"
 										color={isActive ? c.primary : c.onSurface}
-										style={isActive ? { fontWeight: '600' } : undefined}
+										weight={isActive ? 'semibold' : 'regular'}
 									>
-										{opt.label}
+										{option.label}
 									</ThemedText>
-									{isActive ? (
-										<ThemedText variant="h3" color={c.primary}>
-											✓
-										</ThemedText>
-									) : null}
-								</Pressable>
-							);
-						})}
-					</View>
+								</View>
+								{isActive ? (
+									<ThemedText
+										variant="caption"
+										color={c.primary}
+										weight="semibold"
+									>
+										Selected
+									</ThemedText>
+								) : null}
+							</Pressable>
+						);
+					})}
 				</View>
 			</Modal>
 
-			{/* List */}
 			<FlatList
 				data={groupedSets}
 				keyExtractor={(item) => item.baseItemNumber}
-				contentContainerStyle={{ padding: s.md, paddingBottom: listBottomPadding }}
+				contentContainerStyle={{
+					paddingHorizontal: s.lg,
+					paddingTop: s.md,
+					paddingBottom: listBottomPadding,
+				}}
 				renderItem={({ item }) => (
 					<TileSetCard
 						group={item}
-						onPressItem={(invItem) => router.push(`/(app)/inventory/${invItem.id}`)}
+						onPressItem={(inventoryItem) =>
+							router.push(`/(app)/inventory/${inventoryItem.id}`)
+						}
 						style={{ marginBottom: s.md }}
 					/>
 				)}
@@ -458,103 +653,118 @@ export default function InventoryTab() {
 				}
 				onEndReached={() => {
 					if (hasMore && !loading) {
-						fetchItems();
+						void fetchItems();
 					}
 				}}
 				onEndReachedThreshold={0.5}
 				ListFooterComponent={
 					loading && items.length > 0 ? (
-						<View style={{ padding: s.md, gap: s.sm }}>
-							<SkeletonBlock height={80} borderRadius={r.lg} />
+						<View style={{ paddingVertical: s.md, gap: s.sm }}>
+							<SkeletonBlock height={96} borderRadius={r.xl} />
 						</View>
 					) : null
 				}
 			/>
-
-			{/* FAB */}
-			<TouchableOpacity
-				style={[styles.fab, { backgroundColor: c.primary, ...theme.shadows.lg }]}
-				onPress={() => router.push('/(app)/inventory/add')}
-				activeOpacity={0.85}
-				accessibilityRole="button"
-				accessibilityLabel="add-inventory-button"
-				accessibilityHint="Add a new inventory item"
-			>
-				<Plus
-					size={28}
-					color={c.onPrimary}
-					strokeWidth={2.5}
-					importantForAccessibility="no"
-				/>
-			</TouchableOpacity>
 		</AtomicScreen>
 	);
 }
 
-// Map the icon since SlidersHorizontal isn't standard in older lucide but we imported it, if it fails we can fallback.
-
 const styles = StyleSheet.create({
-	filterBtn: {
-		width: SIZE_BUTTON_HEIGHT_SM,
-		height: SIZE_BUTTON_HEIGHT_SM,
+	a11yOnly: {
+		height: 0,
+		opacity: 0,
+		width: 0,
+	},
+	headerActionRow: {
+		flexDirection: 'row',
+		gap: SPACING_PX.xs,
+	},
+	headerAction: {
+		alignItems: 'center',
+		borderWidth: StyleSheet.hairlineWidth,
+		justifyContent: 'center',
+	},
+	exportOverlay: {
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	chipScrollWrap: { marginTop: SPACING_PX.sm },
+	summaryRow: {
+		flexDirection: 'row',
+	},
+	summaryCell: {
+		flex: 1 / SUMMARY_SEGMENTS,
+	},
+	summaryDivider: {
+		borderLeftWidth: StyleSheet.hairlineWidth,
+	},
+	sortButton: {
+		alignItems: 'center',
+		borderWidth: StyleSheet.hairlineWidth,
+		justifyContent: 'center',
+	},
+	filterPill: {
+		alignItems: 'center',
+		borderWidth: StyleSheet.hairlineWidth,
+		flexDirection: 'row',
+		justifyContent: 'center',
+	},
 	centerFlex: {
+		alignItems: 'center',
 		flex: 1,
-		alignItems: 'center',
 		justifyContent: 'center',
-		padding: SPACING_PX['2xl'],
+		paddingBottom: SPACING_PX['2xl'],
+		paddingTop: SPACING_PX['2xl'],
 	},
-	fab: {
-		position: 'absolute',
-		right: FAB_OFFSET_RIGHT,
-		bottom: FAB_OFFSET_BOTTOM,
-		width: SIZE_FAB,
-		height: SIZE_FAB,
-		borderRadius: RADIUS_FAB,
+	emptyState: {
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	summaryBar: {
-		paddingHorizontal: SPACING_PX.lg,
-		paddingVertical: SPACING_PX.xs + SPACING_PX.xxs,
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
-	sortBackdrop: {
+	modalBackdrop: {
+		bottom: 0,
+		left: 0,
 		position: 'absolute',
+		right: 0,
 		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-	},
-	sortSheet: {
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
-		maxHeight: '60%',
-		paddingBottom: SPACING_PX.xl,
 	},
 	menuSheet: {
+		borderWidth: StyleSheet.hairlineWidth,
 		position: 'absolute',
-		top: SIZE_FAB,
-		right: 0,
 		width: SIZE_MENU_SHEET_WIDTH,
 	},
 	menuRow: {
-		flexDirection: 'row',
 		alignItems: 'center',
+		flexDirection: 'row',
 		padding: SPACING_PX.lg,
 	},
+	sortSheet: {
+		bottom: 0,
+		left: 0,
+		maxHeight: SORT_SHEET_MAX_HEIGHT,
+		position: 'absolute',
+		right: 0,
+	},
+	sheetHandle: {
+		alignSelf: 'center',
+		height: 4,
+		marginTop: SPACING_PX.sm,
+		width: 36,
+	},
 	sortOption: {
-		flexDirection: 'row',
 		alignItems: 'center',
+		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingHorizontal: SPACING_PX.lg + SPACING_PX.xs,
-		paddingVertical: SPACING_PX.md + SPACING_PX.xxs,
-		borderBottomWidth: StyleSheet.hairlineWidth,
 		minHeight: TOUCH_TARGET_MIN_PX,
+	},
+	sortOptionContent: {
+		alignItems: 'center',
+		flex: 1,
+	},
+	sortIconWrap: {
+		alignItems: 'center',
+		borderWidth: StyleSheet.hairlineWidth,
+		height: 32,
+		justifyContent: 'center',
+		marginRight: SPACING_PX.sm,
+		width: 32,
 	},
 });

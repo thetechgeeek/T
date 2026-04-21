@@ -26,8 +26,8 @@ beforeAll(async () => {
 afterAll(async () => {
 	// Restore a minimal profile so the app still works after test run
 	await businessProfileService.upsert({
-		business_name: 'EasyDesign Demo',
-		invoice_prefix: 'TM',
+		business_name: 'EasyStock Demo',
+		invoice_prefix: 'ES',
 	});
 	await supabase.auth.signOut();
 });

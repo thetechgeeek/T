@@ -32,9 +32,9 @@ describe('Theme Tokens (P0.1)', () => {
 	it('should have correct border radius tokens', () => {
 		expect(lightTheme.borderRadius.none).toBe(0);
 		expect(lightTheme.borderRadius.sm).toBe(4);
-		expect(lightTheme.borderRadius.md).toBe(8);
-		expect(lightTheme.borderRadius.lg).toBe(12);
-		expect(lightTheme.borderRadius.xl).toBe(16);
+		expect(lightTheme.borderRadius.md).toBe(6);
+		expect(lightTheme.borderRadius.lg).toBe(10);
+		expect(lightTheme.borderRadius.xl).toBe(14);
 		expect(lightTheme.borderRadius.full).toBe(9999);
 	});
 
@@ -73,7 +73,7 @@ describe('Theme Tokens (P0.1)', () => {
 
 	it('should expose shared utility colors through the theme', () => {
 		expect(lightTheme.colors.white).toBe('#FFFFFF');
-		expect(lightTheme.colors.shadow).toBe('#4A3828');
+		expect(lightTheme.colors.shadow).toBe('#09090B');
 		expect(darkTheme.colors.shadow).toBe('#000000');
 	});
 

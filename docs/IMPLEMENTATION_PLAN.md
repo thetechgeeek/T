@@ -1,4 +1,4 @@
-# EasyDesign — Implementation Plan
+# EasyStock — Implementation Plan
 
 **Derived from**: `ARCHITECTURE_REVIEW.md` (Sections 1-31 + Appendices)
 **Sequencing principle**: Every task builds on completed foundations. Later phases never require undoing earlier work. Database changes land before the code that calls them. Types land before the code that uses them. Infrastructure lands before the code it enforces.

@@ -1,6 +1,6 @@
 # TDD Quality Review — Staff QA Engineer Perspective
 
-> App: EasyDesign (React Native / Expo)
+> App: EasyStock (React Native / Expo)
 > Reviewed on: 2026-03-29
 > Reviewer Role: Staff QA Engineer (FAANG)
 

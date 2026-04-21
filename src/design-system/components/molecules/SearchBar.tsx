@@ -13,7 +13,7 @@ import { Search, X } from 'lucide-react-native';
 import { LucideIconGlyph } from '../../iconography';
 import { useControllableState } from '../../foundation/hooks/useControllableState';
 import { useDebounce } from '../../foundation/hooks/useDebounce';
-import { announceForScreenReader, buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { announceForScreenReader } from '../../foundation/utils/accessibility';
 import { useTheme } from '../../foundation/theme/ThemeProvider';
 import { resolveWritingDirection } from '../../foundation/theme/localeTypography';
 
@@ -98,17 +98,13 @@ export const SearchBar = forwardRef<NativeTextInput, SearchBarProps>(
 				style={[
 					styles.container,
 					{
-						backgroundColor: theme.colors.surfaceVariant,
+						backgroundColor: theme.colors.surface,
 						borderRadius: searchTokens.radius,
+						borderColor: isFocused ? theme.colors.primary : theme.colors.border,
+						borderWidth: isFocused ? 2 : StyleSheet.hairlineWidth,
 						paddingHorizontal: searchTokens.paddingX,
 						height: searchTokens.height,
 					},
-					isFocused
-						? buildFocusRingStyle({
-								color: theme.colors.primary,
-								radius: searchTokens.radius,
-							})
-						: null,
 					style,
 				]}
 			>

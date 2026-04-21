@@ -110,7 +110,7 @@ export function createInventoryShellEnvironment({
 	width,
 	pushRoute,
 	replaceRoute,
-	tenantName = 'EasyDesign Inventory',
+	tenantName = 'EasyStock',
 	assetsReady = true,
 	permissionOverrides,
 	featureFlags,

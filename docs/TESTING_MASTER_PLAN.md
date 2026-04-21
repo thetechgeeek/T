@@ -1,4 +1,4 @@
-# EasyDesign — Complete Testing Master Plan
+# EasyStock — Complete Testing Master Plan
 
 **Date:** 2026-03-31
 **Objective:** Reach 100% coverage in Unit, Integration, E2E, and Database test types

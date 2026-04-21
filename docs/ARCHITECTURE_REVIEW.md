@@ -1,4 +1,4 @@
-# EasyDesign — Senior Staff Engineer Architecture Review
+# EasyStock — Senior Staff Engineer Architecture Review
 
 **Reviewer**: Senior Staff Engineer
 **Date**: 2026-03-28

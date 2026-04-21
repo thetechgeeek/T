@@ -69,6 +69,12 @@ const BADGE_PADDING_X_MD = 10;
 const BADGE_PADDING_Y_SM = 2;
 const BADGE_PADDING_Y_MD = 4;
 const CHIP_HEIGHT_SM = 28;
+const BUTTON_PADDING_X_XS = 8;
+const BUTTON_PADDING_X_SM = 10;
+const BUTTON_PADDING_X_MD = 14;
+const BUTTON_PADDING_X_LG = 18;
+const BUTTON_ICON_GAP = 6;
+const CARD_RADIUS = 14;
 const OVERLAY_OPACITY = 0.4;
 const SCRIM_OPACITY = 0.6;
 const LETTER_SPACING_TIGHT = -0.2;
@@ -274,14 +280,14 @@ const buildComponentTokens = ({
 			lg: SIZE_BUTTON_HEIGHT_LG,
 		},
 		paddingX: {
-			xs: spacing.md,
-			sm: spacing.lg,
-			md: spacing.xl,
-			lg: spacing['2xl'],
+			xs: BUTTON_PADDING_X_XS,
+			sm: BUTTON_PADDING_X_SM,
+			md: BUTTON_PADDING_X_MD,
+			lg: BUTTON_PADDING_X_LG,
 		},
 		radius: borderRadius.md,
 		outlineWidth: borderWidth.sm,
-		iconGap: spacing.sm,
+		iconGap: BUTTON_ICON_GAP,
 	},
 	badge: {
 		paddingX: {
@@ -316,7 +322,7 @@ const buildComponentTokens = ({
 			md: spacing.md,
 			lg: spacing.lg,
 		},
-		radius: borderRadius.md,
+		radius: CARD_RADIUS,
 	},
 	input: {
 		minHeight: touchTarget,
@@ -345,7 +351,7 @@ const buildComponentTokens = ({
 		gap: spacing.md,
 	},
 	searchBar: {
-		height: spacing['3xl'],
+		height: 40,
 		radius: borderRadius.md,
 		paddingX: spacing.md,
 		iconGap: spacing.sm,

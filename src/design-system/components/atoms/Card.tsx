@@ -84,15 +84,20 @@ export const Card: React.FC<CardProps> = ({
 		{
 			backgroundColor: featured ? theme.visual.hero.promo.surface : theme.colors.card,
 			borderRadius: cardTokens.radius,
-			borderWidth: featured ? theme.borderWidth.sm : 0,
-			borderColor: featured ? theme.visual.hero.promo.accent : 'transparent',
+			borderWidth: theme.borderWidth.sm,
+			borderColor: featured ? theme.visual.hero.promo.accent : theme.colors.border,
 		},
 		variant === 'elevated' && theme.elevation.raised,
 		variant === 'outlined' && {
 			borderWidth: theme.borderWidth.sm,
 			borderColor: theme.colors.border,
 		},
-		variant === 'flat' && { backgroundColor: theme.colors.surfaceVariant },
+		variant === 'flat' && {
+			backgroundColor: theme.colors.surfaceVariant,
+			borderColor: 'transparent',
+			shadowOpacity: 0,
+			elevation: 0,
+		},
 		resolvedPadding === 'sm' && { padding: cardTokens.padding.sm },
 		resolvedPadding === 'md' && { padding: cardTokens.padding.md },
 		resolvedPadding === 'lg' && { padding: cardTokens.padding.lg },

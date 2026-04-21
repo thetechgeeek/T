@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import { useAuthStore } from '@/src/stores/authStore';
 import { AppError } from '@/src/errors';
+import { useLocale } from '@/src/hooks/useLocale';
 import {
 	GLASS_WHITE_LIGHT,
 	OPACITY_HOVER,
@@ -22,6 +23,7 @@ import { ThemedText } from '@easydesign/design-system';
  */
 export default function PhoneLoginScreen() {
 	const { c, s, r } = useThemeTokens();
+	const { t } = useLocale();
 	const router = useRouter();
 	const { sendOtp, loading } = useAuthStore(
 		useShallow((s) => ({ sendOtp: s.sendOtp, loading: s.loading })),
@@ -77,11 +79,11 @@ export default function PhoneLoginScreen() {
 					]}
 				>
 					<ThemedText variant="h1" style={{ color: c.onPrimary, fontWeight: '700' }}>
-						T
+						{t('branding.appShortName')}
 					</ThemedText>
 				</View>
 				<ThemedText variant="h1" style={{ color: c.onPrimary, marginTop: s.sm }}>
-					EasyDesign
+					{t('branding.appName')}
 				</ThemedText>
 				<ThemedText
 					variant="caption"

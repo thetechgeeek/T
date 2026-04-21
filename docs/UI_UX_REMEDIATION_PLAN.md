@@ -1,6 +1,6 @@
 # Full Implementation Plan
 
-## EasyDesign — FE Audit + UI/UX Remediation
+## EasyStock — FE Audit + UI/UX Remediation
 
 **Reading guide:**
 `[FE-H1]` = FE audit, HIGH item 1 | `[UI-3]` = UI/UX audit, item 3
@@ -234,7 +234,7 @@ Phase 10 (Sweep)
 → Replace the solid `backgroundColor: c.primary` with a `LinearGradient` from `expo-linear-gradient`. Gradient direction: `135deg`, from `c.primaryGradientStart` to `c.primaryGradientEnd`. [UI-3, UI-4]
 → Move the 3 stat card slots inside the header component. Accept `stats?: DashboardStatConfig[]` prop instead of rendering them via negative margin in `index.tsx`. Cards render in a `View` at the bottom of the header, flush inside the gradient — no negative margin hack. [UI-4]
 → Memoize the date string: `const today = useMemo(() => new Date().toLocaleDateString(...), [currentLanguage])`. [FE-M11]
-→ Remove the hardcoded `businessName="EasyDesign"` from its callsite in `index.tsx`. `DashboardHeader` will read `businessName` from `useBusinessProfileStore` or a new `useBusinessProfile` hook. If no profile is loaded, show a `SkeletonBlock`. [FE-H3]
+→ Remove the hardcoded `businessName="EasyStock"` from its callsite in `index.tsx`. `DashboardHeader` will read `businessName` from `useBusinessProfileStore` or a new `useBusinessProfile` hook. If no profile is loaded, show a `SkeletonBlock`. [FE-H3]
 → Add a `NotificationBell` icon slot in the top-right as a `rightElement` prop (icon only, no functionality yet — reserved slot). [UI general]
 
 ### `src/components/organisms/RecentInvoicesList.tsx`
@@ -333,7 +333,7 @@ Phase 10 (Sweep)
 
 ### `app/(app)/(tabs)/index.tsx`
 
-→ Remove `businessName="EasyDesign"` hardcode from `DashboardHeader` — after Phase 3, `DashboardHeader` reads business name internally from store. [FE-H3]
+→ Remove `businessName="EasyStock"` hardcode from `DashboardHeader` — after Phase 3, `DashboardHeader` reads business name internally from store. [FE-H3]
 → Remove the `marginTop: -s.lg` negative margin stats row — after Phase 3, stats are inside `DashboardHeader`. Remove the entire `dashboardStats.map` `View` from this file. [UI-4]
 → Change `key={i}` to `key={stat.accessibilityLabel}` in stats map. [FE-M12]
 
@@ -429,7 +429,7 @@ Phase 10 (Sweep)
 
 ### `app/(auth)/login.tsx`
 
-→ Replace `"EasyDesign"` with an app name constant from config — not `t()` since the app name does not translate.
+→ Replace `"EasyStock"` with an app name constant from config — not `t()` since the app name does not translate.
 → Replace the `"→"` arrow on setup link with the localized link text via `t()`. [FE-H1]
 
 **Done when:** `grep -r '"[A-Z][a-z]' app/ src/components src/features` returns only intentional exceptions (language toggle labels, app name, legal text). Both `en.json` and `hi.json` have all new keys populated.

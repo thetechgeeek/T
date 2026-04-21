@@ -69,7 +69,7 @@
 		"email": "ईमेल",
 		"password": "पासवर्ड",
 		"forgotPassword": "पासवर्ड भूल गए?",
-		"welcome": "EasyDesign में आपका स्वागत है",
+		"welcome": "EasyStock में आपका स्वागत है",
 		"subtitle": "अपना टाइल्स और सेरामिक्स व्यवसाय प्रबंधित करें",
 		"setupBusiness": "अपना व्यवसाय सेट करें",
 		"loginFailed": "लॉगिन विफल",
@@ -444,7 +444,7 @@
 		"llmApiKey": "LLM API कुंजी",
 		"invoiceDefaults": "इनवॉइस डिफ़ॉल्ट",
 		"dataManagement": "डेटा प्रबंधन",
-		"about": "EasyDesign के बारे में",
+		"about": "EasyStock के बारे में",
 		"version": "संस्करण",
 		"light": "लाइट",
 		"dark": "डार्क",
@@ -569,8 +569,8 @@
 		"more": "अधिक"
 	},
 	"branding": {
-		"appName": "EasyDesign",
-		"appShortName": "TM"
+		"appName": "EasyStock",
+		"appShortName": "ES"
 	},
 	"error": {
 		"boundaryTitle": "कुछ गलत हो गया",

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Modal, View, StyleSheet, ScrollView, Platform } from 'react-native';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import {
+	Alert,
+	Modal,
+	View,
+	StyleSheet,
+	ScrollView,
+	Platform,
+	KeyboardAvoidingView,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
 import {

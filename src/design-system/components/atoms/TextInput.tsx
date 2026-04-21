@@ -4,6 +4,7 @@ import {
 	Pressable,
 	ActivityIndicator,
 	TextInput as RNTextInput,
+	Platform,
 	StyleSheet,
 	type TextInputProps as RNTextInputProps,
 	type StyleProp,
@@ -17,6 +18,9 @@ import { useTheme } from '../../foundation/theme/ThemeProvider';
 import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 import { resolveWritingDirection } from '../../foundation/theme/localeTypography';
 import { ThemedText } from './ThemedText';
+
+const INPUT_LABEL_LETTER_SPACING = -0.1;
+const INPUT_FOCUS_SHADOW_OPACITY = 0.08;
 
 export interface TextInputProps extends RNTextInputProps {
 	label?: string;
@@ -99,6 +103,11 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 				: isFocused
 					? c.primary
 					: c.border;
+		const borderWidth = isFocused
+			? Math.max(2, inputTokens.borderWidth)
+			: error
+				? inputTokens.errorBorderWidth
+				: inputTokens.borderWidth;
 		const backgroundColor = isDisabled || readOnly ? c.surfaceVariant : c.surface;
 
 		// Build a composed hint so error/helper is announced alongside the field
@@ -119,9 +128,10 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 						style={[
 							styles.label,
 							{
-								color: c.onSurfaceVariant,
+								color: c.onSurface,
 								fontWeight: theme.typography.weights.medium,
 								marginBottom: inputTokens.labelGap,
+								letterSpacing: INPUT_LABEL_LETTER_SPACING,
 							},
 						]}
 					>
@@ -135,13 +145,21 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 							backgroundColor,
 							borderColor,
 							borderRadius: inputTokens.radius,
-							borderWidth: error
-								? inputTokens.errorBorderWidth
-								: inputTokens.borderWidth,
+							borderWidth,
 							minHeight: inputTokens.minHeight,
 							paddingHorizontal: inputTokens.paddingX,
 							opacity: isDisabled ? theme.opacity.inactive : 1,
 						},
+						isFocused
+							? {
+									shadowColor: error ? c.error : c.primary,
+									shadowOpacity:
+										Platform.OS === 'ios' ? INPUT_FOCUS_SHADOW_OPACITY : 0,
+									shadowRadius: 0,
+									shadowOffset: { width: 0, height: 0 },
+									elevation: 0,
+								}
+							: null,
 					]}
 				>
 					{leftIcon && (

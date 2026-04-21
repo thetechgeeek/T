@@ -10,9 +10,9 @@ describe('theme presets', () => {
 		expect(theme.meta.expression).toBe('balanced');
 		expect(theme.meta.accentBudget).toBe(1);
 		expect(theme.meta.contrastMode).toBe('default');
-		expect(theme.meta.tokenVersion).toBe('1.1.0');
+		expect(theme.meta.tokenVersion).toBe('1.2.0');
 		expect(theme.spacing.lg).toBe(16);
-		expect(theme.borderRadius.md).toBe(8);
+		expect(theme.borderRadius.md).toBe(6);
 		expect(theme.visual.presentation.defaultSurfaceBias).toBe('neutral');
 		expect(theme.visual.presentation.brandExpressionZones).toEqual(['hero']);
 		expect(theme.visual.presentation.neutralSurfaceTiers).toEqual([
@@ -58,7 +58,7 @@ describe('theme presets', () => {
 		expect(executiveTheme.meta.density).toBe('compact');
 		expect(executiveTheme.meta.expression).toBe('operational');
 		expect(executiveTheme.spacing.lg).toBeLessThan(defaultTheme.spacing.lg);
-		expect(executiveTheme.borderRadius.md).toBeLessThan(defaultTheme.borderRadius.md);
+		expect(executiveTheme.borderRadius.md).toBeLessThanOrEqual(defaultTheme.borderRadius.md);
 		expect(executiveTheme.animation.durationFast).toBeLessThan(
 			defaultTheme.animation.durationFast,
 		);
@@ -145,7 +145,7 @@ describe('theme presets', () => {
 
 		expect(tabletTheme.spacing.lg).toBeGreaterThan(phoneTheme.spacing.lg);
 		expect(tabletTheme.typography.sizes.lg).toBeGreaterThan(phoneTheme.typography.sizes.lg);
-		expect(tabletTheme.borderRadius.md).toBeGreaterThan(phoneTheme.borderRadius.md);
+		expect(tabletTheme.borderRadius.md).toBeGreaterThanOrEqual(phoneTheme.borderRadius.md);
 		expect(tabletTheme.touchTarget).toBeGreaterThan(phoneTheme.touchTarget);
 		expect(tabletTheme.components.card.padding.md).toBeGreaterThan(
 			phoneTheme.components.card.padding.md,
