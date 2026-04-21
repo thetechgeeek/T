@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable, TextInput, Alert, Modal } from 'react-native';
 import { Plus, X } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { withOpacity } from '@/src/utils/color';
+import { ScreenHeader } from '@/src/ui-shell';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import {
 	SIZE_INPUT_HEIGHT,
@@ -18,10 +18,10 @@ import {
 	FAB_OFFSET_BOTTOM,
 	FAB_OFFSET_RIGHT,
 	SIZE_FAB,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import { MOCK_EWALLETS } from '@/src/mocks/finance/ewallets';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 // TODO: connect to store — e-wallets table
 interface EWallet {

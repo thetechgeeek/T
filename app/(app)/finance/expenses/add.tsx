@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { SIZE_INPUT_HEIGHT } from '@/src/design-system/foundation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
+import { ScreenHeader } from '@/src/ui-shell';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { DatePickerField } from '@/src/design-system';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import type { PaymentMode } from '@/src/types/invoice';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 const EXPENSE_FORM_BOTTOM_PADDING = 32;
 

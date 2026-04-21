@@ -14,6 +14,8 @@ const HEX_RE = /#[0-9A-Fa-f]{3,8}\b/g;
 const ALLOWED_FILES = new Set([
 	'src/theme/palette.ts',
 	'src/theme/designTokens.ts',
+	'src/design-system/foundation/theme/palette.ts',
+	'src/design-system/foundation/theme/designTokens.ts',
 	// escapeHtml uses &#039; which matches #039 as a false hex hit
 	'src/utils/html.ts',
 ]);
@@ -70,12 +72,14 @@ for (const abs of files) {
 }
 
 if (violations.length) {
-	console.error('Hex color literals found outside src/theme/palette.ts or src/theme/designTokens.ts:\n');
+	console.error(
+		'Hex color literals found outside the theme token source files in src/theme/ or src/design-system/foundation/theme/:\n',
+	);
 	for (const v of violations) {
 		console.error(`  ${v.rel} (${v.count} occurrence(s))`);
 	}
 	console.error(
-		'\nUse theme colors, `palette.*` from @/src/theme/palette, or add tokens to src/theme/designTokens.ts.',
+		'\nUse theme colors, `palette.*` from the theme token surface, or add tokens to the design-token source files.',
 	);
 	process.exit(1);
 }

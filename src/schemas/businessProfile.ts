@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MAX_LONG_TEXT_CHARS } from '@/theme/uiMetrics';
+import { MAX_LONG_TEXT_CHARS } from '@/src/design-system/foundation';
 
 export const BusinessProfileSchema = z.object({
 	business_name: z.string().min(1, 'Business name is required'),

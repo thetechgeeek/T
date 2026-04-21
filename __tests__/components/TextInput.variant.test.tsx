@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { TextInput } from '@/src/design-system';
+import { ThemeProvider } from '@/src/design-system/foundation';
 import { View, Text } from 'react-native';
 
 const renderWithTheme = (ui: React.ReactElement) => {

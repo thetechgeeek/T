@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
+import { ScreenHeader } from '@/src/ui-shell';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { DatePickerField } from '@/src/design-system';
+import { SkeletonBlock } from '@/src/design-system';
+import { Badge } from '@/src/design-system';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 import type { Purchase } from '@/src/types/finance';
 
 /** Number of days in a quarter (365/4 rounded down) */

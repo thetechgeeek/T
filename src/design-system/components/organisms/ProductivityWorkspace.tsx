@@ -3,7 +3,7 @@ import { Share, View, type StyleProp, type ViewStyle } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { Button } from '@/src/design-system/components/atoms/Button';

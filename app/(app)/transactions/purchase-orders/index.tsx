@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import { Plus, ShoppingCart } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Badge } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
@@ -15,7 +15,7 @@ import {
 	type PurchaseOrder,
 	type POStatus,
 } from '@/src/mocks/transactions/purchaseOrders';
-import { FAB_SHADOW } from '@/theme/shadowMetrics';
+import { FAB_SHADOW } from '@/src/design-system/foundation';
 import {
 	FAB_OFFSET_BOTTOM,
 	FAB_OFFSET_RIGHT,
@@ -23,9 +23,9 @@ import {
 	RADIUS_FAB,
 	SIZE_FAB,
 	SIZE_ICON_CIRCLE_MD,
-} from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { withOpacity } from '@/src/utils/color';
+} from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
 
 const MOCK_POS = MOCK_PURCHASE_ORDERS;
 const PURCHASE_ORDER_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs;

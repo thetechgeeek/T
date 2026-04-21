@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 import { X } from 'lucide-react-native';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { resolveWritingDirection } from '@/src/theme/localeTypography';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { resolveWritingDirection } from '@/src/design-system/foundation/theme/localeTypography';
 import { ThemedText } from './ThemedText';
 
 export interface TextInputProps extends RNTextInputProps {

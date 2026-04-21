@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import InventoryTab from '@/app/(app)/(tabs)/inventory';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Mock the inventory store

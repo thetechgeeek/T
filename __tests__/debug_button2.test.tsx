@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { Button } from '@/src/design-system';
+import { ThemeProvider } from '@/src/design-system/foundation';
 
 test('debug disabled - print full RNTL instance tree', () => {
 	const onPressMock = jest.fn();

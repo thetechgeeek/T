@@ -1,9 +1,31 @@
 import React from 'react';
 import { render, type RenderOptions } from '@testing-library/react-native';
-import { ThemeProvider } from '../../src/theme/ThemeProvider';
+import { ThemeProvider } from '../../src/design-system/foundation';
+import { ShellEnvironmentProvider, type ShellEnvironment } from '../../src/ui-shell';
 
-function AllProviders({ children }: { children: React.ReactNode }) {
-	return <ThemeProvider>{children}</ThemeProvider>;
+type ThemeProviderProps = React.ComponentProps<typeof ThemeProvider>;
+
+const DEFAULT_SHELL_ENVIRONMENT: ShellEnvironment = {
+	translate: (key, fallback) => fallback ?? key,
+	isConnected: true,
+	syncStatus: { lastSyncedAt: null, isSyncing: false, pendingCount: 0 },
+	openSyncLog: () => {},
+};
+
+function AllProviders({
+	children,
+	shellEnvironment,
+	themeProviderProps,
+}: {
+	children: React.ReactNode;
+	shellEnvironment: ShellEnvironment;
+	themeProviderProps?: Partial<ThemeProviderProps>;
+}) {
+	return (
+		<ThemeProvider {...themeProviderProps}>
+			<ShellEnvironmentProvider value={shellEnvironment}>{children}</ShellEnvironmentProvider>
+		</ThemeProvider>
+	);
 }
 
 /**
@@ -15,6 +37,37 @@ function AllProviders({ children }: { children: React.ReactNode }) {
  * Usage:
  *   const { getByText } = renderWithTheme(<MyComponent />);
  */
-export function renderWithTheme(ui: React.ReactElement, options?: Omit<RenderOptions, 'wrapper'>) {
-	return render(ui, { wrapper: AllProviders, ...options });
+export function renderWithTheme(
+	ui: React.ReactElement,
+	options?: Omit<RenderOptions, 'wrapper'> & {
+		shellEnvironment?: Partial<ShellEnvironment>;
+		themeProviderProps?: Partial<ThemeProviderProps>;
+	},
+) {
+	const shellEnvironment: ShellEnvironment = {
+		...DEFAULT_SHELL_ENVIRONMENT,
+		...options?.shellEnvironment,
+		syncStatus: {
+			...DEFAULT_SHELL_ENVIRONMENT.syncStatus,
+			...(options?.shellEnvironment?.syncStatus ?? {}),
+		},
+	};
+
+	const {
+		shellEnvironment: _shellEnvironment,
+		themeProviderProps,
+		...renderOptions
+	} = options ?? {};
+
+	return render(ui, {
+		wrapper: ({ children }) => (
+			<AllProviders
+				shellEnvironment={shellEnvironment}
+				themeProviderProps={themeProviderProps}
+			>
+				{children}
+			</AllProviders>
+		),
+		...renderOptions,
+	});
 }

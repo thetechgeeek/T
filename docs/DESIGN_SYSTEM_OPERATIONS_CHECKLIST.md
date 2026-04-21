@@ -2,7 +2,7 @@
 
 > Companion to `docs/UI_Library_Checklist.md`.
 > This file tracks external design-ops and asset-delivery workflows that support the design system but are not part of the pure in-repo library contract.
-> Keep app-runtime concerns in `docs/UI_Integration_Checklist.md`.
+> Keep shell-runtime concerns in `docs/UI_Integration_Checklist.md`.
 
 ## Design-to-Code Sync
 

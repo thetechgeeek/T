@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, TextInput } from 'react-native';
-import { OPACITY_TINT_LIGHT, OPACITY_TOAST } from '@/theme/uiMetrics';
+import { OPACITY_TINT_LIGHT, OPACITY_TOAST } from '@/src/design-system/foundation';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
@@ -12,16 +12,16 @@ import {
 	Receipt,
 	Search,
 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { withOpacity } from '@/src/utils/color';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { withOpacity } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 const ICON_CIRCLE_SIZE = SPACING_PX['2xl'] + SPACING_PX.xs + SPACING_PX.xxs;
 const ICON_CIRCLE_RADIUS = ICON_CIRCLE_SIZE / 2;

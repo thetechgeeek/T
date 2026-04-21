@@ -12,22 +12,22 @@ import {
 	SIZE_SCAN_FRAME_HEIGHT,
 	SIZE_SCAN_FRAME_WIDTH,
 	SIZE_SCAN_MANUAL_BOX_MAX_WIDTH,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { Search, Aperture } from 'lucide-react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { TextInput } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { SkeletonBlock } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
 import logger from '@/src/utils/logger';
-import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
 
 const CAMERA_QUALITY = 0.5;
 const OCR_PLACEHOLDER_DELAY_MS = MS_SYNC_POLL;

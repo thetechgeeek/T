@@ -4,8 +4,8 @@ import {
 	AMOUNT_SHORT_FORMAT_ONE_LAKH,
 	AMOUNT_SHORT_FORMAT_ONE_THOUSAND,
 } from '@/constants/money';
-import { SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 const RECEIPT_BOTTOM_PADDING = SIZE_LANGUAGE_FLAG;
 const ID_TAIL_DIGITS = 6;
@@ -13,14 +13,14 @@ import { View, StyleSheet, Share, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MessageCircle, FileText, CheckCircle2 } from 'lucide-react-native';
 import { paymentService } from '@/src/services/paymentService';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Divider } from '@/src/design-system/components/atoms/Divider';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Divider } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SkeletonBlock } from '@/src/design-system';
 import type { Payment } from '@/src/types/finance';
 
 // ── Helpers ────────────────────────────────────────────────────────────────

@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { DatePickerField } from '../DatePickerField';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
-import { setAccessibilityFocus } from '@/src/utils/accessibility';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { setAccessibilityFocus } from '@/src/design-system/foundation/utils/accessibility';
 
-jest.mock('@/src/utils/accessibility', () => {
-	const actual = jest.requireActual('@/src/utils/accessibility');
+jest.mock('@/src/design-system/foundation/utils/accessibility', () => {
+	const actual = jest.requireActual('@/src/design-system/foundation/utils/accessibility');
 	return {
 		...actual,
 		setAccessibilityFocus: jest.fn(),

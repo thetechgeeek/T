@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { FormSection } from '../FormSection';
 
 const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);

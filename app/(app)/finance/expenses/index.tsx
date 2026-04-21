@@ -4,20 +4,20 @@ import { View, StyleSheet, RefreshControl, Alert, Pressable } from 'react-native
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Plus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { FilterBar } from '@/src/design-system/components/molecules/FilterBar';
+import { ScreenHeader } from '@/src/ui-shell';
+import { FilterBar } from '@/src/design-system';
 import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { EmptyState } from '@/src/design-system';
 import type { Expense } from '@/src/types/finance';
-import { layout } from '@/src/theme/layout';
-import { FAB_OFFSET_RIGHT, RADIUS_FAB, SIZE_FAB } from '@/theme/uiMetrics';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { layout } from '@/src/design-system/foundation';
+import { FAB_OFFSET_RIGHT, RADIUS_FAB, SIZE_FAB } from '@/src/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
 
 const LIST_BOTTOM_PADDING = 100;
 

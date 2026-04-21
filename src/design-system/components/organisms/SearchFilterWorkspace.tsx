@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { Card, CardBody, CardHeader } from '@/src/design-system/components/atoms/Card';

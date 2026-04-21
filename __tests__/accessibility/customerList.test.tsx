@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import CustomersScreen from '@/app/(app)/customers/index';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Mock the customer store to provide data

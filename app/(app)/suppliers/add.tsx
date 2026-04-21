@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { ScreenHeader } from '@/src/ui-shell';
 import { useForm, Controller, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { FormField } from '@/src/design-system/components/molecules/FormField';
-import { FormSection } from '@/src/design-system/components/molecules/FormSection';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { layout } from '@/src/theme/layout';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { FormField } from '@/src/design-system';
+import { FormSection } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { layout } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import logger from '@/src/utils/logger';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 type GstType = 'regular' | 'composition' | 'unregistered';
 

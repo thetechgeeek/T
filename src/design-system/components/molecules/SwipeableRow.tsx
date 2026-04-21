@@ -6,12 +6,12 @@ import {
 	announceForScreenReader,
 	buildFocusRingStyle,
 	mapAccessibilityActionNames,
-} from '@/src/utils/accessibility';
-import { useReducedMotion } from '@/src/hooks/useReducedMotion';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-import { SIZE_SWIPE_ACTION_WIDTH, Z_INDEX } from '@/src/theme/uiMetrics';
+} from '@/src/design-system/foundation/utils/accessibility';
+import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/design-system/foundation/theme/typographyMetrics';
+import { SIZE_SWIPE_ACTION_WIDTH, Z_INDEX } from '@/src/design-system/foundation/theme/uiMetrics';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 
 export interface SwipeableRowProps {

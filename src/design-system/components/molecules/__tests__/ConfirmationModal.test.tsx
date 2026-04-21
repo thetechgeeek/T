@@ -3,7 +3,7 @@ import { Modal } from 'react-native';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { ConfirmationModal } from '../ConfirmationModal';
 import { resetModalStackForTests } from '@/src/design-system/modalStack';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { buildTheme } from '@/src/theme/colors';
 
 const lightTheme = buildTheme(false);

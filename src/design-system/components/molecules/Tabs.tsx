@@ -7,8 +7,8 @@ import {
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 

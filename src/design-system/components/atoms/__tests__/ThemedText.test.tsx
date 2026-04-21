@@ -2,9 +2,9 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { Appearance, View } from 'react-native';
 import { ThemedText, resolveAccessibleFontWeight } from '../ThemedText';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { buildTheme } from '@/src/theme/colors';
-import { resolveTypographyFamiliesForLocale } from '@/src/theme/localeTypography';
+import { resolveTypographyFamiliesForLocale } from '@/src/design-system/foundation/theme/localeTypography';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
 	// eslint-disable-next-line @typescript-eslint/no-require-imports

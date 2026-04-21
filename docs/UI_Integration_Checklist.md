@@ -1,395 +1,214 @@
 # UI Integration Checklist
 
 > Companion to `docs/UI_Library_Checklist.md`.
-> The library checklist tracks what the design system can guarantee in isolation.
-> This checklist tracks what a consuming app must wire so those guarantees hold in real product flows.
-> If an item depends on routing, auth/session, app lifecycle, caching/sync, feature flags, OS permissions, notifications, deep links, or product analytics, it belongs here.
+> The library checklist tracks what the component library can guarantee in isolation.
+> This checklist tracks the reusable shell contract that sits between the library and any consumer app.
+> Once the shell is extracted, each product app should keep its own app-specific integration checklist derived from this file.
+> If an item depends on domain models, route maps, backend semantics, analytics taxonomy, or product copy, it belongs in the consumer app checklist, not here.
 
 ## 0. Ownership & Scope
 
-### Host App Contract
+### Shell Contract
 
 #### Common
 
-- [ ] Product screens compose registered design-system components and patterns instead of hand-rolling bespoke UI
-- [ ] App-shell responsibilities live here: routing, auth/session, permissions, feature flags, tenant context, offline orchestration, notifications, deep links, and platform runtime setup
-- [ ] Library responsibilities stay in `docs/UI_Library_Checklist.md`: tokens, component contracts, reusable UI blocks, reusable compositions, accessibility/i18n/RTL guarantees, graceful state surfaces, and component-level verification
-- [ ] Integration work references the underlying library primitive or pattern before a product-specific wrapper is introduced
+- [x] `src/design-system/foundation` owns the reusable runtime substrate: theme, locale/RTL, responsive metrics, motion helpers, and DS-safe shared utilities
+- [x] `src/design-system/index.ts` and `src/design-system/foundation/index.ts` are treated as the public entrypoints for consumers
+- [x] The shell composes the dumb component library and exposes reusable application infrastructure without embedding product/domain code
+- [x] Product apps depend on the shell; the shell never imports product stores, services, features, or route definitions
+- [ ] Any app-specific wrapper built on top of the shell references the underlying shell scaffold or DS primitive it is composed from
+- [x] Each consuming app keeps a separate app-owned checklist for domain workflows, copy, route maps, and rollout state
 
-## 1. Runtime, Delivery & App Shell
+## 1. Package Boundaries & Public API
 
-### Core Metrics
-
-#### Web
-
-- [ ] LCP (Largest Contentful Paint) ≤ 2.5s
-- [ ] INP (Interaction to Next Paint) ≤ 200ms
-- [ ] CLS (Cumulative Layout Shift) ≤ 0.1
-- [ ] FCP (First Contentful Paint) ≤ 1.8s
-- [ ] TTFB (Time to First Byte) ≤ 800ms
-
-#### Mobile (React Native)
-
-- [ ] App launch to interactive ≤ 2s (cold start)
-- [ ] Screen transition ≤ 300ms
-- [ ] 60fps maintained during screen transitions and long-list scrolling
-- [ ] JS thread usage < 80% during idle
-- [ ] Memory: no unbounded growth on navigation cycles
-- [ ] Hermes bytecode compilation for faster startup
-
-### Rendering Strategy
-
-#### Web
-
-- [ ] Marketing / Public: Static Generation (SSG)
-- [ ] Dashboard / Authenticated: Server-Side Rendering (SSR)
-- [ ] Highly dynamic widgets: Client-Side Rendering (CSR) with skeleton
-- [ ] Reports / heavy data: deferred with `<Suspense>` + skeleton
-- [ ] Progressive enhancement order: task shell → data → brand/media flourish
-
-#### Mobile (React Native)
-
-- [ ] All rendering is client-side (no SSR in RN)
-- [ ] Screen-level lazy loading (lazy-load heavy screens)
-- [ ] Fabric (New Architecture) enabled for concurrent features and improved threading
-- [ ] Progressive enhancement order: screen shell → key data/action → secondary media
-- [ ] Screen-level heavy computation is moved off the JS thread when interaction latency would otherwise regress
-
-### Asset & Bundle Delivery
-
-#### Web
-
-- [ ] JS: route-level code splitting, defer non-critical third-party scripts
-
-#### Mobile (React Native)
-
-- [ ] Asset bundling: only required assets per platform in binary
-- [ ] Hermes engine enabled for faster JS execution
-- [ ] Metro bundler configuration optimized (inline requires, lazy component loading)
-- [ ] App binary size monitored per release (no unbounded growth)
-- [ ] JS bundle size tracked per release
-
-### Adaptive App Shell
-
-#### Mobile (React Native)
-
-- [ ] Phone: single-column layout, bottom tab bar, stack navigation
-- [ ] Tablet: master-detail split view, sidebar navigation, multi-column forms
-- [ ] iPad: `SplitView` / multi-column layout via wide-screen detection
-- [ ] Android tablet: adaptive navigation (rail vs. bottom tabs)
-- [ ] Orientation lock for specific screens where needed (for example video player or signature capture)
-- [ ] Foldable device support (Samsung Fold: inner/outer display handling)
-- [ ] iPad multitasking: Split View, Slide Over compatibility
-- [ ] Android multi-window / picture-in-picture awareness
-
-### Navigation & Routing
-
-#### Mobile (React Native)
-
-- [ ] Bottom Tab Bar (React Navigation `BottomTabNavigator`)
-    - [ ] Badge on tab items
-    - [ ] Haptic feedback on tab switch
-- [ ] Stack Navigator (screen push/pop with native transitions)
-    - [ ] iOS: back swipe gesture (interruptible, gesture-driven)
-    - [ ] Android: hardware back button handling
-    - [ ] Large title / collapsing header (iOS-style)
-    - [ ] Custom header with animated transitions
-- [ ] Drawer Navigator (slide-from-left/right)
-    - [ ] Gesture-driven open/close
-    - [ ] Overlay and push variants
-- [ ] Bottom Sheet Navigation (modal screens from bottom)
-    - [ ] Snap points (half-screen, full-screen)
-    - [ ] Drag-to-dismiss
-    - [ ] Backdrop press to close
-- [ ] Deep linking / universal links (maps URLs to screens)
-- [ ] Nested navigators (tab within stack, modal over tab)
-- [ ] Screen transition animations (slide, fade, modal lift)
-- [ ] Interruptible native transitions remain responsive when the user reverses a back swipe or closes a modal mid-motion
-- [ ] Shared-element or branded transitions are limited to onboarding, browse, or detail flows with clear orientation value
-- [ ] Navigation state persistence (restore screen on app reopen)
-
-## 2. Identity, Access & Tenant Context
-
-### Authentication & Session Patterns
+### Public Entry Points
 
 #### Common
 
-- [ ] Auth surfaces may use premium branding moments, but form clarity and recovery paths stay dominant
-- [ ] Login and session flows remain fully understandable without illustration or hero media
-- [ ] Login form (email/password, SSO/OAuth providers)
-- [ ] Multi-factor authentication UI (OTP input, authenticator app)
-- [ ] Session expiry warning ("Your session expires in X minutes")
-- [ ] Session expired state (redirect to login, preserve intended destination)
-- [ ] Token refresh (silent, transparent to user)
-- [ ] "Remember me" / persistent session option
-- [ ] Password reset flow (request → email → reset → confirmation)
-- [ ] Account locked state (too many failed attempts)
-- [ ] Forced password change on first login
+- [x] Consumers import shell providers, hooks, hosts, and scaffolds only from documented public entrypoints
+- [x] Consumers import UI primitives and patterns only from documented DS entrypoints
+- [x] No consumer imports from private implementation files or repo-local compatibility shims
+- [ ] Shell versioning, migration notes, and deprecation windows are published with every release
+- [ ] Deprecated shell APIs keep an explicit removal target and migration path
 
-#### Web
-
-- [ ] SSO redirect loading state
-- [ ] Cookie-based session management
-
-#### Mobile (React Native)
-
-- [ ] Biometric authentication (Face ID, Touch ID, fingerprint)
-- [ ] Secure storage for tokens (`expo-secure-store` / Keychain / Keystore)
-- [ ] App lock / PIN code screen
-- [ ] OAuth: in-app browser for SSO flow (`expo-auth-session` / `expo-web-browser`)
-- [ ] Deep link handling for auth callbacks (magic links, email verification)
-- [ ] Background-to-foreground session validation
-
-### Permission, Flags & Access Control
+### Adapter Contracts
 
 #### Common
 
-- [ ] Permission-denied and limited-access states are first-class polished surfaces, not empty dead ends
-- [ ] Feature Flag: component/route excluded from render tree when flag off
-- [ ] RBAC Role: menu items hidden, CTA replaced with "Request Access"
-- [ ] Resource Permission: fields become read-only, action buttons disabled/hidden
-- [ ] Field-Level: specific fields hidden or masked (PII, sensitive data)
-- [ ] Hidden vs. Disabled: hide if never accessible, disable with explanation if conditionally blocked
-- [ ] No optimistic rendering of unauthorized actions — resolve permissions at load time
-- [ ] Skeleton shown during flag/permission resolution (no layout shift)
-- [ ] Limited-access and masked states maintain the same layout quality, spacing rhythm, and hierarchy as full-access states
-- [ ] A/B experiments, gradual rollouts, kill switches via feature flags
-- [ ] Flag failure default: documented per flag (off or on)
+- [x] Auth/session integration is passed through a documented adapter interface
+- [ ] Permissions and feature flags are passed through documented adapter interfaces
+- [ ] Tenant/branding data is passed through a documented adapter interface
+- [ ] Notification, deep-link, analytics, and persistence integrations use shell-owned interfaces instead of direct product imports
+- [ ] Shell defaults are safe when an adapter is absent, stale, or unresolved
 
-#### Web
+## 2. Provider Stack & Runtime Host
 
-- [ ] Never 404 on permission denial — show "Access Denied" page with CTA
-- [ ] RBAC-aware forms: read-only renders `<p>` elements, not disabled `<input>`
-- [ ] Flags resolved server-side on SSR, or client-side with `<Suspense>` before render
-
-#### Mobile (React Native)
-
-- [ ] Access Denied screen with navigation back + "Request Access" CTA
-- [ ] RBAC-aware forms: read-only renders `<Text>` elements, not disabled `<TextInput>`
-- [ ] OS-level permission requests (camera, location, contacts): explanation screen before prompt
-- [ ] Permission denied handling: link to device Settings to re-enable
-- [ ] Flags fetched on app startup, cached locally
-- [ ] Stale flag cache used when network unavailable
-- [ ] Flag refresh on app foreground
-- [ ] Feature flag cache stale: use last known values
-
-### Sensitive Data Masking
+### Root Providers
 
 #### Common
 
-- [ ] PII masked by default with "reveal" affordance
-- [ ] Reveal action is permission-gated
-- [ ] Reveal triggers audit log
-- [ ] Consistent masking format: `••••••@gmail.com`, `+1 (***) ***-1234`
-- [ ] Masked layouts remain readable and balanced; redaction never collapses card/table alignment
+- [ ] The shell mounts theme, locale, RTL, reduced-motion, safe-area, gesture, keyboard, overlay, and accessibility hosts in one documented order
+- [x] Runtime signals are read once in the shell/foundation and propagated through shared context
+- [ ] Fonts, icons, and required shell assets are registered before shell surfaces depend on them
+- [ ] Provider order is covered by tests so nested overlays, focus restore, and gesture shells remain stable
 
-#### Mobile (React Native)
-
-- [ ] Masked values excluded from screen reader announcement until revealed
-- [ ] Screenshot prevention on sensitive screens (`FLAG_SECURE` Android / `UIScreen.isCaptured` iOS)
-
-### Multi-Tenancy UI Patterns
+### Delivery & Performance
 
 #### Common
 
-- [ ] Organization / workspace switcher
-- [ ] Tenant-scoped data isolation (visual context of current tenant)
-- [ ] Tenant branding (logo, colors applied from tenant config)
-- [ ] Tenant branding is applied within guardrails for contrast, accent budget, and surface hierarchy
-- [ ] Cross-tenant resource sharing indicators
-- [ ] Tenant creation / setup wizard
+- [ ] Shell startup, navigation, and interaction budgets are defined separately from product-domain budgets
+- [ ] The shell lazy-loads heavy scaffolds and keeps the default root path light
+- [ ] Shell-owned transitions remain responsive under reduced motion, large font scale, and high-contrast settings
+- [ ] Bundle growth for shell-owned code is tracked separately from product-domain code
 
-## 3. Onboarding & Product Activation
-
-### Onboarding & First-Run Experience
-
-#### Common
-
-- [ ] Onboarding may use premium storytelling, but every step has skip, resume, and "show later" paths
-- [ ] First-run hero treatments do not become permanent product chrome once the user reaches operational flows
-- [ ] Welcome screen / first-run modal
-- [ ] Feature tour (tooltip-based coach marks with step progression)
-- [ ] Checklist-based onboarding ("Complete your setup: 3/5 done")
-- [ ] Contextual hints (inline, dismissible, shown once per feature)
-- [ ] Empty-to-populated state transitions (first item created celebration)
-- [ ] "What's new" changelog modal (shown on version update)
-- [ ] Opt-out / "Don't show again" preference persistence
+### Adaptive Runtime
 
 #### Mobile (React Native)
 
-- [ ] Swipeable onboarding carousel (full-screen pages with pagination dots)
-- [ ] Permission request flows with pre-permission explanation screens (camera, location, notifications)
-- [ ] App Store / Play Store screenshots reflecting first-run experience
-- [ ] Animated illustration transitions between onboarding steps
+- [ ] Phone, tablet, foldable, and multi-window behavior are decided in the shell instead of ad hoc per screen
+- [ ] The shell exposes width-aware layout scaffolds such as single-column, split-pane, and rail/sidebar shells
+- [ ] Orientation locks, edge gestures, and safe-area behavior are centralized in shell policy
+- [ ] Navigation-state restore and resume hooks are handled through shell infrastructure
 
-## 4. Data, Sync & Runtime Failure Orchestration
+## 3. Navigation Infrastructure & Screen Scaffolds
 
-### Live Data & Background Work
-
-#### Common
-
-- [ ] Real-time data injection (WebSocket / SSE)
-
-#### Mobile (React Native)
-
-- [ ] Push notifications for long-running job completion
-- [ ] App badge count for unread items / pending actions
-- [ ] Background fetch for data refresh (`expo-background-fetch` or native module)
-- [ ] Job status survives app backgrounding/foregrounding
-
-### Notification Wiring & Delivery
+### Reusable Navigation Hosts
 
 #### Common
 
-- [ ] Real-time notification injection is wired from app events/services into the reusable DS inbox/banner surfaces
-- [ ] Notification preferences route/settings are wired anywhere the DS notification surfaces expose a preferences affordance
+- [ ] The shell owns reusable stack, tab, drawer, modal, and bottom-sheet host patterns where they are shared across apps
+- [ ] Screen transition policy, header strategy, and presentation variants are centralized in the shell
+- [ ] Shell-owned navigators remain interruptible and reduced-motion aware
+- [ ] Shell route infrastructure never hard-codes product destinations
 
-#### Mobile (React Native)
-
-- [ ] Push notification badge (app icon badge count via `expo-notifications` or native module)
-
-### Offline & Degraded Mode
+### Screen Scaffolds
 
 #### Common
 
-- [ ] Full-app offline banner
-- [ ] Writes queued locally
-- [ ] Queued action count indicator
-- [ ] Auto-sync on reconnect
-- [ ] Conflict detection post-sync
+- [ ] Auth, onboarding, settings, detail, list, and split-pane scaffolds exist where multiple apps can reuse them
+- [ ] Error, empty, loading, denied, and read-only shells preserve consistent spacing and hierarchy across scaffolds
+- [ ] Shell scaffolds accept slots, render props, or configuration instead of importing product features
+- [ ] Back behavior, dismiss behavior, and route restore are defined per scaffold type
 
-### Failure-State Orchestration
-
-#### Common
-
-- [ ] 401 / session-expired flow routes the user to sign-in while preserving intended destination
-- [ ] 403 / access-denied flow preserves layout quality and offers request-access guidance
-- [ ] 404 / not-found flow returns the user to a safe list, parent screen, or search context
-- [ ] 429 / rate-limited flow shows countdown or retry guidance tied to real policy
-- [ ] Timeout and offline retry policy is wired to real cache and queue semantics
-- [ ] Reconnected acknowledgement is calm and does not cause jarring layout shift
-- [ ] Optimistic updates roll back safely on server failure and surface the retry path
-- [ ] Long-running job completion, partial success, and failure notifications are wired to real job state
-- [ ] Concurrent-edit and merge-conflict handling is implemented where the domain allows multi-actor mutation
-
-#### Web
-
-- [ ] Reads served from service worker cache
-
-#### Mobile (React Native)
-
-- [ ] Reads served from local storage / SQLite / MMKV cache
-- [ ] `NetInfo` connectivity listener for online/offline detection
-- [ ] Background sync when connectivity returns (`expo-background-fetch`)
-
-### Hydration & Rendering Failures
-
-#### Web
-
-- [ ] SSR/SSG hydration mismatch handled gracefully (fallback to client render)
-- [ ] Partial hydration failure does not crash page
-
-#### Mobile (React Native)
-
-- [ ] App crash recovery: last known good state restored on relaunch
-- [ ] Deep link resolution failure: fallback to home screen with error toast
-
-### Third-Party Dependency Failures
+### Deep Links & OS Hand-off
 
 #### Common
 
-- [ ] Embedded widget failure does not affect host app
-- [ ] Graceful degradation when external dependency fails
+- [ ] Deep-link parsing and fallback policy are handled by shell infrastructure
+- [ ] The shell exposes extension points for app-specific route resolution
+- [ ] Invalid or unauthorized deep links fail into a safe shell state instead of a broken screen
 
-#### Web
+## 4. Identity, Permission, Tenant & Feature Adapters
 
-- [ ] Third-party script timeout: placeholder, not broken layout
-- [ ] CDN failure: local fallback or error state
-
-#### Mobile (React Native)
-
-- [ ] Native module crash isolation (doesn't take down JS runtime)
-- [ ] Push notification service failure: app still functional without notifications
-
-### Pattern Wiring & Host-Shell Behaviors
+### Auth & Session
 
 #### Common
 
-- [ ] Route-level and application-level error boundaries wrap reusable design-system section boundaries
+- [x] The shell exposes reusable auth/session scaffolds without embedding a concrete auth provider
+- [ ] Session expiry, re-auth, lock-screen, and recovery flows are adapter-driven
+- [ ] Auth shell surfaces remain understandable without brand media or product-specific copy
 
 #### Mobile (React Native)
 
-- [ ] Default view per user preference is restored when a search/filter surface mounts
-- [ ] URL / deep-link serialization of view and filter state maps into the reusable search/filter pattern
-- [ ] Voice search integration (native speech-to-text) feeds the shared search/filter surface without bypassing the library contract
-- [ ] CRUD editing opens the appropriate detail screen push instead of relying on inline mobile editing
-- [ ] Master → detail screen push navigation is wired by the host app around reusable data-layout patterns
-- [ ] Collapsible header / parallax scroll behavior is applied by the host shell where a reusable data layout needs it
+- [ ] Biometrics, secure storage, and app-lock flows are exposed as capability adapters
+- [ ] Background-to-foreground session validation hooks exist at the shell layer
 
-## 5. Product Rollout & App-Level Verification
-
-### Product Terminology
+### Permission & Flags
 
 #### Common
 
-- [ ] Product glossary defined (one name per concept)
-- [ ] No synonym mixing ("Organization" OR "Workspace", never both)
+- [ ] The shell exposes reusable boundaries for denied, masked, limited, and loading-resolution states
+- [ ] Permission and feature-flag resolution occurs before protected shell actions become interactive
+- [ ] Hidden-vs-disabled policy, request-access affordances, and fallback surfaces are documented at the shell layer
+- [ ] Flag failure defaults are defined per adapter contract
 
-### Metrics & Adoption Tracking
-
-#### Common
-
-- [ ] Adoption rate: % of product surfaces using DS vs. bespoke components
-- [ ] Usage analytics: which components are most/least used
-- [ ] a11y debt: violations tracked over time per product surface
-- [ ] Bespoke visual exceptions tracked and reduced over time
-- [ ] Visual coherence audits run quarterly across flagship flows
-
-#### Web
-
-- [ ] Designer-engineer handoff fidelity: pixel-diff between Figma and live
-
-#### Mobile (React Native)
-
-- [ ] Platform parity score: % of components available on both iOS and Android
-
-### App-Level Performance Tests
-
-#### Web
-
-- [ ] Core Web Vitals via Lighthouse CI (LCP > 2.5s / CLS > 0.1 fails build)
-
-#### Mobile (React Native)
-
-- [ ] Startup time regression tracking (cold start ≤ 2s)
-- [ ] Frame rate monitoring during scroll / navigation (60fps target)
-- [ ] Memory profiling: no leaks on navigation cycles
-- [ ] App binary size tracked per release
-- [ ] JS bundle size tracked per release
-- [ ] Native dependency count tracked per release
-
-### End-to-End Tests
+### Tenant & Branding
 
 #### Common
 
-- [ ] Authentication (login, MFA, session expiry)
-- [ ] Core CRUD flow (create, read, update, delete with confirmation)
-- [ ] Form submission with validation errors and success
-- [ ] Search, filter, and saved views
-- [ ] Bulk selection and bulk action
-- [ ] Permission-denied state rendering
-- [ ] Offline detection and recovery
-- [ ] Each test asserts: expected screen/URL, visible elements, no errors
+- [ ] Tenant switching, branding inputs, and tenant context surfaces are handled through shell adapters
+- [ ] Branding is applied within DS guardrails for contrast, accent budget, and hierarchy
+- [ ] Cross-tenant context indicators and switchers are shell-owned patterns when reused across apps
 
-#### Web
+## 5. Notification, Offline, Background & Failure Orchestration
 
-- [ ] Playwright: axe scan on final state of each flow
-- [ ] Long-running job initiation and status resolution
+### Notification & Inbox Hosts
+
+#### Common
+
+- [ ] The shell owns reusable banner, toast, inbox, and badge hosts
+- [ ] Consumer apps inject events into shell-owned notification surfaces through documented APIs
+- [ ] Preference affordances exposed by the shell can be routed by the consuming app
 
 #### Mobile (React Native)
 
-- [ ] Detox / Maestro: run on iOS simulator + Android emulator in CI
-- [ ] Deep link / universal link navigation test
-- [ ] Background → foreground session persistence test
-- [ ] Push notification tap → correct screen navigation test
-- [ ] Biometric auth flow test (simulated)
+- [ ] Push-tap routing, badge sync, and foreground/background notification hand-off are handled by shell integrations
+
+### Offline & Sync Surfaces
+
+#### Common
+
+- [ ] Offline banner, queued work indicator, reconnect acknowledgement, and conflict surfaces are shell-owned where reusable
+- [ ] The shell defines extension points for queue state, retry state, optimistic rollback, and conflict presentation
+- [ ] Product apps supply real cache/persistence semantics; the shell supplies shared presentation and orchestration hooks
+
+#### Mobile (React Native)
+
+- [ ] Connectivity listeners, resume triggers, and background refresh hooks are centralized in shell integrations
+
+### Failure Recovery
+
+#### Common
+
+- [ ] The shell owns reusable handling surfaces for 401, 403, 404, 429, timeout, offline, and dependency failure states
+- [ ] Shell fallback policy preserves intended destination, safe back-navigation, and layout stability
+- [ ] Product-specific retry semantics, merge logic, and backend policy remain consumer-app responsibilities
+
+## 6. Consumer App Contract
+
+### What The App Must Supply
+
+#### Common
+
+- [ ] Route map and business destinations
+- [ ] Auth/session implementation
+- [ ] Permission and feature-flag implementation
+- [ ] Tenant configuration and product branding inputs
+- [ ] Data services, caching policy, sync policy, and persistence strategy
+- [ ] Analytics events, product glossary, and product copy
+- [ ] Domain wrappers, product screens, and workflows
+
+### What The App Must Not Do
+
+#### Common
+
+- [ ] Re-implement shell-owned providers, hosts, or scaffolds without a documented exception
+- [x] Import private shell internals
+- [ ] Push domain logic back into the DS or shell package
+- [ ] Bypass shell-owned notification, permission, or failure boundaries when a shared pattern already exists
+
+## 7. Shell Verification & Release Gates
+
+### Verification
+
+#### Common
+
+- [x] Shell provider stack has automated smoke coverage
+- [x] Shell scaffolds and adapters are exercised with mocked consumer inputs
+- [ ] DS package upgrades trigger shell compatibility checks before consumer apps adopt them
+- [ ] Deep-link, auth-expiry, denied-state, offline, and reconnect shell flows are covered end to end
+- [ ] Large-text, RTL, reduced-motion, tablet, and degraded-network scenarios are part of shell verification
+
+#### Mobile (React Native)
+
+- [ ] Native shell flows run on both iOS and Android in CI where supported
+- [ ] Background/foreground, biometric, push-tap, and restore-state flows have dedicated shell coverage where supported
+
+### Release Discipline
+
+#### Common
+
+- [ ] Shell changes publish migration notes for consumer apps
+- [ ] Breaking changes require versioned release notes and deprecation guidance
+- [ ] Shell docs stay aligned with public entrypoints and adapter contracts
+- [x] Each consumer app keeps a derived checklist for app-specific wiring and rollout

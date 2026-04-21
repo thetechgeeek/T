@@ -4,7 +4,7 @@ import {
 	BORDER_WIDTH_BASE,
 	GLASS_WHITE_TEXT,
 	LETTER_SPACING_SECTION,
-} from '@/src/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import {
 	View,
 	StyleSheet,
@@ -14,16 +14,16 @@ import {
 	RefreshControl,
 	Pressable,
 } from 'react-native';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { ScreenHeader } from '@/src/ui-shell';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { MOCK_CASH_TRANSACTIONS } from '@/src/mocks/finance/cash';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 // TODO: connect to store — derive from invoices, expenses, purchases with cash payment
 const MOCK_OPENING_BALANCE = 0;

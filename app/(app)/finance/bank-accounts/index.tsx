@@ -12,12 +12,12 @@ import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { Building2, Plus } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { ScreenHeader } from '@/src/ui-shell';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { Badge } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import {
 	FAB_OFFSET_RIGHT,
@@ -25,10 +25,10 @@ import {
 	LETTER_SPACING_ACCOUNT,
 	RADIUS_FAB,
 	SIZE_FAB,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import { MOCK_BANK_ACCOUNTS } from '@/src/mocks/finance/bankAccounts';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 // TODO: connect to store — fetch from bank_accounts table via Supabase
 type BankAccount = (typeof MOCK_BANK_ACCOUNTS)[number] & { balance: number };

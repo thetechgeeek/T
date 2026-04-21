@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, Alert } from 'react-native';
 import { Download } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { SIZE_CHIP_HEIGHT } from '@/src/design-system/foundation';
 
 const CHART_PLACEHOLDER_HEIGHT = SPACING_PX['4xl'] + SPACING_PX['4xl'] + SPACING_PX['2xl'];
 /** Section label caps letter-spacing (narrower than LETTER_SPACING_SECTION) */

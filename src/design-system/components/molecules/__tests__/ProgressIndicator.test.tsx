@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ProgressIndicator } from '../ProgressIndicator';
 
 const renderWithTheme = (component: React.ReactElement) =>

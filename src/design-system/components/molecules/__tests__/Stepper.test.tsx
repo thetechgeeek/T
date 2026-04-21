@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { Stepper } from '../Stepper';
 
 const renderWithTheme = (component: React.ReactElement) =>

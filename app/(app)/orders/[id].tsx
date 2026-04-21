@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { orderService, Order } from '@/src/services/orderService';
 import type { InventoryItem } from '@/src/types/inventory';
 import { Package, CheckCircle2 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SkeletonBlock } from '@/src/design-system';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 import logger from '@/src/utils/logger';
 
 export default function OrderDetailScreen() {

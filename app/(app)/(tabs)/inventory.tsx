@@ -8,7 +8,7 @@ import {
 	SIZE_FAB,
 	SIZE_MENU_SHEET_WIDTH,
 	Z_INDEX,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
@@ -35,20 +35,20 @@ import {
 	FileDown,
 	FileUp,
 } from 'lucide-react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { TileSetCard } from '@/app/components/organisms/TileSetCard';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { ThemedText } from '@/src/design-system';
 import { InventoryListSkeleton } from '@/app/components/molecules/skeletons/InventoryListSkeleton';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { Chip } from '@/src/design-system/components/atoms/Chip';
+import { SkeletonBlock } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { TextInput } from '@/src/design-system';
+import { Chip } from '@/src/design-system';
 import { inventoryService } from '@/src/services/inventoryService';
 import type { TileSetGroup, TileCategory, InventoryFilters } from '@/src/types/inventory';
-import { layout } from '@/src/theme/layout';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import { layout } from '@/src/design-system/foundation';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
 
 interface SortOption {
 	label: string;

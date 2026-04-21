@@ -1,12 +1,13 @@
 # Design System State Resilience
 
 > Companion to `docs/UI_Library_Checklist.md`.
-> This document defines what the design system proves in isolation for graceful degradation and what must still be orchestrated by the consuming app.
+> This document defines what the design system proves in isolation for graceful degradation and what must still be orchestrated by the reusable shell and, later, each consuming app.
 
 ## Ownership Boundary
 
 - The design system owns reusable fallback surfaces, edge-case fixtures, and component-level state quality.
-- The host app owns route-level error boundaries, auth/session redirects, offline queue orchestration, retry policies, optimistic rollback, long-running job lifecycle, and conflict resolution.
+- The shell owns route-level error boundaries, auth/session adapters, offline queue presentation, retry surfaces, long-running job hosts, and conflict handoff patterns.
+- Each consuming app still owns concrete cache policy, persistence semantics, backend retry rules, and domain conflict logic.
 - When a resilience behavior depends on routing, auth, cache policy, API semantics, background work, or notifications, it belongs in `docs/UI_Integration_Checklist.md`.
 
 ## Library-Owned State Matrix
@@ -36,7 +37,7 @@
 - Shared fixtures: `src/design-system/fixtures.ts`
 - Fallback components: `EmptyState`, `ErrorState`, `AlertBanner`, `PaginatedList`
 - Locale-safe numbers, percent, currency, and timestamp helpers: `src/design-system/formatters.ts`
-- Once those shared proof surfaces are satisfied, route/session/cache orchestration continues in `docs/UI_Integration_Checklist.md`.
+- Once those shared proof surfaces are satisfied, shell/session/cache orchestration continues in `docs/UI_Integration_Checklist.md`.
 
 ## Integration Handoff
 

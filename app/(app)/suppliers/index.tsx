@@ -3,23 +3,23 @@ import {
 	FAB_OFFSET_RIGHT,
 	SIZE_AVATAR_MD,
 	SIZE_ICON_CIRCLE_MD,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SearchBar } from '@/src/design-system/components/molecules/SearchBar';
-import { ListItem } from '@/src/design-system/components/molecules/ListItem';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SearchBar } from '@/src/design-system';
+import { ListItem } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { EmptyState } from '@/src/design-system';
 import { CustomerListSkeleton } from '@/app/components/molecules/skeletons/CustomerListSkeleton';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 import type { Supplier } from '@/src/types/supplier';
 
 const SUPPLIER_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs;

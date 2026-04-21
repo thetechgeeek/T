@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { OPACITY_TINT_LIGHT, Z_INDEX } from '@/theme/uiMetrics';
+import { OPACITY_TINT_LIGHT, Z_INDEX } from '@/src/design-system/foundation';
 import type { Href } from 'expo-router';
 import {
 	Trash2,
@@ -14,21 +14,21 @@ import {
 	Plus,
 } from 'lucide-react-native';
 import { supabase } from '@/src/config/supabase';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { withOpacity } from '@/src/utils/color';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Divider } from '@/src/design-system/components/atoms/Divider';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
+import { withOpacity } from '@/src/design-system/foundation';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Badge } from '@/src/design-system';
+import { Divider } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { SkeletonBlock } from '@/src/design-system';
 import type { Purchase, PurchaseLineItem, Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
 import type { ThemeColors } from '@/src/theme';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 /** Minimum width of the kebab-menu dropdown */
 const KEBAB_MENU_MIN_WIDTH = 140;

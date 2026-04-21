@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, Alert } from 'react-native';
 import { Save, Send } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { GSTR3B_NUM_CELL_WIDTH_PX } from '@/constants/reportLayout';
 import {
@@ -15,7 +15,7 @@ import {
 	MOCK_GSTR3B_ITC,
 	MOCK_GSTR3B_OUTWARD_31,
 } from '@/src/mocks/reports/gstr3b';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 // TODO: Replace all mock values with aggregated Supabase queries for the selected period.
 

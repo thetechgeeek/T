@@ -3,10 +3,10 @@ import { Pressable, View, StyleSheet, ViewStyle, type StyleProp } from 'react-na
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { ChevronRight } from 'lucide-react-native';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { useReducedMotion } from '@/src/hooks/useReducedMotion';
-import { buildFocusRingStyle } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 import { ThemedText } from '../atoms/ThemedText';
 
 interface ListItemProps {

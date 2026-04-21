@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { TextAreaField } from '../TextAreaField';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
-import { LINE_HEIGHT } from '@/src/theme/typographyMetrics';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { LINE_HEIGHT } from '@/src/design-system/foundation/theme/typographyMetrics';
 
 const renderWithTheme = (component: React.ReactElement) =>
 	render(

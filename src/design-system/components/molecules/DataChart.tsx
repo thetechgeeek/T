@@ -16,8 +16,8 @@ import { EmptyState } from '@/src/design-system/components/molecules/EmptyState'
 import { ErrorState } from '@/src/design-system/components/molecules/ErrorState';
 import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 export type DataChartVariant =
 	| 'line'

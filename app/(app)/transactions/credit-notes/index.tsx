@@ -3,10 +3,10 @@ import { View, FlatList, StyleSheet, Alert, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { Plus, FileX } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ThemeColors } from '@/src/theme';
 import {
@@ -14,8 +14,8 @@ import {
 	type CreditNote,
 	type CreditNoteStatus,
 } from '@/src/mocks/transactions/creditNotes';
-import { OPACITY_TINT_MEDIUM, SIZE_AVATAR_MD } from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { OPACITY_TINT_MEDIUM, SIZE_AVATAR_MD } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 const EMPTY_SECTION_PADDING_VERTICAL = SIZE_AVATAR_MD;
 const FAB_SHADOW_OPACITY = OPACITY_TINT_MEDIUM;

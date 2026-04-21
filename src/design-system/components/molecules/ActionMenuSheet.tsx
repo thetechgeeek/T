@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
 import { Modal, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { Button } from '@/src/design-system/components/atoms/Button';
 

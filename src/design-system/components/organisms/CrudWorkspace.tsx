@@ -1,7 +1,7 @@
 import React, { forwardRef, useState } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { announceForScreenReader } from '@/src/utils/accessibility';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { announceForScreenReader } from '@/src/design-system/foundation/utils/accessibility';
 import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { Button } from '@/src/design-system/components/atoms/Button';
@@ -25,7 +25,7 @@ import {
 	stackOnPhoneRowStyle,
 	useResponsiveWorkbenchLayout,
 } from '@/src/design-system/useResponsiveWorkbenchLayout';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 
 export interface CrudWorkspaceRecord {
 	id: string;

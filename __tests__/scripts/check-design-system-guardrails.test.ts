@@ -19,6 +19,14 @@ function createFixture(componentSource: string) {
 		'docs/UI_Library_Web_Backlog.md': [
 			'# UI Library Web Backlog',
 			'',
+			'## 1. Design System Architecture',
+			'',
+			'## 2. Component Contract Standard',
+			'',
+			'## 3. Components — Reusable UI Blocks',
+			'',
+			'## 4. Patterns — Reusable Compositions',
+			'',
 			'## 5. Accessibility (a11y) Architecture',
 			'',
 			'## 6. Internationalization (i18n) & Localization (L10n)',
@@ -33,6 +41,8 @@ function createFixture(componentSource: string) {
 			'',
 			'## 12. State Resilience & Graceful Degradation',
 			'',
+			'## 13. Testing Strategy',
+			'',
 		].join('\n'),
 		'docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md':
 			'Manual release gate on physical-device screen readers.\n',
@@ -44,15 +54,23 @@ function createFixture(componentSource: string) {
 			'Semantic Versioning with two minor releases before removal and CI in .github/workflows/ci.yml.\n',
 		'docs/DESIGN_SYSTEM_STATE_RESILIENCE.md':
 			'DesignLibraryScreen.tsx and ThemeSnapshotPreview.tsx prove fallback surfaces before handoff to UI_Integration_Checklist.\n',
+		'docs/DESIGN_SYSTEM_REVIEW_GATES.md':
+			'Review covers hierarchy, accent budget, surface calm, ugly data, translated copy, phone and tablet layouts, reduced motion, and max font scale.\n',
+		'docs/DESIGN_SYSTEM_VERIFICATION_STRATEGY.md':
+			'npm run validate relies on Jest + React Native Testing Library, Maestro, ThemeSnapshotPreview.tsx, check-design-system-visual-regression.mjs, FlatList, and German locale stress.\n',
 		'src/design-system/README.md': [
 			'# Design System',
 			'',
 			'- Relaxed showcase',
 			'- Operational dense',
 			'- loading, empty, error, read-only, denied, no-media, and ugly-data',
+			'- src/design-system/foundation',
+			'- public entrypoints',
 			'',
 		].join('\n'),
 		'src/design-system/fixtures.ts': 'export const fixtures = [];\n',
+		'src/design-system/foundation/index.ts': 'export * from "./theme/ThemeProvider";\n',
+		'src/design-system/index.ts': 'export * from "./foundation";\n',
 		'src/design-system/iconography.tsx':
 			'export function LucideIconGlyph() { return { transform: [{ scaleX: -1 }] }; }\n',
 		'src/design-system/components/ThemeSnapshotPreview.tsx':
@@ -100,7 +118,11 @@ function createFixture(componentSource: string) {
 			'];',
 			'',
 		].join('\n'),
-		'src/design-system/generated/uiLibraryCatalog.ts': 'export const UI_LIBRARY_ITEMS = [];\n',
+		'src/design-system/generated/uiLibraryCatalog.ts': [
+			'export const UI_LIBRARY_ITEMS = [];',
+			'export const UI_LIBRARY_STATS = { open: 0 };',
+			'',
+		].join('\n'),
 		'src/design-system/components/molecules/MotionCard.tsx': componentSource,
 		'src/design-system/components/molecules/__tests__/MotionCard.test.tsx':
 			"describe('MotionCard', () => it('exists', () => expect(true).toBe(true)));\n",
@@ -136,7 +158,7 @@ describe('check-design-system-guardrails', () => {
 	it('passes when animated DS components gate motion through useReducedMotion', () => {
 		const root = createFixture(`
 			import { withSpring } from 'react-native-reanimated';
-			import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+			import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
 
 			export function MotionCard() {
 				const reduceMotionEnabled = useReducedMotion();
@@ -171,7 +193,7 @@ describe('check-design-system-guardrails', () => {
 	it('fails when the shared RTL directionality contracts disappear', () => {
 		const root = createFixture(`
 			import { withSpring } from 'react-native-reanimated';
-			import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+			import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
 
 			export function MotionCard() {
 				const reduceMotionEnabled = useReducedMotion();
@@ -197,6 +219,32 @@ describe('check-design-system-guardrails', () => {
 		expect(output).toContain('rtl-directional-icons');
 	});
 
+	it('fails when the generated checklist catalog still reports open items', () => {
+		const root = createFixture(`
+			import { withSpring } from 'react-native-reanimated';
+			import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+
+			export function MotionCard() {
+				const reduceMotionEnabled = useReducedMotion();
+				const opacity = reduceMotionEnabled ? 1 : withSpring(1);
+
+				return opacity ? null : null;
+			}
+		`);
+		writeFiles(root, {
+			'src/design-system/generated/uiLibraryCatalog.ts': [
+				'export const UI_LIBRARY_ITEMS = [];',
+				'export const UI_LIBRARY_STATS = { open: 1 };',
+				'',
+			].join('\n'),
+		});
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('ui-library-checklist-open-items');
+	});
+
 	it('fails when a shared component imports Animated from react-native', () => {
 		const root = createFixture(`
 			import { Animated } from 'react-native';
@@ -210,6 +258,26 @@ describe('check-design-system-guardrails', () => {
 		const output = runCheckFailure(root);
 
 		expect(output).toContain('react-native-animated');
+		expect(output).toContain('MotionCard.tsx');
+	});
+
+	it('fails when design-system code imports legacy shared layers outside the package boundary', () => {
+		const root = createFixture(`
+			import { withSpring } from 'react-native-reanimated';
+			import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+
+			export function MotionCard() {
+				const reduceMotionEnabled = useReducedMotion();
+				const opacity = reduceMotionEnabled ? 1 : withSpring(1);
+
+				return opacity ? null : null;
+			}
+		`);
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('legacy-hook-import');
 		expect(output).toContain('MotionCard.tsx');
 	});
 });

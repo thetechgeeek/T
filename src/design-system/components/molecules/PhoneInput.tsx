@@ -7,11 +7,14 @@ import {
 	type TextInput as NativeTextInput,
 	type ViewStyle,
 } from 'react-native';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import {
+	announceForScreenReader,
+	buildFocusRingStyle,
+} from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 const PHONE_DIGITS = 10;
 const PHONE_WITH_COUNTRY_CODE_DIGITS = 12;

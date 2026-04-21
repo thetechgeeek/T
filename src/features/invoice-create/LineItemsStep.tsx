@@ -1,18 +1,18 @@
 import React from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { TextInput as AppTextInput } from '@/src/design-system/components/atoms/TextInput';
-import { FormField } from '@/src/design-system/components/molecules/FormField';
-import { layout } from '@/src/theme/layout';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { TextInput as AppTextInput } from '@/src/design-system';
+import { FormField } from '@/src/design-system';
+import { layout } from '@/src/design-system/foundation';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
+import { SkeletonBlock } from '@/src/design-system';
 import type { InventoryItem } from '@/src/types/inventory';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_SOFT, SIZE_DROPDOWN_MAX_HEIGHT } from '@/src/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { withOpacity } from '@/src/design-system/foundation';
+import { OPACITY_TINT_SOFT, SIZE_DROPDOWN_MAX_HEIGHT } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 interface Props {
 	lineItems: InvoiceLineItemInput[];

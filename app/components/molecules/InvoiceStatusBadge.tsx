@@ -1,6 +1,6 @@
 import React from 'react';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import type { BadgeVariant } from '@/src/design-system/components/atoms/Badge';
+import { Badge } from '@/src/design-system';
+import type { BadgeVariant } from '@/src/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
 
 export type InvoiceStatus = 'paid' | 'partial' | 'unpaid';

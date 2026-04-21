@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-native';
 import React from 'react';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation';
 import { useThemeTokens } from '../useThemeTokens';
 
 const wrapper = ({ children }: { children: React.ReactNode }) =>

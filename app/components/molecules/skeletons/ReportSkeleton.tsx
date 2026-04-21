@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { OVERLAY_COLOR_SEPARATOR } from '@/src/theme/uiMetrics';
+import { SkeletonBlock } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { OVERLAY_COLOR_SEPARATOR } from '@/src/design-system/foundation';
 
 /**
  * P0.12 — Report skeleton: summary card + 8 data rows

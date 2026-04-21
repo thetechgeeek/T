@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useTheme } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { syncI18nRtlPreference } from '@/src/i18n/rtl';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import type { ThemeMode } from '@/src/theme/index';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { withOpacity } from '@/src/utils/color';
+import { ThemedText } from '@/src/design-system';
+import type { ThemeMode } from '@/src/design-system/foundation';
+import { Screen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { withOpacity } from '@/src/design-system/foundation';
 import {
 	BORDER_WIDTH_BASE,
 	BORDER_WIDTH_STRONG,
@@ -18,8 +18,8 @@ import {
 	SIZE_OPTION_CARD_MIN_HEIGHT,
 	SIZE_RADIO_INNER,
 	SIZE_RADIO_OUTER,
-} from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+} from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 const LANG_KEY = '@app/language';
 const DATE_FORMAT_KEY = '@app/dateFormat';

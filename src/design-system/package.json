@@ -1,0 +1,12 @@
+{
+	"name": "@tilemaster/design-system",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./index.ts",
+	"types": "./index.ts",
+	"react-native": "./index.ts",
+	"exports": {
+		".": "./index.ts",
+		"./foundation": "./foundation/index.ts"
+	}
+}

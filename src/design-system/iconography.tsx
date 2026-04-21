@@ -3,7 +3,7 @@ import { StyleSheet, type StyleProp, type TextStyle, type ViewStyle } from 'reac
 import { MaterialIcons } from '@expo/vector-icons';
 import type { LucideIcon } from 'lucide-react-native';
 import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 
 const MAX_ICON_FONT_SCALE = 1.35;
 

@@ -32,7 +32,7 @@
 - Supported shared components use Reanimated shared values and animated styles for motion on the UI thread.
 - The supported design-system surface should not import `Animated` from `react-native`; if legacy/app-only code uses it outside the DS, `nativeDriver: true` is required.
 - Motion values come from theme animation tokens or shared animation helpers, not ad hoc durations or spring constants.
-- Reduced motion is read through `useReducedMotion()` and applied before invoking Reanimated, Animated, or LayoutAnimation work. Navigator-owned screen choreography beyond that boundary belongs in `docs/UI_Integration_Checklist.md`.
+- Reduced motion is read through `useReducedMotion()` and applied before invoking Reanimated, Animated, or LayoutAnimation work. Shell-owned navigator choreography beyond that boundary belongs in `docs/UI_Integration_Checklist.md`.
 - Continuous background motion is disallowed on work surfaces. Repeating shimmer is limited to loading placeholders and disabled under reduced motion.
 
 ## Supported Motion Patterns

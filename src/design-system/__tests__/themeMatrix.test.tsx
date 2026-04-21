@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
-import type { ThemeMode, ThemePresetId } from '@/src/theme';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import type { ThemeMode, ThemePresetId } from '@/src/design-system/foundation/theme';
 import { ThemeSnapshotPreview } from '../components/ThemeSnapshotPreview';
 
 const PRESET_MATRIX: ReadonlyArray<{ presetId: ThemePresetId; mode: ThemeMode }> = [

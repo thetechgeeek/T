@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, Alert } from 'react-native';
 import { FileJson, Upload } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { GSTR1_COL_AMT_FLEX } from '@/constants/reportLayout';
 import { GSTR1_PERIOD_CHIPS, MOCK_GSTR1_B2B, MOCK_GSTR1_B2C } from '@/src/mocks/reports/gstr1';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 function getCurrentPeriod() {
 	const d = new Date();

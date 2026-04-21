@@ -5,18 +5,18 @@ import {
 	OVERLAY_COLOR_STRONG,
 	OPACITY_TINT_LIGHT,
 	SIZE_AVATAR_MD,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import React, { useState } from 'react';
 import { View, Switch, StyleSheet, Pressable, TextInput, Modal, Alert } from 'react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { SettingsCard } from '@/src/design-system/components/molecules/SettingsCard';
-import { withOpacity } from '@/src/utils/color';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { SettingsCard } from '@/src/design-system';
+import { withOpacity } from '@/src/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 type Role = 'salesperson' | 'admin';
 

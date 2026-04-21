@@ -3,17 +3,17 @@ import { View, StyleSheet, TouchableOpacity, Linking, Alert } from 'react-native
 import { useLocalSearchParams } from 'expo-router';
 import { MessageCircle, ShoppingCart, CreditCard } from 'lucide-react-native';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { Card } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
 import { CustomerDetailSkeleton } from '@/app/components/molecules/skeletons/CustomerDetailSkeleton';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-import { SIZE_THUMBNAIL_MD } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
+import { SIZE_THUMBNAIL_MD } from '@/src/design-system/foundation';
 import type { Supplier } from '@/src/types/supplier';
 import type { UUID } from '@/src/types/common';
 

@@ -12,24 +12,24 @@ import {
 	DollarSign,
 	MoreHorizontal,
 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { FilterBar } from '@/src/design-system/components/molecules/FilterBar';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { FilterBar } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { EmptyState } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { layout } from '@/src/theme/layout';
-import { withOpacity } from '@/src/utils/color';
+import { layout } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
 import {
 	FAB_OFFSET_RIGHT,
 	OPACITY_TINT_LIGHT,
 	RADIUS_FAB,
 	SIZE_FAB,
 	SIZE_ICON_CONTAINER,
-} from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+} from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 // ---------------------------------------------------------------------------
 // Types

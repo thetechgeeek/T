@@ -14,21 +14,21 @@ import {
 	ArrowUpRight,
 } from 'lucide-react-native';
 import { paymentService } from '@/src/services/paymentService';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Divider } from '@/src/design-system/components/atoms/Divider';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Badge } from '@/src/design-system';
+import { Divider } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { SkeletonBlock } from '@/src/design-system';
 import type { Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { withOpacity } from '@/src/design-system/foundation';
+import { OPACITY_TINT_LIGHT } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 const ID_TAIL_DIGITS = 6;
 

@@ -8,14 +8,14 @@ import {
 	OPACITY_SEPARATOR,
 	SIZE_MODAL_HANDLE_HEIGHT,
 	SIZE_MODAL_HANDLE_WIDTH,
-} from '@/src/theme/uiMetrics';
-import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/theme/layoutMetrics';
-import { withOpacity } from '@/src/utils/color';
+} from '@/src/design-system/foundation';
+import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
 import { X } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useTheme } from '@/src/design-system/foundation';
+import { Button } from '@/src/design-system';
+import { TextInput } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
 import type { UUID } from '@/src/types/common';
 import { paymentService } from '@/src/services/paymentService';
 import { useLocale } from '@/src/hooks/useLocale';

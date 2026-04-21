@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_SUBTLE } from '@/src/theme/uiMetrics';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
+import { OPACITY_TINT_SUBTLE } from '@/src/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 type VerifyState = 'idle' | 'running' | 'complete';
 

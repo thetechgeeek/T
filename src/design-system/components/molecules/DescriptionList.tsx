@@ -11,9 +11,12 @@ import { Copy, Eye, EyeOff } from 'lucide-react-native';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
 import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import {
+	announceForScreenReader,
+	buildFocusRingStyle,
+} from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 export type DescriptionListLayout = 'vertical' | 'horizontal';
 export type DescriptionListDensity = 'compact' | 'default';

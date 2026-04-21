@@ -1,6 +1,5 @@
 import React from 'react';
-import DesignLibraryScreen from '@/src/design-system/DesignLibraryScreen';
-import { ThemeProvider, useTheme } from '@/src/theme/ThemeProvider';
+import { DesignLibraryScreen, ThemeProvider, useTheme } from '@/src/design-system';
 
 export default function DesignSystemRoute() {
 	const { mode } = useTheme();

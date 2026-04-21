@@ -44,4 +44,30 @@ describe('design-system companion docs contract', () => {
 		expect(normalizedResilienceDoc).toContain('partial');
 		expect(normalizedResilienceDoc).toContain('stale');
 	});
+
+	it('documents the visual review gates for realistic enterprise content', () => {
+		const reviewDoc = readDoc('DESIGN_SYSTEM_REVIEW_GATES.md');
+		const normalizedReviewDoc = reviewDoc.toLowerCase();
+
+		expect(normalizedReviewDoc).toContain('hierarchy');
+		expect(normalizedReviewDoc).toContain('accent budget');
+		expect(normalizedReviewDoc).toContain('surface calm');
+		expect(normalizedReviewDoc).toContain('ugly data');
+		expect(normalizedReviewDoc).toContain('translated copy');
+		expect(normalizedReviewDoc).toContain('phone and tablet');
+		expect(normalizedReviewDoc).toContain('reduced motion');
+		expect(normalizedReviewDoc).toContain('max font scale');
+	});
+
+	it('documents the RN-first verification stack and screenshot proof lanes', () => {
+		const verificationDoc = readDoc('DESIGN_SYSTEM_VERIFICATION_STRATEGY.md');
+
+		expect(verificationDoc).toContain('npm run validate');
+		expect(verificationDoc).toContain('Jest + React Native Testing Library');
+		expect(verificationDoc).toContain('Maestro');
+		expect(verificationDoc).toContain('ThemeSnapshotPreview.tsx');
+		expect(verificationDoc).toContain('check-design-system-visual-regression.mjs');
+		expect(verificationDoc).toContain('FlatList');
+		expect(verificationDoc).toContain('German');
+	});
 });

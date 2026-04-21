@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 import DesignLibraryScreen from '../DesignLibraryScreen';
 import { getDesignSystemCopy, type DesignSystemLocale } from '../copy';
 

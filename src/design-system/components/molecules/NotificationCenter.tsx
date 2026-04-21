@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { SectionList, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';

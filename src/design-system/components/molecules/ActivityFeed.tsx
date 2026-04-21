@@ -14,9 +14,9 @@ import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { Card, type CardDensity } from '@/src/design-system/components/atoms/Card';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { announceForScreenReader } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { announceForScreenReader } from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 export interface ActivityFeedItem {
 	id: string;

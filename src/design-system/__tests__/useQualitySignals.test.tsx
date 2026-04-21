@@ -2,7 +2,7 @@ import type React from 'react';
 import { AccessibilityInfo, I18nManager, PixelRatio } from 'react-native';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import { useDesignSystemQualitySignals } from '../useQualitySignals';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
 	<ThemeProvider persist={false}>{children}</ThemeProvider>

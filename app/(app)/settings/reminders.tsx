@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { View, Switch, StyleSheet, Pressable, TextInput } from 'react-native';
 
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { SettingsCard } from '@/src/design-system/components/molecules/SettingsCard';
-import { withOpacity } from '@/src/utils/color';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { SettingsCard } from '@/src/design-system';
+import { withOpacity } from '@/src/design-system/foundation';
 import {
 	BORDER_WIDTH_BASE,
 	OPACITY_TINT_LIGHT,
 	SIZE_DAYS_INPUT_WIDTH,
 	SIZE_TEXTAREA_HEIGHT,
-} from '@/theme/uiMetrics';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+} from '@/src/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 type Channel = 'whatsapp' | 'sms' | 'both';
 

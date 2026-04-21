@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { SkeletonBlock } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 
 export function CustomerDetailSkeleton() {
 	const { s, r } = useThemeTokens();

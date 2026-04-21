@@ -12,9 +12,9 @@ import {
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { triggerDesignSystemHaptic, type DesignSystemHaptic } from '@/src/design-system/haptics';
 import { buildInProgressLabel, DEFAULT_ACTION_LABEL } from '@/src/design-system/microcopy';
-import { buildFocusRingStyle } from '@/src/utils/accessibility';
-import { useReducedMotion } from '@/src/hooks/useReducedMotion';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
+import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 
 export interface ButtonProps extends Omit<PressableProps, 'style'> {

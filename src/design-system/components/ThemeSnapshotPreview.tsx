@@ -9,7 +9,7 @@ import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
 import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
 import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
 import {
 	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,
 	DESIGN_SYSTEM_READ_ONLY_FIELDS,

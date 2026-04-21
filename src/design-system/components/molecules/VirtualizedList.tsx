@@ -3,7 +3,7 @@ import { RefreshControl, SectionList, View, type StyleProp, type ViewStyle } fro
 import { FlashList } from '@shopify/flash-list';
 import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
 import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 
 export type VirtualizedListDensity = 'compact' | 'default';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { SkeletonBlock } from './SkeletonBlock';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
 
 interface SkeletonRowProps {
 	/** Show a square avatar/icon placeholder on the left */

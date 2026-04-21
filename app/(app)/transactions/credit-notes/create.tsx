@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
+import { SIZE_INPUT_HEIGHT } from '@/src/design-system/foundation';
 import {
 	View,
 	ScrollView,
@@ -10,17 +10,17 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { X, Plus, Trash2 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { TextInput } from '@/src/design-system';
+import { DatePickerField } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 type ReasonOption = 'Defective' | 'Wrong Item' | 'Price Difference' | 'Short Supply' | 'Other';
 

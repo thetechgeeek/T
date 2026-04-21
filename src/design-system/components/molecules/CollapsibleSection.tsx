@@ -4,16 +4,16 @@ import { ChevronDown } from 'lucide-react-native';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
 import { Card } from '@/src/design-system/components/atoms/Card';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useReducedMotion } from '@/src/hooks/useReducedMotion';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
 import {
 	announceForScreenReader,
 	buildFocusRingStyle,
 	isAccessibilityAction,
 	mapAccessibilityActionNames,
-} from '@/src/utils/accessibility';
-import { animateNextLayout } from '@/src/utils/animateNextLayout';
+} from '@/src/design-system/foundation/utils/accessibility';
+import { animateNextLayout } from '@/src/design-system/foundation/utils/animateNextLayout';
 
 export interface CollapsibleSectionProps {
 	title: string;

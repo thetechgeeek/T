@@ -1,6 +1,6 @@
 import React, { forwardRef, useMemo, useState } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { Button } from '@/src/design-system/components/atoms/Button';

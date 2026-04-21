@@ -1,0 +1,11 @@
+{
+	"name": "@tilemaster/ui-shell",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./index.ts",
+	"types": "./index.ts",
+	"react-native": "./index.ts",
+	"exports": {
+		".": "./index.ts"
+	}
+}

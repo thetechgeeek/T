@@ -2,19 +2,19 @@ import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, RefreshControl, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
-import { layout } from '@/src/theme/layout';
-import { withOpacity } from '@/src/utils/color';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
+import { layout } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { SectionHeader } from '@/src/design-system';
 
 // Atomic Design Components
-import { StatCard } from '@/src/design-system/components/molecules/StatCard';
+import { StatCard } from '@/src/design-system';
 import { DashboardSkeleton } from '@/app/components/molecules/skeletons/DashboardSkeleton';
 import { DashboardHeader } from '@/app/components/organisms/DashboardHeader';
 import { QuickActionsGrid } from '@/app/components/organisms/QuickActionsGrid';
@@ -36,7 +36,7 @@ import {
 	SIZE_BUSINESS_TILE_MIN_HEIGHT,
 	SIZE_CHIP_HEIGHT,
 	SIZE_FAB_ICON,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 
 // ---------------------------------------------------------------------------
 // Helpers

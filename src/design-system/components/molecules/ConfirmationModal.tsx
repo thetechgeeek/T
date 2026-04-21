@@ -8,17 +8,20 @@ import {
 	subscribeModalStack,
 } from '@/src/design-system/modalStack';
 import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
-import { useControllableState } from '@/src/hooks/useControllableState';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
 import {
 	announceForScreenReader,
 	buildFocusRingStyle,
 	mapAccessibilityActionNames,
 	setAccessibilityFocus,
-} from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
+} from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { TextInput } from '@/src/design-system/components/atoms/TextInput';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import {
+	SPACING_PX,
+	TOUCH_TARGET_MIN_PX,
+} from '@/src/design-system/foundation/theme/layoutMetrics';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers -- these widths define the explicit small / medium / large dialog variants. */
 const MODAL_MAX_WIDTH = {

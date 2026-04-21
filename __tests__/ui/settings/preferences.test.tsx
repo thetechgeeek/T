@@ -24,27 +24,48 @@ jest.mock('i18next', () => {
 
 // Mock useTheme to support theme changes
 const mockSetThemeMode = jest.fn();
-jest.mock('@/src/theme/ThemeProvider', () => {
-	const React = require('react');
-	const { buildTheme } = require('@/src/theme/colors');
+jest.mock('@/src/design-system/foundation', () => {
+	const actual = jest.requireActual('@/src/design-system/foundation');
+	const { buildTheme } = actual;
 	const { DEFAULT_RUNTIME_QUALITY_SIGNALS } = require('@/src/design-system/runtimeSignals');
-	const actual = jest.requireActual('@/src/theme/ThemeProvider');
+	const theme = buildTheme(false);
+	const runtime = DEFAULT_RUNTIME_QUALITY_SIGNALS;
+
 	return {
 		...actual,
 		useTheme: () => ({
-			theme: buildTheme(false),
+			theme,
 			isDark: false,
 			mode: 'light',
 			presetId: 'baseline',
-			runtime: DEFAULT_RUNTIME_QUALITY_SIGNALS,
+			runtime,
 			availablePresets: [],
 			setThemeMode: mockSetThemeMode,
 			setThemePreset: jest.fn(),
 			cycleThemePreset: jest.fn(),
 			toggleTheme: jest.fn(),
 		}),
-		ThemeProvider: ({ children }: { children: React.ReactNode }) =>
-			React.createElement(React.Fragment, null, children),
+		useThemeTokens: () => ({
+			theme,
+			runtime,
+			isDark: theme.isDark,
+			presetId: 'baseline',
+			meta: theme.meta,
+			c: theme.colors,
+			s: theme.spacing,
+			sem: theme.semanticSpacing,
+			densitySpacing: theme.densitySpacing,
+			letters: theme.letterSpacing,
+			r: theme.borderRadius,
+			bw: theme.borderWidth,
+			opacity: theme.opacity,
+			visual: theme.visual,
+			typo: theme.typography,
+			animation: theme.animation,
+			components: theme.components,
+			shadows: theme.shadows,
+			elevation: theme.elevation,
+		}),
 	};
 });
 

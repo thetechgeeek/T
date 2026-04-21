@@ -23,24 +23,24 @@ import {
 	ChevronUp,
 	Edit2,
 } from 'lucide-react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { pdfService } from '@/src/services/pdfService';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Divider } from '@/src/design-system/components/atoms/Divider';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
+import { ThemedText } from '@/src/design-system';
+import { Screen } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Divider } from '@/src/design-system';
+import { Badge } from '@/src/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { SectionHeader } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
 import { InvoiceDetailSkeleton } from '@/app/components/molecules/skeletons/InvoiceDetailSkeleton';
-import { layout } from '@/src/theme/layout';
+import { layout } from '@/src/design-system/foundation';
 import { PaymentModal } from '@/app/components/organisms/PaymentModal';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { SIZE_BUTTON_HEIGHT_SM } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { SIZE_BUTTON_HEIGHT_SM } from '@/src/design-system/foundation';
 import type { UUID } from '@/src/types/common';
-import type { BadgeVariant } from '@/src/design-system/components/atoms/Badge';
+import type { BadgeVariant } from '@/src/design-system';
 import type { PaymentStatus } from '@/src/types/invoice';
 
 // ─── helpers ────────────────────────────────────────────────────────────────

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SIZE_EMPTY_STATE_ICON } from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_EMPTY_STATE_ICON } from '@/src/design-system/foundation/theme/uiMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 interface EmptyStateProps {
 	title: string;

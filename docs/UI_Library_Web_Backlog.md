@@ -3,7 +3,247 @@
 > Companion to `docs/UI_Library_Checklist.md`.
 > The main library checklist is currently scoped to `Common` + `Mobile (React Native)`.
 > This file parks reusable web-only backlog until the web surface is intentionally brought into scope.
-> Host-app routing, deep-linking, and runtime wiring still belong in `docs/UI_Integration_Checklist.md`.
+> Shell routing, deep-linking, and runtime wiring still belong in `docs/UI_Integration_Checklist.md`.
+
+## 1. Design System Architecture
+
+### Theming Engine
+
+#### Web
+
+- [ ] CSS Custom Properties re-assignment for theme switching (no page reload)
+- [ ] Nested theme scoping (a card can have a different theme than the page via CSS cascade)
+- [ ] `prefers-color-scheme` media query detection
+- [ ] `prefers-contrast` media query detection
+
+### Typography System
+
+#### Web
+
+- [ ] `font-display: swap` on all font faces
+- [ ] Font preload directives (`<link rel="preload">`)
+- [ ] `woff2` format for all custom fonts
+- [ ] Line length (measure) max `75ch` enforced for body text
+- [ ] Heading hierarchy (`h1`-`h6`) is semantic HTML, styled with classes
+
+### Spacing & Layout Grid
+
+#### Web
+
+- [ ] Mobile grid (4 columns, 16px gutter, 16px margin)
+- [ ] Tablet grid (8 columns, 24px gutter, 24px margin)
+- [ ] Desktop grid (12 columns, 24px gutter, 32px margin)
+- [ ] Wide grid (12 columns, 32px gutter, max-width 1440px)
+- [ ] CSS Grid and Flexbox layout utilities
+
+### Elevation & Z-Index
+
+#### Web
+
+- [ ] All z-index values in a single constants file (no magic numbers)
+- [ ] CSS `box-shadow` tokens per elevation level
+
+### Iconography
+
+#### Web
+
+- [ ] SVG component delivery (no icon fonts)
+- [ ] Decorative icons use `aria-hidden="true"`
+- [ ] Meaningful icons have `aria-label` or visually hidden label
+- [ ] Tree-shaken icon imports (never bundle entire icon library)
+
+## 2. Component Contract Standard
+
+### API Design Contracts
+
+#### Web
+
+- [ ] Polymorphic `as` prop / `asChild` to change underlying HTML element
+- [ ] `className` / `style` prop passthrough on all components (escape hatch)
+- [ ] `data-testid` prop support on all components
+- [ ] Ref forwarded to root DOM node
+
+### Accessibility Contract (Per Component)
+
+#### Web
+
+- [ ] Correct ARIA roles, states (`aria-expanded`, `aria-selected`, `aria-busy`), and properties
+- [ ] Focus indicator: 3:1 contrast (WCAG 2.4.11) via `:focus-visible`
+- [ ] `data-testid` attributes for test targeting
+- [ ] `aria-live` regions for dynamic content announcements
+
+### Theming Contract (Per Component)
+
+#### Web
+
+- [ ] High Contrast Mode (Windows/macOS) tested and functional
+- [ ] `prefers-reduced-motion` respected via CSS media query
+
+### Testing Contract (Per Component)
+
+#### Web
+
+- [ ] Visual regression snapshot: all states × all themes (Chromatic / Percy)
+- [ ] Accessibility audit: `axe-core` / `jest-axe` — zero violations per build
+- [ ] Storybook `play()` interaction tests
+
+### Documentation Contract (Per Component)
+
+#### Web
+
+- [ ] Storybook story for each variant/state
+- [ ] Accessibility notes (keyboard map, ARIA decisions)
+
+## 3. Components — Reusable UI Blocks
+
+### Inputs
+
+#### Web
+
+- [ ] Select: virtualized option list (for >500 options via DOM windowing)
+- [ ] Checkbox / Radio: group wrapped in `fieldset` + `legend`
+- [ ] Date Picker: keyboard navigation within calendar grid (arrow keys, page up/down)
+- [ ] Token / Pill Input: paste-to-split (comma/newline), drag-to-reorder (HTML5 DnD)
+- [ ] File Upload: keyboard-accessible drag fallback
+- [ ] Slider: keyboard arrow key support (native `<input type="range">`)
+- [ ] Rich Text Editor
+    - [ ] WYSIWYG mode
+    - [ ] Markdown mode
+    - [ ] Controlled (serializable state)
+    - [ ] Mention (@user)
+    - [ ] Link insertion / unfurling
+    - [ ] Accessible toolbar
+- [ ] Signature / Freehand Input (canvas-based)
+
+### Actions
+
+#### Web
+
+- [ ] Icon-only buttons have `aria-label`
+- [ ] Floating Action Button (FAB)
+- [ ] Menu Button (trigger + dropdown menu)
+- [ ] Link (`<a>`, distinct from `<button>` — navigates, not activates)
+- [ ] Dropdown Menu (standalone composable)
+    - [ ] Nested sub-menus
+    - [ ] Keyboard arrow navigation
+    - [ ] Dividers and group labels
+    - [ ] Disabled items with tooltip
+
+### Feedback
+
+#### Web
+
+- [ ] Toast: `aria-live="polite"` (info/success) / `aria-live="assertive"` (error)
+- [ ] Toast: pause-on-hover auto-dismiss
+- [ ] Banner: `role="alert"` for errors
+- [ ] Skeleton shimmer: disabled under `@media (prefers-reduced-motion: reduce)`
+
+### Navigation
+
+#### Web
+
+- [ ] Navbar / Topbar
+    - [ ] Skip-navigation link (first DOM element, visible on focus)
+    - [ ] Responsive collapse to hamburger
+- [ ] Sidebar / Left Navigation
+    - [ ] Collapsible (icon-only mode)
+    - [ ] Nested categories
+    - [ ] Active route highlight
+    - [ ] With badge/count on nav item
+- [ ] Tabs: vertical, overflow (scrollable tabs)
+- [ ] Breadcrumbs
+    - [ ] With ellipsis truncation for deep hierarchies
+    - [ ] `aria-current="page"` on last item
+- [ ] Pagination
+    - [ ] Standard page controls
+    - [ ] Items-per-page selector
+    - [ ] Jump-to-page input
+- [ ] Infinite Scroll
+    - [ ] Intersection Observer trigger
+    - [ ] "Load More" fallback button
+    - [ ] Loading indicator between batches
+- [ ] Tree View
+    - [ ] Expand / Collapse
+    - [ ] Lazy-load children on expand
+    - [ ] Selectable / multi-select nodes
+- [ ] Mega Menu
+- [ ] Command Palette (`Cmd+K`)
+    - [ ] Fuzzy search
+    - [ ] Recent searches
+    - [ ] Grouped results (Pages, Actions, Users, etc.)
+- [ ] Accordion / Collapsible
+    - [ ] Single / multi expand mode
+    - [ ] Default expanded state
+    - [ ] Keyboard: Enter/Space to toggle, arrow keys between headers
+
+### Data Display
+
+#### Web
+
+- [ ] Data Grid / Advanced Table
+    - [ ] Row + column virtualization
+    - [ ] Column resizing / reordering / show-hide / pinning
+    - [ ] Single + multi-column sort (client + server-side)
+    - [ ] Row selection (single, multi, select-all-page, select-all-cross-page)
+    - [ ] Indeterminate checkbox for partial selection
+    - [ ] Inline column filters (text, number range, date range, enum multi-select)
+    - [ ] Master-detail / row expansion
+    - [ ] Custom cell renderers (sparklines, status pills, avatar groups)
+    - [ ] Row hover actions / right-click context menu
+    - [ ] Inline cell editing with dirty-cell indicator
+    - [ ] Grouped rows with aggregations (sum, avg, count)
+    - [ ] Density toggle (comfortable, compact, spacious)
+    - [ ] Export (CSV, Excel, JSON)
+    - [ ] Persistent column state per user
+    - [ ] Keyboard: arrow keys for cells, Enter to activate, F2 to edit
+    - [ ] Accessible grid semantics (role="grid", columnheader, gridcell)
+- [ ] Sortable List (drag-to-reorder via HTML5 DnD / library)
+    - [ ] Drag handle / drop placeholder
+    - [ ] Keyboard reorder (Space to lift, arrows to move)
+- [ ] Tree Table (hierarchical rows in a grid)
+- [ ] Code Block
+    - [ ] Syntax highlighting
+    - [ ] Line numbers
+    - [ ] Copy-to-clipboard
+    - [ ] Jump-to-line
+    - [ ] Virtual scroll for large content
+- [ ] Log Viewer
+    - [ ] Virtual scroll (100k+ lines)
+    - [ ] ANSI color code support
+    - [ ] Line numbers
+    - [ ] Search / filter within log
+- [ ] Charts: responsive SVG + CSS, keyboard-navigable data points
+- [ ] Avatar Group: tooltip listing hidden members on hover
+- [ ] Diff / Change View
+    - [ ] Side-by-side / inline mode
+    - [ ] Character-level diff highlighting
+    - [ ] Collapsible unchanged sections
+- [ ] Kanban Board
+    - [ ] Drag-and-drop within / across columns (HTML5 DnD)
+    - [ ] Keyboard drag support
+    - [ ] Column WIP limits
+- [ ] Image / Media Viewer
+    - [ ] Lightbox overlay
+    - [ ] Scroll-to-zoom
+    - [ ] Gallery navigation (prev/next, keyboard arrows, Escape to close)
+    - [ ] Loading placeholder
+
+### Overlays
+
+#### Web
+
+- [ ] Modal: scroll-lock on body; scrollable content within modal; fullscreen variant
+- [ ] Drawer / Slide-over / Sheet
+    - [ ] Left / Right slide
+    - [ ] Bottom sheet (mobile viewport)
+    - [ ] Small / Medium / Large / Fullscreen
+    - [ ] Persistent docked variant
+    - [ ] Focus trap + Escape to close
+- [ ] Tooltip: appears on hover AND focus; show delay 300ms; auto-repositions to avoid viewport clipping
+- [ ] Popover: auto-repositions to avoid viewport clipping
+- [ ] Context Menu (right-click)
+    - [ ] Keyboard trigger (Shift+F10 / Menu key)
+    - [ ] Touch long-press equivalent
 
 ## 4. Patterns — Reusable Compositions
 
@@ -304,3 +544,58 @@
 
 - [ ] Landscape and portrait layouts tested for all pages
 - [ ] Orientation-specific adjustments where needed
+
+## 13. Testing Strategy
+
+### Testing Pyramid
+
+#### Web
+
+- [ ] Static: Stylelint, Design Token Lint
+- [ ] Unit: Vitest / Jest + Testing Library
+- [ ] Integration: Testing Library (component composition, page-level)
+- [ ] E2E: Playwright
+
+### Component-Level Tests
+
+#### Web
+
+- [ ] Storybook `play()` interaction tests
+- [ ] DOM assertions: aria attributes, focus, `data-state` after interaction
+
+### Accessibility Tests
+
+#### Web
+
+- [ ] Automated (CI): `jest-axe` / `axe-playwright` on every component + route — zero violations gate
+- [ ] Color contrast: automated via `axe-core` + manual spot-checks
+- [ ] Zoom: 200% and 400% — no clipping or overlapping
+
+### Visual Regression Tests
+
+#### Web
+
+- [ ] All viewports: mobile, tablet, desktop
+- [ ] Interaction snapshots after Storybook `play()` completes
+- [ ] Tools: Chromatic, Percy, or Playwright `toHaveScreenshot()`
+
+### Enterprise x Premium Quality Review
+
+#### Web
+
+- [ ] Storybook review page shows premium showcase shell and operational dense shell side by side
+- [ ] Representative screens reviewed at mobile, tablet, desktop, and wide densities for hierarchy drift
+
+### Performance Tests
+
+#### Web
+
+- [ ] Bundle size regression: `size-limit` per component
+- [ ] Rendering: React Profiler detects unnecessary re-renders
+- [ ] Benchmark: Data Grid + Rich Text Editor with large datasets
+
+### i18n Tests
+
+#### Web
+
+- [ ] Pseudo-localization: padded/accented strings to reveal truncation and overflow

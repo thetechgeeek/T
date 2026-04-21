@@ -1,11 +1,11 @@
 import { Tabs } from 'expo-router';
 import { View, StyleSheet, Platform } from 'react-native';
 import { Home, Package, QrCode, FileText, MoreHorizontal } from 'lucide-react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import type { ErrorBoundaryProps } from 'expo-router';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
 import {
 	FAB_OFFSET_BOTTOM,
 	OPACITY_GLOW,
@@ -13,8 +13,8 @@ import {
 	RADIUS_FAB,
 	SIZE_FAB,
 	SIZE_TAB_BAR_IOS,
-} from '@/theme/uiMetrics';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+} from '@/src/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 	const { t } = useLocale();

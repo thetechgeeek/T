@@ -1,8 +1,8 @@
 import React, { forwardRef, useState } from 'react';
 import { Pressable, Platform, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { triggerDesignSystemHaptic, type DesignSystemHaptic } from '@/src/design-system/haptics';
-import { buildFocusRingStyle } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 
 export interface IconButtonProps {

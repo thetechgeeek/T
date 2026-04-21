@@ -4,10 +4,10 @@ import { renderWithTheme } from '@/__tests__/utils/renderWithTheme';
 import DesignLibraryScreen from '../DesignLibraryScreen';
 import { DESIGN_LIBRARY_OVERVIEW } from '../catalog';
 import { getDesignSystemCopy } from '../copy';
-import { setAccessibilityFocus } from '@/src/utils/accessibility';
+import { setAccessibilityFocus } from '@/src/design-system/foundation/utils/accessibility';
 
-jest.mock('@/src/utils/accessibility', () => {
-	const actual = jest.requireActual('@/src/utils/accessibility');
+jest.mock('@/src/design-system/foundation/utils/accessibility', () => {
+	const actual = jest.requireActual('@/src/design-system/foundation/utils/accessibility');
 	return {
 		...actual,
 		setAccessibilityFocus: jest.fn(),
@@ -90,8 +90,10 @@ describe('DesignLibraryScreen', () => {
 		expect(getByText('State Proof Deck')).toBeTruthy();
 		expect(getAllByText('Partial recovery').length).toBeGreaterThan(0);
 		expect(getAllByText('Stale but still usable').length).toBeGreaterThan(0);
-		expect(getByText(String(DESIGN_LIBRARY_OVERVIEW.total))).toBeTruthy();
-		expect(getByText(String(DESIGN_LIBRARY_OVERVIEW.commonMobile))).toBeTruthy();
+		expect(getAllByText(String(DESIGN_LIBRARY_OVERVIEW.total)).length).toBeGreaterThan(0);
+		expect(getAllByText(String(DESIGN_LIBRARY_OVERVIEW.commonMobile)).length).toBeGreaterThan(
+			0,
+		);
 		expect(getByText('Supported Component Catalog')).toBeTruthy();
 		expect(getByText('Checklist Explorer')).toBeTruthy();
 		expect(getByText(`All (${DESIGN_LIBRARY_OVERVIEW.total})`)).toBeTruthy();

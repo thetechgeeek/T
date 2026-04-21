@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { Plus, Trash2 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_ROW_HIGHLIGHT } from '@/src/theme/uiMetrics';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { DatePickerField } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
+import { OPACITY_ROW_HIGHLIGHT } from '@/src/design-system/foundation';
 import { useRouter } from 'expo-router';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 interface LineItem {
 	id: string;

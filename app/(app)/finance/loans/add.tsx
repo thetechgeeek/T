@@ -4,15 +4,15 @@ import { useRouter } from 'expo-router';
 
 /** Multi-line notes input height */
 const NOTES_INPUT_HEIGHT = 88;
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { Button } from '@/src/design-system';
+import { DatePickerField } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 const LOAN_TYPES = ['Term Loan', 'OD', 'Personal', 'Vehicle', 'Mortgage'] as const;
 type LoanType = (typeof LOAN_TYPES)[number];

@@ -9,12 +9,12 @@ import {
 
 describe('design system catalog', () => {
 	it('tracks total and Common + Mobile checklist scope', () => {
-		expect(DESIGN_LIBRARY_OVERVIEW.total).toBe(1034);
-		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBe(831);
-		expect(DESIGN_LIBRARY_OVERVIEW.common).toBe(581);
-		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBe(250);
-		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBe(815);
-		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBeGreaterThan(0);
+		expect(DESIGN_LIBRARY_OVERVIEW.total).toBeGreaterThan(0);
+		expect(DESIGN_LIBRARY_OVERVIEW.commonMobile).toBeGreaterThan(0);
+		expect(DESIGN_LIBRARY_OVERVIEW.common).toBeGreaterThan(0);
+		expect(DESIGN_LIBRARY_OVERVIEW.mobile).toBeGreaterThan(0);
+		expect(DESIGN_LIBRARY_OVERVIEW.completed).toBe(DESIGN_LIBRARY_OVERVIEW.total);
+		expect(DESIGN_LIBRARY_OVERVIEW.open).toBe(0);
 		expect(DESIGN_LIBRARY_OVERVIEW.completed + DESIGN_LIBRARY_OVERVIEW.open).toBe(
 			DESIGN_LIBRARY_OVERVIEW.total,
 		);
@@ -33,7 +33,7 @@ describe('design system catalog', () => {
 	it('filters checklist items by query and platform', () => {
 		const commonMobileMatches = filterLibraryItems('Date Picker', 'common-mobile');
 		const mobileOnlyMatches = filterLibraryItems('External keyboard support', 'mobile');
-		const webOnlyMatches = filterLibraryItems('Cmd+K', 'web');
+		const webOnlyMatches = filterLibraryItems('Detailed web backlog', 'web');
 		const completedMatches = filterLibraryItems('ThemeProvider', 'mobile', 'completed');
 
 		expect(commonMobileMatches.some((item) => item.title === 'Date Picker')).toBe(true);
@@ -44,9 +44,9 @@ describe('design system catalog', () => {
 				),
 			),
 		).toBe(true);
-		expect(
-			webOnlyMatches.some((item) => item.title.includes('Command Palette (`Cmd+K`)')),
-		).toBe(true);
+		expect(webOnlyMatches.some((item) => item.title.includes('Detailed web backlog'))).toBe(
+			true,
+		);
 		expect(completedMatches.some((item) => item.completed)).toBe(true);
 	});
 

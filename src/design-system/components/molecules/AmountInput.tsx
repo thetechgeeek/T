@@ -7,13 +7,16 @@ import {
 	type TextInput as NativeTextInput,
 	type ViewStyle,
 } from 'react-native';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import {
+	announceForScreenReader,
+	buildFocusRingStyle,
+} from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import { INDIAN_GROUPING_TAIL_DIGIT_COUNT } from '@/constants/money';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { FONT_SIZE } from '@/src/design-system/foundation/theme/typographyMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 /**
  * Format a number with Indian grouping: 100000 → "1,00,000"

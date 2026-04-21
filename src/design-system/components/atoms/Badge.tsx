@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, ViewStyle, TextStyle, type StyleProp } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { withOpacity } from '@/src/design-system/foundation/utils/color';
+import { OPACITY_TINT_LIGHT } from '@/src/design-system/foundation/theme/uiMetrics';
 import { ThemedText } from './ThemedText';
 
 export type BadgeVariant =

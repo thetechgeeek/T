@@ -1,9 +1,12 @@
 import React from 'react';
 import { Text, type TextProps, type TextStyle, type AccessibilityRole } from 'react-native';
 import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import type { ThemeTypography } from '@/src/theme/index';
-import { detectLocaleScript, resolveWritingDirection } from '@/src/theme/localeTypography';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import type { ThemeTypography } from '@/src/design-system/foundation/theme';
+import {
+	detectLocaleScript,
+	resolveWritingDirection,
+} from '@/src/design-system/foundation/theme/localeTypography';
 
 export interface ThemedTextProps extends TextProps {
 	variant?: keyof ThemeTypography['variants'];

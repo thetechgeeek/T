@@ -1,15 +1,15 @@
-import { OPACITY_TINT_LIGHT, SIZE_ICON_CIRCLE_MD } from '@/theme/uiMetrics';
+import { OPACITY_TINT_LIGHT, SIZE_ICON_CIRCLE_MD } from '@/src/design-system/foundation';
 import React from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 import { ShieldCheck, Calculator, Calendar, FileCode, ChevronRight } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { TouchableCard } from '@/src/design-system/components/atoms/TouchableCard';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { withOpacity } from '@/src/utils/color';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { TouchableCard } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 interface UtilityCard {
 	title: string;

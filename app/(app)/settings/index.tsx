@@ -2,13 +2,13 @@ import React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { SettingsCard } from '@/src/design-system/components/molecules/SettingsCard';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { SettingsCard } from '@/src/design-system';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 interface NavRow {
 	label: string;

@@ -6,8 +6,8 @@ import {
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 
 export interface CardSectionProps {

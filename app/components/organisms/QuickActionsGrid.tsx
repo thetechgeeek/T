@@ -1,11 +1,11 @@
 import { View, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useTheme } from '@/src/design-system/foundation';
+import { ThemedText } from '@/src/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { withOpacity } from '@/src/design-system/foundation';
+import { OPACITY_TINT_LIGHT } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 import type { LucideIcon } from 'lucide-react-native';
 
 export interface QuickAction {

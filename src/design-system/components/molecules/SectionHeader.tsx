@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Pressable, StyleSheet, type ViewStyle, type StyleProp } from 'react-native';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { layout } from '@/src/theme/layout';
-import { LETTER_SPACING_SECTION } from '@/theme/uiMetrics';
+import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
+import { layout } from '@/src/design-system/foundation/theme/layout';
+import { LETTER_SPACING_SECTION } from '@/src/design-system/foundation/theme/uiMetrics';
 
 export type SectionHeaderVariant = 'default' | 'uppercase';
 

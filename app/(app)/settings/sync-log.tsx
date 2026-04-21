@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert, RefreshControl } from 'react-native';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { BORDER_WIDTH_BASE, OPACITY_ROW_DIVIDER } from '@/theme/uiMetrics';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { ScreenHeader } from '@/src/ui-shell';
+import { BORDER_WIDTH_BASE, OPACITY_ROW_DIVIDER } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { ThemedText } from '@/src/design-system';
 import { writeQueue, type QueuedMutation } from '@/src/services/writeQueueService';
 import { useSyncStore } from '@/src/stores/syncStore';
 import { useLocale } from '@/src/hooks/useLocale';
-import { layout } from '@/src/theme/layout';
+import { layout } from '@/src/design-system/foundation';
 import { RotateCcw, Trash2, Info, AlertTriangle, Clock } from 'lucide-react-native';
 
 export default function SyncLogScreen() {

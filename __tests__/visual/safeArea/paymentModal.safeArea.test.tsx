@@ -1,7 +1,7 @@
 import React from 'react';
 import { PaymentModal } from '@/app/components/organisms/PaymentModal';
 import { renderToSnapshot } from '../setup/renderToSnapshot';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
+import { Screen } from '@/src/design-system';
 
 describe('Safe Area Verification: PaymentModal', () => {
 	const mockProps = {

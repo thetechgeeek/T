@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, Switch, StyleSheet } from 'react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import type { ThemeColors } from '@/src/theme';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { SettingsCard } from '@/src/design-system/components/molecules/SettingsCard';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { SettingsCard } from '@/src/design-system';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 function SwitchRow({
 	label,

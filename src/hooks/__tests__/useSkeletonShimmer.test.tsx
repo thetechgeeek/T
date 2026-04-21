@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderHook } from '@testing-library/react-native';
 import * as Reanimated from 'react-native-reanimated';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation';
 import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
 import { useSkeletonShimmer } from '../useSkeletonShimmer';
 

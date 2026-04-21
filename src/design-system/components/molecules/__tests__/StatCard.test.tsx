@@ -3,8 +3,8 @@ import { render } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
 import { TrendingUp } from 'lucide-react-native';
 import { StatCard } from '../StatCard';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 
 function flattenStyle(style: unknown) {
 	return Array.isArray(style) ? Object.assign({}, ...style.filter(Boolean)) : style;

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native';
 import { Download, Calendar } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { TableRow } from '@/src/design-system/components/molecules/TableRow';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { TableRow } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { GST_DETAIL_COL_WIDTH_PX } from '@/constants/reportLayout';
 import {
@@ -15,8 +15,8 @@ import {
 	GST_DETAIL_DEFAULT_TO,
 	MOCK_GST_DETAIL_ROWS,
 } from '@/src/mocks/reports/gstDetail';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { SIZE_ICON_MD } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { SIZE_ICON_MD } from '@/src/design-system/foundation';
 
 // TODO: Replace mock data with Supabase query filtered by fromDate/toDate across
 //       sale_invoices, purchase_bills, and expense records.

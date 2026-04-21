@@ -2,8 +2,8 @@ import React, { forwardRef, useMemo, useState } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import { runOnJS } from 'react-native-reanimated';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 
 const TRACK_WIDTH = 240;

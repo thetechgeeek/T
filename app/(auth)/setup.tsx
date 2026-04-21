@@ -6,20 +6,20 @@ import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { Camera, X } from 'lucide-react-native';
 import { useAuthStore } from '@/src/stores/authStore';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { businessProfileService } from '@/src/services/businessProfileService';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
 import { storageService } from '@/src/services/storageService';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 import {
 	OPACITY_TINT_LIGHT,
 	SIZE_INPUT_HEIGHT,
 	SIZE_LANGUAGE_FLAG,
 	SIZE_PROGRESS_BAR,
 	SIZE_TEXTAREA_MIN_HEIGHT,
-} from '@/theme/uiMetrics';
-import { withOpacity } from '@/src/utils/color';
+} from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
 
 /** ImagePicker quality for business logo (medium – balances file size vs clarity) */
 const LOGO_IMAGE_QUALITY = 0.7;

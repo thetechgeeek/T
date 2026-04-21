@@ -4,7 +4,7 @@ import { render, fireEvent, act } from '@testing-library/react-native';
 import { AccessibilityInfo } from 'react-native';
 import * as Reanimated from 'react-native-reanimated';
 import { SwipeableRow } from '../SwipeableRow';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
 
 const renderWithTheme = (

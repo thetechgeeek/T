@@ -20,9 +20,9 @@ import {
 	type ViewStyle,
 } from 'react-native';
 import { Lock } from 'lucide-react-native';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { announceForScreenReader } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { announceForScreenReader } from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
 import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { Badge } from '@/src/design-system/components/atoms/Badge';

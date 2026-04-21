@@ -1,8 +1,8 @@
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useDebounce } from '@/src/hooks/useDebounce';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useDebounce } from '@/src/design-system/foundation/hooks/useDebounce';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { Badge } from '@/src/design-system/components/atoms/Badge';
 import { TextInput } from '@/src/design-system/components/atoms/TextInput';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';

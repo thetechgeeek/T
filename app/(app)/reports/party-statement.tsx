@@ -9,24 +9,24 @@ import {
 	ChevronUp,
 	User,
 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { TableRow } from '@/src/design-system/components/molecules/TableRow';
-import { SearchBar } from '@/src/design-system/components/molecules/SearchBar';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { TableRow } from '@/src/design-system';
+import { SearchBar } from '@/src/design-system';
+import { SkeletonBlock } from '@/src/design-system';
 import { useCustomerStore } from '@/src/stores/customerStore';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
 import type { Customer } from '@/src/types/customer';
 import type { Supplier } from '@/src/types/supplier';
-import { layout } from '@/src/theme/layout';
+import { layout } from '@/src/design-system/foundation';
 import { PARTY_PICKER_PREVIEW_LIMIT, PARTY_STMT_COL_WIDTH_PX } from '@/constants/reportLayout';
 import { MOCK_PARTY_STATEMENT_TXS } from '@/src/mocks/reports/partyStatement';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { SIZE_CHIP_HEIGHT } from '@/theme/uiMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { SIZE_CHIP_HEIGHT } from '@/src/design-system/foundation';
 
 type Tab = 'customers' | 'suppliers';
 type DateRange = 'this-month' | 'this-fy' | 'custom';

@@ -3,8 +3,8 @@ import { InteractionManager, ScrollView, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Calendar, Moon, Package, Palette, Search, Sun } from 'lucide-react-native';
 import { LucideIconGlyph, MaterialIconGlyph } from '@/src/design-system/iconography';
-import { ThemeProvider, useTheme } from '@/src/theme/ThemeProvider';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { ThemeProvider, useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
 import { Screen } from '@/src/design-system/components/atoms/Screen';
 import { Avatar } from '@/src/design-system/components/atoms/Avatar';
 import { Card, CardBody, CardFooter, CardHeader } from '@/src/design-system/components/atoms/Card';
@@ -105,7 +105,7 @@ import {
 } from './catalog';
 import type { DesignSystemComponentKind } from './generated/componentCatalog';
 import type { UiLibraryChecklistItem } from './generated/uiLibraryCatalog';
-import type { ThemeMode, ThemePresetId } from '@/src/theme';
+import type { ThemeMode, ThemePresetId } from '@/src/design-system/foundation/theme';
 import { getDesignSystemCopy, type DesignSystemLocale } from './copy';
 import {
 	buildDesignSystemLocaleDiagnostics,
@@ -121,7 +121,7 @@ import {
 } from './useResponsiveWorkbenchLayout';
 import { WorkbenchHeader } from './components/WorkbenchHeader';
 import { showNativeConfirmationAlert } from './nativeAlertDialog';
-import { setAccessibilityFocus } from '@/src/utils/accessibility';
+import { setAccessibilityFocus } from '@/src/design-system/foundation/utils/accessibility';
 import {
 	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,
 	DESIGN_SYSTEM_READ_ONLY_FIELDS,

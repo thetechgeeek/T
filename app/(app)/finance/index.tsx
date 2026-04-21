@@ -12,16 +12,16 @@ import {
 	ArrowUpRight,
 } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { StatCard } from '@/src/design-system/components/molecules/StatCard';
-import { ListItem } from '@/src/design-system/components/molecules/ListItem';
-import { Divider } from '@/src/design-system/components/atoms/Divider';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { StatCard } from '@/src/design-system';
+import { ListItem } from '@/src/design-system';
+import { Divider } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
 import React, { useEffect, useState } from 'react';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 export default function FinanceOverviewScreen() {
 	const { theme, c, r } = useThemeTokens();

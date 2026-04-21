@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { OPACITY_SKELETON_PEAK, SIZE_TEXTAREA_MIN_HEIGHT } from '@/theme/uiMetrics';
+import { OPACITY_SKELETON_PEAK, SIZE_TEXTAREA_MIN_HEIGHT } from '@/src/design-system/foundation';
 import { View, StyleSheet, TouchableOpacity, Alert, TextInput as RNTextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
@@ -11,20 +11,20 @@ import {
 	ChevronDown,
 	ChevronUp,
 } from 'lucide-react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useOrderStore } from '@/src/stores/orderStore';
 import { pdfService } from '@/src/services/pdfService';
 import type { ParsedOrderItem } from '@/src/services/pdfService';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { TextInput } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 const TEXTAREA_MIN_HEIGHT = SIZE_TEXTAREA_MIN_HEIGHT * 2;
 const TEXTAREA_WRAPPER_MIN_HEIGHT = TEXTAREA_MIN_HEIGHT + SPACING_PX.md + SPACING_PX.xxs * 4;

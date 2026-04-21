@@ -12,8 +12,8 @@ import {
 } from '@/src/design-system/components/atoms/Card';
 import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 interface StatCardProps {
 	label: string;

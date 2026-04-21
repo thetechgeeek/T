@@ -8,7 +8,7 @@ import {
 	RADIUS_FAB,
 	SIZE_MODAL_HANDLE_WIDTH,
 	SIZE_MODAL_HANDLE_HEIGHT,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import React, { useState, useEffect } from 'react';
 import {
 	View,
@@ -26,20 +26,20 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Plus, Pencil, Trash2 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { layout } from '@/src/theme/layout';
+import { layout } from '@/src/design-system/foundation';
 import { itemUnitService } from '@/src/services/itemCategoryService';
 import type { ItemUnit } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
-import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-import { ELEVATION } from '@/theme/shadowMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
+import { ELEVATION } from '@/src/design-system/foundation';
 
 interface UnitFormState {
 	name: string;

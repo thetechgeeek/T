@@ -11,15 +11,15 @@ import {
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { Screen } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
 import { businessProfileService } from '@/src/services/businessProfileService';
-import { SIZE_INPUT_HEIGHT } from '@/src/theme/uiMetrics';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SIZE_INPUT_HEIGHT } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@/src/design-system/foundation';
 import { AppError } from '@/src/errors';
 
 export default function VerifyOtpScreen() {

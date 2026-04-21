@@ -3,7 +3,7 @@ import { View, StyleSheet, type ViewStyle, type StyleProp } from 'react-native';
 import { Card } from '@/src/design-system/components/atoms/Card';
 import { TouchableCard } from '@/src/design-system/components/atoms/TouchableCard';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
 
 export interface SettingsCardProps {
 	title?: string;

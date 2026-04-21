@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation';
 import { QuickActionsGrid } from '../QuickActionsGrid';
 import { FilePlus, Package, UserPlus, CreditCard } from 'lucide-react-native';
 import { useRouter } from 'expo-router';

@@ -5,7 +5,8 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 ## Goals
 
 - Give product and engineering a live in-app component gallery instead of depending on Figma first.
-- Track the pure library contract from [UI_Library_Checklist.md](../../docs/UI_Library_Checklist.md); host-app responsibilities live in [UI_Integration_Checklist.md](../../docs/UI_Integration_Checklist.md).
+- Track the pure library contract from [UI_Library_Checklist.md](../../docs/UI_Library_Checklist.md); shell responsibilities live in [UI_Integration_Checklist.md](../../docs/UI_Integration_Checklist.md), and each consuming app should derive its own app-specific checklist from that contract.
+- Keep the reusable app-host layer in [`src/ui-shell`](../ui-shell/README.md) so the design system stays focused on package-safe primitives and patterns instead of product shell wiring.
 - Track external design-tool and asset-delivery workflow in [DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md](../../docs/DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md) instead of mixing it into the core library contract.
 - Track motion, copy, governance, and state-resilience rules in their companion docs:
     - [DESIGN_SYSTEM_MOTION_GUIDELINES.md](../../docs/DESIGN_SYSTEM_MOTION_GUIDELINES.md)
@@ -32,6 +33,12 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - `runtimeSignals.ts`
     - root runtime quality source for locale detection, RTL, font scale, reduced motion, and bold text
     - consumed by `ThemeProvider` so shared primitives can react without screen-level wiring
+- `foundation/`
+    - detachable runtime substrate that lets the design system extract cleanly as a package
+    - owns theme, shared hooks, safe DS utilities, and locale/runtime helpers without depending on product code
+- `foundation/index.ts` and `index.ts`
+    - public entrypoints for the package-style design-system surface
+    - consumers should prefer these public entrypoints over private file paths
 - `useQualitySignals.ts`
     - design-system-facing quality hook for the workbench
     - merges locale-aware diagnostics with the runtime signals already supplied by `ThemeProvider`
@@ -60,6 +67,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
     - enforces design-system-only UI guardrails
     - blocks inline copy, raw LTR-only spacing props, and raw `Text` usage inside the folder
     - blocks direct platform runtime-signal imports outside `runtimeSignals.ts`
+    - blocks legacy `src/theme`, `src/hooks`, `src/utils`, and `src/i18n` imports from re-entering the package
     - blocks product stores, services, features, organisms, and app-only headers from entering the folder
     - fails when a supported or live-demo component is missing automated test coverage
     - fails when the generated component catalog drifts away from `componentRegistry.json`
@@ -95,6 +103,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - If a component is meant to be part of the supported library, add a live demo for it in `DesignLibraryScreen.tsx`.
 - If a shared component becomes design-system-supported, register it in `componentRegistry.json` and regenerate the catalog.
 - When a component gets a live demo, register it in `catalog.ts` so the catalog marks it as `Live demo`.
+- Treat `src/design-system/foundation/index.ts` and `src/design-system/index.ts` as the public entrypoints for this package-style surface.
 - Keep the workbench representative, not exhaustive at the prop-matrix level. It should show the supported patterns clearly and fast.
 - Treat the checklist explorer as the target-state backlog. Treat the supported component catalog as the current implementation contract.
 - Keep user-facing workbench copy in `copy.ts`, not inline in `DesignLibraryScreen.tsx`.
@@ -112,7 +121,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 
 - Phone-first by default: reusable surfaces collapse to a single-column, touch-first stack until the responsive runtime reports tablet width.
 - Tablet layouts may expand into two-column or split-pane compositions only when both columns preserve hierarchy, scan order, and minimum touch targets.
-- Responsive changes should come from the shared runtime/theme contract in `runtimeSignals.ts`, `ThemeProvider.tsx`, and `useResponsiveWorkbenchLayout.ts` rather than ad hoc screen math.
+- Responsive changes should come from the shared runtime/theme contract in `runtimeSignals.ts`, `foundation/theme/ThemeProvider.tsx`, and `useResponsiveWorkbenchLayout.ts` rather than ad hoc screen math.
 - Width changes should adjust spacing, card padding, and typographic emphasis gradually; large screens are allowed to breathe, but they should not feel inflated.
 - Large-screen shells should keep readable line lengths, preserve safe-area padding after rotation, and avoid stretching a single card or form into an oversized empty canvas.
 - Edge gestures remain deliberate: swipe/archive, long-press context actions, and pinch-to-zoom are allowed when they have visible affordances or accessible alternatives, but they must not block native navigation ergonomics.

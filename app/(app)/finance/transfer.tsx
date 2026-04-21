@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, Alert, TextInput } from 'react-native';
 import { ArrowRightLeft } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { withOpacity } from '@/src/utils/color';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
 import {
 	BORDER_WIDTH_BASE,
 	OPACITY_SKELETON_BASE,
@@ -15,12 +15,12 @@ import {
 	SIZE_NOTES_MIN_HEIGHT,
 	SIZE_RADIO_INNER,
 	SIZE_THEME_SWATCH_WIDTH,
-} from '@/src/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
+import { DatePickerField } from '@/src/design-system';
 import { MOCK_TRANSFER_ACCOUNTS } from '@/src/mocks/finance/transfer';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 const ACCOUNTS = MOCK_TRANSFER_ACCOUNTS;
 

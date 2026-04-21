@@ -10,8 +10,8 @@ import {
 	type SortableListItemShape,
 } from '@/src/design-system/components/molecules/SortableList';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 export interface KanbanBoardCard extends SortableListItemShape {
 	title: string;

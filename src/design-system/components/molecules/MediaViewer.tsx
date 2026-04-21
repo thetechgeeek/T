@@ -14,10 +14,10 @@ import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
 import { Card } from '@/src/design-system/components/atoms/Card';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useReducedMotion } from '@/src/hooks/useReducedMotion';
-import { announceForScreenReader } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+import { announceForScreenReader } from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 export interface MediaViewerItem {
 	id: string;

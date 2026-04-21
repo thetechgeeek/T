@@ -3,22 +3,22 @@ import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, TouchableOpacity, Switch, TextInput } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Save, RefreshCw } from 'lucide-react-native';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SkeletonBlock } from '@/src/design-system';
 import { useForm, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { FormField } from '@/src/design-system/components/molecules/FormField';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { FormField } from '@/src/design-system';
 import type { TileCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { inventoryService } from '@/src/services/inventoryService';
-import { layout } from '@/src/theme/layout';
+import { layout } from '@/src/design-system/foundation';
 
 // ─── Schema ─────────────────────────────────────────────────────────────────
 

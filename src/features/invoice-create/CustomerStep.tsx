@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, TouchableOpacity, Pressable } from 'react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { FormField } from '@/src/design-system/components/molecules/FormField';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
+import { ThemedText } from '@/src/design-system';
+import { FormField } from '@/src/design-system';
+import { DatePickerField } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { withOpacity } from '@/src/design-system/foundation';
+import { OPACITY_TINT_LIGHT } from '@/src/design-system/foundation';
 import type { CustomerDraft } from './invoiceCreateTypes';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 const TOGGLE_BORDER_WIDTH = 1.5;
 

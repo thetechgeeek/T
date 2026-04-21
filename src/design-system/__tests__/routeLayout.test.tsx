@@ -12,7 +12,7 @@ jest.mock('expo-router', () => ({
 	},
 }));
 
-jest.mock('@/src/hooks/useThemeTokens', () => ({
+jest.mock('@/src/design-system/foundation', () => ({
 	useThemeTokens: () => ({
 		c: {
 			background: '#101828',

@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useTheme } from '@/src/design-system/foundation';
+import { ThemedText } from '@/src/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
-import { layout } from '@/src/theme/layout';
+import { layout } from '@/src/design-system/foundation';
 import { Cloud } from 'lucide-react-native';
 import {
 	OPACITY_PRESSED,
@@ -12,10 +12,10 @@ import {
 	GLASS_WHITE_CARD,
 	OPACITY_PANEL,
 	SIZE_BUTTON_HEIGHT_SM,
-} from '@/theme/uiMetrics';
-import { withOpacity } from '@/src/utils/color';
+} from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
 import { FINANCIAL_YEAR_SHORT_YEAR_DIGITS } from '@/utils/dateUtils';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
 
 /** Hour boundaries for greeting copy (local day, 24h clock) */
 const HOUR_NOON = 12;

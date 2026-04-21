@@ -3,7 +3,7 @@ import {
 	SIZE_ICON_CONTAINER,
 	GLASS_WHITE_MEDIUM,
 	GLASS_WHITE_LIGHT,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import React, { useState } from 'react';
 import { View, StyleSheet, Switch, TouchableOpacity, Alert, Pressable } from 'react-native';
 import {
@@ -19,14 +19,14 @@ import {
 	Zap,
 } from 'lucide-react-native';
 
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Badge } from '@/src/design-system';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
 
 const ROW_ITEM_VERTICAL_PADDING = SPACING_PX.md + SPACING_PX.xxs / 2;
 const ROW_TEXT_GAP = SPACING_PX.xxs / 2;

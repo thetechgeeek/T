@@ -1,14 +1,14 @@
 import React, { forwardRef } from 'react';
 import { View, StyleSheet, TextInput as NativeTextInput } from 'react-native';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
 import {
 	TextInput as AtomTextInput,
 	type TextInputProps as AtomTextInputProps,
 } from '@/src/design-system/components/atoms/TextInput';
-import { layout } from '@/src/theme/layout';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { layout } from '@/src/design-system/foundation/theme/layout';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 export interface FormFieldProps extends AtomTextInputProps {
 	label: string;

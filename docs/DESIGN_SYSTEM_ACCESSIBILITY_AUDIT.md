@@ -19,10 +19,14 @@ Date: April 17, 2026
 
 ## Manual Release Gates
 
+- Quarterly manual screen-reader audit cadence is required across the supported surface; release proof never replaces the standing audit schedule.
 - VoiceOver and TalkBack gesture expectations for the supported surface are reviewed during manual audit passes, not inferred from simulator smoke tests alone.
+- Keyboard / assistive-tech walkthroughs cover the primary workbench flows end to end, not just isolated component stories.
 - Physical-device proof is required before release for:
     - VoiceOver + Safari on iOS
     - TalkBack + Chrome on Android
+- Max font scale testing is required on both platforms during the manual accessibility pass.
+- Accessibility inspector checks in Xcode and Android Studio are part of the key-screen release gate.
 - The in-repo checklist stays focused on what CI and documented workbench proofs can verify; these manual lanes remain explicit release gates rather than silent assumptions.
 
 ## Environment

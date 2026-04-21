@@ -15,25 +15,25 @@ import { X, Plus, Trash2 } from 'lucide-react-native';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
 import { financeService } from '@/src/services/financeService';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { TextInput } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { DatePickerField } from '@/src/design-system';
 import type { Supplier } from '@/src/types/supplier';
 import type { InventoryItem } from '@/src/types/inventory';
 import type { PaymentStatus } from '@/src/types/invoice';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 import {
 	OVERLAY_COLOR_MEDIUM,
 	SIZE_DROPDOWN_MAX_HEIGHT,
 	SIZE_INPUT_HEIGHT,
 	Z_INDEX,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 
 const MODAL_CARD_WIDTH = 320;
 const PURCHASE_CREATE_BOTTOM_PADDING = 40;

@@ -8,8 +8,8 @@ import {
 	type ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets, type EdgeInsets } from 'react-native-safe-area-context';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { resolveResponsiveMetrics } from '@/src/theme/responsive';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { resolveResponsiveMetrics } from '@/src/design-system/foundation/theme/responsive';
 
 const COMPACT_PHONE_MAX_WIDTH = 560;
 

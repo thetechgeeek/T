@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { GLASS_WHITE_LIGHT, OPACITY_HOVER, SIZE_AUTH_LOGO_LG } from '@/theme/uiMetrics';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import {
+	GLASS_WHITE_LIGHT,
+	OPACITY_HOVER,
+	SIZE_AUTH_LOGO_LG,
+} from '@/src/design-system/foundation';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { PhoneInput } from '@/src/design-system/components/molecules/PhoneInput';
+import { Screen } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { TextInput } from '@/src/design-system';
+import { PhoneInput } from '@/src/design-system';
 import { AppError } from '@/src/errors';
 
 export default function LoginScreen() {

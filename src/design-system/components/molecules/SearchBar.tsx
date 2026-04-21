@@ -11,11 +11,14 @@ import {
 } from 'react-native';
 import { Search, X } from 'lucide-react-native';
 import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useDebounce } from '@/src/hooks/useDebounce';
-import { announceForScreenReader, buildFocusRingStyle } from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { resolveWritingDirection } from '@/src/theme/localeTypography';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useDebounce } from '@/src/design-system/foundation/hooks/useDebounce';
+import {
+	announceForScreenReader,
+	buildFocusRingStyle,
+} from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { resolveWritingDirection } from '@/src/design-system/foundation/theme/localeTypography';
 
 interface SearchBarProps {
 	value?: string;

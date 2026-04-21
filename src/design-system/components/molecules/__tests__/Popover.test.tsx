@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Pressable, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { act, fireEvent, render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { Button } from '@/src/design-system/components/atoms/Button';
 import { Popover } from '../Popover';
 

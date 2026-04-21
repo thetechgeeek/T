@@ -1,5 +1,5 @@
 import Color from 'color';
-import { lightTheme, darkTheme } from '@/src/theme/colors';
+import { lightTheme, darkTheme } from '@/src/design-system/foundation';
 
 function assertContrast(fg: string, bg: string, minRatio = 4.5, context = '') {
 	const ratio = Color(fg).contrast(Color(bg));

@@ -8,16 +8,16 @@ import {
 	SIZE_REMOVE_BUTTON,
 	SIZE_TEXTAREA_COMPACT_HEIGHT,
 	SIZE_TEXTAREA_HEIGHT,
-} from '@/theme/uiMetrics';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+} from '@/src/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 import { View, TextInput, Pressable, ActivityIndicator, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { businessProfileService } from '@/src/services/businessProfileService';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
+import { useTheme } from '@/src/design-system/foundation';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { SectionHeader } from '@/src/design-system';
 import { storageService } from '@/src/services/storageService';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';

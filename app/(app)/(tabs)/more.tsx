@@ -13,16 +13,16 @@ import {
 	LogOut,
 	ChevronRight,
 } from 'lucide-react-native';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_TINT_LIGHT } from '@/theme/uiMetrics';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { withOpacity } from '@/src/design-system/foundation';
+import { OPACITY_TINT_LIGHT } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation';
 import { useAuthStore } from '@/src/stores/authStore';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Divider } from '@/src/design-system/components/atoms/Divider';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Divider } from '@/src/design-system';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 export default function MoreTab() {
 	const { theme, c, s, r } = useThemeTokens();

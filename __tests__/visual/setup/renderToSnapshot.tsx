@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/theme/ThemeProvider';
+import { ThemeProvider } from '@/src/design-system/foundation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Appearance } from 'react-native';
-import { resolveResponsiveMetrics } from '@/src/theme/responsive';
+import { resolveResponsiveMetrics } from '@/src/design-system/foundation';
 
 // Initial setup for jest-image-snapshot if used in an environment that supports it
 // In standard Jest/RNTL, this will mostly be used for structural snapshots

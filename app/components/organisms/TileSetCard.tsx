@@ -2,14 +2,18 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Package, AlertCircle } from 'lucide-react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_SKELETON_BASE, SIZE_THUMBNAIL_MD, SIZE_TILE_IMAGE } from '@/theme/uiMetrics';
+import { withOpacity } from '@/src/design-system/foundation';
+import {
+	OPACITY_SKELETON_BASE,
+	SIZE_THUMBNAIL_MD,
+	SIZE_TILE_IMAGE,
+} from '@/src/design-system/foundation';
 import type { ViewStyle } from 'react-native';
 import type { TileSetGroup, InventoryItem } from '@/src/types/inventory';
 import { getThumbUrl } from '@/src/utils/imageTransform';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 interface TileSetCardProps {
 	group: TileSetGroup;

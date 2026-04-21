@@ -11,12 +11,20 @@ const SKIP_SEGMENTS = new Set(['generated', '__tests__']);
 const SKIP_FILES = new Set(['src/design-system/copy.ts']);
 const RUNTIME_SIGNAL_SOURCE = 'src/design-system/runtimeSignals.ts';
 const DESIGN_SYSTEM_COMPONENT_PREFIX = 'src/design-system/components/';
+const DESIGN_SYSTEM_FOUNDATION_PREFIX = 'src/design-system/foundation/';
+const FOUNDATION_RUNTIME_ALLOWLIST = new Set([
+	'src/design-system/foundation/theme/ThemeProvider.tsx',
+	'src/design-system/foundation/theme/density.ts',
+	'src/design-system/foundation/utils/accessibility.ts',
+]);
 const COMPONENT_REGISTRY_PATH = 'src/design-system/componentRegistry.json';
 const COMPONENT_CATALOG_PATH = 'src/design-system/generated/componentCatalog.ts';
 const README_PATH = 'src/design-system/README.md';
 const REQUIRED_SOURCE_FILES = [
 	'src/design-system/fixtures.ts',
 	'src/design-system/components/ThemeSnapshotPreview.tsx',
+	'src/design-system/foundation/index.ts',
+	'src/design-system/index.ts',
 ];
 const REQUIRED_TEST_FILES = [
 	'src/design-system/__tests__/boundary.test.ts',
@@ -32,6 +40,8 @@ const REQUIRED_README_PHRASES = [
 	'Relaxed showcase',
 	'Operational dense',
 	'loading, empty, error, read-only, denied, no-media, and ugly-data',
+	'src/design-system/foundation',
+	'public entrypoints',
 ];
 const FILE_CONTRACT_RULES = [
 	{
@@ -59,9 +69,9 @@ const FILE_CONTRACT_RULES = [
 		file: 'docs/UI_Library_Web_Backlog.md',
 		rule: 'web-backlog-scope',
 		pattern:
-			/## 5\. Accessibility \(a11y\) Architecture[\s\S]*## 6\. Internationalization \(i18n\) & Localization \(L10n\)[\s\S]*## 7\. Performance UX[\s\S]*## 8\. Responsive & Adaptive Design[\s\S]*## 9\. Motion & Animation System[\s\S]*## 10\. Copy & Microcopy Standards[\s\S]*## 12\. State Resilience & Graceful Degradation/,
+			/## 1\. Design System Architecture[\s\S]*## 2\. Component Contract Standard[\s\S]*## 3\. Components — Reusable UI Blocks[\s\S]*## 4\. Patterns — Reusable Compositions[\s\S]*## 5\. Accessibility \(a11y\) Architecture[\s\S]*## 6\. Internationalization \(i18n\) & Localization \(L10n\)[\s\S]*## 7\. Performance UX[\s\S]*## 8\. Responsive & Adaptive Design[\s\S]*## 9\. Motion & Animation System[\s\S]*## 10\. Copy & Microcopy Standards[\s\S]*## 12\. State Resilience & Graceful Degradation[\s\S]*## 13\. Testing Strategy/,
 		message:
-			'Web-only checklist scope for sections 5-10 and 12 must stay documented in docs/UI_Library_Web_Backlog.md.',
+			'Web-only checklist scope for sections 1-10, 12, and 13 must stay documented in docs/UI_Library_Web_Backlog.md.',
 	},
 	{
 		file: 'docs/DESIGN_SYSTEM_ACCESSIBILITY_AUDIT.md',
@@ -98,6 +108,22 @@ const FILE_CONTRACT_RULES = [
 			/DesignLibraryScreen\.tsx[\s\S]*ThemeSnapshotPreview\.tsx[\s\S]*UI_Integration_Checklist/i,
 		message:
 			'Design-system state resilience docs must describe the DS proof surfaces and the app-integration handoff.',
+	},
+	{
+		file: 'docs/DESIGN_SYSTEM_REVIEW_GATES.md',
+		rule: 'review-gates-doc',
+		pattern:
+			/hierarchy[\s\S]*accent budget[\s\S]*surface calm[\s\S]*ugly data[\s\S]*translated copy[\s\S]*phone and tablet[\s\S]*reduced motion[\s\S]*max font scale/i,
+		message:
+			'Design-system review gates must document hierarchy/accent review, realistic content fixtures, and phone/tablet reduced-motion font-scale proof.',
+	},
+	{
+		file: 'docs/DESIGN_SYSTEM_VERIFICATION_STRATEGY.md',
+		rule: 'verification-strategy-doc',
+		pattern:
+			/npm run validate[\s\S]*Jest \+ React Native Testing Library[\s\S]*Maestro[\s\S]*ThemeSnapshotPreview\.tsx[\s\S]*check-design-system-visual-regression\.mjs[\s\S]*FlatList[\s\S]*German/i,
+		message:
+			'Design-system verification strategy must document validate, RN test stack, screenshot proof, long-list performance, and locale stress coverage.',
 	},
 ];
 const MOTION_ANIMATION_RE =
@@ -172,6 +198,30 @@ const DISALLOWED_IMPORT_RULES = [
 		pattern: /from\s*['"]@\/src\/components\//g,
 		message:
 			'Design-system code must import shared UI from src/design-system/components instead of the retired src/components tree.',
+	},
+	{
+		name: 'legacy-theme-import',
+		pattern: /from\s*['"](?:@\/src\/theme(?:\/|['"])|@\/theme\/)/g,
+		message:
+			'Design-system code must import theme primitives through src/design-system/foundation instead of the legacy src/theme surface.',
+	},
+	{
+		name: 'legacy-hook-import',
+		pattern: /from\s*['"]@\/src\/hooks\//g,
+		message:
+			'Design-system code must import shared hooks through src/design-system/foundation instead of src/hooks/.',
+	},
+	{
+		name: 'legacy-utils-import',
+		pattern: /from\s*['"]@\/src\/utils\//g,
+		message:
+			'Design-system code must import shared utilities through src/design-system/foundation instead of src/utils/.',
+	},
+	{
+		name: 'legacy-i18n-import',
+		pattern: /from\s*['"]@\/src\/i18n\//g,
+		message:
+			'Design-system code must import runtime locale helpers through src/design-system/foundation instead of src/i18n/.',
 	},
 ];
 
@@ -288,9 +338,11 @@ const violations = [];
 for (const relPath of files) {
 	const text = fs.readFileSync(path.join(root, relPath), 'utf8');
 	const isSharedComponentFile = relPath.startsWith(DESIGN_SYSTEM_COMPONENT_PREFIX);
+	const isFoundationFile = relPath.startsWith(DESIGN_SYSTEM_FOUNDATION_PREFIX);
 
 	if (
 		relPath !== RUNTIME_SIGNAL_SOURCE &&
+		!FOUNDATION_RUNTIME_ALLOWLIST.has(relPath) &&
 		/import\s*\{[^}]*\b(AccessibilityInfo|PixelRatio|I18nManager|Appearance)\b[^}]*\}\s*from\s*['"]react-native['"]/g.test(
 			text,
 		)
@@ -305,6 +357,17 @@ for (const relPath of files) {
 	}
 
 	for (const rule of FILE_TEXT_RULES) {
+		if (
+			isFoundationFile &&
+			(rule.name === 'logical-direction' ||
+				rule.name === 'absolute-left-right' ||
+				rule.name === 'inline-copy-prop' ||
+				rule.name === 'inline-themed-text' ||
+				rule.name === 'react-native-text' ||
+				rule.name === 'react-native-animated')
+		) {
+			continue;
+		}
 		if (
 			isSharedComponentFile &&
 			(rule.name === 'inline-copy-prop' || rule.name === 'inline-themed-text')
@@ -570,6 +633,20 @@ const uiCatalogText = fs.readFileSync(
 	path.join(root, 'src/design-system/generated/uiLibraryCatalog.ts'),
 	'utf8',
 );
+const checklistOpenMatch = uiCatalogText.match(
+	/export const UI_LIBRARY_STATS(?:\s*:\s*[^=]+)?\s*=[\s\S]*?(?:["'])?open(?:["'])?\s*:\s*(\d+)/,
+);
+
+if (!checklistOpenMatch || Number(checklistOpenMatch[1]) !== 0) {
+	violations.push({
+		file: 'src/design-system/generated/uiLibraryCatalog.ts',
+		line: 1,
+		rule: 'ui-library-checklist-open-items',
+		message:
+			'The generated UI library checklist catalog must report zero open items. Finish or rescope new checklist rows before landing them.',
+	});
+}
+
 const checklistTitleSet = new Set(
 	[
 		...uiCatalogText.matchAll(

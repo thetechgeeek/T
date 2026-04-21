@@ -9,11 +9,11 @@ import {
 	OPACITY_HOVER,
 	SIZE_AUTH_LOGO_MD,
 	SIZE_INPUT_HEIGHT,
-} from '@/theme/uiMetrics';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { PhoneInput } from '@/src/design-system/components/molecules/PhoneInput';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+} from '@/src/design-system/foundation';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen } from '@/src/design-system';
+import { PhoneInput } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
 
 /**
  * P1.2 — Phone OTP Login Screen

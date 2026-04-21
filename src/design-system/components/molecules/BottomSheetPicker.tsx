@@ -20,18 +20,24 @@ import Animated, {
 	withSpring,
 } from 'react-native-reanimated';
 import { resolveOverlayDensityStyles, type OverlayDensity } from '@/src/design-system/overlayUtils';
-import { useControllableState } from '@/src/hooks/useControllableState';
-import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
 import {
 	announceForScreenReader,
 	buildFocusRingStyle,
 	setAccessibilityFocus,
-} from '@/src/utils/accessibility';
-import { useTheme } from '@/src/theme/ThemeProvider';
+} from '@/src/design-system/foundation/utils/accessibility';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SIZE_BUTTON_HEIGHT_SM, SIZE_INPUT_HEIGHT } from '@/theme/uiMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/theme/layoutMetrics';
+import {
+	SIZE_BUTTON_HEIGHT_SM,
+	SIZE_INPUT_HEIGHT,
+} from '@/src/design-system/foundation/theme/uiMetrics';
+import { FONT_SIZE } from '@/src/design-system/foundation/theme/typographyMetrics';
+import {
+	SPACING_PX,
+	TOUCH_TARGET_MIN_PX,
+} from '@/src/design-system/foundation/theme/layoutMetrics';
 
 const SNAP_POINT_OPTIONS = ['25%', '50%', '90%'] as const;
 const DISMISS_DISTANCE_RATIO = 0.25;

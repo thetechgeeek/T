@@ -7,12 +7,12 @@ import {
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
 import { PAGINATED_LIST_COPY } from '@/src/design-system/microcopy';
 import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
 import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
 import { ErrorState } from '@/src/design-system/components/molecules/ErrorState';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
 
 export interface PaginatedListProps<T> {
 	data: T[];

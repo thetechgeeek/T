@@ -5,18 +5,18 @@ import {
 	SIZE_THEME_CHECK,
 	SIZE_THEME_SWATCH_HEIGHT,
 	SIZE_THEME_SWATCH_WIDTH,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import React, { useState } from 'react';
 import { View, Switch, StyleSheet, Pressable, TextInput } from 'react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import type { ThemeColors } from '@/src/theme';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { SectionHeader } from '@/src/design-system/components/molecules/SectionHeader';
-import { SettingsCard } from '@/src/design-system/components/molecules/SettingsCard';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { SectionHeader } from '@/src/design-system';
+import { SettingsCard } from '@/src/design-system';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 type PaperType = 'thermal58' | 'thermal80' | 'a4' | 'a5';
 

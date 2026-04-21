@@ -4,18 +4,18 @@ import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { Plus, ChevronRight, FileText } from 'lucide-react-native';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
-import { withOpacity } from '@/src/utils/color';
-import { OPACITY_SKELETON_BASE } from '@/src/theme/uiMetrics';
+import { useThemeTokens } from '@/src/design-system/foundation';
+import { withOpacity } from '@/src/design-system/foundation';
+import { OPACITY_SKELETON_BASE } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useOrderStore } from '@/src/stores/orderStore';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { TouchableCard } from '@/src/design-system/components/atoms/TouchableCard';
-import { Screen as AtomicScreen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
+import { Button } from '@/src/design-system';
+import { TouchableCard } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
 import { OrderListSkeleton } from '@/app/components/molecules/skeletons/OrderListSkeleton';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
 
 const ORDER_BADGE_RADIUS = SPACING_PX.md;
 

@@ -6,7 +6,7 @@ import {
 	SIZE_INPUT_HEIGHT,
 	SIZE_NOTES_MIN_HEIGHT,
 	Z_INDEX,
-} from '@/theme/uiMetrics';
+} from '@/src/design-system/foundation';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
 	View,
@@ -24,20 +24,20 @@ import { useRouter } from 'expo-router';
 import { X } from 'lucide-react-native';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
 import { paymentService } from '@/src/services/paymentService';
-import { useThemeTokens } from '@/src/hooks/useThemeTokens';
+import { useThemeTokens } from '@/src/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { ScreenHeader } from '@/app/components/molecules/ScreenHeader';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
+import { Screen } from '@/src/design-system';
+import { ThemedText } from '@/src/design-system';
+import { Button } from '@/src/design-system';
+import { Card } from '@/src/design-system';
+import { TextInput } from '@/src/design-system';
+import { ScreenHeader } from '@/src/ui-shell';
+import { DatePickerField } from '@/src/design-system';
 import type { Supplier } from '@/src/types/supplier';
 import type { PaymentMode } from '@/src/types/invoice';
 import { buildMakePaymentRecordPayload } from '@/src/features/payments/buildPaymentRecordPayload';
-import { SPACING_PX } from '@/src/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/theme/typographyMetrics';
+import { SPACING_PX } from '@/src/design-system/foundation';
+import { FONT_SIZE } from '@/src/design-system/foundation';
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Card'] as const;
 type PaymentModeLabel = (typeof PAYMENT_MODES)[number];
