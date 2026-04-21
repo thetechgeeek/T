@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
 import { ActionMenuSheet } from '../ActionMenuSheet';
 
 const renderWithTheme = (component: React.ReactElement) =>

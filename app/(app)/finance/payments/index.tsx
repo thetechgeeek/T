@@ -4,22 +4,22 @@ import {
 	RADIUS_FAB,
 	SIZE_CHIP_HEIGHT,
 	SIZE_FAB,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Plus, Banknote, CreditCard, Smartphone, Building2, Coins } from 'lucide-react-native';
 import { paymentService } from '@/src/services/paymentService';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { EmptyState } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SkeletonBlock } from '@/src/design-system';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { EmptyState } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SkeletonBlock } from '@easydesign/design-system';
 import type { Payment } from '@/src/types/finance';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 const LIST_BOTTOM_PADDING = 100;
 

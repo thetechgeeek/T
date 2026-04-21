@@ -7,14 +7,14 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated';
 import { WifiOff, ChevronRight } from 'lucide-react-native';
-import { ThemedText } from '@/src/design-system';
+import { ThemedText } from '@easydesign/design-system';
 import {
 	createTimingConfig,
 	SPACING_PX,
 	SIZE_OFFLINE_BANNER_OFFSET,
 	useReducedMotion,
 	useTheme,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import { useShellEnvironment } from '../../ShellEnvironment';
 
 export function OfflineBanner() {

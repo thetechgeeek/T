@@ -1,9 +1,9 @@
 import React, { forwardRef } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from '../atoms/ThemedText';
+import { triggerDesignSystemHaptic } from '../../haptics';
 
 function clamp(value: number, min: number, max: number) {
 	return Math.min(max, Math.max(min, value));

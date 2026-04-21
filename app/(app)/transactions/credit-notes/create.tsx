@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SIZE_INPUT_HEIGHT } from '@/src/design-system/foundation';
+import { SIZE_INPUT_HEIGHT } from '@easydesign/design-system/foundation';
 import {
 	View,
 	ScrollView,
@@ -10,17 +10,17 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { X, Plus, Trash2 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { TextInput } from '@/src/design-system';
-import { DatePickerField } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { TextInput } from '@easydesign/design-system';
+import { DatePickerField } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 type ReasonOption = 'Defective' | 'Wrong Item' | 'Price Difference' | 'Short Supply' | 'Other';
 

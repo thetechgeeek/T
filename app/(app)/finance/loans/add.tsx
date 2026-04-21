@@ -4,15 +4,15 @@ import { useRouter } from 'expo-router';
 
 /** Multi-line notes input height */
 const NOTES_INPUT_HEIGHT = 88;
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { Button } from '@/src/design-system';
-import { DatePickerField } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { Button } from '@easydesign/design-system';
+import { DatePickerField } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 const LOAN_TYPES = ['Term Loan', 'OD', 'Personal', 'Vehicle', 'Mortgage'] as const;
 type LoanType = (typeof LOAN_TYPES)[number];

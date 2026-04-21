@@ -12,16 +12,16 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import { Package, Edit, HelpCircle, ArrowUpRight, ArrowDownRight } from 'lucide-react-native';
 import { Image } from 'expo-image';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
-import { ThemedText } from '@/src/design-system';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SkeletonBlock } from '@/src/design-system';
-import { withOpacity } from '@/src/design-system/foundation';
+import { ThemedText } from '@easydesign/design-system';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SkeletonBlock } from '@easydesign/design-system';
+import { withOpacity } from '@easydesign/design-system/foundation';
 import { supabase } from '@/src/config/supabase';
-import { layout } from '@/src/design-system/foundation';
+import { layout } from '@easydesign/design-system/foundation';
 import { itemPartyRateService } from '@/src/services/itemPartyRateService';
 import type { UUID } from '@/src/types/common';
 import type { InventoryItem, StockOperation, ItemPartyRate } from '@/src/types/inventory';
@@ -29,7 +29,7 @@ import {
 	OPACITY_ROW_HIGHLIGHT,
 	OPACITY_SKELETON_BASE,
 	OVERLAY_COLOR_STRONG,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import logger from '@/src/utils/logger';
 
 type ItemPartyRateRow = ItemPartyRate & {

@@ -12,24 +12,24 @@ import {
 	DollarSign,
 	MoreHorizontal,
 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { FilterBar } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { EmptyState } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { FilterBar } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { EmptyState } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { layout } from '@/src/design-system/foundation';
-import { withOpacity } from '@/src/design-system/foundation';
+import { layout } from '@easydesign/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
 import {
 	FAB_OFFSET_RIGHT,
 	OPACITY_TINT_LIGHT,
 	RADIUS_FAB,
 	SIZE_FAB,
 	SIZE_ICON_CONTAINER,
-} from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 // ---------------------------------------------------------------------------
 // Types

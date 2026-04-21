@@ -1,7 +1,12 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { ThemedText } from '@/src/design-system';
-import { BORDER_RADIUS_PX, FONT_SIZE, SPACING_PX, useTheme } from '@/src/design-system/foundation';
+import { ThemedText } from '@easydesign/design-system';
+import {
+	BORDER_RADIUS_PX,
+	FONT_SIZE,
+	SPACING_PX,
+	useTheme,
+} from '@easydesign/design-system/foundation';
 import { useShellEnvironment } from '../../ShellEnvironment';
 
 interface Props {

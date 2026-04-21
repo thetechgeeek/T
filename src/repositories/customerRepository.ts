@@ -2,7 +2,7 @@ import { supabase } from '../config/supabase';
 import { toAppError } from '../errors';
 import { createRepository } from './baseRepository';
 import type { Customer } from '../types/customer';
-import { DB_SEARCH_LIMIT } from '@/src/design-system/foundation';
+import { DB_SEARCH_LIMIT } from '@easydesign/design-system/foundation';
 
 const base = createRepository<Customer>('customers');
 

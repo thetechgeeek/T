@@ -16,20 +16,17 @@ import {
 	type ViewStyle,
 } from 'react-native';
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
 import {
 	announceForScreenReader,
 	buildFocusRingStyle,
 	isAccessibilityAction,
 	mapAccessibilityActionNames,
 	setAccessibilityFocus,
-} from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import {
-	SPACING_PX,
-	TOUCH_TARGET_MIN_PX,
-} from '@/src/design-system/foundation/theme/layoutMetrics';
+} from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from '../atoms/ThemedText';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '../../foundation/theme/layoutMetrics';
 import {
 	addDaysIso,
 	buildCalendarMonth,
@@ -40,7 +37,7 @@ import {
 	monthHeading,
 	parseIsoDate,
 	todayIso,
-} from '@/src/design-system/dateUtils';
+} from '../../dateUtils';
 
 const PREVIOUS_MONTH_OFFSET_DAYS = -28;
 const NEXT_MONTH_OFFSET_DAYS = 31;

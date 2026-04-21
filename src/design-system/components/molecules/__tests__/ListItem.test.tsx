@@ -2,9 +2,9 @@ import React from 'react';
 import { Text } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
 import * as Reanimated from 'react-native-reanimated';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
 import { ListItem } from '../ListItem';
-import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
+import type { RuntimeQualitySignals } from '../../../runtimeSignals';
 
 const renderWithTheme = (
 	ui: React.ReactElement,

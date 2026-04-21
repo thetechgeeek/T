@@ -2,8 +2,8 @@ import React from 'react';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import * as Reanimated from 'react-native-reanimated';
 import { MediaViewer, type MediaViewerItem } from '../MediaViewer';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
-import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '../../../runtimeSignals';
 
 const items: MediaViewerItem[] = [
 	{

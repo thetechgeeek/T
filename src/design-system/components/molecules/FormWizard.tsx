@@ -1,17 +1,17 @@
 import React, { forwardRef, useMemo, useRef, useState } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { Button } from '../atoms/Button';
+import { ThemedText } from '../atoms/ThemedText';
 import {
 	DeclarativeForm,
 	type DeclarativeFormDensity,
 	type DeclarativeFormField,
 	type DeclarativeFormHandle,
 	type DeclarativeFormValues,
-} from '@/src/design-system/components/molecules/DeclarativeForm';
-import { Stepper, type StepperStep } from '@/src/design-system/components/molecules/Stepper';
+} from './DeclarativeForm';
+import { Stepper, type StepperStep } from './Stepper';
 
 export interface FormWizardStep {
 	id: string;

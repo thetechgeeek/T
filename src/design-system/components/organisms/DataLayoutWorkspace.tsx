@@ -1,27 +1,24 @@
 import React, { forwardRef, useMemo, useState } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card, CardBody, CardHeader } from '@/src/design-system/components/atoms/Card';
-import { CollapsibleSection } from '@/src/design-system/components/molecules/CollapsibleSection';
-import { ListItem } from '@/src/design-system/components/molecules/ListItem';
-import { SegmentedControl } from '@/src/design-system/components/molecules/SegmentedControl';
-import { SortableList } from '@/src/design-system/components/molecules/SortableList';
-import { StatCard } from '@/src/design-system/components/molecules/StatCard';
-import { SwipeableRow } from '@/src/design-system/components/molecules/SwipeableRow';
-import { ToggleSwitch } from '@/src/design-system/components/atoms/ToggleSwitch';
-import {
-	VirtualizedList,
-	type VirtualizedListSection,
-} from '@/src/design-system/components/molecules/VirtualizedList';
-import { TouchableCard } from '@/src/design-system/components/atoms/TouchableCard';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { AlertBanner } from '../molecules/AlertBanner';
+import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { Card, CardBody, CardHeader } from '../atoms/Card';
+import { CollapsibleSection } from '../molecules/CollapsibleSection';
+import { ListItem } from '../molecules/ListItem';
+import { SegmentedControl } from '../molecules/SegmentedControl';
+import { SortableList } from '../molecules/SortableList';
+import { StatCard } from '../molecules/StatCard';
+import { SwipeableRow } from '../molecules/SwipeableRow';
+import { ToggleSwitch } from '../atoms/ToggleSwitch';
+import { VirtualizedList, type VirtualizedListSection } from '../molecules/VirtualizedList';
+import { TouchableCard } from '../atoms/TouchableCard';
+import { ThemedText } from '../atoms/ThemedText';
 import {
 	responsiveCardStyle,
 	useResponsiveWorkbenchLayout,
-} from '@/src/design-system/useResponsiveWorkbenchLayout';
+} from '../../useResponsiveWorkbenchLayout';
 
 type LayoutMode = 'summary' | 'dense';
 type MetricId = 'late-payments' | 'blocked-orders' | 'at-risk-suppliers';

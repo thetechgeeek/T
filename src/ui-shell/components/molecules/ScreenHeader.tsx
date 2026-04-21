@@ -3,13 +3,13 @@ import { View, StyleSheet, TouchableOpacity, type ViewStyle } from 'react-native
 import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ThemedText } from '@/src/design-system';
+import { ThemedText } from '@easydesign/design-system';
 import {
 	layout,
 	MS_HEADER_SYNC_REFRESH,
 	SPACING_PX,
 	useThemeTokens,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import { SyncIndicator, type SyncStatus } from '../atoms/SyncIndicator';
 import { useShellEnvironment } from '../../ShellEnvironment';
 

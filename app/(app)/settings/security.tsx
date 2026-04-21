@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { View, Switch, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import type { ThemeColors } from '@/src/theme';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SectionHeader } from '@/src/design-system';
-import { SettingsCard } from '@/src/design-system';
-import { BORDER_WIDTH_BASE } from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SectionHeader } from '@easydesign/design-system';
+import { SettingsCard } from '@easydesign/design-system';
+import { BORDER_WIDTH_BASE } from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
 
 type AutoLock = 'never' | '1min' | '5min' | '15min';
 

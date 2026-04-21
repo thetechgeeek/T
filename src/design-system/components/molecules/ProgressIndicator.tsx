@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from '../atoms/ThemedText';
 
 export interface ProgressIndicatorProps {
 	variant: 'linear' | 'circular';

@@ -3,22 +3,22 @@ import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, TouchableOpacity, Switch, TextInput } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Save, RefreshCw } from 'lucide-react-native';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SkeletonBlock } from '@/src/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SkeletonBlock } from '@easydesign/design-system';
 import { useForm, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { FormField } from '@/src/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { FormField } from '@easydesign/design-system';
 import type { TileCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 import { inventoryService } from '@/src/services/inventoryService';
-import { layout } from '@/src/design-system/foundation';
+import { layout } from '@easydesign/design-system/foundation';
 
 // ─── Schema ─────────────────────────────────────────────────────────────────
 

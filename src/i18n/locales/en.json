@@ -69,7 +69,7 @@
 		"email": "Email",
 		"password": "Password",
 		"forgotPassword": "Forgot Password?",
-		"welcome": "Welcome to TileMaster",
+		"welcome": "Welcome to EasyDesign",
 		"subtitle": "Manage your tiles & ceramics business",
 		"setupBusiness": "Set Up Your Business",
 		"loginFailed": "Login Failed",
@@ -448,7 +448,7 @@
 		"llmApiKey": "LLM API Key",
 		"invoiceDefaults": "Invoice Defaults",
 		"dataManagement": "Data Management",
-		"about": "About TileMaster",
+		"about": "About EasyDesign",
 		"version": "Version",
 		"light": "Light",
 		"dark": "Dark",
@@ -573,7 +573,7 @@
 		"more": "More"
 	},
 	"branding": {
-		"appName": "TileMaster",
+		"appName": "EasyDesign",
 		"appShortName": "TM"
 	},
 	"error": {

@@ -8,12 +8,12 @@ import {
 import { render, fireEvent, act } from '@testing-library/react-native';
 import * as Reanimated from 'react-native-reanimated';
 import { BottomSheetPicker } from '../BottomSheetPicker';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
-import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
-import { setAccessibilityFocus } from '@/src/design-system/foundation/utils/accessibility';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '../../../runtimeSignals';
+import { setAccessibilityFocus } from '../../../foundation/utils/accessibility';
 
-jest.mock('@/src/design-system/foundation/utils/accessibility', () => {
-	const actual = jest.requireActual('@/src/design-system/foundation/utils/accessibility');
+jest.mock('../../../foundation/utils/accessibility', () => {
+	const actual = jest.requireActual('../../../foundation/utils/accessibility');
 	return {
 		...actual,
 		setAccessibilityFocus: jest.fn(),

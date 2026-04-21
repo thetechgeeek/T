@@ -3,26 +3,23 @@ import { Share, View, type StyleProp, type ViewStyle } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card, CardBody, CardHeader } from '@/src/design-system/components/atoms/Card';
-import { DescriptionList } from '@/src/design-system/components/molecules/DescriptionList';
-import {
-	FileUploadField,
-	type UploadItem,
-} from '@/src/design-system/components/molecules/FileUploadField';
-import { ProgressIndicator } from '@/src/design-system/components/molecules/ProgressIndicator';
-import { SegmentedControl } from '@/src/design-system/components/molecules/SegmentedControl';
-import { Stepper, type StepperStep } from '@/src/design-system/components/molecules/Stepper';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ToastViewport, type ToastStackItem } from '@/src/design-system/components/molecules/Toast';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { AlertBanner } from '../molecules/AlertBanner';
+import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { Card, CardBody, CardHeader } from '../atoms/Card';
+import { DescriptionList } from '../molecules/DescriptionList';
+import { FileUploadField, type UploadItem } from '../molecules/FileUploadField';
+import { ProgressIndicator } from '../molecules/ProgressIndicator';
+import { SegmentedControl } from '../molecules/SegmentedControl';
+import { Stepper, type StepperStep } from '../molecules/Stepper';
+import { TextInput } from '../atoms/TextInput';
+import { ThemedText } from '../atoms/ThemedText';
+import { ToastViewport, type ToastStackItem } from '../molecules/Toast';
 import {
 	responsiveCardStyle,
 	useResponsiveWorkbenchLayout,
-} from '@/src/design-system/useResponsiveWorkbenchLayout';
+} from '../../useResponsiveWorkbenchLayout';
 
 type ExportScope = 'current-view' | 'full-dataset';
 type ExportFormat = 'csv' | 'xlsx' | 'json';

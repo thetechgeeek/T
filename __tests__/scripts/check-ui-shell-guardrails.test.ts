@@ -23,7 +23,7 @@ function createFixture({
 	const root = fs.mkdtempSync(path.join(os.tmpdir(), 'check-ui-shell-guardrails-'));
 	writeFiles(root, {
 		'app/_layout.tsx': [
-			"import { ShellAuthGate, ShellRootProviders } from '@/src/ui-shell';",
+			"import { ShellAuthGate, ShellRootProviders } from '@easydesign/ui-shell';",
 			'export default function RootLayout() {',
 			'	return (',
 			'		<ShellRootProviders environment={{ translate: (key) => key, isConnected: true, syncStatus: { lastSyncedAt: null, isSyncing: false, pendingCount: 0 }, openSyncLog: () => {} }}>',
@@ -37,13 +37,18 @@ function createFixture({
 		'src/ui-shell/index.ts':
 			'export * from "./ShellRootProviders";\nexport * from "./ShellAuthGate";\n',
 		'src/ui-shell/package.json': JSON.stringify(
-			{ name: '@tilemaster/ui-shell', version: '0.0.0', private: true },
+			{ name: '@easydesign/ui-shell', version: '0.0.0', private: true },
 			null,
 			2,
 		),
-		'src/ui-shell/README.md': 'public surface\nproduct apps\nsrc/design-system\nadapter\n',
+		'src/ui-shell/README.md':
+			'public surface\nconsumer apps\n@easydesign/design-system\n@easydesign/ui-shell\nadapter\nProvider Order\n',
+		'src/ui-shell/ShellAdapters.ts': 'export type ShellAdapter = {};\n',
+		'src/ui-shell/ShellAssetGate.tsx': 'export function ShellAssetGate() { return null; }\n',
 		'src/ui-shell/ShellEnvironment.tsx':
 			'export function ShellEnvironmentProvider() { return null; }\n',
+		'src/ui-shell/ShellOverlay.tsx':
+			'export function ShellOverlayProvider() { return null; }\n',
 		'src/ui-shell/ShellRootProviders.tsx':
 			'export function ShellRootProviders() { return null; }\n',
 		'src/ui-shell/ShellAuthGate.tsx': 'export function ShellAuthGate() { return null; }\n',
@@ -82,8 +87,8 @@ describe('check-ui-shell-guardrails', () => {
 	it('passes when shell code stays product-agnostic and consumers use public entrypoints', () => {
 		const root = createFixture({
 			shellSource: [
-				"import { ThemedText } from '@/src/design-system';",
-				"import { useThemeTokens } from '@/src/design-system/foundation';",
+				"import { ThemedText } from '@easydesign/design-system';",
+				"import { useThemeTokens } from '@easydesign/design-system/foundation';",
 				"import { useShellEnvironment } from '../../ShellEnvironment';",
 				'export function ScreenHeader() {',
 				'	const { c } = useThemeTokens();',
@@ -93,7 +98,7 @@ describe('check-ui-shell-guardrails', () => {
 				'',
 			].join('\n'),
 			consumerSource:
-				"import { ShellRootProviders } from '@/src/ui-shell';\nexport default ShellRootProviders;\n",
+				"import { ShellRootProviders } from '@easydesign/ui-shell';\nexport default ShellRootProviders;\n",
 		});
 		roots.push(root);
 
@@ -110,7 +115,7 @@ describe('check-ui-shell-guardrails', () => {
 				'',
 			].join('\n'),
 			consumerSource:
-				"import { ShellRootProviders } from '@/src/ui-shell';\nexport default ShellRootProviders;\n",
+				"import { ShellRootProviders } from '@easydesign/ui-shell';\nexport default ShellRootProviders;\n",
 		});
 		roots.push(root);
 
@@ -123,7 +128,7 @@ describe('check-ui-shell-guardrails', () => {
 	it('fails when consumers import legacy shim paths', () => {
 		const root = createFixture({
 			shellSource: [
-				"import { ThemedText } from '@/src/design-system';",
+				"import { ThemedText } from '@easydesign/design-system';",
 				'export function ScreenHeader() {',
 				'	return ThemedText ? null : null;',
 				'}',
@@ -143,7 +148,7 @@ describe('check-ui-shell-guardrails', () => {
 	it('fails when consumers import private shell files', () => {
 		const root = createFixture({
 			shellSource: [
-				"import { ThemedText } from '@/src/design-system';",
+				"import { ThemedText } from '@easydesign/design-system';",
 				'export function ScreenHeader() {',
 				'	return ThemedText ? null : null;',
 				'}',
@@ -151,6 +156,26 @@ describe('check-ui-shell-guardrails', () => {
 			].join('\n'),
 			consumerSource:
 				"import { ScreenHeader } from '@/src/ui-shell/components/molecules/ScreenHeader';\nexport default ScreenHeader;\n",
+		});
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('private-shell-import');
+		expect(output).toContain('app/example.tsx');
+	});
+
+	it('fails when consumers import private package subpaths', () => {
+		const root = createFixture({
+			shellSource: [
+				"import { ThemedText } from '@easydesign/design-system';",
+				'export function ScreenHeader() {',
+				'	return ThemedText ? null : null;',
+				'}',
+				'',
+			].join('\n'),
+			consumerSource:
+				"import { ScreenHeader } from '@easydesign/ui-shell/components/molecules/ScreenHeader';\nexport default ScreenHeader;\n",
 		});
 		roots.push(root);
 

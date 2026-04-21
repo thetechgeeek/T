@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
 import { Divider } from '../Divider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { SPACING_PX } from '../../../foundation/theme/layoutMetrics';
 
 const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);
 

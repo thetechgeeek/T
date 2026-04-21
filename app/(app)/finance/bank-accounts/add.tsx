@@ -5,16 +5,16 @@ import {
 	BORDER_WIDTH_BASE,
 	LETTER_SPACING_ACCOUNT,
 	SIZE_INPUT_HEIGHT,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScreenHeader } from '@/src/ui-shell';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 // TODO: connect to store — save to bank_accounts table via Supabase
 const BANKS = [

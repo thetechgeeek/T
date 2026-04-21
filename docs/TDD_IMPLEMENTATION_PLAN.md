@@ -1,4 +1,4 @@
-# TDD Implementation Plan — TileMaster (React Native / Expo)
+# TDD Implementation Plan — EasyDesign (React Native / Expo)
 
 > Based on: TDD_QA_REVIEW.md (reviewed 2026-03-29)
 > Target: Close all P0/P1/P2 gaps, harden configuration, achieve production-ready test suite
@@ -219,7 +219,7 @@ _Create shared typed test data builders. All subsequent test files import from h
 
 ### Auth Fixtures
 
-- [x] Create `__tests__/fixtures/authFixtures.ts`: Export `makeUser(overrides?: Partial<User>): User` with defaults `{ id: 'user-uuid-001', email: 'admin@tilemaster.in', created_at: '2026-01-01T00:00:00.000Z' }`.
+- [x] Create `__tests__/fixtures/authFixtures.ts`: Export `makeUser(overrides?: Partial<User>): User` with defaults `{ id: 'user-uuid-001', email: 'admin@easydesign.in', created_at: '2026-01-01T00:00:00.000Z' }`.
 
 - [x] Add to `__tests__/fixtures/authFixtures.ts`: Export `makeSession(overrides?: Partial<Session>): Session` with defaults `{ access_token: 'mock-access-token', refresh_token: 'mock-refresh-token', user: makeUser() }`.
 

@@ -7,13 +7,13 @@ import {
 	type TextInput as NativeTextInput,
 	type ViewStyle,
 } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
-import { SIZE_TEXTAREA_MIN_HEIGHT } from '@/src/design-system/foundation/theme/uiMetrics';
-import { LINE_HEIGHT } from '@/src/design-system/foundation/theme/typographyMetrics';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from '../atoms/ThemedText';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
+import { SIZE_TEXTAREA_MIN_HEIGHT } from '../../foundation/theme/uiMetrics';
+import { LINE_HEIGHT } from '../../foundation/theme/typographyMetrics';
 
 type NativeTextAreaProps = React.ComponentProps<typeof TextInput>;
 

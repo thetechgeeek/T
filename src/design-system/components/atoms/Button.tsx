@@ -10,11 +10,11 @@ import {
 	type GestureResponderEvent,
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { triggerDesignSystemHaptic, type DesignSystemHaptic } from '@/src/design-system/haptics';
-import { buildInProgressLabel, DEFAULT_ACTION_LABEL } from '@/src/design-system/microcopy';
-import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
-import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { triggerDesignSystemHaptic, type DesignSystemHaptic } from '../../haptics';
+import { buildInProgressLabel, DEFAULT_ACTION_LABEL } from '../../microcopy';
+import { buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 
 export interface ButtonProps extends Omit<PressableProps, 'style'> {

@@ -1,4 +1,4 @@
-# Test Coverage Analysis — TileMaster Application
+# Test Coverage Analysis — EasyDesign Application
 
 **Generated:** 2026-03-31
 **Framework:** Jest v29.7.0 (jest-expo preset) + Maestro for E2E

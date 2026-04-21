@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { View, Switch, StyleSheet, Pressable, TextInput } from 'react-native';
 
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SectionHeader } from '@/src/design-system';
-import { SettingsCard } from '@/src/design-system';
-import { withOpacity } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SectionHeader } from '@easydesign/design-system';
+import { SettingsCard } from '@easydesign/design-system';
+import { withOpacity } from '@easydesign/design-system/foundation';
 import {
 	BORDER_WIDTH_BASE,
 	OPACITY_TINT_LIGHT,
 	SIZE_DAYS_INPUT_WIDTH,
 	SIZE_TEXTAREA_HEIGHT,
-} from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 type Channel = 'whatsapp' | 'sms' | 'both';
 

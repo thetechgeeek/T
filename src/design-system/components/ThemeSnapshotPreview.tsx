@@ -1,15 +1,15 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Chip } from '@/src/design-system/components/atoms/Chip';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
-import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
+import { Card } from './atoms/Card';
+import { Badge } from './atoms/Badge';
+import { Button } from './atoms/Button';
+import { Chip } from './atoms/Chip';
+import { TextInput } from './atoms/TextInput';
+import { ThemedText } from './atoms/ThemedText';
+import { AlertBanner } from './molecules/AlertBanner';
+import { SkeletonBlock } from './molecules/SkeletonBlock';
+import { SkeletonRow } from './molecules/SkeletonRow';
+import { useThemeTokens } from '../foundation/hooks/useThemeTokens';
 import {
 	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,
 	DESIGN_SYSTEM_READ_ONLY_FIELDS,

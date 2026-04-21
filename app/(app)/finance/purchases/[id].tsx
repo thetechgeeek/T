@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, Alert, Pressable, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { OPACITY_TINT_LIGHT, Z_INDEX } from '@/src/design-system/foundation';
+import { OPACITY_TINT_LIGHT, Z_INDEX } from '@easydesign/design-system/foundation';
 import type { Href } from 'expo-router';
 import {
 	Trash2,
@@ -14,21 +14,21 @@ import {
 	Plus,
 } from 'lucide-react-native';
 import { supabase } from '@/src/config/supabase';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { withOpacity } from '@/src/design-system/foundation';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { Badge } from '@/src/design-system';
-import { Divider } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SectionHeader } from '@/src/design-system';
-import { SkeletonBlock } from '@/src/design-system';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { Badge } from '@easydesign/design-system';
+import { Divider } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SectionHeader } from '@easydesign/design-system';
+import { SkeletonBlock } from '@easydesign/design-system';
 import type { Purchase, PurchaseLineItem, Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
 import type { ThemeColors } from '@/src/theme';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 /** Minimum width of the kebab-menu dropdown */
 const KEBAB_MENU_MIN_WIDTH = 140;

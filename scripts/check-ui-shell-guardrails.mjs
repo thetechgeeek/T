@@ -37,24 +37,34 @@ const REQUIRED_FILES = [
 	'src/ui-shell/index.ts',
 	'src/ui-shell/package.json',
 	'src/ui-shell/README.md',
+	'src/ui-shell/ShellAdapters.ts',
+	'src/ui-shell/ShellAssetGate.tsx',
 	'src/ui-shell/ShellEnvironment.tsx',
+	'src/ui-shell/ShellOverlay.tsx',
 	'src/ui-shell/ShellRootProviders.tsx',
 	'src/ui-shell/ShellAuthGate.tsx',
 	'src/ui-shell/__tests__/boundary.test.tsx',
 ];
 const REQUIRED_README_PHRASES = [
 	'public surface',
-	'product apps',
-	'src/design-system',
+	'consumer apps',
+	'@easydesign/design-system',
+	'@easydesign/ui-shell',
 	'adapter',
+	'Provider Order',
 ];
 const LEGACY_CONSUMER_IMPORT_RE =
-	/from\s*['"](?:@\/src\/theme\/|@\/theme\/|@\/src\/hooks\/(?:useThemeTokens|useReducedMotion|useSkeletonShimmer|useDebounce|useControllableState)|@\/src\/utils\/(?:color|accessibility|animateNextLayout)|@\/app\/components\/atoms\/(?:ErrorBoundary|OfflineBanner|QueryBoundary|SyncIndicator)|@\/app\/components\/molecules\/ScreenHeader)/;
-const PRIVATE_SHELL_IMPORT_RE = /from\s*['"]@\/src\/ui-shell\/(?!index['"]|package\.json['"])/;
+	/from\s*['"](?:@\/src\/theme\/|@\/theme\/|@\/src\/hooks\/(?:useThemeTokens|useReducedMotion|useSkeletonShimmer|useDebounce|useControllableState)|@\/src\/utils\/(?:color|accessibility|animateNextLayout)|@\/app\/components\/atoms\/(?:ErrorBoundary|OfflineBanner|QueryBoundary|SyncIndicator)|@\/app\/components\/molecules\/ScreenHeader|@\/src\/design-system['"]|@\/src\/design-system\/foundation['"]|@\/src\/ui-shell['"])/;
+const PRIVATE_SHELL_IMPORT_RE =
+	/from\s*['"](?:@\/src\/ui-shell\/(?!index['"]|package\.json['"])|@easydesign\/ui-shell\/(?!package\.json['"]))/;
 const PRIVATE_DESIGN_SYSTEM_IMPORT_RE =
-	/from\s*['"](?:@\/src\/design-system\/components\/|@\/src\/design-system\/foundation\/)/;
+	/from\s*['"](?:@\/src\/design-system\/components\/|@\/src\/design-system\/foundation\/|@easydesign\/design-system\/foundation\/|@easydesign\/design-system\/(?!foundation['"]|package\.json['"]))/;
 const SHELL_PRODUCT_IMPORT_RE =
 	/from\s*['"](?:@\/app\/|@\/src\/stores\/|@\/src\/services\/|@\/src\/features\/|@\/src\/hooks\/useLocale|@\/src\/hooks\/useNetworkStatus|@\/src\/theme\/|@\/theme\/|@\/src\/utils\/)/;
+const SHELL_PRIVATE_DESIGN_SYSTEM_IMPORT_RE =
+	/from\s*['"]@easydesign\/design-system\/(?!foundation['"]|package\.json['"])/;
+const SHELL_PRIVATE_FOUNDATION_IMPORT_RE =
+	/from\s*['"]@easydesign\/design-system\/foundation\//;
 
 function normalize(relPath) {
 	return relPath.split(path.sep).join('/');
@@ -89,11 +99,10 @@ function walk(dir, out = []) {
 function collectConsumerFiles() {
 	const roots = [path.join(root, 'app'), path.join(root, 'src'), path.join(root, '__tests__')];
 	const excludedFiles = new Set([
-		'__tests__/scripts/check-design-system-guardrails.test.ts',
-		'__tests__/scripts/check-ui-shell-guardrails.test.ts',
 		'src/i18n/runtime.ts',
 	]);
 	const excludedPrefixes = [
+		'__tests__/scripts',
 		'src/design-system',
 		'src/ui-shell',
 		'src/theme',
@@ -164,6 +173,14 @@ for (const absolutePath of collectShellSourceFiles()) {
 			message: 'UI shell code must stay detached from product hooks, stores, services, features, and legacy shared layers.',
 		});
 	}
+	if (SHELL_PRIVATE_DESIGN_SYSTEM_IMPORT_RE.test(text) || SHELL_PRIVATE_FOUNDATION_IMPORT_RE.test(text)) {
+		violations.push({
+			file: relPath,
+			rule: 'shell-private-design-system-import',
+			message:
+				'UI shell code must consume design-system packages through @easydesign/design-system or @easydesign/design-system/foundation only.',
+		});
+	}
 }
 
 for (const absolutePath of collectConsumerFiles()) {
@@ -202,6 +219,13 @@ if (!/ShellRootProviders/.test(rootLayout) || !/ShellAuthGate/.test(rootLayout))
 		file: 'app/_layout.tsx',
 		rule: 'root-shell-contract',
 		message: 'app/_layout.tsx must compose the root shell through ShellRootProviders and ShellAuthGate.',
+	});
+}
+if (!/from\s*['"]@easydesign\/ui-shell['"]/.test(rootLayout)) {
+	violations.push({
+		file: 'app/_layout.tsx',
+		rule: 'root-shell-import',
+		message: 'app/_layout.tsx must import the root shell from @easydesign/ui-shell.',
 	});
 }
 

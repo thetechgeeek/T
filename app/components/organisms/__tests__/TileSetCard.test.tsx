@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/design-system/foundation';
+import { ThemeProvider } from '@easydesign/design-system/foundation';
 import { TileSetCard } from '../TileSetCard';
 import type { TileSetGroup, InventoryItem } from '@/src/types/inventory';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 
 interface DividerProps {
 	style?: StyleProp<ViewStyle>;

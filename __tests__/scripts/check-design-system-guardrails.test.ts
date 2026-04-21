@@ -64,10 +64,16 @@ function createFixture(componentSource: string) {
 			'- Relaxed showcase',
 			'- Operational dense',
 			'- loading, empty, error, read-only, denied, no-media, and ugly-data',
-			'- src/design-system/foundation',
+			'- @easydesign/design-system',
+			'- @easydesign/design-system/foundation',
 			'- public entrypoints',
 			'',
 		].join('\n'),
+		'src/design-system/package.json': JSON.stringify(
+			{ name: '@easydesign/design-system', version: '0.1.0', private: true },
+			null,
+			2,
+		),
 		'src/design-system/fixtures.ts': 'export const fixtures = [];\n',
 		'src/design-system/foundation/index.ts': 'export * from "./theme/ThemeProvider";\n',
 		'src/design-system/index.ts': 'export * from "./foundation";\n',
@@ -158,7 +164,7 @@ describe('check-design-system-guardrails', () => {
 	it('passes when animated DS components gate motion through useReducedMotion', () => {
 		const root = createFixture(`
 			import { withSpring } from 'react-native-reanimated';
-			import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+			import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
 
 			export function MotionCard() {
 				const reduceMotionEnabled = useReducedMotion();
@@ -193,7 +199,7 @@ describe('check-design-system-guardrails', () => {
 	it('fails when the shared RTL directionality contracts disappear', () => {
 		const root = createFixture(`
 			import { withSpring } from 'react-native-reanimated';
-			import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+			import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
 
 			export function MotionCard() {
 				const reduceMotionEnabled = useReducedMotion();
@@ -222,7 +228,7 @@ describe('check-design-system-guardrails', () => {
 	it('fails when the generated checklist catalog still reports open items', () => {
 		const root = createFixture(`
 			import { withSpring } from 'react-native-reanimated';
-			import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
+			import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
 
 			export function MotionCard() {
 				const reduceMotionEnabled = useReducedMotion();
@@ -278,6 +284,23 @@ describe('check-design-system-guardrails', () => {
 		const output = runCheckFailure(root);
 
 		expect(output).toContain('legacy-hook-import');
+		expect(output).toContain('MotionCard.tsx');
+	});
+
+	it('fails when DS source re-imports itself through public package paths', () => {
+		const root = createFixture(`
+			import { useReducedMotion } from '@easydesign/design-system/foundation';
+
+			export function MotionCard() {
+				const reduceMotionEnabled = useReducedMotion();
+				return reduceMotionEnabled ? null : null;
+			}
+		`);
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('design-system-self-import');
 		expect(output).toContain('MotionCard.tsx');
 	});
 });

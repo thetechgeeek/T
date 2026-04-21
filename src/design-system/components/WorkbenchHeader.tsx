@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useThemeTokens } from '../foundation/hooks/useThemeTokens';
+import { ThemedText } from './atoms/ThemedText';
 
 export interface WorkbenchHeaderProps {
 	title: string;

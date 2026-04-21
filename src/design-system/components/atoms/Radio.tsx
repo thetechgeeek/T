@@ -7,19 +7,13 @@ import {
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
-import {
-	announceForScreenReader,
-	buildFocusRingStyle,
-} from '@/src/design-system/foundation/utils/accessibility';
-import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
-import {
-	SPACING_PX,
-	TOUCH_TARGET_MIN_PX,
-} from '@/src/design-system/foundation/theme/layoutMetrics';
-import { SIZE_RADIO_INNER } from '@/src/design-system/foundation/theme/uiMetrics';
+import { announceForScreenReader, buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { triggerDesignSystemHaptic } from '../../haptics';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '../../foundation/theme/layoutMetrics';
+import { SIZE_RADIO_INNER } from '../../foundation/theme/uiMetrics';
 
 export interface RadioProps {
 	label: string;

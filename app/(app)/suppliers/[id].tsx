@@ -3,17 +3,17 @@ import { View, StyleSheet, TouchableOpacity, Linking, Alert } from 'react-native
 import { useLocalSearchParams } from 'expo-router';
 import { MessageCircle, ShoppingCart, CreditCard } from 'lucide-react-native';
 import { supplierRepository } from '@/src/repositories/supplierRepository';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
+import { Card } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
 import { CustomerDetailSkeleton } from '@/app/components/molecules/skeletons/CustomerDetailSkeleton';
-import { SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
-import { SIZE_THUMBNAIL_MD } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
+import { SIZE_THUMBNAIL_MD } from '@easydesign/design-system/foundation';
 import type { Supplier } from '@/src/types/supplier';
 import type { UUID } from '@/src/types/common';
 

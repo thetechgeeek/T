@@ -1,11 +1,11 @@
 import React from 'react';
 import { WifiOff, AlertTriangle, FileQuestion } from 'lucide-react-native';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { DEFAULT_RETRY_LABEL, ERROR_STATE_COPY } from '@/src/design-system/microcopy';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { LucideIconGlyph } from '../../iconography';
+import { DEFAULT_RETRY_LABEL, ERROR_STATE_COPY } from '../../microcopy';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { Button } from '../atoms/Button';
+import { ThemedText } from '../atoms/ThemedText';
 
 export type ErrorStateVariant = 'server' | 'not-found' | 'offline';
 

@@ -4,20 +4,20 @@ import { View, StyleSheet, RefreshControl, Alert, Pressable } from 'react-native
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Plus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
-import { ScreenHeader } from '@/src/ui-shell';
-import { FilterBar } from '@/src/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { FilterBar } from '@easydesign/design-system';
 import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { EmptyState } from '@/src/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { EmptyState } from '@easydesign/design-system';
 import type { Expense } from '@/src/types/finance';
-import { layout } from '@/src/design-system/foundation';
-import { FAB_OFFSET_RIGHT, RADIUS_FAB, SIZE_FAB } from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { layout } from '@easydesign/design-system/foundation';
+import { FAB_OFFSET_RIGHT, RADIUS_FAB, SIZE_FAB } from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
 
 const LIST_BOTTOM_PADDING = 100;
 

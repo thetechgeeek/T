@@ -1,10 +1,10 @@
 import React, { forwardRef, useMemo, useState } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { primitiveColorPalettes } from '@/src/design-system/foundation/theme/palette';
-import { SegmentedControl } from '@/src/design-system/components/molecules/SegmentedControl';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { primitiveColorPalettes } from '../../foundation/theme/palette';
+import { SegmentedControl } from './SegmentedControl';
+import { TextInput } from '../atoms/TextInput';
 
 const HUE_SEGMENT_DEGREES = 60;
 const FULL_HUE_DEGREES = 360;

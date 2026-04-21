@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, Alert } from 'react-native';
 import { Download, ArrowUpDown } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { REPORT_NUM_COLUMN_MIN_WIDTH_PX } from '@/constants/reportLayout';
 import { MOCK_ITEM_PROFIT_ROWS, type ItemProfitRow } from '@/src/mocks/reports/itemProfit';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 // TODO: Replace with real data from Supabase (sales + purchase cost joined on item_id)
 type Period = 'month' | 'quarter' | 'year' | 'fy';

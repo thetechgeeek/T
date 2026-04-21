@@ -1,5 +1,5 @@
 /**
- * Jest configuration for TileMaster (React Native / Expo)
+ * Jest configuration for EasyDesign (React Native / Expo)
  *
  * Path aliases mirror tsconfig.json "paths". Specific prefixes (@/theme, @/constants, …)
  * must be listed BEFORE the catch-all '^@/(.*)$' — Jest uses first match.
@@ -58,6 +58,13 @@ module.exports = {
 	testPathIgnorePatterns: ['/node_modules/', '<rootDir>/__tests__/integration/'],
 
 	moduleNameMapper: {
+		'^@easydesign/design-system/foundation$': '<rootDir>/src/design-system/foundation/index.ts',
+		'^@easydesign/design-system$': '<rootDir>/src/design-system/index.ts',
+		'^@easydesign/design-system/(.*)$': '<rootDir>/src/design-system/$1',
+		'^@easydesign/ui-shell$': '<rootDir>/src/ui-shell/index.ts',
+		'^@easydesign/ui-shell/(.*)$': '<rootDir>/src/ui-shell/$1',
+		'^@easydesign/ops-console$': '<rootDir>/examples/ops-console/src/index.ts',
+		'^@easydesign/ops-console/(.*)$': '<rootDir>/examples/ops-console/src/$1',
 		'^@/theme/(.*)$': '<rootDir>/src/theme/$1',
 		'^@/constants/(.*)$': '<rootDir>/src/constants/$1',
 		'^@/components/(.*)$': '<rootDir>/src/components/$1',

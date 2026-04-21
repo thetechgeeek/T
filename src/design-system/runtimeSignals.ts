@@ -1,13 +1,13 @@
 import { AccessibilityInfo, Dimensions, I18nManager, PixelRatio, Platform } from 'react-native';
 import { useEffect, useState } from 'react';
-import { detectDeviceLocale } from '@/src/design-system/foundation/i18n/runtime';
-import { detectPixelRatio } from '@/src/design-system/foundation/theme/density';
+import { detectDeviceLocale } from './foundation/i18n/runtime';
+import { detectPixelRatio } from './foundation/theme/density';
 import {
 	resolveResponsiveMetrics,
 	type ResponsiveBreakpoint,
 	type ResponsiveDeviceType,
 	type ResponsiveOrientation,
-} from '@/src/design-system/foundation/theme/responsive';
+} from './foundation/theme/responsive';
 
 const FONT_SCALE_DECIMALS = 2;
 const DEFAULT_WINDOW_WIDTH = 390;

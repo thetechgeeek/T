@@ -1,11 +1,30 @@
 {
-	"name": "@tilemaster/ui-shell",
-	"version": "0.0.0",
+	"name": "@easydesign/ui-shell",
+	"version": "0.1.0",
+	"description": "EasyDesign reusable UI shell package.",
 	"private": true,
 	"main": "./index.ts",
 	"types": "./index.ts",
 	"react-native": "./index.ts",
+	"sideEffects": false,
+	"files": [
+		"README.md",
+		"CHANGELOG.md",
+		"MIGRATIONS.md",
+		"index.ts",
+		"ShellAdapters.ts",
+		"ShellAssetGate.tsx",
+		"ShellAuthGate.tsx",
+		"ShellEnvironment.tsx",
+		"ShellOverlay.tsx",
+		"ShellRootProviders.tsx",
+		"components"
+	],
+	"dependencies": {
+		"@easydesign/design-system": "file:../design-system"
+	},
 	"exports": {
-		".": "./index.ts"
+		".": "./index.ts",
+		"./package.json": "./package.json"
 	}
 }

@@ -2,19 +2,19 @@ import {
 	BORDER_WIDTH_BASE,
 	BORDER_WIDTH_MEDIUM,
 	OPACITY_TINT_LIGHT,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import React, { useState } from 'react';
 import { View, Switch, StyleSheet, TextInput, Pressable } from 'react-native';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import type { ThemeColors } from '@/src/theme';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SectionHeader } from '@/src/design-system';
-import { SettingsCard } from '@/src/design-system';
-import { withOpacity } from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SectionHeader } from '@easydesign/design-system';
+import { SettingsCard } from '@easydesign/design-system';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 type FilingPeriod = 'monthly' | 'quarterly';
 

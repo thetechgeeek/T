@@ -8,16 +8,16 @@ import {
 	SIZE_REMOVE_BUTTON,
 	SIZE_TEXTAREA_COMPACT_HEIGHT,
 	SIZE_TEXTAREA_HEIGHT,
-} from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 import { View, TextInput, Pressable, ActivityIndicator, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { businessProfileService } from '@/src/services/businessProfileService';
-import { useTheme } from '@/src/design-system/foundation';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { SectionHeader } from '@/src/design-system';
+import { useTheme } from '@easydesign/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { SectionHeader } from '@easydesign/design-system';
 import { storageService } from '@/src/services/storageService';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';

@@ -2,18 +2,18 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { Button } from '@/src/design-system';
+import { Button } from '@easydesign/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
 import { FileText, Plus, Search, X } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
 import { InvoiceStatusBadge } from '@/app/components/molecules/InvoiceStatusBadge';
 import type { InvoiceStatus } from '@/app/components/molecules/InvoiceStatusBadge';
 import { InvoiceListSkeleton } from '@/app/components/molecules/skeletons/InvoiceListSkeleton';
 import type { Invoice, PaymentStatus } from '@/src/types/invoice';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 // ─── types ───────────────────────────────────────────────────────────────────
 

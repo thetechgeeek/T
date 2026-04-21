@@ -1,13 +1,10 @@
 import React, { forwardRef } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import {
-	DatePickerField,
-	type DatePickerFieldProps,
-} from '@/src/design-system/components/molecules/DatePickerField';
-import { Chip } from '@/src/design-system/components/atoms/Chip';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { DatePickerField, type DatePickerFieldProps } from './DatePickerField';
+import { Chip } from '../atoms/Chip';
+import { ThemedText } from '../atoms/ThemedText';
 import {
 	addDaysIso,
 	endOfMonthIso,
@@ -15,7 +12,7 @@ import {
 	startOfMonthIso,
 	todayIso,
 	type DateRangeValue,
-} from '@/src/design-system/dateUtils';
+} from '../../dateUtils';
 
 const LAST_7_DAYS_OFFSET = -6;
 

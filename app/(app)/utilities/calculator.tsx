@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, Modal, TextInput, Alert } from 'react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { withOpacity } from '@/src/design-system/foundation';
-import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { SPACING_PX, BORDER_RADIUS_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 import {
 	OVERLAY_COLOR_STRONG,
 	OPACITY_BADGE_BG,
 	OPACITY_SKELETON_BASE,
 	SIZE_TEXTAREA_MIN_HEIGHT,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 
 const GST_RATES = [0, 5, 12, 18, 28];
 const CALCULATOR_EXPRESSION_MIN_HEIGHT = FONT_SIZE.h2;

@@ -1,23 +1,23 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
-import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@/src/design-system/foundation';
+import { OPACITY_TINT_STRONG, OPACITY_SKELETON_BASE } from '@easydesign/design-system/foundation';
 
 const DISABLED_NAV_OPACITY = OPACITY_TINT_STRONG;
 const SUMMARY_CARD_BORDER_WIDTH = 1.5;
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import type { ThemeColors } from '@/src/theme';
 import { useLocale } from '@/src/hooks/useLocale';
-import { withOpacity } from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
-import { SIZE_CHIP_HEIGHT } from '@/src/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { SIZE_CHIP_HEIGHT } from '@easydesign/design-system/foundation';
 
 type PeriodMode = 'monthly' | 'quarterly' | 'fy';
 const PROFIT_LOSS_SCROLL_BOTTOM_PADDING = 40;

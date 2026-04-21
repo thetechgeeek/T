@@ -15,7 +15,7 @@ describe('INT-001: Auth Flow', () => {
 	});
 
 	it('signs in with valid credentials and returns a session', async () => {
-		const email = process.env.INTEGRATION_TEST_EMAIL ?? 'test@tilemaster.dev';
+		const email = process.env.INTEGRATION_TEST_EMAIL ?? 'test@easydesign.dev';
 		const password = process.env.INTEGRATION_TEST_PASSWORD ?? 'TestPass123!';
 
 		const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -27,7 +27,7 @@ describe('INT-001: Auth Flow', () => {
 
 	it('returns an error for invalid credentials', async () => {
 		const { data, error } = await supabase.auth.signInWithPassword({
-			email: 'nonexistent@tilemaster.dev',
+			email: 'nonexistent@easydesign.dev',
 			password: 'WrongPassword123!',
 		});
 
@@ -74,7 +74,7 @@ describe('INT-001: Auth Flow', () => {
 
 	it('returns error with empty password', async () => {
 		const { data, error } = await supabase.auth.signInWithPassword({
-			email: process.env.INTEGRATION_TEST_EMAIL ?? 'test@tilemaster.dev',
+			email: process.env.INTEGRATION_TEST_EMAIL ?? 'test@easydesign.dev',
 			password: '',
 		});
 

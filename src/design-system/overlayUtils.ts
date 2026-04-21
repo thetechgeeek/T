@@ -1,4 +1,4 @@
-import type { Theme } from '@/src/design-system/foundation/theme';
+import type { Theme } from './foundation/theme';
 
 export type OverlayDensity = 'compact' | 'default' | 'relaxed';
 

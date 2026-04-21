@@ -1,31 +1,28 @@
 import React, { forwardRef, useState } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { announceForScreenReader } from '@/src/design-system/foundation/utils/accessibility';
-import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card, CardBody, CardFooter, CardHeader } from '@/src/design-system/components/atoms/Card';
-import { Checkbox } from '@/src/design-system/components/atoms/Checkbox';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import {
-	ActivityFeed,
-	type ActivityFeedItem,
-} from '@/src/design-system/components/molecules/ActivityFeed';
-import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
-import { ConfirmationModal } from '@/src/design-system/components/molecules/ConfirmationModal';
-import { DescriptionList } from '@/src/design-system/components/molecules/DescriptionList';
-import { ProgressIndicator } from '@/src/design-system/components/molecules/ProgressIndicator';
-import { SegmentedControl } from '@/src/design-system/components/molecules/SegmentedControl';
-import { SwipeableRow } from '@/src/design-system/components/molecules/SwipeableRow';
-import { TableRow } from '@/src/design-system/components/molecules/TableRow';
-import { ToastViewport, type ToastStackItem } from '@/src/design-system/components/molecules/Toast';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { announceForScreenReader } from '../../foundation/utils/accessibility';
+import { triggerDesignSystemHaptic } from '../../haptics';
+import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { Card, CardBody, CardFooter, CardHeader } from '../atoms/Card';
+import { Checkbox } from '../atoms/Checkbox';
+import { ThemedText } from '../atoms/ThemedText';
+import { ActivityFeed, type ActivityFeedItem } from '../molecules/ActivityFeed';
+import { AlertBanner } from '../molecules/AlertBanner';
+import { ConfirmationModal } from '../molecules/ConfirmationModal';
+import { DescriptionList } from '../molecules/DescriptionList';
+import { ProgressIndicator } from '../molecules/ProgressIndicator';
+import { SegmentedControl } from '../molecules/SegmentedControl';
+import { SwipeableRow } from '../molecules/SwipeableRow';
+import { TableRow } from '../molecules/TableRow';
+import { ToastViewport, type ToastStackItem } from '../molecules/Toast';
 import {
 	responsiveCardStyle,
 	stackOnPhoneRowStyle,
 	useResponsiveWorkbenchLayout,
-} from '@/src/design-system/useResponsiveWorkbenchLayout';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+} from '../../useResponsiveWorkbenchLayout';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 
 export interface CrudWorkspaceRecord {
 	id: string;

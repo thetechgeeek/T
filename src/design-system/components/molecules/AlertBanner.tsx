@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { DEFAULT_DISMISS_LABEL, FEEDBACK_TONE_LABELS } from '@/src/design-system/microcopy';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { DEFAULT_DISMISS_LABEL, FEEDBACK_TONE_LABELS } from '../../microcopy';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from '../atoms/ThemedText';
 
 export type AlertBannerVariant = 'info' | 'success' | 'warning' | 'error';
 

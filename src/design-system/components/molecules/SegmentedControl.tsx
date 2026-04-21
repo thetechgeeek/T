@@ -1,9 +1,6 @@
 import React, { forwardRef } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import {
-	ToggleButtonGroup,
-	type ToggleButtonOption,
-} from '@/src/design-system/components/molecules/ToggleButtonGroup';
+import { ToggleButtonGroup, type ToggleButtonOption } from './ToggleButtonGroup';
 
 export interface SegmentedControlProps {
 	label?: string;

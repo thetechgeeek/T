@@ -8,7 +8,7 @@ import {
 	RADIUS_FAB,
 	SIZE_MODAL_HANDLE_WIDTH,
 	SIZE_MODAL_HANDLE_HEIGHT,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import React, { useState, useEffect } from 'react';
 import {
 	View,
@@ -26,20 +26,24 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Plus, Pencil, Trash2 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { layout } from '@/src/design-system/foundation';
+import { layout } from '@easydesign/design-system/foundation';
 import { itemUnitService } from '@/src/services/itemCategoryService';
 import type { ItemUnit } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
-import { BORDER_RADIUS_PX, SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
-import { ELEVATION } from '@/src/design-system/foundation';
+import {
+	BORDER_RADIUS_PX,
+	SPACING_PX,
+	TOUCH_TARGET_MIN_PX,
+} from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
+import { ELEVATION } from '@easydesign/design-system/foundation';
 
 interface UnitFormState {
 	name: string;

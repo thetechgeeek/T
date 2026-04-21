@@ -1,4 +1,4 @@
-import { OPACITY_TINT_LIGHT, SIZE_ICON_CIRCLE_MD } from '@/src/design-system/foundation';
+import { OPACITY_TINT_LIGHT, SIZE_ICON_CIRCLE_MD } from '@easydesign/design-system/foundation';
 import React from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
@@ -11,13 +11,13 @@ import {
 	BarChart,
 	ChevronRight,
 } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { TouchableCard } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { withOpacity } from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { TouchableCard } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 interface ReportCard {
 	title: string;

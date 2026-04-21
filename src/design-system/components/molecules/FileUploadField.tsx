@@ -2,12 +2,12 @@ import React, { forwardRef, useEffect, useRef } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ProgressIndicator } from '@/src/design-system/components/molecules/ProgressIndicator';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { ProgressIndicator } from './ProgressIndicator';
+import { ThemedText } from '../atoms/ThemedText';
 
 const BYTES_PER_KILOBYTE = 1024;
 const DEFAULT_MAX_FILE_SIZE_BYTES = 5 * BYTES_PER_KILOBYTE * BYTES_PER_KILOBYTE;

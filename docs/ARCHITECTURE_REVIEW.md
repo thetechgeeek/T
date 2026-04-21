@@ -1,4 +1,4 @@
-# TileMaster — Senior Staff Engineer Architecture Review
+# EasyDesign — Senior Staff Engineer Architecture Review
 
 **Reviewer**: Senior Staff Engineer
 **Date**: 2026-03-28

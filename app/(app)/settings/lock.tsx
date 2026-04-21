@@ -1,8 +1,8 @@
 import { View, StyleSheet } from 'react-native';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
 import { useLocale } from '@/src/hooks/useLocale';
 
 export default function SecurityLockScreen() {

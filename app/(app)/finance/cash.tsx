@@ -4,7 +4,7 @@ import {
 	BORDER_WIDTH_BASE,
 	GLASS_WHITE_TEXT,
 	LETTER_SPACING_SECTION,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import {
 	View,
 	StyleSheet,
@@ -14,16 +14,16 @@ import {
 	RefreshControl,
 	Pressable,
 } from 'react-native';
-import { ScreenHeader } from '@/src/ui-shell';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { MOCK_CASH_TRANSACTIONS } from '@/src/mocks/finance/cash';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 // TODO: connect to store — derive from invoices, expenses, purchases with cash payment
 const MOCK_OPENING_BALANCE = 0;

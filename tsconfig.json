@@ -4,6 +4,10 @@
 		"strict": true,
 		"baseUrl": ".",
 		"paths": {
+			"@easydesign/design-system": ["./src/design-system/index.ts"],
+			"@easydesign/design-system/foundation": ["./src/design-system/foundation/index.ts"],
+			"@easydesign/ui-shell": ["./src/ui-shell/index.ts"],
+			"@easydesign/ops-console": ["./examples/ops-console/src/index.ts"],
 			"@/*": ["./*"],
 			"@/src/*": ["./src/*"],
 			"@/components/*": ["./src/components/*"],

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, type ViewStyle, type StyleProp } from 'react-native';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { TouchableCard } from '@/src/design-system/components/atoms/TouchableCard';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
+import { Card } from '../atoms/Card';
+import { TouchableCard } from '../atoms/TouchableCard';
+import { ThemedText } from '../atoms/ThemedText';
+import { useThemeTokens } from '../../foundation/hooks/useThemeTokens';
 
 export interface SettingsCardProps {
 	title?: string;

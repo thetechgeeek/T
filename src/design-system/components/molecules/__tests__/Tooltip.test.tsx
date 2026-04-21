@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { fireEvent, render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
 import { Tooltip } from '../Tooltip';
 
 function flattenStyle(style: unknown) {

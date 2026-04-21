@@ -9,7 +9,7 @@ import Animated, {
 	Easing,
 	cancelAnimation,
 } from 'react-native-reanimated';
-import { ThemedText } from '@/src/design-system';
+import { ThemedText } from '@easydesign/design-system';
 import {
 	BORDER_RADIUS_PX,
 	MS_SYNC_POLL,
@@ -19,7 +19,7 @@ import {
 	useReducedMotion,
 	useThemeTokens,
 	Z_INDEX,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 
 export type SyncStatus = 'synced' | 'syncing' | 'offline';
 

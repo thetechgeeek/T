@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { ThemedText } from '@/src/design-system';
-import { FormField } from '@/src/design-system';
-import { layout } from '@/src/design-system/foundation';
+import { ThemedText } from '@easydesign/design-system';
+import { FormField } from '@easydesign/design-system';
+import { layout } from '@easydesign/design-system/foundation';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import type { CustomerDraft, PaymentMode } from './invoiceCreateTypes';
-import { withOpacity } from '@/src/design-system/foundation';
-import { OPACITY_BADGE_BG } from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { OPACITY_BADGE_BG } from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 import { PAYMENT_MODES } from '@/src/constants/paymentModes';
 

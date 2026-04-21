@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SkeletonBlock } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { SkeletonBlock } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 
 export function CustomerDetailSkeleton() {
 	const { s, r } = useThemeTokens();

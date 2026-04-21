@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { AppState, InteractionManager, type AppStateStatus } from 'react-native';
 import { Stack } from 'expo-router';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useCustomerStore } from '@/src/stores/customerStore';

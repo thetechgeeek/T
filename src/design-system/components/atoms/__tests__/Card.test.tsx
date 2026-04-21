@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import { buildTheme } from '@/src/theme/colors';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
-import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '../../../runtimeSignals';
 import { Text } from 'react-native';
 import { Card, CardBody, CardFooter, CardHeader } from '../Card';
 

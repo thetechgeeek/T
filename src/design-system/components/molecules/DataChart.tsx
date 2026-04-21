@@ -11,13 +11,13 @@ import Svg, {
 	Rect,
 	Text as SvgText,
 } from 'react-native-svg';
-import { Chip } from '@/src/design-system/components/atoms/Chip';
-import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
-import { ErrorState } from '@/src/design-system/components/molecules/ErrorState';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { Chip } from '../atoms/Chip';
+import { EmptyState } from './EmptyState';
+import { ErrorState } from './ErrorState';
+import { SkeletonBlock } from './SkeletonBlock';
+import { ThemedText } from '../atoms/ThemedText';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 
 export type DataChartVariant =
 	| 'line'

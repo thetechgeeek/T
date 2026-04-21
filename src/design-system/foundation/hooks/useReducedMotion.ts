@@ -1,4 +1,4 @@
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { useTheme } from '../theme/ThemeProvider';
 
 /**
  * Small convenience hook so components can opt out of motion without re-reading

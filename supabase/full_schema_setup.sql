@@ -1214,4 +1214,4 @@ DO $$ BEGIN
 END $$;
 
 -- Seed Business Profile
-INSERT INTO business_profile (business_name, invoice_prefix) VALUES ('TileMaster', 'TM') ON CONFLICT DO NOTHING;
+INSERT INTO business_profile (business_name, invoice_prefix) VALUES ('EasyDesign', 'ED') ON CONFLICT DO NOTHING;

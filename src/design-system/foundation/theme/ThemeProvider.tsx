@@ -9,16 +9,14 @@ import React, {
 } from 'react';
 import { Appearance } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-	useRuntimeQualitySignals,
-	type RuntimeQualitySignals,
-} from '@/src/design-system/runtimeSignals';
+import { useRuntimeQualitySignals, type RuntimeQualitySignals } from '../../runtimeSignals';
 import type { Theme, ThemeMode, ThemePresetId } from './index';
 import { buildTheme, DEFAULT_THEME_PRESET_ID, themePresetOptions } from './colors';
 
 export const THEME_STORAGE_KEY = '@ui/theme-settings';
 export const LEGACY_THEME_SETTINGS_STORAGE_KEY = '@tilemaster/theme-settings';
 export const LEGACY_THEME_STORAGE_KEY = '@tilemaster/theme';
+const LEGACY_THEME_PRESET_ALIASES = new Set(['tilemaster', 'easydesign']);
 
 interface PersistedThemeSettings {
 	mode: ThemeMode;
@@ -54,7 +52,7 @@ function isValidThemeMode(value: unknown): value is ThemeMode {
 }
 
 function normalizeThemePresetId(value: unknown): ThemePresetId | null {
-	if (value === 'tilemaster') {
+	if (typeof value === 'string' && LEGACY_THEME_PRESET_ALIASES.has(value)) {
 		return DEFAULT_THEME_PRESET_ID;
 	}
 

@@ -2,11 +2,11 @@ import React, { forwardRef, useState } from 'react';
 import { Pressable, View, StyleSheet, ViewStyle, type StyleProp } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { ChevronRight } from 'lucide-react-native';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
-import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { LucideIconGlyph } from '../../iconography';
+import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
+import { buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 import { ThemedText } from '../atoms/ThemedText';
 
 interface ListItemProps {

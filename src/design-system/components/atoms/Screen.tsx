@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '../../runtimeSignals';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 
 export interface ScreenProps {
 	children: React.ReactNode;

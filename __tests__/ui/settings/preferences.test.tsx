@@ -24,10 +24,10 @@ jest.mock('i18next', () => {
 
 // Mock useTheme to support theme changes
 const mockSetThemeMode = jest.fn();
-jest.mock('@/src/design-system/foundation', () => {
-	const actual = jest.requireActual('@/src/design-system/foundation');
+jest.mock('@easydesign/design-system/foundation', () => {
+	const actual = jest.requireActual('@easydesign/design-system/foundation');
 	const { buildTheme } = actual;
-	const { DEFAULT_RUNTIME_QUALITY_SIGNALS } = require('@/src/design-system/runtimeSignals');
+	const { DEFAULT_RUNTIME_QUALITY_SIGNALS } = require('@easydesign/design-system');
 	const theme = buildTheme(false);
 	const runtime = DEFAULT_RUNTIME_QUALITY_SIGNALS;
 

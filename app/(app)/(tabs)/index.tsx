@@ -2,19 +2,19 @@ import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, RefreshControl, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
-import { layout } from '@/src/design-system/foundation';
-import { withOpacity } from '@/src/design-system/foundation';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { SectionHeader } from '@/src/design-system';
+import { layout } from '@easydesign/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { SectionHeader } from '@easydesign/design-system';
 
 // Atomic Design Components
-import { StatCard } from '@/src/design-system';
+import { StatCard } from '@easydesign/design-system';
 import { DashboardSkeleton } from '@/app/components/molecules/skeletons/DashboardSkeleton';
 import { DashboardHeader } from '@/app/components/organisms/DashboardHeader';
 import { QuickActionsGrid } from '@/app/components/organisms/QuickActionsGrid';
@@ -36,7 +36,7 @@ import {
 	SIZE_BUSINESS_TILE_MIN_HEIGHT,
 	SIZE_CHIP_HEIGHT,
 	SIZE_FAB_ICON,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 
 // ---------------------------------------------------------------------------
 // Helpers

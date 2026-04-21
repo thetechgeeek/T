@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { View, Switch, StyleSheet, Pressable, TextInput } from 'react-native';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import type { ThemeColors } from '@/src/theme';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SectionHeader } from '@/src/design-system';
-import { SettingsCard } from '@/src/design-system';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SectionHeader } from '@easydesign/design-system';
+import { SettingsCard } from '@easydesign/design-system';
 import {
 	BORDER_WIDTH_BASE,
 	SIZE_FIELD_CHIP_HEIGHT,
 	SIZE_FIELD_CHIP_WIDTH,
-} from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 type ExtraFields = 0 | 1 | 2 | 3;
 

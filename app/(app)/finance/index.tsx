@@ -12,16 +12,16 @@ import {
 	ArrowUpRight,
 } from 'lucide-react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { StatCard } from '@/src/design-system';
-import { ListItem } from '@/src/design-system';
-import { Divider } from '@/src/design-system';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
+import { StatCard } from '@easydesign/design-system';
+import { ListItem } from '@easydesign/design-system';
+import { Divider } from '@easydesign/design-system';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
 import React, { useEffect, useState } from 'react';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 export default function FinanceOverviewScreen() {
 	const { theme, c, r } = useThemeTokens();

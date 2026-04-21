@@ -1,14 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SkeletonBlock } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { SkeletonBlock } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import {
 	SIZE_SKELETON_AVATAR,
 	SIZE_SKELETON_BADGE_HEIGHT,
 	SIZE_SKELETON_BADGE_WIDTH,
 	SIZE_SKELETON_TEXT_MD,
 	SIZE_SKELETON_TEXT_SM,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 
 export function CustomerListSkeleton() {
 	const { s, r } = useThemeTokens();

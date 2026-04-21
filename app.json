@@ -1,8 +1,8 @@
 {
 	"expo": {
-		"name": "TileMaster",
-		"slug": "tilemaster",
-		"scheme": "tilemaster",
+		"name": "EasyDesign",
+		"slug": "easydesign",
+		"scheme": "easydesign",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/images/icon.png",
@@ -14,11 +14,11 @@
 		},
 		"ios": {
 			"supportsTablet": true,
-			"bundleIdentifier": "com.tilemaster.app",
+			"bundleIdentifier": "com.easydesign.app",
 			"infoPlist": {
-				"NSCameraUsageDescription": "TileMaster needs camera access to scan tile barcodes and take product photos.",
-				"NSPhotoLibraryUsageDescription": "TileMaster needs photo library access to select tile images.",
-				"NSFaceIDUsageDescription": "TileMaster uses Face ID to secure your business data."
+				"NSCameraUsageDescription": "EasyDesign needs camera access to scan tile barcodes and take product photos.",
+				"NSPhotoLibraryUsageDescription": "EasyDesign needs photo library access to select tile images.",
+				"NSFaceIDUsageDescription": "EasyDesign uses Face ID to secure your business data."
 			}
 		},
 		"android": {
@@ -26,7 +26,7 @@
 				"foregroundImage": "./assets/images/adaptive-icon.png",
 				"backgroundColor": "#C1440E"
 			},
-			"package": "com.tilemaster.app",
+			"package": "com.easydesign.app",
 			"permissions": [
 				"CAMERA",
 				"READ_EXTERNAL_STORAGE",
@@ -45,7 +45,7 @@
 			[
 				"expo-camera",
 				{
-					"cameraPermission": "Allow TileMaster to access your camera to scan barcodes and take photos."
+					"cameraPermission": "Allow EasyDesign to access your camera to scan barcodes and take photos."
 				}
 			],
 			[
@@ -57,14 +57,14 @@
 			[
 				"expo-local-authentication",
 				{
-					"faceIDPermission": "Allow TileMaster to use Face ID to secure your business data."
+					"faceIDPermission": "Allow EasyDesign to use Face ID to secure your business data."
 				}
 			],
 			[
 				"expo-image-picker",
 				{
-					"photosPermission": "Allow TileMaster to access your photos to add tile images.",
-					"cameraPermission": "Allow TileMaster to use your camera."
+					"photosPermission": "Allow EasyDesign to access your photos to add tile images.",
+					"cameraPermission": "Allow EasyDesign to use your camera."
 				}
 			],
 			"expo-localization"

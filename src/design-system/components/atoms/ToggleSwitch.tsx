@@ -7,15 +7,12 @@ import {
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
-import {
-	announceForScreenReader,
-	buildFocusRingStyle,
-} from '@/src/design-system/foundation/utils/accessibility';
-import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { announceForScreenReader, buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { triggerDesignSystemHaptic } from '../../haptics';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 
 export interface ToggleSwitchProps {
 	label?: string;

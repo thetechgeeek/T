@@ -1,6 +1,6 @@
-import type { ErrorStateVariant } from '@/src/design-system/components/molecules/ErrorState';
-import type { AlertBannerVariant } from '@/src/design-system/components/molecules/AlertBanner';
-import type { ToastVariant } from '@/src/design-system/components/molecules/Toast';
+import type { ErrorStateVariant } from './components/molecules/ErrorState';
+import type { AlertBannerVariant } from './components/molecules/AlertBanner';
+import type { ToastVariant } from './components/molecules/Toast';
 
 export const MISSING_VALUE_PLACEHOLDER = '—';
 export const DEFAULT_ACTION_LABEL = 'Action';

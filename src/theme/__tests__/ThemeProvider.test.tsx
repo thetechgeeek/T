@@ -84,7 +84,7 @@ describe('ThemeProvider', () => {
 	it('maps the legacy structured preset id onto the generic baseline preset', async () => {
 		await AsyncStorage.setItem(
 			LEGACY_THEME_SETTINGS_STORAGE_KEY,
-			JSON.stringify({ mode: 'light', presetId: 'tilemaster' }),
+			JSON.stringify({ mode: 'light', presetId: 'easydesign' }),
 		);
 
 		const { result } = renderHook(() => useTheme(), { wrapper: rootWrapper });

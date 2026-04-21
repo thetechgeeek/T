@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import {
 	GLASS_WHITE_LIGHT,
 	OPACITY_HOVER,
 	SIZE_AUTH_LOGO_LG,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import { useAuthStore } from '@/src/stores/authStore';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { TextInput } from '@/src/design-system';
-import { PhoneInput } from '@/src/design-system';
+import { Screen } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { TextInput } from '@easydesign/design-system';
+import { PhoneInput } from '@easydesign/design-system';
 import { AppError } from '@/src/errors';
 
 export default function LoginScreen() {

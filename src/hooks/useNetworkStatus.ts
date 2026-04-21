@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
-import { HTTP_NO_CONTENT, MS_NETWORK_TIMEOUT } from '@/src/design-system/foundation';
+import { HTTP_NO_CONTENT, MS_NETWORK_TIMEOUT } from '@easydesign/design-system/foundation';
 
 const CHECK_URL = 'https://www.google.com/generate_204';
 const CHECK_INTERVAL_MS = 10_000;

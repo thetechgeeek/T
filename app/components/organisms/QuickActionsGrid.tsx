@@ -1,11 +1,11 @@
 import { View, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useTheme } from '@/src/design-system/foundation';
-import { ThemedText } from '@/src/design-system';
+import { useTheme } from '@easydesign/design-system/foundation';
+import { ThemedText } from '@easydesign/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
-import { withOpacity } from '@/src/design-system/foundation';
-import { OPACITY_TINT_LIGHT } from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { OPACITY_TINT_LIGHT } from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 import type { LucideIcon } from 'lucide-react-native';
 
 export interface QuickAction {

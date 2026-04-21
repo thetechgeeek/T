@@ -2,7 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { encodeBase64 } from "jsr:@std/encoding/base64";
 
 const corsHeaders = {
-	'Access-Control-Allow-Origin': Deno.env.get('ALLOWED_ORIGIN') ?? 'https://tilemaster.app',
+	'Access-Control-Allow-Origin': Deno.env.get('ALLOWED_ORIGIN') ?? 'https://easydesign.app',
 	'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 

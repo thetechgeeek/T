@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { Button } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { withOpacity } from '@/src/design-system/foundation';
-import { OPACITY_TINT_SUBTLE } from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { Button } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { OPACITY_TINT_SUBTLE } from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 type VerifyState = 'idle' | 'running' | 'complete';
 

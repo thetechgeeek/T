@@ -1,13 +1,10 @@
 import React from 'react';
 import { type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, interpolate } from 'react-native-reanimated';
-import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
-import { withOpacity } from '@/src/design-system/foundation/utils/color';
-import { useSkeletonShimmer } from '@/src/design-system/foundation/hooks/useSkeletonShimmer';
-import {
-	OPACITY_SKELETON_BASE,
-	OPACITY_SKELETON_PEAK,
-} from '@/src/design-system/foundation/theme/uiMetrics';
+import { useThemeTokens } from '../../foundation/hooks/useThemeTokens';
+import { withOpacity } from '../../foundation/utils/color';
+import { useSkeletonShimmer } from '../../foundation/hooks/useSkeletonShimmer';
+import { OPACITY_SKELETON_BASE, OPACITY_SKELETON_PEAK } from '../../foundation/theme/uiMetrics';
 
 interface SkeletonBlockProps {
 	width?: number | `${number}%`;

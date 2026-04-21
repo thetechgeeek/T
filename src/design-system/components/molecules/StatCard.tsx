@@ -2,18 +2,12 @@ import React from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Polyline } from 'react-native-svg';
 import type { LucideIcon } from 'lucide-react-native';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import {
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-	type CardDensity,
-} from '@/src/design-system/components/atoms/Card';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { LucideIconGlyph } from '../../iconography';
+import { Card, CardBody, CardFooter, CardHeader, type CardDensity } from '../atoms/Card';
+import { SkeletonBlock } from './SkeletonBlock';
+import { ThemedText } from '../atoms/ThemedText';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 
 interface StatCardProps {
 	label: string;

@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { RefreshControl, SectionList, View, type StyleProp, type ViewStyle } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
-import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { EmptyState } from './EmptyState';
+import { SkeletonRow } from './SkeletonRow';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 
 export type VirtualizedListDensity = 'compact' | 'default';
 

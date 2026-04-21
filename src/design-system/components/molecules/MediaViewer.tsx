@@ -9,15 +9,15 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Image as ExpoImage } from 'expo-image';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react-native';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
-import { announceForScreenReader } from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { LucideIconGlyph } from '../../iconography';
+import { triggerDesignSystemHaptic } from '../../haptics';
+import { Card } from '../atoms/Card';
+import { Button } from '../atoms/Button';
+import { ThemedText } from '../atoms/ThemedText';
+import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
+import { announceForScreenReader } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 
 export interface MediaViewerItem {
 	id: string;

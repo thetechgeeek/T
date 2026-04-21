@@ -1,0 +1,22 @@
+{
+	"name": "@easydesign/ops-console",
+	"version": "0.1.0",
+	"description": "Example second consumer app for the EasyDesign UI packages.",
+	"private": true,
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"react-native": "./src/index.ts",
+	"sideEffects": false,
+	"files": [
+		"README.md",
+		"src"
+	],
+	"dependencies": {
+		"@easydesign/design-system": "file:../../src/design-system",
+		"@easydesign/ui-shell": "file:../../src/ui-shell"
+	},
+	"exports": {
+		".": "./src/index.ts",
+		"./package.json": "./package.json"
+	}
+}

@@ -1,4 +1,4 @@
-# TileMaster — Complete Testing Master Plan
+# EasyDesign — Complete Testing Master Plan
 
 **Date:** 2026-03-31
 **Objective:** Reach 100% coverage in Unit, Integration, E2E, and Database test types
@@ -1242,7 +1242,7 @@ supabase/tests/                  ← pgTAP SQL (supabase test db)
 
 `scripts/seed-test-data.ts` creates:
 
-- 1 test user: `test@tilemaster.dev` / `TestPass123!`
+- 1 test user: `test@easydesign.dev` / `TestPass123!`
 - Business profile: Rupesh Tiles, GSTIN `27AABCU9603R1ZX`
 - 5 customers (mix of GSTIN and non-GSTIN, intra + inter-state)
 - 10 inventory items (2 low-stock, 1 out-of-stock, variety of categories)

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/design-system/foundation';
+import { ThemeProvider } from '@easydesign/design-system/foundation';
 import { DashboardHeader } from '../DashboardHeader';
 
 const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);

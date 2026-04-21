@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
-import { ScreenHeader } from '@/src/ui-shell';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { DatePickerField } from '@/src/design-system';
-import { SkeletonBlock } from '@/src/design-system';
-import { Badge } from '@/src/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { DatePickerField } from '@easydesign/design-system';
+import { SkeletonBlock } from '@easydesign/design-system';
+import { Badge } from '@easydesign/design-system';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 import type { Purchase } from '@/src/types/finance';
 
 /** Number of days in a quarter (365/4 rounded down) */

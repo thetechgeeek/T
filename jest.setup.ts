@@ -1,5 +1,5 @@
 /**
- * Global Jest setup for TileMaster.
+ * Global Jest setup for EasyDesign.
  *
  * SUPABASE: NOT globally mocked here. Each test file that needs Supabase must declare:
  *   jest.mock('../config/supabase', () => ({ supabase: createSupabaseMock() }))

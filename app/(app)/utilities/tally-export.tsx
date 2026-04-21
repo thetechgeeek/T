@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { ChevronDown, ChevronUp, FileCode } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SectionHeader } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { withOpacity } from '@/src/design-system/foundation';
-import { OPACITY_SKELETON_BASE, SIZE_ICON_LG, SIZE_ICON_MD } from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SectionHeader } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import {
+	OPACITY_SKELETON_BASE,
+	SIZE_ICON_LG,
+	SIZE_ICON_MD,
+} from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 import type { ThemeColors } from '@/src/theme';
 
 const EXPORT_ITEMS = [

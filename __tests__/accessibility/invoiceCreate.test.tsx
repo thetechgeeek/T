@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import InvoiceCreateScreen from '@/src/features/invoice-create/InvoiceCreateScreen';
-import { ThemeProvider } from '@/src/design-system/foundation';
+import { ThemeProvider } from '@easydesign/design-system/foundation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Mock the hook that manages the flow

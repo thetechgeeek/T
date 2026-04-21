@@ -1,19 +1,47 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { AppState, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { ThemeProvider, useTheme } from '@/src/design-system/foundation';
+import { ThemeProvider, useTheme } from '@easydesign/design-system/foundation';
+import { ShellAssetGate } from './ShellAssetGate';
 import { ErrorBoundary } from './components/atoms/ErrorBoundary';
 import { OfflineBanner } from './components/atoms/OfflineBanner';
-import { ShellEnvironmentProvider, type ShellEnvironment } from './ShellEnvironment';
+import {
+	ShellEnvironmentProvider,
+	type ShellEnvironmentInput,
+	useShellEnvironment,
+} from './ShellEnvironment';
+import { ShellOverlayProvider } from './ShellOverlay';
 
 type ThemeProviderProps = React.ComponentProps<typeof ThemeProvider>;
 
 interface ShellViewportProps {
 	children: React.ReactNode;
 	hideOfflineBanner: boolean;
+}
+
+function ShellSessionLifecycleBridge() {
+	const { session } = useShellEnvironment();
+
+	useEffect(() => {
+		if (!session.validateOnResume) {
+			return;
+		}
+
+		const subscription = AppState.addEventListener('change', (nextState) => {
+			if (nextState === 'active') {
+				void session.validateOnResume?.();
+			}
+		});
+
+		return () => {
+			subscription.remove();
+		};
+	}, [session]);
+
+	return null;
 }
 
 function ShellViewport({ children, hideOfflineBanner }: ShellViewportProps) {
@@ -32,16 +60,18 @@ function ShellViewport({ children, hideOfflineBanner }: ShellViewportProps) {
 
 export interface ShellRootProvidersProps {
 	children: React.ReactNode;
-	environment: ShellEnvironment;
+	environment?: ShellEnvironmentInput;
 	errorFallback?: React.ReactNode;
+	assetFallback?: React.ReactNode;
 	hideOfflineBanner?: boolean;
 	themeProviderProps?: Partial<ThemeProviderProps>;
 }
 
 export function ShellRootProviders({
 	children,
-	environment,
+	environment = {},
 	errorFallback,
+	assetFallback,
 	hideOfflineBanner = false,
 	themeProviderProps,
 }: ShellRootProvidersProps) {
@@ -49,11 +79,16 @@ export function ShellRootProviders({
 		<ThemeProvider {...themeProviderProps}>
 			<ShellEnvironmentProvider value={environment}>
 				<ErrorBoundary fallback={errorFallback}>
-					<KeyboardProvider>
-						<ShellViewport hideOfflineBanner={hideOfflineBanner}>
-							{children}
-						</ShellViewport>
-					</KeyboardProvider>
+					<ShellSessionLifecycleBridge />
+					<ShellAssetGate fallback={assetFallback}>
+						<KeyboardProvider>
+							<ShellOverlayProvider>
+								<ShellViewport hideOfflineBanner={hideOfflineBanner}>
+									{children}
+								</ShellViewport>
+							</ShellOverlayProvider>
+						</KeyboardProvider>
+					</ShellAssetGate>
 				</ErrorBoundary>
 			</ShellEnvironmentProvider>
 		</ThemeProvider>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderHook } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/design-system/foundation';
-import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
+import { ThemeProvider } from '@easydesign/design-system/foundation';
+import type { RuntimeQualitySignals } from '@easydesign/design-system';
 import { useReducedMotion } from '../useReducedMotion';
 
 function createWrapper(runtimeOverrides?: Partial<RuntimeQualitySignals>) {

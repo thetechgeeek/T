@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, type ViewStyle, type StyleProp } from 'react-native';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
-import { layout } from '@/src/design-system/foundation/theme/layout';
+import { ThemedText } from '../atoms/ThemedText';
+import { useThemeTokens } from '../../foundation/hooks/useThemeTokens';
+import { layout } from '../../foundation/theme/layout';
 import { Tooltip } from './Tooltip';
 
 export type TableRowVariant = 'default' | 'header' | 'total';

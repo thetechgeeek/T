@@ -4,10 +4,10 @@ import { renderWithTheme } from '@/__tests__/utils/renderWithTheme';
 import DesignLibraryScreen from '../DesignLibraryScreen';
 import { DESIGN_LIBRARY_OVERVIEW } from '../catalog';
 import { getDesignSystemCopy } from '../copy';
-import { setAccessibilityFocus } from '@/src/design-system/foundation/utils/accessibility';
+import { setAccessibilityFocus } from '../foundation/utils/accessibility';
 
-jest.mock('@/src/design-system/foundation/utils/accessibility', () => {
-	const actual = jest.requireActual('@/src/design-system/foundation/utils/accessibility');
+jest.mock('../foundation/utils/accessibility', () => {
+	const actual = jest.requireActual('../foundation/utils/accessibility');
 	return {
 		...actual,
 		setAccessibilityFocus: jest.fn(),

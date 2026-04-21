@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import type { LucideIcon } from 'lucide-react-native';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from './runtimeSignals';
+import { useTheme } from './foundation/theme/ThemeProvider';
 
 const MAX_ICON_FONT_SCALE = 1.35;
 

@@ -1,12 +1,13 @@
 # Design System Workspace
 
-This folder is the in-repo source of truth for the app-agnostic mobile design-system workbench at `/design-system`.
+This folder is the in-repo source of truth for `@easydesign/design-system`, the app-agnostic mobile design-system workbench at `/design-system`.
 
 ## Goals
 
 - Give product and engineering a live in-app component gallery instead of depending on Figma first.
 - Track the pure library contract from [UI_Library_Checklist.md](../../docs/UI_Library_Checklist.md); shell responsibilities live in [UI_Integration_Checklist.md](../../docs/UI_Integration_Checklist.md), and each consuming app should derive its own app-specific checklist from that contract.
 - Keep the reusable app-host layer in [`src/ui-shell`](../ui-shell/README.md) so the design system stays focused on package-safe primitives and patterns instead of product shell wiring.
+- Publish reusable consumer entrypoints through `@easydesign/design-system` and `@easydesign/design-system/foundation` instead of repo-local import paths.
 - Track external design-tool and asset-delivery workflow in [DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md](../../docs/DESIGN_SYSTEM_OPERATIONS_CHECKLIST.md) instead of mixing it into the core library contract.
 - Track motion, copy, governance, and state-resilience rules in their companion docs:
     - [DESIGN_SYSTEM_MOTION_GUIDELINES.md](../../docs/DESIGN_SYSTEM_MOTION_GUIDELINES.md)
@@ -38,6 +39,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
     - owns theme, shared hooks, safe DS utilities, and locale/runtime helpers without depending on product code
 - `foundation/index.ts` and `index.ts`
     - public entrypoints for the package-style design-system surface
+    - map to `@easydesign/design-system` and `@easydesign/design-system/foundation`
     - consumers should prefer these public entrypoints over private file paths
 - `useQualitySignals.ts`
     - design-system-facing quality hook for the workbench
@@ -103,7 +105,7 @@ This folder is the in-repo source of truth for the app-agnostic mobile design-sy
 - If a component is meant to be part of the supported library, add a live demo for it in `DesignLibraryScreen.tsx`.
 - If a shared component becomes design-system-supported, register it in `componentRegistry.json` and regenerate the catalog.
 - When a component gets a live demo, register it in `catalog.ts` so the catalog marks it as `Live demo`.
-- Treat `src/design-system/foundation/index.ts` and `src/design-system/index.ts` as the public entrypoints for this package-style surface.
+- Treat `@easydesign/design-system` and `@easydesign/design-system/foundation` as the public entrypoints for this package-style surface.
 - Keep the workbench representative, not exhaustive at the prop-matrix level. It should show the supported patterns clearly and fast.
 - Treat the checklist explorer as the target-state backlog. Treat the supported component catalog as the current implementation contract.
 - Keep user-facing workbench copy in `copy.ts`, not inline in `DesignLibraryScreen.tsx`.

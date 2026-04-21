@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable, Alert, type AlertButton } from 'react-native';
 import { FileText, AlertTriangle, Plus } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { ThemedText } from '@/src/design-system';
-import { Badge } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { ThemedText } from '@easydesign/design-system';
+import { Badge } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { BadgeVariant } from '@/src/design-system';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import type { BadgeVariant } from '@easydesign/design-system';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 import {
 	BORDER_WIDTH_BASE,
 	BORDER_WIDTH_STRONG,
@@ -17,7 +17,7 @@ import {
 	FAB_OFFSET_RIGHT,
 	SIZE_FAB,
 	SIZE_ICON_CIRCLE_MD,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import { MOCK_CHEQUES_RECEIVED, MOCK_CHEQUES_ISSUED } from '@/src/mocks/finance/cheques';
 import type { Cheque, ChequeStatus } from '@/src/mocks/finance/cheques';
 

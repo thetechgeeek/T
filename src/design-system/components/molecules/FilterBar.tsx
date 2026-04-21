@@ -7,16 +7,13 @@ import {
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import {
-	announceForScreenReader,
-	buildFocusRingStyle,
-} from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/design-system/foundation/theme/typographyMetrics';
-import { SIZE_CHIP_HEIGHT } from '@/src/design-system/foundation/theme/uiMetrics';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { announceForScreenReader, buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from '../atoms/ThemedText';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
+import { FONT_SIZE } from '../../foundation/theme/typographyMetrics';
+import { SIZE_CHIP_HEIGHT } from '../../foundation/theme/uiMetrics';
 
 export interface FilterOption {
 	label: string;

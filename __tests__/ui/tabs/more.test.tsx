@@ -5,15 +5,15 @@ import MoreTab from '@/app/(app)/(tabs)/more';
 import { useAuthStore } from '@/src/stores/authStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
-import { lightTheme, darkTheme } from '@/src/design-system/foundation';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
+import { lightTheme, darkTheme } from '@easydesign/design-system/foundation';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@easydesign/design-system';
 
-jest.mock('@/src/design-system/foundation', () => ({
-	...jest.requireActual('@/src/design-system/foundation'),
+jest.mock('@easydesign/design-system/foundation', () => ({
+	...jest.requireActual('@easydesign/design-system/foundation'),
 	useTheme: jest.fn(),
 }));
 
-import { useTheme } from '@/src/design-system/foundation';
+import { useTheme } from '@easydesign/design-system/foundation';
 
 jest.mock('@/src/stores/authStore', () => ({
 	useAuthStore: jest.fn(),

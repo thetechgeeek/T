@@ -1,17 +1,17 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ScrollView, Alert } from 'react-native';
 import { Download, CheckCircle2, Clock, XCircle, Package } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { ThemedText } from '@/src/design-system';
-import { Card } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { withOpacity } from '@/src/design-system/foundation';
-import { OPACITY_BADGE_BG } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { ThemedText } from '@easydesign/design-system';
+import { Card } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { OPACITY_BADGE_BG } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { MOCK_ORDER_SUMMARY_ROWS } from '@/src/mocks/reports/orderSummary';
-import { SPACING_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 import type { OrderRow, OrderStatus } from '@/src/mocks/reports/orderSummary';
 
 // TODO: Replace with real data — SELECT id, party_name, amount, status, date FROM sales_orders WHERE date BETWEEN ? AND ?

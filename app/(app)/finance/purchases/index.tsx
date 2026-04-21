@@ -3,25 +3,25 @@ import {
 	FAB_OFFSET_RIGHT,
 	RADIUS_FAB,
 	SIZE_FAB,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import React, { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, StyleSheet, RefreshControl, Alert, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
-import { ScreenHeader } from '@/src/ui-shell';
+import { ScreenHeader } from '@easydesign/ui-shell';
 import { Calendar, User, Plus } from 'lucide-react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useFinanceStore } from '@/src/stores/financeStore';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Card } from '@/src/design-system';
-import { Badge } from '@/src/design-system';
-import { EmptyState } from '@/src/design-system';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
+import { Card } from '@easydesign/design-system';
+import { Badge } from '@easydesign/design-system';
+import { EmptyState } from '@easydesign/design-system';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
 import type { Purchase } from '@/src/types/finance';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 export default function PurchasesScreen() {
 	const { theme, c, r } = useThemeTokens();

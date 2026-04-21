@@ -5,21 +5,21 @@ import {
 	FAB_OFFSET_BOTTOM,
 	FAB_OFFSET_RIGHT,
 	SIZE_FAB,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { Plus } from 'lucide-react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { Card } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { withOpacity } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { Card } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 interface Loan {
 	id: string;

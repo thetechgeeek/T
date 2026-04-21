@@ -1,10 +1,10 @@
 import React, { forwardRef } from 'react';
 import { SectionList, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { Badge } from '../atoms/Badge';
+import { EmptyState } from './EmptyState';
+import { ThemedText } from '../atoms/ThemedText';
 
 export interface NotificationItem {
 	id: string;

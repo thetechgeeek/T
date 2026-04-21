@@ -1,12 +1,42 @@
 {
-	"name": "@tilemaster/design-system",
-	"version": "0.0.0",
+	"name": "@easydesign/design-system",
+	"version": "0.1.0",
+	"description": "EasyDesign reusable design system package.",
 	"private": true,
 	"main": "./index.ts",
 	"types": "./index.ts",
 	"react-native": "./index.ts",
+	"sideEffects": false,
+	"files": [
+		"README.md",
+		"CHANGELOG.md",
+		"MIGRATIONS.md",
+		"index.ts",
+		"DesignLibraryScreen.tsx",
+		"catalog.ts",
+		"componentContract.ts",
+		"componentDocs.ts",
+		"componentRegistry.json",
+		"components",
+		"copy.ts",
+		"dateUtils.ts",
+		"fixtures.ts",
+		"formatters.ts",
+		"foundation",
+		"generated",
+		"haptics.ts",
+		"iconography.tsx",
+		"microcopy.ts",
+		"modalStack.ts",
+		"nativeAlertDialog.ts",
+		"overlayUtils.ts",
+		"runtimeSignals.ts",
+		"useQualitySignals.ts",
+		"useResponsiveWorkbenchLayout.ts"
+	],
 	"exports": {
 		".": "./index.ts",
-		"./foundation": "./foundation/index.ts"
+		"./foundation": "./foundation/index.ts",
+		"./package.json": "./package.json"
 	}
 }

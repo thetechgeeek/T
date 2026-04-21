@@ -67,12 +67,12 @@ describe('LoginScreen', () => {
 	it('calls login when dev credentials are submitted', async () => {
 		const { getByTestId } = renderWithTheme(<LoginScreen />);
 
-		fireEvent.changeText(getByTestId('dev-email-input'), 'dev@tilemaster.test');
+		fireEvent.changeText(getByTestId('dev-email-input'), 'dev@easydesign.test');
 		fireEvent.changeText(getByTestId('dev-password-input'), 'TestPass123!');
 		fireEvent.press(getByTestId('dev-login-button'));
 
 		await waitFor(() => {
-			expect(mockLogin).toHaveBeenCalledWith('dev@tilemaster.test', 'TestPass123!');
+			expect(mockLogin).toHaveBeenCalledWith('dev@easydesign.test', 'TestPass123!');
 		});
 	});
 
@@ -81,7 +81,7 @@ describe('LoginScreen', () => {
 
 		const { getByTestId, findByTestId } = renderWithTheme(<LoginScreen />);
 
-		fireEvent.changeText(getByTestId('dev-email-input'), 'dev@tilemaster.test');
+		fireEvent.changeText(getByTestId('dev-email-input'), 'dev@easydesign.test');
 		fireEvent.changeText(getByTestId('dev-password-input'), 'wrong-password');
 		fireEvent.press(getByTestId('dev-login-button'));
 

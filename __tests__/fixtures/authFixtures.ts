@@ -3,7 +3,7 @@ import type { User, Session } from '@supabase/supabase-js';
 export function makeUser(overrides?: Partial<User>): User {
 	return {
 		id: 'user-uuid-001',
-		email: 'admin@tilemaster.in',
+		email: 'admin@easydesign.in',
 		created_at: '2026-01-01T00:00:00.000Z',
 		app_metadata: {},
 		user_metadata: {},

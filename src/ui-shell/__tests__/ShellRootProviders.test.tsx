@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text } from 'react-native';
-import { render } from '@testing-library/react-native';
+import { AppState, Text } from 'react-native';
+import { act, render } from '@testing-library/react-native';
 import { ShellRootProviders } from '../ShellRootProviders';
 
 jest.mock('expo-status-bar', () => ({
@@ -58,5 +58,38 @@ describe('ShellRootProviders', () => {
 		);
 
 		expect(queryByText('No internet connection')).toBeNull();
+	});
+
+	it('runs session validation when the app returns to the foreground', () => {
+		const validateOnResume = jest.fn();
+		let handleAppStateChange: ((nextState: string) => void) | undefined;
+		const subscription = { remove: jest.fn() };
+		const appStateSpy = jest
+			.spyOn(AppState, 'addEventListener')
+			.mockImplementation((_, callback) => {
+				handleAppStateChange = callback as (nextState: string) => void;
+				return subscription as never;
+			});
+
+		render(
+			<ShellRootProviders
+				environment={{
+					...baseEnvironment,
+					session: {
+						validateOnResume,
+					},
+				}}
+			>
+				<Text>Shell Child</Text>
+			</ShellRootProviders>,
+		);
+
+		act(() => {
+			handleAppStateChange?.('active');
+		});
+
+		expect(validateOnResume).toHaveBeenCalledTimes(1);
+
+		appStateSpy.mockRestore();
 	});
 });

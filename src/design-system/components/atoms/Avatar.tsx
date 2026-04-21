@@ -1,8 +1,8 @@
 import React, { forwardRef, useMemo, useState } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Image as ExpoImage } from 'expo-image';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from './ThemedText';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarStatus = 'online' | 'busy' | 'offline' | 'warning';

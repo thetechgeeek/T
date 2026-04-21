@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Modal, ScrollView, TouchableOpacity } from 'react-native';
 import { AlertTriangle, ChevronRight } from 'lucide-react-native';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
-import { layout } from '@/src/design-system/foundation';
+import { layout } from '@easydesign/design-system/foundation';
 import {
 	FLEX_AMT_WIDE,
 	OVERLAY_COLOR_STRONG,
@@ -13,8 +13,8 @@ import {
 	SIZE_ICON_LG,
 	SIZE_ICON_MD,
 	SIZE_ICON_SM,
-} from '@/src/design-system/foundation';
-import { SPACING_PX, BORDER_RADIUS_PX } from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
+import { SPACING_PX, BORDER_RADIUS_PX } from '@easydesign/design-system/foundation';
 
 const CONFLICT_ICON_SIZE = SIZE_ICON_MD;
 

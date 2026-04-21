@@ -9,11 +9,11 @@ import {
 	OPACITY_HOVER,
 	SIZE_AUTH_LOGO_MD,
 	SIZE_INPUT_HEIGHT,
-} from '@/src/design-system/foundation';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { Screen } from '@/src/design-system';
-import { PhoneInput } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
+} from '@easydesign/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { PhoneInput } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
 
 /**
  * P1.2 — Phone OTP Login Screen
@@ -81,7 +81,7 @@ export default function PhoneLoginScreen() {
 					</ThemedText>
 				</View>
 				<ThemedText variant="h1" style={{ color: c.onPrimary, marginTop: s.sm }}>
-					TileMaster
+					EasyDesign
 				</ThemedText>
 				<ThemedText
 					variant="caption"

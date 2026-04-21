@@ -1,18 +1,18 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, Alert } from 'react-native';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SettingsCard } from '@/src/design-system';
-import { withOpacity } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SettingsCard } from '@easydesign/design-system';
+import { withOpacity } from '@easydesign/design-system/foundation';
 import {
 	BORDER_WIDTH_BASE,
 	BORDER_WIDTH_MEDIUM,
 	OPACITY_TINT_LIGHT,
-} from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
-import { LINE_HEIGHT } from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
+import { LINE_HEIGHT } from '@easydesign/design-system/foundation';
 
 export default function FirmsScreen() {
 	const { c } = useThemeTokens();

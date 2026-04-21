@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
-import { ERROR_STATE_COPY } from '@/src/design-system/microcopy';
+import { ERROR_STATE_COPY } from '../../../microcopy';
 import { buildTheme } from '@/src/theme/colors';
 import { DataChart } from '../DataChart';
 

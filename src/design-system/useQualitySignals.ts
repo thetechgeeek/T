@@ -1,4 +1,4 @@
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { useTheme } from './foundation/theme/ThemeProvider';
 import type { DesignSystemDirection, DesignSystemLocale } from './copy';
 import { resolveIntlLocale } from './formatters';
 

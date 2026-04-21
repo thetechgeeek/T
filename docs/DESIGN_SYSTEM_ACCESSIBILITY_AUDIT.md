@@ -4,7 +4,7 @@ Date: April 17, 2026
 
 ## Scope
 
-- Route under test: `tilemaster://design-system`
+- Route under test: `easydesign://design-system`
 - Workbench entry: [app/design-system/index.tsx](/Users/rupesh-20594/Documents/T/app/design-system/index.tsx)
 - Supported surface: [componentRegistry.json](/Users/rupesh-20594/Documents/T/src/design-system/componentRegistry.json)
 - Library contract source: [UI_Library_Checklist.md](/Users/rupesh-20594/Documents/T/docs/UI_Library_Checklist.md)

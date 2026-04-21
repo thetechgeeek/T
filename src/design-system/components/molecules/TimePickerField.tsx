@@ -1,12 +1,12 @@
 import React, { forwardRef, useState } from 'react';
 import { Platform, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
-import { formatDisplayTime } from '@/src/design-system/dateUtils';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from '../atoms/ThemedText';
+import { TOUCH_TARGET_MIN_PX } from '../../foundation/theme/layoutMetrics';
+import { formatDisplayTime } from '../../dateUtils';
 
 const DEFAULT_HOUR = 9;
 const MAX_HOUR = 23;

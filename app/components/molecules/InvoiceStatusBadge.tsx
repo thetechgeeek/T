@@ -1,6 +1,6 @@
 import React from 'react';
-import { Badge } from '@/src/design-system';
-import type { BadgeVariant } from '@/src/design-system';
+import { Badge } from '@easydesign/design-system';
+import type { BadgeVariant } from '@easydesign/design-system';
 import { useLocale } from '@/src/hooks/useLocale';
 
 export type InvoiceStatus = 'paid' | 'partial' | 'unpaid';

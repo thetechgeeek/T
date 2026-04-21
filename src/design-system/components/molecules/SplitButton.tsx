@@ -1,13 +1,10 @@
 import React, { forwardRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react-native';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import {
-	ActionMenuSheet,
-	type ActionMenuSheetItem,
-} from '@/src/design-system/components/molecules/ActionMenuSheet';
+import { LucideIconGlyph } from '../../iconography';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { Button } from '../atoms/Button';
+import { ActionMenuSheet, type ActionMenuSheetItem } from './ActionMenuSheet';
 
 export interface SplitButtonProps {
 	label: string;

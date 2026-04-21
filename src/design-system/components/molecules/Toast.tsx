@@ -7,12 +7,12 @@ import {
 	type StyleProp,
 	type ViewStyle,
 } from 'react-native';
-import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
-import { DEFAULT_DISMISS_LABEL, FEEDBACK_TONE_LABELS } from '@/src/design-system/microcopy';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SIZE_TOAST_BOTTOM_OFFSET } from '@/src/design-system/foundation/theme/uiMetrics';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { triggerDesignSystemHaptic } from '../../haptics';
+import { DEFAULT_DISMISS_LABEL, FEEDBACK_TONE_LABELS } from '../../microcopy';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SIZE_TOAST_BOTTOM_OFFSET } from '../../foundation/theme/uiMetrics';
+import { ThemedText } from '../atoms/ThemedText';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 
 export type ToastVariant = 'success' | 'error' | 'info' | 'warning';
 

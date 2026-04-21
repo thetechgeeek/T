@@ -6,14 +6,14 @@ import {
 	SIZE_AUTH_LOGO_MD,
 	SIZE_INPUT_HEIGHT,
 	SIZE_LANGUAGE_FLAG,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { syncI18nRtlPreference } from '@/src/i18n/rtl';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { withOpacity } from '@/src/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { withOpacity } from '@easydesign/design-system/foundation';
 
 const LANG_KEY = '@app/language';
 const LANG_SELECTED_KEY = '@app/languageSelected';

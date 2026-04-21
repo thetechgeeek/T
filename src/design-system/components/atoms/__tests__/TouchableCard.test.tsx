@@ -3,8 +3,8 @@ import { Text } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
 import * as Reanimated from 'react-native-reanimated';
 import { TouchableCard } from '../TouchableCard';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
-import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '../../../runtimeSignals';
 
 const renderWithTheme = (
 	component: React.ReactElement,

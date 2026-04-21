@@ -3,7 +3,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import { render } from '@testing-library/react-native';
 import { Keyboard, Platform, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
 import { Screen } from '../Screen';
 
 const renderWithTheme = (ui: React.ReactElement) => render(<ThemeProvider>{ui}</ThemeProvider>);

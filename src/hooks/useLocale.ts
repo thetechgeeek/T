@@ -6,7 +6,7 @@ import { syncI18nRtlPreference } from '@/src/i18n/rtl';
 import { formatINR, formatINRShort } from '@/src/utils/currency';
 import { formatDate, formatRelativeDate, formatShortDate } from '@/src/utils/dateUtils';
 
-const STORAGE_KEY = '@tilemaster/locale';
+const STORAGE_KEY = '@easydesign/locale';
 
 export function useLocale() {
 	const { t, i18n } = useTranslation();

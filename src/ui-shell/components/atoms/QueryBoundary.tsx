@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { EmptyState, SkeletonBlock, ThemedText } from '@/src/design-system';
-import { SPACING_PX, useTheme } from '@/src/design-system/foundation';
+import { EmptyState, SkeletonBlock, ThemedText } from '@easydesign/design-system';
+import { SPACING_PX, useTheme } from '@easydesign/design-system/foundation';
 import type { AppError } from '@/src/errors';
 import { useShellEnvironment } from '../../ShellEnvironment';
 

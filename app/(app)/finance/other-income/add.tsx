@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert, TextInput, Pressable } from 'react-native';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { DatePickerField } from '@/src/design-system';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { DatePickerField } from '@easydesign/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useRouter } from 'expo-router';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 const OTHER_INCOME_BOTTOM_PADDING = 32;
 

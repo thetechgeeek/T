@@ -7,9 +7,9 @@ import {
 	type ViewStyle,
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
-import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
+import { buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 
 export interface TouchableCardProps extends Omit<PressableProps, 'style'> {
 	children: React.ReactNode;

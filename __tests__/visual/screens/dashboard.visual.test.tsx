@@ -29,7 +29,7 @@ jest.mock('@/src/hooks/useLocale', () => ({
 		t: (key: string, opts?: Record<string, unknown>) => {
 			const map: Record<string, string> = {
 				'inventory.stockStatus': '{{count}} items',
-				'branding.appName': 'TileMaster',
+				'branding.appName': 'EasyDesign',
 				'dashboard.todaySales': 'Today Sales',
 				'dashboard.lowStock': 'Low Stock',
 				'dashboard.newInvoice': 'New Invoice',

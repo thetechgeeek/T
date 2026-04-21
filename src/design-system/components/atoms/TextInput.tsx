@@ -11,11 +11,11 @@ import {
 	type TextStyle,
 } from 'react-native';
 import { X } from 'lucide-react-native';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
-import { resolveWritingDirection } from '@/src/design-system/foundation/theme/localeTypography';
+import { LucideIconGlyph } from '../../iconography';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
+import { resolveWritingDirection } from '../../foundation/theme/localeTypography';
 import { ThemedText } from './ThemedText';
 
 export interface TextInputProps extends RNTextInputProps {

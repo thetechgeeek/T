@@ -21,6 +21,7 @@ const COMPONENT_REGISTRY_PATH = 'src/design-system/componentRegistry.json';
 const COMPONENT_CATALOG_PATH = 'src/design-system/generated/componentCatalog.ts';
 const README_PATH = 'src/design-system/README.md';
 const REQUIRED_SOURCE_FILES = [
+	'src/design-system/package.json',
 	'src/design-system/fixtures.ts',
 	'src/design-system/components/ThemeSnapshotPreview.tsx',
 	'src/design-system/foundation/index.ts',
@@ -40,7 +41,8 @@ const REQUIRED_README_PHRASES = [
 	'Relaxed showcase',
 	'Operational dense',
 	'loading, empty, error, read-only, denied, no-media, and ugly-data',
-	'src/design-system/foundation',
+	'@easydesign/design-system',
+	'@easydesign/design-system/foundation',
 	'public entrypoints',
 ];
 const FILE_CONTRACT_RULES = [
@@ -223,6 +225,13 @@ const DISALLOWED_IMPORT_RULES = [
 		message:
 			'Design-system code must import runtime locale helpers through src/design-system/foundation instead of src/i18n/.',
 	},
+	{
+		name: 'design-system-self-import',
+		pattern:
+			/from\s*['"](?:@\/src\/design-system\/|@easydesign\/design-system(?:['"]|\/)|@easydesign\/design-system\/foundation\/)/g,
+		message:
+			'Design-system source files must use relative imports internally instead of public self-imports.',
+	},
 ];
 
 function parseCliOptions() {
@@ -397,6 +406,13 @@ for (const relPath of files) {
 	}
 
 	for (const rule of DISALLOWED_IMPORT_RULES) {
+		if (
+			rule.name === 'design-system-self-import' &&
+			relPath.startsWith('app/design-system/')
+		) {
+			continue;
+		}
+
 		rule.pattern.lastIndex = 0;
 		for (const match of text.matchAll(rule.pattern)) {
 			if (match.index == null) {

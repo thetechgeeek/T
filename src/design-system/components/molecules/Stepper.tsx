@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { Badge } from '../atoms/Badge';
+import { ThemedText } from '../atoms/ThemedText';
 
 export type StepState = 'completed' | 'active' | 'upcoming' | 'error';
 

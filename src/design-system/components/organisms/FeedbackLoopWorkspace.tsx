@@ -1,18 +1,18 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card, CardBody, CardHeader } from '@/src/design-system/components/atoms/Card';
-import { ErrorState } from '@/src/design-system/components/molecules/ErrorState';
-import { ProgressIndicator } from '@/src/design-system/components/molecules/ProgressIndicator';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { ToastViewport, type ToastStackItem } from '@/src/design-system/components/molecules/Toast';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { AlertBanner } from '../molecules/AlertBanner';
+import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { Card, CardBody, CardHeader } from '../atoms/Card';
+import { ErrorState } from '../molecules/ErrorState';
+import { ProgressIndicator } from '../molecules/ProgressIndicator';
+import { ThemedText } from '../atoms/ThemedText';
+import { ToastViewport, type ToastStackItem } from '../molecules/Toast';
 import {
 	responsiveCardStyle,
 	useResponsiveWorkbenchLayout,
-} from '@/src/design-system/useResponsiveWorkbenchLayout';
+} from '../../useResponsiveWorkbenchLayout';
 
 type SyncState = 'tentative' | 'syncing' | 'stale' | 'confirmed';
 type ConnectivityState = 'online' | 'offline' | 'reconnecting';

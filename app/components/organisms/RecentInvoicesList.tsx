@@ -1,13 +1,13 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 import { FileText, ChevronRight } from 'lucide-react-native';
-import { useTheme } from '@/src/design-system/foundation';
-import { ThemedText } from '@/src/design-system';
+import { useTheme } from '@easydesign/design-system/foundation';
+import { ThemedText } from '@easydesign/design-system';
 import { InvoiceStatusBadge } from '@/app/components/molecules/InvoiceStatusBadge';
 import type { InvoiceStatus } from '@/app/components/molecules/InvoiceStatusBadge';
 import { useLocale } from '@/src/hooks/useLocale';
 import { formatDate } from '@/src/utils/dateUtils';
-import { layout } from '@/src/design-system/foundation';
+import { layout } from '@easydesign/design-system/foundation';
 
 export interface Invoice {
 	id: string;

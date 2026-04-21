@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, act, fireEvent } from '@testing-library/react-native';
 import { Toast, ToastViewport } from '../Toast';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
 
 jest.useFakeTimers();
 

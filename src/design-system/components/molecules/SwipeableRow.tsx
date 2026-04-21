@@ -6,13 +6,13 @@ import {
 	announceForScreenReader,
 	buildFocusRingStyle,
 	mapAccessibilityActionNames,
-} from '@/src/design-system/foundation/utils/accessibility';
-import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
-import { FONT_SIZE } from '@/src/design-system/foundation/theme/typographyMetrics';
-import { SIZE_SWIPE_ACTION_WIDTH, Z_INDEX } from '@/src/design-system/foundation/theme/uiMetrics';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+} from '../../foundation/utils/accessibility';
+import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { TOUCH_TARGET_MIN_PX } from '../../foundation/theme/layoutMetrics';
+import { FONT_SIZE } from '../../foundation/theme/typographyMetrics';
+import { SIZE_SWIPE_ACTION_WIDTH, Z_INDEX } from '../../foundation/theme/uiMetrics';
+import { ThemedText } from '../atoms/ThemedText';
 
 export interface SwipeableRowProps {
 	children: React.ReactNode;

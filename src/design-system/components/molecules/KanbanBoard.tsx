@@ -1,17 +1,14 @@
 import React, { forwardRef, useState } from 'react';
 import { ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { ArrowLeftRight } from 'lucide-react-native';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import {
-	SortableList,
-	type SortableListItemShape,
-} from '@/src/design-system/components/molecules/SortableList';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { LucideIconGlyph } from '../../iconography';
+import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { Card } from '../atoms/Card';
+import { SortableList, type SortableListItemShape } from './SortableList';
+import { ThemedText } from '../atoms/ThemedText';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 
 export interface KanbanBoardCard extends SortableListItemShape {
 	title: string;

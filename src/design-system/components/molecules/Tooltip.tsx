@@ -1,14 +1,11 @@
 import React, { forwardRef, useMemo, useRef, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import {
-	buildFocusRingStyle,
-	announceForScreenReader,
-} from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
-import { Z_INDEX } from '@/src/design-system/foundation/theme/uiMetrics';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { buildFocusRingStyle, announceForScreenReader } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
+import { Z_INDEX } from '../../foundation/theme/uiMetrics';
+import { ThemedText } from '../atoms/ThemedText';
 
 export interface TooltipProps {
 	trigger: React.ReactNode;

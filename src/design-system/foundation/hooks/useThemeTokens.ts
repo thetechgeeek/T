@@ -1,5 +1,5 @@
 import { useTheme } from '../theme/ThemeProvider';
-import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '@/src/design-system/runtimeSignals';
+import { DEFAULT_RUNTIME_QUALITY_SIGNALS } from '../../runtimeSignals';
 
 /**
  * Convenience hook that destructures the most commonly used theme tokens.

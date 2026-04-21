@@ -3,7 +3,7 @@ import {
 	FAB_OFFSET_RIGHT,
 	SIZE_AVATAR_MD,
 	SIZE_ICON_CIRCLE_MD,
-} from '@/src/design-system/foundation';
+} from '@easydesign/design-system/foundation';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } from 'react-native';
@@ -12,18 +12,18 @@ import type { Href } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SearchBar } from '@/src/design-system';
-import { FilterBar } from '@/src/design-system';
-import { ListItem } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { EmptyState } from '@/src/design-system';
-import { Badge } from '@/src/design-system';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SearchBar } from '@easydesign/design-system';
+import { FilterBar } from '@easydesign/design-system';
+import { ListItem } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { EmptyState } from '@easydesign/design-system';
+import { Badge } from '@easydesign/design-system';
 import { CustomerListSkeleton } from '@/app/components/molecules/skeletons/CustomerListSkeleton';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 import type { Customer } from '@/src/types/customer';
 
 const CUSTOMER_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs;

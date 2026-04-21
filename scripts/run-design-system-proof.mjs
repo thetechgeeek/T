@@ -10,7 +10,7 @@ function parseArgs(argv) {
 		updateBaseline: false,
 		skipVisualRegression: false,
 		root: process.cwd(),
-		deepLink: 'tilemaster://design-system',
+		deepLink: 'easydesign://design-system',
 	};
 
 	for (let index = 0; index < argv.length; index += 1) {

@@ -1,6 +1,6 @@
 # TDD Quality Review — Staff QA Engineer Perspective
 
-> App: TileMaster (React Native / Expo)
+> App: EasyDesign (React Native / Expo)
 > Reviewed on: 2026-03-29
 > Reviewer Role: Staff QA Engineer (FAANG)
 

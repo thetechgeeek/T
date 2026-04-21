@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
 import { IconButton, FAB } from '../IconButton';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
 
 const renderWithTheme = (component: React.ReactElement) =>
 	render(

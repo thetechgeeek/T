@@ -1,5 +1,5 @@
 import React from 'react';
-import { DesignLibraryScreen, ThemeProvider, useTheme } from '@/src/design-system';
+import { DesignLibraryScreen, ThemeProvider, useTheme } from '@easydesign/design-system';
 
 export default function DesignSystemRoute() {
 	const { mode } = useTheme();

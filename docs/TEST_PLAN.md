@@ -678,7 +678,7 @@ it('PaymentModal clears Android navigation bar (bottom inset 48px)')
 
 ```
 .maestro/
-  config.yaml          # appId: com.tilemaster.app
+  config.yaml          # appId: com.easydesign.app
   helpers/
     signIn.yaml        # reusable sign-in subflow
     createInvoice.yaml # reusable invoice creation subflow
@@ -703,7 +703,7 @@ inventory data before the E2E suite runs.
 ```yaml
 - launchApp
 - tapOn: 'Email'
-- inputText: 'test@tilemaster.dev'
+- inputText: 'test@easydesign.dev'
 - tapOn: 'Password'
 - inputText: 'TestPass123!'
 - tapOn: 'Sign In'
@@ -811,7 +811,7 @@ Additional error flows:
 
 ```yaml
 - runFlow: '../../helpers/signIn.yaml'
-- openLink: 'tilemaster://customers/test-customer-id'
+- openLink: 'easydesign://customers/test-customer-id'
 - tapOn: 'Record Payment'
 - tapOn:
       text: 'Amount (₹)' # tap the label text, not the input itself

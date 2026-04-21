@@ -1,18 +1,18 @@
 import React from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { TextInput as AppTextInput } from '@/src/design-system';
-import { FormField } from '@/src/design-system';
-import { layout } from '@/src/design-system/foundation';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { TextInput as AppTextInput } from '@easydesign/design-system';
+import { FormField } from '@easydesign/design-system';
+import { layout } from '@easydesign/design-system/foundation';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
-import { SkeletonBlock } from '@/src/design-system';
+import { SkeletonBlock } from '@easydesign/design-system';
 import type { InventoryItem } from '@/src/types/inventory';
-import { withOpacity } from '@/src/design-system/foundation';
-import { OPACITY_TINT_SOFT, SIZE_DROPDOWN_MAX_HEIGHT } from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { OPACITY_TINT_SOFT, SIZE_DROPDOWN_MAX_HEIGHT } from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 interface Props {
 	lineItems: InvoiceLineItemInput[];

@@ -4,8 +4,8 @@ import {
 	AMOUNT_SHORT_FORMAT_ONE_LAKH,
 	AMOUNT_SHORT_FORMAT_ONE_THOUSAND,
 } from '@/constants/money';
-import { SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { SIZE_INPUT_HEIGHT, SIZE_LANGUAGE_FLAG } from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 const RECEIPT_BOTTOM_PADDING = SIZE_LANGUAGE_FLAG;
 const ID_TAIL_DIGITS = 6;
@@ -13,14 +13,14 @@ import { View, StyleSheet, Share, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MessageCircle, FileText, CheckCircle2 } from 'lucide-react-native';
 import { paymentService } from '@/src/services/paymentService';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { Divider } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SkeletonBlock } from '@/src/design-system';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { Divider } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SkeletonBlock } from '@easydesign/design-system';
 import type { Payment } from '@/src/types/finance';
 
 // ── Helpers ────────────────────────────────────────────────────────────────

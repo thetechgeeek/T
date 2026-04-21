@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
-import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { createTimingConfig } from '@/src/design-system/foundation/theme/animations';
+import { useReducedMotion } from './useReducedMotion';
+import { useTheme } from '../theme/ThemeProvider';
+import { createTimingConfig } from '../theme/animations';
 
 /**
  * Returns a shared value that oscillates 0 → 1 → 0 in a loop.

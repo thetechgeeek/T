@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, Alert } from 'react-native';
-import { useThemeTokens } from '@/src/design-system/foundation';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SectionHeader } from '@/src/design-system';
-import { SettingsCard } from '@/src/design-system';
-import { BORDER_WIDTH_BASE } from '@/src/design-system/foundation';
-import { BORDER_RADIUS_PX, SPACING_PX } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SectionHeader } from '@easydesign/design-system';
+import { SettingsCard } from '@easydesign/design-system';
+import { BORDER_WIDTH_BASE } from '@easydesign/design-system/foundation';
+import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
 
 type AutoBackup = 'off' | 'daily' | 'weekly';
 

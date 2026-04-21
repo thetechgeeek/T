@@ -1,18 +1,11 @@
 import React, { forwardRef, useState } from 'react';
 import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
-import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
-import {
-	Avatar,
-	type AvatarSize,
-	type AvatarStatus,
-} from '@/src/design-system/components/atoms/Avatar';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import {
-	announceForScreenReader,
-	buildFocusRingStyle,
-} from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { SPACING_PX } from '@/src/design-system/foundation/theme/layoutMetrics';
+import { triggerDesignSystemHaptic } from '../../haptics';
+import { Avatar, type AvatarSize, type AvatarStatus } from '../atoms/Avatar';
+import { ThemedText } from '../atoms/ThemedText';
+import { announceForScreenReader, buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { SPACING_PX } from '../../foundation/theme/layoutMetrics';
 
 export interface AvatarGroupItem {
 	id: string;

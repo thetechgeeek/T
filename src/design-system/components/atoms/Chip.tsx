@@ -1,8 +1,8 @@
 import React, { forwardRef, useState } from 'react';
 import { TouchableOpacity, View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { buildFocusRingStyle } from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { buildFocusRingStyle } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
 import { ThemedText } from './ThemedText';
 
 export interface ChipProps {

@@ -2,95 +2,76 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { InteractionManager, ScrollView, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Calendar, Moon, Package, Palette, Search, Sun } from 'lucide-react-native';
-import { LucideIconGlyph, MaterialIconGlyph } from '@/src/design-system/iconography';
-import { ThemeProvider, useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
-import { Screen } from '@/src/design-system/components/atoms/Screen';
-import { Avatar } from '@/src/design-system/components/atoms/Avatar';
-import { Card, CardBody, CardFooter, CardHeader } from '@/src/design-system/components/atoms/Card';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { FAB, IconButton } from '@/src/design-system/components/atoms/IconButton';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Chip } from '@/src/design-system/components/atoms/Chip';
-import { Checkbox, CheckboxGroup } from '@/src/design-system/components/atoms/Checkbox';
-import { Radio, RadioGroup } from '@/src/design-system/components/atoms/Radio';
-import { TextInput } from '@/src/design-system/components/atoms/TextInput';
-import { ToggleSwitch } from '@/src/design-system/components/atoms/ToggleSwitch';
-import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
-import { ActionMenuSheet } from '@/src/design-system/components/molecules/ActionMenuSheet';
-import {
-	ActivityFeed,
-	type ActivityFeedItem,
-} from '@/src/design-system/components/molecules/ActivityFeed';
-import { AutocompleteField } from '@/src/design-system/components/molecules/AutocompleteField';
-import { AvatarGroup } from '@/src/design-system/components/molecules/AvatarGroup';
-import { SearchBar } from '@/src/design-system/components/molecules/SearchBar';
-import { PhoneInput } from '@/src/design-system/components/molecules/PhoneInput';
-import { AmountInput } from '@/src/design-system/components/molecules/AmountInput';
-import { DatePickerField } from '@/src/design-system/components/molecules/DatePickerField';
-import { DateRangePickerField } from '@/src/design-system/components/molecules/DateRangePickerField';
-import { DataChart } from '@/src/design-system/components/molecules/DataChart';
-import { DescriptionList } from '@/src/design-system/components/molecules/DescriptionList';
-import { TimePickerField } from '@/src/design-system/components/molecules/TimePickerField';
-import { ColorPicker } from '@/src/design-system/components/molecules/ColorPicker';
-import {
-	FileUploadField,
-	type UploadItem,
-} from '@/src/design-system/components/molecules/FileUploadField';
-import { FilterBar } from '@/src/design-system/components/molecules/FilterBar';
-import { EmptyState } from '@/src/design-system/components/molecules/EmptyState';
-import { ErrorState } from '@/src/design-system/components/molecules/ErrorState';
-import {
-	KanbanBoard,
-	type KanbanBoardColumn,
-} from '@/src/design-system/components/molecules/KanbanBoard';
-import { MediaViewer } from '@/src/design-system/components/molecules/MediaViewer';
+import { LucideIconGlyph, MaterialIconGlyph } from './iconography';
+import { ThemeProvider, useTheme } from './foundation/theme/ThemeProvider';
+import { useThemeTokens } from './foundation/hooks/useThemeTokens';
+import { Screen } from './components/atoms/Screen';
+import { Avatar } from './components/atoms/Avatar';
+import { Card, CardBody, CardFooter, CardHeader } from './components/atoms/Card';
+import { ThemedText } from './components/atoms/ThemedText';
+import { Button } from './components/atoms/Button';
+import { FAB, IconButton } from './components/atoms/IconButton';
+import { Badge } from './components/atoms/Badge';
+import { Chip } from './components/atoms/Chip';
+import { Checkbox, CheckboxGroup } from './components/atoms/Checkbox';
+import { Radio, RadioGroup } from './components/atoms/Radio';
+import { TextInput } from './components/atoms/TextInput';
+import { ToggleSwitch } from './components/atoms/ToggleSwitch';
+import { AlertBanner } from './components/molecules/AlertBanner';
+import { ActionMenuSheet } from './components/molecules/ActionMenuSheet';
+import { ActivityFeed, type ActivityFeedItem } from './components/molecules/ActivityFeed';
+import { AutocompleteField } from './components/molecules/AutocompleteField';
+import { AvatarGroup } from './components/molecules/AvatarGroup';
+import { SearchBar } from './components/molecules/SearchBar';
+import { PhoneInput } from './components/molecules/PhoneInput';
+import { AmountInput } from './components/molecules/AmountInput';
+import { DatePickerField } from './components/molecules/DatePickerField';
+import { DateRangePickerField } from './components/molecules/DateRangePickerField';
+import { DataChart } from './components/molecules/DataChart';
+import { DescriptionList } from './components/molecules/DescriptionList';
+import { TimePickerField } from './components/molecules/TimePickerField';
+import { ColorPicker } from './components/molecules/ColorPicker';
+import { FileUploadField, type UploadItem } from './components/molecules/FileUploadField';
+import { FilterBar } from './components/molecules/FilterBar';
+import { EmptyState } from './components/molecules/EmptyState';
+import { ErrorState } from './components/molecules/ErrorState';
+import { KanbanBoard, type KanbanBoardColumn } from './components/molecules/KanbanBoard';
+import { MediaViewer } from './components/molecules/MediaViewer';
 import {
 	NotificationCenter,
 	type NotificationItem,
-} from '@/src/design-system/components/molecules/NotificationCenter';
-import { BottomSheetPicker } from '@/src/design-system/components/molecules/BottomSheetPicker';
-import { CollapsibleSection } from '@/src/design-system/components/molecules/CollapsibleSection';
-import { ConfirmationModal } from '@/src/design-system/components/molecules/ConfirmationModal';
-import {
-	DeclarativeForm,
-	type DeclarativeFormField,
-} from '@/src/design-system/components/molecules/DeclarativeForm';
-import {
-	FormWizard,
-	type FormWizardStep,
-} from '@/src/design-system/components/molecules/FormWizard';
-import { ListItem } from '@/src/design-system/components/molecules/ListItem';
-import { NumericStepper } from '@/src/design-system/components/molecules/NumericStepper';
-import { OtpCodeInput } from '@/src/design-system/components/molecules/OtpCodeInput';
-import { ProgressIndicator } from '@/src/design-system/components/molecules/ProgressIndicator';
-import { RangeSlider } from '@/src/design-system/components/molecules/RangeSlider';
-import { SegmentedControl } from '@/src/design-system/components/molecules/SegmentedControl';
-import { SkeletonBlock } from '@/src/design-system/components/molecules/SkeletonBlock';
-import { SkeletonRow } from '@/src/design-system/components/molecules/SkeletonRow';
-import { SortableList } from '@/src/design-system/components/molecules/SortableList';
-import { Tooltip } from '@/src/design-system/components/molecules/Tooltip';
-import { Popover } from '@/src/design-system/components/molecules/Popover';
-import { SplitButton } from '@/src/design-system/components/molecules/SplitButton';
-import { Stepper } from '@/src/design-system/components/molecules/Stepper';
-import { StatCard } from '@/src/design-system/components/molecules/StatCard';
-import { SwipeableRow } from '@/src/design-system/components/molecules/SwipeableRow';
-import { Tabs } from '@/src/design-system/components/molecules/Tabs';
-import { TextAreaField } from '@/src/design-system/components/molecules/TextAreaField';
-import {
-	Toast,
-	ToastViewport,
-	type ToastStackItem,
-} from '@/src/design-system/components/molecules/Toast';
-import { TokenInput } from '@/src/design-system/components/molecules/TokenInput';
-import { ToggleButtonGroup } from '@/src/design-system/components/molecules/ToggleButtonGroup';
-import { VirtualizedList } from '@/src/design-system/components/molecules/VirtualizedList';
-import { CrudWorkspace } from '@/src/design-system/components/organisms/CrudWorkspace';
-import { DataLayoutWorkspace } from '@/src/design-system/components/organisms/DataLayoutWorkspace';
-import { FeedbackLoopWorkspace } from '@/src/design-system/components/organisms/FeedbackLoopWorkspace';
-import { ProductivityWorkspace } from '@/src/design-system/components/organisms/ProductivityWorkspace';
-import { SearchFilterWorkspace } from '@/src/design-system/components/organisms/SearchFilterWorkspace';
+} from './components/molecules/NotificationCenter';
+import { BottomSheetPicker } from './components/molecules/BottomSheetPicker';
+import { CollapsibleSection } from './components/molecules/CollapsibleSection';
+import { ConfirmationModal } from './components/molecules/ConfirmationModal';
+import { DeclarativeForm, type DeclarativeFormField } from './components/molecules/DeclarativeForm';
+import { FormWizard, type FormWizardStep } from './components/molecules/FormWizard';
+import { ListItem } from './components/molecules/ListItem';
+import { NumericStepper } from './components/molecules/NumericStepper';
+import { OtpCodeInput } from './components/molecules/OtpCodeInput';
+import { ProgressIndicator } from './components/molecules/ProgressIndicator';
+import { RangeSlider } from './components/molecules/RangeSlider';
+import { SegmentedControl } from './components/molecules/SegmentedControl';
+import { SkeletonBlock } from './components/molecules/SkeletonBlock';
+import { SkeletonRow } from './components/molecules/SkeletonRow';
+import { SortableList } from './components/molecules/SortableList';
+import { Tooltip } from './components/molecules/Tooltip';
+import { Popover } from './components/molecules/Popover';
+import { SplitButton } from './components/molecules/SplitButton';
+import { Stepper } from './components/molecules/Stepper';
+import { StatCard } from './components/molecules/StatCard';
+import { SwipeableRow } from './components/molecules/SwipeableRow';
+import { Tabs } from './components/molecules/Tabs';
+import { TextAreaField } from './components/molecules/TextAreaField';
+import { Toast, ToastViewport, type ToastStackItem } from './components/molecules/Toast';
+import { TokenInput } from './components/molecules/TokenInput';
+import { ToggleButtonGroup } from './components/molecules/ToggleButtonGroup';
+import { VirtualizedList } from './components/molecules/VirtualizedList';
+import { CrudWorkspace } from './components/organisms/CrudWorkspace';
+import { DataLayoutWorkspace } from './components/organisms/DataLayoutWorkspace';
+import { FeedbackLoopWorkspace } from './components/organisms/FeedbackLoopWorkspace';
+import { ProductivityWorkspace } from './components/organisms/ProductivityWorkspace';
+import { SearchFilterWorkspace } from './components/organisms/SearchFilterWorkspace';
 import {
 	DESIGN_LIBRARY_COMPONENT_OVERVIEW,
 	DESIGN_LIBRARY_OVERVIEW,
@@ -105,7 +86,7 @@ import {
 } from './catalog';
 import type { DesignSystemComponentKind } from './generated/componentCatalog';
 import type { UiLibraryChecklistItem } from './generated/uiLibraryCatalog';
-import type { ThemeMode, ThemePresetId } from '@/src/design-system/foundation/theme';
+import type { ThemeMode, ThemePresetId } from './foundation/theme';
 import { getDesignSystemCopy, type DesignSystemLocale } from './copy';
 import {
 	buildDesignSystemLocaleDiagnostics,
@@ -121,7 +102,7 @@ import {
 } from './useResponsiveWorkbenchLayout';
 import { WorkbenchHeader } from './components/WorkbenchHeader';
 import { showNativeConfirmationAlert } from './nativeAlertDialog';
-import { setAccessibilityFocus } from '@/src/design-system/foundation/utils/accessibility';
+import { setAccessibilityFocus } from './foundation/utils/accessibility';
 import {
 	DESIGN_SYSTEM_OPERATIONAL_FIXTURE,
 	DESIGN_SYSTEM_READ_ONLY_FIELDS,

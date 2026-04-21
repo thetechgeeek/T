@@ -14,21 +14,21 @@ import {
 	ArrowUpRight,
 } from 'lucide-react-native';
 import { paymentService } from '@/src/services/paymentService';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { Screen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { Badge } from '@/src/design-system';
-import { Divider } from '@/src/design-system';
-import { ScreenHeader } from '@/src/ui-shell';
-import { SectionHeader } from '@/src/design-system';
-import { SkeletonBlock } from '@/src/design-system';
+import { Screen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { Badge } from '@easydesign/design-system';
+import { Divider } from '@easydesign/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { SectionHeader } from '@easydesign/design-system';
+import { SkeletonBlock } from '@easydesign/design-system';
 import type { Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
-import { withOpacity } from '@/src/design-system/foundation';
-import { OPACITY_TINT_LIGHT } from '@/src/design-system/foundation';
-import { SPACING_PX } from '@/src/design-system/foundation';
+import { withOpacity } from '@easydesign/design-system/foundation';
+import { OPACITY_TINT_LIGHT } from '@easydesign/design-system/foundation';
+import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 const ID_TAIL_DIGITS = 6;
 

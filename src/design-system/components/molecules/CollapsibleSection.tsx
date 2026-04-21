@@ -1,19 +1,19 @@
 import React, { forwardRef, useState } from 'react';
 import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { ChevronDown } from 'lucide-react-native';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { Card } from '@/src/design-system/components/atoms/Card';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useReducedMotion } from '@/src/design-system/foundation/hooks/useReducedMotion';
-import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
+import { LucideIconGlyph } from '../../iconography';
+import { Card } from '../atoms/Card';
+import { ThemedText } from '../atoms/ThemedText';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useReducedMotion } from '../../foundation/hooks/useReducedMotion';
+import { useThemeTokens } from '../../foundation/hooks/useThemeTokens';
 import {
 	announceForScreenReader,
 	buildFocusRingStyle,
 	isAccessibilityAction,
 	mapAccessibilityActionNames,
-} from '@/src/design-system/foundation/utils/accessibility';
-import { animateNextLayout } from '@/src/design-system/foundation/utils/animateNextLayout';
+} from '../../foundation/utils/accessibility';
+import { animateNextLayout } from '../../foundation/utils/animateNextLayout';
 
 export interface CollapsibleSectionProps {
 	title: string;

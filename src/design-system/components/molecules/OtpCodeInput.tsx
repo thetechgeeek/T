@@ -1,8 +1,8 @@
 import React, { forwardRef, useEffect, useMemo, useRef } from 'react';
 import { TextInput, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { ThemedText } from '../atoms/ThemedText';
 
 function splitCode(value: string, length: number) {
 	return Array.from({ length }, (_, index) => value[index] ?? '');

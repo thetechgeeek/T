@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SIZE_INPUT_HEIGHT } from '@/src/design-system/foundation';
+import { SIZE_INPUT_HEIGHT } from '@easydesign/design-system/foundation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScreenHeader } from '@/src/ui-shell';
-import { Screen as AtomicScreen } from '@/src/design-system';
-import { ThemedText } from '@/src/design-system';
-import { Button } from '@/src/design-system';
-import { DatePickerField } from '@/src/design-system';
+import { ScreenHeader } from '@easydesign/ui-shell';
+import { Screen as AtomicScreen } from '@easydesign/design-system';
+import { ThemedText } from '@easydesign/design-system';
+import { Button } from '@easydesign/design-system';
+import { DatePickerField } from '@easydesign/design-system';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import type { PaymentMode } from '@/src/types/invoice';
-import { useThemeTokens } from '@/src/design-system/foundation';
+import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@/src/design-system/foundation';
-import { FONT_SIZE } from '@/src/design-system/foundation';
+import { SPACING_PX, TOUCH_TARGET_MIN_PX } from '@easydesign/design-system/foundation';
+import { FONT_SIZE } from '@easydesign/design-system/foundation';
 
 const EXPENSE_FORM_BOTTOM_PADDING = 32;
 

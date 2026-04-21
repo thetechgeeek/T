@@ -20,18 +20,18 @@ import {
 	type ViewStyle,
 } from 'react-native';
 import { Lock } from 'lucide-react-native';
-import { useControllableState } from '@/src/design-system/foundation/hooks/useControllableState';
-import { announceForScreenReader } from '@/src/design-system/foundation/utils/accessibility';
-import { useTheme } from '@/src/design-system/foundation/theme/ThemeProvider';
-import { LucideIconGlyph } from '@/src/design-system/iconography';
-import { triggerDesignSystemHaptic } from '@/src/design-system/haptics';
-import { Badge } from '@/src/design-system/components/atoms/Badge';
-import { Button } from '@/src/design-system/components/atoms/Button';
-import { ThemedText } from '@/src/design-system/components/atoms/ThemedText';
-import { AlertBanner } from '@/src/design-system/components/molecules/AlertBanner';
-import { FormField } from '@/src/design-system/components/molecules/FormField';
-import { TextAreaField } from '@/src/design-system/components/molecules/TextAreaField';
-import { ToggleSwitch } from '@/src/design-system/components/atoms/ToggleSwitch';
+import { useControllableState } from '../../foundation/hooks/useControllableState';
+import { announceForScreenReader } from '../../foundation/utils/accessibility';
+import { useTheme } from '../../foundation/theme/ThemeProvider';
+import { LucideIconGlyph } from '../../iconography';
+import { triggerDesignSystemHaptic } from '../../haptics';
+import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { ThemedText } from '../atoms/ThemedText';
+import { AlertBanner } from './AlertBanner';
+import { FormField } from './FormField';
+import { TextAreaField } from './TextAreaField';
+import { ToggleSwitch } from '../atoms/ToggleSwitch';
 
 export type DeclarativeFormValues = Record<string, string>;
 export type DeclarativeFormMode = 'edit' | 'read-only';

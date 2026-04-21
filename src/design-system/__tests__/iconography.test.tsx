@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import { Search } from 'lucide-react-native';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
+import { ThemeProvider } from '../foundation/theme/ThemeProvider';
 import { LucideIconGlyph, MaterialIconGlyph, resolveAccessibleIconSize } from '../iconography';
 
 describe('design-system iconography helpers', () => {

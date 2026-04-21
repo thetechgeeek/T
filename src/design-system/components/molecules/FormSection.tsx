@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, type ViewStyle, type StyleProp } from 'react-native';
-import { useThemeTokens } from '@/src/design-system/foundation/hooks/useThemeTokens';
+import { useThemeTokens } from '../../foundation/hooks/useThemeTokens';
 import { SectionHeader, type SectionHeaderVariant } from './SectionHeader';
 
 export interface FormSectionProps {

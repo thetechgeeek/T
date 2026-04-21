@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
-import { ThemeProvider } from '@/src/design-system/foundation/theme/ThemeProvider';
-import type { RuntimeQualitySignals } from '@/src/design-system/runtimeSignals';
-import * as layoutAnimationUtils from '@/src/design-system/foundation/utils/animateNextLayout';
+import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
+import type { RuntimeQualitySignals } from '../../../runtimeSignals';
+import * as layoutAnimationUtils from '../../../foundation/utils/animateNextLayout';
 import { CollapsibleSection } from '../CollapsibleSection';
 
 const renderWithTheme = (

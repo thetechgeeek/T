@@ -103,7 +103,7 @@ export async function cleanupByPrefix(
 export async function signInTestUser(
 	supabase: ReturnType<typeof createTestSupabaseClient>,
 ): Promise<void> {
-	const email = process.env.INTEGRATION_TEST_EMAIL ?? 'test@tilemaster.dev';
+	const email = process.env.INTEGRATION_TEST_EMAIL ?? 'test@easydesign.dev';
 	const password = process.env.INTEGRATION_TEST_PASSWORD ?? 'TestPass123!';
 
 	await withRetry(
