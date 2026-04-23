@@ -77,7 +77,10 @@ describe('Button', () => {
 			expect.objectContaining({ backgroundColor: lightTheme.colors.primary }),
 		);
 		expect(flattenStyle(getByLabelText('Secondary').props.style)).toEqual(
-			expect.objectContaining({ backgroundColor: lightTheme.colors.surfaceVariant }),
+			expect.objectContaining({
+				backgroundColor: lightTheme.colors.surface,
+				borderColor: lightTheme.colors.border,
+			}),
 		);
 		expect(flattenStyle(getByLabelText('Ghost').props.style)).toEqual(
 			expect.objectContaining({ backgroundColor: 'transparent' }),

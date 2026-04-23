@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 # E2E-011: Offline behavior — verify app handles no-network gracefully
 - launchApp

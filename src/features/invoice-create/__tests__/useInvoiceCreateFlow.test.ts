@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import { renderHook, act } from '@testing-library/react-native';
 import { useInvoiceCreateFlow } from '../useInvoiceCreateFlow';
+import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 
 // ─── Store mocks ─────────────────────────────────────────────────────────────
@@ -272,6 +273,7 @@ describe('useInvoiceCreateFlow', () => {
 
 	it('submitInvoice on failure sets submitting=false', async () => {
 		mockCreateInvoice.mockRejectedValueOnce(new Error('Submit failed'));
+		allowExpectedConsoleError(/\[ERROR\] Failed to create invoice/);
 
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 

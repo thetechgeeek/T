@@ -3,21 +3,13 @@ import { Text } from 'react-native';
 import { fireEvent } from '@testing-library/react-native';
 import { ErrorBoundary } from '../ErrorBoundary';
 import { renderWithTheme } from '@/__tests__/utils/renderWithTheme';
+import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
 
 // Component that throws on demand
 function BrokenComponent({ shouldThrow }: { shouldThrow: boolean }) {
 	if (shouldThrow) throw new Error('Test crash');
 	return <Text>OK</Text>;
 }
-
-// Suppress console.error for expected throws in tests
-beforeEach(() => {
-	jest.spyOn(console, 'error').mockImplementation(() => {});
-});
-
-afterEach(() => {
-	(console.error as jest.Mock).mockRestore();
-});
 
 describe('ErrorBoundary', () => {
 	it('renders children when no error', () => {
@@ -30,6 +22,7 @@ describe('ErrorBoundary', () => {
 	});
 
 	it('renders fallback UI when child throws', () => {
+		allowExpectedConsoleError(/Test crash/, 2);
 		const { getByText } = renderWithTheme(
 			<ErrorBoundary>
 				<BrokenComponent shouldThrow />
@@ -40,6 +33,7 @@ describe('ErrorBoundary', () => {
 	});
 
 	it('renders custom fallback when provided', () => {
+		allowExpectedConsoleError(/Test crash/, 2);
 		const { getByText } = renderWithTheme(
 			<ErrorBoundary fallback={<Text>Custom fallback</Text>}>
 				<BrokenComponent shouldThrow />
@@ -49,6 +43,7 @@ describe('ErrorBoundary', () => {
 	});
 
 	it('resets error state when Try again is pressed', () => {
+		allowExpectedConsoleError(/Test crash/, 4);
 		const { getByText } = renderWithTheme(
 			<ErrorBoundary>
 				<BrokenComponent shouldThrow />

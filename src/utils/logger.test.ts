@@ -1,4 +1,8 @@
 import logger from './logger';
+import {
+	allowExpectedConsoleError,
+	allowExpectedConsoleWarn,
+} from '@/__tests__/utils/runtimeNoise';
 
 describe('logger', () => {
 	let debugSpy: jest.SpyInstance;
@@ -58,6 +62,7 @@ describe('logger', () => {
 
 	describe('warn()', () => {
 		it('always calls console.warn regardless of __DEV__', () => {
+			allowExpectedConsoleWarn('[WARN] important warning');
 			(global as unknown as { __DEV__: boolean }).__DEV__ = false;
 			logger.warn('important warning');
 			expect(warnSpy).toHaveBeenCalledWith('[WARN] important warning', undefined);
@@ -65,6 +70,7 @@ describe('logger', () => {
 		});
 
 		it('calls console.warn in __DEV__ mode too', () => {
+			allowExpectedConsoleWarn('[WARN] dev warning');
 			logger.warn('dev warning', { context: 'test' });
 			expect(warnSpy).toHaveBeenCalledWith('[WARN] dev warning', { context: 'test' });
 		});
@@ -72,6 +78,7 @@ describe('logger', () => {
 
 	describe('error()', () => {
 		it('always calls console.error regardless of __DEV__', () => {
+			allowExpectedConsoleError('[ERROR] critical error');
 			(global as unknown as { __DEV__: boolean }).__DEV__ = false;
 			const err = new Error('something broke');
 			logger.error('critical error', err);
@@ -80,12 +87,14 @@ describe('logger', () => {
 		});
 
 		it('calls console.error in __DEV__ mode', () => {
+			allowExpectedConsoleError('[ERROR] error occurred');
 			const err = new Error('test error');
 			logger.error('error occurred', err, { userId: '123' });
 			expect(errorSpy).toHaveBeenCalledWith('[ERROR] error occurred', err, { userId: '123' });
 		});
 
 		it('handles undefined error gracefully', () => {
+			allowExpectedConsoleError('[ERROR] no error object');
 			expect(() => logger.error('no error object')).not.toThrow();
 			expect(errorSpy).toHaveBeenCalled();
 		});
@@ -104,11 +113,13 @@ describe('logger', () => {
 		});
 
 		it('warn messages include [WARN] prefix', () => {
+			allowExpectedConsoleWarn('[WARN] my message');
 			logger.warn('my message');
 			expect(warnSpy.mock.calls[0][0]).toMatch(/^\[WARN\]/);
 		});
 
 		it('error messages include [ERROR] prefix', () => {
+			allowExpectedConsoleError('[ERROR] my message');
 			logger.error('my message');
 			expect(errorSpy.mock.calls[0][0]).toMatch(/^\[ERROR\]/);
 		});

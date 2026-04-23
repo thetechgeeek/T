@@ -18,6 +18,7 @@ const SCREEN_HEADER_EYEBROW_LETTER_SPACING = 0.4;
 
 export interface ScreenHeaderProps {
 	title: string | React.ReactNode;
+	titleAccessibilityLabel?: string;
 	eyebrow?: string;
 	subtitle?: string;
 	onBack?: () => void;
@@ -33,6 +34,7 @@ export interface ScreenHeaderProps {
  */
 export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 	title,
+	titleAccessibilityLabel,
 	eyebrow,
 	subtitle,
 	onBack,
@@ -127,7 +129,11 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 							{eyebrow}
 						</ThemedText>
 					) : null}
-					<ThemedText variant="screenTitle" numberOfLines={1}>
+					<ThemedText
+						variant="screenTitle"
+						numberOfLines={1}
+						accessibilityLabel={titleAccessibilityLabel}
+					>
 						{title}
 					</ThemedText>
 					{secondaryText ? (

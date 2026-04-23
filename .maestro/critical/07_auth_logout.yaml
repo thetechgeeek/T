@@ -1,0 +1,15 @@
+appId: com.easystock.app
+---
+- runFlow: ../shared/login_seeded.yaml
+- tapOn:
+      label: 'tab-more'
+- assertVisible:
+      label: 'more-screen'
+- tapOn:
+      label: 'sign-out-button'
+- tapOn:
+      text: 'Sign Out'
+- assertVisible:
+      label: 'sign-in-heading'
+- assertNotVisible:
+      label: 'runtime-error-boundary'

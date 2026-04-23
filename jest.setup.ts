@@ -22,10 +22,92 @@ import React from 'react';
 import '@testing-library/jest-native/extend-expect';
 import 'react-native-gesture-handler/jestSetup';
 import { config } from 'dotenv';
+import {
+	assertNoUnexpectedRuntimeNoise,
+	recordConsoleCall,
+	recordRuntimeError,
+	resetRuntimeNoiseState,
+} from './__tests__/utils/runtimeNoise';
 
 config({ path: '.env.test' });
 
 import { ViewProps, TextProps, ScrollViewProps, TouchableOpacityProps } from 'react-native';
+
+const trackedConsoleMethods = new Set(['error', 'warn'] as const);
+const rawJestSpyOn = jest.spyOn.bind(jest) as (...args: unknown[]) => jest.SpyInstance;
+const trackedConsoleError = (...args: unknown[]) => {
+	recordConsoleCall('error', args);
+};
+const trackedConsoleWarn = (...args: unknown[]) => {
+	recordConsoleCall('warn', args);
+};
+
+console.error = trackedConsoleError as typeof console.error;
+console.warn = trackedConsoleWarn as typeof console.warn;
+
+(
+	jest as typeof jest & {
+		spyOn: typeof jest.spyOn;
+	}
+).spyOn = ((object: object, methodName: PropertyKey, accessType?: 'get' | 'set') => {
+	const spy = accessType
+		? rawJestSpyOn(object, methodName, accessType)
+		: rawJestSpyOn(object, methodName);
+
+	if (
+		object === console &&
+		typeof methodName === 'string' &&
+		trackedConsoleMethods.has(methodName as 'error' | 'warn')
+	) {
+		const method = methodName as 'error' | 'warn';
+		const trackedSpy = spy as any;
+		const wrapImplementation =
+			(implementation?: (...args: unknown[]) => unknown) =>
+			(...args: unknown[]) => {
+				recordConsoleCall(method, args);
+				return implementation?.(...args);
+			};
+
+		const originalMockImplementation = trackedSpy.mockImplementation.bind(trackedSpy) as (
+			implementation?: (...args: unknown[]) => unknown,
+		) => jest.SpyInstance;
+		const originalMockImplementationOnce = trackedSpy.mockImplementationOnce.bind(
+			trackedSpy,
+		) as (implementation?: (...args: unknown[]) => unknown) => jest.SpyInstance;
+
+		originalMockImplementation(wrapImplementation());
+		trackedSpy.mockImplementation = (implementation?: (...args: unknown[]) => unknown) =>
+			originalMockImplementation(wrapImplementation(implementation));
+		trackedSpy.mockImplementationOnce = (implementation?: (...args: unknown[]) => unknown) =>
+			originalMockImplementationOnce(wrapImplementation(implementation));
+	}
+
+	return spy;
+}) as typeof jest.spyOn;
+
+const unhandledRejectionHandler = (reason: unknown) => {
+	recordRuntimeError('unhandledRejection', reason);
+};
+
+const uncaughtExceptionHandler = (error: unknown) => {
+	recordRuntimeError('uncaughtException', error);
+};
+
+process.on('unhandledRejection', unhandledRejectionHandler);
+process.on('uncaughtException', uncaughtExceptionHandler);
+
+beforeEach(() => {
+	resetRuntimeNoiseState();
+});
+
+afterEach(() => {
+	assertNoUnexpectedRuntimeNoise();
+});
+
+afterAll(() => {
+	process.off('unhandledRejection', unhandledRejectionHandler);
+	process.off('uncaughtException', uncaughtExceptionHandler);
+});
 
 const mockNativeRegistry = {
 	textInputs: new Map<
@@ -646,6 +728,7 @@ jest.mock('react-native-gesture-handler', () => {
 // expo-router — useLocalSearchParams returns {} by default (QA issue 3.3)
 // Per-test params: use setMockSearchParams() from __tests__/utils/mockSearchParams.ts
 jest.mock('expo-router', () => {
+	const React = jest.requireActual('react');
 	const push = jest.fn();
 	const replace = jest.fn();
 	const back = jest.fn();
@@ -653,7 +736,9 @@ jest.mock('expo-router', () => {
 	return {
 		useRouter: jest.fn(() => ({ push, replace, back, setParams })),
 		useLocalSearchParams: jest.fn(() => ({})),
-		useFocusEffect: jest.fn((cb) => cb()),
+		useFocusEffect: jest.fn((cb) => {
+			React.useEffect(() => cb(), [cb]);
+		}),
 		useNavigation: jest.fn(() => ({
 			navigate: jest.fn(),
 			goBack: back,

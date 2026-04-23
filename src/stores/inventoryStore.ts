@@ -59,6 +59,18 @@ const DEFAULT_FILTERS: InventoryFilters = {
 
 const PAGE_SIZE = 20;
 
+function areInventoryFiltersEqual(a: InventoryFilters, b: InventoryFilters): boolean {
+	return (
+		a.search === b.search &&
+		a.category === b.category &&
+		a.lowStockOnly === b.lowStockOnly &&
+		a.sortBy === b.sortBy &&
+		a.sortDir === b.sortDir
+	);
+}
+
+let pendingResetFetch = false;
+
 // Helper to handle debounced fetches across store instances
 const debouncedFetchItems = debounce((get: () => InventoryState) => {
 	get().fetchItems(true);
@@ -77,8 +89,13 @@ export const useInventoryStore = create<InventoryState>()(
 			conflict: null,
 
 			setFilters: (newFilters) => {
+				const nextFilters = { ...get().filters, ...newFilters };
+				if (areInventoryFiltersEqual(get().filters, nextFilters)) {
+					return;
+				}
+
 				set((state) => {
-					state.filters = { ...state.filters, ...newFilters };
+					state.filters = nextFilters;
 				});
 				// Debounce the fetch to avoid spamming the server on rapid keystrokes
 				debouncedFetchItems(get);
@@ -86,43 +103,74 @@ export const useInventoryStore = create<InventoryState>()(
 
 			fetchItems: async (reset = false) => {
 				const state = get();
-				if (state.loading) return;
+				if (state.loading) {
+					if (reset) {
+						pendingResetFetch = true;
+					}
+					return;
+				}
 				if (!reset && !state.hasMore) return;
 
-				const pageToFetch = reset ? 1 : state.page + 1;
+				let restartWithLatestReset = false;
 
-				set((s) => {
-					s.loading = true;
-					s.error = null;
-					if (reset) s.page = 1;
-				});
-
-				try {
-					const { data, count } = await withRetry(() =>
-						inventoryService.fetchItems(state.filters, pageToFetch, PAGE_SIZE),
-					);
+				do {
+					restartWithLatestReset = false;
+					const requestState = get();
+					const requestFilters = { ...requestState.filters };
+					const pageToFetch = reset ? 1 : requestState.page + 1;
 
 					set((s) => {
-						if (reset) {
-							s.items = data;
-						} else {
-							const existingIds = new Set(s.items.map((i: InventoryItem) => i.id));
-							const newItems = data.filter(
-								(i: InventoryItem) => !existingIds.has(i.id),
-							);
-							s.items.push(...newItems);
+						s.loading = true;
+						s.error = null;
+						if (reset) s.page = 1;
+					});
+
+					try {
+						const { data, count } = await withRetry(() =>
+							inventoryService.fetchItems(requestFilters, pageToFetch, PAGE_SIZE),
+						);
+
+						const shouldRestartWithLatestFilters =
+							reset &&
+							(pendingResetFetch ||
+								!areInventoryFiltersEqual(get().filters, requestFilters));
+
+						if (shouldRestartWithLatestFilters) {
+							pendingResetFetch = false;
+							restartWithLatestReset = true;
+							continue;
 						}
-						s.totalCount = count;
-						s.page = pageToFetch;
-						s.hasMore = s.items.length < count;
-						s.loading = false;
-					});
-				} catch (err: unknown) {
-					set((s) => {
-						s.error = (err as Error).message;
-						s.loading = false;
-					});
-				}
+
+						set((s) => {
+							if (reset) {
+								s.items = data;
+							} else {
+								const existingIds = new Set(
+									s.items.map((i: InventoryItem) => i.id),
+								);
+								const newItems = data.filter(
+									(i: InventoryItem) => !existingIds.has(i.id),
+								);
+								s.items.push(...newItems);
+							}
+							s.totalCount = count;
+							s.page = pageToFetch;
+							s.hasMore = s.items.length < count;
+							s.loading = false;
+						});
+					} catch (err: unknown) {
+						if (reset && pendingResetFetch) {
+							pendingResetFetch = false;
+							restartWithLatestReset = true;
+							continue;
+						}
+
+						set((s) => {
+							s.error = (err as Error).message;
+							s.loading = false;
+						});
+					}
+				} while (restartWithLatestReset);
 			},
 
 			createItem: async (itemPayload) => {
@@ -291,6 +339,7 @@ export const useInventoryStore = create<InventoryState>()(
 			},
 
 			reset: () => {
+				pendingResetFetch = false;
 				set((s) => {
 					s.items = [];
 					s.totalCount = 0;

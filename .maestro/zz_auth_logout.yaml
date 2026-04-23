@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 # E2E-001c: Logout flow
 - launchApp
@@ -10,6 +10,10 @@ appId: com.tilemaster.app
       label: 'sign-out-button'
 - tapOn:
       label: 'sign-out-button'
+- assertVisible:
+      text: 'Sign Out'
+- tapOn:
+      text: 'Sign Out'
 - assertVisible:
       label: 'sign-in-heading'
 - takeScreenshot: auth_logout_success

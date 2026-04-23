@@ -269,9 +269,11 @@ export default function InvoiceDetailScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard={false}
 			scrollable
+			testID="invoice-detail-screen"
 			header={
 				<ScreenHeader
 					title={invoice.invoice_number}
+					titleAccessibilityLabel="invoice-detail-screen"
 					rightElement={
 						<TouchableOpacity
 							onPress={handleKebab}

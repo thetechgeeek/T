@@ -1,0 +1,34 @@
+appId: com.easystock.app
+---
+- runFlow: ../shared/login_seeded.yaml
+- tapOn:
+      label: 'tab-more'
+- assertVisible:
+      label: 'more-screen'
+- tapOn:
+      label: 'menu-customers'
+- assertVisible:
+      label: 'customers-screen'
+- tapOn:
+      label: 'add-customer-button'
+- assertVisible:
+      label: 'customer-name-input'
+- tapOn:
+      label: 'customer-name-input'
+- inputText: 'PR Seed Customer'
+- tapOn:
+      label: 'customer-phone-input'
+- inputText: '9876500099'
+- hideKeyboard
+- tapOn:
+      label: 'save-customer-button'
+- assertVisible:
+      label: 'customers-screen'
+- assertVisible:
+      text: 'PR Seed Customer'
+- tapOn:
+      text: 'PR Seed Customer'
+- assertVisible:
+      text: 'Outstanding Balance'
+- assertNotVisible:
+      label: 'runtime-error-boundary'

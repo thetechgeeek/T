@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 - clearState
 - launchApp:

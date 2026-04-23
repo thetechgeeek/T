@@ -47,9 +47,9 @@ public enum DesignSystemTokens {
         public static let none: Double = 0
         public static let xs: Double = 2
         public static let sm: Double = 4
-        public static let md: Double = 6
-        public static let lg: Double = 10
-        public static let xl: Double = 14
+        public static let md: Double = 8
+        public static let lg: Double = 12
+        public static let xl: Double = 16
         public static let full: Double = 9999
     }
 

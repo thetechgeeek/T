@@ -127,7 +127,12 @@ export default function ReceivePaymentScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
-			header={<ScreenHeader title="Receive Payment" />}
+			header={
+				<ScreenHeader
+					title="Receive Payment"
+					titleAccessibilityLabel="receive-payment-screen"
+				/>
+			}
 			contentContainerStyle={[styles.content, { padding: s.md }]}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
@@ -285,6 +290,8 @@ export default function ReceivePaymentScreen() {
 										] as StyleProp<ViewStyle>
 									}
 									onPress={() => setPaymentMode(m)}
+									accessibilityRole="button"
+									accessibilityLabel={`payment-mode-${modeToKey[m]}`}
 								>
 									<ThemedText
 										variant="caption"

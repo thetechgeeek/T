@@ -60,6 +60,7 @@ const DATE_CHIP_LABELS: Record<DateChip, string> = {
 };
 
 const STATUS_CHIPS: StatusChip[] = ['ALL', 'paid', 'partial', 'unpaid'];
+const INVOICES_SCREEN_ACCESSIBILITY_LABEL = 'invoices-screen';
 
 // ─── component ───────────────────────────────────────────────────────────────
 
@@ -148,7 +149,7 @@ export default function InvoicesListScreen() {
 		<AtomicScreen safeAreaEdges={['top']}>
 			{/* ── Top Header ── */}
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
-				<ThemedText variant="h1" accessibilityLabel="invoices-screen-title">
+				<ThemedText variant="h1" accessibilityLabel={INVOICES_SCREEN_ACCESSIBILITY_LABEL}>
 					{t('invoice.title')}
 				</ThemedText>
 				<Button

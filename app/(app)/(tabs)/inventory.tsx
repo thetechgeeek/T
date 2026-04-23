@@ -108,9 +108,18 @@ export default function InventoryTab() {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [exporting, setExporting] = useState(false);
 	const initialized = useRef(false);
+	const searchInputRef = useRef(searchInput);
 
 	useEffect(() => {
-		setSearchInput(filters.search || '');
+		searchInputRef.current = searchInput;
+	}, [searchInput]);
+
+	useEffect(() => {
+		const nextSearchInput = filters.search || '';
+		if (searchInputRef.current !== nextSearchInput) {
+			searchInputRef.current = nextSearchInput;
+			setSearchInput(nextSearchInput);
+		}
 	}, [filters.search]);
 
 	useEffect(() => {

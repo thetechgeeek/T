@@ -64,7 +64,7 @@ describe('useResponsiveWorkbenchLayout', () => {
 		expect(result.current.typographyScale).toBeGreaterThan(1);
 	});
 
-	it('animates layout transitions when the dimensions listener reports a rotation', () => {
+	it('animates layout transitions when the dimensions listener reports a rotation', async () => {
 		const dimensionsListeners: Array<
 			(event: { window: { width: number; height: number } }) => void
 		> = [];
@@ -79,6 +79,9 @@ describe('useResponsiveWorkbenchLayout', () => {
 
 		const configureNextSpy = jest.spyOn(LayoutAnimation, 'configureNext');
 		const { result } = renderHook(() => useResponsiveWorkbenchLayout(), { wrapper });
+		await act(async () => {
+			await Promise.resolve();
+		});
 
 		act(() => {
 			dimensionsListeners.forEach((listener) =>

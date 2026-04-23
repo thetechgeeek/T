@@ -2,6 +2,7 @@ import React from 'react';
 import { act, fireEvent } from '@testing-library/react-native';
 import { renderWithTheme } from '../../../../../__tests__/utils/renderWithTheme';
 import { FeedbackLoopWorkspace } from '../FeedbackLoopWorkspace';
+import { allowExpectedConsoleError } from '../../../../../__tests__/utils/runtimeNoise';
 
 describe('FeedbackLoopWorkspace', () => {
 	beforeEach(() => {
@@ -33,13 +34,11 @@ describe('FeedbackLoopWorkspace', () => {
 	});
 
 	it('contains section failures inside the local boundary', () => {
-		const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+		allowExpectedConsoleError(/Simulated section failure/, 2);
 		const { getByText } = renderWithTheme(<FeedbackLoopWorkspace />);
 
 		fireEvent.press(getByText('Trigger section failure'));
 
 		expect(getByText('Section boundary recovered')).toBeTruthy();
-
-		errorSpy.mockRestore();
 	});
 });

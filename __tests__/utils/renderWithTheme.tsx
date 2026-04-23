@@ -49,12 +49,16 @@ export function renderWithTheme(
 		themeProviderProps,
 		...renderOptions
 	} = options ?? {};
+	const resolvedThemeProviderProps: Partial<ThemeProviderProps> = {
+		persist: false,
+		...themeProviderProps,
+	};
 
 	return render(ui, {
 		wrapper: ({ children }) => (
 			<AllProviders
 				shellEnvironment={shellEnvironment}
-				themeProviderProps={themeProviderProps}
+				themeProviderProps={resolvedThemeProviderProps}
 			>
 				{children}
 			</AllProviders>

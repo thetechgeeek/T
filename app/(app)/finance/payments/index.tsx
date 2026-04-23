@@ -22,6 +22,7 @@ import type { Payment } from '@/src/types/finance';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 const LIST_BOTTOM_PADDING = 100;
+const PAYMENTS_SCREEN_ACCESSIBILITY_LABEL = 'payments-screen';
 
 function getModeIcon(mode: string, color: string) {
 	const size = 20;
@@ -119,7 +120,10 @@ export default function PaymentsScreen() {
 
 	return (
 		<Screen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title={t('common.payments')} />
+			<ScreenHeader
+				title={t('common.payments')}
+				titleAccessibilityLabel={PAYMENTS_SCREEN_ACCESSIBILITY_LABEL}
+			/>
 
 			{/* Summary bar */}
 			<View

@@ -28,6 +28,7 @@ import type { Customer } from '@/src/types/customer';
 
 const CUSTOMER_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs;
 const SUMMARY_BAR_RADIUS = SPACING_PX.sm - SPACING_PX.xxs;
+const CUSTOMERS_SCREEN_ACCESSIBILITY_LABEL = 'customers-screen';
 
 function getInitials(name: string): string {
 	return name
@@ -152,7 +153,10 @@ export default function CustomersScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title={t('customer.title')} />
+			<ScreenHeader
+				title={t('customer.title')}
+				titleAccessibilityLabel={CUSTOMERS_SCREEN_ACCESSIBILITY_LABEL}
+			/>
 
 			<View
 				style={[

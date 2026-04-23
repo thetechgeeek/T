@@ -261,7 +261,7 @@ describe('ThemeProvider', () => {
 		});
 	});
 
-	it('updates runtime layout metrics when dimensions change', () => {
+	it('updates runtime layout metrics when dimensions change', async () => {
 		let dimensionsListener:
 			| ((event: { window: { width: number; height: number } }) => void)
 			| undefined;
@@ -275,6 +275,9 @@ describe('ThemeProvider', () => {
 		}) as unknown as typeof Dimensions.addEventListener);
 
 		const { result } = renderHook(() => useTheme(), { wrapper: rootWrapper });
+		await act(async () => {
+			await Promise.resolve();
+		});
 
 		act(() => {
 			dimensionsListener?.({

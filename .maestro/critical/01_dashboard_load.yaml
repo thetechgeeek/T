@@ -1,0 +1,15 @@
+appId: com.easystock.app
+---
+- runFlow: ../shared/login_seeded.yaml
+- assertVisible:
+      label: 'dashboard-screen'
+- assertVisible:
+      label: 'stat-today-sales'
+- assertVisible:
+      label: 'stat-outstanding'
+- assertVisible:
+      label: 'stat-low-stock'
+- assertVisible:
+      label: 'quick-action-new-invoice'
+- assertNotVisible:
+      label: 'runtime-error-boundary'

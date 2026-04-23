@@ -1,6 +1,7 @@
 import React from 'react';
 import { waitFor } from '@testing-library/react-native';
 import StockOpScreen from '@/app/(app)/inventory/stock-op';
+import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
 import { inventoryService } from '@/src/services/inventoryService';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useLocalSearchParams } from 'expo-router';
@@ -62,6 +63,7 @@ describe('StockOp Loading & Error UI States', () => {
 		// BUG FIX: The infinite spinner bug is now fixed. When fetchItemById rejects,
 		// the component sets loadError=true and shows "Failed to load item." + "Go Back".
 		(inventoryService.fetchItemById as jest.Mock).mockRejectedValue(new Error('Network Error'));
+		allowExpectedConsoleError(/\[ERROR\] error/);
 
 		const { findByText, queryByTestId } = renderWithTheme(<StockOpScreen />);
 

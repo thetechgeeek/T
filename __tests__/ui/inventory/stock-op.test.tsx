@@ -2,6 +2,7 @@ import React from 'react';
 import { waitFor, fireEvent } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import StockOpScreen from '@/app/(app)/inventory/stock-op';
+import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
 import { inventoryService } from '@/src/services/inventoryService';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
@@ -156,6 +157,7 @@ describe('StockOpScreen', () => {
 
 	it('shows error message and Go Back button when fetchItemById rejects', async () => {
 		(inventoryService.fetchItemById as jest.Mock).mockRejectedValue(new Error('Network Error'));
+		allowExpectedConsoleError(/\[ERROR\] error/);
 
 		const { findByText } = renderWithTheme(<StockOpScreen />);
 

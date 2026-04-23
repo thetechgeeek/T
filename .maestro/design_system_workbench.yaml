@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 env:
   DESIGN_SYSTEM_DEEPLINK: ${DESIGN_SYSTEM_DEEPLINK}
 ---

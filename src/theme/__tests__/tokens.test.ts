@@ -32,9 +32,9 @@ describe('Theme Tokens (P0.1)', () => {
 	it('should have correct border radius tokens', () => {
 		expect(lightTheme.borderRadius.none).toBe(0);
 		expect(lightTheme.borderRadius.sm).toBe(4);
-		expect(lightTheme.borderRadius.md).toBe(6);
-		expect(lightTheme.borderRadius.lg).toBe(10);
-		expect(lightTheme.borderRadius.xl).toBe(14);
+		expect(lightTheme.borderRadius.md).toBe(8);
+		expect(lightTheme.borderRadius.lg).toBe(12);
+		expect(lightTheme.borderRadius.xl).toBe(16);
 		expect(lightTheme.borderRadius.full).toBe(9999);
 	});
 

@@ -1,5 +1,5 @@
 import { AccessibilityInfo, Dimensions, I18nManager, PixelRatio, Platform } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { detectDeviceLocale } from './foundation/i18n/runtime';
 import { detectPixelRatio } from './foundation/theme/density';
 import {
@@ -43,6 +43,12 @@ export interface RuntimeQualitySignals {
 	layoutScale: number;
 	spacingScale: number;
 	typographyScale: number;
+}
+
+interface AccessibilitySignalsState {
+	reduceMotionEnabled: boolean;
+	boldTextEnabled: boolean;
+	highTextContrastEnabled: boolean;
 }
 
 const DEFAULT_DIMENSIONS = getWindowDimensions();
@@ -112,19 +118,25 @@ function addDimensionsListener(
 }
 
 export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals {
-	const [reduceMotionEnabled, setReduceMotionEnabled] = useState(
-		DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled,
-	);
-	const [boldTextEnabled, setBoldTextEnabled] = useState(
-		DEFAULT_RUNTIME_QUALITY_SIGNALS.boldTextEnabled,
-	);
-	const [highTextContrastEnabled, setHighTextContrastEnabled] = useState(
-		DEFAULT_RUNTIME_QUALITY_SIGNALS.highTextContrastEnabled,
-	);
+	const [accessibilitySignals, setAccessibilitySignals] = useState<AccessibilitySignalsState>({
+		reduceMotionEnabled: DEFAULT_RUNTIME_QUALITY_SIGNALS.reduceMotionEnabled,
+		boldTextEnabled: DEFAULT_RUNTIME_QUALITY_SIGNALS.boldTextEnabled,
+		highTextContrastEnabled: DEFAULT_RUNTIME_QUALITY_SIGNALS.highTextContrastEnabled,
+	});
 	const [detectedLocale] = useState(detectDeviceLocale);
 	const [pixelRatio] = useState(detectPixelRatio);
 	const [fontScale] = useState(detectFontScale);
 	const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions);
+	const accessibilitySignalsRef = useRef(accessibilitySignals);
+	const windowDimensionsRef = useRef(windowDimensions);
+
+	useEffect(() => {
+		accessibilitySignalsRef.current = accessibilitySignals;
+	}, [accessibilitySignals]);
+
+	useEffect(() => {
+		windowDimensionsRef.current = windowDimensions;
+	}, [windowDimensions]);
 
 	useEffect(() => {
 		if (!enabled) {
@@ -147,25 +159,75 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 				return;
 			}
 
-			setReduceMotionEnabled(reduceMotion);
-			setBoldTextEnabled(boldText);
-			setHighTextContrastEnabled(highTextContrast);
+			const nextAccessibilitySignals = {
+				reduceMotionEnabled: reduceMotion,
+				boldTextEnabled: boldText,
+				highTextContrastEnabled: highTextContrast,
+			};
+			const currentAccessibilitySignals = accessibilitySignalsRef.current;
+
+			if (
+				currentAccessibilitySignals.reduceMotionEnabled !==
+					nextAccessibilitySignals.reduceMotionEnabled ||
+				currentAccessibilitySignals.boldTextEnabled !==
+					nextAccessibilitySignals.boldTextEnabled ||
+				currentAccessibilitySignals.highTextContrastEnabled !==
+					nextAccessibilitySignals.highTextContrastEnabled
+			) {
+				accessibilitySignalsRef.current = nextAccessibilitySignals;
+				setAccessibilitySignals(nextAccessibilitySignals);
+			}
 		});
 
 		const reduceMotionSubscription = addAccessibilityListener(
 			'reduceMotionChanged',
-			setReduceMotionEnabled,
+			(value) => {
+				if (accessibilitySignalsRef.current.reduceMotionEnabled === value) {
+					return;
+				}
+				const nextAccessibilitySignals = {
+					...accessibilitySignalsRef.current,
+					reduceMotionEnabled: value,
+				};
+				accessibilitySignalsRef.current = nextAccessibilitySignals;
+				setAccessibilitySignals(nextAccessibilitySignals);
+			},
 		);
-		const boldTextSubscription = addAccessibilityListener(
-			'boldTextChanged',
-			setBoldTextEnabled,
-		);
+		const boldTextSubscription = addAccessibilityListener('boldTextChanged', (value) => {
+			if (accessibilitySignalsRef.current.boldTextEnabled === value) {
+				return;
+			}
+			const nextAccessibilitySignals = {
+				...accessibilitySignalsRef.current,
+				boldTextEnabled: value,
+			};
+			accessibilitySignalsRef.current = nextAccessibilitySignals;
+			setAccessibilitySignals(nextAccessibilitySignals);
+		});
 		const highTextContrastSubscription = addAccessibilityListener(
 			'highTextContrastChanged',
-			setHighTextContrastEnabled,
+			(value) => {
+				if (accessibilitySignalsRef.current.highTextContrastEnabled === value) {
+					return;
+				}
+				const nextAccessibilitySignals = {
+					...accessibilitySignalsRef.current,
+					highTextContrastEnabled: value,
+				};
+				accessibilitySignalsRef.current = nextAccessibilitySignals;
+				setAccessibilitySignals(nextAccessibilitySignals);
+			},
 		);
 		const dimensionsSubscription = addDimensionsListener((width, height) => {
-			setWindowDimensions({ width, height });
+			if (
+				windowDimensionsRef.current.width === width &&
+				windowDimensionsRef.current.height === height
+			) {
+				return;
+			}
+			const nextWindowDimensions = { width, height };
+			windowDimensionsRef.current = nextWindowDimensions;
+			setWindowDimensions(nextWindowDimensions);
 		});
 
 		return () => {
@@ -187,9 +249,9 @@ export function useRuntimeQualitySignals(enabled = true): RuntimeQualitySignals 
 		runtimeRtl: I18nManager.isRTL,
 		pixelRatio,
 		fontScale,
-		reduceMotionEnabled,
-		boldTextEnabled,
-		highTextContrastEnabled,
+		reduceMotionEnabled: accessibilitySignals.reduceMotionEnabled,
+		boldTextEnabled: accessibilitySignals.boldTextEnabled,
+		highTextContrastEnabled: accessibilitySignals.highTextContrastEnabled,
 		platform: Platform.OS,
 		windowWidth: responsiveMetrics.width,
 		windowHeight: responsiveMetrics.height,

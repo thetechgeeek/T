@@ -10,7 +10,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 31.200000000000003,
           "fontWeight": "700",
@@ -34,7 +34,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 24.96,
           "fontWeight": "700",
@@ -58,7 +58,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 18.72,
           "fontWeight": "600",
@@ -82,7 +82,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 24.96,
           "fontWeight": "700",
@@ -106,7 +106,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 20.8,
           "fontWeight": "600",
@@ -130,7 +130,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 18.72,
           "fontWeight": "600",
@@ -153,7 +153,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 16.64,
           "fontWeight": "400",
@@ -176,7 +176,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 16.64,
           "fontWeight": "500",
@@ -199,7 +199,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 16.64,
           "fontWeight": "600",
@@ -222,7 +222,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 16.64,
           "fontWeight": "700",
@@ -245,7 +245,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 13.52,
           "fontWeight": "500",
@@ -268,7 +268,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 29.12,
           "fontWeight": "700",
@@ -291,7 +291,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "Menlo",
           "fontSize": 13.52,
           "fontWeight": "500",
@@ -314,7 +314,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 13.52,
           "fontWeight": "400",
@@ -337,7 +337,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 13.52,
           "fontWeight": "700",
@@ -360,7 +360,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#E8622A",
+          "color": "#7B8CE5",
           "fontFamily": "System",
           "fontSize": 20.8,
           "fontWeight": "700",
@@ -383,7 +383,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#E8622A",
+          "color": "#7B8CE5",
           "fontFamily": "System",
           "fontSize": 29.12,
           "fontWeight": "700",
@@ -406,7 +406,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#EF4444",
+          "color": "#F16870",
           "fontFamily": "System",
           "fontSize": 20.8,
           "fontWeight": "700",
@@ -429,7 +429,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 13.52,
           "fontWeight": "500",
@@ -452,7 +452,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in dark mode 1`]
     style={
       [
         {
-          "color": "#F2EDE8",
+          "color": "#F7F8F8",
           "fontFamily": "System",
           "fontSize": 11.440000000000001,
           "fontWeight": "400",
@@ -481,7 +481,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 31.200000000000003,
           "fontWeight": "700",
@@ -505,7 +505,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 24.96,
           "fontWeight": "700",
@@ -529,7 +529,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 18.72,
           "fontWeight": "600",
@@ -553,7 +553,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 24.96,
           "fontWeight": "700",
@@ -577,7 +577,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 20.8,
           "fontWeight": "600",
@@ -601,7 +601,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 18.72,
           "fontWeight": "600",
@@ -624,7 +624,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 16.64,
           "fontWeight": "400",
@@ -647,7 +647,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 16.64,
           "fontWeight": "500",
@@ -670,7 +670,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 16.64,
           "fontWeight": "600",
@@ -693,7 +693,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 16.64,
           "fontWeight": "700",
@@ -716,7 +716,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 13.52,
           "fontWeight": "500",
@@ -739,7 +739,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 29.12,
           "fontWeight": "700",
@@ -762,7 +762,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "Menlo",
           "fontSize": 13.52,
           "fontWeight": "500",
@@ -785,7 +785,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 13.52,
           "fontWeight": "400",
@@ -808,7 +808,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 13.52,
           "fontWeight": "700",
@@ -831,7 +831,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#C1440E",
+          "color": "#5E6AD2",
           "fontFamily": "System",
           "fontSize": 20.8,
           "fontWeight": "700",
@@ -854,7 +854,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#C1440E",
+          "color": "#5E6AD2",
           "fontFamily": "System",
           "fontSize": 29.12,
           "fontWeight": "700",
@@ -877,7 +877,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#B91C1C",
+          "color": "#E5484D",
           "fontFamily": "System",
           "fontSize": 20.8,
           "fontWeight": "700",
@@ -900,7 +900,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 13.52,
           "fontWeight": "500",
@@ -923,7 +923,7 @@ exports[`ThemedText (P0.2) matches the variant gallery snapshot in light mode 1`
     style={
       [
         {
-          "color": "#1A1412",
+          "color": "#09090B",
           "fontFamily": "System",
           "fontSize": 11.440000000000001,
           "fontWeight": "400",

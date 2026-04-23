@@ -517,9 +517,9 @@ export const RADIUS_TOKENS = {
 	none: 0,
 	xs: 2,
 	sm: 4,
-	md: 6,
-	lg: 10,
-	xl: 14,
+	md: 8,
+	lg: 12,
+	xl: 16,
 	full: 9999,
 } as const;
 

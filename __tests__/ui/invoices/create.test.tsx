@@ -2,6 +2,7 @@ import React from 'react';
 import { waitFor, fireEvent } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import CreateInvoiceScreen from '@/app/(app)/invoices/create';
+import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
 import { buildInvoiceCreatePayload } from '@/src/features/invoice-create/buildInvoiceCreatePayload';
 import { InvoiceInputSchema } from '@/src/schemas/invoice';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
@@ -218,6 +219,7 @@ describe('CreateInvoiceScreen', () => {
 	it('shows an alert when invoice creation fails', async () => {
 		const errorMessage = 'Schema error';
 		mockCreateInvoice.mockRejectedValue(new Error(errorMessage));
+		allowExpectedConsoleError(/\[ERROR\] Failed to create invoice/);
 
 		const { getByText, getByPlaceholderText } = renderWithTheme(<CreateInvoiceScreen />);
 

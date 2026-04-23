@@ -1,0 +1,35 @@
+appId: com.easystock.app
+---
+- runFlow: ../shared/login_seeded.yaml
+- tapOn:
+      label: 'tab-more'
+- tapOn:
+      label: 'menu-finance'
+- assertVisible:
+      label: 'receive-payment'
+- tapOn:
+      label: 'receive-payment'
+- assertVisible:
+      label: 'receive-payment-screen'
+- tapOn:
+      label: 'customer-search'
+- inputText: 'Seeded Customer Alpha'
+- hideKeyboard
+- tapOn:
+      text: 'Seeded Customer Alpha'
+- tapOn:
+      label: 'amount-received'
+- inputText: '1000'
+- hideKeyboard
+- tapOn:
+      label: 'payment-mode-upi'
+- tapOn:
+      label: 'save-payment'
+- assertVisible:
+      text: 'The payment has been saved.'
+- tapOn:
+      text: 'OK'
+- assertVisible:
+      label: 'receive-payment'
+- assertNotVisible:
+      label: 'runtime-error-boundary'

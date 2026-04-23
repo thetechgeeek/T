@@ -1,0 +1,21 @@
+appId: com.easystock.app
+---
+- runFlow: ../shared/login_seeded.yaml
+- tapOn:
+      label: 'tab-inventory'
+- assertVisible:
+      label: 'inventory-screen'
+- tapOn:
+      label: 'tab-invoices'
+- assertVisible:
+      label: 'invoices-screen'
+- tapOn:
+      label: 'tab-more'
+- assertVisible:
+      label: 'more-screen'
+- tapOn:
+      label: 'tab-dashboard'
+- assertVisible:
+      label: 'dashboard-screen'
+- assertNotVisible:
+      label: 'runtime-error-boundary'

@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 # E2E-004: Invoice list and detail view
 - launchApp
@@ -10,24 +10,20 @@ appId: com.tilemaster.app
 
 # Check list items are rendered (at least one invoice)
 - assertVisible:
-      text: 'TM-'
-      optional: true
+      text: 'SEED/'
 
 # Tap first invoice in list
 - tapOn:
-      index: 0
-      text: 'TM-'
-      optional: true
+      text: 'SEED/'
 
 # If invoice detail loads, assert key fields
 - assertVisible:
       label: 'invoice-detail-screen'
-      optional: true
 
 - takeScreenshot: invoice_detail
 
 # Navigate back
 - tapOn:
-      label: 'back-button'
+      label: 'Go back'
 - assertVisible:
       label: 'invoices-screen'

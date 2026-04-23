@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 # E2E-012: Tab navigation — all bottom tabs accessible
 - launchApp

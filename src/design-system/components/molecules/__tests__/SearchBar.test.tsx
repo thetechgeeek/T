@@ -105,4 +105,44 @@ describe('SearchBar', () => {
 
 		expect(onDebouncedChange).toHaveBeenCalledWith('marble');
 	});
+
+	it('does not retrigger the debounced callback when only the callback identity changes', () => {
+		const firstDebouncedChange = jest.fn();
+		const { getByPlaceholderText, rerender } = renderWithTheme(
+			<SearchBar
+				placeholder="Search patterns..."
+				defaultValue=""
+				onChangeText={jest.fn()}
+				onDebouncedChange={firstDebouncedChange}
+				debounceMs={250}
+			/>,
+		);
+
+		fireEvent.changeText(getByPlaceholderText('Search patterns...'), 'marble');
+
+		act(() => {
+			jest.advanceTimersByTime(250);
+		});
+
+		expect(firstDebouncedChange).toHaveBeenCalledTimes(1);
+		expect(firstDebouncedChange).toHaveBeenCalledWith('marble');
+
+		const secondDebouncedChange = jest.fn();
+		rerender(
+			<SearchBar
+				placeholder="Search patterns..."
+				defaultValue=""
+				onChangeText={jest.fn()}
+				onDebouncedChange={secondDebouncedChange}
+				debounceMs={250}
+			/>,
+		);
+
+		act(() => {
+			jest.advanceTimersByTime(250);
+		});
+
+		expect(firstDebouncedChange).toHaveBeenCalledTimes(1);
+		expect(secondDebouncedChange).not.toHaveBeenCalled();
+	});
 });

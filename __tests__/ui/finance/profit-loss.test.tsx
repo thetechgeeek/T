@@ -1,13 +1,38 @@
 import React from 'react';
+import { useFinanceStore } from '@/src/stores/financeStore';
+import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import ProfitLossScreen from '@/app/(app)/finance/profit-loss';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 import { useRouter } from 'expo-router';
+
+jest.mock('@/src/stores/financeStore', () => ({
+	useFinanceStore: jest.fn(),
+}));
+
+jest.mock('@/src/stores/invoiceStore', () => ({
+	useInvoiceStore: jest.fn(),
+}));
 
 const mockBack = jest.fn();
 
 beforeEach(() => {
 	jest.clearAllMocks();
 	(useRouter as jest.Mock).mockReturnValue({ back: mockBack, push: jest.fn() });
+	(useFinanceStore as unknown as jest.Mock).mockImplementation(
+		(selector: (state: unknown) => unknown) =>
+			selector({
+				expenses: [],
+				purchases: [],
+				initialize: jest.fn(),
+			}),
+	);
+	(useInvoiceStore as unknown as jest.Mock).mockImplementation(
+		(selector: (state: unknown) => unknown) =>
+			selector({
+				invoices: [],
+				fetchInvoices: jest.fn(),
+			}),
+	);
 });
 
 describe('ProfitLossScreen', () => {

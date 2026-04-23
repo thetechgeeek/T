@@ -5,10 +5,14 @@ on:
         branches: [main, master]
     pull_request:
         branches: [main, master]
+    schedule:
+        - cron: '30 2 * * *'
 
 jobs:
     validate:
+        if: github.event_name != 'schedule'
         runs-on: ubuntu-latest
+        timeout-minutes: 30
 
         steps:
             - name: Checkout
@@ -29,8 +33,8 @@ jobs:
             - name: Lint
               run: npm run lint
 
-            - name: Test
-              run: npm run test -- --coverage
+            - name: Strict Jest
+              run: npm run test:coverage
 
             - name: Upload coverage
               uses: codecov/codecov-action@v4
@@ -38,7 +42,149 @@ jobs:
               with:
                   fail_ci_if_error: false
 
+    backend-integration:
+        if: github.event_name != 'schedule'
+        runs-on: ubuntu-latest
+        needs: validate
+        timeout-minutes: 30
+        env:
+            SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
+            SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
+            SUPABASE_TEST_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_TEST_SERVICE_ROLE_KEY }}
+            EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
+            EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
+            INTEGRATION_TEST_EMAIL: ${{ secrets.INTEGRATION_TEST_EMAIL }}
+            INTEGRATION_TEST_PASSWORD: ${{ secrets.INTEGRATION_TEST_PASSWORD }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Reset deterministic test seed
+              run: npm run test:seed:reset
+
+            - name: Run seeded integration suite
+              run: npm run test:integration
+
+    maestro-critical-ios:
+        if: github.event_name != 'schedule'
+        runs-on: macos-latest
+        needs: backend-integration
+        timeout-minutes: 75
+        env:
+            SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
+            SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
+            SUPABASE_TEST_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_TEST_SERVICE_ROLE_KEY }}
+            EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
+            EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
+            INTEGRATION_TEST_EMAIL: ${{ secrets.INTEGRATION_TEST_EMAIL }}
+            INTEGRATION_TEST_PASSWORD: ${{ secrets.INTEGRATION_TEST_PASSWORD }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Install Maestro
+              run: brew install maestro
+
+            - name: Reset deterministic test seed
+              run: npm run test:seed:reset
+
+            - name: Start iOS simulator
+              run: maestro start-device --platform ios --os-version 18 --force-create
+
+            - name: Build iOS app
+              run: npx expo run:ios -d "iPhone 11"
+
+            - name: Run iOS critical app workflows
+              run: npm run test:e2e:critical
+
+    maestro-critical-android:
+        if: github.event_name != 'schedule'
+        runs-on: macos-latest
+        needs: maestro-critical-ios
+        timeout-minutes: 90
+        env:
+            SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
+            SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
+            SUPABASE_TEST_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_TEST_SERVICE_ROLE_KEY }}
+            EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
+            EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
+            INTEGRATION_TEST_EMAIL: ${{ secrets.INTEGRATION_TEST_EMAIL }}
+            INTEGRATION_TEST_PASSWORD: ${{ secrets.INTEGRATION_TEST_PASSWORD }}
+            ANDROID_SDK_ROOT: /opt/homebrew/share/android-commandlinetools
+            ANDROID_HOME: /opt/homebrew/share/android-commandlinetools
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Install Maestro and Android tooling
+              run: brew install maestro android-commandlinetools android-platform-tools
+
+            - name: Accept Android licenses
+              shell: bash
+              run: yes | sdkmanager --licenses
+
+            - name: Install Android SDK packages
+              shell: bash
+              run: |
+                  sdkmanager --install \
+                    "emulator" \
+                    "platforms;android-35" \
+                    "build-tools;35.0.0" \
+                    "system-images;android-35;google_apis;arm64-v8a"
+
+            - name: Reset deterministic test seed
+              run: npm run test:seed:reset
+
+            - name: Start Android emulator
+              shell: bash
+              run: |
+                  export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"
+                  maestro start-device --platform android --os-version 33 --force-create
+
+            - name: Build Android app
+              shell: bash
+              run: |
+                  export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"
+                  npx expo run:android
+
+            - name: Run Android critical app workflows
+              shell: bash
+              run: |
+                  export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"
+                  npm run test:e2e:critical
+
     design-system-ios:
+        if: github.event_name != 'schedule'
         runs-on: macos-latest
         timeout-minutes: 60
 
@@ -78,6 +224,7 @@ jobs:
                   path: artifacts/design-system-proof/ios
 
     design-system-android:
+        if: github.event_name != 'schedule'
         runs-on: macos-latest
         timeout-minutes: 75
         env:
@@ -140,3 +287,47 @@ jobs:
               with:
                   name: design-system-android-proof
                   path: artifacts/design-system-proof/android
+
+    nightly-full-suite:
+        if: github.event_name == 'schedule'
+        runs-on: macos-latest
+        timeout-minutes: 120
+        env:
+            SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
+            SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
+            SUPABASE_TEST_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_TEST_SERVICE_ROLE_KEY }}
+            EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
+            EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
+            INTEGRATION_TEST_EMAIL: ${{ secrets.INTEGRATION_TEST_EMAIL }}
+            INTEGRATION_TEST_PASSWORD: ${{ secrets.INTEGRATION_TEST_PASSWORD }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Install Maestro
+              run: brew install maestro
+
+            - name: Reset deterministic test seed
+              run: npm run test:seed:reset
+
+            - name: Run seeded integration suite
+              run: npm run test:integration
+
+            - name: Start iOS simulator
+              run: maestro start-device --platform ios --os-version 18 --force-create
+
+            - name: Build iOS app
+              run: npx expo run:ios -d "iPhone 11"
+
+            - name: Run full Maestro suite
+              run: npm run test:e2e:full

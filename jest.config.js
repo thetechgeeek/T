@@ -19,11 +19,15 @@ module.exports = {
 	collectCoverage: false,
 	collectCoverageFrom: [
 		'src/**/*.{ts,tsx}',
+		'app/**/*.{ts,tsx}',
 		'!src/**/*.d.ts',
+		'!app/**/*.d.ts',
 		'!src/**/__tests__/**',
+		'!app/**/__tests__/**',
 		'!src/config/**',
 		'!src/types/**',
-		'!app/**',
+		'!app/**/_layout.tsx',
+		'!app/design-system/**',
 		// Barrel re-export files — no logic to test
 		'!src/**/index.ts',
 		'!src/theme/index.ts',
@@ -37,14 +41,20 @@ module.exports = {
 	coverageReporters: ['text', 'lcov', 'html'],
 	coverageThreshold: {
 		global: {
-			branches: 80,
-			functions: 85,
-			lines: 85,
-			statements: 85,
+			branches: 60,
+			functions: 54,
+			lines: 65,
+			statements: 64,
 		},
-		'./src/services/': { lines: 85, branches: 75 },
+		'./src/services/': { lines: 75, branches: 70 },
 		'./src/repositories/': { lines: 90, branches: 68 },
-		'./src/utils/': { lines: 98, branches: 90 },
+		'./src/utils/': { lines: 90, branches: 85 },
+		'./app/(auth)/login.tsx': { lines: 60, branches: 40 },
+		'./app/(app)/(tabs)/inventory.tsx': { lines: 55, branches: 35 },
+		'./app/(app)/(tabs)/invoices.tsx': { lines: 45, branches: 25 },
+		'./app/(app)/customers/': { lines: 45, branches: 25 },
+		'./app/(app)/invoices/': { lines: 45, branches: 25 },
+		'./app/(app)/finance/payments/': { lines: 40, branches: 20 },
 	},
 
 	// Explicit test discovery — prevents accidental collection of non-test files

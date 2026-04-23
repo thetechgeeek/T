@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 - launchApp
 - tapOn:
@@ -20,7 +20,7 @@ appId: com.tilemaster.app
 - tapOn: 'GLOSSY WHITE 60x60'
 - tapOn:
       label: 'item-quantity-input'
-- clearText
+- eraseText
 - inputText: '10'
 - hideKeyboard
 - tapOn:

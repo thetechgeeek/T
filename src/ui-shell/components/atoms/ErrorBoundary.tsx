@@ -23,7 +23,12 @@ function FallbackUI({ error, onReset }: { error: Error | null; onReset: () => vo
 	const { translate } = useShellEnvironment();
 	const { theme } = useTheme();
 	return (
-		<View style={styles.container}>
+		<View
+			style={styles.container}
+			testID="runtime-error-boundary"
+			accessible
+			accessibilityLabel="runtime-error-boundary"
+		>
 			<ThemedText variant="h3" style={styles.title}>
 				{translate('error.boundaryTitle', 'Something went wrong')}
 			</ThemedText>

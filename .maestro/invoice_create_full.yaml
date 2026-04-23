@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 # E2E-003: Full invoice creation wizard
 - launchApp
@@ -28,7 +28,7 @@ appId: com.tilemaster.app
 - tapOn: 'GLOSSY WHITE 60x60'
 - tapOn:
       label: 'item-quantity-input'
-- clearText
+- eraseText
 - inputText: '5'
 - hideKeyboard
 - tapOn:

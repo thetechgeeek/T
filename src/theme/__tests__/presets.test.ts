@@ -12,7 +12,7 @@ describe('theme presets', () => {
 		expect(theme.meta.contrastMode).toBe('default');
 		expect(theme.meta.tokenVersion).toBe('1.2.0');
 		expect(theme.spacing.lg).toBe(16);
-		expect(theme.borderRadius.md).toBe(6);
+		expect(theme.borderRadius.md).toBe(8);
 		expect(theme.visual.presentation.defaultSurfaceBias).toBe('neutral');
 		expect(theme.visual.presentation.brandExpressionZones).toEqual(['hero']);
 		expect(theme.visual.presentation.neutralSurfaceTiers).toEqual([

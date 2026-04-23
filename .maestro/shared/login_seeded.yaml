@@ -1,0 +1,19 @@
+appId: com.easystock.app
+---
+- launchApp:
+      clearState: true
+- assertVisible:
+      label: 'sign-in-heading'
+- tapOn:
+      label: 'email-input'
+- inputText: '${INTEGRATION_TEST_EMAIL}'
+- tapOn:
+      label: 'password-input'
+- inputText: '${INTEGRATION_TEST_PASSWORD}'
+- hideKeyboard
+- tapOn:
+      label: 'sign-in-button'
+- assertVisible:
+      label: 'dashboard-screen'
+- assertNotVisible:
+      label: 'runtime-error-boundary'

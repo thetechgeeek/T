@@ -24,6 +24,8 @@ import { ThemedText } from '@easydesign/design-system';
 import { Divider } from '@easydesign/design-system';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
 
+const MORE_SCREEN_ACCESSIBILITY_LABEL = 'more-screen';
+
 export default function MoreTab() {
 	const { theme, c, s, r } = useThemeTokens();
 	const { t, currentLanguage, toggleLanguage } = useLocale();
@@ -99,7 +101,7 @@ export default function MoreTab() {
 					},
 				]}
 			>
-				<ThemedText variant="h1" accessibilityLabel="more-screen-title">
+				<ThemedText variant="h1" accessibilityLabel={MORE_SCREEN_ACCESSIBILITY_LABEL}>
 					{t('common.more')}
 				</ThemedText>
 			</View>
@@ -296,7 +298,7 @@ export default function MoreTab() {
 					]}
 					onPress={handleLogout}
 					accessibilityRole="button"
-					accessibilityLabel={t('auth.signOut')}
+					accessibilityLabel="sign-out-button"
 					accessibilityHint={t('settings.signOutHint')}
 				>
 					<LogOut

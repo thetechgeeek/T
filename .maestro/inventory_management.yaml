@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 # E2E-005: Inventory management — browse, search, add item
 - launchApp
@@ -22,7 +22,7 @@ appId: com.tilemaster.app
 - takeScreenshot: inventory_search_results
 
 # Clear search and reset
-- clearText
+- eraseText
 - hideKeyboard
 
 # Tap FAB to add new item

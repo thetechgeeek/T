@@ -45,7 +45,7 @@ export function useInvoiceCreateFlow() {
 
 	// Load inventory on mount
 	useEffect(() => {
-		useInventoryStore.getState().fetchItems();
+		useInventoryStore.getState().fetchItems(true);
 	}, []);
 
 	// Debounced search
@@ -75,7 +75,7 @@ export function useInvoiceCreateFlow() {
 		if (canNext) {
 			setStep((s) => Math.min(s + 1, 3));
 		}
-	}, [step, customer, lineItems, isCashSale, step1Complete]);
+	}, [lineItems.length, step, step1Complete]);
 	const handleBack = useCallback(() => setStep((s) => Math.max(s - 1, 1)), []);
 
 	// Line item management

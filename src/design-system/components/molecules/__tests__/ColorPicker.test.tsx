@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { ThemeProvider } from '../../../foundation/theme/ThemeProvider';
+import { primitiveColorPalettes } from '../../../foundation/theme/palette';
 import { ColorPicker } from '../ColorPicker';
 
 const renderWithTheme = (component: React.ReactElement) =>
@@ -21,7 +22,8 @@ describe('ColorPicker', () => {
 		const { getByTestId } = renderWithTheme(
 			<ColorPicker label="Accent color" onChange={onChange} testID="color" />,
 		);
-		fireEvent.press(getByTestId('color-#065F46'));
-		expect(onChange).toHaveBeenCalledWith('#065F46');
+		const successSwatch = primitiveColorPalettes.success[700];
+		fireEvent.press(getByTestId(`color-${successSwatch}`));
+		expect(onChange).toHaveBeenCalledWith(successSwatch);
 	});
 });

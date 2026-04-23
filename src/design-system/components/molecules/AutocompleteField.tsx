@@ -48,7 +48,9 @@ export const AutocompleteField = forwardRef<View, AutocompleteFieldProps>(
 		const { theme } = useTheme();
 		const c = theme.colors;
 		const [query, setQuery] = useState('');
-		const [remoteOptions, setRemoteOptions] = useState<AutocompleteOption[]>([]);
+		const [remoteOptions, setRemoteOptions] = useState<AutocompleteOption[]>(() =>
+			onAsyncSearch ? options : [],
+		);
 		const debouncedQuery = useDebounce(query, debounceMs);
 		const [currentValue, setCurrentValue] = useControllableState({
 			value,
@@ -63,7 +65,7 @@ export const AutocompleteField = forwardRef<View, AutocompleteFieldProps>(
 
 		useEffect(() => {
 			let active = true;
-			if (!onAsyncSearch) {
+			if (!onAsyncSearch || debouncedQuery.trim().length === 0) {
 				return undefined;
 			}
 
@@ -83,7 +85,8 @@ export const AutocompleteField = forwardRef<View, AutocompleteFieldProps>(
 			: currentValue
 				? [currentValue]
 				: [];
-		const sourceOptions = onAsyncSearch ? remoteOptions : options;
+		const sourceOptions =
+			onAsyncSearch && debouncedQuery.trim().length > 0 ? remoteOptions : options;
 		const filteredOptions = useMemo(() => {
 			const normalizedQuery = debouncedQuery.trim().toLowerCase();
 			if (!normalizedQuery) {

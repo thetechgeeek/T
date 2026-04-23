@@ -1,4 +1,5 @@
 import { authService } from './authService';
+import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
 import { AppError, NetworkError } from '@/src/errors';
 import { supabase } from '@/src/config/supabase';
 
@@ -169,6 +170,7 @@ describe('authService', () => {
 			data: { session: null },
 			error: { message: 'Refresh token expired', status: 401 },
 		});
+		allowExpectedConsoleError(/\[ERROR\] Token refresh failed/);
 
 		await expect(authService.refreshSession()).rejects.toBeInstanceOf(AppError);
 	});

@@ -152,9 +152,59 @@ const MIN_DURATION_SLOW = 220;
 const DEFAULT_VIEWPORT_WIDTH = 430;
 const DEFAULT_VIEWPORT_HEIGHT = 932;
 const TABLET_TOUCH_TARGET_MIN = 52;
+const LIGHT_FOREGROUND = '#FFFFFF';
+const DARK_FOREGROUND = '#09090B';
+const SRGB_LINEAR_THRESHOLD = 0.03928;
+const SRGB_DIVISOR = 12.92;
+const SRGB_OFFSET = 0.055;
+const SRGB_SCALE = 1.055;
+const SRGB_EXPONENT = 2.4;
+const LUMINANCE_RED_WEIGHT = 0.2126;
+const LUMINANCE_GREEN_WEIGHT = 0.7152;
+const LUMINANCE_BLUE_WEIGHT = 0.0722;
+const CONTRAST_OFFSET = 0.05;
+const MIN_NON_TEXT_CONTRAST_RATIO = 3;
 
 function roundToken(value: number, minimum = 0) {
 	return Math.max(minimum, Math.round(value));
+}
+
+function hexToLinearRgb(hex: string) {
+	const normalized = hex.replace('#', '').slice(0, 6);
+	return [0, 2, 4].map((start) => {
+		const channel = Number.parseInt(normalized.slice(start, start + 2), 16) / 255;
+		return channel <= SRGB_LINEAR_THRESHOLD
+			? channel / SRGB_DIVISOR
+			: ((channel + SRGB_OFFSET) / SRGB_SCALE) ** SRGB_EXPONENT;
+	});
+}
+
+function relativeLuminance(hex: string) {
+	const [red, green, blue] = hexToLinearRgb(hex);
+	return (
+		LUMINANCE_RED_WEIGHT * red + LUMINANCE_GREEN_WEIGHT * green + LUMINANCE_BLUE_WEIGHT * blue
+	);
+}
+
+function contrastRatio(foreground: string, background: string) {
+	const foregroundLuminance = relativeLuminance(foreground);
+	const backgroundLuminance = relativeLuminance(background);
+	const lightest = Math.max(foregroundLuminance, backgroundLuminance);
+	const darkest = Math.min(foregroundLuminance, backgroundLuminance);
+
+	return (lightest + CONTRAST_OFFSET) / (darkest + CONTRAST_OFFSET);
+}
+
+function pickReadableForeground(background: string) {
+	return contrastRatio(LIGHT_FOREGROUND, background) >= contrastRatio(DARK_FOREGROUND, background)
+		? LIGHT_FOREGROUND
+		: DARK_FOREGROUND;
+}
+
+function resolveAccessibleBorderStrong(borderStrong: string, surface: string, fallback: string) {
+	return contrastRatio(borderStrong, surface) >= MIN_NON_TEXT_CONTRAST_RATIO
+		? borderStrong
+		: fallback;
 }
 
 function scaleSpacing(scale: number, pixelRatio = 2): Theme['spacing'] {
@@ -513,13 +563,27 @@ export function resolveThemePreset(
 		options.viewportHeight ?? DEFAULT_VIEWPORT_HEIGHT,
 	);
 	const baseColors = resolvePresetBaseColors(isDark, contrastMode);
-	const colors: ThemeColors = {
+	const resolvedColors: ThemeColors = {
 		...baseColors,
 		...(contrastMode === 'default'
 			? isDark
 				? preset.darkOverrides
 				: preset.lightOverrides
 			: {}),
+	};
+	const colors: ThemeColors = {
+		...resolvedColors,
+		onPrimary: pickReadableForeground(resolvedColors.primary),
+		onSecondary: pickReadableForeground(resolvedColors.secondary),
+		onSuccess: pickReadableForeground(resolvedColors.success),
+		onWarning: pickReadableForeground(resolvedColors.warning),
+		onError: pickReadableForeground(resolvedColors.error),
+		onInfo: pickReadableForeground(resolvedColors.info),
+		borderStrong: resolveAccessibleBorderStrong(
+			resolvedColors.borderStrong,
+			resolvedColors.surface,
+			resolvedColors.onSurfaceVariant,
+		),
 	};
 	const responsiveFontScale = preset.fontScale * responsiveMetrics.typographyScale;
 	const responsiveLineHeightScale = preset.lineHeightScale * responsiveMetrics.typographyScale;

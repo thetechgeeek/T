@@ -78,9 +78,14 @@ export const SearchBar = forwardRef<NativeTextInput, SearchBarProps>(
 			},
 		});
 		const debouncedValue = useDebounce(currentValue, debounceMs ?? 0);
+		const debouncedChangeRef = useRef(onDebouncedChange);
 
 		useEffect(() => {
-			if (!onDebouncedChange) {
+			debouncedChangeRef.current = onDebouncedChange;
+		}, [onDebouncedChange]);
+
+		useEffect(() => {
+			if (!debouncedChangeRef.current) {
 				return;
 			}
 
@@ -89,8 +94,8 @@ export const SearchBar = forwardRef<NativeTextInput, SearchBarProps>(
 				return;
 			}
 
-			onDebouncedChange(debouncedValue);
-		}, [debouncedValue, onDebouncedChange]);
+			debouncedChangeRef.current(debouncedValue);
+		}, [debouncedValue]);
 
 		return (
 			<View

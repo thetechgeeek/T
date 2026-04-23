@@ -84,7 +84,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -223,7 +223,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             [
               {
-                "color": "#FFFFFF",
+                "color": "#09090B",
                 "fontFamily": "System",
                 "fontSize": 13.52,
                 "fontWeight": "400",
@@ -730,7 +730,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 8.32,
             "marginHorizontal": 12.48,
           },
@@ -1476,7 +1476,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures auth login 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -1493,17 +1493,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
     ]
   }
 >
-  <ScrollView
-    contentContainerStyle={
-      [
-        {
-          "flexGrow": 1,
-        },
-        undefined,
-      ]
-    }
-    ref={null}
-    showsVerticalScrollIndicator={false}
+  <View
     style={
       [
         {
@@ -1521,8 +1511,8 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#7B8CE5",
-            "borderBottomLeftRadius": 14.280000000000001,
-            "borderBottomRightRadius": 14.280000000000001,
+            "borderBottomLeftRadius": 16.32,
+            "borderBottomRightRadius": 16.32,
             "paddingBottom": 49.92,
             "paddingHorizontal": 24.96,
             "paddingTop": 49.92,
@@ -1541,7 +1531,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             },
             {
               "backgroundColor": "rgba(255,255,255,0.2)",
-              "borderRadius": 10.2,
+              "borderRadius": 12.24,
             },
           ]
         }
@@ -1564,7 +1554,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 "writingDirection": "ltr",
               },
               {
-                "color": "#FFFFFF",
+                "color": "#09090B",
                 "fontWeight": "800",
                 "letterSpacing": -1,
               },
@@ -1597,7 +1587,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 "fontWeight": "800",
               },
               {
-                "color": "#FFFFFF",
+                "color": "#09090B",
                 "marginTop": 12.48,
               },
             ],
@@ -1628,7 +1618,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 "textAlign": "center",
               },
               {
-                "color": "#FFFFFF",
+                "color": "#09090B",
                 "fontSize": 14.56,
                 "marginTop": 4.16,
                 "opacity": 0.9,
@@ -1655,6 +1645,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       }
     >
       <Text
+        accessibilityLabel="sign-in-heading"
         accessibilityRole="header"
         allowFontScaling={true}
         lineBreakStrategyIOS="standard"
@@ -1718,7 +1709,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               },
               {
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 1,
                 "minHeight": 51.84,
               },
@@ -1839,7 +1830,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#1A1B1E",
                 "borderColor": "transparent",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 0,
                 "height": 56,
                 "paddingHorizontal": 18,
@@ -1891,7 +1882,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 10.2,
+              "borderRadius": 12.24,
               "marginTop": 33.28,
               "padding": 16.64,
             },
@@ -1952,17 +1943,13 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
         </Text>
         <View
           style={
-            [
-              {},
-              {
-                "marginTop": 16.64,
-              },
-            ]
+            {
+              "marginTop": 16.64,
+            }
           }
         >
           <Text
             allowFontScaling={true}
-            importantForAccessibility="no"
             lineBreakStrategyIOS="standard"
             maxFontSizeMultiplier={1.3}
             style={
@@ -1977,96 +1964,58 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   "textAlign": undefined,
                   "writingDirection": "ltr",
                 },
-                [
-                  {},
-                  {
-                    "color": "#F7F8F8",
-                    "fontWeight": "500",
-                    "letterSpacing": -0.1,
-                    "marginBottom": 4.16,
-                  },
-                ],
+                {
+                  "color": "#F7F8F8",
+                  "marginBottom": 4.16,
+                },
               ]
             }
             textBreakStrategy="highQuality"
           >
             Email
           </Text>
-          <View
+          <TextInput
+            accessibilityLabel="email-input"
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
+            importantForAutofill="no"
+            keyboardType="email-address"
+            onChangeText={[Function]}
+            placeholder="dev@example.com"
+            placeholderTextColor="#646A74"
+            ref={null}
+            spellCheck={false}
             style={
               [
                 {
-                  "alignItems": "center",
-                  "flexDirection": "row",
+                  "borderWidth": 1,
                 },
                 {
                   "backgroundColor": "#111113",
                   "borderColor": "#26272B",
-                  "borderRadius": 6.12,
-                  "borderWidth": 1,
-                  "minHeight": 51.84,
-                  "opacity": 1,
+                  "borderRadius": 8.16,
+                  "color": "#F7F8F8",
+                  "fontSize": 14.56,
                   "paddingHorizontal": 12.48,
+                  "paddingVertical": 8.32,
                 },
-                null,
               ]
             }
-          >
-            <TextInput
-              accessibilityLabel="Email"
-              accessibilityState={
-                {
-                  "busy": undefined,
-                  "disabled": undefined,
-                }
-              }
-              accessible={true}
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={true}
-              keyboardType="email-address"
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="dev@example.com"
-              placeholderTextColor="#646A74"
-              readOnly={false}
-              ref={null}
-              style={
-                [
-                  {
-                    "flex": 1,
-                    "height": "100%",
-                  },
-                  {
-                    "color": "#F7F8F8",
-                    "fontFamily": "System",
-                    "fontSize": 14.56,
-                    "paddingVertical": 8.32,
-                    "writingDirection": "ltr",
-                  },
-                  undefined,
-                ]
-              }
-              testID="dev-email-input"
-              textContentType="emailAddress"
-              value=""
-            />
-          </View>
+            testID="dev-email-input"
+            textContentType="none"
+            value=""
+          />
         </View>
         <View
           style={
-            [
-              {},
-              {
-                "marginTop": 12.48,
-              },
-            ]
+            {
+              "marginTop": 12.48,
+            }
           }
         >
           <Text
             allowFontScaling={true}
-            importantForAccessibility="no"
             lineBreakStrategyIOS="standard"
             maxFontSizeMultiplier={1.3}
             style={
@@ -2081,80 +2030,48 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   "textAlign": undefined,
                   "writingDirection": "ltr",
                 },
-                [
-                  {},
-                  {
-                    "color": "#F7F8F8",
-                    "fontWeight": "500",
-                    "letterSpacing": -0.1,
-                    "marginBottom": 4.16,
-                  },
-                ],
+                {
+                  "color": "#F7F8F8",
+                  "marginBottom": 4.16,
+                },
               ]
             }
             textBreakStrategy="highQuality"
           >
             Password
           </Text>
-          <View
+          <TextInput
+            accessibilityLabel="password-input"
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
+            importantForAutofill="no"
+            onChangeText={[Function]}
+            placeholder="Enter password"
+            placeholderTextColor="#646A74"
+            ref={null}
+            secureTextEntry={false}
+            spellCheck={false}
             style={
               [
                 {
-                  "alignItems": "center",
-                  "flexDirection": "row",
+                  "borderWidth": 1,
                 },
                 {
                   "backgroundColor": "#111113",
                   "borderColor": "#26272B",
-                  "borderRadius": 6.12,
-                  "borderWidth": 1,
-                  "minHeight": 51.84,
-                  "opacity": 1,
+                  "borderRadius": 8.16,
+                  "color": "#F7F8F8",
+                  "fontSize": 14.56,
                   "paddingHorizontal": 12.48,
+                  "paddingVertical": 8.32,
                 },
-                null,
               ]
             }
-          >
-            <TextInput
-              accessibilityLabel="Password"
-              accessibilityState={
-                {
-                  "busy": undefined,
-                  "disabled": undefined,
-                }
-              }
-              accessible={true}
-              editable={true}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Enter password"
-              placeholderTextColor="#646A74"
-              readOnly={false}
-              ref={null}
-              secureTextEntry={true}
-              style={
-                [
-                  {
-                    "flex": 1,
-                    "height": "100%",
-                  },
-                  {
-                    "color": "#F7F8F8",
-                    "fontFamily": "System",
-                    "fontSize": 14.56,
-                    "paddingVertical": 8.32,
-                    "writingDirection": "ltr",
-                  },
-                  undefined,
-                ]
-              }
-              testID="dev-password-input"
-              textContentType="password"
-              value=""
-            />
-          </View>
+            testID="dev-password-input"
+            textContentType="none"
+            value=""
+          />
         </View>
         <View
           style={
@@ -2173,7 +2090,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           }
         >
           <Pressable
-            accessibilityLabel="Dev sign in"
+            accessibilityLabel="sign-in-button"
             accessibilityRole="button"
             accessibilityState={
               {
@@ -2199,7 +2116,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "backgroundColor": "#1A1B1E",
                   "borderColor": "#26272B",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "borderWidth": 1,
                   "height": 51.84,
                   "paddingHorizontal": 14,
@@ -2318,12 +2235,12 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
         </TouchableOpacity>
       </View>
     </View>
-  </ScrollView>
-</View>
+  </View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures auth setup 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -2534,7 +2451,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#F7F8F8",
               "fontSize": 16.64,
             },
@@ -2589,7 +2506,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#F7F8F8",
               "fontSize": 16.64,
             },
@@ -2641,7 +2558,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -2741,7 +2658,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             },
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -2776,11 +2693,11 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       </Pressable>
     </View>
   </View>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures business profile 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -2829,7 +2746,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             "writingDirection": "ltr",
           },
           {
-            "color": "#FFFFFF",
+            "color": "#09090B",
           },
         ]
       }
@@ -2909,7 +2826,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#F7F8F8",
           },
         ]
@@ -2967,7 +2884,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#F7F8F8",
           },
         ]
@@ -3026,7 +2943,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#F7F8F8",
           },
         ]
@@ -3090,7 +3007,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#F7F8F8",
           },
         ]
@@ -3147,7 +3064,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#F7F8F8",
           },
         ]
@@ -3204,7 +3121,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#F7F8F8",
           },
         ]
@@ -3338,7 +3255,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#F7F8F8",
             },
           ]
@@ -3394,7 +3311,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#F7F8F8",
             },
           ]
@@ -3457,7 +3374,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#F7F8F8",
             },
           ]
@@ -3822,7 +3739,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#7B8CE5",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginTop": 24.96,
           },
         ]
@@ -3846,7 +3763,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               "writingDirection": "ltr",
             },
             {
-              "color": "#FFFFFF",
+              "color": "#09090B",
               "fontWeight": "700",
             },
           ]
@@ -3857,7 +3774,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       </Text>
     </Pressable>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures cash in hand 1`] = `
@@ -3944,7 +3861,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -4050,7 +3967,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               },
               {
                 "backgroundColor": "#7B8CE5",
-                "borderRadius": 10.2,
+                "borderRadius": 12.24,
               },
             ]
           }
@@ -4087,7 +4004,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             style={
               [
                 {
-                  "color": "#FFFFFF",
+                  "color": "#09090B",
                   "fontFamily": "System",
                   "fontSize": 24.96,
                   "fontWeight": "700",
@@ -4201,7 +4118,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                       },
                       {
                         "borderColor": "#26272B",
-                        "borderRadius": 6.12,
+                        "borderRadius": 8.16,
                         "flex": 1,
                       },
                     ]
@@ -4298,7 +4215,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                         {
                           "backgroundColor": "#7B8CE5",
                           "borderColor": "transparent",
-                          "borderRadius": 6.12,
+                          "borderRadius": 8.16,
                           "borderWidth": 0,
                           "height": 44,
                           "paddingHorizontal": 10,
@@ -4326,7 +4243,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                           [
                             {},
                             {
-                              "color": "#FFFFFF",
+                              "color": "#09090B",
                               "fontSize": 13.52,
                               "marginEnd": 0,
                               "marginStart": 0,
@@ -4478,7 +4395,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               style={
                 [
                   {
-                    "color": "#FFFFFF",
+                    "color": "#09090B",
                     "fontFamily": "System",
                     "fontSize": 13.52,
                     "fontWeight": "400",
@@ -4749,7 +4666,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -5144,7 +5061,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                     {
                       "backgroundColor": "#7B8CE5",
                       "borderColor": "transparent",
-                      "borderRadius": 6.12,
+                      "borderRadius": 8.16,
                       "borderWidth": 0,
                       "height": 51.84,
                       "paddingHorizontal": 14,
@@ -5177,7 +5094,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                       [
                         {},
                         {
-                          "color": "#FFFFFF",
+                          "color": "#09090B",
                           "fontSize": 14.56,
                           "marginEnd": 0,
                           "marginStart": 6,
@@ -5235,7 +5152,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                     {
                       "backgroundColor": "transparent",
                       "borderColor": "#26272B",
-                      "borderRadius": 6.12,
+                      "borderRadius": 8.16,
                       "borderWidth": 1,
                       "height": 51.84,
                       "paddingHorizontal": 14,
@@ -5681,7 +5598,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "borderLeftWidth": 4,
-                "borderRadius": 10,
+                "borderRadius": 12,
                 "marginBottom": 12,
                 "marginHorizontal": 16,
                 "padding": 12,
@@ -5974,7 +5891,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -5995,6 +5912,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           }
         >
           <Text
+            accessibilityLabel="customers-screen"
             accessibilityRole="header"
             allowFontScaling={true}
             lineBreakStrategyIOS="standard"
@@ -6091,7 +6009,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
               "height": 40,
               "paddingHorizontal": 12.48,
@@ -6214,7 +6132,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   "writingDirection": "ltr",
                 },
                 {
-                  "color": "#FFFFFF",
+                  "color": "#09090B",
                   "fontSize": 13,
                 },
               ]
@@ -6807,7 +6725,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -6948,7 +6866,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               style={
                 [
                   {
-                    "color": "#FFFFFF",
+                    "color": "#09090B",
                     "fontFamily": "System",
                     "fontSize": 13.52,
                     "fontWeight": "400",
@@ -7994,7 +7912,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -8144,7 +8062,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
         [
           {
             "backgroundColor": "#111113",
-            "borderRadius": 10.2,
+            "borderRadius": 12.24,
             "padding": 4.16,
             "shadowColor": "#000000",
             "shadowOffset": {
@@ -8163,7 +8081,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             "alignItems": "center",
             "aspectRatio": 1,
             "backgroundColor": "#1A1B1E",
-            "borderRadius": 10.2,
+            "borderRadius": 12.24,
             "justifyContent": "center",
             "width": "100%",
           }
@@ -8204,7 +8122,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -8272,7 +8190,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -8340,7 +8258,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -8408,7 +8326,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -8476,7 +8394,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -8544,7 +8462,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -8612,7 +8530,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             {
               "backgroundColor": "rgba(123, 140, 229, 0.06)",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -8675,7 +8593,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "rgba(48, 164, 108, 0.08)",
             "borderColor": "#30A46C",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "borderWidth": 1,
             "marginTop": 24.96,
             "padding": 16.64,
@@ -8763,7 +8681,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             },
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "flex": 1,
               "paddingVertical": 14.56,
             },
@@ -8818,7 +8736,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             },
             {
               "backgroundColor": "#1A1B1E",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "flex": 1,
               "paddingVertical": 14.56,
             },
@@ -8946,7 +8864,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
         style={
           {
             "backgroundColor": "#1A1B1E",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "padding": 12.48,
           }
         }
@@ -9605,7 +9523,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 1,
                 "height": 40,
                 "paddingHorizontal": 12.48,
@@ -10006,7 +9924,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               [
                 {},
                 {
-                  "borderRadius": 14.280000000000001,
+                  "borderRadius": 16.32,
                   "overflow": "hidden",
                 },
                 {
@@ -10123,7 +10041,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                       },
                       {
                         "backgroundColor": "#1A1B1E",
-                        "borderRadius": 6.12,
+                        "borderRadius": 8.16,
                         "marginRight": 12.48,
                       },
                     ]
@@ -10300,7 +10218,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               [
                 {},
                 {
-                  "borderRadius": 14.280000000000001,
+                  "borderRadius": 16.32,
                   "overflow": "hidden",
                 },
                 {
@@ -10468,7 +10386,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                       },
                       {
                         "backgroundColor": "#1A1B1E",
-                        "borderRadius": 6.12,
+                        "borderRadius": 8.16,
                         "marginRight": 12.48,
                       },
                     ]
@@ -10636,7 +10554,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures invoice create flow 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -10720,7 +10638,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -11215,7 +11133,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                     style={
                       [
                         {
-                          "color": "#FFFFFF",
+                          "color": "#09090B",
                           "fontFamily": "System",
                           "fontSize": 13.52,
                           "fontWeight": "600",
@@ -11295,7 +11213,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                       },
                       {
                         "backgroundColor": "#1A1B1E",
-                        "borderColor": "#35363A",
+                        "borderColor": "#8A8F98",
                         "borderRadius": 14,
                         "borderWidth": 1.5,
                         "height": 28,
@@ -11391,7 +11309,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                       },
                       {
                         "backgroundColor": "#1A1B1E",
-                        "borderColor": "#35363A",
+                        "borderColor": "#8A8F98",
                         "borderRadius": 14,
                         "borderWidth": 1.5,
                         "height": 28,
@@ -11777,7 +11695,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                     {
                       "alignItems": "center",
                       "backgroundColor": "#1A1B1E",
-                      "borderColor": "#35363A",
+                      "borderColor": "#8A8F98",
                       "borderRadius": 4.08,
                       "borderWidth": 1.5,
                       "flex": 1,
@@ -11839,7 +11757,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                     style={
                       [
                         {
-                          "color": "#FFFFFF",
+                          "color": "#09090B",
                           "fontFamily": "System",
                           "fontSize": 16.64,
                           "fontWeight": "600",
@@ -11983,7 +11901,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                           },
                           {
                             "borderColor": "#26272B",
-                            "borderRadius": 6.12,
+                            "borderRadius": 8.16,
                             "minHeight": 48,
                           },
                           null,
@@ -12131,7 +12049,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                             {
                               "backgroundColor": "#111113",
                               "borderColor": "#26272B",
-                              "borderRadius": 6.12,
+                              "borderRadius": 8.16,
                               "borderWidth": 1,
                               "minHeight": 51.84,
                               "opacity": 1,
@@ -12324,7 +12242,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                         {
                           "backgroundColor": "#111113",
                           "borderColor": "#26272B",
-                          "borderRadius": 6.12,
+                          "borderRadius": 8.16,
                           "borderWidth": 1,
                           "minHeight": 51.84,
                           "opacity": 1,
@@ -12470,7 +12388,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                         {
                           "backgroundColor": "#111113",
                           "borderColor": "#26272B",
-                          "borderRadius": 6.12,
+                          "borderRadius": 8.16,
                           "borderWidth": 1,
                           "minHeight": 51.84,
                           "opacity": 1,
@@ -12592,7 +12510,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                         {
                           "backgroundColor": "#111113",
                           "borderColor": "#26272B",
-                          "borderRadius": 6.12,
+                          "borderRadius": 8.16,
                           "borderWidth": 1,
                           "minHeight": 51.84,
                           "opacity": 1,
@@ -12656,7 +12574,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   {
                     "backgroundColor": "#1A1B1E",
                     "borderColor": "#26272B",
-                    "borderRadius": 6.12,
+                    "borderRadius": 8.16,
                     "borderWidth": 1,
                     "marginTop": 8.32,
                     "padding": 12.48,
@@ -12740,7 +12658,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                     style={
                       {
                         "backgroundColor": "#111113",
-                        "borderColor": "#35363A",
+                        "borderColor": "#8A8F98",
                         "borderRadius": 9999,
                         "borderWidth": 1,
                         "height": 24,
@@ -12830,7 +12748,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "transparent",
                 "borderColor": "transparent",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 0,
                 "height": 51.84,
                 "paddingHorizontal": 14,
@@ -12915,7 +12833,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#1A1B1E",
                 "borderColor": "transparent",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 0,
                 "height": 51.84,
                 "paddingHorizontal": 14,
@@ -12959,7 +12877,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       </View>
     </View>
   </View>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures invoice detail 1`] = `
@@ -12978,6 +12896,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       undefined,
     ]
   }
+  testID="invoice-detail-screen"
 >
   <View
     style={
@@ -13036,7 +12955,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -13057,6 +12976,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
         }
       >
         <Text
+          accessibilityLabel="invoice-detail-screen"
           accessibilityRole="header"
           allowFontScaling={true}
           lineBreakStrategyIOS="standard"
@@ -13190,7 +13110,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#08281C",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "padding": 12.48,
           },
@@ -13296,7 +13216,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#111113",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#000000",
             "shadowOffset": {
@@ -13501,7 +13421,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#111113",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#000000",
             "shadowOffset": {
@@ -13620,7 +13540,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#111113",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#000000",
             "shadowOffset": {
@@ -13644,8 +13564,8 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               "backgroundColor": "#1A1B1E",
               "borderBottomColor": "#26272B",
               "borderBottomWidth": 1,
-              "borderTopLeftRadius": 6.12,
-              "borderTopRightRadius": 6.12,
+              "borderTopLeftRadius": 8.16,
+              "borderTopRightRadius": 8.16,
               "paddingHorizontal": 12.48,
               "paddingVertical": 4.16,
             },
@@ -13946,7 +13866,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#111113",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#000000",
             "shadowOffset": {
@@ -14323,7 +14243,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#111113",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#000000",
             "shadowOffset": {
@@ -14687,7 +14607,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "backgroundColor": "#7B8CE5",
                   "borderColor": "transparent",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "borderWidth": 0,
                   "height": 51.84,
                   "paddingHorizontal": 14,
@@ -14697,7 +14617,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             }
           >
             <Icon
-              color="#FFFFFF"
+              color="#09090B"
               name="Share2"
               size={18}
             />
@@ -14720,7 +14640,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   [
                     {},
                     {
-                      "color": "#FFFFFF",
+                      "color": "#09090B",
                       "fontSize": 14.56,
                       "marginEnd": 0,
                       "marginStart": 6,
@@ -14753,7 +14673,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               },
               {
                 "backgroundColor": "#1A1B1E",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -14783,7 +14703,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               },
               {
                 "backgroundColor": "#1A1B1E",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "marginLeft": 4.16,
               },
             ]
@@ -14802,7 +14722,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures invoice list 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -14846,7 +14766,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       }
     >
       <Text
-        accessibilityLabel="invoices-screen-title"
+        accessibilityLabel="invoices-screen"
         accessibilityRole="header"
         allowFontScaling={true}
         lineBreakStrategyIOS="standard"
@@ -14911,7 +14831,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#7B8CE5",
                 "borderColor": "transparent",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 0,
                 "height": 51.84,
                 "paddingHorizontal": 14,
@@ -14921,7 +14841,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           }
         >
           <Icon
-            color="#FFFFFF"
+            color="#09090B"
             name="Plus"
             size={20}
           />
@@ -14944,7 +14864,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 [
                   {},
                   {
-                    "color": "#FFFFFF",
+                    "color": "#09090B",
                     "fontSize": 14.56,
                     "marginEnd": 0,
                     "marginStart": 6,
@@ -14967,7 +14887,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#111113",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginHorizontal": 12.48,
             "marginTop": 12.48,
             "shadowColor": "#000000",
@@ -15223,7 +15143,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#1A1B1E",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginHorizontal": 12.48,
             "marginTop": 12.48,
           },
@@ -15293,7 +15213,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             style={
               [
                 {
-                  "color": "#FFFFFF",
+                  "color": "#09090B",
                   "fontFamily": "System",
                   "fontSize": 13.52,
                   "fontWeight": "700",
@@ -15543,7 +15463,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             style={
               [
                 {
-                  "color": "#FFFFFF",
+                  "color": "#09090B",
                   "fontFamily": "System",
                   "fontSize": 13.52,
                   "fontWeight": "700",
@@ -15784,7 +15704,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               },
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 10.2,
+                "borderRadius": 12.24,
                 "shadowColor": "#000000",
                 "shadowOffset": {
                   "height": 1,
@@ -16006,7 +15926,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               },
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 10.2,
+                "borderRadius": 12.24,
                 "shadowColor": "#000000",
                 "shadowOffset": {
                   "height": 1,
@@ -16221,11 +16141,11 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       />
     </View>
   </View>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures online store 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -16299,7 +16219,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -16431,7 +16351,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           },
           {
             "backgroundColor": "#7B8CE5",
-            "borderRadius": 10.2,
+            "borderRadius": 12.24,
           },
         ]
       }
@@ -16456,7 +16376,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           }
         >
           <Icon
-            color="#FFFFFF"
+            color="#09090B"
             name="Globe"
             size={20}
             strokeWidth={2}
@@ -16483,7 +16403,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                     "flexShrink": 1,
                   },
                   {
-                    "color": "#FFFFFF",
+                    "color": "#09090B",
                   },
                 ],
               ]
@@ -16552,7 +16472,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
         <Switch
           accessibilityLabel="Toggle store online status"
           onChange={[Function]}
-          thumbColor="#FFFFFF"
+          thumbColor="#09090B"
           trackColor={
             {
               "false": "#26272B",
@@ -16603,7 +16523,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   "fontFamily": "monospace",
                 },
                 {
-                  "color": "#FFFFFF",
+                  "color": "#09090B",
                 },
               ],
             ]
@@ -16631,7 +16551,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           onPress={[Function]}
         >
           <Icon
-            color="#FFFFFF"
+            color="#09090B"
             name="Copy"
             size={16}
           />
@@ -16657,7 +16577,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             },
             {
               "backgroundColor": "#111113",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -16739,7 +16659,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             },
             {
               "backgroundColor": "#111113",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -16821,7 +16741,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             },
             {
               "backgroundColor": "#111113",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -16954,7 +16874,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           false,
           {
             "backgroundColor": "#111113",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "overflow": "hidden",
           },
         ]
@@ -16985,7 +16905,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 [
                   {
                     "alignItems": "center",
-                    "borderRadius": 6,
+                    "borderRadius": 8,
                     "height": 34,
                     "justifyContent": "center",
                     "width": 34,
@@ -17077,7 +16997,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 [
                   {
                     "alignItems": "center",
-                    "borderRadius": 6,
+                    "borderRadius": 8,
                     "height": 34,
                     "justifyContent": "center",
                     "width": 34,
@@ -17223,7 +17143,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           false,
           {
             "backgroundColor": "#111113",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "overflow": "hidden",
           },
         ]
@@ -17254,7 +17174,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 [
                   {
                     "alignItems": "center",
-                    "borderRadius": 6,
+                    "borderRadius": 8,
                     "height": 34,
                     "justifyContent": "center",
                     "width": 34,
@@ -17346,7 +17266,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 [
                   {
                     "alignItems": "center",
-                    "borderRadius": 6,
+                    "borderRadius": 8,
                     "height": 34,
                     "justifyContent": "center",
                     "width": 34,
@@ -17474,7 +17394,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#7B8CE5",
               "borderColor": "transparent",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 0,
               "height": 51.84,
               "paddingHorizontal": 14,
@@ -17507,7 +17427,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               [
                 {},
                 {
-                  "color": "#FFFFFF",
+                  "color": "#09090B",
                   "fontSize": 14.56,
                   "marginEnd": 0,
                   "marginStart": 6,
@@ -17534,7 +17454,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#012631",
             "borderLeftColor": "#38BDF8",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
           },
         ]
       }
@@ -17582,11 +17502,11 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       </Text>
     </View>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures order detail 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -17660,7 +17580,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -17860,7 +17780,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -18060,7 +17980,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -18192,7 +18112,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -18314,11 +18234,11 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       </View>
     </View>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures orders index 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -18402,7 +18322,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -18542,7 +18462,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   {
                     "backgroundColor": "#7B8CE5",
                     "borderColor": "transparent",
-                    "borderRadius": 6.12,
+                    "borderRadius": 8.16,
                     "borderWidth": 0,
                     "height": 44,
                     "paddingHorizontal": 10,
@@ -18552,7 +18472,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               }
             >
               <Icon
-                color="#FFFFFF"
+                color="#09090B"
                 importantForAccessibility="no"
                 name="Plus"
                 size={16}
@@ -18576,7 +18496,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                     [
                       {},
                       {
-                        "color": "#FFFFFF",
+                        "color": "#09090B",
                         "fontSize": 13.52,
                         "marginEnd": 0,
                         "marginStart": 6,
@@ -18627,7 +18547,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               [
                 {
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "minHeight": 51.84,
                 },
                 null,
@@ -18635,7 +18555,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   {
                     "backgroundColor": "#111113",
                     "borderColor": "#26272B",
-                    "borderRadius": 6.12,
+                    "borderRadius": 8.16,
                     "borderWidth": 1,
                     "flexDirection": "row",
                     "marginBottom": 12.48,
@@ -18774,7 +18694,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       />
     </View>
   </View>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures payments index 1`] = `
@@ -18861,7 +18781,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -18882,6 +18802,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           }
         >
           <Text
+            accessibilityLabel="payments-screen"
             accessibilityRole="header"
             allowFontScaling={true}
             lineBreakStrategyIOS="standard"
@@ -19031,7 +18952,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                   "gap": 12,
                 },
                 {
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                 },
               ],
             ]
@@ -19190,7 +19111,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       }
     >
       <Icon
-        color="#FFFFFF"
+        color="#09090B"
         name="Plus"
         size={28}
       />
@@ -19273,7 +19194,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -19474,7 +19395,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
               "marginRight": 8,
             },
@@ -19547,7 +19468,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "rgba(123, 140, 229, 0.12)",
               "borderColor": "#7B8CE5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 2,
             },
           ]
@@ -19687,7 +19608,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
           ]
@@ -19756,7 +19677,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
           ]
@@ -19825,7 +19746,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "rgba(123, 140, 229, 0.12)",
               "borderColor": "#7B8CE5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 2,
             },
           ]
@@ -19957,7 +19878,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "rgba(123, 140, 229, 0.12)",
             "borderColor": "#7B8CE5",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "borderWidth": 2,
             "marginBottom": 8,
           },
@@ -20069,7 +19990,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "borderWidth": 1,
             "marginBottom": 8,
           },
@@ -20166,7 +20087,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           {
             "backgroundColor": "#111113",
             "borderColor": "#26272B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "borderWidth": 1,
             "marginBottom": 8,
           },
@@ -20356,7 +20277,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "rgba(123, 140, 229, 0.12)",
               "borderColor": "#7B8CE5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 2,
               "marginRight": 8,
             },
@@ -20424,7 +20345,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
           ]
@@ -20511,7 +20432,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures reports hub 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -20585,7 +20506,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -20737,7 +20658,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -20745,7 +20666,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -20773,7 +20694,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(48, 164, 108, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -20882,7 +20803,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -20890,7 +20811,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -20918,7 +20839,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(56, 189, 248, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -21027,7 +20948,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -21035,7 +20956,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -21063,7 +20984,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(245, 158, 11, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -21172,7 +21093,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -21180,7 +21101,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -21208,7 +21129,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(123, 140, 229, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -21317,7 +21238,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -21325,7 +21246,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -21353,7 +21274,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(241, 104, 112, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -21462,7 +21383,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -21470,7 +21391,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -21498,7 +21419,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(138, 143, 152, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -21578,7 +21499,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       </View>
     </View>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures settings index 1`] = `
@@ -21829,7 +21750,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -22217,7 +22138,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -22605,7 +22526,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -23078,7 +22999,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -23466,7 +23387,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -23682,7 +23603,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -23846,7 +23767,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             [
               {
-                "color": "#FFFFFF",
+                "color": "#09090B",
                 "fontFamily": "System",
                 "fontSize": 13.52,
                 "fontWeight": "400",
@@ -24273,7 +24194,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
           style={
             [
               {
-                "color": "#FFFFFF",
+                "color": "#09090B",
                 "fontFamily": "System",
                 "fontSize": 13.52,
                 "fontWeight": "400",
@@ -25143,7 +25064,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
               {
                 "backgroundColor": "#111113",
                 "borderColor": "#26272B",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -25260,7 +25181,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
               "height": 40,
               "paddingHorizontal": 12.48,
@@ -25590,7 +25511,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots dark theme captures utilities hub 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -25664,7 +25585,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             {
               "backgroundColor": "#111113",
               "borderColor": "#26272B",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -25816,7 +25737,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -25824,7 +25745,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -25852,7 +25773,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(48, 164, 108, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -25961,7 +25882,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -25969,7 +25890,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -25997,7 +25918,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(123, 140, 229, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -26106,7 +26027,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -26114,7 +26035,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -26142,7 +26063,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(245, 158, 11, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -26251,7 +26172,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
             [
               {
                 "backgroundColor": "#111113",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -26259,7 +26180,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 {
                   "alignItems": "center",
                   "backgroundColor": "#111113",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -26287,7 +26208,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
                 },
                 {
                   "backgroundColor": "rgba(56, 189, 248, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -26367,7 +26288,7 @@ exports[`Visual Regression: Representative Screen Snapshots dark theme captures 
       </View>
     </View>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures all transactions 1`] = `
@@ -26454,7 +26375,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -27100,7 +27021,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 8.32,
             "marginHorizontal": 12.48,
           },
@@ -27846,7 +27767,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures auth login 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -27863,17 +27784,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
     ]
   }
 >
-  <ScrollView
-    contentContainerStyle={
-      [
-        {
-          "flexGrow": 1,
-        },
-        undefined,
-      ]
-    }
-    ref={null}
-    showsVerticalScrollIndicator={false}
+  <View
     style={
       [
         {
@@ -27891,8 +27802,8 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#5E6AD2",
-            "borderBottomLeftRadius": 14.280000000000001,
-            "borderBottomRightRadius": 14.280000000000001,
+            "borderBottomLeftRadius": 16.32,
+            "borderBottomRightRadius": 16.32,
             "paddingBottom": 49.92,
             "paddingHorizontal": 24.96,
             "paddingTop": 49.92,
@@ -27911,7 +27822,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             },
             {
               "backgroundColor": "rgba(255,255,255,0.2)",
-              "borderRadius": 10.2,
+              "borderRadius": 12.24,
             },
           ]
         }
@@ -28025,6 +27936,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       }
     >
       <Text
+        accessibilityLabel="sign-in-heading"
         accessibilityRole="header"
         allowFontScaling={true}
         lineBreakStrategyIOS="standard"
@@ -28088,7 +28000,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               },
               {
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 1,
                 "minHeight": 51.84,
               },
@@ -28209,7 +28121,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#F4F4F5",
                 "borderColor": "transparent",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 0,
                 "height": 56,
                 "paddingHorizontal": 18,
@@ -28261,7 +28173,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 10.2,
+              "borderRadius": 12.24,
               "marginTop": 33.28,
               "padding": 16.64,
             },
@@ -28322,17 +28234,13 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
         </Text>
         <View
           style={
-            [
-              {},
-              {
-                "marginTop": 16.64,
-              },
-            ]
+            {
+              "marginTop": 16.64,
+            }
           }
         >
           <Text
             allowFontScaling={true}
-            importantForAccessibility="no"
             lineBreakStrategyIOS="standard"
             maxFontSizeMultiplier={1.3}
             style={
@@ -28347,96 +28255,58 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                   "textAlign": undefined,
                   "writingDirection": "ltr",
                 },
-                [
-                  {},
-                  {
-                    "color": "#09090B",
-                    "fontWeight": "500",
-                    "letterSpacing": -0.1,
-                    "marginBottom": 4.16,
-                  },
-                ],
+                {
+                  "color": "#09090B",
+                  "marginBottom": 4.16,
+                },
               ]
             }
             textBreakStrategy="highQuality"
           >
             Email
           </Text>
-          <View
+          <TextInput
+            accessibilityLabel="email-input"
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
+            importantForAutofill="no"
+            keyboardType="email-address"
+            onChangeText={[Function]}
+            placeholder="dev@example.com"
+            placeholderTextColor="#A1A1AA"
+            ref={null}
+            spellCheck={false}
             style={
               [
                 {
-                  "alignItems": "center",
-                  "flexDirection": "row",
+                  "borderWidth": 1,
                 },
                 {
                   "backgroundColor": "#FFFFFF",
                   "borderColor": "#E4E4E7",
-                  "borderRadius": 6.12,
-                  "borderWidth": 1,
-                  "minHeight": 51.84,
-                  "opacity": 1,
+                  "borderRadius": 8.16,
+                  "color": "#09090B",
+                  "fontSize": 14.56,
                   "paddingHorizontal": 12.48,
+                  "paddingVertical": 8.32,
                 },
-                null,
               ]
             }
-          >
-            <TextInput
-              accessibilityLabel="Email"
-              accessibilityState={
-                {
-                  "busy": undefined,
-                  "disabled": undefined,
-                }
-              }
-              accessible={true}
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={true}
-              keyboardType="email-address"
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="dev@example.com"
-              placeholderTextColor="#A1A1AA"
-              readOnly={false}
-              ref={null}
-              style={
-                [
-                  {
-                    "flex": 1,
-                    "height": "100%",
-                  },
-                  {
-                    "color": "#09090B",
-                    "fontFamily": "System",
-                    "fontSize": 14.56,
-                    "paddingVertical": 8.32,
-                    "writingDirection": "ltr",
-                  },
-                  undefined,
-                ]
-              }
-              testID="dev-email-input"
-              textContentType="emailAddress"
-              value=""
-            />
-          </View>
+            testID="dev-email-input"
+            textContentType="none"
+            value=""
+          />
         </View>
         <View
           style={
-            [
-              {},
-              {
-                "marginTop": 12.48,
-              },
-            ]
+            {
+              "marginTop": 12.48,
+            }
           }
         >
           <Text
             allowFontScaling={true}
-            importantForAccessibility="no"
             lineBreakStrategyIOS="standard"
             maxFontSizeMultiplier={1.3}
             style={
@@ -28451,80 +28321,48 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                   "textAlign": undefined,
                   "writingDirection": "ltr",
                 },
-                [
-                  {},
-                  {
-                    "color": "#09090B",
-                    "fontWeight": "500",
-                    "letterSpacing": -0.1,
-                    "marginBottom": 4.16,
-                  },
-                ],
+                {
+                  "color": "#09090B",
+                  "marginBottom": 4.16,
+                },
               ]
             }
             textBreakStrategy="highQuality"
           >
             Password
           </Text>
-          <View
+          <TextInput
+            accessibilityLabel="password-input"
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
+            importantForAutofill="no"
+            onChangeText={[Function]}
+            placeholder="Enter password"
+            placeholderTextColor="#A1A1AA"
+            ref={null}
+            secureTextEntry={false}
+            spellCheck={false}
             style={
               [
                 {
-                  "alignItems": "center",
-                  "flexDirection": "row",
+                  "borderWidth": 1,
                 },
                 {
                   "backgroundColor": "#FFFFFF",
                   "borderColor": "#E4E4E7",
-                  "borderRadius": 6.12,
-                  "borderWidth": 1,
-                  "minHeight": 51.84,
-                  "opacity": 1,
+                  "borderRadius": 8.16,
+                  "color": "#09090B",
+                  "fontSize": 14.56,
                   "paddingHorizontal": 12.48,
+                  "paddingVertical": 8.32,
                 },
-                null,
               ]
             }
-          >
-            <TextInput
-              accessibilityLabel="Password"
-              accessibilityState={
-                {
-                  "busy": undefined,
-                  "disabled": undefined,
-                }
-              }
-              accessible={true}
-              editable={true}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Enter password"
-              placeholderTextColor="#A1A1AA"
-              readOnly={false}
-              ref={null}
-              secureTextEntry={true}
-              style={
-                [
-                  {
-                    "flex": 1,
-                    "height": "100%",
-                  },
-                  {
-                    "color": "#09090B",
-                    "fontFamily": "System",
-                    "fontSize": 14.56,
-                    "paddingVertical": 8.32,
-                    "writingDirection": "ltr",
-                  },
-                  undefined,
-                ]
-              }
-              testID="dev-password-input"
-              textContentType="password"
-              value=""
-            />
-          </View>
+            testID="dev-password-input"
+            textContentType="none"
+            value=""
+          />
         </View>
         <View
           style={
@@ -28543,7 +28381,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           }
         >
           <Pressable
-            accessibilityLabel="Dev sign in"
+            accessibilityLabel="sign-in-button"
             accessibilityRole="button"
             accessibilityState={
               {
@@ -28569,7 +28407,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "backgroundColor": "#F4F4F5",
                   "borderColor": "#E4E4E7",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "borderWidth": 1,
                   "height": 51.84,
                   "paddingHorizontal": 14,
@@ -28688,12 +28526,12 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
         </TouchableOpacity>
       </View>
     </View>
-  </ScrollView>
-</View>
+  </View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures auth setup 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -28904,7 +28742,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#09090B",
               "fontSize": 16.64,
             },
@@ -28959,7 +28797,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#09090B",
               "fontSize": 16.64,
             },
@@ -29011,7 +28849,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -29111,7 +28949,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             },
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -29146,11 +28984,11 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       </Pressable>
     </View>
   </View>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures business profile 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -29279,7 +29117,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#09090B",
           },
         ]
@@ -29337,7 +29175,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#09090B",
           },
         ]
@@ -29396,7 +29234,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#09090B",
           },
         ]
@@ -29460,7 +29298,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#09090B",
           },
         ]
@@ -29517,7 +29355,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#09090B",
           },
         ]
@@ -29574,7 +29412,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "color": "#09090B",
           },
         ]
@@ -29708,7 +29546,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#09090B",
             },
           ]
@@ -29764,7 +29602,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#09090B",
             },
           ]
@@ -29827,7 +29665,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "color": "#09090B",
             },
           ]
@@ -30192,7 +30030,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#5E6AD2",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginTop": 24.96,
           },
         ]
@@ -30227,7 +30065,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       </Text>
     </Pressable>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures cash in hand 1`] = `
@@ -30314,7 +30152,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -30420,7 +30258,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               },
               {
                 "backgroundColor": "#5E6AD2",
-                "borderRadius": 10.2,
+                "borderRadius": 12.24,
               },
             ]
           }
@@ -30571,7 +30409,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                       },
                       {
                         "borderColor": "#E4E4E7",
-                        "borderRadius": 6.12,
+                        "borderRadius": 8.16,
                         "flex": 1,
                       },
                     ]
@@ -30668,7 +30506,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                         {
                           "backgroundColor": "#5E6AD2",
                           "borderColor": "transparent",
-                          "borderRadius": 6.12,
+                          "borderRadius": 8.16,
                           "borderWidth": 0,
                           "height": 44,
                           "paddingHorizontal": 10,
@@ -31119,7 +30957,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -31514,7 +31352,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                     {
                       "backgroundColor": "#5E6AD2",
                       "borderColor": "transparent",
-                      "borderRadius": 6.12,
+                      "borderRadius": 8.16,
                       "borderWidth": 0,
                       "height": 51.84,
                       "paddingHorizontal": 14,
@@ -31605,7 +31443,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                     {
                       "backgroundColor": "transparent",
                       "borderColor": "#E4E4E7",
-                      "borderRadius": 6.12,
+                      "borderRadius": 8.16,
                       "borderWidth": 1,
                       "height": 51.84,
                       "paddingHorizontal": 14,
@@ -32051,7 +31889,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "borderLeftWidth": 4,
-                "borderRadius": 10,
+                "borderRadius": 12,
                 "marginBottom": 12,
                 "marginHorizontal": 16,
                 "padding": 12,
@@ -32344,7 +32182,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -32365,6 +32203,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           }
         >
           <Text
+            accessibilityLabel="customers-screen"
             accessibilityRole="header"
             allowFontScaling={true}
             lineBreakStrategyIOS="standard"
@@ -32461,7 +32300,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
               "height": 40,
               "paddingHorizontal": 12.48,
@@ -33177,7 +33016,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -34364,7 +34203,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -34514,7 +34353,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
         [
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 10.2,
+            "borderRadius": 12.24,
             "padding": 4.16,
             "shadowColor": "#09090B",
             "shadowOffset": {
@@ -34533,7 +34372,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             "alignItems": "center",
             "aspectRatio": 1,
             "backgroundColor": "#F4F4F5",
-            "borderRadius": 10.2,
+            "borderRadius": 12.24,
             "justifyContent": "center",
             "width": "100%",
           }
@@ -34574,7 +34413,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           style={
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -34642,7 +34481,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           style={
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -34710,7 +34549,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           style={
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -34778,7 +34617,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           style={
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -34846,7 +34685,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           style={
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -34914,7 +34753,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           style={
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -34982,7 +34821,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           style={
             {
               "backgroundColor": "rgba(94, 106, 210, 0.06)",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "padding": 12.48,
             }
           }
@@ -35045,7 +34884,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "rgba(34, 160, 107, 0.08)",
             "borderColor": "#22A06B",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "borderWidth": 1,
             "marginTop": 24.96,
             "padding": 16.64,
@@ -35133,7 +34972,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             },
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "flex": 1,
               "paddingVertical": 14.56,
             },
@@ -35188,7 +35027,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             },
             {
               "backgroundColor": "#F4F4F5",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "flex": 1,
               "paddingVertical": 14.56,
             },
@@ -35316,7 +35155,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
         style={
           {
             "backgroundColor": "#F4F4F5",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "padding": 12.48,
           }
         }
@@ -35975,7 +35814,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 1,
                 "height": 40,
                 "paddingHorizontal": 12.48,
@@ -36376,7 +36215,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               [
                 {},
                 {
-                  "borderRadius": 14.280000000000001,
+                  "borderRadius": 16.32,
                   "overflow": "hidden",
                 },
                 {
@@ -36493,7 +36332,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                       },
                       {
                         "backgroundColor": "#F4F4F5",
-                        "borderRadius": 6.12,
+                        "borderRadius": 8.16,
                         "marginRight": 12.48,
                       },
                     ]
@@ -36670,7 +36509,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               [
                 {},
                 {
-                  "borderRadius": 14.280000000000001,
+                  "borderRadius": 16.32,
                   "overflow": "hidden",
                 },
                 {
@@ -36838,7 +36677,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                       },
                       {
                         "backgroundColor": "#F4F4F5",
-                        "borderRadius": 6.12,
+                        "borderRadius": 8.16,
                         "marginRight": 12.48,
                       },
                     ]
@@ -37006,7 +36845,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures invoice create flow 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -37090,7 +36929,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -37665,7 +37504,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                       },
                       {
                         "backgroundColor": "#F4F4F5",
-                        "borderColor": "#D4D4D8",
+                        "borderColor": "#52525B",
                         "borderRadius": 14,
                         "borderWidth": 1.5,
                         "height": 28,
@@ -37761,7 +37600,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                       },
                       {
                         "backgroundColor": "#F4F4F5",
-                        "borderColor": "#D4D4D8",
+                        "borderColor": "#52525B",
                         "borderRadius": 14,
                         "borderWidth": 1.5,
                         "height": 28,
@@ -38147,7 +37986,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                     {
                       "alignItems": "center",
                       "backgroundColor": "#F4F4F5",
-                      "borderColor": "#D4D4D8",
+                      "borderColor": "#52525B",
                       "borderRadius": 4.08,
                       "borderWidth": 1.5,
                       "flex": 1,
@@ -38353,7 +38192,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                           },
                           {
                             "borderColor": "#E4E4E7",
-                            "borderRadius": 6.12,
+                            "borderRadius": 8.16,
                             "minHeight": 48,
                           },
                           null,
@@ -38501,7 +38340,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                             {
                               "backgroundColor": "#FFFFFF",
                               "borderColor": "#E4E4E7",
-                              "borderRadius": 6.12,
+                              "borderRadius": 8.16,
                               "borderWidth": 1,
                               "minHeight": 51.84,
                               "opacity": 1,
@@ -38694,7 +38533,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                         {
                           "backgroundColor": "#FFFFFF",
                           "borderColor": "#E4E4E7",
-                          "borderRadius": 6.12,
+                          "borderRadius": 8.16,
                           "borderWidth": 1,
                           "minHeight": 51.84,
                           "opacity": 1,
@@ -38840,7 +38679,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                         {
                           "backgroundColor": "#FFFFFF",
                           "borderColor": "#E4E4E7",
-                          "borderRadius": 6.12,
+                          "borderRadius": 8.16,
                           "borderWidth": 1,
                           "minHeight": 51.84,
                           "opacity": 1,
@@ -38962,7 +38801,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                         {
                           "backgroundColor": "#FFFFFF",
                           "borderColor": "#E4E4E7",
-                          "borderRadius": 6.12,
+                          "borderRadius": 8.16,
                           "borderWidth": 1,
                           "minHeight": 51.84,
                           "opacity": 1,
@@ -39026,7 +38865,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                   {
                     "backgroundColor": "#F4F4F5",
                     "borderColor": "#E4E4E7",
-                    "borderRadius": 6.12,
+                    "borderRadius": 8.16,
                     "borderWidth": 1,
                     "marginTop": 8.32,
                     "padding": 12.48,
@@ -39110,7 +38949,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                     style={
                       {
                         "backgroundColor": "#FFFFFF",
-                        "borderColor": "#D4D4D8",
+                        "borderColor": "#52525B",
                         "borderRadius": 9999,
                         "borderWidth": 1,
                         "height": 24,
@@ -39200,7 +39039,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "transparent",
                 "borderColor": "transparent",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 0,
                 "height": 51.84,
                 "paddingHorizontal": 14,
@@ -39285,7 +39124,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#F4F4F5",
                 "borderColor": "transparent",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 0,
                 "height": 51.84,
                 "paddingHorizontal": 14,
@@ -39329,7 +39168,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       </View>
     </View>
   </View>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures invoice detail 1`] = `
@@ -39348,6 +39187,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       undefined,
     ]
   }
+  testID="invoice-detail-screen"
 >
   <View
     style={
@@ -39406,7 +39246,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -39427,6 +39267,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
         }
       >
         <Text
+          accessibilityLabel="invoice-detail-screen"
           accessibilityRole="header"
           allowFontScaling={true}
           lineBreakStrategyIOS="standard"
@@ -39560,7 +39401,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#E8F5EE",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "padding": 12.48,
           },
@@ -39666,7 +39507,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#09090B",
             "shadowOffset": {
@@ -39871,7 +39712,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#09090B",
             "shadowOffset": {
@@ -39990,7 +39831,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#09090B",
             "shadowOffset": {
@@ -40014,8 +39855,8 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               "backgroundColor": "#F4F4F5",
               "borderBottomColor": "#E4E4E7",
               "borderBottomWidth": 1,
-              "borderTopLeftRadius": 6.12,
-              "borderTopRightRadius": 6.12,
+              "borderTopLeftRadius": 8.16,
+              "borderTopRightRadius": 8.16,
               "paddingHorizontal": 12.48,
               "paddingVertical": 4.16,
             },
@@ -40316,7 +40157,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#09090B",
             "shadowOffset": {
@@ -40693,7 +40534,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginBottom": 12.48,
             "shadowColor": "#09090B",
             "shadowOffset": {
@@ -41057,7 +40898,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "backgroundColor": "#5E6AD2",
                   "borderColor": "transparent",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "borderWidth": 0,
                   "height": 51.84,
                   "paddingHorizontal": 14,
@@ -41067,7 +40908,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             }
           >
             <Icon
-              color="#FFFFFF"
+              color="#09090B"
               name="Share2"
               size={18}
             />
@@ -41123,7 +40964,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               },
               {
                 "backgroundColor": "#F4F4F5",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -41153,7 +40994,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               },
               {
                 "backgroundColor": "#F4F4F5",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "marginLeft": 4.16,
               },
             ]
@@ -41172,7 +41013,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures invoice list 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -41216,7 +41057,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       }
     >
       <Text
-        accessibilityLabel="invoices-screen-title"
+        accessibilityLabel="invoices-screen"
         accessibilityRole="header"
         allowFontScaling={true}
         lineBreakStrategyIOS="standard"
@@ -41281,7 +41122,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#5E6AD2",
                 "borderColor": "transparent",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "borderWidth": 0,
                 "height": 51.84,
                 "paddingHorizontal": 14,
@@ -41337,7 +41178,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginHorizontal": 12.48,
             "marginTop": 12.48,
             "shadowColor": "#09090B",
@@ -41593,7 +41434,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#F4F4F5",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "marginHorizontal": 12.48,
             "marginTop": 12.48,
           },
@@ -42154,7 +41995,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               },
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 10.2,
+                "borderRadius": 12.24,
                 "shadowColor": "#09090B",
                 "shadowOffset": {
                   "height": 1,
@@ -42376,7 +42217,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               },
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 10.2,
+                "borderRadius": 12.24,
                 "shadowColor": "#09090B",
                 "shadowOffset": {
                   "height": 1,
@@ -42591,11 +42432,11 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       />
     </View>
   </View>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures online store 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -42669,7 +42510,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -42801,7 +42642,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           },
           {
             "backgroundColor": "#5E6AD2",
-            "borderRadius": 10.2,
+            "borderRadius": 12.24,
           },
         ]
       }
@@ -43027,7 +42868,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             },
             {
               "backgroundColor": "#FFFFFF",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -43109,7 +42950,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             },
             {
               "backgroundColor": "#FFFFFF",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -43191,7 +43032,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             },
             {
               "backgroundColor": "#FFFFFF",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -43324,7 +43165,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           false,
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "overflow": "hidden",
           },
         ]
@@ -43355,7 +43196,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 [
                   {
                     "alignItems": "center",
-                    "borderRadius": 6,
+                    "borderRadius": 8,
                     "height": 34,
                     "justifyContent": "center",
                     "width": 34,
@@ -43447,7 +43288,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 [
                   {
                     "alignItems": "center",
-                    "borderRadius": 6,
+                    "borderRadius": 8,
                     "height": 34,
                     "justifyContent": "center",
                     "width": 34,
@@ -43593,7 +43434,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           false,
           {
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "overflow": "hidden",
           },
         ]
@@ -43624,7 +43465,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 [
                   {
                     "alignItems": "center",
-                    "borderRadius": 6,
+                    "borderRadius": 8,
                     "height": 34,
                     "justifyContent": "center",
                     "width": 34,
@@ -43716,7 +43557,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 [
                   {
                     "alignItems": "center",
-                    "borderRadius": 6,
+                    "borderRadius": 8,
                     "height": 34,
                     "justifyContent": "center",
                     "width": 34,
@@ -43844,7 +43685,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#5E6AD2",
               "borderColor": "transparent",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 0,
               "height": 51.84,
               "paddingHorizontal": 14,
@@ -43904,7 +43745,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#E6F6FE",
             "borderLeftColor": "#0BA5E9",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
           },
         ]
       }
@@ -43952,11 +43793,11 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       </Text>
     </View>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures order detail 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -44030,7 +43871,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -44230,7 +44071,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -44430,7 +44271,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -44562,7 +44403,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -44684,11 +44525,11 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       </View>
     </View>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures orders index 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -44772,7 +44613,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -44912,7 +44753,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                   {
                     "backgroundColor": "#5E6AD2",
                     "borderColor": "transparent",
-                    "borderRadius": 6.12,
+                    "borderRadius": 8.16,
                     "borderWidth": 0,
                     "height": 44,
                     "paddingHorizontal": 10,
@@ -44997,7 +44838,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               [
                 {
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "minHeight": 51.84,
                 },
                 null,
@@ -45005,7 +44846,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                   {
                     "backgroundColor": "#FFFFFF",
                     "borderColor": "#E4E4E7",
-                    "borderRadius": 6.12,
+                    "borderRadius": 8.16,
                     "borderWidth": 1,
                     "flexDirection": "row",
                     "marginBottom": 12.48,
@@ -45144,7 +44985,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       />
     </View>
   </View>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures payments index 1`] = `
@@ -45231,7 +45072,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -45252,6 +45093,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           }
         >
           <Text
+            accessibilityLabel="payments-screen"
             accessibilityRole="header"
             allowFontScaling={true}
             lineBreakStrategyIOS="standard"
@@ -45401,7 +45243,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                   "gap": 12,
                 },
                 {
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                 },
               ],
             ]
@@ -45643,7 +45485,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -45844,7 +45686,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
               "marginRight": 8,
             },
@@ -45917,7 +45759,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "rgba(94, 106, 210, 0.12)",
               "borderColor": "#5E6AD2",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 2,
             },
           ]
@@ -46057,7 +45899,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
           ]
@@ -46126,7 +45968,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
           ]
@@ -46195,7 +46037,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "rgba(94, 106, 210, 0.12)",
               "borderColor": "#5E6AD2",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 2,
             },
           ]
@@ -46327,7 +46169,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "rgba(94, 106, 210, 0.12)",
             "borderColor": "#5E6AD2",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "borderWidth": 2,
             "marginBottom": 8,
           },
@@ -46439,7 +46281,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "borderWidth": 1,
             "marginBottom": 8,
           },
@@ -46536,7 +46378,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
           {
             "backgroundColor": "#FFFFFF",
             "borderColor": "#E4E4E7",
-            "borderRadius": 6.12,
+            "borderRadius": 8.16,
             "borderWidth": 1,
             "marginBottom": 8,
           },
@@ -46726,7 +46568,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "rgba(94, 106, 210, 0.12)",
               "borderColor": "#5E6AD2",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 2,
               "marginRight": 8,
             },
@@ -46794,7 +46636,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
           ]
@@ -46881,7 +46723,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures reports hub 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -46955,7 +46797,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -47107,7 +46949,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -47115,7 +46957,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -47143,7 +46985,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(34, 160, 107, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -47252,7 +47094,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -47260,7 +47102,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -47288,7 +47130,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(11, 165, 233, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -47397,7 +47239,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -47405,7 +47247,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -47433,7 +47275,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(217, 119, 6, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -47542,7 +47384,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -47550,7 +47392,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -47578,7 +47420,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(94, 106, 210, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -47687,7 +47529,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -47695,7 +47537,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -47723,7 +47565,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(229, 72, 77, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -47832,7 +47674,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -47840,7 +47682,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -47868,7 +47710,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(82, 82, 91, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -47948,7 +47790,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       </View>
     </View>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures settings index 1`] = `
@@ -48199,7 +48041,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -48587,7 +48429,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -48975,7 +48817,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -49448,7 +49290,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -49836,7 +49678,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
             },
             {
@@ -50052,7 +49894,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -51513,7 +51355,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
               {
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E4E4E7",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
               },
             ]
           }
@@ -51630,7 +51472,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
               "borderWidth": 1,
               "height": 40,
               "paddingHorizontal": 12.48,
@@ -51960,7 +51802,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
 `;
 
 exports[`Visual Regression: Representative Screen Snapshots light theme captures utilities hub 1`] = `
-<View
+<KeyboardAvoidingView
   behavior="padding"
   style={
     [
@@ -52034,7 +51876,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             {
               "backgroundColor": "#FFFFFF",
               "borderColor": "#E4E4E7",
-              "borderRadius": 6.12,
+              "borderRadius": 8.16,
             },
           ]
         }
@@ -52186,7 +52028,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -52194,7 +52036,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -52222,7 +52064,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(34, 160, 107, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -52331,7 +52173,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -52339,7 +52181,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -52367,7 +52209,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(94, 106, 210, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -52476,7 +52318,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -52484,7 +52326,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -52512,7 +52354,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(217, 119, 6, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -52621,7 +52463,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
             [
               {
                 "backgroundColor": "#FFFFFF",
-                "borderRadius": 6.12,
+                "borderRadius": 8.16,
                 "minHeight": 51.84,
               },
               null,
@@ -52629,7 +52471,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 {
                   "alignItems": "center",
                   "backgroundColor": "#FFFFFF",
-                  "borderRadius": 6.12,
+                  "borderRadius": 8.16,
                   "flexDirection": "row",
                   "marginBottom": 8.32,
                   "padding": 10.4,
@@ -52657,7 +52499,7 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
                 },
                 {
                   "backgroundColor": "rgba(11, 165, 233, 0.12)",
-                  "borderRadius": 10.2,
+                  "borderRadius": 12.24,
                 },
               ]
             }
@@ -52737,5 +52579,5 @@ exports[`Visual Regression: Representative Screen Snapshots light theme captures
       </View>
     </View>
   </ScrollView>
-</View>
+</KeyboardAvoidingView>
 `;

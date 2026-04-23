@@ -160,7 +160,11 @@ export default function LoginScreen() {
 
 			{/* Form */}
 			<View style={[styles.form, { marginTop: -s['2xl'], padding: s.xl }]}>
-				<ThemedText variant="h2" style={{ marginBottom: s.xs, textAlign: 'center' }}>
+				<ThemedText
+					variant="h2"
+					style={{ marginBottom: s.xs, textAlign: 'center' }}
+					accessibilityLabel="sign-in-heading"
+				>
 					{t('auth.welcome')}
 				</ThemedText>
 				<ThemedText
@@ -217,6 +221,7 @@ export default function LoginScreen() {
 							</ThemedText>
 							<NativeTextInput
 								testID="dev-email-input"
+								accessibilityLabel="email-input"
 								placeholder="dev@example.com"
 								placeholderTextColor={c.placeholder}
 								value={devEmail}
@@ -252,6 +257,7 @@ export default function LoginScreen() {
 							</ThemedText>
 							<NativeTextInput
 								testID="dev-password-input"
+								accessibilityLabel="password-input"
 								placeholder="Enter password"
 								placeholderTextColor={c.placeholder}
 								value={devPassword}
@@ -290,7 +296,7 @@ export default function LoginScreen() {
 
 						<Button
 							title="Dev Sign In"
-							accessibilityLabel="Dev sign in"
+							accessibilityLabel="sign-in-button"
 							testID="dev-login-button"
 							onPress={handleDevLogin}
 							loading={loading}

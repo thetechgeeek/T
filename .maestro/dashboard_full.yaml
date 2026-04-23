@@ -1,4 +1,4 @@
-appId: com.tilemaster.app
+appId: com.easystock.app
 ---
 # E2E-002: Dashboard full flow — stats, quick actions, recent invoices
 - launchApp

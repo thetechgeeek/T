@@ -2,6 +2,7 @@ import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import AddCustomerScreen from '@/app/(app)/customers/add';
+import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { renderWithTheme } from '../../utils/renderWithTheme';
 
@@ -33,6 +34,7 @@ describe('AddCustomerScreen', () => {
 	it('shows an alert when customer creation fails', async () => {
 		const errorMessage = "Could not find the table 'public.customers' in the schema cache";
 		mockCreateCustomer.mockRejectedValue(new Error(errorMessage));
+		allowExpectedConsoleError(/\[ERROR\] Failed to save customer/);
 
 		const { getByPlaceholderText, getByText } = renderWithTheme(<AddCustomerScreen />);
 
