@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -17,6 +17,28 @@ import { OPACITY_TINT_SOFT, SIZE_DROPDOWN_MAX_HEIGHT } from '@easydesign/design-
 import { SPACING_PX } from '@easydesign/design-system/foundation';
 
 const FIELD_MIN_WIDTH_PX = 150;
+
+export function calculateLineItemTotals(lineItems: InvoiceLineItemInput[]) {
+	const totals = lineItems.reduce(
+		(acc, item) => {
+			const lineSubtotal = item.quantity * item.rate_per_unit - (item.discount || 0);
+			acc.subtotal += lineSubtotal;
+			acc.gst += lineSubtotal * (item.gst_rate / 100);
+			return acc;
+		},
+		{ subtotal: 0, gst: 0 },
+	);
+
+	return {
+		subtotal: roundCurrency(totals.subtotal),
+		gst: roundCurrency(totals.gst),
+		grandTotal: roundCurrency(totals.subtotal + totals.gst),
+	};
+}
+
+function roundCurrency(value: number) {
+	return Math.round((value + Number.EPSILON) * 100) / 100;
+}
 
 interface Props {
 	lineItems: InvoiceLineItemInput[];
@@ -57,15 +79,10 @@ export function LineItemsStep({
 }: Props) {
 	const { c, s, r } = useThemeTokens();
 	const { t, formatCurrency } = useLocale();
-	const subtotal = lineItems.reduce((acc, item) => {
-		const lineSubtotal = item.quantity * item.rate_per_unit - (item.discount || 0);
-		return acc + lineSubtotal;
-	}, 0);
-	const gst = lineItems.reduce((acc, item) => {
-		const lineSubtotal = item.quantity * item.rate_per_unit - (item.discount || 0);
-		return acc + lineSubtotal * (item.gst_rate / 100);
-	}, 0);
-	const grandTotal = subtotal + gst;
+	const { subtotal, gst, grandTotal } = useMemo(
+		() => calculateLineItemTotals(lineItems),
+		[lineItems],
+	);
 
 	return (
 		<View>
@@ -94,94 +111,103 @@ export function LineItemsStep({
 				</Card>
 			) : (
 				<Card variant="outlined" padding="none" style={{ backgroundColor: c.surface }}>
-					{lineItems.map((item, index) => (
-						<View
-							key={item.item_id ?? `${item.design_name}-${index}`}
-							style={{
-								paddingHorizontal: s.lg,
-								paddingVertical: s.md,
-								borderBottomWidth: index === lineItems.length - 1 ? 0 : 1,
-								borderBottomColor: c.border,
-							}}
-						>
+					{lineItems.map((item, index) => {
+						const lineAmount = item.quantity * item.rate_per_unit;
+
+						return (
 							<View
-								style={[layout.rowBetween, { alignItems: 'flex-start', gap: s.md }]}
+								key={item.item_id ?? `${item.design_name}-${index}`}
+								style={{
+									paddingHorizontal: s.lg,
+									paddingVertical: s.md,
+									borderBottomWidth: index === lineItems.length - 1 ? 0 : 1,
+									borderBottomColor: c.border,
+								}}
 							>
-								<View style={{ flex: 1 }}>
-									<ThemedText weight="semibold">{item.design_name}</ThemedText>
-									<View
+								<View
+									style={[
+										layout.rowBetween,
+										{ alignItems: 'flex-start', gap: s.md },
+									]}
+								>
+									<View style={{ flex: 1 }}>
+										<ThemedText weight="semibold">
+											{item.design_name}
+										</ThemedText>
+										<View
+											style={{
+												flexDirection: 'row',
+												flexWrap: 'wrap',
+												gap: s.xs,
+												marginTop: SPACING_PX.xs,
+											}}
+										>
+											<Badge
+												label={`GST ${item.gst_rate}%`}
+												variant="neutral"
+												size="sm"
+											/>
+											<Badge
+												label={`${item.quantity} ${t('invoice.itemPlural')}`}
+												variant="neutral"
+												size="sm"
+											/>
+										</View>
+									</View>
+									<ThemedText weight="bold" color={c.primary}>
+										{formatCurrency(lineAmount)}
+									</ThemedText>
+								</View>
+								<View
+									style={[
+										layout.rowBetween,
+										{
+											alignItems: 'center',
+											marginTop: s.sm,
+											gap: s.md,
+										},
+									]}
+								>
+									<View style={{ flex: 1 }}>
+										<ThemedText variant="caption" color={c.onSurfaceVariant}>
+											{item.quantity}{' '}
+											{t('invoice.unitsAt', {
+												price: formatCurrency(item.rate_per_unit),
+											})}
+										</ThemedText>
+										{!!item.discount && item.discount > 0 && (
+											<ThemedText
+												variant="caption"
+												color={c.error}
+												style={{ marginTop: SPACING_PX.xxs }}
+											>
+												{t('invoice.discountAmount')}:{' '}
+												{formatCurrency(item.discount)}
+											</ThemedText>
+										)}
+									</View>
+									<TouchableOpacity
+										onPress={() => removeLineItem(index)}
+										accessibilityRole="button"
+										accessibilityLabel={`remove-line-item-${index}`}
+										accessibilityHint={t('invoice.removeHint', {
+											name: item.design_name,
+										})}
 										style={{
-											flexDirection: 'row',
-											flexWrap: 'wrap',
-											gap: s.xs,
-											marginTop: SPACING_PX.xs,
+											paddingHorizontal: s.sm,
+											paddingVertical: SPACING_PX.xxs,
+											borderRadius: r.sm,
+											backgroundColor: c.surfaceVariant,
 										}}
 									>
-										<Badge
-											label={`GST ${item.gst_rate}%`}
-											variant="neutral"
-											size="sm"
-										/>
-										<Badge
-											label={`${item.quantity} ${t('invoice.itemPlural')}`}
-											variant="neutral"
-											size="sm"
-										/>
-									</View>
-								</View>
-								<ThemedText weight="bold" color={c.primary}>
-									{formatCurrency(item.quantity * item.rate_per_unit)}
-								</ThemedText>
-							</View>
-							<View
-								style={[
-									layout.rowBetween,
-									{
-										alignItems: 'center',
-										marginTop: s.sm,
-										gap: s.md,
-									},
-								]}
-							>
-								<View style={{ flex: 1 }}>
-									<ThemedText variant="caption" color={c.onSurfaceVariant}>
-										{item.quantity}{' '}
-										{t('invoice.unitsAt', {
-											price: formatCurrency(item.rate_per_unit),
-										})}
-									</ThemedText>
-									{!!item.discount && item.discount > 0 && (
-										<ThemedText
-											variant="caption"
-											color={c.error}
-											style={{ marginTop: SPACING_PX.xxs }}
-										>
-											{t('invoice.discountAmount')}:{' '}
-											{formatCurrency(item.discount)}
+										<ThemedText variant="caption" color={c.error}>
+											{t('invoice.remove')}
 										</ThemedText>
-									)}
+									</TouchableOpacity>
 								</View>
-								<TouchableOpacity
-									onPress={() => removeLineItem(index)}
-									accessibilityRole="button"
-									accessibilityLabel={`remove-line-item-${index}`}
-									accessibilityHint={t('invoice.removeHint', {
-										name: item.design_name,
-									})}
-									style={{
-										paddingHorizontal: s.sm,
-										paddingVertical: SPACING_PX.xxs,
-										borderRadius: r.sm,
-										backgroundColor: c.surfaceVariant,
-									}}
-								>
-									<ThemedText variant="caption" color={c.error}>
-										{t('invoice.remove')}
-									</ThemedText>
-								</TouchableOpacity>
 							</View>
-						</View>
-					))}
+						);
+					})}
 				</Card>
 			)}
 

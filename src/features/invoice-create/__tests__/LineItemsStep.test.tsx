@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
-import { LineItemsStep } from '../LineItemsStep';
+import { calculateLineItemTotals, LineItemsStep } from '../LineItemsStep';
 import { renderWithTheme } from '@/__tests__/utils/renderWithTheme';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import type { InventoryItem } from '@/src/types/inventory';
@@ -64,6 +64,61 @@ function makeProps(overrides = {}) {
 }
 
 beforeEach(() => jest.clearAllMocks());
+
+describe('calculateLineItemTotals', () => {
+	function makeLine(index: number): InvoiceLineItemInput {
+		return {
+			design_name: `Tile ${index}`,
+			quantity: index % 2 === 0 ? 2.5 : 1,
+			rate_per_unit: 100 + index,
+			discount: index % 3 === 0 ? 5 : 0,
+			gst_rate: index % 2 === 0 ? 18 : 12,
+			item_id: `item-${index}`,
+		};
+	}
+
+	it('calculates subtotal, GST, and grand total in one helper for 10-line invoices', () => {
+		const lineItems = Array.from({ length: 10 }, (_, index) => makeLine(index + 1));
+
+		expect(calculateLineItemTotals(lineItems)).toEqual({
+			subtotal: 1835,
+			gst: 299.4,
+			grandTotal: 2134.4,
+		});
+	});
+
+	it('calculates subtotal, GST, and grand total in one helper for 50-line invoices', () => {
+		const lineItems = Array.from({ length: 50 }, (_, index) => makeLine(index + 1));
+
+		expect(calculateLineItemTotals(lineItems)).toEqual({
+			subtotal: 10920,
+			gst: 1780.5,
+			grandTotal: 12700.5,
+		});
+	});
+
+	it('updates totals when quantity, rate, discount, or GST rate changes', () => {
+		const base = [sampleLineItem];
+
+		expect(calculateLineItemTotals(base)).toEqual({
+			subtotal: 15000,
+			gst: 2700,
+			grandTotal: 17700,
+		});
+		expect(calculateLineItemTotals([{ ...sampleLineItem, quantity: 2.5 }]).grandTotal).toBe(
+			4425,
+		);
+		expect(
+			calculateLineItemTotals([{ ...sampleLineItem, rate_per_unit: 1000 }]).grandTotal,
+		).toBe(11800);
+		expect(calculateLineItemTotals([{ ...sampleLineItem, discount: 100 }]).grandTotal).toBe(
+			17582,
+		);
+		expect(calculateLineItemTotals([{ ...sampleLineItem, gst_rate: 5 }]).grandTotal).toBe(
+			15750,
+		);
+	});
+});
 
 describe('LineItemsStep', () => {
 	it('renders Line Items heading', () => {

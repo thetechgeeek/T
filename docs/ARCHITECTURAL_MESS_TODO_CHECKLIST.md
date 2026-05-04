@@ -682,16 +682,16 @@ Audit refs: Part III sections 14 through 16, Part XIII sections 49 through 54, R
 
 ### PERF-003 Optimize Line Item Totals
 
-- [ ] Wrap subtotal/GST/grand-total calculation in `useMemo`.
-- [ ] Compute line subtotal once per line item.
-- [ ] Compute subtotal and GST in a single pass.
-- [ ] Preserve exact 2-decimal financial rounding rules.
-- [ ] Add tests for 10-line and 50-line invoices if the calculation helper is extracted.
-- [ ] Verify calculations update correctly after quantity changes.
-- [ ] Verify calculations update correctly after rate changes.
-- [ ] Verify calculations update correctly after discount changes.
-- [ ] Verify calculations update correctly after GST-rate changes.
-- [ ] Mark done only when every keystroke does no duplicate reduction work.
+- [x] Wrap subtotal/GST/grand-total calculation in `useMemo`.
+- [x] Compute line subtotal once per line item.
+- [x] Compute subtotal and GST in a single pass.
+- [x] Preserve exact 2-decimal financial rounding rules.
+- [x] Add tests for 10-line and 50-line invoices if the calculation helper is extracted.
+- [x] Verify calculations update correctly after quantity changes.
+- [x] Verify calculations update correctly after rate changes.
+- [x] Verify calculations update correctly after discount changes.
+- [x] Verify calculations update correctly after GST-rate changes.
+- [x] Mark done only when every keystroke does no duplicate reduction work.
 
 ### PERF-004 Add React.memo To High-Value Molecules
 
