@@ -180,27 +180,27 @@ Phase 0.
       to cast quantities to `NUMERIC`.
 - [x] Search all Supabase SQL for `quantity')::INTEGER`, `quantity::INTEGER`, and `quantity_change INTEGER`.
 - [x] Search service and repository code for assumptions that stock quantities are integers.
-- [ ] Update TypeScript database types after the migration.
-- [ ] Add a database test for selling `2.5` units and deducting exactly `2.5`.
+- [x] Update TypeScript database types after the migration.
+- [x] Add a database test for selling `2.5` units and deducting exactly `2.5`.
 - [x] Add a service-level test for fractional invoice quantities flowing through stock deduction.
-- [ ] Add a reconciliation query that detects invoices with fractional quantities created before the fix.
-- [ ] Produce a one-time backfill or reconciliation plan for affected inventory records.
-- [ ] Document the customer-support path for correcting inventory drift caused by historical truncation.
+- [x] Add a reconciliation query that detects invoices with fractional quantities created before the fix.
+- [x] Produce a one-time backfill or reconciliation plan for affected inventory records.
+- [x] Document the customer-support path for correcting inventory drift caused by historical truncation.
 - [x] Add an alert or migration note that this is a P0 data-integrity remediation.
-- [ ] Mark the task done only after database, TypeScript, service, and regression-test layers agree.
+- [x] Mark the task done only after database, TypeScript, service, and regression-test layers agree.
 
 ### P0-002 Broken Purchase Drill-Down From Reports
 
 - [x] Confirm the current purchase detail route file path.
 - [x] Confirm the route currently produced by `app/(app)/reports/all-transactions.tsx`.
 - [x] Replace `/(app)/finance/purchase/${p.id}` with the actual plural route shape if still broken.
-- [ ] Add a route-construction helper or typed route constant for finance purchase detail paths.
+- [x] Add a route-construction helper or typed route constant for finance purchase detail paths.
 - [x] Search the app for singular `finance/purchase/` route strings.
-- [ ] Search the app for other hardcoded route strings that differ from filesystem route names.
+- [x] Search the app for other hardcoded route strings that differ from filesystem route names.
 - [x] Add a unit test for all-transactions purchase-row navigation.
-- [ ] Add an e2e or UI navigation smoke test that opens a purchase from reports.
-- [ ] Include this case in the top 10 business-critical navigation regression suite.
-- [ ] Mark the task done only after the report drill-down reaches the detail screen in test.
+- [x] Add an e2e or UI navigation smoke test that opens a purchase from reports.
+- [x] Include this case in the top 10 business-critical navigation regression suite.
+- [x] Mark the task done only after the report drill-down reaches the detail screen in test.
 
 ### P0-003 False Security Promise In Settings
 
@@ -209,13 +209,15 @@ Phase 0.
 - [x] Confirm whether auto-lock enforcement exists anywhere.
 - [x] Remove the biometric toggle if enforcement is not being implemented in the same release.
 - [x] Remove the auto-lock timer UI if enforcement is not being implemented in the same release.
-- [ ] If implementing biometrics, wire a real local-authentication challenge before sensitive app access.
-- [ ] If implementing auto-lock, define the lock trigger on background, idle timeout, and app resume.
-- [ ] If implementing auto-lock, persist only safe lock metadata outside secure storage.
-- [ ] Add tests proving toggles change actual enforcement behavior, not only local component state.
+- [x] Not applicable this release: biometric enforcement was not implemented because the false UI was
+      removed instead.
+- [x] Not applicable this release: auto-lock triggers were not implemented because the false UI was
+      removed instead.
+- [x] Not applicable this release: no new auto-lock metadata is persisted because the feature is hidden.
+- [x] Add tests proving removed security controls cannot drift as local-only component state.
 - [x] Add copy that avoids implying protection until enforcement is active.
-- [ ] Add product/release approval before any security control is exposed in live settings.
-- [ ] Mark the task done only after the UI and enforcement path cannot drift independently.
+- [x] Add product/release approval before any security control is exposed in live settings.
+- [x] Mark the task done only after the UI and enforcement path cannot drift independently.
 
 ### P0-004 Silent Supabase Misconfiguration Failure
 
@@ -228,23 +230,24 @@ Phase 0.
 - [x] Add a unit test proving missing URL throws the expected configuration error.
 - [x] Add a unit test proving missing anon key throws the expected configuration error.
 - [x] Add a test proving repositories cannot call `.from()` on an empty object.
-- [ ] Add an app startup health check that validates Supabase configuration once.
+- [x] Add an app startup health check that validates Supabase configuration once.
 - [x] Update developer docs to explain required env variables and failure modes.
-- [ ] Mark the task done only after no runtime path can export a fake Supabase client.
+- [x] Mark the task done only after no runtime path can export a fake Supabase client.
 
 ### P0-005 Immediate Security Scanning Gate
 
 - [x] Add `npm audit --audit-level=high` to CI as a required check.
 - [x] Decide whether the first security gate should fail immediately or run in reporting mode for one
       short remediation branch.
-- [ ] Run `npm audit` locally and store the current vulnerability baseline in the security issue.
-- [ ] Apply `npm audit fix` for fixable lodash and forge vulnerabilities if compatible.
-- [ ] Create explicit issues for no-fix vulnerabilities, especially `xlsx` and Handlebars chains.
-- [ ] Add secret scanning to CI before the next release branch.
+- [x] Run `npm audit` locally and store the current vulnerability baseline in the security issue.
+- [!] Apply `npm audit fix` for fixable lodash and forge vulnerabilities if compatible; dry-run showed the
+  remaining fixes are entangled with peer-resolution, Node engine, or major Expo/Jest movements.
+- [x] Create explicit issues for no-fix vulnerabilities, especially `xlsx` and Handlebars chains.
+- [x] Add secret scanning to CI before the next release branch.
 - [x] Confirm `.env.test` remains ignored.
 - [x] Add `.env.example` with safe placeholder values.
-- [ ] Move all CI test credentials into GitHub Secrets or the chosen secret manager.
-- [ ] Mark the task done only after CI fails on new high/critical vulnerabilities or leaked secrets.
+- [x] Move all CI test credentials into GitHub Secrets or the chosen secret manager.
+- [x] Mark the task done only after CI fails on new high/critical vulnerabilities or leaked secrets.
 
 ## Phase 1: Tooling, Scripts, And Meta-Architecture
 

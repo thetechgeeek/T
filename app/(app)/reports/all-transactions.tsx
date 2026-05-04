@@ -22,6 +22,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@easydesign/design-system/foundation';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
 import { FONT_SIZE } from '@easydesign/design-system/foundation';
+import { appRoutes } from '@/src/navigation/routes';
 
 const ICON_CIRCLE_SIZE = SPACING_PX['2xl'] + SPACING_PX.xs + SPACING_PX.xxs;
 const ICON_CIRCLE_RADIUS = ICON_CIRCLE_SIZE / 2;
@@ -76,7 +77,7 @@ interface TxRow {
 	date: string;
 	amount: number;
 	isInflow: boolean;
-	route?: string;
+	route?: Href;
 }
 
 export default function AllTransactionsScreen() {
@@ -120,7 +121,7 @@ export default function AllTransactionsScreen() {
 					date: inv.invoice_date,
 					amount: inv.grand_total,
 					isInflow: true,
-					route: `/(app)/invoices/${inv.id}`,
+					route: appRoutes.invoices.detail(inv.id),
 				});
 			});
 
@@ -136,7 +137,7 @@ export default function AllTransactionsScreen() {
 					date: p.purchase_date,
 					amount: p.grand_total,
 					isInflow: false,
-					route: `/(app)/finance/purchases/${p.id}`,
+					route: appRoutes.finance.purchases.detail(p.id),
 				});
 			});
 
@@ -205,7 +206,7 @@ export default function AllTransactionsScreen() {
 					styles.txRow,
 					{ borderBottomColor: c.border, borderBottomWidth: StyleSheet.hairlineWidth },
 				]}
-				onPress={() => item.route && router.push(item.route as Href)}
+				onPress={() => item.route && router.push(item.route)}
 				accessibilityRole="button"
 			>
 				<View
