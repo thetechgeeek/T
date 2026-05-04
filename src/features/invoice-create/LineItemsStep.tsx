@@ -393,7 +393,7 @@ export function LineItemsStep({
 										keyboardType="numeric"
 										onChangeText={setInputQuantity}
 										error={
-											parseInt(inputQuantity) > selectedItem.box_count
+											parseFloat(inputQuantity) > selectedItem.box_count
 												? t('invoice.exceedsStock', {
 														count: selectedItem.box_count,
 													})

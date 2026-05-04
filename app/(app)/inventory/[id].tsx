@@ -195,6 +195,7 @@ export default function ItemDetailScreen() {
 			header={
 				<ScreenHeader
 					title={item.design_name}
+					titleAccessibilityLabel="inventory-detail-screen"
 					rightElement={
 						<TouchableOpacity
 							style={{ padding: s.xs }}

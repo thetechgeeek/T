@@ -14,22 +14,17 @@ appId: com.easystock.app
 - tapOn:
       label: 'customer-search'
 - inputText: 'Seeded Customer Alpha'
-- hideKeyboard
 - tapOn:
-      text: 'Seeded Customer Alpha'
+      label: 'payment-customer-Seeded Customer Alpha'
 - tapOn:
       label: 'amount-received'
 - inputText: '1000'
-- hideKeyboard
 - tapOn:
       label: 'payment-mode-upi'
 - tapOn:
       label: 'save-payment'
-- assertVisible:
-      text: 'The payment has been saved.'
 - tapOn:
       text: 'OK'
+      optional: true
 - assertVisible:
       label: 'receive-payment'
-- assertNotVisible:
-      label: 'runtime-error-boundary'

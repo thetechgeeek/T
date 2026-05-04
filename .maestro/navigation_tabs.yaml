@@ -1,7 +1,7 @@
 appId: com.easystock.app
 ---
 # E2E-012: Tab navigation — all bottom tabs accessible
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - assertVisible:
       label: 'dashboard-screen'
 - takeScreenshot: nav_dashboard

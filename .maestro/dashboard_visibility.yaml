@@ -1,6 +1,6 @@
 appId: com.easystock.app
 ---
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - assertVisible:
       label: 'dashboard-screen'
 - assertVisible:

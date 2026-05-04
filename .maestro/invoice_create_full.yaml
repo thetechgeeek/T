@@ -1,9 +1,11 @@
 appId: com.easystock.app
 ---
 # E2E-003: Full invoice creation wizard
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - tapOn:
       label: 'tab-invoices'
+- assertVisible:
+      label: 'invoices-screen'
 - tapOn:
       label: 'new-invoice-button'
 - assertVisible:
@@ -14,7 +16,9 @@ appId: com.easystock.app
 - tapOn:
       label: 'customer-name-input'
 - inputText: 'E2E Test Customer'
-- hideKeyboard
+- tapOn:
+      label: 'customer-phone-input'
+- inputText: '9876500097'
 - tapOn:
       label: 'invoice-next-button'
 
@@ -24,29 +28,31 @@ appId: com.easystock.app
 - takeScreenshot: invoice_step2_items
 - tapOn:
       label: 'add-item-button'
-- assertVisible: 'GLOSSY WHITE 60x60'
-- tapOn: 'GLOSSY WHITE 60x60'
+- tapOn:
+      label: 'GLOSSY WHITE 60x60'
 - tapOn:
       label: 'item-quantity-input'
 - eraseText
 - inputText: '5'
-- hideKeyboard
 - tapOn:
       label: 'confirm-add-item'
 
 # Verify item added
-- assertVisible: 'GLOSSY WHITE 60x60'
+- assertVisible:
+      label: 'remove-line-item-0'
 - tapOn:
       label: 'invoice-next-button'
 
 # Step 3: Review
 - assertVisible:
       label: 'invoice-step-3'
-- assertVisible: 'E2E Test Customer'
-- assertVisible: 'GLOSSY WHITE 60x60'
+- assertVisible:
+      label: 'balance-due-indicator'
 - takeScreenshot: invoice_step3_review
 
 # Generate
+- tapOn:
+      label: 'paid-in-full-chip'
 - tapOn:
       label: 'generate-invoice-button'
 - assertVisible:

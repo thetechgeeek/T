@@ -136,7 +136,7 @@ export const inventoryService = {
 		referenceType?: string,
 		referenceId?: UUID,
 	) {
-		if (quantityChange <= 0) {
+		if (!Number.isFinite(quantityChange) || quantityChange === 0) {
 			throw new ValidationError('Quantity must be positive', { quantity_change: ['min'] });
 		}
 		const { data, error } = await supabase.rpc('perform_stock_operation_v1', {

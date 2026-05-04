@@ -83,17 +83,27 @@ export const FormField = forwardRef<NativeTextInput, FormFieldProps>(
 					label={undefined}
 					warningText={undefined}
 				/>
-				{/* Visual error/helper — announced via input hint, kept visual-only */}
-				{!!footerCopy && (
-					<ThemedText
-						importantForAccessibility="no"
-						variant="caption"
-						color={footerColor}
-						style={{ marginTop: theme.spacing.xs }}
-					>
-						{footerCopy}
-					</ThemedText>
-				)}
+				{/* Error copy stays visible and is also exposed for automation; helper text remains visual-only. */}
+				{!!footerCopy &&
+					(error ? (
+						<ThemedText
+							accessibilityRole="alert"
+							variant="caption"
+							color={footerColor}
+							style={{ marginTop: theme.spacing.xs }}
+						>
+							{footerCopy}
+						</ThemedText>
+					) : (
+						<ThemedText
+							importantForAccessibility="no"
+							variant="caption"
+							color={footerColor}
+							style={{ marginTop: theme.spacing.xs }}
+						>
+							{footerCopy}
+						</ThemedText>
+					))}
 			</View>
 		);
 	},

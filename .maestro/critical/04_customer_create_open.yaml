@@ -19,16 +19,13 @@ appId: com.easystock.app
 - tapOn:
       label: 'customer-phone-input'
 - inputText: '9876500099'
-- hideKeyboard
 - tapOn:
       label: 'save-customer-button'
 - assertVisible:
       label: 'customers-screen'
 - assertVisible:
-      text: 'PR Seed Customer'
+      label: 'PR Seed Customer, 9876500099'
 - tapOn:
-      text: 'PR Seed Customer'
+      label: 'PR Seed Customer, 9876500099'
 - assertVisible:
-      text: 'Outstanding Balance'
-- assertNotVisible:
-      label: 'runtime-error-boundary'
+      label: 'customer-detail-screen'

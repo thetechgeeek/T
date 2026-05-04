@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
 	View,
 	StyleSheet,
-	Alert,
-	TouchableOpacity,
 	Platform,
+	TouchableOpacity,
 	TextInput as NativeTextInput,
 } from 'react-native';
-import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import {
 	GLASS_WHITE_LIGHT,
@@ -20,74 +18,56 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@easydesign/design-system';
 import { Button } from '@easydesign/design-system';
 import { ThemedText } from '@easydesign/design-system';
-import { PhoneInput } from '@easydesign/design-system';
 import { AppError } from '@/src/errors';
 
 export default function LoginScreen() {
 	const { c, s, r, typo } = useThemeTokens();
 	const { t } = useLocale();
-	const { sendOtp, login, loading } = useAuthStore(
-		useShallow((s) => ({ sendOtp: s.sendOtp, login: s.login, loading: s.loading })),
+	const { login, loading } = useAuthStore(
+		useShallow((s) => ({ login: s.login, loading: s.loading })),
 	);
-	const router = useRouter();
-	const [phone, setPhone] = useState('');
-	const [devEmail, setDevEmail] = useState('');
-	const [devPassword, setDevPassword] = useState('');
-	const [devError, setDevError] = useState('');
+	const emailInputRef = useRef<NativeTextInput | null>(null);
+	const passwordInputRef = useRef<NativeTextInput | null>(null);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [loginError, setLoginError] = useState('');
 
-	const showDevLogin = __DEV__;
-	const canSubmitDevLogin = devEmail.trim().length > 0 && devPassword.length > 0;
-	const hideDevPasswordOnThisPlatform = Platform.OS !== 'ios';
-	const useStaticDevAuthLayout = showDevLogin && Platform.OS === 'ios';
+	const runningIosDevBuild = __DEV__ && Platform.OS === 'ios';
+	const canSubmitLogin = email.trim().length > 0 && password.length > 0;
+	const useStaticAuthLayout = runningIosDevBuild;
+	const disableNativeCredentialPrompts = runningIosDevBuild;
+	const shouldMaskPassword = !runningIosDevBuild;
+	const allowPasswordSubmitKey = true;
 
-	const handleDevEmailChange = (value: string) => {
-		setDevEmail(value);
-		if (devError) {
-			setDevError('');
+	const handleEmailChange = (value: string) => {
+		setEmail(value);
+		if (loginError) {
+			setLoginError('');
 		}
 	};
 
-	const handleDevPasswordChange = (value: string) => {
-		setDevPassword(value);
-		if (devError) {
-			setDevError('');
+	const handlePasswordChange = (value: string) => {
+		setPassword(value);
+		if (loginError) {
+			setLoginError('');
 		}
 	};
 
-	const handleSendOtp = async () => {
-		if (phone.length < 10) {
-			Alert.alert(t('common.error'), t('auth.errorInvalidPhone'));
-			return;
-		}
-		try {
-			const e164Phone = `+91${phone}`;
-			await sendOtp(e164Phone);
-			router.push({
-				pathname: '/(auth)/verify',
-				params: { phone: e164Phone },
-			});
-		} catch (e: unknown) {
-			Alert.alert(
-				t('auth.errorOtpFailed'),
-				e instanceof AppError
-					? e.userMessage
-					: e instanceof Error
-						? e.message
-						: t('common.unexpectedError'),
-			);
-		}
-	};
-
-	const handleDevLogin = async () => {
-		if (!canSubmitDevLogin || loading) {
+	const handleLogin = async () => {
+		if (loading) {
 			return;
 		}
 
-		setDevError('');
+		if (!canSubmitLogin) {
+			setLoginError(t('auth.errorMissingFields'));
+			return;
+		}
+
+		setLoginError('');
 		try {
-			await login(devEmail.trim(), devPassword);
+			await login(email.trim(), password);
 		} catch (e: unknown) {
-			setDevError(
+			setLoginError(
 				e instanceof AppError
 					? e.userMessage
 					: e instanceof Error
@@ -99,10 +79,10 @@ export default function LoginScreen() {
 
 	return (
 		<Screen
-			scrollable={!useStaticDevAuthLayout}
+			scrollable={!useStaticAuthLayout}
 			safeAreaEdges={['top']}
 			scrollViewProps={
-				useStaticDevAuthLayout
+				useStaticAuthLayout
 					? undefined
 					: {
 							keyboardShouldPersistTaps: 'always',
@@ -170,143 +150,101 @@ export default function LoginScreen() {
 				<ThemedText
 					style={{ color: c.onSurfaceVariant, textAlign: 'center', marginBottom: s.xl }}
 				>
-					जारी रखने के लिए अपना मोबाइल नंबर भरें
+					{t('auth.subtitle')}
 				</ThemedText>
 
-				{/* Phone Input */}
-				<PhoneInput value={phone} onChange={setPhone} />
+				<View>
+					<ThemedText variant="label" style={{ color: c.onSurface, marginBottom: s.xs }}>
+						{t('auth.email')}
+					</ThemedText>
+					<NativeTextInput
+						ref={emailInputRef}
+						testID="email-input"
+						placeholder={t('auth.placeholders.email')}
+						placeholderTextColor={c.placeholder}
+						value={email}
+						onChangeText={handleEmailChange}
+						autoCapitalize="none"
+						autoCorrect={false}
+						spellCheck={false}
+						keyboardType="email-address"
+						autoComplete={disableNativeCredentialPrompts ? 'off' : 'email'}
+						textContentType={disableNativeCredentialPrompts ? 'none' : 'emailAddress'}
+						importantForAutofill={disableNativeCredentialPrompts ? 'no' : 'auto'}
+						accessibilityLabel="email-input"
+						style={[
+							styles.input,
+							{
+								color: c.onSurface,
+								borderColor: c.border,
+								backgroundColor: c.surface,
+								borderRadius: r.md,
+								fontSize: typo.sizes.md,
+								paddingHorizontal: s.md,
+								paddingVertical: s.sm,
+							},
+						]}
+					/>
+				</View>
 
-				{/* Send OTP Button */}
+				<View style={{ marginTop: s.md }}>
+					<ThemedText variant="label" style={{ color: c.onSurface, marginBottom: s.xs }}>
+						{t('auth.password')}
+					</ThemedText>
+					<NativeTextInput
+						ref={passwordInputRef}
+						testID="password-input"
+						placeholder={t('auth.placeholders.password')}
+						placeholderTextColor={c.placeholder}
+						value={password}
+						onChangeText={handlePasswordChange}
+						autoCapitalize="none"
+						autoCorrect={false}
+						spellCheck={false}
+						autoComplete={disableNativeCredentialPrompts ? 'off' : 'password'}
+						textContentType={disableNativeCredentialPrompts ? 'none' : 'password'}
+						importantForAutofill={disableNativeCredentialPrompts ? 'no' : 'auto'}
+						secureTextEntry={shouldMaskPassword}
+						returnKeyType="go"
+						onSubmitEditing={
+							allowPasswordSubmitKey ? () => void handleLogin() : undefined
+						}
+						accessibilityLabel="password-input"
+						style={[
+							styles.input,
+							{
+								color: c.onSurface,
+								borderColor: c.border,
+								backgroundColor: c.surface,
+								borderRadius: r.md,
+								fontSize: typo.sizes.md,
+								paddingHorizontal: s.md,
+								paddingVertical: s.sm,
+							},
+						]}
+					/>
+				</View>
+
+				{loginError ? (
+					<ThemedText
+						testID="login-error"
+						variant="caption"
+						style={{ color: c.error, marginTop: s.sm }}
+					>
+						{loginError}
+					</ThemedText>
+				) : null}
+
 				<Button
-					title={t('auth.sendOtp')}
-					testID="send-otp-button"
-					onPress={handleSendOtp}
+					title={t('auth.signIn')}
+					accessibilityLabel="sign-in-button"
+					testID="sign-in-button"
+					onPress={handleLogin}
 					loading={loading}
-					disabled={phone.length < 10}
+					disabled={!canSubmitLogin}
 					size="lg"
 					style={{ marginTop: s.xl }}
 				/>
-
-				{showDevLogin ? (
-					<View
-						testID="dev-login-panel"
-						style={[
-							styles.devPanel,
-							{
-								marginTop: s['2xl'],
-								padding: s.lg,
-								borderRadius: r.lg,
-								borderColor: c.border,
-								backgroundColor: c.surface,
-							},
-						]}
-					>
-						<ThemedText variant="label" weight="bold" style={{ color: c.primary }}>
-							Dev only
-						</ThemedText>
-						<ThemedText
-							variant="caption"
-							style={{ color: c.onSurfaceVariant, marginTop: s.xs }}
-						>
-							Use email and password in simulator or local development builds when SMS
-							OTP is unavailable.
-						</ThemedText>
-
-						<View style={{ marginTop: s.lg }}>
-							<ThemedText
-								variant="label"
-								style={{ color: c.onSurface, marginBottom: s.xs }}
-							>
-								Email
-							</ThemedText>
-							<NativeTextInput
-								testID="dev-email-input"
-								accessibilityLabel="email-input"
-								placeholder="dev@example.com"
-								placeholderTextColor={c.placeholder}
-								value={devEmail}
-								onChangeText={handleDevEmailChange}
-								autoCapitalize="none"
-								autoCorrect={false}
-								spellCheck={false}
-								keyboardType="email-address"
-								autoComplete="off"
-								textContentType="none"
-								importantForAutofill="no"
-								style={[
-									styles.devInput,
-									{
-										color: c.onSurface,
-										borderColor: c.border,
-										backgroundColor: c.surface,
-										borderRadius: r.md,
-										fontSize: typo.sizes.md,
-										paddingHorizontal: s.md,
-										paddingVertical: s.sm,
-									},
-								]}
-							/>
-						</View>
-
-						<View style={{ marginTop: s.md }}>
-							<ThemedText
-								variant="label"
-								style={{ color: c.onSurface, marginBottom: s.xs }}
-							>
-								Password
-							</ThemedText>
-							<NativeTextInput
-								testID="dev-password-input"
-								accessibilityLabel="password-input"
-								placeholder="Enter password"
-								placeholderTextColor={c.placeholder}
-								value={devPassword}
-								onChangeText={handleDevPasswordChange}
-								autoCapitalize="none"
-								autoCorrect={false}
-								spellCheck={false}
-								autoComplete="off"
-								textContentType="none"
-								importantForAutofill="no"
-								secureTextEntry={hideDevPasswordOnThisPlatform}
-								style={[
-									styles.devInput,
-									{
-										color: c.onSurface,
-										borderColor: c.border,
-										backgroundColor: c.surface,
-										borderRadius: r.md,
-										fontSize: typo.sizes.md,
-										paddingHorizontal: s.md,
-										paddingVertical: s.sm,
-									},
-								]}
-							/>
-						</View>
-
-						{devError ? (
-							<ThemedText
-								testID="dev-login-error"
-								variant="caption"
-								style={{ color: c.error, marginTop: s.sm }}
-							>
-								{devError}
-							</ThemedText>
-						) : null}
-
-						<Button
-							title="Dev Sign In"
-							accessibilityLabel="sign-in-button"
-							testID="dev-login-button"
-							onPress={handleDevLogin}
-							loading={loading}
-							disabled={!canSubmitDevLogin}
-							variant="secondary"
-							size="md"
-							style={{ marginTop: s.lg }}
-						/>
-					</View>
-				) : null}
 
 				{/* Help text */}
 				<View style={[styles.helpBlock, { marginTop: s['3xl'] }]}>
@@ -337,8 +275,7 @@ const styles = StyleSheet.create({
 	appName: { fontWeight: '800' },
 	subtitle: { textAlign: 'center' },
 	form: { flex: 1 },
-	devPanel: { borderWidth: 1 },
-	devInput: {
+	input: {
 		borderWidth: 1,
 	},
 	helpBlock: { alignItems: 'center' },

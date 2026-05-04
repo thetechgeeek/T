@@ -4,9 +4,9 @@ CREATE TABLE stock_operations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   item_id UUID NOT NULL REFERENCES inventory_items(id) ON DELETE CASCADE,
   operation_type stock_op_type NOT NULL,
-  quantity_change INTEGER NOT NULL,
-  previous_quantity INTEGER,
-  new_quantity INTEGER,
+  quantity_change NUMERIC NOT NULL,
+  previous_quantity NUMERIC,
+  new_quantity NUMERIC,
   reason TEXT,
   reference_type TEXT CHECK (reference_type IN ('invoice', 'purchase', 'adjustment', 'transfer', 'return')),
   reference_id UUID,
@@ -21,15 +21,15 @@ CREATE INDEX idx_stock_ops_item_date ON stock_operations (item_id, created_at DE
 CREATE OR REPLACE FUNCTION perform_stock_operation(
   p_item_id UUID,
   p_operation_type stock_op_type,
-  p_quantity_change INTEGER,
+  p_quantity_change NUMERIC,
   p_reason TEXT DEFAULT NULL,
   p_reference_type TEXT DEFAULT NULL,
   p_reference_id UUID DEFAULT NULL
 )
-RETURNS INTEGER AS $$
+RETURNS NUMERIC AS $$
 DECLARE
-  v_current_qty INTEGER;
-  v_new_qty INTEGER;
+  v_current_qty NUMERIC;
+  v_new_qty NUMERIC;
 BEGIN
   -- Lock the row for update
   SELECT box_count INTO v_current_qty

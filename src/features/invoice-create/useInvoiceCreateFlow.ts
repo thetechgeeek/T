@@ -82,7 +82,7 @@ export function useInvoiceCreateFlow() {
 	const addLineItem = useCallback(() => {
 		if (!selectedItem) return;
 
-		const quantity = parseInt(inputQuantity) || 1;
+		const quantity = parseFloat(inputQuantity) || 1;
 
 		// UI-level stock validation
 		if (quantity > selectedItem.box_count) {

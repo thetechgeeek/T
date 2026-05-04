@@ -111,7 +111,10 @@ describe('inventoryService', () => {
 		it('throws ValidationError when supabase returns 23502 (not null violation)', async () => {
 			const builder = makeBuilder({
 				data: null,
-				error: { message: 'Required', code: '23502', column: 'name' } as any,
+				error: { message: 'Required', code: '23502', column: 'name' } as {
+					message: string;
+					code?: string;
+				},
 			});
 			(supabase.from as jest.Mock).mockReturnValue(builder);
 
@@ -227,6 +230,27 @@ describe('inventoryService', () => {
 			).rejects.toBeInstanceOf(ValidationError);
 		});
 
+		it('allows fractional negative stock_out deltas', async () => {
+			(supabase.rpc as jest.Mock).mockResolvedValueOnce({ data: 7.5, error: null });
+
+			const result = await inventoryService.performStockOperation(
+				'item1',
+				'stock_out',
+				-2.5,
+				'Fractional sale',
+			);
+
+			expect(supabase.rpc).toHaveBeenCalledWith('perform_stock_operation_v1', {
+				p_item_id: 'item1',
+				p_operation_type: 'stock_out',
+				p_quantity_change: -2.5,
+				p_reason: 'Fractional sale',
+				p_reference_id: null,
+				p_reference_type: null,
+			});
+			expect(result).toBe(7.5);
+		});
+
 		it('throws AppError with INSUFFICIENT_STOCK when RPC returns P0001 with stock message', async () => {
 			(supabase.rpc as jest.Mock).mockResolvedValue({
 				data: null,
@@ -236,8 +260,8 @@ describe('inventoryService', () => {
 			try {
 				await inventoryService.performStockOperation('item1', 'stock_out', 100);
 				fail('Should have thrown');
-			} catch (err: any) {
-				expect(err.code).toBe('INSUFFICIENT_STOCK');
+			} catch (err: unknown) {
+				expect((err as { code?: string }).code).toBe('INSUFFICIENT_STOCK');
 			}
 		});
 

@@ -76,7 +76,7 @@ BEGIN
       PERFORM perform_stock_operation(
         (v_item->>'item_id')::UUID,
         'stock_out',
-        -((v_item->>'quantity')::INTEGER),
+        -((v_item->>'quantity')::NUMERIC),
         'Invoice #' || v_invoice_number,
         'invoice',
         v_invoice_id

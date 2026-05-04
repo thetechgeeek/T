@@ -72,6 +72,26 @@ describe('StockOpScreen', () => {
 		});
 	});
 
+	it('submits fractional stock quantities without truncating them', async () => {
+		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
+
+		await waitFor(() => getByPlaceholderText('e.g. 50'));
+
+		fireEvent.changeText(getByPlaceholderText('e.g. 50'), '2.5');
+		fireEvent.changeText(getByPlaceholderText(/broken|reason/i), 'Fractional adjustment');
+
+		fireEvent.press(getByText('Confirm'));
+
+		await waitFor(() => {
+			expect(mockPerformStockOperation).toHaveBeenCalledWith(
+				'item-123',
+				'stock_in',
+				2.5,
+				'Fractional adjustment',
+			);
+		});
+	});
+
 	it('successfully submits stock out operation', async () => {
 		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_out' });
 		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);

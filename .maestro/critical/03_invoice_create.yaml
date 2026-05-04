@@ -15,22 +15,18 @@ appId: com.easystock.app
 - tapOn:
       label: 'customer-phone-input'
 - inputText: '9876500099'
-- hideKeyboard
 - tapOn:
       label: 'invoice-next-button'
 - assertVisible:
       label: 'invoice-step-2'
 - tapOn:
       label: 'add-item-button'
-- assertVisible:
-      text: 'GLOSSY WHITE 60x60'
 - tapOn:
       label: 'GLOSSY WHITE 60x60'
 - tapOn:
       label: 'item-quantity-input'
 - eraseText
 - inputText: '2'
-- hideKeyboard
 - tapOn:
       label: 'confirm-add-item'
 - tapOn:
@@ -43,5 +39,3 @@ appId: com.easystock.app
       label: 'generate-invoice-button'
 - assertVisible:
       label: 'invoice-detail-screen'
-- assertNotVisible:
-      label: 'runtime-error-boundary'

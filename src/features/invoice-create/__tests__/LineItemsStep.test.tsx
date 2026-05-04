@@ -174,6 +174,19 @@ describe('LineItemsStep', () => {
 		expect(getByText('Exceeds available stock (50)')).toBeTruthy();
 	});
 
+	it('shows stock exceeded error for fractional quantity above stock', () => {
+		const { getByText } = renderWithTheme(
+			<LineItemsStep
+				{...makeProps({
+					isAddingItem: true,
+					selectedItem: sampleItem,
+					inputQuantity: '50.5',
+				})}
+			/>,
+		);
+		expect(getByText('Exceeds available stock (50)')).toBeTruthy();
+	});
+
 	it('shows "No items found." when inventory is empty and not loading', () => {
 		const { getByText } = renderWithTheme(
 			<LineItemsStep

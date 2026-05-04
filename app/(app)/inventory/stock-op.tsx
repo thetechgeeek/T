@@ -80,7 +80,7 @@ export default function StockOpScreen() {
 
 	const onSubmit = async (data: FormData) => {
 		if (!id || !type) return;
-		const qty = parseInt(data.quantity);
+		const qty = parseFloat(data.quantity);
 		if (isNaN(qty) || qty <= 0) {
 			Alert.alert(t('common.errorTitle'), t('inventory.stockOpValidationError'), [
 				{ text: t('common.ok') },

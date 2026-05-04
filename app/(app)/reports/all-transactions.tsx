@@ -136,7 +136,7 @@ export default function AllTransactionsScreen() {
 					date: p.purchase_date,
 					amount: p.grand_total,
 					isInflow: false,
-					route: `/(app)/finance/purchase/${p.id}`,
+					route: `/(app)/finance/purchases/${p.id}`,
 				});
 			});
 

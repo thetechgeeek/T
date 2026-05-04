@@ -318,7 +318,7 @@ export default function AddItemScreen() {
 				brand_name: data.brand_name || undefined,
 				pcs_per_box: data.pcs_per_box ? parseInt(data.pcs_per_box) : undefined,
 				sqft_per_box: data.sqft_per_box ? parseFloat(data.sqft_per_box) : undefined,
-				box_count: data.track_stock ? parseInt(data.box_count || '0') || 0 : 0,
+				box_count: data.track_stock ? parseFloat(data.box_count || '0') || 0 : 0,
 				has_batch_tracking: false,
 				has_serial_tracking: false,
 				selling_price: parseFloat(data.selling_price) || 0,

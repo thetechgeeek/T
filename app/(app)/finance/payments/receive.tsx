@@ -187,6 +187,8 @@ export default function ReceivePaymentScreen() {
 											setSelectedCustomer(customer);
 											setCustomerSearch('');
 										}}
+										accessibilityRole="button"
+										accessibilityLabel={`payment-customer-${customer.name}`}
 									>
 										<ThemedText variant="body">{customer.name}</ThemedText>
 										<ThemedText variant="caption" color={c.onSurfaceVariant}>

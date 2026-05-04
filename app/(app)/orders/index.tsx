@@ -43,6 +43,7 @@ export default function OrdersListScreen() {
 		<AtomicScreen safeAreaEdges={['bottom']}>
 			<ScreenHeader
 				title={t('order.title')}
+				titleAccessibilityLabel="orders-screen"
 				rightElement={
 					<Button
 						title={t('order.importBtn')}

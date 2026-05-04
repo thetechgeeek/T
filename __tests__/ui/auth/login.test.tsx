@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react-native';
-import { Alert, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 
 import LoginScreen from '@/app/(auth)/login';
 import { useAuthStore } from '@/src/stores/authStore';
@@ -12,13 +12,11 @@ jest.mock('@/src/stores/authStore', () => ({
 }));
 
 describe('LoginScreen', () => {
-	const mockSendOtp = jest.fn();
 	const mockLogin = jest.fn();
 
 	beforeEach(() => {
 		jest.clearAllMocks();
 		(useAuthStore as unknown as jest.Mock).mockReturnValue({
-			sendOtp: mockSendOtp,
 			login: mockLogin,
 			loading: false,
 		});
@@ -27,96 +25,67 @@ describe('LoginScreen', () => {
 	it('renders correctly', () => {
 		const { getByPlaceholderText, getByText } = renderWithTheme(<LoginScreen />);
 
-		// Check mobile sequence
-		expect(getByPlaceholderText('XXXXX XXXXX')).toBeTruthy();
-
-		// Check button
-		expect(getByText('sendOtp')).toBeTruthy();
+		expect(getByPlaceholderText('you@example.com')).toBeTruthy();
+		expect(getByPlaceholderText('••••••••')).toBeTruthy();
+		expect(getByText('Sign In')).toBeTruthy();
 	});
 
-	it('renders the dev-only login helper in test/dev builds', () => {
-		const { getByTestId, getByText } = renderWithTheme(<LoginScreen />);
-
-		expect(getByTestId('dev-login-panel')).toBeTruthy();
-		expect(getByText('Dev Sign In')).toBeTruthy();
-	});
-
-	it('uses a static layout for the iOS dev helper so the simulator keeps text focus', () => {
+	it('uses a static layout for the iOS dev login screen so the simulator keeps text focus', () => {
 		const { UNSAFE_queryByType } = renderWithTheme(<LoginScreen />);
 
 		expect(UNSAFE_queryByType(ScrollView)).toBeNull();
 	});
 
-	it('opts the dev helper inputs out of autofill and credential suggestions', () => {
+	it('opts the login inputs out of autofill and credential suggestions in iOS dev builds', () => {
 		const { getByTestId } = renderWithTheme(<LoginScreen />);
 
-		expect(getByTestId('dev-email-input')).toHaveProp('autoComplete', 'off');
-		expect(getByTestId('dev-email-input')).toHaveProp('textContentType', 'none');
-		expect(getByTestId('dev-password-input')).toHaveProp('autoComplete', 'off');
-		expect(getByTestId('dev-password-input')).toHaveProp('textContentType', 'none');
+		expect(getByTestId('email-input')).toHaveProp('autoComplete', 'off');
+		expect(getByTestId('email-input')).toHaveProp('textContentType', 'none');
+		expect(getByTestId('password-input')).toHaveProp('autoComplete', 'off');
+		expect(getByTestId('password-input')).toHaveProp('textContentType', 'none');
 	});
 
-	it('calls sendOtp on submit with +91 prefix', async () => {
-		const { getByPlaceholderText, getByTestId } = renderWithTheme(<LoginScreen />);
+	it('disables sign in until both fields are entered', () => {
+		const { getByTestId } = renderWithTheme(<LoginScreen />);
 
-		fireEvent.changeText(getByPlaceholderText('XXXXX XXXXX'), '9876543210');
-
-		const sendOtpButton = getByTestId('send-otp-button');
-		fireEvent.press(sendOtpButton);
-
-		await waitFor(() => {
-			expect(mockSendOtp).toHaveBeenCalledWith('+919876543210');
-		});
-	});
-
-	it('disables button when phone < 10 digits', () => {
-		const { getByPlaceholderText, getByTestId } = renderWithTheme(<LoginScreen />);
-
-		fireEvent.changeText(getByPlaceholderText('XXXXX XXXXX'), '12345');
-		const button = getByTestId('send-otp-button');
-
-		// In React Native, accessibilityState.disabled is common for testing button state
+		const button = getByTestId('sign-in-button');
 		expect(button.props.accessibilityState.disabled).toBe(true);
 	});
 
-	it('calls login when dev credentials are submitted', async () => {
+	it('calls login when credentials are submitted', async () => {
 		const { getByTestId } = renderWithTheme(<LoginScreen />);
 
-		fireEvent.changeText(getByTestId('dev-email-input'), 'dev@easydesign.test');
-		fireEvent.changeText(getByTestId('dev-password-input'), 'TestPass123!');
-		fireEvent.press(getByTestId('dev-login-button'));
+		fireEvent.changeText(getByTestId('email-input'), 'dev@easydesign.test');
+		fireEvent.changeText(getByTestId('password-input'), 'TestPass123!');
+		fireEvent.press(getByTestId('sign-in-button'));
 
 		await waitFor(() => {
 			expect(mockLogin).toHaveBeenCalledWith('dev@easydesign.test', 'TestPass123!');
 		});
 	});
 
-	it('shows inline error when dev login fails', async () => {
+	it('shows inline error when login fails', async () => {
 		mockLogin.mockRejectedValue(new Error('Invalid credentials'));
 
 		const { getByTestId, findByTestId } = renderWithTheme(<LoginScreen />);
 
-		fireEvent.changeText(getByTestId('dev-email-input'), 'dev@easydesign.test');
-		fireEvent.changeText(getByTestId('dev-password-input'), 'wrong-password');
-		fireEvent.press(getByTestId('dev-login-button'));
+		fireEvent.changeText(getByTestId('email-input'), 'dev@easydesign.test');
+		fireEvent.changeText(getByTestId('password-input'), 'wrong-password');
+		fireEvent.press(getByTestId('sign-in-button'));
 
-		expect(await findByTestId('dev-login-error')).toHaveTextContent('Invalid credentials');
+		expect(await findByTestId('login-error')).toHaveTextContent('Invalid credentials');
 	});
 
-	it('shows AppError userMessage when OTP send fails', async () => {
-		const friendlyMessage =
-			'Phone OTP is not enabled for this Supabase project. Enable Phone auth and configure an SMS provider in Supabase before trying again.';
-		mockSendOtp.mockRejectedValue(
-			new AppError('Unsupported phone provider', 'AUTH_ERROR', friendlyMessage),
-		);
+	it('shows AppError userMessage when login fails with a friendly auth error', async () => {
+		const friendlyMessage = 'Invalid credentials.';
+		mockLogin.mockRejectedValue(new AppError('Invalid login', 'AUTH_ERROR', friendlyMessage));
 
-		const { getByPlaceholderText, getByTestId } = renderWithTheme(<LoginScreen />);
+		const { getByTestId, findByTestId } = renderWithTheme(<LoginScreen />);
 
-		fireEvent.changeText(getByPlaceholderText('XXXXX XXXXX'), '9876543210');
-		fireEvent.press(getByTestId('send-otp-button'));
+		fireEvent.changeText(getByTestId('email-input'), 'dev@easydesign.test');
+		fireEvent.changeText(getByTestId('password-input'), 'wrong-password');
+		fireEvent.press(getByTestId('sign-in-button'));
 
-		await waitFor(() => {
-			expect(Alert.alert).toHaveBeenCalledWith(expect.any(String), friendlyMessage);
-		});
+		expect(await findByTestId('login-error')).toHaveTextContent(friendlyMessage);
 	});
 });

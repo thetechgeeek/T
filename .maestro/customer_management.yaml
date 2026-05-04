@@ -1,47 +1,37 @@
 appId: com.easystock.app
 ---
 # E2E-006: Customer management — list, add, view detail
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - tapOn:
       label: 'tab-more'
 - assertVisible:
-      label: 'menu-customers'
+      label: 'more-screen'
 - tapOn:
       label: 'menu-customers'
-- assertVisible: 'Customers'
+- assertVisible:
+      label: 'customers-screen'
 - takeScreenshot: customers_list
 
 # Add a new customer
 - tapOn:
       label: 'add-customer-button'
-      optional: true
-- assertVisible:
-      text: 'Add Customer'
-      optional: true
 - tapOn:
       label: 'customer-name-input'
-      optional: true
 - inputText: 'E2E Tiles Ltd'
-- hideKeyboard
+- tapOn:
+      label: 'customer-phone-input'
+- inputText: '9876500098'
 - tapOn:
       label: 'save-customer-button'
-      optional: true
+- assertVisible:
+      label: 'customers-screen'
+- assertVisible:
+      label: 'E2E Tiles Ltd, 9876500098'
 - takeScreenshot: customer_added
 
 # View customer detail (tap first customer)
 - tapOn:
-      index: 0
-      text: 'E2E Tiles Ltd'
-      optional: true
+      label: 'E2E Tiles Ltd, 9876500098'
 - assertVisible:
-      text: 'Outstanding Balance'
-      optional: true
+      label: 'customer-detail-screen'
 - takeScreenshot: customer_detail
-
-# Navigate back
-- tapOn:
-      text: 'Back'
-      optional: true
-- assertVisible:
-      text: 'Customers'
-      optional: true

@@ -1,7 +1,9 @@
 appId: com.easystock.app
 ---
 # E2E-005: Inventory management — browse, search, add item
-- launchApp
+- runFlow: shared/login_seeded.yaml
+- assertVisible:
+      label: 'tab-inventory'
 - tapOn:
       label: 'tab-inventory'
 - assertVisible:
@@ -17,26 +19,13 @@ appId: com.easystock.app
 # Search for an item
 - tapOn:
       label: 'inventory-search-input'
-- inputText: 'Marble'
-- hideKeyboard
+- inputText: 'GLOSSY'
+- assertVisible:
+      label: 'GLOSSY WHITE 60x60'
 - takeScreenshot: inventory_search_results
 
-# Clear search and reset
-- eraseText
-- hideKeyboard
-
-# Tap FAB to add new item
 - tapOn:
-      label: 'add-inventory-button'
-      optional: true
+      label: 'category-chip-GLOSSY'
 - assertVisible:
-      text: 'Add Item'
-      optional: true
-- takeScreenshot: inventory_add_form
-
-# Navigate back if form opened
-- tapOn:
-      text: 'Back'
-      optional: true
-- assertVisible:
-      label: 'inventory-screen'
+      label: 'GLOSSY WHITE 60x60'
+- takeScreenshot: inventory_glossy_filter

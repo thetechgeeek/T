@@ -1,34 +1,40 @@
 appId: com.easystock.app
 ---
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - tapOn:
       label: 'tab-invoices'
+- assertVisible:
+      label: 'invoices-screen'
 - tapOn:
       label: 'new-invoice-button'
 - assertVisible:
       label: 'invoice-step-1'
 - tapOn:
       label: 'customer-name-input'
-- inputText: 'Test Customer'
-- hideKeyboard
+- inputText: 'Invoice Flow Customer'
+- tapOn:
+      label: 'customer-phone-input'
+- inputText: '9876500088'
 - tapOn:
       label: 'invoice-next-button'
 - assertVisible:
       label: 'invoice-step-2'
 - tapOn:
       label: 'add-item-button'
-- tapOn: 'GLOSSY WHITE 60x60'
+- tapOn:
+      label: 'GLOSSY WHITE 60x60'
 - tapOn:
       label: 'item-quantity-input'
 - eraseText
-- inputText: '10'
-- hideKeyboard
+- inputText: '2'
 - tapOn:
       label: 'confirm-add-item'
 - tapOn:
       label: 'invoice-next-button'
 - assertVisible:
       label: 'invoice-step-3'
+- tapOn:
+      label: 'paid-in-full-chip'
 - tapOn:
       label: 'generate-invoice-button'
 - assertVisible:

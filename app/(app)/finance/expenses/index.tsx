@@ -77,7 +77,7 @@ export default function ExpensesScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title={t('finance.expenses')} />
+			<ScreenHeader title={t('finance.expenses')} titleAccessibilityLabel="expenses-screen" />
 
 			{/* Summary card */}
 			<View style={[styles.summaryCard, { backgroundColor: theme.colors.surface }]}>

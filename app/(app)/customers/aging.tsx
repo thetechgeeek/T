@@ -36,10 +36,20 @@ export default function AgingReportScreen() {
 			scrollable
 			contentContainerStyle={{ padding: s.lg }}
 			safeAreaEdges={['bottom']}
-			header={<ScreenHeader title={t('customer.agingReport')} />}
+			header={
+				<ScreenHeader
+					title={t('customer.agingReport')}
+					titleAccessibilityLabel="aging-report-screen"
+				/>
+			}
 		>
 			<View style={{ marginBottom: s.xl }}>
-				<Card padding="lg" variant="elevated">
+				<Card
+					padding="lg"
+					variant="elevated"
+					accessible={true}
+					accessibilityLabel="aging-total-outstanding-card"
+				>
 					<ThemedText
 						variant="caption"
 						color={colors.onSurfaceVariant}

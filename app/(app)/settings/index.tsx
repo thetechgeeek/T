@@ -97,7 +97,7 @@ const SECTIONS: Section[] = [
 			},
 			{
 				label: 'Security',
-				sub: 'PIN, biometric, auto-lock',
+				sub: 'Security controls unavailable',
 				route: '/(app)/settings/security',
 			},
 			{
@@ -128,6 +128,7 @@ export default function SettingsScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard={false}
 			scrollable
+			accessibilityLabel="settings-screen"
 			header={<ScreenHeader title="Settings" showBackButton={false} />}
 			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 		>

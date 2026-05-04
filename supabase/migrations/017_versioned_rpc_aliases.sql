@@ -7,12 +7,12 @@
 CREATE OR REPLACE FUNCTION perform_stock_operation_v1(
   p_item_id UUID,
   p_operation_type stock_op_type,
-  p_quantity_change INTEGER,
+  p_quantity_change NUMERIC,
   p_reason TEXT DEFAULT NULL,
   p_reference_type TEXT DEFAULT NULL,
   p_reference_id UUID DEFAULT NULL
 )
-RETURNS INTEGER
+RETURNS NUMERIC
 LANGUAGE sql
 SECURITY DEFINER
 AS $$

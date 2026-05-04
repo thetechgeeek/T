@@ -119,7 +119,7 @@ export default function CustomerDetailScreen() {
 
 	return (
 		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
-			<ScreenHeader title={customer.name} />
+			<ScreenHeader title={customer.name} titleAccessibilityLabel="customer-detail-screen" />
 
 			<FlatList
 				data={ledger}

@@ -26,7 +26,7 @@ describe('Login screen live wiring', () => {
 		}));
 	});
 
-	it('logs in through the real auth store when dev credentials are submitted', async () => {
+	it('logs in through the real auth store when credentials are submitted', async () => {
 		(authService.signIn as jest.Mock).mockResolvedValue({
 			session: { user: { id: 'user-1', email: 'dev@easydesign.test' } },
 			user: { id: 'user-1', email: 'dev@easydesign.test' },
@@ -56,7 +56,7 @@ describe('Login screen live wiring', () => {
 		fireEvent.press(screen.getByLabelText('sign-in-button'));
 
 		await waitFor(() => {
-			expect(screen.getByTestId('dev-login-error')).toHaveTextContent('Invalid credentials');
+			expect(screen.getByTestId('login-error')).toHaveTextContent('Invalid credentials');
 		});
 
 		expect(useAuthStore.getState().isAuthenticated).toBe(false);

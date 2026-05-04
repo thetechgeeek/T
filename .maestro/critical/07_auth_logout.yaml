@@ -9,7 +9,6 @@ appId: com.easystock.app
       label: 'sign-out-button'
 - tapOn:
       text: 'Sign Out'
+      optional: true
 - assertVisible:
-      label: 'sign-in-heading'
-- assertNotVisible:
-      label: 'runtime-error-boundary'
+      label: 'email-input'

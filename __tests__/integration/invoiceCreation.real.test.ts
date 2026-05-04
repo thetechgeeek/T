@@ -115,6 +115,60 @@ describe('Invoice Creation Real DB', () => {
 		expect(updatedItem.box_count).toBe(100 - 5);
 	});
 
+	it('deducts fractional line-item quantities without truncating stock', async () => {
+		const item = await inventoryRepository.create({
+			design_name: `${prefix}Fractional Tile`,
+			base_item_number: `${prefix}FT-001`,
+			category: 'GLOSSY',
+			box_count: 10,
+			has_batch_tracking: false,
+			has_serial_tracking: false,
+			cost_price: 1000,
+			selling_price: 1000,
+			hsn_code: '6908',
+			low_stock_threshold: 1,
+		});
+
+		const invoiceInput = {
+			customer_id: customerId,
+			customer_name: `${prefix}Test Customer`,
+			customer_phone: customerPhone,
+			invoice_date: new Date().toISOString().split('T')[0],
+			subtotal: 2500,
+			cgst_total: 0,
+			sgst_total: 0,
+			igst_total: 0,
+			discount_total: 0,
+			grand_total: 2500,
+			is_inter_state: false,
+			payment_status: 'unpaid' as const,
+			amount_paid: 0,
+			notes: prefix,
+		};
+
+		const lineItems = [
+			{
+				item_id: item.id,
+				design_name: `${prefix}Fractional Tile`,
+				quantity: 2.5,
+				rate_per_unit: 1000,
+				taxable_amount: 2500,
+				line_total: 2500,
+				gst_rate: 0,
+				cgst_amount: 0,
+				sgst_amount: 0,
+				igst_amount: 0,
+				discount: 0,
+				sort_order: 1,
+			},
+		];
+
+		await invoiceRepository.createAtomic(invoiceInput as any, lineItems as any);
+
+		const updatedItem = await inventoryRepository.findById(item.id);
+		expect(updatedItem.box_count).toBe(7.5);
+	});
+
 	it('generates sequential invoice numbers for same business', async () => {
 		const invoiceInput = {
 			customer_id: customerId,

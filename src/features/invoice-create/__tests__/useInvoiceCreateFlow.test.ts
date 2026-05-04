@@ -146,6 +146,22 @@ describe('useInvoiceCreateFlow', () => {
 		expect(result.current.lineItems[0].item_id).toBe('item-001');
 	});
 
+	it('preserves fractional quantities when adding line items', () => {
+		const { result } = renderHook(() => useInvoiceCreateFlow());
+
+		act(() => {
+			result.current.selectInventoryItem(
+				sampleInventoryItem as Parameters<typeof result.current.selectInventoryItem>[0],
+			);
+			result.current.setInputQuantity('2.5');
+		});
+		act(() => {
+			result.current.addLineItem();
+		});
+
+		expect(result.current.lineItems[0].quantity).toBe(2.5);
+	});
+
 	it('selectInventoryItem + addLineItem twice results in 2 lineItems', () => {
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 

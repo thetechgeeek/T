@@ -1,7 +1,7 @@
 appId: com.easystock.app
 ---
 # E2E-004: Invoice list and detail view
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - tapOn:
       label: 'tab-invoices'
 - assertVisible:
@@ -10,11 +10,11 @@ appId: com.easystock.app
 
 # Check list items are rendered (at least one invoice)
 - assertVisible:
-      text: 'SEED/'
+      label: 'invoice-SEED/2026-27/0001'
 
 # Tap first invoice in list
 - tapOn:
-      text: 'SEED/'
+      label: 'invoice-SEED/2026-27/0001'
 
 # If invoice detail loads, assert key fields
 - assertVisible:

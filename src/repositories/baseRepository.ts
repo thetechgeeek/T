@@ -78,18 +78,23 @@ function applyFilters<Q extends QueryBuilder>(query: Q, options: QueryOptions): 
 	return query;
 }
 
-/**
- * Access the supabase client lazily to ensure we catch the latest mocked version
- * during tests, falling back to an empty object if uninitialized.
- */
-function getClient() {
-	try {
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		const mod = require('../config/supabase');
-		return mod.supabase || defaultClient || ({} as Record<string, unknown>);
-	} catch {
-		return defaultClient || ({} as Record<string, unknown>);
+type SupabaseClient = typeof defaultClient;
+
+function assertSupabaseClient(client: unknown): asserts client is SupabaseClient {
+	if (!client || typeof (client as { from?: unknown }).from !== 'function') {
+		throw new Error(
+			'[Supabase] Client is not initialized. Check Supabase environment configuration.',
+		);
 	}
+}
+
+/** Access the Supabase client lazily to catch the latest mocked version during tests. */
+function getClient() {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
+	const mod = require('../config/supabase') as typeof import('../config/supabase');
+	const client = mod.supabase ?? defaultClient;
+	assertSupabaseClient(client);
+	return client;
 }
 
 export function createRepository<T extends { id: UUID }>(tableName: string) {

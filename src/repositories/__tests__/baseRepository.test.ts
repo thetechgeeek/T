@@ -43,6 +43,17 @@ describe('createRepository — findById', () => {
 
 		await expect(repo.findById('bad-id')).rejects.toThrow('found');
 	});
+
+	it('throws a clear configuration error when the client is invalid', async () => {
+		const originalFrom = supabase.from;
+		(supabase as unknown as { from?: unknown }).from = undefined;
+
+		try {
+			await expect(repo.findById('bad-id')).rejects.toThrow('Client is not initialized');
+		} finally {
+			(supabase as unknown as { from?: unknown }).from = originalFrom;
+		}
+	});
 });
 
 describe('createRepository — create', () => {

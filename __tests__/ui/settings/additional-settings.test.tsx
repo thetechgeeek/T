@@ -39,11 +39,11 @@ describe('Additional settings screens', () => {
 	});
 
 	it('renders security controls', () => {
-		const { getByText } = renderWithTheme(<SecuritySettingsScreen />);
+		const { getByText, queryByText } = renderWithTheme(<SecuritySettingsScreen />);
 
-		expect(getByText('Set 4-digit PIN')).toBeTruthy();
-		expect(getByText('1 min')).toBeTruthy();
-		expect(getByText('Require PIN to Delete Transactions')).toBeTruthy();
+		expect(getByText('Security controls are unavailable')).toBeTruthy();
+		expect(queryByText('Use Biometric Authentication')).toBeNull();
+		expect(queryByText('Require PIN to Delete Transactions')).toBeNull();
 	});
 
 	it('opens the invite modal on the users screen', () => {

@@ -59,7 +59,7 @@ CREATE TABLE inventory_items (
   sqft_per_box NUMERIC,
   sqm_per_box NUMERIC,
   tile_image_url TEXT,
-  box_count INTEGER NOT NULL DEFAULT 0,
+  box_count NUMERIC NOT NULL DEFAULT 0,
   cost_price NUMERIC NOT NULL DEFAULT 0,
   selling_price NUMERIC NOT NULL DEFAULT 0,
   gst_rate INTEGER NOT NULL DEFAULT 18,

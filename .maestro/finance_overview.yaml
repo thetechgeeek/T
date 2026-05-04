@@ -1,12 +1,13 @@
 appId: com.easystock.app
 ---
 # E2E-008: Finance overview — stats, navigation to sub-sections
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - tapOn:
       label: 'tab-more'
 - tapOn:
       label: 'menu-finance'
-- assertVisible: 'Finance Overview'
+- assertVisible:
+      label: 'stat-gross-profit'
 - takeScreenshot: finance_overview
 
 # Verify metric cards visible
@@ -24,20 +25,25 @@ appId: com.easystock.app
 - tapOn:
       label: 'menu-expenses'
 - assertVisible:
-      text: 'Expense'
-      optional: true
+      label: 'expenses-screen'
 - takeScreenshot: finance_expenses
 
 # Go back
-- tapOn: 'Back'
-- assertVisible: 'Finance Overview'
+- tapOn:
+      label: 'Go back'
+- assertVisible:
+      label: 'menu-aging-report'
 
 # Navigate to Aging Report
 - tapOn:
       label: 'menu-aging-report'
-- assertVisible: 'Aging Report'
-- assertVisible: 'Total Outstanding'
+- assertVisible:
+      label: 'aging-report-screen'
+- assertVisible:
+      label: 'aging-total-outstanding-card'
 - takeScreenshot: aging_report
 
-- tapOn: 'Back'
-- assertVisible: 'Finance Overview'
+- tapOn:
+      label: 'Go back'
+- assertVisible:
+      label: 'stat-gross-profit'

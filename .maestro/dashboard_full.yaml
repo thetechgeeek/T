@@ -1,7 +1,7 @@
 appId: com.easystock.app
 ---
 # E2E-002: Dashboard full flow — stats, quick actions, recent invoices
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - assertVisible:
       label: 'dashboard-screen'
 - assertVisible:
@@ -19,10 +19,10 @@ appId: com.easystock.app
       label: 'quick-action-add-stock'
 
 # Pull to refresh dashboard
-- scroll:
+- swipe:
       direction: DOWN
       duration: 300
-- scroll:
+- swipe:
       direction: UP
       duration: 300
 - assertVisible:

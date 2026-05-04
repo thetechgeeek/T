@@ -3,8 +3,23 @@ appId: com.easystock.app
 # E2E-001a: Successful login flow
 - launchApp:
       clearState: true
+- tapOn:
+      text: 'http://localhost:8081'
+      optional: true
+- tapOn:
+      text: 'Open'
+      optional: true
+- tapOn:
+      text: 'Continue'
+      optional: true
 - assertVisible:
       label: 'sign-in-heading'
+- assertVisible:
+      label: 'email-input'
+- assertVisible:
+      label: 'password-input'
+- assertVisible:
+      label: 'sign-in-button'
 - tapOn:
       label: 'email-input'
 - inputText: '${INTEGRATION_TEST_EMAIL}'
@@ -15,4 +30,6 @@ appId: com.easystock.app
       label: 'sign-in-button'
 - assertVisible:
       label: 'dashboard-screen'
+- assertVisible:
+      label: 'tab-dashboard'
 - takeScreenshot: auth_login_success

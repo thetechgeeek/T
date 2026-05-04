@@ -1,13 +1,15 @@
 appId: com.easystock.app
 ---
 # E2E-011: Offline behavior — verify app handles no-network gracefully
-- launchApp
+- runFlow: shared/login_seeded.yaml
 - assertVisible:
       label: 'dashboard-screen'
 - takeScreenshot: offline_start_online
 
 # Disable network (airplane mode simulation via Maestro)
-- setAirplaneMode: true
+- setAirplaneMode:
+      value: enabled
+      optional: true
 
 # App should still show cached content or a graceful error
 - assertVisible:
@@ -25,7 +27,9 @@ appId: com.easystock.app
 - takeScreenshot: offline_inventory_no_network
 
 # Re-enable network
-- setAirplaneMode: false
+- setAirplaneMode:
+      value: disabled
+      optional: true
 
 # App should recover and reload data
 - tapOn:

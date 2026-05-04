@@ -142,7 +142,9 @@ export async function resetSeedData(adminClient) {
 
 	const { data: seededCustomers, error: customerError } = await adminClient
 		.from('customers')
-		.insert(seedFixtures.customers)
+		.upsert(seedFixtures.customers, {
+			onConflict: 'phone',
+		})
 		.select();
 
 	if (customerError || !seededCustomers) {
@@ -151,7 +153,9 @@ export async function resetSeedData(adminClient) {
 
 	const { data: seededInventory, error: inventoryError } = await adminClient
 		.from('inventory_items')
-		.insert(seedFixtures.inventoryItems)
+		.upsert(seedFixtures.inventoryItems, {
+			onConflict: 'design_name',
+		})
 		.select();
 
 	if (inventoryError || !seededInventory) {

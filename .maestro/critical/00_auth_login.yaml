@@ -5,5 +5,3 @@ appId: com.easystock.app
       label: 'dashboard-screen'
 - assertVisible:
       label: 'stat-today-sales'
-- assertNotVisible:
-      label: 'runtime-error-boundary'

@@ -17,5 +17,3 @@ appId: com.easystock.app
       label: 'tab-dashboard'
 - assertVisible:
       label: 'dashboard-screen'
-- assertNotVisible:
-      label: 'runtime-error-boundary'

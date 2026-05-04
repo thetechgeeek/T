@@ -1,10 +1,21 @@
 appId: com.easystock.app
 ---
-# E2E-001b: Invalid login shows error
+# E2E-001b: Invalid login shows inline error
 - launchApp:
       clearState: true
+- openLink: '${E2E_DEV_CLIENT_URL}'
+- tapOn:
+      text: 'Open'
+      optional: true
+- tapOn:
+      text: 'Continue'
+      optional: true
 - assertVisible:
-      label: 'sign-in-heading'
+      label: 'email-input'
+- assertVisible:
+      label: 'password-input'
+- assertVisible:
+      label: 'sign-in-button'
 - tapOn:
       label: 'email-input'
 - inputText: 'wrong@tilemaster.dev'
@@ -13,6 +24,6 @@ appId: com.easystock.app
 - inputText: 'WrongPassword!'
 - tapOn:
       label: 'sign-in-button'
-- assertNotVisible:
-      label: 'dashboard-screen'
+- assertVisible:
+      text: 'Invalid credentials.'
 - takeScreenshot: auth_login_failure

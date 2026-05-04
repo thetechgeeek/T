@@ -415,7 +415,12 @@ export default function ImportOrderScreen() {
 		<AtomicScreen
 			safeAreaEdges={['bottom']}
 			scrollable
-			header={<ScreenHeader title={t('order.importBtn')} />}
+			header={
+				<ScreenHeader
+					title={t('order.importBtn')}
+					titleAccessibilityLabel="order-import-screen"
+				/>
+			}
 			contentContainerStyle={{ padding: s.lg }}
 		>
 			<ThemedText style={{ lineHeight: 22, marginBottom: s.xl }}>

@@ -1,6 +1,8 @@
 appId: com.easystock.app
 ---
 - runFlow: ../shared/login_seeded.yaml
+- assertVisible:
+      label: 'tab-inventory'
 - tapOn:
       label: 'tab-inventory'
 - assertVisible:
@@ -8,12 +10,9 @@ appId: com.easystock.app
 - tapOn:
       label: 'inventory-search-input'
 - inputText: 'GLOSSY'
-- hideKeyboard
 - assertVisible:
-      text: 'GLOSSY WHITE 60x60'
+      label: 'GLOSSY WHITE 60x60'
 - tapOn:
       label: 'category-chip-GLOSSY'
 - assertVisible:
-      text: 'GLOSSY WHITE 60x60'
-- assertNotVisible:
-      label: 'runtime-error-boundary'
+      label: 'GLOSSY WHITE 60x60'

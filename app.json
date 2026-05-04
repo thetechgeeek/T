@@ -2,7 +2,10 @@
 	"expo": {
 		"name": "EasyStock",
 		"slug": "easystock",
-		"scheme": "easystock",
+		"scheme": ["easystock", "easydesign"],
+		"developmentClient": {
+			"silentLaunch": true
+		},
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/images/icon.png",
@@ -41,6 +44,12 @@
 			"bundler": "metro"
 		},
 		"plugins": [
+			[
+				"expo-dev-client",
+				{
+					"launchMode": "most-recent"
+				}
+			],
 			"expo-router",
 			[
 				"expo-camera",
