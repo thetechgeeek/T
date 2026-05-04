@@ -10,6 +10,31 @@ criterion, and threat-model finding from the audit into a dense implementation c
 Review expectation: another reviewer should be able to compare this file against the audit section by
 section and verify that every actionable concern has an owner-ready todo.
 
+## Current Implementation Progress
+
+This section summarizes implementation progress so reviewers do not have to infer it from the
+ownership and coverage-map scaffolding at the top of the file.
+
+- [x] P0-001 Fractional Stock Truncation is closed by the numeric stock migration, DB test,
+      TypeScript database contract artifact, service/regression tests, and reconciliation runbook.
+- [x] P0-002 Broken Purchase Drill-Down From Reports is closed by the plural purchase route fix,
+      shared route helper, unit coverage, UI navigation smoke coverage, and route audit.
+- [x] P0-003 False Security Promise In Settings is closed for this release by removing the false
+      biometric and auto-lock UI instead of exposing unenforced controls.
+- [x] P0-004 Silent Supabase Misconfiguration Failure is closed by fail-fast Supabase config
+      validation, repository guardrails, docs, and startup-health tests.
+- [!] P0-005 Immediate Security Scanning Gate is active in CI, with a documented vulnerability
+  baseline; `npm audit fix` remains blocked because the compatible path requires peer, engine, and
+  major Expo/Jest dependency decisions.
+- [x] Phase 1 reached: TOOL-001 is closed and TOOL-002 has a shared tooling foundation plus one
+      migrated proof-of-pattern script.
+- [x] Phase 2 reached: RUNTIME-001 has a route-boundary ratchet that blocks new raw Supabase,
+      repository, and live-route mock imports while baselining existing debt.
+- [x] Phase 3 reached: PERF-003 is closed by memoizing invoice line-item totals and covering 10-line,
+      50-line, quantity, rate, discount, and GST-rate changes.
+- [ ] The unchecked ownership, coverage-map, and later-phase items below are still live work unless
+      explicitly marked `[!]` or `[r]`.
+
 ## How To Use This Checklist
 
 - [ ] Treat every unchecked item as live work until it is either implemented or explicitly accepted as
