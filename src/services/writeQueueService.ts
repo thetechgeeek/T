@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppError } from '../errors/AppError';
 
 export type MutationType = 'insert' | 'update' | 'delete';
 
@@ -39,7 +40,8 @@ export class WriteQueueService {
 		if (!raw) return [];
 		try {
 			return JSON.parse(raw) as QueuedMutation[];
-		} catch {
+		} catch (error: unknown) {
+			void error;
 			return [];
 		}
 	}
@@ -56,7 +58,8 @@ export class WriteQueueService {
 		if (!raw) return [];
 		try {
 			return JSON.parse(raw) as QueuedMutation[];
-		} catch {
+		} catch (error: unknown) {
+			void error;
 			return [];
 		}
 	}
@@ -74,7 +77,9 @@ export class WriteQueueService {
 		const queue = await this.readQueue();
 
 		if (queue.length >= MAX_QUEUE_SIZE) {
-			throw new Error(
+			throw new AppError(
+				'Offline sync queue is full. Please reconnect to sync existing changes.',
+				'WRITE_QUEUE_FULL',
 				'Offline sync queue is full. Please reconnect to sync existing changes.',
 			);
 		}

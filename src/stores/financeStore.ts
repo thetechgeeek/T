@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { financeService } from '../services/financeService';
 import { eventBus } from '../events/appEvents';
+import { getErrorMessage } from '../errors/AppError';
 import type { Expense, Purchase, ProfitLossReport as ProfitLossSummary } from '../types/finance';
 
 // Returns the current Indian financial year range (April 1 – March 31)
@@ -87,7 +88,7 @@ export const useFinanceStore = create<FinanceState>()(
 					});
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 				}
@@ -124,7 +125,7 @@ export const useFinanceStore = create<FinanceState>()(
 					});
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 				}
@@ -153,7 +154,7 @@ export const useFinanceStore = create<FinanceState>()(
 					});
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 				}
@@ -182,7 +183,7 @@ export const useFinanceStore = create<FinanceState>()(
 					});
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 				}
@@ -203,7 +204,7 @@ export const useFinanceStore = create<FinanceState>()(
 					get().fetchSummary();
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 					throw err;

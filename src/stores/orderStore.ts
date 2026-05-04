@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { orderService } from '../services/orderService';
 import { pdfService } from '../services/pdfService';
 import { eventBus } from '../events/appEvents';
+import { getErrorMessage } from '../errors/AppError';
 import type { ParsedOrderItem } from '../services/pdfService';
 
 import type { Order } from '../types/order';
@@ -40,7 +41,7 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 			const data = await orderService.fetchOrders();
 			set({ orders: data, loading: false });
 		} catch (error: unknown) {
-			set({ error: (error as Error).message, loading: false });
+			set({ error: getErrorMessage(error), loading: false });
 		}
 	},
 
@@ -54,7 +55,7 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 				isParsing: false,
 			});
 		} catch (error: unknown) {
-			set({ error: (error as Error).message, isParsing: false });
+			set({ error: getErrorMessage(error), isParsing: false });
 			throw error;
 		}
 	},
@@ -69,7 +70,7 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 				isParsing: false,
 			});
 		} catch (error: unknown) {
-			set({ error: (error as Error).message, isParsing: false });
+			set({ error: getErrorMessage(error), isParsing: false });
 			throw error;
 		}
 	},
@@ -83,7 +84,7 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 			// Notify inventory store that stock levels may have changed
 			eventBus.emit({ type: 'STOCK_CHANGED', itemId: '' });
 		} catch (error: unknown) {
-			set({ error: (error as Error).message, loading: false });
+			set({ error: getErrorMessage(error), loading: false });
 			throw error;
 		}
 	},

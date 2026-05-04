@@ -1,5 +1,6 @@
 import { supabase } from '../config/supabase';
 import * as FileSystem from 'expo-file-system/legacy';
+import { AppError, toAppError } from '../errors/AppError';
 import logger from '../utils/logger';
 
 export type StorageBucket = 'branding' | 'order-pdfs';
@@ -19,7 +20,13 @@ export const storageService = {
 			const {
 				data: { user },
 			} = await supabase.auth.getUser();
-			if (!user) throw new Error('User not authenticated');
+			if (!user) {
+				throw new AppError(
+					'User not authenticated',
+					'AUTH_REQUIRED',
+					'Please sign in before uploading files',
+				);
+			}
 
 			// Path: userId/filename
 			const storagePath = `${user.id}/${fileName}`;
@@ -42,16 +49,16 @@ export const storageService = {
 
 			if (error) {
 				logger.error(`Storage upload failed to bucket ${bucket}`, new Error(error.message));
-				throw new Error(error.message);
+				throw toAppError(error);
 			}
 
 			return data.path;
-		} catch (e) {
+		} catch (e: unknown) {
 			logger.error(
 				'storageService.uploadFile exception',
 				e instanceof Error ? e : new Error(String(e)),
 			);
-			throw e;
+			throw toAppError(e);
 		}
 	},
 
@@ -72,7 +79,7 @@ export const storageService = {
 		const { error } = await supabase.storage.from(bucket).remove([path]);
 		if (error) {
 			logger.error(`Failed to delete file from ${bucket}`, new Error(error.message));
-			throw new Error(error.message);
+			throw toAppError(error);
 		}
 	},
 };

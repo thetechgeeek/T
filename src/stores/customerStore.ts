@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { customerService } from '../services/customerService';
 import { eventBus } from '../events/appEvents';
+import { getErrorMessage } from '../errors/AppError';
 import { debounce } from '../utils/perf';
 import { withRetry } from '../utils/retry';
 import type {
@@ -89,7 +90,7 @@ export const useCustomerStore = create<CustomerState>()(
 					});
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 				}
@@ -143,7 +144,7 @@ export const useCustomerStore = create<CustomerState>()(
 					});
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 				}
@@ -164,7 +165,7 @@ export const useCustomerStore = create<CustomerState>()(
 					return newCustomer;
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 					throw err;
@@ -188,7 +189,7 @@ export const useCustomerStore = create<CustomerState>()(
 					return updated;
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 					throw err;

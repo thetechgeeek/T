@@ -26,7 +26,7 @@ export function createPaymentService(repo = paymentRepository) {
 				});
 
 				return result;
-			} catch (error) {
+			} catch (error: unknown) {
 				throw toAppError(error);
 			}
 		},
@@ -39,7 +39,7 @@ export function createPaymentService(repo = paymentRepository) {
 		}) {
 			try {
 				return await repo.fetchPayments(filters);
-			} catch (error) {
+			} catch (error: unknown) {
 				throw toAppError(error);
 			}
 		},

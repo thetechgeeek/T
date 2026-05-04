@@ -1,5 +1,5 @@
 import { supabase } from '@/src/config/supabase';
-import { toAppError, ValidationError } from '@/src/errors/AppError';
+import { ConflictError, toAppError, ValidationError } from '@/src/errors/AppError';
 import type {
 	InventoryItem,
 	InventoryItemInsert,
@@ -151,7 +151,10 @@ export const inventoryService = {
 			// If it's a 'single' failure but the error code indicates it found 0 rows despite ID match,
 			// it usually means the updated_at filter didn't match (conflict).
 			if (expectedUpdatedAt && error.code === 'PGRST116') {
-				throw new Error('VERSION_CONFLICT');
+				throw new ConflictError(
+					'VERSION_CONFLICT',
+					'This item changed on another device. Review the latest values before saving.',
+				);
 			}
 			throw toAppError(error);
 		}

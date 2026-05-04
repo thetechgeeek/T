@@ -121,3 +121,17 @@ export function toAppError(err: unknown): AppError {
 	}
 	return new AppError(message, code || 'UNKNOWN', 'An unexpected error occurred');
 }
+
+export function getErrorMessage(err: unknown, fallback = 'An unexpected error occurred'): string {
+	if (err instanceof AppError) {
+		return err.userMessage || err.message || fallback;
+	}
+	if (err instanceof Error) {
+		return err.message || fallback;
+	}
+	if (typeof err === 'string') {
+		return err || fallback;
+	}
+	const appError = toAppError(err);
+	return appError.message || appError.userMessage || fallback;
+}

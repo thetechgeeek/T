@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { inventoryService } from '../services/inventoryService';
 import { eventBus } from '../events/appEvents';
+import { ConflictError, getErrorMessage } from '../errors/AppError';
 import { debounce } from '../utils/perf';
 import { withRetry } from '../utils/retry';
 import type {
@@ -166,7 +167,7 @@ export const useInventoryStore = create<InventoryState>()(
 						}
 
 						set((s) => {
-							s.error = (err as Error).message;
+							s.error = getErrorMessage(err);
 							s.loading = false;
 						});
 					}
@@ -189,7 +190,7 @@ export const useInventoryStore = create<InventoryState>()(
 					return newItem;
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 					throw err;
@@ -220,7 +221,11 @@ export const useInventoryStore = create<InventoryState>()(
 					});
 					return updated;
 				} catch (err: unknown) {
-					if (err instanceof Error && err.message === 'VERSION_CONFLICT' && localItem) {
+					if (
+						err instanceof ConflictError &&
+						err.message === 'VERSION_CONFLICT' &&
+						localItem
+					) {
 						// Fetch latest server version to show in modal
 						const serverItem = await inventoryService.fetchItemById(id);
 						set((s) => {
@@ -230,7 +235,7 @@ export const useInventoryStore = create<InventoryState>()(
 						throw err;
 					}
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 					throw err;
@@ -270,9 +275,9 @@ export const useInventoryStore = create<InventoryState>()(
 						set((s) => {
 							s.conflict = null;
 						});
-					} catch (err) {
+					} catch (err: unknown) {
 						set((s) => {
-							s.error = (err as Error).message;
+							s.error = getErrorMessage(err);
 						});
 					}
 				} else {
@@ -306,7 +311,7 @@ export const useInventoryStore = create<InventoryState>()(
 					eventBus.emit({ type: 'STOCK_CHANGED', itemId });
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 					throw err;
@@ -331,7 +336,7 @@ export const useInventoryStore = create<InventoryState>()(
 					eventBus.emit({ type: 'STOCK_CHANGED', itemId: id });
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 					throw err;

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { notificationRepository } from '../repositories/notificationRepository';
 import { eventBus } from '../events/appEvents';
+import { getErrorMessage } from '../errors/AppError';
 import type { Notification } from '../types/notification';
 import type { UUID } from '../types/common';
 
@@ -38,7 +39,7 @@ export const useNotificationStore = create<NotificationState>()(
 				});
 			} catch (err: unknown) {
 				set((s) => {
-					s.error = (err as Error).message;
+					s.error = getErrorMessage(err);
 					s.loading = false;
 				});
 			}
@@ -56,7 +57,7 @@ export const useNotificationStore = create<NotificationState>()(
 				});
 			} catch (err: unknown) {
 				set((s) => {
-					s.error = (err as Error).message;
+					s.error = getErrorMessage(err);
 				});
 			}
 		},

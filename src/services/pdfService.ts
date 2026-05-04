@@ -3,6 +3,7 @@ import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { supabase } from '../config/supabase';
+import { AppError, toAppError } from '../errors/AppError';
 import { businessProfileService } from './businessProfileService';
 import { numberToIndianWords } from '../utils/currency';
 import { escapeHtml } from '../utils/html';
@@ -343,14 +344,14 @@ export const pdfService = {
 
 		if (error) {
 			logger.error('Edge Function Error:', error);
-			throw new Error(
-				error.message || `Edge function returned ${error.status || 'unknown'} error`,
-			);
+			throw toAppError(error);
 		}
 
 		if (!data || !data.success || !data.data || !data.data.items) {
-			throw new Error(
+			throw new AppError(
 				data?.error || 'Failed to parse document format explicitly from Vision API',
+				'ORDER_PARSE_FAILED',
+				'Could not parse this order document. Please verify the file and try again.',
 			);
 		}
 
@@ -372,13 +373,15 @@ export const pdfService = {
 
 		if (error) {
 			logger.error('Edge Function Error (text mode):', error);
-			throw new Error(
-				error.message || `Edge function returned ${error.status || 'unknown'} error`,
-			);
+			throw toAppError(error);
 		}
 
 		if (!data || !data.success || !data.data || !data.data.items) {
-			throw new Error(data?.error || 'Failed to parse text from Vision AI');
+			throw new AppError(
+				data?.error || 'Failed to parse text from Vision AI',
+				'ORDER_PARSE_FAILED',
+				'Could not parse this order text. Please verify it and try again.',
+			);
 		}
 
 		return data.data.items as ParsedOrderItem[];

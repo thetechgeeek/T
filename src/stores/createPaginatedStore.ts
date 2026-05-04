@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { getErrorMessage } from '../errors/AppError';
 
 export interface PaginatedState<T, F extends Record<string, unknown>> {
 	items: T[];
@@ -87,7 +88,7 @@ export function createPaginatedStore<T extends { id: string }, F extends Record<
 					});
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 				}

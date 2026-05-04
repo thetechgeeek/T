@@ -6,6 +6,7 @@ import {
 	NotFoundError,
 	ConflictError,
 	toAppError,
+	getErrorMessage,
 } from './AppError';
 
 describe('AppError', () => {
@@ -137,5 +138,14 @@ describe('toAppError', () => {
 		const wrapped = toAppError({ weird: true });
 		expect(wrapped).toBeInstanceOf(AppError);
 		expect(wrapped.code).toBe('UNKNOWN');
+	});
+
+	it('extracts safe messages from AppError, Error, and non-Error values', () => {
+		expect(getErrorMessage(new AppError('internal', 'CODE', 'user-facing'))).toBe(
+			'user-facing',
+		);
+		expect(getErrorMessage(new Error('plain error'))).toBe('plain error');
+		expect(getErrorMessage('string failure')).toBe('string failure');
+		expect(getErrorMessage(null)).toBe('null');
 	});
 });

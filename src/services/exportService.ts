@@ -1,6 +1,7 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import { supabase } from '../config/supabase';
+import { toAppError } from '../errors/AppError';
 import type { Invoice, InvoiceLineItem } from '../types/invoice';
 
 /**
@@ -75,7 +76,7 @@ export const exportService = {
 			.lte('invoice_date', endDate)
 			.order('invoice_date');
 
-		if (error) throw new Error(error.message);
+		if (error) throw toAppError(error);
 
 		const invoices = (data ?? []) as (Invoice & { line_items: InvoiceLineItem[] })[];
 

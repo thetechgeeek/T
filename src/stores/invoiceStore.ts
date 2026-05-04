@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { invoiceService } from '../services/invoiceService';
 import { eventBus } from '../events/appEvents';
+import { getErrorMessage } from '../errors/AppError';
 import { withRetry } from '../utils/retry';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
 import type { UUID } from '../types/common';
@@ -67,7 +68,7 @@ export const useInvoiceStore = create<InvoiceState>()(
 						state.loading = false;
 					});
 				} catch (error: unknown) {
-					set({ error: (error as Error).message, loading: false });
+					set({ error: getErrorMessage(error), loading: false });
 				}
 			},
 
@@ -80,7 +81,7 @@ export const useInvoiceStore = create<InvoiceState>()(
 						state.loading = false;
 					});
 				} catch (error: unknown) {
-					set({ error: (error as Error).message, loading: false });
+					set({ error: getErrorMessage(error), loading: false });
 				}
 			},
 
@@ -109,7 +110,7 @@ export const useInvoiceStore = create<InvoiceState>()(
 
 					return result;
 				} catch (error: unknown) {
-					set({ error: (error as Error).message, loading: false });
+					set({ error: getErrorMessage(error), loading: false });
 					throw error;
 				}
 			},

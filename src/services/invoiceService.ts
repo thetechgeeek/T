@@ -42,7 +42,7 @@ export function createInvoiceService(repo = invoiceRepository) {
 		async fetchInvoiceDetail(id: UUID): Promise<Invoice> {
 			try {
 				return await repo.findWithLineItems(id);
-			} catch (error) {
+			} catch (error: unknown) {
 				throw toAppError(error);
 			}
 		},
@@ -138,7 +138,7 @@ export function createInvoiceService(repo = invoiceRepository) {
 				);
 				// Re-fetch to return full Invoice type for store consistency
 				return await repo.findById(result.id);
-			} catch (error) {
+			} catch (error: unknown) {
 				throw toAppError(error);
 			}
 		},

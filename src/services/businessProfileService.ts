@@ -1,4 +1,5 @@
 import { supabase } from '../config/supabase';
+import { toAppError } from '../errors/AppError';
 
 export interface BusinessProfileInput {
 	business_name: string;
@@ -35,7 +36,7 @@ export const businessProfileService = {
 		const existing = (await this.fetch()) as BusinessProfile | null;
 		const doc = existing ? { ...data, id: existing.id } : data;
 		const { error } = await supabase.from('business_profile').upsert(doc);
-		if (error) throw new Error(error.message);
+		if (error) throw toAppError(error);
 	},
 
 	async fetch() {
@@ -44,7 +45,7 @@ export const businessProfileService = {
 			.select('*')
 			.limit(1)
 			.maybeSingle();
-		if (error && error.code !== 'PGRST116') throw new Error(error.message);
+		if (error && error.code !== 'PGRST116') throw toAppError(error);
 		return data;
 	},
 

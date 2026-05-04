@@ -2,6 +2,7 @@ import { supabase } from '@/src/config/supabase';
 import type { ParsedOrderItem } from './pdfService';
 import type { UUID } from '@/src/types/common';
 import { inventoryService } from './inventoryService';
+import { toAppError } from '../errors/AppError';
 import type { Order } from '../types/order';
 import type { TileCategory } from '../types/inventory';
 export type { Order };
@@ -20,14 +21,14 @@ export const orderService = {
 		}
 
 		const { data, error } = await query;
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as Order[];
 	},
 
 	async fetchOrderById(id: UUID) {
 		const { data, error } = await supabase.from('orders').select('*').eq('id', id).single();
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data as Order;
 	},
 
@@ -37,7 +38,7 @@ export const orderService = {
 			.select('*')
 			.eq('order_id', orderId);
 
-		if (error) throw error;
+		if (error) throw toAppError(error);
 		return data;
 	},
 
@@ -56,7 +57,7 @@ export const orderService = {
 			.select()
 			.single();
 
-		if (orderError) throw orderError;
+		if (orderError) throw toAppError(orderError);
 		const orderId = orderData.id;
 
 		const normalizeCategory = (cat?: string): TileCategory => {

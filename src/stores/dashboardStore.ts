@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { dashboardService } from '../services/dashboardService';
 import { eventBus } from '../events/appEvents';
+import { getErrorMessage } from '../errors/AppError';
 import { withRetry } from '../utils/retry';
 import type { DashboardStats } from '../types/finance';
 
@@ -36,7 +37,7 @@ export const useDashboardStore = create<DashboardState>()(
 					});
 				} catch (err: unknown) {
 					set((s) => {
-						s.error = (err as Error).message;
+						s.error = getErrorMessage(err);
 						s.loading = false;
 					});
 				}

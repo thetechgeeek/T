@@ -115,6 +115,15 @@ describe('orderStore', () => {
 		expect(state.orders).toHaveLength(1);
 	});
 
+	it('fetchOrders handles non-Error thrown values safely', async () => {
+		(orderService.fetchOrders as jest.Mock).mockRejectedValue('plain failure');
+
+		await useOrderStore.getState().fetchOrders();
+
+		expect(useOrderStore.getState().error).toBe('plain failure');
+		expect(useOrderStore.getState().loading).toBe(false);
+	});
+
 	// ─── parseDocument ────────────────────────────────────────────────────────
 
 	it('parseDocument: isParsing=true during call, false after', async () => {
