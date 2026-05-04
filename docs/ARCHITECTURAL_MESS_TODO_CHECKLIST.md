@@ -438,26 +438,26 @@ Target-State Architecture.
 
 ### RUNTIME-001 Enforce The Target Dependency Graph
 
-- [ ] Adopt this graph: routes/screens -> feature modules/view models -> services/use cases ->
+- [x] Adopt this graph: routes/screens -> feature modules/view models -> services/use cases ->
       repositories/read models -> typed backend interface.
-- [ ] Define the simple-read lane for list/detail queries and low-risk CRUD.
-- [ ] Define the server-authoritative lane for money, stock, ledger, compliance, imports, exports, and
+- [x] Define the simple-read lane for list/detail queries and low-risk CRUD.
+- [x] Define the server-authoritative lane for money, stock, ledger, compliance, imports, exports, and
       auth-adjacent security flows.
-- [ ] Create lint boundaries for route files.
+- [x] Create lint boundaries for route files.
 - [ ] Create lint boundaries for feature modules.
 - [ ] Create lint boundaries for stores.
 - [ ] Create lint boundaries for services.
 - [ ] Create lint boundaries for repositories.
-- [ ] Add examples of allowed imports per layer.
-- [ ] Add examples of disallowed imports per layer.
-- [ ] Add a CI check that fails on new raw Supabase imports from `app/`.
-- [ ] Add a CI check that fails on new repository imports from `app/`.
-- [ ] Add a CI check that fails on live-route imports from `src/mocks`.
+- [x] Add examples of allowed imports per layer.
+- [x] Add examples of disallowed imports per layer.
+- [x] Add a CI check that fails on new raw Supabase imports from `app/`.
+- [x] Add a CI check that fails on new repository imports from `app/`.
+- [x] Add a CI check that fails on live-route imports from `src/mocks`.
 - [ ] Mark done only when the dependency graph is enforceable without tribal knowledge.
 
 ### RUNTIME-002 Remove Raw Supabase From Route Files
 
-- [ ] Search `app/` for imports from the Supabase config/client.
+- [x] Search `app/` for imports from the Supabase config/client.
 - [ ] Refactor `app/(app)/inventory/[id].tsx` to stop mixing raw Supabase with services.
 - [ ] Refactor `app/(app)/finance/purchases/[id].tsx` to stop reading purchases via raw Supabase.
 - [ ] Refactor `app/(app)/finance/purchases/[id].tsx` to stop deleting purchases via raw Supabase.
@@ -470,7 +470,7 @@ Target-State Architecture.
 
 ### RUNTIME-003 Remove Direct Repository Access From Route Files
 
-- [ ] Search `app/` for direct repository imports.
+- [x] Search `app/` for direct repository imports.
 - [ ] Refactor `app/(app)/reports/all-parties.tsx` so it does not combine store access with
       `supplierRepository.findMany()` in the route.
 - [ ] Refactor `app/(app)/suppliers/index.tsx` to use a service, view model, or store.
@@ -479,20 +479,20 @@ Target-State Architecture.
 - [ ] Add read-model or service APIs for supplier lookups if needed.
 - [ ] Document whether routes may use read models directly; default answer should be no unless explicitly
       adopted.
-- [ ] Add lint rules for route-level repository imports.
+- [x] Add lint rules for route-level repository imports.
 - [ ] Add regression tests for the refactored supplier and payment screens.
 - [ ] Mark done only when direct repository imports in route files are zero or formally allowed by a
       documented read-model exception.
 
 ### RUNTIME-004 Complete Or Hide Mock-Backed Product Surfaces
 
-- [ ] Search `app/` for imports from `src/mocks`.
-- [ ] Build an inventory of all mock-backed app screens.
-- [ ] Confirm the audit-listed screens still import mock data: `reports/gstr1.tsx`.
-- [ ] Confirm the audit-listed screens still import mock data: `reports/gstr3b.tsx`.
-- [ ] Confirm the audit-listed screens still import mock data: `finance/cash.tsx`.
-- [ ] Confirm the audit-listed screens still import mock data: `reports/party-statement.tsx`.
-- [ ] Confirm the audit-listed screens still import mock data: `finance/bank-accounts/index.tsx`.
+- [x] Search `app/` for imports from `src/mocks`.
+- [x] Build an inventory of all mock-backed app screens.
+- [x] Confirm the audit-listed screens still import mock data: `reports/gstr1.tsx`.
+- [x] Confirm the audit-listed screens still import mock data: `reports/gstr3b.tsx`.
+- [x] Confirm the audit-listed screens still import mock data: `finance/cash.tsx`.
+- [x] Confirm the audit-listed screens still import mock data: `reports/party-statement.tsx`.
+- [x] Confirm the audit-listed screens still import mock data: `finance/bank-accounts/index.tsx`.
 - [ ] Identify all placeholder export actions.
 - [ ] Identify all placeholder save actions.
 - [ ] Identify all placeholder share actions.

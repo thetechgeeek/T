@@ -1,0 +1,28 @@
+{
+	"allowed": [
+		"app-raw-supabase-import|app/(app)/finance/purchases/[id].tsx|@/src/config/supabase",
+		"app-raw-supabase-import|app/(app)/inventory/[id].tsx|@/src/config/supabase",
+		"app-repository-import|app/(app)/finance/payments/make.tsx|@/src/repositories/supplierRepository",
+		"app-repository-import|app/(app)/finance/purchases/create.tsx|@/src/repositories/supplierRepository",
+		"app-repository-import|app/(app)/reports/all-parties.tsx|@/src/repositories/supplierRepository",
+		"app-repository-import|app/(app)/reports/party-statement.tsx|@/src/repositories/supplierRepository",
+		"app-repository-import|app/(app)/suppliers/[id].tsx|@/src/repositories/supplierRepository",
+		"app-repository-import|app/(app)/suppliers/add.tsx|@/src/repositories/supplierRepository",
+		"app-repository-import|app/(app)/suppliers/index.tsx|@/src/repositories/supplierRepository",
+		"live-route-mock-import|app/(app)/finance/bank-accounts/index.tsx|@/src/mocks/finance/bankAccounts",
+		"live-route-mock-import|app/(app)/finance/cash.tsx|@/src/mocks/finance/cash",
+		"live-route-mock-import|app/(app)/finance/cheques.tsx|@/src/mocks/finance/cheques",
+		"live-route-mock-import|app/(app)/finance/ewallets.tsx|@/src/mocks/finance/ewallets",
+		"live-route-mock-import|app/(app)/finance/loans/[id].tsx|@/src/mocks/finance/loans",
+		"live-route-mock-import|app/(app)/finance/transfer.tsx|@/src/mocks/finance/transfer",
+		"live-route-mock-import|app/(app)/reports/gst-detail.tsx|@/src/mocks/reports/gstDetail",
+		"live-route-mock-import|app/(app)/reports/gstr1.tsx|@/src/mocks/reports/gstr1",
+		"live-route-mock-import|app/(app)/reports/gstr3b.tsx|@/src/mocks/reports/gstr3b",
+		"live-route-mock-import|app/(app)/reports/item-profit.tsx|@/src/mocks/reports/itemProfit",
+		"live-route-mock-import|app/(app)/reports/order-summary.tsx|@/src/mocks/reports/orderSummary",
+		"live-route-mock-import|app/(app)/reports/party-statement.tsx|@/src/mocks/reports/partyStatement",
+		"live-route-mock-import|app/(app)/transactions/credit-notes/index.tsx|@/src/mocks/transactions/creditNotes",
+		"live-route-mock-import|app/(app)/transactions/estimates/index.tsx|@/src/mocks/transactions/estimates",
+		"live-route-mock-import|app/(app)/transactions/purchase-orders/index.tsx|@/src/mocks/transactions/purchaseOrders"
+	]
+}

@@ -6,9 +6,11 @@ Date: 2026-05-04
 
 ## Counts
 
-- Root `package.json` scripts: 42. Audit baseline: 41. Difference: +1 from the new `audit:security` gate.
-- Root `scripts/*.mjs` files: 19. Audit baseline: 19. Difference: unchanged.
-- Root `scripts/*.mjs` LOC: 4,787. Audit baseline: 4,806. Difference: -19 after route-check helper extraction.
+- Root `package.json` scripts: 43. Audit baseline: 41. Difference: +2 from `audit:security` and
+  `check:runtime-boundaries`.
+- Root `scripts/*.mjs` files: 20. Audit baseline: 19. Difference: +1 from the runtime-boundary ratchet.
+- Root `scripts/*.mjs` LOC: 4,940. Audit baseline: 4,806. Difference: +134 after adding the
+  runtime-boundary ratchet and extracting shared route-check helper logic.
 
 ## Target
 
@@ -24,6 +26,7 @@ Target one-off script count after consolidation: 12 or fewer root `scripts/*.mjs
 | `check-inventory-app-ui-contract.mjs`       | App Architecture | package governance       | yes  | yes      | no         | yes          | yes        | custom root/env                          |
 | `check-no-hex.mjs`                          | Design System    | design-system governance | no   | yes      | no         | yes          | no         | local root logic                         |
 | `check-package-release-discipline.mjs`      | Platform         | release                  | yes  | no       | no         | yes          | yes        | custom root/env                          |
+| `check-runtime-boundaries.mjs`              | App Architecture | runtime governance       | yes  | yes      | no         | yes          | no         | uses shared tooling and baseline ratchet |
 | `check-ui-package-extraction-readiness.mjs` | Platform         | package governance       | yes  | yes      | yes        | yes          | yes        | custom root/env                          |
 | `check-ui-shell-guardrails.mjs`             | UI Shell         | package governance       | yes  | yes      | no         | yes          | yes        | custom root/env                          |
 | `check-ui-tokens.mjs`                       | Design System    | design-system governance | yes  | yes      | yes        | yes          | no         | custom root/env and staged mode          |
@@ -40,10 +43,10 @@ Target one-off script count after consolidation: 12 or fewer root `scripts/*.mjs
 
 ## Duplication Clusters
 
-- Manual CLI parsing: at least 12 scripts inspect `process.argv` directly.
-- Manual filesystem walking: at least 9 scripts call `readdirSync` recursively or scan directories.
+- Manual CLI parsing: at least 13 scripts inspect `process.argv` directly.
+- Manual filesystem walking: at least 10 scripts call `readdirSync` recursively or scan directories.
 - Direct shell execution: at least 6 scripts call `spawn`, `spawnSync`, `execFile`, or `execFileSync`.
-- Plain-text source reads: at least 13 scripts read source files directly.
+- Plain-text source reads: at least 14 scripts read source files directly.
 - Plain-text docs reads: at least 7 scripts read docs as an enforcement input.
 - Duplicated root resolution: guardrail scripts repeatedly derive roots through `__dirname`, `process.cwd()`, or custom `--root` parsing.
 - Duplicated env loading: e2e and seed scripts load `.env.test` independently.

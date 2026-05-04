@@ -53,6 +53,9 @@ jobs:
             - name: Lint
               run: npm run lint
 
+            - name: Runtime boundary check
+              run: npm run check:runtime-boundaries
+
             - name: Strict Jest
               run: npm run test:coverage
 
