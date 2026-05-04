@@ -1,19 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, StyleSheet, Alert, Pressable, Platform } from 'react-native';
+import { View, StyleSheet, Alert, Pressable, Platform, Share } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { OPACITY_TINT_LIGHT, Z_INDEX } from '@easydesign/design-system/foundation';
 import type { Href } from 'expo-router';
+import { Trash2, Share2, MoreVertical, Phone, User, Calendar, Plus } from 'lucide-react-native';
 import {
-	Trash2,
-	Share2,
-	Pencil,
-	MoreVertical,
-	Phone,
-	User,
-	Calendar,
-	Plus,
-} from 'lucide-react-native';
-import { supabase } from '@/src/config/supabase';
+	financeService,
+	type PurchaseDetail,
+	type PurchasePayment,
+} from '@/src/services/financeService';
+import type { PurchaseLineItem } from '@/src/types/finance';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { withOpacity } from '@easydesign/design-system/foundation';
@@ -25,7 +21,6 @@ import { Divider } from '@easydesign/design-system';
 import { ScreenHeader } from '@easydesign/ui-shell';
 import { SectionHeader } from '@easydesign/design-system';
 import { SkeletonBlock } from '@easydesign/design-system';
-import type { Purchase, PurchaseLineItem, Payment } from '@/src/types/finance';
 import type { UUID } from '@/src/types/common';
 import type { ThemeColors } from '@/src/theme';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
@@ -34,16 +29,6 @@ import { SPACING_PX } from '@easydesign/design-system/foundation';
 const KEBAB_MENU_MIN_WIDTH = 140;
 const PURCHASE_KEBAB_TOP_OFFSET = 56;
 const PURCHASE_KEBAB_ELEVATION = 8;
-
-type PurchaseWithDetails = Purchase & {
-	suppliers?: { name: string; phone?: string } | null;
-	purchase_line_items?: PurchaseLineItem[];
-};
-
-type PaymentWithParty = Payment & {
-	customer?: { name: string };
-	supplier?: { name: string };
-};
 
 function statusVariant(status: string): 'success' | 'warning' | 'error' | 'default' {
 	if (status === 'paid') return 'success';
@@ -75,8 +60,8 @@ export default function PurchaseBillDetailScreen() {
 	const { c, s, r, theme } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 
-	const [purchase, setPurchase] = useState<PurchaseWithDetails | null>(null);
-	const [payments, setPayments] = useState<PaymentWithParty[]>([]);
+	const [purchase, setPurchase] = useState<PurchaseDetail | null>(null);
+	const [payments, setPayments] = useState<PurchasePayment[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [showKebab, setShowKebab] = useState(false);
 
@@ -84,25 +69,9 @@ export default function PurchaseBillDetailScreen() {
 		if (!id) return;
 		setLoading(true);
 		try {
-			const [purchaseRes, paymentsRes] = await Promise.all([
-				supabase
-					.from('purchases')
-					.select('*, suppliers(name, phone), purchase_line_items(*)')
-					.eq('id', id)
-					.single(),
-				supabase
-					.from('payments')
-					.select('*')
-					.eq('purchase_id', id)
-					.order('payment_date', { ascending: false }),
-			]);
-
-			if (purchaseRes.error) throw purchaseRes.error;
-			setPurchase(purchaseRes.data as PurchaseWithDetails);
-
-			if (!paymentsRes.error) {
-				setPayments((paymentsRes.data as PaymentWithParty[]) ?? []);
-			}
+			const result = await financeService.fetchPurchaseDetailScreenData(id);
+			setPurchase(result.purchase);
+			setPayments(result.payments);
 		} catch {
 			setPurchase(null);
 		} finally {
@@ -126,11 +95,7 @@ export default function PurchaseBillDetailScreen() {
 					style: 'destructive',
 					onPress: async () => {
 						try {
-							const { error } = await supabase
-								.from('purchases')
-								.delete()
-								.eq('id', id);
-							if (error) throw error;
+							await financeService.deletePurchase(id);
 							router.back();
 						} catch (err: unknown) {
 							Alert.alert(
@@ -144,10 +109,17 @@ export default function PurchaseBillDetailScreen() {
 		);
 	};
 
-	const handleShare = () => {
+	const handleShare = async () => {
 		if (!purchase) return;
-		// Share basic purchase summary as text
-		Alert.alert('Share', 'PDF sharing coming soon.');
+		await Share.share({
+			message: [
+				`Purchase: ${purchase.purchase_number ?? purchase.id}`,
+				`Supplier: ${purchase.suppliers?.name ?? purchase.supplier_name ?? 'Supplier'}`,
+				`Date: ${purchase.purchase_date}`,
+				`Total: ${formatCurrency(purchase.grand_total ?? 0)}`,
+				`Paid: ${formatCurrency(purchase.amount_paid ?? 0)}`,
+			].join('\n'),
+		});
 	};
 
 	const handleRecordPayment = () => {
@@ -260,16 +232,6 @@ export default function PurchaseBillDetailScreen() {
 								},
 							]}
 						>
-							<Pressable
-								style={[styles.kebabItem, { borderBottomColor: c.border }]}
-								onPress={() => {
-									setShowKebab(false);
-									Alert.alert('Edit', 'Edit functionality coming soon.');
-								}}
-							>
-								<Pencil size={16} color={c.onSurface} />
-								<ThemedText style={{ marginLeft: SPACING_PX.sm }}>Edit</ThemedText>
-							</Pressable>
 							<Pressable style={styles.kebabItem} onPress={handleDelete}>
 								<Trash2 size={16} color={c.error} />
 								<ThemedText style={{ marginLeft: SPACING_PX.sm }} color={c.error}>

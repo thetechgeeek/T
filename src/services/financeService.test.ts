@@ -6,6 +6,7 @@ import { makeExpense } from '../../__tests__/fixtures/financeFixtures';
 const mockQuery: Record<string, jest.Mock> = {
 	select: jest.fn().mockReturnThis(),
 	insert: jest.fn().mockReturnThis(),
+	delete: jest.fn().mockReturnThis(),
 	ilike: jest.fn().mockReturnThis(),
 	gte: jest.fn().mockReturnThis(),
 	lte: jest.fn().mockReturnThis(),
@@ -122,7 +123,7 @@ describe('financeService', () => {
 		it('error path: rejects when supabase returns an error', async () => {
 			mockQuery.single.mockResolvedValueOnce({
 				data: null,
-				error: { message: 'insert failed' },
+				error: { message: 'duplicate', code: '23505' },
 			});
 
 			await expect(
@@ -132,7 +133,60 @@ describe('financeService', () => {
 					expense_date: '2026-01-10',
 					notes: '',
 				}),
-			).rejects.toBeDefined();
+			).rejects.toMatchObject({ code: 'CONFLICT' });
+		});
+	});
+
+	describe('purchase detail operations', () => {
+		it('fetches purchase detail data through service methods', async () => {
+			const purchase = {
+				id: 'purchase-1',
+				purchase_date: '2026-01-01',
+				grand_total: 100,
+				amount_paid: 25,
+			};
+			const payment = {
+				id: 'payment-1',
+				purchase_id: 'purchase-1',
+				amount: 25,
+				payment_date: '2026-01-02',
+			};
+			mockQuery.single.mockResolvedValueOnce({ data: purchase, error: null });
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
+				resolve({ data: [payment], error: null }),
+			);
+
+			const result = await financeService.fetchPurchaseDetailScreenData('purchase-1');
+
+			expect(supabase.from).toHaveBeenCalledWith('purchases');
+			expect(supabase.from).toHaveBeenCalledWith('payments');
+			expect(mockQuery.eq).toHaveBeenCalledWith('id', 'purchase-1');
+			expect(mockQuery.eq).toHaveBeenCalledWith('purchase_id', 'purchase-1');
+			expect(result.purchase).toEqual(purchase);
+			expect(result.payments).toEqual([payment]);
+		});
+
+		it('normalizes purchase detail errors to AppError', async () => {
+			mockQuery.single.mockResolvedValueOnce({
+				data: null,
+				error: { message: 'missing purchase', code: 'PGRST116' },
+			});
+
+			await expect(
+				financeService.fetchPurchaseDetail('purchase-missing'),
+			).rejects.toMatchObject({ code: 'NOT_FOUND' });
+		});
+
+		it('deletes purchases through the service boundary', async () => {
+			mockQuery.then.mockImplementationOnce((resolve: (val: unknown) => void) =>
+				resolve({ data: null, error: null }),
+			);
+
+			await financeService.deletePurchase('purchase-1');
+
+			expect(supabase.from).toHaveBeenCalledWith('purchases');
+			expect(mockQuery.delete).toHaveBeenCalled();
+			expect(mockQuery.eq).toHaveBeenCalledWith('id', 'purchase-1');
 		});
 	});
 

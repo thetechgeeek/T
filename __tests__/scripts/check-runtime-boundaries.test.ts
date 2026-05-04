@@ -69,6 +69,19 @@ describe('check-runtime-boundaries', () => {
 		expect(output).toContain('app/(app)/inventory/[id].tsx');
 	});
 
+	it('fails on a live route mock import', () => {
+		const root = createFixture({
+			'app/(app)/reports/gstr1.tsx':
+				"import { MOCK_GSTR1_B2B } from '@/src/mocks/reports/gstr1';\n",
+		});
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('live-route-mock-import');
+		expect(output).toContain('app/(app)/reports/gstr1.tsx');
+	});
+
 	it('passes an existing violation only when the exact baseline key is present', () => {
 		const key =
 			'app-repository-import|app/(app)/suppliers/index.tsx|@/src/repositories/supplierRepository';

@@ -5,7 +5,7 @@ import { ScreenHeader } from '@easydesign/ui-shell';
 import { useForm, Controller, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { supplierRepository } from '@/src/repositories/supplierRepository';
+import { supplierService } from '@/src/services/supplierService';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { Button } from '@easydesign/design-system';
 import { Card } from '@easydesign/design-system';
@@ -80,7 +80,7 @@ export default function AddSupplierScreen() {
 		setSubmitting(true);
 		try {
 			const { gst_type: _gstType, ...rest } = data;
-			await supplierRepository.create(rest);
+			await supplierService.createSupplier(rest);
 			router.back();
 		} catch (e: unknown) {
 			logger.error('Failed to save supplier', e instanceof Error ? e : new Error(String(e)));

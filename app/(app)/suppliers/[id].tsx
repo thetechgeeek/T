@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Linking, Alert } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import type { Href } from 'expo-router';
 import { MessageCircle, ShoppingCart, CreditCard } from 'lucide-react-native';
-import { supplierRepository } from '@/src/repositories/supplierRepository';
+import { supplierService } from '@/src/services/supplierService';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { Card } from '@easydesign/design-system';
@@ -33,6 +34,7 @@ type TabName = 'ledger' | 'purchases';
 
 export default function SupplierDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: UUID }>();
+	const router = useRouter();
 	const { c, s, r, theme } = useThemeTokens();
 	const { t } = useLocale();
 
@@ -45,8 +47,8 @@ export default function SupplierDetailScreen() {
 		if (!id || fetchedId.current === id) return;
 		fetchedId.current = id;
 		setLoading(true);
-		supplierRepository
-			.findById(id)
+		supplierService
+			.getSupplierById(id)
 			.then(setSupplier)
 			.catch((e: unknown) => {
 				Alert.alert(
@@ -75,11 +77,11 @@ export default function SupplierDetailScreen() {
 	};
 
 	const handleNewPurchase = () => {
-		Alert.alert('Coming Soon', 'New Purchase feature is not yet implemented.');
+		router.push('/(app)/finance/purchases/create' as Href);
 	};
 
 	const handleMakePayment = () => {
-		Alert.alert('Coming Soon', 'Make Payment feature is not yet implemented.');
+		router.push('/(app)/finance/payments/make' as Href);
 	};
 
 	if (loading && !supplier) {

@@ -14,13 +14,12 @@ import { Package, Edit, HelpCircle, ArrowUpRight, ArrowDownRight } from 'lucide-
 import { Image } from 'expo-image';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { inventoryService } from '@/src/services/inventoryService';
+import { inventoryService, type InventoryRatePartyOption } from '@/src/services/inventoryService';
 import { ThemedText } from '@easydesign/design-system';
 import { Screen as AtomicScreen } from '@easydesign/design-system';
 import { ScreenHeader } from '@easydesign/ui-shell';
 import { SkeletonBlock } from '@easydesign/design-system';
 import { withOpacity } from '@easydesign/design-system/foundation';
-import { supabase } from '@/src/config/supabase';
 import { layout } from '@easydesign/design-system/foundation';
 import { itemPartyRateService } from '@/src/services/itemPartyRateService';
 import type { UUID } from '@/src/types/common';
@@ -56,9 +55,7 @@ export default function ItemDetailScreen() {
 
 	// Add Rate Modal State
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [parties, setParties] = useState<
-		{ id: string; name: string; type: 'customer' | 'supplier' }[]
-	>([]);
+	const [parties, setParties] = useState<InventoryRatePartyOption[]>([]);
 	const [selectedParty, setSelectedParty] = useState<string | null>(null);
 	const [customRate, setCustomRate] = useState('');
 	const [partySearch, setPartySearch] = useState('');
@@ -103,24 +100,7 @@ export default function ItemDetailScreen() {
 
 	const fetchParties = async () => {
 		try {
-			const [custRes, suppRes] = await Promise.all([
-				supabase.from('customers').select('id, name').order('name'),
-				supabase.from('suppliers').select('id, name').order('name'),
-			]);
-
-			const combined: { id: string; name: string; type: 'customer' | 'supplier' }[] = [
-				...(custRes.data?.map((c) => ({
-					id: c.id,
-					name: c.name,
-					type: 'customer' as const,
-				})) || []),
-				...(suppRes.data?.map((s) => ({
-					id: s.id,
-					name: s.name,
-					type: 'supplier' as const,
-				})) || []),
-			];
-			setParties(combined);
+			setParties(await inventoryService.fetchPartiesForRates());
 		} catch (err) {
 			logger.error('Failed to fetch parties', err);
 		}

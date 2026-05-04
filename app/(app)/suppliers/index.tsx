@@ -9,7 +9,7 @@ import { View, FlatList, StyleSheet, RefreshControl, Alert, TouchableOpacity } f
 import { useRouter } from 'expo-router';
 import type { Href } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
-import { supplierRepository } from '@/src/repositories/supplierRepository';
+import { supplierService } from '@/src/services/supplierService';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { ScreenHeader } from '@easydesign/ui-shell';
 import { SearchBar } from '@easydesign/design-system';
@@ -52,13 +52,7 @@ export default function SupplierListScreen() {
 		async (searchTerm: string) => {
 			setLoading(true);
 			try {
-				const result = await supplierRepository.findMany({
-					search: searchTerm
-						? { columns: ['name', 'contact_person'], term: searchTerm }
-						: undefined,
-					sort: { column: 'name', ascending: true },
-				});
-				setSuppliers(result.data);
+				setSuppliers(await supplierService.findSuppliers({ search: searchTerm }));
 			} catch (e: unknown) {
 				Alert.alert(
 					t('common.errorTitle'),

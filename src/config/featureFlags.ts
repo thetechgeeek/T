@@ -8,4 +8,7 @@ export const Features = {
 	MULTI_WAREHOUSE: false,
 	GST_E_INVOICE: false,
 	NOTIFICATIONS: true,
+	LIVE_FINANCE_BANKING_SURFACES: false,
+	LIVE_STATUTORY_REPORTS: false,
+	LIVE_TRANSACTION_DOCUMENTS: false,
 } as const;

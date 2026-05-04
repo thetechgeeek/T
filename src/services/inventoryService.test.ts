@@ -170,6 +170,46 @@ describe('inventoryService', () => {
 		});
 	});
 
+	describe('fetchPartiesForRates', () => {
+		it('combines customers and suppliers into rate party options', async () => {
+			const customerBuilder = makeBuilder({
+				data: [{ id: 'customer-1', name: 'Asha Traders' }],
+				error: null,
+			});
+			const supplierBuilder = makeBuilder({
+				data: [{ id: 'supplier-1', name: 'Bharat Ceramics' }],
+				error: null,
+			});
+			(supabase.from as jest.Mock)
+				.mockReturnValueOnce(customerBuilder)
+				.mockReturnValueOnce(supplierBuilder);
+
+			const result = await inventoryService.fetchPartiesForRates();
+
+			expect(supabase.from).toHaveBeenCalledWith('customers');
+			expect(supabase.from).toHaveBeenCalledWith('suppliers');
+			expect(result).toEqual([
+				{ id: 'customer-1', name: 'Asha Traders', type: 'customer' },
+				{ id: 'supplier-1', name: 'Bharat Ceramics', type: 'supplier' },
+			]);
+		});
+
+		it('normalizes customer lookup errors', async () => {
+			const customerBuilder = makeBuilder({
+				data: null,
+				error: { message: 'denied', code: '42501' },
+			});
+			const supplierBuilder = makeBuilder({ data: [], error: null });
+			(supabase.from as jest.Mock)
+				.mockReturnValueOnce(customerBuilder)
+				.mockReturnValueOnce(supplierBuilder);
+
+			await expect(inventoryService.fetchPartiesForRates()).rejects.toMatchObject({
+				code: 'ACCESS_DENIED',
+			});
+		});
+	});
+
 	describe('createItem', () => {
 		it('calls insert(payload).select().single() and returns created item', async () => {
 			const item = makeInventoryItem();

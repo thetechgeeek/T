@@ -10,7 +10,7 @@ import { SkeletonBlock } from '@easydesign/design-system';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
-import { supplierRepository } from '@/src/repositories/supplierRepository';
+import { supplierService } from '@/src/services/supplierService';
 import type { Customer } from '@/src/types/customer';
 import type { Supplier } from '@/src/types/supplier';
 import { layout } from '@easydesign/design-system/foundation';
@@ -53,9 +53,9 @@ export default function AllPartiesScreen() {
 
 	useEffect(() => {
 		if (tab === 'suppliers' && suppliers.length === 0) {
-			supplierRepository
-				.findMany({})
-				.then((r) => setSuppliers((r.data as Supplier[]) ?? []))
+			supplierService
+				.findSuppliers()
+				.then(setSuppliers)
 				.catch(() => Alert.alert('Error', 'Failed to load suppliers'))
 				.finally(() => setSupliersLoading(false));
 		}

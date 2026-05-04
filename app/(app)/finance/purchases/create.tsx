@@ -12,7 +12,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useShallow } from 'zustand/react/shallow';
 import { X, Plus, Trash2 } from 'lucide-react-native';
-import { supplierRepository } from '@/src/repositories/supplierRepository';
+import { supplierService } from '@/src/services/supplierService';
 import { financeService } from '@/src/services/financeService';
 import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
@@ -65,9 +65,9 @@ export default function PurchaseCreateScreen() {
 
 	useEffect(() => {
 		fetchItems();
-		supplierRepository
-			.findMany({})
-			.then((result) => setSuppliers(result.data))
+		supplierService
+			.findSuppliers()
+			.then(setSuppliers)
 			.catch(() => {});
 	}, [fetchItems]);
 

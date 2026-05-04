@@ -9,6 +9,12 @@ import type {
 } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
 
+export interface InventoryRatePartyOption {
+	id: UUID;
+	name: string;
+	type: 'customer' | 'supplier';
+}
+
 export const inventoryService = {
 	/**
 	 * Fetch paginated inventory items with optional filters
@@ -32,7 +38,7 @@ export const inventoryService = {
 			const { data: lowStockData, error: lowStockError } = await supabase
 				.from('low_stock_items')
 				.select('id');
-			if (lowStockError) throw lowStockError;
+			if (lowStockError) throw toAppError(lowStockError);
 			const lowStockIds = (lowStockData ?? []).map((r: { id: string }) => r.id);
 			if (lowStockIds.length === 0) {
 				return { data: [], count: 0 };
@@ -75,6 +81,33 @@ export const inventoryService = {
 
 		if (error) throw toAppError(error);
 		return data as InventoryItem;
+	},
+
+	async fetchPartiesForRates(): Promise<InventoryRatePartyOption[]> {
+		const [customerResult, supplierResult] = await Promise.all([
+			supabase.from('customers').select('id, name').order('name'),
+			supabase.from('suppliers').select('id, name').order('name'),
+		]);
+
+		if (customerResult.error) throw toAppError(customerResult.error);
+		if (supplierResult.error) throw toAppError(supplierResult.error);
+
+		const customers = (customerResult.data ?? []).map(
+			(customer: { id: UUID; name: string }): InventoryRatePartyOption => ({
+				id: customer.id,
+				name: customer.name,
+				type: 'customer',
+			}),
+		);
+		const suppliers = (supplierResult.data ?? []).map(
+			(supplier: { id: UUID; name: string }): InventoryRatePartyOption => ({
+				id: supplier.id,
+				name: supplier.name,
+				type: 'supplier',
+			}),
+		);
+
+		return [...customers, ...suppliers];
 	},
 
 	/**

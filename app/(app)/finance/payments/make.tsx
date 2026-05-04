@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { X } from 'lucide-react-native';
-import { supplierRepository } from '@/src/repositories/supplierRepository';
+import { supplierService } from '@/src/services/supplierService';
 import { paymentService } from '@/src/services/paymentService';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
@@ -62,9 +62,9 @@ export default function MakePaymentScreen() {
 	const [suppliers, setSuppliers] = useState<Supplier[]>([]);
 
 	useEffect(() => {
-		supplierRepository
-			.findMany({})
-			.then((result) => setSuppliers(result.data))
+		supplierService
+			.findSuppliers()
+			.then(setSuppliers)
 			.catch(() => {});
 	}, []);
 
