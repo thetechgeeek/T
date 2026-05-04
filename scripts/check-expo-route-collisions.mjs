@@ -6,54 +6,50 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+	createViolation,
+	findRepoRoot,
+	parseCliArgs,
+	printViolationReport,
+	walkFiles,
+} from './lib/repo-tools.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const appDir = path.join(__dirname, '..', 'app');
+const { flags } = parseCliArgs(process.argv.slice(2), {
+	boolean: ['json'],
+	string: ['root'],
+});
+const root = flags.root ? path.resolve(String(flags.root)) : findRepoRoot(path.join(__dirname, '..'));
+const appDir = path.join(root, 'app');
 
-const SKIP_DIR = new Set(['node_modules', '.expo', 'dist', 'coverage']);
+const collisions = walkFiles(appDir, { extensions: ['.tsx'] }).flatMap((relPath) => {
+	const fileName = path.basename(relPath);
+	if (fileName === '_layout.tsx') return [];
 
-/** @param {string} dir @param {string[]} out */
-function walk(dir, out) {
-	let entries;
+	const base = path.basename(fileName, '.tsx');
+	if (base === 'index' || /^\[/.test(base)) return [];
+
+	const siblingDir = path.join(appDir, path.dirname(relPath), base);
 	try {
-		entries = fs.readdirSync(dir, { withFileTypes: true });
+		if (!fs.statSync(siblingDir).isDirectory()) return [];
 	} catch {
-		return;
+		return [];
 	}
-	for (const e of entries) {
-		if (e.name.startsWith('.')) continue;
-		const full = path.join(dir, e.name);
-		if (e.isDirectory()) {
-			if (SKIP_DIR.has(e.name)) continue;
-			walk(full, out);
-			continue;
-		}
-		if (!e.name.endsWith('.tsx')) continue;
-		if (e.name === '_layout.tsx') continue;
-		const base = path.basename(e.name, '.tsx');
-		if (base === 'index' || /^\[/.test(base)) continue;
-		const siblingDir = path.join(dir, base);
-		try {
-			if (fs.statSync(siblingDir).isDirectory()) {
-				out.push({
-					file: path.relative(appDir, full),
-					dir: path.relative(appDir, siblingDir) + '/',
-				});
-			}
-		} catch {
-			// no sibling dir
-		}
-	}
-}
 
-const collisions = [];
-walk(appDir, collisions);
+	const siblingRel = path.relative(root, siblingDir).split(path.sep).join('/');
+	return createViolation({
+		file: path.join('app', relPath).split(path.sep).join('/'),
+		rule: 'expo-route-collision',
+		message: `Route file collides with same-named folder: ${siblingRel}/`,
+	});
+});
 
-if (collisions.length) {
-	console.error('Expo Router: route file collides with same-named folder (duplicate screen name):');
-	for (const { file, dir } of collisions) {
-		console.error(`  ${file}  ↔  ${dir}`);
-	}
+printViolationReport('check-expo-route-collisions', collisions, {
+	json: Boolean(flags.json),
+	stream: collisions.length > 0 ? process.stderr : process.stdout,
+});
+
+if (collisions.length > 0) {
 	console.error(
 		'\nFix: move the screen into folder/index.tsx and delete the sibling *.tsx, or rename one segment.',
 	);

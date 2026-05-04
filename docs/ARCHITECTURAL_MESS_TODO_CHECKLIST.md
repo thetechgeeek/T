@@ -256,42 +256,42 @@ Audit refs: Part I sections 1 through 8, Part VI section 23, Recommended Directi
 
 ### TOOL-001 Baseline The Bespoke Toolchain
 
-- [ ] Recount root `package.json` scripts and compare with the audit baseline of 41.
-- [ ] Recount root `scripts/*.mjs` files and compare with the audit baseline of 19.
-- [ ] Recount total `scripts/*.mjs` LOC and compare with the audit baseline of 4,806.
-- [ ] List every script and its current owner.
-- [ ] Classify every script as build, test, e2e, design-system governance, package governance,
+- [x] Recount root `package.json` scripts and compare with the audit baseline of 41.
+- [x] Recount root `scripts/*.mjs` files and compare with the audit baseline of 19.
+- [x] Recount total `scripts/*.mjs` LOC and compare with the audit baseline of 4,806.
+- [x] List every script and its current owner.
+- [x] Classify every script as build, test, e2e, design-system governance, package governance,
       environment, seed/reset, visual regression, or release.
-- [ ] Identify scripts that parse CLI args manually.
-- [ ] Identify scripts that walk the filesystem manually.
-- [ ] Identify scripts that shell out directly.
-- [ ] Identify scripts that read source files as plain text.
-- [ ] Identify scripts that read docs as plain text.
-- [ ] Identify duplicated root-discovery logic across scripts.
-- [ ] Identify duplicated env-loading logic across scripts.
-- [ ] Identify duplicated structured-output or violation-reporting logic across scripts.
-- [ ] Create a script inventory table in a platform issue.
-- [ ] Define the target maximum number of one-off scripts after consolidation.
+- [x] Identify scripts that parse CLI args manually.
+- [x] Identify scripts that walk the filesystem manually.
+- [x] Identify scripts that shell out directly.
+- [x] Identify scripts that read source files as plain text.
+- [x] Identify scripts that read docs as plain text.
+- [x] Identify duplicated root-discovery logic across scripts.
+- [x] Identify duplicated env-loading logic across scripts.
+- [x] Identify duplicated structured-output or violation-reporting logic across scripts.
+- [x] Create a script inventory table in a platform issue.
+- [x] Define the target maximum number of one-off scripts after consolidation.
 
 ### TOOL-002 Create A Shared Internal Tooling Foundation
 
-- [ ] Create a shared internal Node tooling module location.
-- [ ] Add a common CLI parser helper.
-- [ ] Add a common repository-root resolver.
-- [ ] Add a common environment loader.
-- [ ] Add a typed config resolver for script contexts.
-- [ ] Add a common filesystem walker that supports ignore patterns.
-- [ ] Add a common command runner wrapper with structured errors.
-- [ ] Add a common violation format with severity, file path, line, rule, and message.
-- [ ] Add JSON output support for scripts that produce machine-readable results.
-- [ ] Add human-readable output support for local developer use.
-- [ ] Add dry-run support for destructive or baseline-updating scripts.
-- [ ] Add tests for root resolution from nested working directories.
-- [ ] Add tests for missing prerequisite tools.
-- [ ] Add tests for structured violation output.
-- [ ] Migrate one low-risk script first as a proof of pattern.
+- [x] Create a shared internal Node tooling module location.
+- [x] Add a common CLI parser helper.
+- [x] Add a common repository-root resolver.
+- [x] Add a common environment loader.
+- [x] Add a typed config resolver for script contexts.
+- [x] Add a common filesystem walker that supports ignore patterns.
+- [x] Add a common command runner wrapper with structured errors.
+- [x] Add a common violation format with severity, file path, line, rule, and message.
+- [x] Add JSON output support for scripts that produce machine-readable results.
+- [x] Add human-readable output support for local developer use.
+- [x] Add dry-run support for destructive or baseline-updating scripts.
+- [x] Add tests for root resolution from nested working directories.
+- [x] Add tests for missing prerequisite tools.
+- [x] Add tests for structured violation output.
+- [x] Migrate one low-risk script first as a proof of pattern.
 - [ ] Migrate the remaining scripts in small batches.
-- [ ] Delete duplicated helper logic after each script migration.
+- [x] Delete duplicated helper logic after each script migration.
 - [ ] Update package scripts to call the consolidated entry points.
 - [ ] Mark done only when new governance scripts can be built by extending the shared module.
 

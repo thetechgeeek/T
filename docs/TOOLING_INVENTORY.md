@@ -1,0 +1,67 @@
+# Tooling Inventory
+
+Status: Phase 1 baseline for the bespoke script/toolchain audit.
+
+Date: 2026-05-04
+
+## Counts
+
+- Root `package.json` scripts: 42. Audit baseline: 41. Difference: +1 from the new `audit:security` gate.
+- Root `scripts/*.mjs` files: 19. Audit baseline: 19. Difference: unchanged.
+- Root `scripts/*.mjs` LOC: 4,787. Audit baseline: 4,806. Difference: -19 after route-check helper extraction.
+
+## Target
+
+Target one-off script count after consolidation: 12 or fewer root `scripts/*.mjs` files, with shared behavior in `scripts/lib/`.
+
+## Inventory
+
+| Script                                      | Owner            | Class                    | Args | Walks FS | Shells Out | Reads Source | Reads Docs | Env / Root Notes                         |
+| ------------------------------------------- | ---------------- | ------------------------ | ---- | -------- | ---------- | ------------ | ---------- | ---------------------------------------- |
+| `check-design-system-guardrails.mjs`        | Design System    | design-system governance | yes  | yes      | no         | yes          | yes        | custom root/env                          |
+| `check-design-system-visual-regression.mjs` | Design System    | visual regression        | yes  | yes      | no         | no           | no         | `process.cwd()`                          |
+| `check-expo-route-collisions.mjs`           | Platform         | route governance         | yes  | yes      | no         | no           | no         | migrated to `scripts/lib/repo-tools.mjs` |
+| `check-inventory-app-ui-contract.mjs`       | App Architecture | package governance       | yes  | yes      | no         | yes          | yes        | custom root/env                          |
+| `check-no-hex.mjs`                          | Design System    | design-system governance | no   | yes      | no         | yes          | no         | local root logic                         |
+| `check-package-release-discipline.mjs`      | Platform         | release                  | yes  | no       | no         | yes          | yes        | custom root/env                          |
+| `check-ui-package-extraction-readiness.mjs` | Platform         | package governance       | yes  | yes      | yes        | yes          | yes        | custom root/env                          |
+| `check-ui-shell-guardrails.mjs`             | UI Shell         | package governance       | yes  | yes      | no         | yes          | yes        | custom root/env                          |
+| `check-ui-tokens.mjs`                       | Design System    | design-system governance | yes  | yes      | yes        | yes          | no         | custom root/env and staged mode          |
+| `check-workspace-packages.mjs`              | Platform         | package governance       | yes  | no       | no         | yes          | yes        | custom root/env                          |
+| `generate-component-catalog.mjs`            | Design System    | build                    | no   | no       | no         | yes          | no         | fixed paths                              |
+| `generate-design-tokens.mjs`                | Design System    | build                    | no   | no       | no         | yes          | no         | fixed paths                              |
+| `generate-ui-library-catalog.mjs`           | UI Shell         | build                    | no   | no       | no         | yes          | no         | fixed paths                              |
+| `run-design-system-proof.mjs`               | Release / QE     | e2e                      | yes  | no       | yes        | no           | no         | `process.cwd()`                          |
+| `run-expo-e2e.mjs`                          | Release / QE     | e2e                      | yes  | no       | yes        | no           | no         | manual `.env.test` loading               |
+| `run-maestro-suite.mjs`                     | Release / QE     | e2e                      | yes  | yes      | yes        | yes          | no         | manual `.env.test` loading               |
+| `test-seed-reset.mjs`                       | Data             | seed/reset               | no   | no       | yes        | no           | no         | Supabase test env                        |
+| `test-seed-verify.mjs`                      | Data             | seed/reset               | no   | no       | no         | no           | no         | imports shared seed helper               |
+| `test-seed.shared.mjs`                      | Data             | seed/reset               | no   | no       | no         | no           | no         | `dotenv` `.env.test` loading             |
+
+## Duplication Clusters
+
+- Manual CLI parsing: at least 12 scripts inspect `process.argv` directly.
+- Manual filesystem walking: at least 9 scripts call `readdirSync` recursively or scan directories.
+- Direct shell execution: at least 6 scripts call `spawn`, `spawnSync`, `execFile`, or `execFileSync`.
+- Plain-text source reads: at least 13 scripts read source files directly.
+- Plain-text docs reads: at least 7 scripts read docs as an enforcement input.
+- Duplicated root resolution: guardrail scripts repeatedly derive roots through `__dirname`, `process.cwd()`, or custom `--root` parsing.
+- Duplicated env loading: e2e and seed scripts load `.env.test` independently.
+- Duplicated violation reporting: guardrail scripts each define their own violation shape and console formatting.
+
+## First Consolidation Slice
+
+`scripts/lib/repo-tools.mjs` now provides:
+
+- repository root resolution
+- CLI parsing
+- `.env` file loading
+- script config resolution
+- filesystem walking with ignore patterns
+- prerequisite tool checks
+- command execution with structured errors
+- structured violation creation
+- human and JSON violation output
+- dry-run flag interpretation
+
+`scripts/check-expo-route-collisions.mjs` is the first migrated proof of pattern.
