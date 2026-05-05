@@ -100,7 +100,7 @@ function addAccessibilityListener(
 	eventName: string,
 	handler: (value: boolean) => void,
 ): AccessibilitySubscription {
-	const addEventListener = AccessibilityInfo.addEventListener as unknown as
+	const addEventListener = AccessibilityInfo.addEventListener as
 		| ((name: string, listener: (value: boolean) => void) => AccessibilitySubscription)
 		| undefined;
 

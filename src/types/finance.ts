@@ -53,6 +53,8 @@ export interface Payment extends Timestamps {
 	supplier?: { name: string };
 }
 
+export type PaymentInput = Omit<Payment, 'id' | 'created_at' | 'updated_at'>;
+
 export interface ProfitLossReport {
 	period_start: string;
 	period_end: string;

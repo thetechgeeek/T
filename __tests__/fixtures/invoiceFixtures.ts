@@ -71,6 +71,7 @@ export function makeInvoice(overrides?: Partial<Invoice>): Invoice {
 		discount_total: 0,
 		reverse_charge: false,
 		...input,
+		invoice_number: input.invoice_number ?? 'TM/2025-26/0001',
 		amount_paid: input.amount_paid ?? 0,
 		line_items: lineItems,
 		...overrides,

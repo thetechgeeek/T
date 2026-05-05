@@ -96,7 +96,7 @@ export const Tabs = forwardRef<View, TabsProps>(
 						const keyboardProps = {
 							onKeyPress: (event: PressableKeyEvent) =>
 								handleKeyPress(event.nativeEvent.key, optionIndex),
-						} as unknown as React.ComponentProps<typeof Pressable>;
+						} as React.ComponentProps<typeof Pressable>;
 						return (
 							<Pressable
 								{...keyboardProps}

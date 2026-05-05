@@ -16,8 +16,11 @@ const { flags } = parseCliArgs(process.argv.slice(2), {
 	boolean: ['json'],
 	string: ['baseline', 'root'],
 });
-const root = flags.root ? path.resolve(String(flags.root)) : findRepoRoot(path.join(__dirname, '..'));
+const root = flags.root
+	? path.resolve(String(flags.root))
+	: findRepoRoot(path.join(__dirname, '..'));
 const appDir = path.join(root, 'app');
+const srcDir = path.join(root, 'src');
 const baselinePath = flags.baseline
 	? path.resolve(String(flags.baseline))
 	: path.join(root, 'scripts', 'baselines', 'runtime-boundaries.json');
@@ -27,9 +30,21 @@ const ROUTE_FILE_EXCLUDES = [
 	'design-system/',
 	'components/__tests__/',
 	'components/organisms/__tests__/',
+	'.test.',
+	'.spec.',
 ];
 
-const RULES = [
+const COMMON_FILE_EXCLUDES = [
+	'__tests__/',
+	'__mocks__/',
+	'.test.',
+	'.spec.',
+	'design-system/',
+	'ui-shell/',
+	'theme/generated/',
+];
+
+const ROUTE_RULES = [
 	{
 		id: 'app-raw-supabase-import',
 		sourceMatches: (source) =>
@@ -40,12 +55,128 @@ const RULES = [
 		id: 'app-repository-import',
 		sourceMatches: (source) =>
 			source.startsWith('@/src/repositories') || source.includes('/src/repositories'),
-		message: 'Route files must use feature, service, store, or read-model APIs instead of repositories.',
+		message:
+			'Route files must use feature, service, store, or read-model APIs instead of repositories.',
 	},
 	{
 		id: 'live-route-mock-import',
-		sourceMatches: (source) => source.startsWith('@/src/mocks') || source.includes('/src/mocks'),
+		sourceMatches: (source) =>
+			source.startsWith('@/src/mocks') || source.includes('/src/mocks'),
 		message: 'Live route files must not import mock-backed product data.',
+	},
+];
+
+const LAYER_SCANS = [
+	{
+		dir: appDir,
+		prefix: 'app',
+		excludes: ROUTE_FILE_EXCLUDES,
+		rules: ROUTE_RULES,
+	},
+	{
+		dir: path.join(srcDir, 'features'),
+		prefix: 'src/features',
+		excludes: COMMON_FILE_EXCLUDES,
+		rules: [
+			{
+				id: 'feature-raw-supabase-import',
+				sourceMatches: (source) =>
+					source === '@/src/config/supabase' || source.endsWith('/src/config/supabase'),
+				message:
+					'Feature modules must use services or view-model APIs instead of raw Supabase.',
+			},
+			{
+				id: 'feature-repository-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/repositories') || source.includes('/repositories'),
+				message: 'Feature modules must not import repositories directly.',
+			},
+			{
+				id: 'feature-mock-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/mocks') || source.includes('/mocks'),
+				message: 'Feature modules must not depend on mock product data.',
+			},
+		],
+	},
+	{
+		dir: path.join(srcDir, 'stores'),
+		prefix: 'src/stores',
+		excludes: COMMON_FILE_EXCLUDES,
+		rules: [
+			{
+				id: 'store-raw-supabase-import',
+				sourceMatches: (source) =>
+					source === '@/src/config/supabase' || source.endsWith('/src/config/supabase'),
+				message: 'Stores must use services or orchestrators instead of raw Supabase.',
+			},
+			{
+				id: 'store-repository-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/repositories') || source.includes('/repositories'),
+				message: 'Stores must use services or orchestrators instead of repositories.',
+			},
+			{
+				id: 'store-mock-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/mocks') || source.includes('/mocks'),
+				message: 'Stores must not depend on mock product data.',
+			},
+		],
+	},
+	{
+		dir: path.join(srcDir, 'services'),
+		prefix: 'src/services',
+		excludes: COMMON_FILE_EXCLUDES,
+		rules: [
+			{
+				id: 'service-store-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/stores') || source.includes('/stores'),
+				message: 'Services must not import Zustand stores.',
+			},
+			{
+				id: 'service-app-import',
+				sourceMatches: (source) => source.startsWith('@/app') || source.includes('/app/'),
+				message: 'Services must not import app route modules.',
+			},
+			{
+				id: 'service-mock-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/mocks') || source.includes('/mocks'),
+				message: 'Services must not depend on mock product data.',
+			},
+		],
+	},
+	{
+		dir: path.join(srcDir, 'repositories'),
+		prefix: 'src/repositories',
+		excludes: COMMON_FILE_EXCLUDES,
+		rules: [
+			{
+				id: 'repository-service-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/services') || source.includes('/services'),
+				message: 'Repositories must not import services.',
+			},
+			{
+				id: 'repository-store-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/stores') || source.includes('/stores'),
+				message: 'Repositories must not import stores.',
+			},
+			{
+				id: 'repository-app-import',
+				sourceMatches: (source) => source.startsWith('@/app') || source.includes('/app/'),
+				message: 'Repositories must not import app route modules.',
+			},
+			{
+				id: 'repository-mock-import',
+				sourceMatches: (source) =>
+					source.startsWith('@/src/mocks') || source.includes('/mocks'),
+				message: 'Repositories must not depend on mock product data.',
+			},
+		],
 	},
 ];
 
@@ -72,18 +203,18 @@ function violationKey(violation) {
 	return `${violation.rule}|${violation.file}|${violation.source}`;
 }
 
-function collectViolations() {
-	if (!fs.existsSync(appDir)) return [];
+function collectScanViolations(scan) {
+	if (!fs.existsSync(scan.dir)) return [];
 
-	const violations = walkFiles(appDir, {
+	return walkFiles(scan.dir, {
 		extensions: ['.ts', '.tsx'],
-		exclude: (relPath) => ROUTE_FILE_EXCLUDES.some((exclude) => relPath.startsWith(exclude)),
+		exclude: (relPath) => scan.excludes.some((exclude) => relPath.includes(exclude)),
 	}).flatMap((relPath) => {
-		const file = `app/${relPath}`;
-		const text = fs.readFileSync(path.join(appDir, relPath), 'utf8');
+		const file = `${scan.prefix}/${relPath}`;
+		const text = fs.readFileSync(path.join(scan.dir, relPath), 'utf8');
 
 		return importSources(text).flatMap(({ line, source }) =>
-			RULES.flatMap((rule) => {
+			scan.rules.flatMap((rule) => {
 				if (!rule.sourceMatches(source)) return [];
 				return {
 					...createViolation({
@@ -97,8 +228,14 @@ function collectViolations() {
 			}),
 		);
 	});
+}
 
-	return [...new Map(violations.map((violation) => [violationKey(violation), violation])).values()];
+function collectViolations() {
+	const violations = LAYER_SCANS.flatMap(collectScanViolations);
+
+	return [
+		...new Map(violations.map((violation) => [violationKey(violation), violation])).values(),
+	];
 }
 
 const baseline = loadBaseline(baselinePath);

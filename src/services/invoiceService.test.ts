@@ -170,7 +170,7 @@ describe('invoiceService', () => {
 			expect(ve.fieldErrors['line_items.0.rate_per_unit']?.length).toBeGreaterThan(0);
 		});
 
-		it('full payload: p_invoice includes place_of_supply, reverse_charge, cgst_total, sgst_total, igst_total, grand_total', async () => {
+		it('full payload: p_invoice includes invoice intent but omits trusted final totals', async () => {
 			(supabase.rpc as jest.Mock).mockResolvedValue({
 				data: { id: 'inv-001', invoice_number: 'TM/2026-27/0001' },
 				error: null,
@@ -198,24 +198,24 @@ describe('invoiceService', () => {
 				],
 				amount_paid: 0,
 			} as Parameters<typeof invoiceService.createInvoice>[0]);
-			expect(supabase.rpc).toHaveBeenCalledWith(
-				'create_invoice_with_items_v1',
+			const rpcArgs = (supabase.rpc as jest.Mock).mock.calls[0][1];
+			expect(rpcArgs.p_invoice).toEqual(
 				expect.objectContaining({
-					p_invoice: expect.objectContaining({
-						place_of_supply: '27',
-						reverse_charge: true,
-						payment_mode: 'cash',
-						notes: 'test',
-						cgst_total: expect.any(Number),
-						sgst_total: expect.any(Number),
-						igst_total: expect.any(Number),
-						grand_total: expect.any(Number),
-					}),
+					place_of_supply: '27',
+					reverse_charge: true,
+					payment_mode: 'cash',
+					notes: 'test',
 				}),
 			);
+			expect(rpcArgs.p_invoice).not.toHaveProperty('subtotal');
+			expect(rpcArgs.p_invoice).not.toHaveProperty('cgst_total');
+			expect(rpcArgs.p_invoice).not.toHaveProperty('sgst_total');
+			expect(rpcArgs.p_invoice).not.toHaveProperty('igst_total');
+			expect(rpcArgs.p_invoice).not.toHaveProperty('discount_total');
+			expect(rpcArgs.p_invoice).not.toHaveProperty('grand_total');
 		});
 
-		it('line item payload includes cgst_amount, sgst_amount, igst_amount, taxable_amount, line_total, sort_order', async () => {
+		it('line item payload includes draft line intent but omits trusted tax amounts', async () => {
 			(supabase.rpc as jest.Mock).mockResolvedValue({
 				data: { id: 'inv-001', invoice_number: 'TM/2026-27/0001' },
 				error: null,
@@ -239,21 +239,23 @@ describe('invoiceService', () => {
 				],
 				amount_paid: 0,
 			} as Parameters<typeof invoiceService.createInvoice>[0]);
-			expect(supabase.rpc).toHaveBeenCalledWith(
-				'create_invoice_with_items_v1',
+			const rpcArgs = (supabase.rpc as jest.Mock).mock.calls[0][1];
+			expect(rpcArgs.p_line_items[0]).toEqual(
 				expect.objectContaining({
-					p_line_items: expect.arrayContaining([
-						expect.objectContaining({
-							cgst_amount: expect.any(Number),
-							sgst_amount: expect.any(Number),
-							igst_amount: expect.any(Number),
-							taxable_amount: expect.any(Number),
-							line_total: expect.any(Number),
-							sort_order: 0,
-						}),
-					]),
+					item_id: itemId,
+					design_name: 'X',
+					quantity: 1,
+					rate_per_unit: 1000,
+					gst_rate: 18,
+					discount: 0,
 				}),
 			);
+			expect(rpcArgs.p_line_items[0]).not.toHaveProperty('taxable_amount');
+			expect(rpcArgs.p_line_items[0]).not.toHaveProperty('cgst_amount');
+			expect(rpcArgs.p_line_items[0]).not.toHaveProperty('sgst_amount');
+			expect(rpcArgs.p_line_items[0]).not.toHaveProperty('igst_amount');
+			expect(rpcArgs.p_line_items[0]).not.toHaveProperty('line_total');
+			expect(rpcArgs.p_line_items[0]).not.toHaveProperty('sort_order');
 		});
 
 		it('no discount provided: p_line_items[0].discount is 0', async () => {

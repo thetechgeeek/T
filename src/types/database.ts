@@ -2,6 +2,23 @@ import type { UUID } from './common';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
+export const PUBLIC_TABLE_NAMES = [
+	'business_profile',
+	'customers',
+	'expenses',
+	'inventory_items',
+	'invoice_line_items',
+	'invoices',
+	'notifications',
+	'orders',
+	'payments',
+	'purchases',
+	'stock_operations',
+	'suppliers',
+] as const;
+
+export type PublicTableName = (typeof PUBLIC_TABLE_NAMES)[number];
+
 type DbTable<Row, Insert = Partial<Row>, Update = Partial<Row>> = {
 	Row: Row & Record<string, unknown>;
 	Insert: Insert & Record<string, unknown>;

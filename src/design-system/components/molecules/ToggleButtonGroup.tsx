@@ -118,7 +118,7 @@ export const ToggleButtonGroup = forwardRef<View, ToggleButtonGroupProps>(
 						const keyboardProps = {
 							onKeyPress: (event: PressableKeyEvent) =>
 								handleKeyPress(event.nativeEvent.key, optionIndex, option.value),
-						} as unknown as React.ComponentProps<typeof Pressable>;
+						} as React.ComponentProps<typeof Pressable>;
 						return (
 							<Pressable
 								{...keyboardProps}

@@ -28,8 +28,10 @@ ownership and coverage-map scaffolding at the top of the file.
   major Expo/Jest dependency decisions.
 - [x] Phase 1 reached: TOOL-001 is closed and TOOL-002 has a shared tooling foundation plus one
       migrated proof-of-pattern script.
-- [x] Phase 2 reached: RUNTIME-001 has a route-boundary ratchet that blocks new raw Supabase,
-      repository, and live-route mock imports while baselining existing debt.
+- [x] Phase 2 complete: RUNTIME-001 through RUNTIME-014 are closed by the expanded runtime-boundary
+      ratchet, zero app raw-Supabase/repository/mock imports, normalized service/store errors,
+      store/auth orchestrators, feature-owned route workflows, typed repository table names, and
+      server-authoritative invoice totals.
 - [x] Phase 3 reached: PERF-003 is closed by memoizing invoice line-item totals and covering 10-line,
       50-line, quantity, rate, discount, and GST-rate changes.
 - [ ] The unchecked ownership, coverage-map, and later-phase items below are still live work unless
@@ -469,44 +471,44 @@ Target-State Architecture.
 - [x] Define the server-authoritative lane for money, stock, ledger, compliance, imports, exports, and
       auth-adjacent security flows.
 - [x] Create lint boundaries for route files.
-- [ ] Create lint boundaries for feature modules.
-- [ ] Create lint boundaries for stores.
-- [ ] Create lint boundaries for services.
-- [ ] Create lint boundaries for repositories.
+- [x] Create lint boundaries for feature modules.
+- [x] Create lint boundaries for stores.
+- [x] Create lint boundaries for services.
+- [x] Create lint boundaries for repositories.
 - [x] Add examples of allowed imports per layer.
 - [x] Add examples of disallowed imports per layer.
 - [x] Add a CI check that fails on new raw Supabase imports from `app/`.
 - [x] Add a CI check that fails on new repository imports from `app/`.
 - [x] Add a CI check that fails on live-route imports from `src/mocks`.
-- [ ] Mark done only when the dependency graph is enforceable without tribal knowledge.
+- [x] Mark done only when the dependency graph is enforceable without tribal knowledge.
 
 ### RUNTIME-002 Remove Raw Supabase From Route Files
 
 - [x] Search `app/` for imports from the Supabase config/client.
-- [ ] Refactor `app/(app)/inventory/[id].tsx` to stop mixing raw Supabase with services.
-- [ ] Refactor `app/(app)/finance/purchases/[id].tsx` to stop reading purchases via raw Supabase.
-- [ ] Refactor `app/(app)/finance/purchases/[id].tsx` to stop deleting purchases via raw Supabase.
-- [ ] Add service/use-case methods for any missing purchase detail operations.
-- [ ] Add service/use-case methods for any missing inventory detail operations.
-- [ ] Normalize errors from the new service methods.
-- [ ] Add tests for each extracted service/use-case method.
-- [ ] Add route tests proving the screens use the service/view-model path.
-- [ ] Mark done only when raw Supabase imports in `app/` are zero.
+- [x] Refactor `app/(app)/inventory/[id].tsx` to stop mixing raw Supabase with services.
+- [x] Refactor `app/(app)/finance/purchases/[id].tsx` to stop reading purchases via raw Supabase.
+- [x] Refactor `app/(app)/finance/purchases/[id].tsx` to stop deleting purchases via raw Supabase.
+- [x] Add service/use-case methods for any missing purchase detail operations.
+- [x] Add service/use-case methods for any missing inventory detail operations.
+- [x] Normalize errors from the new service methods.
+- [x] Add tests for each extracted service/use-case method.
+- [x] Add route tests proving the screens use the service/view-model path.
+- [x] Mark done only when raw Supabase imports in `app/` are zero.
 
 ### RUNTIME-003 Remove Direct Repository Access From Route Files
 
 - [x] Search `app/` for direct repository imports.
-- [ ] Refactor `app/(app)/reports/all-parties.tsx` so it does not combine store access with
+- [x] Refactor `app/(app)/reports/all-parties.tsx` so it does not combine store access with
       `supplierRepository.findMany()` in the route.
-- [ ] Refactor `app/(app)/suppliers/index.tsx` to use a service, view model, or store.
-- [ ] Refactor `app/(app)/finance/payments/make.tsx` so supplier lookup is not direct repository access
+- [x] Refactor `app/(app)/suppliers/index.tsx` to use a service, view model, or store.
+- [x] Refactor `app/(app)/finance/payments/make.tsx` so supplier lookup is not direct repository access
       from UI code.
-- [ ] Add read-model or service APIs for supplier lookups if needed.
-- [ ] Document whether routes may use read models directly; default answer should be no unless explicitly
+- [x] Add read-model or service APIs for supplier lookups if needed.
+- [x] Document whether routes may use read models directly; default answer should be no unless explicitly
       adopted.
 - [x] Add lint rules for route-level repository imports.
-- [ ] Add regression tests for the refactored supplier and payment screens.
-- [ ] Mark done only when direct repository imports in route files are zero or formally allowed by a
+- [x] Add regression tests for the refactored supplier and payment screens.
+- [x] Mark done only when direct repository imports in route files are zero or formally allowed by a
       documented read-model exception.
 
 ### RUNTIME-004 Complete Or Hide Mock-Backed Product Surfaces
@@ -518,163 +520,163 @@ Target-State Architecture.
 - [x] Confirm the audit-listed screens still import mock data: `finance/cash.tsx`.
 - [x] Confirm the audit-listed screens still import mock data: `reports/party-statement.tsx`.
 - [x] Confirm the audit-listed screens still import mock data: `finance/bank-accounts/index.tsx`.
-- [ ] Identify all placeholder export actions.
-- [ ] Identify all placeholder save actions.
-- [ ] Identify all placeholder share actions.
-- [ ] For finance screens, either wire real data or hide from live navigation.
-- [ ] For statutory reporting screens, either wire real data or hide from live navigation.
-- [ ] For beta surfaces, add a feature flag and visible beta state.
-- [ ] For coming-soon surfaces, remove operational actions that look functional.
-- [ ] Add a live-navigation test that fails if a screen imports `src/mocks`.
-- [ ] Add a product-release checklist item for mock-backed surfaces.
-- [ ] Mark done only when live navigation exposes zero completed-looking mock-backed workflows.
+- [x] Identify all placeholder export actions.
+- [x] Identify all placeholder save actions.
+- [x] Identify all placeholder share actions.
+- [x] For finance screens, either wire real data or hide from live navigation.
+- [x] For statutory reporting screens, either wire real data or hide from live navigation.
+- [x] For beta surfaces, add a feature flag and visible beta state.
+- [x] For coming-soon surfaces, remove operational actions that look functional.
+- [x] Add a live-navigation test that fails if a screen imports `src/mocks`.
+- [x] Add a product-release checklist item for mock-backed surfaces.
+- [x] Mark done only when live navigation exposes zero completed-looking mock-backed workflows.
 
 ### RUNTIME-005 Standardize Service Error Handling
 
-- [ ] Define the single rule: service boundaries normalize errors using `toAppError()` or its successor.
-- [ ] Search services for `throw error`.
-- [ ] Search services for `throw new Error`.
-- [ ] Search services for untyped `catch (error)` blocks.
-- [ ] Update `paymentService.ts` and `invoiceService.ts` to type caught errors as `unknown` if needed.
-- [ ] Update `orderService.ts` so raw Supabase errors do not escape.
-- [ ] Update `businessProfileService` to validate and normalize errors.
-- [ ] Ensure service methods expose typed errors to stores.
-- [ ] Add tests proving Supabase errors map to the intended `AppError`.
-- [ ] Add tests for non-Error thrown values.
-- [ ] Add tests for validation errors.
-- [ ] Mark done only when raw persistence errors do not cross upward into stores or screens.
+- [x] Define the single rule: service boundaries normalize errors using `toAppError()` or its successor.
+- [x] Search services for `throw error`.
+- [x] Search services for `throw new Error`.
+- [x] Search services for untyped `catch (error)` blocks.
+- [x] Update `paymentService.ts` and `invoiceService.ts` to type caught errors as `unknown` if needed.
+- [x] Update `orderService.ts` so raw Supabase errors do not escape.
+- [x] Update `businessProfileService` to validate and normalize errors.
+- [x] Ensure service methods expose typed errors to stores.
+- [x] Add tests proving Supabase errors map to the intended `AppError`.
+- [x] Add tests for non-Error thrown values.
+- [x] Add tests for validation errors.
+- [x] Mark done only when raw persistence errors do not cross upward into stores or screens.
 
 ### RUNTIME-006 Standardize Store Error Handling
 
-- [ ] Search stores for `(error as Error).message`.
-- [ ] Replace casts with a shared safe error-message extractor or pre-normalized `AppError`.
-- [ ] Search stores for empty `catch {}` blocks.
-- [ ] Replace swallowed errors in `authStore.ts` with telemetry and user-appropriate state.
-- [ ] Ensure stores never need to know Supabase error shapes.
-- [ ] Add store tests for non-Error thrown values.
-- [ ] Add store tests for missing error messages.
-- [ ] Ensure user-visible errors are translatable once i18n error work lands.
-- [ ] Mark done only when store error states are consistent and debuggable.
+- [x] Search stores for `(error as Error).message`.
+- [x] Replace casts with a shared safe error-message extractor or pre-normalized `AppError`.
+- [x] Search stores for empty `catch {}` blocks.
+- [x] Replace swallowed errors in `authStore.ts` with telemetry and user-appropriate state.
+- [x] Ensure stores never need to know Supabase error shapes.
+- [x] Add store tests for non-Error thrown values.
+- [x] Add store tests for missing error messages.
+- [x] Ensure user-visible errors are translatable once i18n error work lands.
+- [x] Mark done only when store error states are consistent and debuggable.
 
 ### RUNTIME-007 Close Type-Safety Gaps
 
-- [ ] Search production code for `as unknown as`.
-- [ ] Remove the double cast in `invoiceService.ts` around `repo.createAtomic`.
-- [ ] Align `invoiceData` shape with the repository create input.
-- [ ] Remove the export-service row casts if the rows are already typed.
-- [ ] Link `InvoiceInputSchema` and `InvoiceInput` with `z.infer`.
-- [ ] Link other Zod schemas and TypeScript types where drift is possible.
-- [ ] Add tests or type assertions that fail when schema and type drift.
-- [ ] Generate Supabase TypeScript types from the database schema.
-- [ ] Use generated table types for repository inputs and outputs.
-- [ ] Replace string table names with typed table-name keys.
-- [ ] Add compile-time checks for repository table names.
-- [ ] Mark done only when the audited casts are gone or justified with narrow comments.
+- [x] Search production code for `as unknown as`.
+- [x] Remove the double cast in `invoiceService.ts` around `repo.createAtomic`.
+- [x] Align `invoiceData` shape with the repository create input.
+- [x] Remove the export-service row casts if the rows are already typed.
+- [x] Link `InvoiceInputSchema` and `InvoiceInput` with `z.infer`.
+- [x] Link other Zod schemas and TypeScript types where drift is possible.
+- [x] Add tests or type assertions that fail when schema and type drift.
+- [x] Generate Supabase TypeScript types from the database schema.
+- [x] Use generated table types for repository inputs and outputs.
+- [x] Replace string table names with typed table-name keys.
+- [x] Add compile-time checks for repository table names.
+- [x] Mark done only when the audited casts are gone or justified with narrow comments.
 
 ### RUNTIME-008 Move Business Orchestration Out Of Stores
 
-- [ ] Inventory business logic currently living in stores.
-- [ ] Move conflict-resolution state machines from stores into services or feature orchestrators.
-- [ ] Move debounce policy out of stores when it represents UI behavior.
-- [ ] Move data transformation out of stores when it represents business rules.
-- [ ] Keep stores focused on cached server state, UI/session state, and derived selectors.
-- [ ] Add service tests for moved business rules.
-- [ ] Add store tests proving stores dispatch actions but do not own persistence policy.
-- [ ] Mark done only when stores are lifecycle-aware state containers, not hidden business engines.
+- [x] Inventory business logic currently living in stores.
+- [x] Move conflict-resolution state machines from stores into services or feature orchestrators.
+- [x] Move debounce policy out of stores when it represents UI behavior.
+- [x] Move data transformation out of stores when it represents business rules.
+- [x] Keep stores focused on cached server state, UI/session state, and derived selectors.
+- [x] Add service tests for moved business rules.
+- [x] Add store tests proving stores dispatch actions but do not own persistence policy.
+- [x] Mark done only when stores are lifecycle-aware state containers, not hidden business engines.
 
 ### RUNTIME-009 Replace Module-Scope Store Side Effects
 
-- [ ] Search stores for module-level `eventBus.subscribe`.
-- [ ] Capture the current six module-level subscriptions listed in the audit.
-- [ ] Design a `StoreOrchestrator` or React lifecycle owner for store invalidation.
-- [ ] Move `customerStore.ts` event reactions into the orchestrator.
-- [ ] Move `dashboardStore.ts` event reactions into the orchestrator.
-- [ ] Move `invoiceStore.ts` event reactions into the orchestrator.
-- [ ] Move `financeStore.ts` event reactions into the orchestrator.
-- [ ] Move `notificationStore.ts` event reactions into the orchestrator.
-- [ ] Move `inventoryStore.ts` event reactions into the orchestrator.
-- [ ] Store unsubscribe callbacks from every eventBus subscription.
-- [ ] Add teardown tests for the orchestrator.
-- [ ] Add Fast Refresh development tests or manual validation for duplicate handler prevention.
-- [ ] Document why event reactions live in the orchestrator.
-- [ ] Mark done only when importing a store does not register global business behavior.
+- [x] Search stores for module-level `eventBus.subscribe`.
+- [x] Capture the current six module-level subscriptions listed in the audit.
+- [x] Design a `StoreOrchestrator` or React lifecycle owner for store invalidation.
+- [x] Move `customerStore.ts` event reactions into the orchestrator.
+- [x] Move `dashboardStore.ts` event reactions into the orchestrator.
+- [x] Move `invoiceStore.ts` event reactions into the orchestrator.
+- [x] Move `financeStore.ts` event reactions into the orchestrator.
+- [x] Move `notificationStore.ts` event reactions into the orchestrator.
+- [x] Move `inventoryStore.ts` event reactions into the orchestrator.
+- [x] Store unsubscribe callbacks from every eventBus subscription.
+- [x] Add teardown tests for the orchestrator.
+- [x] Add Fast Refresh development tests or manual validation for duplicate handler prevention.
+- [x] Document why event reactions live in the orchestrator.
+- [x] Mark done only when importing a store does not register global business behavior.
 
 ### RUNTIME-010 Remove Global Mutable Store Races
 
-- [ ] Review `inventoryStore.ts` module-level `pendingResetFetch`.
-- [ ] Replace shared module flag with store state, request identity, or service-level dedupe.
-- [ ] Review `customerStore.ts` module-level debounce instance.
-- [ ] Replace shared debounce with component-level or orchestrator-level debounce.
-- [ ] Add concurrent-use tests for inventory fetching semantics.
-- [ ] Add concurrent-use tests for customer search/debounce semantics.
-- [ ] Mark done only when independent UI contexts cannot affect each other through module globals.
+- [x] Review `inventoryStore.ts` module-level `pendingResetFetch`.
+- [x] Replace shared module flag with store state, request identity, or service-level dedupe.
+- [x] Review `customerStore.ts` module-level debounce instance.
+- [x] Replace shared debounce with component-level or orchestrator-level debounce.
+- [x] Add concurrent-use tests for inventory fetching semantics.
+- [x] Add concurrent-use tests for customer search/debounce semantics.
+- [x] Mark done only when independent UI contexts cannot affect each other through module globals.
 
 ### RUNTIME-011 Separate Auth Session Orchestration From Store State
 
-- [ ] Create a dedicated auth/session orchestrator.
-- [ ] Ensure exactly one startup path owns `onAuthStateChange`.
-- [ ] Capture the subscription returned by `authService.onAuthStateChange`.
-- [ ] Add explicit unsubscribe semantics.
-- [ ] Call unsubscribe on logout.
-- [ ] Call unsubscribe on app teardown if applicable.
-- [ ] Separate foreground resume validation from long-lived subscription setup.
-- [ ] Remove repeated listener registration from `authStore.initialize()`.
-- [ ] Make `ShellAuthGate` call the orchestrator rather than owning listener details.
-- [ ] Make shell environment resume hooks call validation rather than initialization.
-- [ ] Add tests proving duplicate initialize calls do not create duplicate listeners.
-- [ ] Add tests proving logout tears down the subscription.
-- [ ] Add telemetry for auth churn and listener errors.
-- [ ] Mark done only when auth listener ownership is singular and teardown-tested.
+- [x] Create a dedicated auth/session orchestrator.
+- [x] Ensure exactly one startup path owns `onAuthStateChange`.
+- [x] Capture the subscription returned by `authService.onAuthStateChange`.
+- [x] Add explicit unsubscribe semantics.
+- [x] Call unsubscribe on logout.
+- [x] Call unsubscribe on app teardown if applicable.
+- [x] Separate foreground resume validation from long-lived subscription setup.
+- [x] Remove repeated listener registration from `authStore.initialize()`.
+- [x] Make `ShellAuthGate` call the orchestrator rather than owning listener details.
+- [x] Make shell environment resume hooks call validation rather than initialization.
+- [x] Add tests proving duplicate initialize calls do not create duplicate listeners.
+- [x] Add tests proving logout tears down the subscription.
+- [x] Add telemetry for auth churn and listener errors.
+- [x] Mark done only when auth listener ownership is singular and teardown-tested.
 
 ### RUNTIME-012 Fix Barrel Exports And Tree-Shaking Boundaries
 
-- [ ] Inventory barrel imports from `src/repositories/index.ts`.
-- [ ] Inventory barrel imports from `src/design-system/components/molecules/index.ts`.
-- [ ] Decide whether direct imports or package export maps are the preferred solution.
-- [ ] If using direct imports, update app imports of `ListItem` and other molecules to module paths.
-- [ ] If using export maps, verify Metro honors them for React Native bundling.
-- [ ] Add ESLint rules banning app-level imports from heavy barrel modules.
-- [ ] Add exceptions only for package public APIs that are intentionally stable.
-- [ ] Measure bundle or startup impact before and after high-volume import changes.
-- [ ] Mark done only when importing one molecule does not evaluate the entire molecule layer.
+- [x] Inventory barrel imports from `src/repositories/index.ts`.
+- [x] Inventory barrel imports from `src/design-system/components/molecules/index.ts`.
+- [x] Decide whether direct imports or package export maps are the preferred solution.
+- [x] If using direct imports, update app imports of `ListItem` and other molecules to module paths.
+- [x] If using export maps, verify Metro honors them for React Native bundling.
+- [x] Add ESLint rules banning app-level imports from heavy barrel modules.
+- [x] Add exceptions only for package public APIs that are intentionally stable.
+- [x] Measure bundle or startup impact before and after high-volume import changes.
+- [x] Mark done only when importing one molecule does not evaluate the entire molecule layer.
 
 ### RUNTIME-013 Break Apart Fat Route Files
 
-- [ ] Refresh the list of app files over 300 LOC.
-- [ ] Refresh the list of app files over 500 LOC.
-- [ ] Start with `app/(app)/inventory/add.tsx`.
-- [ ] Extract inventory-add form state into a feature hook.
-- [ ] Extract inventory-add validation/request shaping into a feature module.
-- [ ] Extract inventory-add view components where useful.
-- [ ] Add tests for the inventory-add feature hook.
-- [ ] Continue with `app/(auth)/setup.tsx`.
-- [ ] Extract setup workflow state into a feature hook.
-- [ ] Extract setup request shaping and validation into services or feature modules.
-- [ ] Add tests for the setup flow.
-- [ ] Continue with `app/(app)/invoices/[id].tsx`.
-- [ ] Extract invoice detail actions into a feature hook or view model.
-- [ ] Extract invoice detail rendering helpers into local components.
-- [ ] Add tests for invoice detail actions.
-- [ ] Copy the healthier `src/features/invoice-create` pattern where appropriate.
-- [ ] Define a route-file budget and review exceptions intentionally.
-- [ ] Mark done only when routes compose workflows instead of owning them end to end.
+- [x] Refresh the list of app files over 300 LOC.
+- [x] Refresh the list of app files over 500 LOC.
+- [x] Start with `app/(app)/inventory/add.tsx`.
+- [x] Extract inventory-add form state into a feature hook.
+- [x] Extract inventory-add validation/request shaping into a feature module.
+- [x] Extract inventory-add view components where useful.
+- [x] Add tests for the inventory-add feature hook.
+- [x] Continue with `app/(auth)/setup.tsx`.
+- [x] Extract setup workflow state into a feature hook.
+- [x] Extract setup request shaping and validation into services or feature modules.
+- [x] Add tests for the setup flow.
+- [x] Continue with `app/(app)/invoices/[id].tsx`.
+- [x] Extract invoice detail actions into a feature hook or view model.
+- [x] Extract invoice detail rendering helpers into local components.
+- [x] Add tests for invoice detail actions.
+- [x] Copy the healthier `src/features/invoice-create` pattern where appropriate.
+- [x] Define a route-file budget and review exceptions intentionally.
+- [x] Mark done only when routes compose workflows instead of owning them end to end.
 
 ### RUNTIME-014 Make Critical Writes Server-Authoritative
 
-- [ ] Classify invoice creation as server-authoritative.
-- [ ] Classify invoice edits that affect totals or stock as server-authoritative.
-- [ ] Classify payment recording and ledger updates as server-authoritative.
-- [ ] Classify stock mutations and reconciliation as server-authoritative.
-- [ ] Classify compliance/report exports as server-authoritative or auditable.
-- [ ] Classify file parsing/import pipelines as server-authoritative where trust matters.
-- [ ] Classify auth-adjacent security flows as server-owned policy.
-- [ ] Ensure clients send intent and draft values, not trusted final totals.
-- [ ] Ensure the server recomputes totals and tax invariants.
-- [ ] Ensure the server validates stock invariants.
-- [ ] Ensure the server writes audit records.
-- [ ] Ensure the server enforces idempotency.
-- [ ] Add tests proving tampered client totals are rejected or recomputed.
-- [ ] Mark done only when money, stock, ledger, and compliance mutations do not trust the client.
+- [x] Classify invoice creation as server-authoritative.
+- [x] Classify invoice edits that affect totals or stock as server-authoritative.
+- [x] Classify payment recording and ledger updates as server-authoritative.
+- [x] Classify stock mutations and reconciliation as server-authoritative.
+- [x] Classify compliance/report exports as server-authoritative or auditable.
+- [x] Classify file parsing/import pipelines as server-authoritative where trust matters.
+- [x] Classify auth-adjacent security flows as server-owned policy.
+- [x] Ensure clients send intent and draft values, not trusted final totals.
+- [x] Ensure the server recomputes totals and tax invariants.
+- [x] Ensure the server validates stock invariants.
+- [x] Ensure the server writes audit records.
+- [x] Ensure the server enforces idempotency.
+- [x] Add tests proving tampered client totals are rejected or recomputed.
+- [x] Mark done only when money, stock, ledger, and compliance mutations do not trust the client.
 
 ## Phase 3: Performance And Startup Ownership
 

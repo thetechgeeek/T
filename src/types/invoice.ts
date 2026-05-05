@@ -1,4 +1,6 @@
 import type { UUID, Timestamps } from './common';
+import type { z } from 'zod';
+import type { InvoiceInputSchema, InvoiceLineItemSchema } from '../schemas/invoice';
 
 export type PaymentStatus = 'paid' | 'partial' | 'unpaid';
 export type PaymentMode = 'cash' | 'upi' | 'bank_transfer' | 'credit' | 'cheque';
@@ -54,37 +56,13 @@ export interface Invoice extends Timestamps {
 	line_items?: InvoiceLineItem[];
 }
 
-export interface InvoiceLineItemInput {
-	item_id?: UUID;
-	design_name: string;
-	description?: string;
-	hsn_code?: string;
-	quantity: number;
-	rate_per_unit: number;
-	discount?: number;
-	gst_rate: number;
-	tile_image_url?: string;
-}
+export type ParsedInvoiceLineItemInput = z.infer<typeof InvoiceLineItemSchema>;
 
-export interface InvoiceInput {
-	invoice_number: string;
-	idempotency_key?: UUID;
-	invoice_date: string;
-	customer_id?: UUID;
-	customer_name: string;
-	customer_gstin?: string;
-	customer_phone: string;
-	customer_address?: string;
-	is_inter_state: boolean;
-	place_of_supply?: string;
-	reverse_charge?: boolean;
-	line_items: InvoiceLineItemInput[];
-	payment_status: PaymentStatus;
-	payment_mode?: PaymentMode;
-	amount_paid?: number;
-	notes?: string;
-	terms?: string;
-}
+export type InvoiceLineItemInput = z.input<typeof InvoiceLineItemSchema>;
+
+export type ParsedInvoiceInput = z.infer<typeof InvoiceInputSchema>;
+
+export type InvoiceInput = z.input<typeof InvoiceInputSchema>;
 
 export interface InvoiceTotals {
 	subtotal: number;

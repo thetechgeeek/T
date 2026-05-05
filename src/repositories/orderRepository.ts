@@ -5,11 +5,16 @@ import type { Order } from '../types/order';
 
 const base = createRepository<Order>('orders');
 
+export interface OrderDuplicateCandidate {
+	id: string;
+	design_name: string;
+}
+
 export const orderRepository = {
 	...base,
 
 	/** Case-insensitive duplicate detection (fixes §orderService.ts:91-94) */
-	async findDuplicates(designName: string): Promise<Order[]> {
+	async findDuplicates(designName: string): Promise<OrderDuplicateCandidate[]> {
 		const escaped = designName.replace(/[%_\\]/g, (c) => `\\${c}`);
 		const { data, error } = await supabase
 			.from('inventory_items')
@@ -17,6 +22,6 @@ export const orderRepository = {
 			.ilike('design_name', escaped)
 			.limit(10);
 		if (error) throw toAppError(error);
-		return (data ?? []) as unknown as Order[];
+		return data ?? [];
 	},
 };

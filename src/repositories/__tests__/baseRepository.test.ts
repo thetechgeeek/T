@@ -18,7 +18,7 @@ beforeEach(() => {
 });
 
 describe('createRepository — findById', () => {
-	const repo = createRepository<{ id: string; name: string }>('test_table');
+	const repo = createRepository<{ id: string; name: string }>('customers');
 
 	it('calls .from(table).select(*).eq(id, value).single()', async () => {
 		const item = { id: 'test-id', name: 'Item' };
@@ -27,7 +27,7 @@ describe('createRepository — findById', () => {
 
 		const result = await repo.findById('test-id');
 
-		expect(mockFrom).toHaveBeenCalledWith('test_table');
+		expect(mockFrom).toHaveBeenCalledWith('customers');
 		expect(builder.select).toHaveBeenCalledWith('*');
 		expect(builder.eq).toHaveBeenCalledWith('id', 'test-id');
 		expect(builder.single).toHaveBeenCalled();
@@ -57,7 +57,7 @@ describe('createRepository — findById', () => {
 });
 
 describe('createRepository — create', () => {
-	const repo = createRepository<{ id: string; name: string }>('test_table');
+	const repo = createRepository<{ id: string; name: string }>('customers');
 
 	it('calls .from(table).insert(payload).select().single()', async () => {
 		const payload = { name: 'New Item' };
@@ -75,7 +75,7 @@ describe('createRepository — create', () => {
 });
 
 describe('createRepository — update', () => {
-	const repo = createRepository<{ id: string; name: string }>('test_table');
+	const repo = createRepository<{ id: string; name: string }>('customers');
 
 	it('calls .from(table).update(payload).eq(id, value).select().single()', async () => {
 		const updated = { id: 'upd-id', name: 'Updated' };
@@ -92,7 +92,7 @@ describe('createRepository — update', () => {
 });
 
 describe('createRepository — remove', () => {
-	const repo = createRepository<{ id: string }>('test_table');
+	const repo = createRepository<{ id: string }>('customers');
 
 	it('calls .from(table).delete().eq(id, value) and resolves void', async () => {
 		const builder = makeBuilder({ data: null, error: null });
@@ -125,7 +125,7 @@ describe('createRepository — findMany with pagination', () => {
 		phone?: string;
 		status?: string;
 		created_at?: string;
-	}>('test_table');
+	}>('customers');
 
 	it('applies pagination range: page 2, pageSize 10 → range(10, 19)', async () => {
 		const builder = makeBuilder({ data: [], count: 0, error: null });

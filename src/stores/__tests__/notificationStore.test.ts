@@ -1,17 +1,10 @@
 import { useNotificationStore } from '../notificationStore';
-import { notificationRepository } from '../../repositories/notificationRepository';
+import { notificationService } from '../../services/notificationService';
 
-jest.mock('../../repositories/notificationRepository', () => ({
-	notificationRepository: {
+jest.mock('../../services/notificationService', () => ({
+	notificationService: {
 		fetchUnread: jest.fn(),
 		markAsRead: jest.fn(),
-	},
-}));
-
-// Suppress eventBus side-effects during tests
-jest.mock('../../events/appEvents', () => ({
-	eventBus: {
-		subscribe: jest.fn(),
 	},
 }));
 
@@ -50,7 +43,7 @@ describe('notificationStore', () => {
 
 	describe('fetchUnread', () => {
 		it('populates notifications and updates unreadCount', async () => {
-			(notificationRepository.fetchUnread as jest.Mock).mockResolvedValue(mockNotifications);
+			(notificationService.fetchUnread as jest.Mock).mockResolvedValue(mockNotifications);
 
 			await useNotificationStore.getState().fetchUnread();
 
@@ -61,7 +54,7 @@ describe('notificationStore', () => {
 		});
 
 		it('sets error when repository throws', async () => {
-			(notificationRepository.fetchUnread as jest.Mock).mockRejectedValue(
+			(notificationService.fetchUnread as jest.Mock).mockRejectedValue(
 				new Error('Network error'),
 			);
 
@@ -75,10 +68,10 @@ describe('notificationStore', () => {
 
 	describe('markAsRead', () => {
 		it('marks a notification as read and decrements unreadCount', async () => {
-			(notificationRepository.fetchUnread as jest.Mock).mockResolvedValue(mockNotifications);
+			(notificationService.fetchUnread as jest.Mock).mockResolvedValue(mockNotifications);
 			await useNotificationStore.getState().fetchUnread();
 
-			(notificationRepository.markAsRead as jest.Mock).mockResolvedValue(undefined);
+			(notificationService.markAsRead as jest.Mock).mockResolvedValue(undefined);
 			await useNotificationStore.getState().markAsRead('n1');
 
 			const state = useNotificationStore.getState();
@@ -89,9 +82,7 @@ describe('notificationStore', () => {
 
 		it('sets error when markAsRead repository call fails', async () => {
 			useNotificationStore.setState({ notifications: mockNotifications, unreadCount: 2 });
-			(notificationRepository.markAsRead as jest.Mock).mockRejectedValue(
-				new Error('DB error'),
-			);
+			(notificationService.markAsRead as jest.Mock).mockRejectedValue(new Error('DB error'));
 
 			await useNotificationStore.getState().markAsRead('n1');
 
@@ -101,10 +92,10 @@ describe('notificationStore', () => {
 
 	describe('markAllAsRead', () => {
 		it('marks all unread notifications as read', async () => {
-			(notificationRepository.fetchUnread as jest.Mock).mockResolvedValue(mockNotifications);
+			(notificationService.fetchUnread as jest.Mock).mockResolvedValue(mockNotifications);
 			await useNotificationStore.getState().fetchUnread();
 
-			(notificationRepository.markAsRead as jest.Mock).mockResolvedValue(undefined);
+			(notificationService.markAsRead as jest.Mock).mockResolvedValue(undefined);
 			await useNotificationStore.getState().markAllAsRead();
 
 			const state = useNotificationStore.getState();

@@ -1,8 +1,9 @@
-import { paymentRepository, type PaymentInput } from '../repositories/paymentRepository';
+import { paymentRepository } from '../repositories/paymentRepository';
 import { toAppError } from '../errors/AppError';
 import { validateWith } from '../utils/validation';
 import { PaymentSchema } from '../schemas/payment';
 import { eventBus } from '../events/appEvents';
+import type { PaymentInput } from '../types/finance';
 
 export type { PaymentInput };
 

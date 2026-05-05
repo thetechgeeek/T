@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { immer } from 'zustand/middleware/immer';
 import { getErrorMessage } from '../errors/AppError';
 
 export interface PaginatedState<T, F extends Record<string, unknown>> {
@@ -28,83 +27,80 @@ export function createPaginatedStore<T extends { id: string }, F extends Record<
 ) {
 	const { fetchFn, defaultFilters, pageSize = 20 } = config;
 
-	return create<PaginatedState<T, F>>()(
-		immer((set, get) => ({
-			items: [],
-			totalCount: 0,
-			loading: false,
-			error: null,
-			filters: defaultFilters,
-			page: 1,
-			hasMore: true,
-			initialized: false,
+	return create<PaginatedState<T, F>>()((set, get) => ({
+		items: [],
+		totalCount: 0,
+		loading: false,
+		error: null,
+		filters: defaultFilters,
+		page: 1,
+		hasMore: true,
+		initialized: false,
 
-			setFilters: (newFilters) => {
-				set((state) => {
-					// Double cast needed: Immer's Draft<F> is incompatible with F for generic params
-					(state.filters as unknown as F) = {
-						...(state.filters as unknown as F),
-						...newFilters,
-					} as F;
-					state.page = 1;
-					state.hasMore = true;
-					state.initialized = false;
+		setFilters: (newFilters) => {
+			set((state) => ({
+				filters: { ...state.filters, ...newFilters },
+				page: 1,
+				hasMore: true,
+				initialized: false,
+			}));
+			void get().fetch(true);
+		},
+
+		fetch: async (reset = false) => {
+			const state = get();
+			if (state.loading) return;
+			if (!reset && !state.hasMore) return;
+
+			const pageToFetch = reset ? 1 : state.page + 1;
+
+			set({
+				loading: true,
+				error: null,
+				...(reset ? { page: 1, items: [] } : {}),
+			});
+
+			try {
+				const { data, count } = await fetchFn(state.filters, pageToFetch, pageSize);
+
+				set((current) => {
+					const nextItems = reset
+						? data
+						: [
+								...current.items,
+								...data.filter(
+									(item) =>
+										!current.items.some((existing) => existing.id === item.id),
+								),
+							];
+
+					return {
+						items: nextItems,
+						totalCount: count,
+						page: pageToFetch,
+						hasMore: nextItems.length < count,
+						loading: false,
+						initialized: true,
+					};
 				});
-				get().fetch(true);
-			},
-
-			fetch: async (reset = false) => {
-				const state = get();
-				if (state.loading) return;
-				if (!reset && !state.hasMore) return;
-
-				const pageToFetch = reset ? 1 : state.page + 1;
-
-				set((s) => {
-					s.loading = true;
-					s.error = null;
-					if (reset) {
-						s.page = 1;
-						s.items = [] as unknown as typeof s.items;
-					}
+			} catch (err: unknown) {
+				set({
+					error: getErrorMessage(err),
+					loading: false,
 				});
+			}
+		},
 
-				try {
-					const { data, count } = await fetchFn(state.filters, pageToFetch, pageSize);
-
-					set((s) => {
-						if (reset) {
-							s.items = data as unknown as typeof s.items;
-						} else {
-							const existingIds = new Set(s.items.map((i) => i.id));
-							const newItems = data.filter((i) => !existingIds.has(i.id));
-							(s.items as T[]).push(...newItems);
-						}
-						s.totalCount = count;
-						s.page = pageToFetch;
-						s.hasMore = s.items.length < count;
-						s.loading = false;
-						s.initialized = true;
-					});
-				} catch (err: unknown) {
-					set((s) => {
-						s.error = getErrorMessage(err);
-						s.loading = false;
-					});
-				}
-			},
-
-			reset: () => {
-				set((s) => {
-					s.items = [] as unknown as typeof s.items;
-					s.totalCount = 0;
-					s.page = 1;
-					s.hasMore = true;
-					(s.filters as unknown as F) = defaultFilters;
-					s.error = null;
-					s.initialized = false;
-				});
-			},
-		})),
-	);
+		reset: () => {
+			set({
+				items: [],
+				totalCount: 0,
+				page: 1,
+				hasMore: true,
+				filters: defaultFilters,
+				error: null,
+				initialized: false,
+			});
+		},
+	}));
 }

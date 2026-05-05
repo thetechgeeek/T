@@ -13,7 +13,7 @@ jest.mock('../../config/supabase', () => ({
 const mockFrom = supabase.from as jest.Mock;
 
 describe('Repository Error Propagation', () => {
-	const repo = createRepository<{ id: string; name: string }>('test_table');
+	const repo = createRepository<{ id: string; name: string }>('customers');
 
 	beforeEach(() => {
 		jest.clearAllMocks();

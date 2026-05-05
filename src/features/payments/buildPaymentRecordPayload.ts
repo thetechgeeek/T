@@ -1,4 +1,4 @@
-import type { PaymentInput } from '@/src/repositories/paymentRepository';
+import type { PaymentInput } from '@/src/types/finance';
 import type { PaymentMode } from '@/src/types/invoice';
 
 export type BuildReceivePaymentInput = {

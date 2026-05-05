@@ -1,6 +1,6 @@
 import { createPaymentService } from './paymentService';
 import { ValidationError } from '../errors/AppError';
-import type { PaymentInput } from '../repositories/paymentRepository';
+import type { PaymentInput } from '../types/finance';
 
 // Fixed: use a static past date rather than a date that can become "future" (QA issue 2.18)
 const validPayment: PaymentInput = {

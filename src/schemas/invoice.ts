@@ -5,17 +5,21 @@ import { CASH_WALK_IN_CUSTOMER_NAME } from '@/src/constants/invoiceCustomer';
 export const InvoiceLineItemSchema = z.object({
 	item_id: z.string().uuid().optional(),
 	design_name: z.string().min(1, 'Design name is required'),
+	description: z.string().optional(),
 	quantity: z.number().positive('Quantity must be a positive number'),
 	rate_per_unit: z.number().positive('Rate must be positive'),
 	discount: z.number().min(0).default(0),
 	gst_rate: z.number().refine((r) => [0, 5, 12, 18, 28].includes(r), 'Invalid GST rate'),
 	hsn_code: z.string().optional(),
+	tile_image_url: z.string().optional(),
 });
 
 export const InvoiceInputSchema = z
 	.object({
+		invoice_number: z.string().optional(),
 		idempotency_key: z.string().uuid().optional(),
 		invoice_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+		customer_id: z.string().uuid().optional(),
 		customer_name: z.string().min(1, 'Customer name is required'),
 		customer_gstin: z
 			.string()
@@ -26,6 +30,7 @@ export const InvoiceInputSchema = z
 		customer_address: z.string().optional(),
 		is_inter_state: z.boolean(),
 		place_of_supply: z.string().optional(),
+		reverse_charge: z.boolean().optional(),
 		line_items: z.array(InvoiceLineItemSchema).min(1, 'At least one line item required'),
 		payment_status: z.enum(['paid', 'partial', 'unpaid']),
 		payment_mode: z.enum(['cash', 'upi', 'bank_transfer', 'credit', 'cheque']).optional(),

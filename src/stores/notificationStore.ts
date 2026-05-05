@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { notificationRepository } from '../repositories/notificationRepository';
+import { notificationService } from '../services/notificationService';
 import { getErrorMessage } from '../errors/AppError';
 import type { Notification } from '../types/notification';
 import type { UUID } from '../types/common';
@@ -30,7 +30,7 @@ export const useNotificationStore = create<NotificationState>()(
 				s.error = null;
 			});
 			try {
-				const notifications = await notificationRepository.fetchUnread();
+				const notifications = await notificationService.fetchUnread();
 				set((s) => {
 					s.notifications = notifications;
 					s.unreadCount = notifications.length;
@@ -46,7 +46,7 @@ export const useNotificationStore = create<NotificationState>()(
 
 		markAsRead: async (id) => {
 			try {
-				await notificationRepository.markAsRead(id);
+				await notificationService.markAsRead(id);
 				set((s) => {
 					const idx = s.notifications.findIndex((n) => n.id === id);
 					if (idx !== -1) {

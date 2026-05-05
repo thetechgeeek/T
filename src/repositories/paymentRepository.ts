@@ -1,13 +1,11 @@
 import { supabase } from '../config/supabase';
 import { toAppError } from '../errors';
 import { createRepository } from './baseRepository';
-import type { Payment } from '../types/finance';
+import type { Payment, PaymentInput } from '../types/finance';
 import type { PaymentStatus } from '../types/invoice';
 import type { UUID } from '../types/common';
 
 const base = createRepository<Payment>('payments');
-
-export type PaymentInput = Omit<Payment, 'id' | 'created_at' | 'updated_at'>;
 
 export const paymentRepository = {
 	...base,

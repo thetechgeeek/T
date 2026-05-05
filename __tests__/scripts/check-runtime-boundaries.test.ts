@@ -82,6 +82,45 @@ describe('check-runtime-boundaries', () => {
 		expect(output).toContain('app/(app)/reports/gstr1.tsx');
 	});
 
+	it('fails on a feature module importing a repository', () => {
+		const root = createFixture({
+			'src/features/payments/buildPaymentRecordPayload.ts':
+				"import type { PaymentInput } from '@/src/repositories/paymentRepository';\n",
+		});
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('feature-repository-import');
+		expect(output).toContain('src/features/payments/buildPaymentRecordPayload.ts');
+	});
+
+	it('fails on a store importing a repository', () => {
+		const root = createFixture({
+			'src/stores/notificationStore.ts':
+				"import { notificationRepository } from '../repositories/notificationRepository';\n",
+		});
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('store-repository-import');
+		expect(output).toContain('src/stores/notificationStore.ts');
+	});
+
+	it('fails on a service importing a store', () => {
+		const root = createFixture({
+			'src/services/badService.ts':
+				"import { useInvoiceStore } from '../stores/invoiceStore';\n",
+		});
+		roots.push(root);
+
+		const output = runCheckFailure(root);
+
+		expect(output).toContain('service-store-import');
+		expect(output).toContain('src/services/badService.ts');
+	});
+
 	it('passes an existing violation only when the exact baseline key is present', () => {
 		const key =
 			'app-repository-import|app/(app)/suppliers/index.tsx|@/src/repositories/supplierRepository';

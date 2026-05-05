@@ -55,10 +55,16 @@ function escapeCSV(value: string | number): string {
 	return str;
 }
 
-function toCSV(headers: string[], rows: Record<string, string | number>[]): string {
+function csvCell(value: unknown): string | number {
+	if (typeof value === 'string' || typeof value === 'number') return value;
+	if (value == null) return '';
+	return String(value);
+}
+
+function toCSV<T extends object>(headers: (keyof T)[], rows: T[]): string {
 	const lines = [
-		headers.map(escapeCSV).join(','),
-		...rows.map((row) => headers.map((h) => escapeCSV(row[h] ?? '')).join(',')),
+		headers.map((header) => escapeCSV(String(header))).join(','),
+		...rows.map((row) => headers.map((header) => escapeCSV(csvCell(row[header]))).join(',')),
 	];
 	return lines.join('\n');
 }
@@ -169,8 +175,8 @@ export const exportService = {
 			'IGST',
 		];
 
-		const b2bCSV = toCSV(b2bHeaders, b2bRows as unknown as Record<string, string | number>[]);
-		const b2cCSV = toCSV(b2cHeaders, b2cRows as unknown as Record<string, string | number>[]);
+		const b2bCSV = toCSV(b2bHeaders, b2bRows);
+		const b2cCSV = toCSV(b2cHeaders, b2cRows);
 		const combined = `B2B\n${b2bCSV}\n\nB2C Large\n${b2cCSV}`;
 
 		const fileName = `GSTR1_${startDate}_${endDate}.csv`;

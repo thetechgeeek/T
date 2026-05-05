@@ -2,6 +2,7 @@ import { supabase as defaultClient } from '../config/supabase';
 import { toAppError } from '../errors';
 import logger from '../utils/logger';
 import type { UUID } from '../types/common';
+import type { PublicTableName } from '../types/database';
 
 export interface QueryOptions {
 	filters?: Record<string, unknown>;
@@ -97,7 +98,9 @@ function getClient() {
 	return client;
 }
 
-export function createRepository<T extends { id: UUID }>(tableName: string) {
+export function createRepository<T extends { id: UUID; created_at?: string }>(
+	tableName: PublicTableName,
+) {
 	return {
 		async findMany(options: QueryOptions = {}): Promise<PaginatedResult<T>> {
 			const start = performance.now();
@@ -116,9 +119,10 @@ export function createRepository<T extends { id: UUID }>(tableName: string) {
 			if (error) throw toAppError(error);
 			const rows = (data ?? []) as T[];
 			const pageSize = options.cursorPageSize ?? 20;
+			const lastRow = rows[rows.length - 1];
 			const nextCursor =
-				useCursor && rows.length === pageSize
-					? (rows[rows.length - 1] as unknown as { created_at: string }).created_at
+				useCursor && rows.length === pageSize && lastRow?.created_at
+					? lastRow.created_at
 					: undefined;
 			return { data: rows, total: count ?? rows.length, nextCursor };
 		},

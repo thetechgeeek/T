@@ -1,7 +1,6 @@
 import { supabase } from '../config/supabase';
 import { toAppError } from '../errors/AppError';
-import { invoiceRepository } from '../repositories/invoiceRepository';
-import { calculateInvoiceTotals, calculateLineItemTax } from '../utils/gstCalculator';
+import { invoiceRepository, type InvoiceCreatePayload } from '../repositories/invoiceRepository';
 import { validateWith } from '../utils/validation';
 import { generateUUID } from '../utils/uuid';
 import { InvoiceInputSchema } from '../schemas/invoice';
@@ -54,7 +53,6 @@ export function createInvoiceService(repo = invoiceRepository) {
 		 */
 		async createInvoice(input: InvoiceInput): Promise<Invoice> {
 			validateWith(InvoiceInputSchema, input);
-			const totals = calculateInvoiceTotals(input.line_items, input.is_inter_state);
 
 			// Link-or-Create Customer Logic
 			let customerId = input.customer_id;
@@ -84,7 +82,7 @@ export function createInvoiceService(repo = invoiceRepository) {
 				}
 			}
 
-			const invoiceData = {
+			const invoiceData: InvoiceCreatePayload = {
 				invoice_date: input.invoice_date,
 				customer_id: customerId,
 				customer_name: input.customer_name,
@@ -100,42 +98,22 @@ export function createInvoiceService(repo = invoiceRepository) {
 				notes: input.notes,
 				terms: input.terms,
 				idempotency_key: input.idempotency_key || generateUUID(),
-				...totals,
 			};
 
-			const lineItems = input.line_items.map((item, index) => {
-				const discount = item.discount || 0;
-				const tax = calculateLineItemTax(
-					item.gst_rate,
-					item.quantity,
-					item.rate_per_unit,
-					discount,
-					input.is_inter_state,
-				);
-				return {
-					item_id: item.item_id,
-					design_name: item.design_name,
-					description: item.description,
-					hsn_code: item.hsn_code,
-					quantity: item.quantity,
-					rate_per_unit: item.rate_per_unit,
-					discount,
-					taxable_amount: tax.taxableAmount,
-					gst_rate: item.gst_rate,
-					cgst_amount: tax.cgst,
-					sgst_amount: tax.sgst,
-					igst_amount: tax.igst,
-					line_total: tax.lineTotal,
-					tile_image_url: item.tile_image_url,
-					sort_order: index,
-				};
-			});
+			const lineItems = input.line_items.map((item) => ({
+				item_id: item.item_id,
+				design_name: item.design_name,
+				description: item.description,
+				hsn_code: item.hsn_code,
+				quantity: item.quantity,
+				rate_per_unit: item.rate_per_unit,
+				discount: item.discount || 0,
+				gst_rate: item.gst_rate,
+				tile_image_url: item.tile_image_url,
+			}));
 
 			try {
-				const result = await repo.createAtomic(
-					invoiceData as unknown as Parameters<typeof repo.createAtomic>[0],
-					lineItems,
-				);
+				const result = await repo.createAtomic(invoiceData, lineItems);
 				// Re-fetch to return full Invoice type for store consistency
 				return await repo.findById(result.id);
 			} catch (error: unknown) {

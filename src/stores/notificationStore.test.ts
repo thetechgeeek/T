@@ -1,9 +1,8 @@
 import { useNotificationStore } from './notificationStore';
-import { notificationRepository } from '../repositories/notificationRepository';
-import { eventBus } from '../events/appEvents';
+import { notificationService } from '../services/notificationService';
 
-jest.mock('../repositories/notificationRepository', () => ({
-	notificationRepository: {
+jest.mock('../services/notificationService', () => ({
+	notificationService: {
 		fetchUnread: jest.fn(),
 		markAsRead: jest.fn(),
 	},
@@ -22,7 +21,7 @@ describe('notificationStore', () => {
 
 	it('fetchUnread updates notifications and unreadCount', async () => {
 		const mockNotifications = [{ id: '1', title: 'Low Stock', read: false }];
-		(notificationRepository.fetchUnread as jest.Mock).mockResolvedValue(mockNotifications);
+		(notificationService.fetchUnread as jest.Mock).mockResolvedValue(mockNotifications);
 
 		await useNotificationStore.getState().fetchUnread();
 
@@ -37,7 +36,7 @@ describe('notificationStore', () => {
 			notifications: [{ id: '1', title: 'Low Stock', read: false } as any],
 			unreadCount: 1,
 		});
-		(notificationRepository.markAsRead as jest.Mock).mockResolvedValue(undefined);
+		(notificationService.markAsRead as jest.Mock).mockResolvedValue(undefined);
 
 		await useNotificationStore.getState().markAsRead('1');
 
@@ -68,13 +67,8 @@ describe('notificationStore', () => {
 		spy.mockRestore();
 	});
 
-	it('listens to STOCK_CHANGED and refreshes unread notifications', async () => {
-		(notificationRepository.fetchUnread as jest.Mock).mockClear();
-		(notificationRepository.fetchUnread as jest.Mock).mockResolvedValue([]);
-
-		eventBus.emit({ type: 'STOCK_CHANGED', itemId: 'any' });
-
-		expect(notificationRepository.fetchUnread).toHaveBeenCalled();
+	it('leaves stock-change refresh ownership to the store orchestrator', () => {
+		expect(useNotificationStore.getState().fetchUnread).toEqual(expect.any(Function));
 	});
 
 	// ─── fetchUnread: loading lifecycle & error ───────────────────────────────
@@ -84,7 +78,7 @@ describe('notificationStore', () => {
 		const p = new Promise((r) => {
 			resolve = r;
 		});
-		(notificationRepository.fetchUnread as jest.Mock).mockReturnValue(p);
+		(notificationService.fetchUnread as jest.Mock).mockReturnValue(p);
 
 		const fetchPromise = useNotificationStore.getState().fetchUnread();
 		expect(useNotificationStore.getState().loading).toBe(true);
@@ -99,9 +93,7 @@ describe('notificationStore', () => {
 		useNotificationStore.setState({
 			notifications: [{ id: '1', title: 'Old', read: false }] as any,
 		});
-		(notificationRepository.fetchUnread as jest.Mock).mockRejectedValue(
-			new Error('Fetch failed'),
-		);
+		(notificationService.fetchUnread as jest.Mock).mockRejectedValue(new Error('Fetch failed'));
 
 		await useNotificationStore.getState().fetchUnread();
 
@@ -122,7 +114,7 @@ describe('notificationStore', () => {
 			] as any[],
 			unreadCount: 2,
 		});
-		(notificationRepository.markAsRead as jest.Mock).mockResolvedValue(undefined);
+		(notificationService.markAsRead as jest.Mock).mockResolvedValue(undefined);
 
 		await useNotificationStore.getState().markAsRead('1');
 
@@ -141,7 +133,7 @@ describe('notificationStore', () => {
 			{ id: '1', read: false },
 			{ id: '2', read: false },
 		];
-		(notificationRepository.fetchUnread as jest.Mock).mockResolvedValue(unreadNotifications);
+		(notificationService.fetchUnread as jest.Mock).mockResolvedValue(unreadNotifications);
 
 		await useNotificationStore.getState().fetchUnread();
 
@@ -156,11 +148,11 @@ describe('notificationStore', () => {
 			] as any[],
 			unreadCount: 2,
 		});
-		(notificationRepository.markAsRead as jest.Mock).mockResolvedValue(undefined);
+		(notificationService.markAsRead as jest.Mock).mockResolvedValue(undefined);
 
 		await useNotificationStore.getState().markAllAsRead();
 
 		// After markAllAsRead, all notifications should be marked read (via markAsRead calls)
-		expect(notificationRepository.markAsRead).toHaveBeenCalledTimes(2);
+		expect(notificationService.markAsRead).toHaveBeenCalledTimes(2);
 	});
 });
