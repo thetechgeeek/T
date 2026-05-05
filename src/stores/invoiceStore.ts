@@ -141,21 +141,3 @@ export const useInvoiceStore = create<InvoiceState>()(
 		},
 	),
 );
-// Refresh invoice list when a payment is recorded against an invoice
-eventBus.subscribe((event) => {
-	if (event.type === 'PAYMENT_RECORDED' && event.invoiceId) {
-		useInvoiceStore.getState().fetchInvoices(1);
-
-		// If we are currently viewing the invoice that was paid, refresh it
-		const current = useInvoiceStore.getState().currentInvoice;
-		if (current && current.id === event.invoiceId) {
-			useInvoiceStore.getState().fetchInvoiceById(event.invoiceId);
-		}
-	}
-
-	// When a customer's name/phone/address is updated, refresh the invoice
-	// list so invoice rows show the latest customer display name.
-	if (event.type === 'CUSTOMER_UPDATED') {
-		useInvoiceStore.getState().fetchInvoices(1);
-	}
-});

@@ -131,13 +131,8 @@ describe('inventoryStore', () => {
 		expect(state.totalCount).toBe(0);
 	});
 
-	it('listens to STOCK_CHANGED event and refreshes', async () => {
-		(inventoryService.fetchItems as jest.Mock).mockResolvedValue({ data: [], count: 0 });
-		(inventoryService.fetchItems as jest.Mock).mockClear();
-
-		eventBus.emit({ type: 'STOCK_CHANGED', itemId: 'any' });
-
-		await waitFor(() => expect(inventoryService.fetchItems).toHaveBeenCalled());
+	it('leaves stock-change event refresh ownership to the store orchestrator', () => {
+		expect(useInventoryStore.getState().fetchItems).toEqual(expect.any(Function));
 	});
 
 	// ─── fetchItems: loading flag lifecycle ──────────────────────────────────

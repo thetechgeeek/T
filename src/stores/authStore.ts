@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import type { Session, User, AuthChangeEvent } from '@supabase/supabase-js';
+import type { Session, User } from '@supabase/supabase-js';
 import { authService } from '@/src/services/authService';
 import { getErrorMessage } from '@/src/errors/AppError';
+import { stopAuthSessionSubscription } from '@/src/orchestrators/authSessionSubscription';
 
 interface AuthState {
 	user: User | null;
@@ -21,7 +22,7 @@ interface AuthState {
 	reset: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>((set) => ({
 	user: null,
 	session: null,
 	loading: true,
@@ -38,24 +39,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 				loading: false,
 				error: null,
 			});
-
-			// Listen for auth state changes (token refresh, sign out, session expiry)
-			authService.onAuthStateChange(
-				async (event: AuthChangeEvent, session: Session | null) => {
-					if (
-						event === 'TOKEN_REFRESHED' ||
-						event === 'SIGNED_IN' ||
-						event === 'INITIAL_SESSION'
-					) {
-						set({ session, user: session?.user ?? null, isAuthenticated: !!session });
-					} else if (event === 'SIGNED_OUT') {
-						set({ session: null, user: null, isAuthenticated: false });
-					} else if (!session) {
-						// Session expired or refresh failed — force logout
-						await get().logout();
-					}
-				},
-			);
 		} catch (error: unknown) {
 			const message = getErrorMessage(error);
 			set({ loading: false, error: message });
@@ -116,6 +99,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 	},
 
 	logout: async () => {
+		stopAuthSessionSubscription();
 		try {
 			await authService.signOut();
 		} catch (error: unknown) {

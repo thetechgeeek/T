@@ -201,7 +201,6 @@ export const useFinanceStore = create<FinanceState>()(
 						s.loading = false;
 					});
 					eventBus.emit({ type: 'EXPENSE_CREATED', expenseId: newExpense.id });
-					get().fetchSummary();
 				} catch (err: unknown) {
 					set((s) => {
 						s.error = getErrorMessage(err);
@@ -236,18 +235,3 @@ export const useFinanceStore = create<FinanceState>()(
 		},
 	),
 );
-
-// Refresh finance data when relevant business events occur.
-// PAYMENT_RECORDED: refresh both the P&L summary AND the expenses list so the
-//   finance screen doesn't show stale data after a payment.
-// EXPENSE_CREATED: fetchSummary is already called inside addExpense(); the
-//   event handler here covers any external triggers.
-eventBus.subscribe((event) => {
-	if (event.type === 'PAYMENT_RECORDED') {
-		const store = useFinanceStore.getState();
-		store.fetchSummary();
-		store.fetchExpenses();
-	} else if (event.type === 'EXPENSE_CREATED') {
-		useFinanceStore.getState().fetchSummary();
-	}
-});

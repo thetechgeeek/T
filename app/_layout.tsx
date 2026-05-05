@@ -11,6 +11,15 @@ import { useNotificationStore } from '@/src/stores/notificationStore';
 import { useSyncStore } from '@/src/stores/syncStore';
 import { createInventoryShellEnvironment } from '@/src/inventory-app/shell/createInventoryShellEnvironment';
 import { ShellAuthGate, ShellRootProviders } from '@easydesign/ui-shell';
+import {
+	startAuthSessionOrchestrator,
+	stopAuthSessionOrchestrator,
+	validateAuthSession,
+} from '@/src/orchestrators/authSessionOrchestrator';
+import {
+	startStoreOrchestrator,
+	stopStoreOrchestrator,
+} from '@/src/orchestrators/storeOrchestrator';
 
 function AppShell() {
 	const router = useRouter();
@@ -44,13 +53,22 @@ function AppShell() {
 			markAllAsRead: state.markAllAsRead,
 		})),
 	);
-	const { isAuthenticated, loading, initialize } = useAuthStore(
+	const { isAuthenticated, loading } = useAuthStore(
 		useShallow((state) => ({
 			isAuthenticated: state.isAuthenticated,
 			loading: state.loading,
-			initialize: state.initialize,
 		})),
 	);
+
+	useEffect(() => {
+		startStoreOrchestrator();
+		return () => {
+			stopAuthSessionOrchestrator();
+			stopStoreOrchestrator();
+		};
+	}, []);
+
+	const initializeAuthSession = useCallback(() => startAuthSessionOrchestrator(), []);
 
 	useEffect(() => {
 		void fetchUnread();
@@ -84,11 +102,10 @@ function AppShell() {
 				replaceRoute: (href) => {
 					router.replace(href as Href);
 				},
-				onValidateSession: initialize,
+				onValidateSession: validateAuthSession,
 			}),
 		[
 			fetchUnread,
-			initialize,
 			isConnected,
 			isSyncing,
 			lastSyncedAt,
@@ -119,7 +136,7 @@ function AppShell() {
 				isAuthenticated={isAuthenticated}
 				inAuthArea={inAuthGroup}
 				skip={inDesignSystem}
-				initialize={initialize}
+				initialize={initializeAuthSession}
 				onAuthRequired={handleAuthRequired}
 				onAuthenticated={handleAuthenticated}
 			>

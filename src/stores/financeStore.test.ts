@@ -1,6 +1,7 @@
 import { useFinanceStore } from './financeStore';
 import { financeService } from '../services/financeService';
 import { eventBus } from '../events/appEvents';
+import { startStoreOrchestrator, stopStoreOrchestrator } from '../orchestrators/storeOrchestrator';
 import type { ProfitLossReport } from '../types/finance';
 
 jest.mock('../services/financeService', () => ({
@@ -35,8 +36,13 @@ function resetStore() {
 
 describe('financeStore', () => {
 	beforeEach(() => {
+		stopStoreOrchestrator();
 		jest.clearAllMocks();
 		resetStore();
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
 	});
 
 	// ─── fetchExpenses ────────────────────────────────────────────────────────
@@ -178,7 +184,7 @@ describe('financeStore', () => {
 	});
 
 	// ─── addExpense ───────────────────────────────────────────────────────────
-	it('addExpense adds to list and refreshes summary', async () => {
+	it('addExpense adds to list and emits a refreshable event', async () => {
 		const newExpense = { amount: 50, category: 'Tools', expense_date: '2026-03-22' };
 		const savedExpense = { id: '2', ...newExpense };
 		(financeService.createExpense as jest.Mock).mockResolvedValue(savedExpense);
@@ -188,7 +194,7 @@ describe('financeStore', () => {
 
 		const state = useFinanceStore.getState();
 		expect(state.expenses[0]).toEqual(savedExpense);
-		expect(financeService.getProfitLoss).toHaveBeenCalled();
+		expect(financeService.getProfitLoss).not.toHaveBeenCalled();
 	});
 
 	it('addExpense failure sets error and leaves expenses unchanged', async () => {
@@ -282,7 +288,9 @@ describe('financeStore', () => {
 
 	// ─── event-driven refresh ─────────────────────────────────────────────────
 	it('refreshes summary when PAYMENT_RECORDED event emitted', async () => {
+		startStoreOrchestrator();
 		(financeService.getProfitLoss as jest.Mock).mockResolvedValue(mockSummary);
+		(financeService.fetchExpenses as jest.Mock).mockResolvedValue({ data: [], count: 0 });
 
 		eventBus.emit({ type: 'PAYMENT_RECORDED', paymentId: 'pay-1', invoiceId: 'inv-1' });
 
@@ -291,6 +299,7 @@ describe('financeStore', () => {
 	});
 
 	it('refreshes summary when EXPENSE_CREATED event emitted', async () => {
+		startStoreOrchestrator();
 		(financeService.getProfitLoss as jest.Mock).mockResolvedValue(mockSummary);
 
 		eventBus.emit({ type: 'EXPENSE_CREATED', expenseId: 'exp-1' });

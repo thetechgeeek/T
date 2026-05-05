@@ -2,10 +2,14 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+	buildInventoryConflictSnapshot,
+	buildKeepMineResolutionUpdates,
+	isInventoryVersionConflict,
+} from '../features/inventory/inventoryConflictOrchestrator';
 import { inventoryService } from '../services/inventoryService';
 import { eventBus } from '../events/appEvents';
-import { ConflictError, getErrorMessage } from '../errors/AppError';
-import { debounce } from '../utils/perf';
+import { getErrorMessage } from '../errors/AppError';
 import { withRetry } from '../utils/retry';
 import type {
 	InventoryItem,
@@ -23,6 +27,7 @@ interface InventoryState {
 	filters: InventoryFilters;
 	page: number;
 	hasMore: boolean;
+	pendingResetFetch: boolean;
 
 	// Conflict Resolution
 	conflict: {
@@ -70,13 +75,6 @@ function areInventoryFiltersEqual(a: InventoryFilters, b: InventoryFilters): boo
 	);
 }
 
-let pendingResetFetch = false;
-
-// Helper to handle debounced fetches across store instances
-const debouncedFetchItems = debounce((get: () => InventoryState) => {
-	get().fetchItems(true);
-}, 300);
-
 export const useInventoryStore = create<InventoryState>()(
 	persist(
 		immer((set, get) => ({
@@ -87,6 +85,7 @@ export const useInventoryStore = create<InventoryState>()(
 			filters: DEFAULT_FILTERS,
 			page: 1,
 			hasMore: true,
+			pendingResetFetch: false,
 			conflict: null,
 
 			setFilters: (newFilters) => {
@@ -98,15 +97,16 @@ export const useInventoryStore = create<InventoryState>()(
 				set((state) => {
 					state.filters = nextFilters;
 				});
-				// Debounce the fetch to avoid spamming the server on rapid keystrokes
-				debouncedFetchItems(get);
+				void get().fetchItems(true);
 			},
 
 			fetchItems: async (reset = false) => {
 				const state = get();
 				if (state.loading) {
 					if (reset) {
-						pendingResetFetch = true;
+						set((s) => {
+							s.pendingResetFetch = true;
+						});
 					}
 					return;
 				}
@@ -133,11 +133,13 @@ export const useInventoryStore = create<InventoryState>()(
 
 						const shouldRestartWithLatestFilters =
 							reset &&
-							(pendingResetFetch ||
+							(get().pendingResetFetch ||
 								!areInventoryFiltersEqual(get().filters, requestFilters));
 
 						if (shouldRestartWithLatestFilters) {
-							pendingResetFetch = false;
+							set((s) => {
+								s.pendingResetFetch = false;
+							});
 							restartWithLatestReset = true;
 							continue;
 						}
@@ -159,9 +161,18 @@ export const useInventoryStore = create<InventoryState>()(
 							s.hasMore = s.items.length < count;
 							s.loading = false;
 						});
+
+						if (!reset && get().pendingResetFetch) {
+							set((s) => {
+								s.pendingResetFetch = false;
+							});
+							void get().fetchItems(true);
+						}
 					} catch (err: unknown) {
-						if (reset && pendingResetFetch) {
-							pendingResetFetch = false;
+						if (reset && get().pendingResetFetch) {
+							set((s) => {
+								s.pendingResetFetch = false;
+							});
 							restartWithLatestReset = true;
 							continue;
 						}
@@ -221,15 +232,10 @@ export const useInventoryStore = create<InventoryState>()(
 					});
 					return updated;
 				} catch (err: unknown) {
-					if (
-						err instanceof ConflictError &&
-						err.message === 'VERSION_CONFLICT' &&
-						localItem
-					) {
-						// Fetch latest server version to show in modal
-						const serverItem = await inventoryService.fetchItemById(id);
+					if (isInventoryVersionConflict(err) && localItem) {
+						const conflict = await buildInventoryConflictSnapshot(id, localItem);
 						set((s) => {
-							s.conflict = { localItem, serverItem };
+							s.conflict = conflict;
 							s.loading = false;
 						});
 						throw err;
@@ -249,28 +255,8 @@ export const useInventoryStore = create<InventoryState>()(
 				const { localItem, serverItem } = conflict;
 
 				if (resolution === 'keepMine') {
-					// Force update without conflict check
-					// Usually we should re-apply the user's intended changes to the server values,
-					// but 'Force overwrite' is simpler for this implementation phase.
 					try {
-						// Extract only common editable fields or use localItem as is
-						const updates: Partial<InventoryItemInsert> = {
-							design_name: localItem.design_name,
-							selling_price: localItem.selling_price,
-							cost_price: localItem.cost_price,
-							category: localItem.category,
-							gst_rate: localItem.gst_rate,
-							hsn_code: localItem.hsn_code,
-							notes: localItem.notes,
-							size_name: localItem.size_name,
-							brand_name: localItem.brand_name,
-							pcs_per_box: localItem.pcs_per_box,
-							sqft_per_box: localItem.sqft_per_box,
-							box_count: localItem.box_count,
-							has_batch_tracking: false,
-							has_serial_tracking: false,
-							low_stock_threshold: localItem.low_stock_threshold,
-						};
+						const updates = buildKeepMineResolutionUpdates(localItem);
 						await get().updateItem(localItem.id, updates, false);
 						set((s) => {
 							s.conflict = null;
@@ -344,12 +330,12 @@ export const useInventoryStore = create<InventoryState>()(
 			},
 
 			reset: () => {
-				pendingResetFetch = false;
 				set((s) => {
 					s.items = [];
 					s.totalCount = 0;
 					s.page = 1;
 					s.hasMore = true;
+					s.pendingResetFetch = false;
 					s.filters = DEFAULT_FILTERS;
 					s.error = null;
 					s.loading = false;
@@ -368,10 +354,3 @@ export const useInventoryStore = create<InventoryState>()(
 		},
 	),
 );
-
-// Refresh inventory when stock changes externally (e.g., invoice line items sold)
-eventBus.subscribe((event) => {
-	if (event.type === 'STOCK_CHANGED') {
-		useInventoryStore.getState().fetchItems(true);
-	}
-});

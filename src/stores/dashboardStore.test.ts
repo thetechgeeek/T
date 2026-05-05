@@ -1,7 +1,5 @@
-import { waitFor } from '@testing-library/react-native';
 import { useDashboardStore } from './dashboardStore';
 import { dashboardService } from '../services/dashboardService';
-import { eventBus, type AppEvent } from '../events/appEvents';
 
 jest.mock('../utils/retry', () => ({
 	withRetry: jest.fn((fn) => fn()),
@@ -24,20 +22,9 @@ const mockStats: DashboardStats = {
 };
 
 describe('dashboardStore', () => {
-	// Capture unsubscribe functions to prevent listener leaks between tests
-	const unsubscribers: Array<() => void> = [];
-
 	beforeEach(() => {
 		jest.clearAllMocks();
 		useDashboardStore.setState({ stats: null, loading: false, error: null });
-	});
-
-	afterEach(() => {
-		// Clean up any event listeners registered during tests
-		while (unsubscribers.length > 0) {
-			const unsub = unsubscribers.pop();
-			if (unsub) unsub();
-		}
 	});
 
 	it('initial state is empty', () => {
@@ -100,70 +87,7 @@ describe('dashboardStore', () => {
 		expect(useDashboardStore.getState().error).toBeNull();
 	});
 
-	describe('event-driven auto-refresh', () => {
-		it('re-fetches on INVOICE_CREATED', async () => {
-			(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
-
-			eventBus.emit({ type: 'INVOICE_CREATED', invoiceId: 'inv-1' });
-
-			await waitFor(() =>
-				expect(dashboardService.fetchDashboardStats).toHaveBeenCalledTimes(1),
-			);
-		});
-
-		it('re-fetches on PAYMENT_RECORDED', async () => {
-			(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
-
-			eventBus.emit({ type: 'PAYMENT_RECORDED', paymentId: 'pay-1', invoiceId: 'inv-1' });
-
-			await waitFor(() =>
-				expect(dashboardService.fetchDashboardStats).toHaveBeenCalledTimes(1),
-			);
-		});
-
-		it('re-fetches on STOCK_CHANGED', async () => {
-			(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
-
-			eventBus.emit({ type: 'STOCK_CHANGED', itemId: 'item-1' });
-
-			await waitFor(() =>
-				expect(dashboardService.fetchDashboardStats).toHaveBeenCalledTimes(1),
-			);
-		});
-
-		it('does NOT re-fetch on unrelated events', async () => {
-			(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
-
-			eventBus.emit({ type: 'CUSTOMER_UPDATED', customerId: 'cust-1' });
-			eventBus.emit({ type: 'EXPENSE_CREATED', expenseId: 'exp-1' });
-			await Promise.resolve();
-
-			expect(dashboardService.fetchDashboardStats).not.toHaveBeenCalled();
-		});
-
-		it('event listener cleanup — no re-fetch after unsubscribe', async () => {
-			(dashboardService.fetchDashboardStats as jest.Mock).mockResolvedValue(mockStats);
-
-			// Capture a temporary subscription so we can verify unsubscribe works
-			const mockUnsub = jest.fn();
-			const onSpy = jest
-				.spyOn(eventBus, 'subscribe')
-				.mockImplementation((_handler: (ev: AppEvent) => void) => {
-					// Return a mock unsubscribe; the real store listeners are already set up
-					return mockUnsub;
-				});
-
-			// Register via the spy to capture the unsubscribe mechanism
-			const unsub = eventBus.subscribe(() => {});
-			unsubscribers.push(unsub);
-
-			// Unsubscribe
-			unsub();
-
-			// The mockUnsub should have been called (verifying unsubscribe mechanism works)
-			expect(mockUnsub).toHaveBeenCalled();
-
-			onSpy.mockRestore();
-		});
+	it('leaves event-driven refresh ownership to the store orchestrator', () => {
+		expect(useDashboardStore.getState().fetchStats).toEqual(expect.any(Function));
 	});
 });

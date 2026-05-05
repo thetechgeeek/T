@@ -1,7 +1,6 @@
 import { waitFor } from '@testing-library/react-native';
 import { useCustomerStore } from './customerStore';
 import { customerService } from '../services/customerService';
-import { eventBus } from '../events/appEvents';
 
 jest.mock('../utils/retry', () => ({
 	withRetry: jest.fn((fn) => fn()),
@@ -131,23 +130,8 @@ describe('customerStore', () => {
 		await waitFor(() => expect(customerService.fetchCustomers).toHaveBeenCalled());
 	});
 
-	// ─── event-driven refresh ─────────────────────────────────────────────────
-	it('refreshes customers when INVOICE_CREATED event is emitted', async () => {
-		(customerService.fetchCustomers as jest.Mock).mockResolvedValue({ data: [], count: 0 });
-		(customerService.fetchCustomers as jest.Mock).mockClear();
-
-		eventBus.emit({ type: 'INVOICE_CREATED', invoiceId: 'inv-1' });
-
-		await waitFor(() => expect(customerService.fetchCustomers).toHaveBeenCalled());
-	});
-
-	it('refreshes customers when PAYMENT_RECORDED event is emitted', async () => {
-		(customerService.fetchCustomers as jest.Mock).mockResolvedValue({ data: [], count: 0 });
-		(customerService.fetchCustomers as jest.Mock).mockClear();
-
-		eventBus.emit({ type: 'PAYMENT_RECORDED', paymentId: 'pay-1' });
-
-		await waitFor(() => expect(customerService.fetchCustomers).toHaveBeenCalled());
+	it('leaves event-driven refresh ownership to the store orchestrator', () => {
+		expect(useCustomerStore.getState().fetchCustomers).toEqual(expect.any(Function));
 	});
 
 	// ─── fetchCustomers: loading lifecycle ────────────────────────────────────

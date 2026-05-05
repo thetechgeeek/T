@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { customerService } from '../services/customerService';
 import { eventBus } from '../events/appEvents';
 import { getErrorMessage } from '../errors/AppError';
-import { debounce } from '../utils/perf';
 import { withRetry } from '../utils/retry';
 import type {
 	Customer,
@@ -37,11 +36,6 @@ export interface CustomerState {
 	reset: () => void;
 }
 
-// Helper to handle debounced fetches
-const debouncedFetchCustomers = debounce((get: () => CustomerState) => {
-	get().fetchCustomers(true);
-}, 300);
-
 export const useCustomerStore = create<CustomerState>()(
 	persist(
 		immer((set, get) => ({
@@ -64,8 +58,7 @@ export const useCustomerStore = create<CustomerState>()(
 				set((state) => {
 					state.filters = { ...state.filters, ...newFilters };
 				});
-				// Debounce the fetch to avoid spamming the server on rapid keystrokes
-				debouncedFetchCustomers(get);
+				void get().fetchCustomers(true);
 			},
 
 			fetchCustomers: async (reset = false) => {
@@ -207,16 +200,3 @@ export const useCustomerStore = create<CustomerState>()(
 		},
 	),
 );
-
-// Refresh customer list when an invoice or payment affects a customer's balance
-eventBus.subscribe((event) => {
-	if (event.type === 'INVOICE_CREATED' || event.type === 'PAYMENT_RECORDED') {
-		useCustomerStore.getState().fetchCustomers(true);
-
-		// If we are looking at this specific customer's ledger, refresh it too
-		const { selectedCustomer } = useCustomerStore.getState();
-		if (selectedCustomer && event.customerId === selectedCustomer.id) {
-			useCustomerStore.getState().fetchCustomerDetail(selectedCustomer.id);
-		}
-	}
-});
