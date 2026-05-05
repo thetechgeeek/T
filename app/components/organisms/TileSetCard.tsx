@@ -96,9 +96,8 @@ export function TileSetCard({ group, onPressItem, style }: TileSetCardProps) {
 					color={c.onSurfaceVariant}
 					style={{ marginTop: s.xxs }}
 				>
-					{group.items.length}{' '}
-					{group.items.length === 1 ? t('inventory.variant') : t('inventory.variants')} •{' '}
-					{totalStock} {t('inventory.boxesTotal')}
+					{t('inventory.variantCount', { count: group.items.length })} • {totalStock}{' '}
+					{t('inventory.boxesTotal')}
 				</ThemedText>
 			</View>
 

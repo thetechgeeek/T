@@ -297,7 +297,7 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, ButtonProps
 									style={[
 										styles.label,
 										{
-											color: isDisabled ? c.placeholder : v.text,
+											color: isDisabled ? c.onSurfaceVariant : v.text,
 											fontSize: s.fontSize,
 											marginStart: leftIcon ? buttonTokens.iconGap : 0,
 											marginEnd: rightIcon ? buttonTokens.iconGap : 0,

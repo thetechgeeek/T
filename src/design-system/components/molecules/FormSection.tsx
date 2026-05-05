@@ -14,6 +14,7 @@ export interface FormSectionProps {
 	headerVariant?: SectionHeaderVariant;
 	style?: StyleProp<ViewStyle>;
 	testID?: string;
+	accessibilityLabel?: string;
 }
 
 export function FormSection({
@@ -26,11 +27,16 @@ export function FormSection({
 	headerVariant,
 	style,
 	testID,
+	accessibilityLabel,
 }: FormSectionProps) {
 	const { s } = useThemeTokens();
 
 	return (
-		<View testID={testID} style={[styles.container, { gap: s.sm }, style]}>
+		<View
+			testID={testID}
+			accessibilityLabel={accessibilityLabel ?? title}
+			style={[styles.container, { gap: s.sm }, style]}
+		>
 			<SectionHeader
 				title={title}
 				subtitle={subtitle}

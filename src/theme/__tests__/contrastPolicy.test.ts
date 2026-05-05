@@ -76,4 +76,10 @@ describe('theme contrast policy', () => {
 			).toBeGreaterThanOrEqual(3);
 		},
 	);
+
+	it.each(THEME_MATRIX)('keeps disabled button labels legible in $label', ({ theme }) => {
+		expect(
+			contrastRatio(theme.colors.onSurfaceVariant, theme.colors.surfaceVariant),
+		).toBeGreaterThanOrEqual(3);
+	});
 });

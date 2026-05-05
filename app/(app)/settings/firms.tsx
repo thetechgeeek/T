@@ -13,16 +13,16 @@ import {
 } from '@easydesign/design-system/foundation';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
 import { LINE_HEIGHT } from '@easydesign/design-system/foundation';
+import { useLocale } from '@/src/hooks/useLocale';
 
 export default function FirmsScreen() {
 	const { c } = useThemeTokens();
+	const { t } = useLocale();
 
 	const handleAddBusiness = () => {
-		Alert.alert(
-			'Add Business',
-			'This will create a completely separate business. Current data stays safe. Max 5 businesses.',
-			[{ text: 'OK' }],
-		);
+		Alert.alert(t('settings.firms.addBusiness'), t('settings.firms.addBusinessMessage'), [
+			{ text: t('common.ok') },
+		]);
 	};
 
 	return (
@@ -30,7 +30,7 @@ export default function FirmsScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard={false}
 			scrollable
-			header={<ScreenHeader title="Manage Businesses" />}
+			header={<ScreenHeader title={t('settings.firms.manageBusinesses')} />}
 			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 		>
 			{/* Active firm card */}
@@ -44,11 +44,11 @@ export default function FirmsScreen() {
 						}}
 					>
 						<ThemedText variant="body" weight="bold" style={{ flex: 1 }}>
-							My Business
+							{t('settings.firms.myBusiness')}
 						</ThemedText>
 						<View style={[styles.badge, { backgroundColor: c.successLight }]}>
 							<ThemedText variant="caption" color={c.paid} weight="bold">
-								Active
+								{t('settings.firms.active')}
 							</ThemedText>
 						</View>
 					</View>
@@ -73,7 +73,7 @@ export default function FirmsScreen() {
 				]}
 			>
 				<ThemedText variant="body" color={c.primary} weight="bold">
-					+ Add Another Business
+					{t('settings.firms.addAnotherBusiness')}
 				</ThemedText>
 			</Pressable>
 
@@ -87,7 +87,7 @@ export default function FirmsScreen() {
 						lineHeight: LINE_HEIGHT.caption,
 					}}
 				>
-					Each business has completely separate data and settings
+					{t('settings.firms.separateData')}
 				</ThemedText>
 			</View>
 		</Screen>

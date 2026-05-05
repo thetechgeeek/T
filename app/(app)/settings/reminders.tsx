@@ -16,23 +16,22 @@ import {
 } from '@easydesign/design-system/foundation';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
 import { FONT_SIZE } from '@easydesign/design-system/foundation';
+import { useLocale } from '@/src/hooks/useLocale';
 
 type Channel = 'whatsapp' | 'sms' | 'both';
-
-const DEFAULT_TEMPLATE =
-	'नमस्ते {PartyName} जी, ₹{Amount} का भुगतान बकाया है। Invoice: {InvoiceNo}। कृपया भुगतान करें। - {BusinessName}';
 
 const VARIABLES = ['{PartyName}', '{Amount}', '{DueDate}', '{InvoiceNo}', '{BusinessName}'];
 
 export default function RemindersScreen() {
 	const { c } = useThemeTokens();
+	const { t } = useLocale();
 
 	const [autoReminders, setAutoReminders] = useState(false);
 	const [first, setFirst] = useState('7');
 	const [second, setSecond] = useState('15');
 	const [third, setThird] = useState('30');
 	const [channel, setChannel] = useState<Channel>('whatsapp');
-	const [template, setTemplate] = useState(DEFAULT_TEMPLATE);
+	const [template, setTemplate] = useState(() => t('settings.reminders.defaultTemplate'));
 
 	const insertVariable = (v: string) => {
 		setTemplate((prev) => prev + v);
@@ -42,7 +41,7 @@ export default function RemindersScreen() {
 		<Screen
 			safeAreaEdges={['bottom']}
 			scrollable
-			header={<ScreenHeader title="Payment Reminders" />}
+			header={<ScreenHeader title={t('settings.reminders.title')} />}
 			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 			scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
 		>
@@ -50,7 +49,7 @@ export default function RemindersScreen() {
 			<SettingsCard style={styles.topCard} padding="md">
 				<View style={styles.topRow}>
 					<ThemedText variant="body" style={{ flex: 1 }} weight="semibold">
-						Auto Reminders
+						{t('settings.reminders.autoReminders')}
 					</ThemedText>
 					<Switch
 						trackColor={{ true: c.primary, false: c.border }}
@@ -63,7 +62,7 @@ export default function RemindersScreen() {
 			{autoReminders && (
 				<>
 					<SectionHeader
-						title="Reminder Schedule"
+						title={t('settings.reminders.schedule')}
 						variant="uppercase"
 						titleColor={c.primary}
 					/>
@@ -77,13 +76,21 @@ export default function RemindersScreen() {
 						}}
 					>
 						{[
-							{ label: 'First reminder after', value: first, setter: setFirst },
 							{
-								label: 'Second reminder after',
+								label: t('settings.reminders.firstAfter'),
+								value: first,
+								setter: setFirst,
+							},
+							{
+								label: t('settings.reminders.secondAfter'),
 								value: second,
 								setter: setSecond,
 							},
-							{ label: 'Third reminder after', value: third, setter: setThird },
+							{
+								label: t('settings.reminders.thirdAfter'),
+								value: third,
+								setter: setThird,
+							},
 						].map((item, idx, arr) => (
 							<View
 								key={item.label}
@@ -119,20 +126,24 @@ export default function RemindersScreen() {
 										variant="caption"
 										style={{ color: c.onSurfaceVariant }}
 									>
-										days
+										{t('common.days')}
 									</ThemedText>
 								</View>
 							</View>
 						))}
 					</SettingsCard>
 
-					<SectionHeader title="Channel" variant="uppercase" titleColor={c.primary} />
+					<SectionHeader
+						title={t('settings.reminders.channel')}
+						variant="uppercase"
+						titleColor={c.primary}
+					/>
 					<View style={[styles.chipRow, { marginHorizontal: SPACING_PX.lg }]}>
 						{(
 							[
-								{ key: 'whatsapp', label: 'WhatsApp' },
-								{ key: 'sms', label: 'SMS' },
-								{ key: 'both', label: 'Both' },
+								{ key: 'whatsapp', label: t('settings.reminders.whatsapp') },
+								{ key: 'sms', label: t('settings.reminders.sms') },
+								{ key: 'both', label: t('settings.reminders.both') },
 							] as { key: Channel; label: string }[]
 						).map((ch) => (
 							<Pressable
@@ -159,7 +170,7 @@ export default function RemindersScreen() {
 					</View>
 
 					<SectionHeader
-						title="Message Template"
+						title={t('settings.reminders.messageTemplate')}
 						variant="uppercase"
 						titleColor={c.primary}
 					/>
@@ -190,7 +201,7 @@ export default function RemindersScreen() {
 								marginBottom: SPACING_PX.xs,
 							}}
 						>
-							Tap to insert variable:
+							{t('settings.reminders.insertVariable')}
 						</ThemedText>
 						<View
 							style={{

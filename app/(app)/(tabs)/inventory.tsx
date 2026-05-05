@@ -43,6 +43,10 @@ import {
 	Z_INDEX,
 } from '@easydesign/design-system/foundation';
 import { ScreenHeader } from '@easydesign/ui-shell';
+import {
+	announceListLoadMoreComplete,
+	announceListRefreshComplete,
+} from '@/src/accessibility/announcements';
 
 interface SortOption {
 	label: string;
@@ -76,15 +80,7 @@ const HEADER_ACTION_SIZE = 40;
 const MENU_TOP_OFFSET = 84;
 const SORT_SHEET_MAX_HEIGHT = '60%';
 const SUMMARY_SEGMENTS = 3;
-const SUMMARY_OUT_OF_STOCK_LABEL = 'Out of stock';
-const SUMMARY_LOW_STOCK_LABEL = 'Low stock';
-const SUMMARY_STOCK_VALUE_LABEL = 'Stock value';
-const ACTION_IMPORT_EXPORT_LABEL = 'inventory-actions-button';
-const ACTION_IMPORT_EXPORT_HINT = 'Open import and export options';
-const ADD_INVENTORY_HINT = 'Add a new inventory item';
 const INVENTORY_SCREEN_ACCESSIBILITY_LABEL = 'inventory-screen';
-const INVENTORY_SEARCH_HINT = 'Search by design name or item number';
-const LOW_STOCK_ACCESSIBILITY_LABEL = 'category-chip-lowstock';
 
 export default function InventoryTab() {
 	const { theme, c, s, r } = useThemeTokens();
@@ -163,15 +159,36 @@ export default function InventoryTab() {
 	);
 	const inventorySubtitle =
 		groupedSets.length > 0
-			? `${groupedSets.length} sets in catalog`
+			? t('inventory.setsInCatalog', { count: groupedSets.length })
 			: loading
 				? t('common.loading')
 				: t('inventory.addFirstItem');
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
-		await fetchItems(true);
-		setRefreshing(false);
+		try {
+			await fetchItems(true);
+			await announceListRefreshComplete(t('inventory.title'), groupedSets.length);
+		} finally {
+			setRefreshing(false);
+		}
+	};
+
+	const handleLoadMore = async () => {
+		if (!hasMore || loading) {
+			return;
+		}
+
+		const beforeCount = useInventoryStore.getState().items.length;
+		await fetchItems();
+		const afterCount = useInventoryStore.getState().items.length;
+		if (afterCount > beforeCount) {
+			await announceListLoadMoreComplete(
+				t('inventory.title'),
+				afterCount - beforeCount,
+				afterCount,
+			);
+		}
 	};
 
 	const handleCategorySelect = (category: 'ALL' | TileCategory) => {
@@ -201,7 +218,7 @@ export default function InventoryTab() {
 
 			const baseDirectory = FileSystem.documentDirectory;
 			if (!baseDirectory) {
-				Alert.alert(t('common.errorTitle'), 'Storage unavailable');
+				Alert.alert(t('common.errorTitle'), t('inventory.storageUnavailable'));
 				return;
 			}
 
@@ -212,7 +229,7 @@ export default function InventoryTab() {
 			});
 			await Sharing.shareAsync(uri);
 		} catch {
-			Alert.alert(t('common.errorTitle'), 'Export failed');
+			Alert.alert(t('common.errorTitle'), t('inventory.exportFailed'));
 		} finally {
 			setExporting(false);
 		}
@@ -223,12 +240,14 @@ export default function InventoryTab() {
 		selected: boolean,
 		onPress: () => void,
 		accessibilityLabel: string,
+		key: string,
 	) => (
 		<Pressable
-			key={accessibilityLabel}
+			key={key}
 			onPress={onPress}
 			accessibilityRole="button"
 			accessibilityLabel={accessibilityLabel}
+			accessibilityState={{ selected }}
 			style={({ pressed }) => [
 				styles.filterPill,
 				{
@@ -313,8 +332,8 @@ export default function InventoryTab() {
 						<Pressable
 							onPress={() => setMenuOpen(true)}
 							accessibilityRole="button"
-							accessibilityLabel={ACTION_IMPORT_EXPORT_LABEL}
-							accessibilityHint={ACTION_IMPORT_EXPORT_HINT}
+							accessibilityLabel={t('inventory.importExportActions')}
+							accessibilityHint={t('inventory.importExportHint')}
 							style={({ pressed }) => [
 								styles.headerAction,
 								{
@@ -331,13 +350,14 @@ export default function InventoryTab() {
 								size={HEADER_ACTION_ICON_SIZE}
 								color={c.onSurface}
 								strokeWidth={2}
+								importantForAccessibility="no"
 							/>
 						</Pressable>
 						<Pressable
 							onPress={() => router.push('/(app)/inventory/add')}
 							accessibilityRole="button"
-							accessibilityLabel="add-inventory-button"
-							accessibilityHint={ADD_INVENTORY_HINT}
+							accessibilityLabel={t('inventory.addItem')}
+							accessibilityHint={t('inventory.addHint')}
 							style={({ pressed }) => [
 								styles.headerAction,
 								{
@@ -354,6 +374,7 @@ export default function InventoryTab() {
 								size={HEADER_ACTION_ICON_SIZE}
 								color={c.onSurface}
 								strokeWidth={2.2}
+								importantForAccessibility="no"
 							/>
 						</Pressable>
 					</View>
@@ -376,11 +397,11 @@ export default function InventoryTab() {
 			) : null}
 
 			<View style={{ paddingHorizontal: s.lg, paddingTop: s.lg }}>
-				<Card accessibilityLabel="inventory-summary-card" padding="none" variant="outlined">
+				<Card accessibilityLabel={t('inventory.summaryLabel')} padding="none" variant="outlined">
 					<View style={styles.summaryRow}>
 						<View style={[styles.summaryCell, { padding: s.md }]}>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{SUMMARY_STOCK_VALUE_LABEL}
+								{t('inventory.stockValue')}
 							</ThemedText>
 							<ThemedText variant="h3" style={{ marginTop: s.xxs }}>
 								{formatCurrency(totalValue)}
@@ -394,7 +415,7 @@ export default function InventoryTab() {
 							]}
 						>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{SUMMARY_LOW_STOCK_LABEL}
+								{t('inventory.lowStockCount')}
 							</ThemedText>
 							<ThemedText variant="h3" color={c.warning} style={{ marginTop: s.xxs }}>
 								{lowStockSetCount}
@@ -408,7 +429,7 @@ export default function InventoryTab() {
 							]}
 						>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
-								{SUMMARY_OUT_OF_STOCK_LABEL}
+								{t('inventory.outOfStockCount')}
 							</ThemedText>
 							<ThemedText variant="h3" color={c.error} style={{ marginTop: s.xxs }}>
 								{outOfStockSetCount}
@@ -419,9 +440,9 @@ export default function InventoryTab() {
 
 				<View style={[layout.row, { gap: s.sm, marginTop: s.md }]}>
 					<SearchBar
-						accessibilityLabel="inventory-search-input"
-						accessibilityHint={INVENTORY_SEARCH_HINT}
-						placeholder="SKU, name, HSN code..."
+						accessibilityLabel={t('inventory.searchLabel')}
+						accessibilityHint={t('inventory.searchHint')}
+						placeholder={t('inventory.searchPlaceholder')}
 						value={searchInput}
 						onChangeText={setSearchInput}
 						onDebouncedChange={(value) => setFilters({ search: value })}
@@ -441,14 +462,21 @@ export default function InventoryTab() {
 						]}
 						onPress={() => setSortSheetOpen(true)}
 						accessibilityRole="button"
-						accessibilityLabel="inventory-filter-button"
+						accessibilityLabel={t('inventory.filterLabel')}
 						accessibilityHint={t('inventory.filterHint')}
 					>
-						<SlidersHorizontal size={18} color={c.onSurface} strokeWidth={2} />
+						<SlidersHorizontal
+							size={18}
+							color={c.onSurface}
+							strokeWidth={2}
+							importantForAccessibility="no"
+						/>
 					</Pressable>
 				</View>
 
 				<ScrollView
+					accessibilityRole="list"
+					accessibilityLabel={t('inventory.categoryFiltersLabel')}
 					horizontal
 					showsHorizontalScrollIndicator={false}
 					contentContainerStyle={{ gap: s.sm, paddingVertical: s.md }}
@@ -463,14 +491,16 @@ export default function InventoryTab() {
 							label,
 							isSelected,
 							() => handleCategorySelect(category),
-							`category-chip-${category}`,
+							t('inventory.categoryFilterLabel', { label }),
+							`category-${category}`,
 						);
 					})}
 					{renderInventoryFilter(
-						`${SUMMARY_LOW_STOCK_LABEL} · ${lowStockSetCount}`,
+						t('inventory.lowStockFilterWithCount', { count: lowStockSetCount }),
 						Boolean(filters.lowStockOnly),
 						handleLowStockToggle,
-						LOW_STOCK_ACCESSIBILITY_LABEL,
+						t('inventory.lowStockFilterLabel'),
+						'low-stock',
 					)}
 				</ScrollView>
 			</View>
@@ -484,6 +514,8 @@ export default function InventoryTab() {
 				<Pressable
 					style={[styles.modalBackdrop, { backgroundColor: OVERLAY_COLOR_MEDIUM }]}
 					onPress={() => setMenuOpen(false)}
+					accessibilityElementsHidden
+					importantForAccessibility="no-hide-descendants"
 				/>
 				<View
 					style={[
@@ -503,22 +535,36 @@ export default function InventoryTab() {
 							setMenuOpen(false);
 							router.push('/(app)/inventory/import');
 						}}
+						accessibilityRole="button"
+						accessibilityLabel={t('inventory.importItems')}
 						style={({ pressed }) => [
 							styles.menuRow,
 							{ opacity: pressed ? theme.opacity.pressed : 1 },
 						]}
 					>
-						<FileUp size={18} color={c.onSurface} style={{ marginRight: s.md }} />
+						<FileUp
+							size={18}
+							color={c.onSurface}
+							style={{ marginRight: s.md }}
+							importantForAccessibility="no"
+						/>
 						<ThemedText variant="body">{t('inventory.importItems')}</ThemedText>
 					</Pressable>
 					<Pressable
 						onPress={handleExport}
+						accessibilityRole="button"
+						accessibilityLabel={t('inventory.exportItems')}
 						style={({ pressed }) => [
 							styles.menuRow,
 							{ opacity: pressed ? theme.opacity.pressed : 1 },
 						]}
 					>
-						<FileDown size={18} color={c.onSurface} style={{ marginRight: s.md }} />
+						<FileDown
+							size={18}
+							color={c.onSurface}
+							style={{ marginRight: s.md }}
+							importantForAccessibility="no"
+						/>
 						<ThemedText variant="body">{t('inventory.exportItems')}</ThemedText>
 					</Pressable>
 				</View>
@@ -533,6 +579,8 @@ export default function InventoryTab() {
 				<Pressable
 					style={[styles.modalBackdrop, { backgroundColor: OVERLAY_COLOR_MEDIUM }]}
 					onPress={() => setSortSheetOpen(false)}
+					accessibilityElementsHidden
+					importantForAccessibility="no-hide-descendants"
 				/>
 				<View
 					style={[
@@ -554,13 +602,13 @@ export default function InventoryTab() {
 					<View
 						style={{ paddingHorizontal: s.lg, paddingBottom: s.md, paddingTop: s.md }}
 					>
-						<ThemedText variant="sectionTitle">Sort inventory</ThemedText>
+						<ThemedText variant="sectionTitle">{t('inventory.sortTitle')}</ThemedText>
 						<ThemedText
 							variant="caption"
 							color={c.onSurfaceVariant}
 							style={{ marginTop: s.xxs }}
 						>
-							Choose how inventory sets should be ordered
+							{t('inventory.sortDescription')}
 						</ThemedText>
 					</View>
 					{SORT_OPTIONS.map((option, index) => {
@@ -576,6 +624,9 @@ export default function InventoryTab() {
 									});
 									setSortSheetOpen(false);
 								}}
+								accessibilityRole="button"
+								accessibilityLabel={t('inventory.sortByLabel', { label: option.label })}
+								accessibilityState={{ selected: isActive }}
 								style={({ pressed }) => [
 									styles.sortOption,
 									{
@@ -609,6 +660,7 @@ export default function InventoryTab() {
 											size={16}
 											color={isActive ? c.primary : c.onSurfaceVariant}
 											strokeWidth={2}
+											importantForAccessibility="no"
 										/>
 									</View>
 									<ThemedText
@@ -625,7 +677,7 @@ export default function InventoryTab() {
 										color={c.primary}
 										weight="semibold"
 									>
-										Selected
+										{t('common.selected')}
 									</ThemedText>
 								) : null}
 							</Pressable>
@@ -635,6 +687,8 @@ export default function InventoryTab() {
 			</Modal>
 
 			<FlatList
+				accessibilityRole="list"
+				accessibilityLabel={t('inventory.setsListLabel')}
 				data={groupedSets}
 				keyExtractor={(item) => item.baseItemNumber}
 				contentContainerStyle={{
@@ -660,11 +714,7 @@ export default function InventoryTab() {
 						tintColor={c.primary}
 					/>
 				}
-				onEndReached={() => {
-					if (hasMore && !loading) {
-						void fetchItems();
-					}
-				}}
+				onEndReached={() => void handleLoadMore()}
 				onEndReachedThreshold={0.5}
 				ListFooterComponent={
 					loading && items.length > 0 ? (

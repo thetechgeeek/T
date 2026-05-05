@@ -36,6 +36,10 @@ import { Card } from '@easydesign/design-system';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { layout } from '@easydesign/design-system/foundation';
+import {
+	announceForScreenReader,
+	setAccessibilityFocus,
+} from '@easydesign/design-system/foundation';
 import { itemCategoryService } from '@/src/services/itemCategoryService';
 import type { ItemCategory } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
@@ -76,6 +80,7 @@ export default function ItemCategoriesScreen() {
 	const [submitting, setSubmitting] = useState(false);
 	const [editingId, setEditingId] = useState<UUID | null>(null);
 	const [form, setForm] = useState<CategoryFormState>(defaultForm);
+	const addButtonRef = React.useRef<React.ElementRef<typeof Pressable> | null>(null);
 
 	const loadCategories = React.useCallback(async () => {
 		try {
@@ -151,6 +156,10 @@ export default function ItemCategoriesScreen() {
 						try {
 							await itemCategoryService.delete(cat.id);
 							await loadCategories();
+							await announceForScreenReader(
+								t('inventory.deleteCategorySuccess', { name: cat.name_en }),
+							);
+							setTimeout(() => setAccessibilityFocus(addButtonRef), 100);
 						} catch {
 							Alert.alert(t('common.error'), t('inventory.deleteError'));
 						}
@@ -165,7 +174,10 @@ export default function ItemCategoriesScreen() {
 			<Card padding="md">
 				<View style={layout.rowBetween}>
 					<View style={[layout.row, { alignItems: 'center', flex: 1 }]}>
-						<View style={[styles.dot, { backgroundColor: item.color || c.primary }]} />
+						<View
+							style={[styles.dot, { backgroundColor: item.color || c.primary }]}
+							importantForAccessibility="no"
+						/>
 						<ThemedText variant="h2" style={{ marginRight: s.xs }}>
 							{item.icon || '📁'}
 						</ThemedText>
@@ -185,11 +197,27 @@ export default function ItemCategoriesScreen() {
 						</View>
 					</View>
 					<View style={[layout.row, { gap: s.sm }]}>
-						<Pressable onPress={() => openEdit(item)} hitSlop={8}>
-							<Pencil size={18} color={c.primary} />
+						<Pressable
+							onPress={() => openEdit(item)}
+							hitSlop={8}
+							accessibilityRole="button"
+							accessibilityLabel={t('inventory.editCategoryNamed', {
+								name: item.name_en,
+							})}
+							accessibilityHint={t('inventory.editCategoryHint')}
+						>
+							<Pencil size={18} color={c.primary} importantForAccessibility="no" />
 						</Pressable>
-						<Pressable onPress={() => handleDelete(item)} hitSlop={8}>
-							<Trash2 size={18} color={c.error} />
+						<Pressable
+							onPress={() => handleDelete(item)}
+							hitSlop={8}
+							accessibilityRole="button"
+							accessibilityLabel={t('inventory.deleteCategoryNamed', {
+								name: item.name_en,
+							})}
+							accessibilityHint={t('inventory.deleteCategoryHint')}
+						>
+							<Trash2 size={18} color={c.error} importantForAccessibility="no" />
 						</Pressable>
 					</View>
 				</View>
@@ -207,6 +235,8 @@ export default function ItemCategoriesScreen() {
 				</View>
 			) : (
 				<FlatList
+					accessibilityRole="list"
+					accessibilityLabel={t('inventory.itemCategories')}
 					data={categories}
 					keyExtractor={(item) => item.id}
 					renderItem={renderItem}
@@ -224,13 +254,17 @@ export default function ItemCategoriesScreen() {
 			)}
 
 			<Pressable
+				ref={addButtonRef}
 				style={[
 					styles.fab,
 					{ backgroundColor: c.primary, bottom: FAB_OFFSET_BOTTOM + insets.bottom },
 				]}
 				onPress={openAdd}
+				accessibilityRole="button"
+				accessibilityLabel={t('inventory.newCategory')}
+				accessibilityHint={t('inventory.addCategoryHint')}
 			>
-				<Plus color={c.white} size={28} />
+				<Plus color={c.white} size={28} importantForAccessibility="no" />
 			</Pressable>
 
 			<Modal
@@ -346,6 +380,11 @@ export default function ItemCategoriesScreen() {
 									<Pressable
 										key={col}
 										onPress={() => setForm((f) => ({ ...f, color: col }))}
+										accessibilityRole="button"
+										accessibilityLabel={t('inventory.selectCategoryColor', {
+											color: col,
+										})}
+										accessibilityState={{ selected: form.color === col }}
 										style={[
 											styles.colorCircle,
 											{

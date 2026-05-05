@@ -88,7 +88,7 @@ export const FormField = React.memo(
 						label={undefined}
 						warningText={undefined}
 					/>
-					{/* Error copy stays visible and is also exposed for automation; helper text remains visual-only. */}
+					{/* Error copy stays live; helper and warning copy remain visible and readable. */}
 					{!!footerCopy &&
 						(error ? (
 							<ThemedText
@@ -101,7 +101,6 @@ export const FormField = React.memo(
 							</ThemedText>
 						) : (
 							<ThemedText
-								importantForAccessibility="no"
 								variant="caption"
 								color={footerColor}
 								style={{ marginTop: theme.spacing.xs }}

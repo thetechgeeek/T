@@ -8,6 +8,7 @@ import { ScreenHeader } from '@easydesign/ui-shell';
 import { SectionHeader } from '@easydesign/design-system';
 import { SettingsCard } from '@easydesign/design-system';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { useLocale } from '@/src/hooks/useLocale';
 
 function SwitchRow({
 	label,
@@ -53,6 +54,7 @@ function SwitchRow({
 
 export default function ItemSettingsScreen() {
 	const { c } = useThemeTokens();
+	const { t } = useLocale();
 
 	const [itemsModule, setItemsModule] = useState(true);
 	const [barcode, setBarcode] = useState(false);
@@ -70,10 +72,14 @@ export default function ItemSettingsScreen() {
 		<Screen
 			safeAreaEdges={['bottom']}
 			scrollable
-			header={<ScreenHeader title="Item Settings" />}
+			header={<ScreenHeader title={t('settings.items.title')} />}
 			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 		>
-			<SectionHeader title="General" variant="uppercase" titleColor={c.primary} />
+			<SectionHeader
+				title={t('settings.items.general')}
+				variant="uppercase"
+				titleColor={c.primary}
+			/>
 			<SettingsCard
 				padding="none"
 				style={{
@@ -84,21 +90,26 @@ export default function ItemSettingsScreen() {
 				}}
 			>
 				<SwitchRow
-					label="Items Module"
-					sub="Master switch for all item features"
+					label={t('settings.items.itemsModule')}
+					sub={t('settings.items.itemsModuleSub')}
 					value={itemsModule}
 					onChange={setItemsModule}
 					c={c}
 				/>
-				<SwitchRow label="Barcode Scanning" value={barcode} onChange={setBarcode} c={c} />
 				<SwitchRow
-					label="Track Stock by Default"
+					label={t('settings.items.barcodeScanning')}
+					value={barcode}
+					onChange={setBarcode}
+					c={c}
+				/>
+				<SwitchRow
+					label={t('settings.items.trackStockDefault')}
 					value={trackStock}
 					onChange={setTrackStock}
 					c={c}
 				/>
 				<SwitchRow
-					label="Item Categories"
+					label={t('settings.items.itemCategories')}
 					value={categories}
 					onChange={setCategories}
 					c={c}
@@ -106,7 +117,11 @@ export default function ItemSettingsScreen() {
 				/>
 			</SettingsCard>
 
-			<SectionHeader title="Pricing" variant="uppercase" titleColor={c.primary} />
+			<SectionHeader
+				title={t('settings.items.pricing')}
+				variant="uppercase"
+				titleColor={c.primary}
+			/>
 			<SettingsCard
 				padding="none"
 				style={{
@@ -117,23 +132,38 @@ export default function ItemSettingsScreen() {
 				}}
 			>
 				<SwitchRow
-					label="Party-wise Item Rates"
-					sub="Different prices per party"
+					label={t('settings.items.partyRates')}
+					sub={t('settings.items.partyRatesSub')}
 					value={partyRates}
 					onChange={setPartyRates}
 					c={c}
 				/>
-				<SwitchRow label="Item-wise Tax" value={itemTax} onChange={setItemTax} c={c} />
 				<SwitchRow
-					label="Item-wise Discount"
+					label={t('settings.items.itemTax')}
+					value={itemTax}
+					onChange={setItemTax}
+					c={c}
+				/>
+				<SwitchRow
+					label={t('settings.items.itemDiscount')}
 					value={itemDiscount}
 					onChange={setItemDiscount}
 					c={c}
 				/>
-				<SwitchRow label="Show MRP" value={showMrp} onChange={setShowMrp} c={c} last />
+				<SwitchRow
+					label={t('settings.items.showMrp')}
+					value={showMrp}
+					onChange={setShowMrp}
+					c={c}
+					last
+				/>
 			</SettingsCard>
 
-			<SectionHeader title="Display" variant="uppercase" titleColor={c.primary} />
+			<SectionHeader
+				title={t('settings.items.display')}
+				variant="uppercase"
+				titleColor={c.primary}
+			/>
 			<SettingsCard
 				padding="none"
 				style={{
@@ -144,7 +174,7 @@ export default function ItemSettingsScreen() {
 				}}
 			>
 				<SwitchRow
-					label="Show Item Description"
+					label={t('settings.items.showDescription')}
 					value={showDesc}
 					onChange={setShowDesc}
 					c={c}
@@ -152,7 +182,11 @@ export default function ItemSettingsScreen() {
 				/>
 			</SettingsCard>
 
-			<SectionHeader title="Tracking" variant="uppercase" titleColor={c.primary} />
+			<SectionHeader
+				title={t('settings.items.tracking')}
+				variant="uppercase"
+				titleColor={c.primary}
+			/>
 			<SettingsCard
 				padding="none"
 				style={{
@@ -163,14 +197,14 @@ export default function ItemSettingsScreen() {
 				}}
 			>
 				<SwitchRow
-					label="Batch Number Tracking"
-					sub="For manufacturing & pharma"
+					label={t('settings.items.batchTracking')}
+					sub={t('settings.items.batchTrackingSub')}
 					value={batchNo}
 					onChange={setBatchNo}
 					c={c}
 				/>
 				<SwitchRow
-					label="Expiry Date Tracking"
+					label={t('settings.items.expiryTracking')}
 					value={expiry}
 					onChange={setExpiry}
 					c={c}

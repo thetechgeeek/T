@@ -25,6 +25,7 @@ import type { InvoiceStatus } from '@/app/components/molecules/InvoiceStatusBadg
 import { InvoiceListSkeleton } from '@/app/components/molecules/skeletons/InvoiceListSkeleton';
 import type { Invoice, PaymentStatus } from '@/src/types/invoice';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { announceListRefreshComplete } from '@/src/accessibility/announcements';
 import type { UUID } from '@/src/types/common';
 
 // ─── types ───────────────────────────────────────────────────────────────────
@@ -129,7 +130,8 @@ const DateChipButton = React.memo(function DateChipButton({
 			]}
 			onPress={handlePress}
 			accessibilityRole="button"
-			accessibilityLabel={`date-filter-${chip}`}
+			accessibilityLabel={`${label} date filter`}
+			accessibilityState={{ selected: isActive }}
 		>
 			<ThemedText
 				variant="captionBold"
@@ -178,10 +180,12 @@ const StatusChipButton = React.memo(function StatusChipButton({
 			]}
 			onPress={handlePress}
 			accessibilityRole="button"
-			accessibilityLabel={`status-filter-${chip}`}
+			accessibilityLabel={`${chip === 'ALL' ? 'All' : chip.charAt(0).toUpperCase() + chip.slice(1)} status filter`}
+			accessibilityState={{ selected: isActive }}
 		>
 			{chip !== 'ALL' && (
 				<View
+					importantForAccessibility="no"
 					style={[
 						styles.statusDot,
 						{ backgroundColor: isActive ? activeTextColor : dotColor },
@@ -309,10 +313,11 @@ export default function InvoicesListScreen() {
 		setRefreshing(true);
 		try {
 			await fetchInvoices(1);
+			await announceListRefreshComplete(t('invoice.title'), invoices.length);
 		} finally {
 			setRefreshing(false);
 		}
-	}, [fetchInvoices]);
+	}, [fetchInvoices, invoices.length, t]);
 
 	// ── client-side filter (search + date + status) ──
 	const filtered = useMemo<Invoice[]>(() => {
@@ -537,7 +542,11 @@ export default function InvoicesListScreen() {
 		<AtomicScreen safeAreaEdges={['top']}>
 			{/* ── Top Header ── */}
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
-				<ThemedText variant="h1" accessibilityLabel={INVOICES_SCREEN_ACCESSIBILITY_LABEL}>
+				<ThemedText
+					variant="h1"
+					accessibilityRole="header"
+					accessibilityLabel={INVOICES_SCREEN_ACCESSIBILITY_LABEL}
+				>
 					{t('invoice.title')}
 				</ThemedText>
 				<Button
@@ -550,7 +559,7 @@ export default function InvoicesListScreen() {
 
 			{/* ── Monthly Summary Card ── */}
 			{invoices.length > 0 && (
-				<View style={summaryCardStyle}>
+				<View style={summaryCardStyle} accessibilityLabel="Monthly invoice summary">
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
@@ -594,7 +603,12 @@ export default function InvoicesListScreen() {
 
 			{/* ── Search Bar ── */}
 			<View style={searchBarStyle}>
-				<Search size={16} color={c.placeholder} style={styles.searchIcon} />
+				<Search
+					size={16}
+					color={c.placeholder}
+					style={styles.searchIcon}
+					importantForAccessibility="no"
+				/>
 				<TextInput
 					style={searchInputStyle}
 					placeholder="Search invoice no. or customer..."
@@ -606,14 +620,20 @@ export default function InvoicesListScreen() {
 					accessibilityLabel="invoice-search-input"
 				/>
 				{search.length > 0 && (
-					<TouchableOpacity onPress={handleClearSearch} accessibilityLabel="clear-search">
-						<X size={16} color={c.placeholder} />
+					<TouchableOpacity
+						onPress={handleClearSearch}
+						accessibilityRole="button"
+						accessibilityLabel="Clear invoice search"
+					>
+						<X size={16} color={c.placeholder} importantForAccessibility="no" />
 					</TouchableOpacity>
 				)}
 			</View>
 
 			{/* ── Date Filter Chips ── */}
 			<FlatList
+				accessibilityRole="list"
+				accessibilityLabel="Invoice date filters"
 				horizontal
 				data={DATE_CHIPS}
 				keyExtractor={chipKeyExtractor}
@@ -624,6 +644,8 @@ export default function InvoicesListScreen() {
 
 			{/* ── Status Filter Chips ── */}
 			<FlatList
+				accessibilityRole="list"
+				accessibilityLabel="Invoice status filters"
 				horizontal
 				data={STATUS_CHIPS}
 				keyExtractor={chipKeyExtractor}
@@ -635,6 +657,8 @@ export default function InvoicesListScreen() {
 			{/* ── Invoice List ── */}
 			{loading && invoices.length === 0 ? <InvoiceListSkeleton /> : null}
 			<FlatList
+				accessibilityRole="list"
+				accessibilityLabel="Invoices list"
 				data={loading && invoices.length === 0 ? [] : filtered}
 				keyExtractor={invoiceKeyExtractor}
 				refreshing={refreshing}

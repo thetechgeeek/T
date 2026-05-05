@@ -7,6 +7,7 @@ import { calculateInvoiceTotals } from '@/src/utils/gstCalculator';
 import logger from '@/src/utils/logger';
 import { useLocale } from '@/src/hooks/useLocale';
 import { isInvoiceCustomerPhoneValid } from '@/src/schemas/invoice';
+import { announceForScreenReader } from '@easydesign/design-system/foundation';
 import type { InvoiceLineItemInput } from '@/src/types/invoice';
 import { buildInvoiceCreatePayload } from './buildInvoiceCreatePayload';
 import type { CustomerDraft, PaymentMode } from './invoiceCreateTypes';
@@ -155,6 +156,7 @@ export function useInvoiceCreateFlow() {
 					paymentMode,
 				}),
 			);
+			await announceForScreenReader(t('invoice.createInvoiceSuccess'));
 			router.replace(`/(app)/invoices/${newInvoice.id}`);
 		} catch (e: unknown) {
 			logger.error('Failed to create invoice', e instanceof Error ? e : new Error(String(e)));

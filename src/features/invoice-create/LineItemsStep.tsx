@@ -148,7 +148,9 @@ export function LineItemsStep({
 												size="sm"
 											/>
 											<Badge
-												label={`${item.quantity} ${t('invoice.itemPlural')}`}
+												label={t('invoice.itemCount', {
+													count: item.quantity,
+												})}
 												variant="neutral"
 												size="sm"
 											/>
@@ -242,10 +244,7 @@ export function LineItemsStep({
 					/>
 					<View style={layout.rowBetween}>
 						<ThemedText weight="semibold">
-							{lineItems.length}{' '}
-							{lineItems.length === 1
-								? t('invoice.itemSingular')
-								: t('invoice.itemPlural')}
+							{t('invoice.itemCount', { count: lineItems.length })}
 						</ThemedText>
 						<ThemedText variant="h3" color={c.primary}>
 							{formatCurrency(grandTotal)}
@@ -277,11 +276,7 @@ export function LineItemsStep({
 									? t('invoice.availableStock', {
 											count: selectedItem.box_count,
 										})
-									: `${inventoryItems.length} ${
-											inventoryItems.length === 1
-												? t('invoice.itemSingular')
-												: t('invoice.itemPlural')
-										}`}
+									: t('invoice.itemCount', { count: inventoryItems.length })}
 							</ThemedText>
 						</View>
 						{inventoryLoading && (

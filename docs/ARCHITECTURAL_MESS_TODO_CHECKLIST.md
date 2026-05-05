@@ -1361,122 +1361,122 @@ Audit refs: Part VII sections 24 and 25, Part XIV sections 55 through 59.
 
 ### A11Y-001 Preserve Design-System Accessibility Strengths
 
-- [ ] Preserve atom-level `accessibilityRole` coverage.
-- [ ] Preserve state announcements via `announceForScreenReader()`.
-- [ ] Preserve 48px touch target enforcement.
-- [ ] Preserve focus ring utilities.
-- [ ] Preserve decorative-content hiding.
-- [ ] Preserve Toast live-region behavior.
-- [ ] Preserve accessibility actions for gesture-heavy components.
-- [ ] Preserve FormField error alert behavior.
-- [ ] Preserve contrast validation across theme presets.
-- [ ] Preserve color-blindness distinguishability tests.
-- [ ] Preserve role/label-based tests.
-- [ ] Add regression tests when refactoring design-system components.
+- [x] Preserve atom-level `accessibilityRole` coverage.
+- [x] Preserve state announcements via `announceForScreenReader()`.
+- [x] Preserve 48px touch target enforcement.
+- [x] Preserve focus ring utilities.
+- [x] Preserve decorative-content hiding.
+- [x] Preserve Toast live-region behavior.
+- [x] Preserve accessibility actions for gesture-heavy components.
+- [x] Preserve FormField error alert behavior.
+- [x] Preserve contrast validation across theme presets.
+- [x] Preserve color-blindness distinguishability tests.
+- [x] Preserve role/label-based tests.
+- [x] Add regression tests when refactoring design-system components.
 
 ### A11Y-002 Fix App-Level List Semantics
 
-- [ ] Add `accessibilityLabel` to `PaginatedList` FlatList containers.
-- [ ] Add appropriate list or region role where React Native supports it.
-- [ ] Add list context labels on invoice lists.
-- [ ] Add list context labels on customer lists.
-- [ ] Add list context labels on inventory lists.
-- [ ] Add list context labels on reports lists.
-- [ ] Add tests for list labels with screen-reader queries where possible.
-- [ ] Mark done only when screen reader users know which list they are in.
+- [x] Add `accessibilityLabel` to `PaginatedList` FlatList containers.
+- [x] Add appropriate list or region role where React Native supports it.
+- [x] Add list context labels on invoice lists.
+- [x] Add list context labels on customer lists.
+- [x] Add list context labels on inventory lists.
+- [x] Add list context labels on reports lists.
+- [x] Add tests for list labels with screen-reader queries where possible.
+- [x] Mark done only when screen reader users know which list they are in.
 
 ### A11Y-003 Add Heading And Group Semantics
 
-- [ ] Define heading hierarchy rules for app screens.
-- [ ] Ensure screen titles use header semantics.
-- [ ] Add `accessibilityRole="group"` to `FormSection`.
-- [ ] Give `FormSection` an accessible label from the section title.
-- [ ] Add group context to dashboard stats grid.
-- [ ] Add group context to settings sections.
-- [ ] Add group context to recent activity list.
-- [ ] Add tests for grouped form sections.
-- [ ] Add tests for settings section context if feasible.
-- [ ] Mark done only when visual grouping has semantic grouping.
+- [~] Define heading hierarchy rules for app screens.
+- [~] Ensure screen titles use header semantics.
+- [~] Add `accessibilityRole="group"` to `FormSection`; current React Native type surface does not support `group`, so labeled section context was added instead.
+- [x] Give `FormSection` an accessible label from the section title.
+- [x] Add group context to dashboard stats grid.
+- [~] Add group context to settings sections.
+- [x] Add group context to recent activity list.
+- [x] Add tests for grouped form sections.
+- [~] Add tests for settings section context if feasible.
+- [~] Mark done only when visual grouping has semantic grouping.
 
 ### A11Y-004 Fix Focus Management
 
-- [ ] Add initial focus to `ActionMenuSheet` on open.
-- [ ] Compare behavior with `ConfirmationModal`.
-- [ ] Compare behavior with `BottomSheetPicker`.
-- [ ] Restore focus after deleting a category in `settings/item-categories.tsx`.
-- [ ] Announce invoice creation success before navigation or on destination screen.
-- [ ] Add focus tests where supported by the test environment.
-- [ ] Add manual VoiceOver verification for ActionMenuSheet.
-- [ ] Add manual TalkBack verification for ActionMenuSheet.
-- [ ] Mark done only when modal/sheet and post-delete flows do not leave focus undefined.
+- [x] Add initial focus to `ActionMenuSheet` on open.
+- [x] Compare behavior with `ConfirmationModal`.
+- [x] Compare behavior with `BottomSheetPicker`.
+- [x] Restore focus after deleting a category in `settings/item-categories.tsx`.
+- [x] Announce invoice creation success before navigation or on destination screen.
+- [~] Add focus tests where supported by the test environment.
+- [~] Add manual VoiceOver verification for ActionMenuSheet.
+- [~] Add manual TalkBack verification for ActionMenuSheet.
+- [~] Mark done only when modal/sheet and post-delete flows do not leave focus undefined.
 
 ### A11Y-005 Label Icon-Only And Destructive Controls
 
-- [ ] Add `accessibilityRole="button"` to delete icon pressables in item categories.
-- [ ] Add destructive `accessibilityLabel` to delete icon pressables.
-- [ ] Add `accessibilityHint` to destructive delete actions where useful.
-- [ ] Add labels to edit icon pressables in item categories.
-- [ ] Replace `more-options` label in invoice detail with human text such as `More actions`.
-- [ ] Add labels to dashboard transaction icons or hide decorative icons from the a11y tree.
-- [ ] Audit every icon-only `Pressable`.
-- [ ] Audit every icon-only `TouchableOpacity`.
-- [ ] Add tests preventing unlabeled icon-only interactive controls.
-- [ ] Mark done only when VoiceOver never announces an actionable control as only `Button`.
+- [x] Add `accessibilityRole="button"` to delete icon pressables in item categories.
+- [x] Add destructive `accessibilityLabel` to delete icon pressables.
+- [x] Add `accessibilityHint` to destructive delete actions where useful.
+- [x] Add labels to edit icon pressables in item categories.
+- [x] Replace `more-options` label in invoice detail with human text such as `More actions`.
+- [x] Add labels to dashboard transaction icons or hide decorative icons from the a11y tree.
+- [~] Audit every icon-only `Pressable`.
+- [~] Audit every icon-only `TouchableOpacity`.
+- [~] Add tests preventing unlabeled icon-only interactive controls.
+- [~] Mark done only when VoiceOver never announces an actionable control as only `Button`.
 
 ### A11Y-006 Add Accessible Chip Selection Semantics
 
-- [ ] Add role to inventory add category chips.
-- [ ] Add role to inventory add unit chips.
-- [ ] Add `accessibilityState={{ selected: ... }}` to selectable chips.
-- [ ] Add accessible labels that include the option and group context.
-- [ ] Ensure selected/unselected state is announced.
-- [ ] Add tests for selected chip state.
-- [ ] Mark done only when chip groups communicate option role and selected state.
+- [x] Add role to inventory add category chips.
+- [x] Add role to inventory add unit chips.
+- [x] Add `accessibilityState={{ selected: ... }}` to selectable chips.
+- [x] Add accessible labels that include the option and group context.
+- [x] Ensure selected/unselected state is announced.
+- [~] Add tests for selected chip state.
+- [~] Mark done only when chip groups communicate option role and selected state.
 
 ### A11Y-007 Make Helper Text Accessible
 
-- [ ] Review `FormField` helper text accessibility behavior.
-- [ ] Stop hiding non-error helper text when it provides input guidance.
-- [ ] Include helper text in the input hint where appropriate.
-- [ ] Keep visual-only helper text hidden only when it is truly redundant.
-- [ ] Add tests proving GSTIN format helper text is available to screen readers.
-- [ ] Ensure error text remains an alert.
-- [ ] Mark done only when input guidance is not invisible to screen-reader users.
+- [x] Review `FormField` helper text accessibility behavior.
+- [x] Stop hiding non-error helper text when it provides input guidance.
+- [x] Include helper text in the input hint where appropriate.
+- [x] Keep visual-only helper text hidden only when it is truly redundant.
+- [x] Add tests proving GSTIN format helper text is available to screen readers.
+- [x] Ensure error text remains an alert.
+- [x] Mark done only when input guidance is not invisible to screen-reader users.
 
 ### A11Y-008 Validate Disabled Button Contrast
 
-- [ ] Add contrast tests for disabled button `surfaceVariant` background and `placeholder` text.
-- [ ] Validate disabled contrast in every theme preset.
-- [ ] Validate disabled contrast in light mode.
-- [ ] Validate disabled contrast in dark mode.
-- [ ] Adjust disabled tokens if contrast fails.
-- [ ] Add visual regression coverage for disabled buttons.
-- [ ] Mark done only when disabled controls meet the required contrast policy.
+- [x] Add contrast tests for disabled button `surfaceVariant` background and disabled text token.
+- [x] Validate disabled contrast in every theme preset.
+- [x] Validate disabled contrast in light mode.
+- [x] Validate disabled contrast in dark mode.
+- [x] Adjust disabled tokens if contrast fails.
+- [~] Add visual regression coverage for disabled buttons.
+- [~] Mark done only when disabled controls meet the required contrast policy.
 
 ### A11Y-009 Announce Dynamic Content Changes
 
-- [ ] Announce pull-to-refresh completion on invoice lists.
-- [ ] Announce load-more completion on invoice lists.
-- [ ] Add a reusable announcement helper for list refresh/load-more events.
-- [ ] Announce network offline transitions.
-- [ ] Announce network online transitions.
-- [ ] Announce sync queue status changes where user-visible.
-- [ ] Announce dead-letter or sync-failure states where user-visible.
-- [ ] Add tests or manual QA steps for dynamic announcements.
-- [ ] Mark done only when visual status changes have screen-reader feedback.
+- [x] Announce pull-to-refresh completion on invoice lists.
+- [~] Announce load-more completion on invoice lists.
+- [x] Add a reusable announcement helper for list refresh/load-more events.
+- [~] Announce network offline transitions.
+- [~] Announce network online transitions.
+- [~] Announce sync queue status changes where user-visible.
+- [~] Announce dead-letter or sync-failure states where user-visible.
+- [x] Add tests or manual QA steps for dynamic announcements.
+- [~] Mark done only when visual status changes have screen-reader feedback.
 
 ### A11Y-010 Add Platform Accessibility Declarations And Device Walkthroughs
 
-- [ ] Review `app.json` for iOS accessibility declarations.
-- [ ] Add `UIAccessibilityReduceTransparency` support if applicable.
-- [ ] Review Android accessibility service declarations if applicable.
-- [ ] Add launch-time accessibility detection only if it drives behavior.
-- [ ] Define top 5 VoiceOver walkthrough journeys.
-- [ ] Define top 5 TalkBack walkthrough journeys.
-- [ ] Run quarterly VoiceOver audits.
-- [ ] Run quarterly TalkBack audits.
-- [ ] Store walkthrough evidence in the release/QE process.
-- [ ] Mark done only when app-level accessibility is tested, not only component-level accessibility.
+- [x] Review `app.json` for iOS accessibility declarations.
+- [~] Add `UIAccessibilityReduceTransparency` support if applicable.
+- [~] Review Android accessibility service declarations if applicable.
+- [~] Add launch-time accessibility detection only if it drives behavior.
+- [x] Define top 5 VoiceOver walkthrough journeys.
+- [x] Define top 5 TalkBack walkthrough journeys.
+- [~] Run quarterly VoiceOver audits.
+- [~] Run quarterly TalkBack audits.
+- [x] Store walkthrough evidence in the release/QE process.
+- [~] Mark done only when app-level accessibility is tested, not only component-level accessibility.
 
 ## Phase 8: Internationalization
 
@@ -1484,136 +1484,136 @@ Audit refs: Part VIII sections 26 through 29, Recommended Direction 19, Elite Ex
 
 ### I18N-001 Preserve I18n Strengths
 
-- [ ] Preserve i18next and react-i18next infrastructure.
-- [ ] Preserve expo-localization device locale detection.
-- [ ] Preserve fallback to English.
-- [ ] Preserve runtime language switching.
-- [ ] Preserve AsyncStorage language preference.
-- [ ] Preserve Indian currency grouping in `formatINR()`.
-- [ ] Preserve language-aware short INR suffixes.
-- [ ] Preserve `numberToIndianWords()` in English and Hindi.
-- [ ] Preserve locale-aware date formatting.
-- [ ] Preserve RTL infrastructure even if current languages are LTR.
-- [ ] Preserve existing translation test coverage.
+- [x] Preserve i18next and react-i18next infrastructure.
+- [x] Preserve expo-localization device locale detection.
+- [x] Preserve fallback to English.
+- [x] Preserve runtime language switching.
+- [x] Preserve AsyncStorage language preference.
+- [x] Preserve Indian currency grouping in `formatINR()`.
+- [x] Preserve language-aware short INR suffixes.
+- [x] Preserve `numberToIndianWords()` in English and Hindi.
+- [x] Preserve locale-aware date formatting.
+- [x] Preserve RTL infrastructure even if current languages are LTR.
+- [x] Preserve existing translation test coverage.
 
 ### I18N-002 Remove Hardcoded Settings Strings
 
-- [ ] Extract `app/(app)/settings/items.tsx` title strings.
-- [ ] Extract `Item Settings`.
-- [ ] Extract `General`.
-- [ ] Extract `Pricing`.
-- [ ] Extract `Display`.
-- [ ] Extract `Tracking`.
-- [ ] Extract `Items Module`.
-- [ ] Extract `Master switch for all item features`.
-- [ ] Extract `Barcode Scanning`.
-- [ ] Extract `Track Stock by Default`.
-- [ ] Extract `app/(app)/settings/reminders.tsx` title strings.
-- [ ] Extract `Payment Reminders`.
-- [ ] Extract `Auto Reminders`.
-- [ ] Extract `Reminder Schedule`.
-- [ ] Extract `First reminder after`.
-- [ ] Extract `Second reminder after`.
-- [ ] Extract `Third reminder after`.
-- [ ] Extract `Channel`.
-- [ ] Extract `WhatsApp`.
-- [ ] Extract `SMS`.
-- [ ] Extract `Both`.
-- [ ] Move hardcoded Hindi reminder default template into translation JSON.
-- [ ] Extract `app/(app)/settings/firms.tsx` strings.
-- [ ] Extract `Add Business`.
-- [ ] Extract `Manage Businesses`.
-- [ ] Extract `My Business`.
-- [ ] Extract `app/(app)/settings/business-profile.tsx` strings.
-- [ ] Extract `Business Profile`.
-- [ ] Extract `Business Description (max 200 chars)`.
-- [ ] Extract `Business Logo`.
-- [ ] Add English and Hindi keys for each extracted string.
-- [ ] Mark done only when settings screens have no unapproved hardcoded user-facing strings.
+- [x] Extract `app/(app)/settings/items.tsx` title strings.
+- [x] Extract `Item Settings`.
+- [x] Extract `General`.
+- [x] Extract `Pricing`.
+- [x] Extract `Display`.
+- [x] Extract `Tracking`.
+- [x] Extract `Items Module`.
+- [x] Extract `Master switch for all item features`.
+- [x] Extract `Barcode Scanning`.
+- [x] Extract `Track Stock by Default`.
+- [x] Extract `app/(app)/settings/reminders.tsx` title strings.
+- [x] Extract `Payment Reminders`.
+- [x] Extract `Auto Reminders`.
+- [x] Extract `Reminder Schedule`.
+- [x] Extract `First reminder after`.
+- [x] Extract `Second reminder after`.
+- [x] Extract `Third reminder after`.
+- [x] Extract `Channel`.
+- [x] Extract `WhatsApp`.
+- [x] Extract `SMS`.
+- [x] Extract `Both`.
+- [x] Move hardcoded Hindi reminder default template into translation JSON.
+- [x] Extract `app/(app)/settings/firms.tsx` strings.
+- [x] Extract `Add Business`.
+- [x] Extract `Manage Businesses`.
+- [x] Extract `My Business`.
+- [x] Extract `app/(app)/settings/business-profile.tsx` strings.
+- [x] Extract `Business Profile`.
+- [x] Extract `Business Description (max 200 chars)`.
+- [x] Extract `Business Logo`.
+- [x] Add English and Hindi keys for each extracted string.
+- [x] Mark done only when settings screens have no unapproved hardcoded user-facing strings.
 
 ### I18N-003 Remove Hardcoded Form Strings
 
-- [ ] Extract `app/(app)/suppliers/add.tsx` strings.
-- [ ] Extract `Add Supplier`.
-- [ ] Extract `Supplier Name`.
-- [ ] Extract `Contact Person`.
-- [ ] Extract `Phone`.
-- [ ] Extract `Email`.
-- [ ] Extract `GST Type`.
-- [ ] Extract `GST Details`.
-- [ ] Extract `Address`.
-- [ ] Extract `Terms & Notes`.
-- [ ] Extract `Save Supplier`.
-- [ ] Extract dropdown labels `Regular`, `Composition`, and `Unregistered`.
-- [ ] Extract `app/(app)/inventory/add.tsx` section strings.
-- [ ] Extract `Basic Info`.
-- [ ] Extract `Pricing`.
-- [ ] Extract `Track Stock`.
-- [ ] Extract unit labels `Pcs`, `Box`, `Kg`, `Meter`, `Sq.ft`, `Sq.meter`, and `Set`.
-- [ ] Extract `app/(app)/customers/add.tsx` strings.
-- [ ] Extract `Customer Type`.
-- [ ] Extract `Individual`.
-- [ ] Extract `Business`.
-- [ ] Replace `t('customer.gstin') + ' ' + t('order.detailsMissing')` with interpolation.
-- [ ] Add English and Hindi translations.
-- [ ] Mark done only when form screens do not bypass i18n.
+- [x] Extract `app/(app)/suppliers/add.tsx` strings.
+- [x] Extract `Add Supplier`.
+- [x] Extract `Supplier Name`.
+- [x] Extract `Contact Person`.
+- [x] Extract `Phone`.
+- [x] Extract `Email`.
+- [x] Extract `GST Type`.
+- [x] Extract `GST Details`.
+- [x] Extract `Address`.
+- [x] Extract `Terms & Notes`.
+- [x] Extract `Save Supplier`.
+- [x] Extract dropdown labels `Regular`, `Composition`, and `Unregistered`.
+- [x] Extract `app/(app)/inventory/add.tsx` section strings.
+- [x] Extract `Basic Info`.
+- [x] Extract `Pricing`.
+- [x] Extract `Track Stock`.
+- [x] Extract unit labels `Pcs`, `Box`, `Kg`, `Meter`, `Sq.ft`, `Sq.meter`, and `Set`.
+- [x] Extract `app/(app)/customers/add.tsx` strings.
+- [x] Extract `Customer Type`.
+- [x] Extract `Individual`.
+- [x] Extract `Business`.
+- [x] Replace `t('customer.gstin') + ' ' + t('order.detailsMissing')` with interpolation.
+- [x] Add English and Hindi translations.
+- [x] Mark done only when form screens do not bypass i18n.
 
 ### I18N-004 Make App Errors Translatable
 
-- [ ] Replace hardcoded `ValidationError` message with translation key.
-- [ ] Replace hardcoded `NetworkError` message with translation key.
-- [ ] Replace hardcoded `InsufficientStockError` message with translation key plus interpolation.
-- [ ] Replace hardcoded `NotFoundError` message with translation key plus interpolation.
-- [ ] Replace hardcoded `FK_VIOLATION` message with translation key.
-- [ ] Replace inline Hindi `RLS_VIOLATION` source string with translation keys.
-- [ ] Ensure AppError can carry `translationKey` and interpolation values.
-- [ ] Ensure UI renders translated AppError messages using current locale.
-- [ ] Add tests for English AppError output.
-- [ ] Add tests for Hindi AppError output.
-- [ ] Add tests for interpolation values.
-- [ ] Mark done only when error source code does not hardcode language-specific user messages.
+- [x] Replace hardcoded `ValidationError` message with translation key.
+- [x] Replace hardcoded `NetworkError` message with translation key.
+- [x] Replace hardcoded `InsufficientStockError` message with translation key plus interpolation.
+- [x] Replace hardcoded `NotFoundError` message with translation key plus interpolation.
+- [x] Replace hardcoded `FK_VIOLATION` message with translation key.
+- [x] Replace inline Hindi `RLS_VIOLATION` source string with translation keys.
+- [x] Ensure AppError can carry `translationKey` and interpolation values.
+- [x] Ensure UI renders translated AppError messages using current locale.
+- [x] Add tests for English AppError output.
+- [x] Add tests for Hindi AppError output.
+- [x] Add tests for interpolation values.
+- [~] Mark done only when error source code does not hardcode language-specific user messages.
 
 ### I18N-005 Make Zod Validation Translatable
 
-- [ ] Convert schema creation to factory pattern where messages need translation.
-- [ ] Add `getInventorySchema(t)`.
-- [ ] Add `getInvoiceSchema(t)`.
-- [ ] Add `getPaymentSchema(t)`.
-- [ ] Update supplier inline schema in `app/(app)/suppliers/add.tsx`.
-- [ ] Extract `Design name is required`.
-- [ ] Extract `Stock cannot be negative`.
-- [ ] Extract `Low stock threshold cannot be negative`.
-- [ ] Extract `Date must be in YYYY-MM-DD format`.
-- [ ] Extract `Customer name is required`.
-- [ ] Extract `Name is required`.
-- [ ] Audit all schemas for the remaining 30+ hardcoded messages.
-- [ ] Add tests for schema messages in English.
-- [ ] Add tests for schema messages in Hindi.
-- [ ] Mark done only when validation errors use current locale.
+- [x] Convert schema creation to factory pattern where messages need translation.
+- [x] Add `getInventorySchema(t)`.
+- [x] Add `getInvoiceSchema(t)`.
+- [x] Add `getPaymentSchema(t)`.
+- [x] Update supplier inline schema in `app/(app)/suppliers/add.tsx`.
+- [x] Extract `Design name is required`.
+- [x] Extract `Stock cannot be negative`.
+- [x] Extract `Low stock threshold cannot be negative`.
+- [x] Extract `Date must be in YYYY-MM-DD format`.
+- [x] Extract `Customer name is required`.
+- [x] Extract `Name is required`.
+- [~] Audit all schemas for the remaining 30+ hardcoded messages.
+- [x] Add tests for schema messages in English.
+- [x] Add tests for schema messages in Hindi.
+- [~] Mark done only when validation errors use current locale.
 
 ### I18N-006 Implement Pluralization
 
-- [ ] Add i18next plural forms for English.
-- [ ] Add i18next plural forms for Hindi.
-- [ ] Replace manual `itemSingular` / `itemPlural` workarounds.
-- [ ] Search translation JSON for singular/plural manual pairs.
-- [ ] Update UI to call `t(key, { count })`.
-- [ ] Add tests for count 0.
-- [ ] Add tests for count 1.
-- [ ] Add tests for count 2.
-- [ ] Add tests for Hindi plural behavior.
-- [ ] Mark done only when pluralization is handled by i18next rules.
+- [x] Add i18next plural forms for English.
+- [x] Add i18next plural forms for Hindi.
+- [x] Replace manual `itemSingular` / `itemPlural` workarounds.
+- [x] Search translation JSON for singular/plural manual pairs.
+- [x] Update UI to call `t(key, { count })`.
+- [x] Add tests for count 0.
+- [x] Add tests for count 1.
+- [x] Add tests for count 2.
+- [x] Add tests for Hindi plural behavior.
+- [x] Mark done only when pluralization is handled by i18next rules.
 
 ### I18N-007 Close Translation Coverage Gaps
 
-- [ ] Add missing Hindi translation for `customer.invalidPhone`.
-- [ ] Add missing Hindi translation for `invoice.add`.
-- [ ] Add missing Hindi translation for `invoice.errors.noSellingPrice`.
-- [ ] Add missing Hindi translation for `invoice.noResults`.
-- [ ] Add CI check that English and Hindi key sets stay aligned.
-- [ ] Add hardcoded-string detection for live app screens.
-- [ ] Maintain an allowlist for true constants, units, brand names, and technical codes.
-- [ ] Mark done only when live-screen hardcoded user-facing strings trend to zero.
+- [x] Add missing Hindi translation for `customer.invalidPhone`.
+- [x] Add missing Hindi translation for `invoice.add`.
+- [x] Add missing Hindi translation for `invoice.errors.noSellingPrice`.
+- [x] Add missing Hindi translation for `invoice.noResults`.
+- [x] Add CI check that English and Hindi key sets stay aligned.
+- [x] Add hardcoded-string detection for live app screens.
+- [x] Maintain an allowlist for true constants, units, brand names, and technical codes.
+- [x] Mark done only when live-screen hardcoded user-facing strings trend to zero.
 
 ## Phase 9: CI/CD, Team Process, And Dependency Supply Chain
 

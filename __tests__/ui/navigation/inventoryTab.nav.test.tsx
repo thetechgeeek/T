@@ -35,8 +35,8 @@ beforeEach(() => {
 describe('InventoryTab Navigation Wiring', () => {
 	it('Press FAB (+) -> router.push("/(app)/inventory/add") called', async () => {
 		const { getByLabelText } = renderWithTheme(<InventoryTab />);
-		await waitFor(() => expect(getByLabelText('add-inventory-button')).toBeTruthy());
-		fireEvent.press(getByLabelText('add-inventory-button'));
+		await waitFor(() => expect(getByLabelText('Add Item')).toBeTruthy());
+		fireEvent.press(getByLabelText('Add Item'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/inventory/add');
 	});
 

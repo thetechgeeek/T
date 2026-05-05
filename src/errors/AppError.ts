@@ -1,9 +1,13 @@
+export type ErrorTranslator = (key: string, options?: Record<string, unknown>) => string;
+
 export class AppError extends Error {
 	constructor(
 		message: string,
 		public readonly code: string,
 		public readonly userMessage: string,
 		public readonly cause?: unknown,
+		public readonly translationKey?: string,
+		public readonly translationValues?: Record<string, unknown>,
 	) {
 		super(message);
 		this.name = 'AppError';
@@ -17,7 +21,13 @@ export class ValidationError extends AppError {
 		message: string,
 		public readonly fieldErrors: Record<string, string[]>,
 	) {
-		super(message, 'VALIDATION_ERROR', 'Please fix the highlighted fields');
+		super(
+			message,
+			'VALIDATION_ERROR',
+			'Please fix the highlighted fields',
+			undefined,
+			'error.app.validation',
+		);
 		this.name = 'ValidationError';
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
@@ -25,7 +35,13 @@ export class ValidationError extends AppError {
 
 export class NetworkError extends AppError {
 	constructor(message: string, cause?: unknown) {
-		super(message, 'NETWORK_ERROR', 'Network error. Please check your connection.', cause);
+		super(
+			message,
+			'NETWORK_ERROR',
+			'Network error. Please check your connection.',
+			cause,
+			'error.app.network',
+		);
 		this.name = 'NetworkError';
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
@@ -41,6 +57,9 @@ export class InsufficientStockError extends AppError {
 			`Insufficient stock for "${itemName}": requested ${requested}, available ${available}`,
 			'INSUFFICIENT_STOCK',
 			`Not enough stock for "${itemName}". Available: ${available}, Requested: ${requested}`,
+			undefined,
+			'error.app.insufficientStock',
+			{ itemName, available, requested },
 		);
 		this.name = 'InsufficientStockError';
 		Object.setPrototypeOf(this, new.target.prototype);
@@ -52,7 +71,16 @@ export class NotFoundError extends AppError {
 		public readonly entity: string,
 		public readonly id: string,
 	) {
-		super(`${entity} with id "${id}" not found`, 'NOT_FOUND', `${entity} not found`);
+		super(
+			`${entity} with id "${id}" not found`,
+			'NOT_FOUND',
+			`${entity} not found`,
+			undefined,
+			'error.app.notFound',
+			{
+				entity,
+			},
+		);
 		this.name = 'NotFoundError';
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
@@ -62,8 +90,10 @@ export class ConflictError extends AppError {
 	constructor(
 		message: string,
 		public readonly userMessage: string,
+		translationKey = 'error.app.conflict',
+		translationValues?: Record<string, unknown>,
 	) {
-		super(message, 'CONFLICT', userMessage);
+		super(message, 'CONFLICT', userMessage, undefined, translationKey, translationValues);
 		this.name = 'ConflictError';
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
@@ -85,6 +115,8 @@ export function toAppError(err: unknown): AppError {
 				message,
 				'FK_VIOLATION',
 				'This record is in use and cannot be modified',
+				err,
+				'error.app.foreignKey',
 			);
 		case '23502': // Not null violation
 			return new ValidationError(message, { [errObj?.column || 'field']: ['isRequired'] });
@@ -92,11 +124,19 @@ export function toAppError(err: unknown): AppError {
 			return new AppError(
 				message,
 				'ACCESS_DENIED',
-				'आपको यह देखने या बदलने की अनुमति नहीं है (Access Denied)',
+				'You do not have permission to view or change this record',
+				err,
+				'error.app.accessDenied',
 			);
 		case 'P0001': // custom Raise Exception from PL/pgSQL
 			if (message.toLowerCase().includes('insufficient stock')) {
-				return new AppError(message, 'INSUFFICIENT_STOCK', message);
+				return new AppError(
+					message,
+					'INSUFFICIENT_STOCK',
+					'Not enough stock for the selected item.',
+					err,
+					'error.app.unexpected',
+				);
 			}
 			if (message.toLowerCase().includes('not found')) {
 				return new NotFoundError('Record', 'database');
@@ -113,13 +153,26 @@ export function toAppError(err: unknown): AppError {
 				code,
 				'Database schema mismatch. Please contact support.',
 				err,
+				'error.app.schemaMismatch',
 			);
 	}
 
 	if (err instanceof Error) {
-		return new AppError(message, code || 'UNKNOWN', 'An unexpected error occurred', err);
+		return new AppError(
+			message,
+			code || 'UNKNOWN',
+			'An unexpected error occurred',
+			err,
+			'error.app.unexpected',
+		);
 	}
-	return new AppError(message, code || 'UNKNOWN', 'An unexpected error occurred');
+	return new AppError(
+		message,
+		code || 'UNKNOWN',
+		'An unexpected error occurred',
+		undefined,
+		'error.app.unexpected',
+	);
 }
 
 export function getErrorMessage(err: unknown, fallback = 'An unexpected error occurred'): string {
@@ -134,4 +187,20 @@ export function getErrorMessage(err: unknown, fallback = 'An unexpected error oc
 	}
 	const appError = toAppError(err);
 	return appError.message || appError.userMessage || fallback;
+}
+
+export function getTranslatedErrorMessage(
+	err: unknown,
+	t: ErrorTranslator,
+	fallback = 'An unexpected error occurred',
+): string {
+	const appError = err instanceof AppError ? err : toAppError(err);
+	if (!appError.translationKey) {
+		return appError.userMessage || appError.message || fallback;
+	}
+
+	return t(appError.translationKey, {
+		...(appError.translationValues ?? {}),
+		defaultValue: appError.userMessage || fallback,
+	});
 }

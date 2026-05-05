@@ -238,10 +238,14 @@ export default function InvoiceDetailScreen() {
 						<TouchableOpacity
 							onPress={handleKebab}
 							style={styles.iconBtn}
-							accessibilityLabel="more-options"
+							accessibilityLabel="More actions"
 							accessibilityRole="button"
 						>
-							<MoreVertical size={22} color={c.onSurface} />
+							<MoreVertical
+								size={22}
+								color={c.onSurface}
+								importantForAccessibility="no"
+							/>
 						</TouchableOpacity>
 					}
 				/>
@@ -275,9 +279,13 @@ export default function InvoiceDetailScreen() {
 								]}
 								onPress={handleShare}
 								accessibilityRole="button"
-								accessibilityLabel="share-whatsapp"
+								accessibilityLabel={t('invoice.shareWhatsApp')}
 							>
-								<Share2 size={20} color={c.onSuccess} />
+								<Share2
+									size={20}
+									color={c.onSuccess}
+									importantForAccessibility="no"
+								/>
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={[
@@ -290,16 +298,26 @@ export default function InvoiceDetailScreen() {
 								]}
 								onPress={handlePrintComingSoon}
 								accessibilityRole="button"
-								accessibilityLabel="print-invoice"
+								accessibilityLabel={t('common.print')}
 							>
-								<Printer size={20} color={c.onSurfaceVariant} />
+								<Printer
+									size={20}
+									color={c.onSurfaceVariant}
+									importantForAccessibility="no"
+								/>
 							</TouchableOpacity>
 						</View>
 					) : (
 						<View style={styles.actionRow}>
 							<Button
 								title={t('invoice.sharePdf')}
-								leftIcon={<Share2 size={18} color={c.onSuccess} />}
+								leftIcon={
+									<Share2
+										size={18}
+										color={c.onSuccess}
+										importantForAccessibility="no"
+									/>
+								}
 								style={{
 									flex: 1,
 									marginRight: s.sm,
@@ -316,9 +334,13 @@ export default function InvoiceDetailScreen() {
 								]}
 								onPress={handlePrintComingSoon}
 								accessibilityRole="button"
-								accessibilityLabel="print-invoice"
+								accessibilityLabel={t('common.print')}
 							>
-								<Printer size={20} color={c.onSurfaceVariant} />
+								<Printer
+									size={20}
+									color={c.onSurfaceVariant}
+									importantForAccessibility="no"
+								/>
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={[

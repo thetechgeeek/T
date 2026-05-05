@@ -7,6 +7,7 @@ import {
 	ConflictError,
 	toAppError,
 	getErrorMessage,
+	getTranslatedErrorMessage,
 } from './AppError';
 
 describe('AppError', () => {
@@ -30,6 +31,20 @@ describe('AppError', () => {
 		const err = new AppError('msg', 'CODE', 'user');
 		expect(err instanceof AppError).toBe(true);
 		expect(err instanceof Error).toBe(true);
+	});
+
+	it('stores translation key and interpolation values', () => {
+		const err = new AppError(
+			'internal',
+			'CODE',
+			'Fallback message',
+			undefined,
+			'error.app.custom',
+			{ name: 'Invoice' },
+		);
+
+		expect(err.translationKey).toBe('error.app.custom');
+		expect(err.translationValues).toEqual({ name: 'Invoice' });
 	});
 });
 
@@ -147,5 +162,23 @@ describe('toAppError', () => {
 		expect(getErrorMessage(new Error('plain error'))).toBe('plain error');
 		expect(getErrorMessage('string failure')).toBe('string failure');
 		expect(getErrorMessage(null)).toBe('null');
+	});
+
+	it('renders translated AppError output with interpolation', () => {
+		const err = new InsufficientStockError('Marble Tile', 5, 20);
+		const t = jest.fn((key: string, options?: Record<string, unknown>) => {
+			if (key === 'error.app.insufficientStock') {
+				return `Hindi stock copy: ${options?.itemName} ${options?.available}/${options?.requested}`;
+			}
+			return String(options?.defaultValue ?? key);
+		});
+
+		expect(getTranslatedErrorMessage(err, t)).toBe('Hindi stock copy: Marble Tile 5/20');
+		expect(t).toHaveBeenCalledWith('error.app.insufficientStock', {
+			itemName: 'Marble Tile',
+			available: 5,
+			requested: 20,
+			defaultValue: 'Not enough stock for "Marble Tile". Available: 5, Requested: 20',
+		});
 	});
 });

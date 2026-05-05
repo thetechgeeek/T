@@ -39,35 +39,47 @@ function ChipGroup<T extends string>({
 	value,
 	onChange,
 	labelMap,
+	groupLabel,
 }: {
 	options: readonly T[];
 	value: T;
 	onChange: (v: T) => void;
 	labelMap?: Record<string, string>;
+	groupLabel: string;
 }) {
 	const { c, s, r } = useThemeTokens();
 	return (
-		<View style={[layout.row, { flexWrap: 'wrap', gap: s.sm, marginBottom: s.md }]}>
-			{options.map((opt) => (
-				<TouchableOpacity
-					key={opt}
-					onPress={() => onChange(opt)}
-					style={{
-						paddingVertical: s.sm,
-						paddingHorizontal: s.md,
-						backgroundColor: value === opt ? c.primary : c.surfaceVariant,
-						borderRadius: r.md,
-					}}
-				>
-					<ThemedText
-						variant="caption"
-						weight="semibold"
-						color={value === opt ? c.onPrimary : c.onSurfaceVariant}
+		<View
+			style={[layout.row, { flexWrap: 'wrap', gap: s.sm, marginBottom: s.md }]}
+			accessibilityLabel={groupLabel}
+		>
+			{options.map((opt) => {
+				const displayLabel = labelMap ? (labelMap[opt] ?? opt) : opt;
+				const selected = value === opt;
+				return (
+					<TouchableOpacity
+						key={opt}
+						onPress={() => onChange(opt)}
+						accessibilityRole="button"
+						accessibilityLabel={`${groupLabel}: ${displayLabel}`}
+						accessibilityState={{ selected }}
+						style={{
+							paddingVertical: s.sm,
+							paddingHorizontal: s.md,
+							backgroundColor: selected ? c.primary : c.surfaceVariant,
+							borderRadius: r.md,
+						}}
 					>
-						{labelMap ? (labelMap[opt] ?? opt) : opt}
-					</ThemedText>
-				</TouchableOpacity>
-			))}
+						<ThemedText
+							variant="caption"
+							weight="semibold"
+							color={selected ? c.onPrimary : c.onSurfaceVariant}
+						>
+							{displayLabel}
+						</ThemedText>
+					</TouchableOpacity>
+				);
+			})}
 		</View>
 	);
 }
@@ -136,6 +148,18 @@ export default function AddItemScreen() {
 	const compactControlPadding = s.sm + s.xxs;
 	const { form, watched, isEditing, loading, submitting, handleAutoGenerateCode, submitForm } =
 		useInventoryAddFlow(t);
+	const primaryUnitLabels = React.useMemo(
+		() => ({
+			Pcs: t('inventory.units.pcs'),
+			Box: t('inventory.units.box'),
+			Kg: t('inventory.units.kg'),
+			Meter: t('inventory.units.meter'),
+			'Sq.ft': t('inventory.units.sqft'),
+			'Sq.meter': t('inventory.units.sqmeter'),
+			Set: t('inventory.units.set'),
+		}),
+		[t],
+	);
 	const {
 		control,
 		formState: { errors },
@@ -198,7 +222,7 @@ export default function AddItemScreen() {
 			}
 		>
 			{/* ── Section 1: Basic Info ────────────────────────────── */}
-			<SectionHeader label="Basic Info" />
+			<SectionHeader label={t('inventory.sections.basicInfo')} />
 
 			<Controller
 				control={control}
@@ -284,6 +308,7 @@ export default function AddItemScreen() {
 						options={INVENTORY_ADD_CATEGORIES}
 						value={value}
 						onChange={onChange}
+						groupLabel={t('inventory.category')}
 					/>
 				)}
 			/>
@@ -306,7 +331,7 @@ export default function AddItemScreen() {
 			/>
 
 			{/* ── Section 2: Pricing ──────────────────────────────── */}
-			<SectionHeader label="Pricing" />
+			<SectionHeader label={t('inventory.sections.pricing')} />
 
 			<View style={[layout.row, { gap: s.md }]}>
 				<View style={{ flex: 1 }}>
@@ -391,7 +416,7 @@ export default function AddItemScreen() {
 				color={c.onSurfaceVariant}
 				style={{ marginBottom: fieldLabelSpacing }}
 			>
-				GST Rate *
+				{t('inventory.gstRate')} *
 			</ThemedText>
 			<Controller
 				control={control}
@@ -401,6 +426,7 @@ export default function AddItemScreen() {
 						options={INVENTORY_ADD_GST_RATES}
 						value={value as (typeof INVENTORY_ADD_GST_RATES)[number]}
 						onChange={onChange}
+						groupLabel={t('inventory.gstRate')}
 						labelMap={{
 							'0': '0%',
 							'5': '5%',
@@ -434,7 +460,7 @@ export default function AddItemScreen() {
 			/>
 
 			{/* ── Section 4: Stock & Units ─────────────────────────── */}
-			<SectionHeader label="Stock & Units" />
+			<SectionHeader label={t('inventory.sections.stockUnits')} />
 
 			{/* Track Stock toggle */}
 			<View
@@ -452,7 +478,7 @@ export default function AddItemScreen() {
 			>
 				<View style={{ flex: 1 }}>
 					<ThemedText variant="body" weight="medium">
-						Track Stock
+						{t('inventory.sections.trackStock')}
 					</ThemedText>
 					<ThemedText variant="caption" color={c.onSurfaceVariant}>
 						Monitor quantity and get low-stock alerts
@@ -479,7 +505,7 @@ export default function AddItemScreen() {
 						color={c.onSurfaceVariant}
 						style={{ marginBottom: fieldLabelSpacing }}
 					>
-						Primary Unit
+						{t('inventory.primaryUnit')}
 					</ThemedText>
 					<Controller
 						control={control}
@@ -489,6 +515,8 @@ export default function AddItemScreen() {
 								options={INVENTORY_PRIMARY_UNITS}
 								value={(value ?? 'Box') as (typeof INVENTORY_PRIMARY_UNITS)[number]}
 								onChange={onChange}
+								groupLabel={t('inventory.primaryUnit')}
+								labelMap={primaryUnitLabels}
 							/>
 						)}
 					/>
@@ -552,7 +580,7 @@ export default function AddItemScreen() {
 					>
 						<View style={{ flex: 1 }}>
 							<ThemedText variant="body" weight="medium">
-								Secondary Unit
+								{t('inventory.secondaryUnit')}
 							</ThemedText>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
 								e.g. sell in Pcs but stock in Box

@@ -34,13 +34,13 @@ interface SupplierFormData {
 	gst_type: GstType;
 }
 
-const getSupplierSchema = () =>
+const getSupplierSchema = (t: (key: string) => string) =>
 	z.object({
-		name: z.string().min(2, 'Name is required'),
+		name: z.string().min(2, t('supplier.nameRequired')),
 		contact_person: z.string().optional(),
 		phone: z.string().optional(),
-		email: z.string().email('Invalid email').optional().or(z.literal('')),
-		gstin: z.string().length(15, 'GSTIN must be 15 characters').optional().or(z.literal('')),
+		email: z.string().email(t('supplier.invalidEmail')).optional().or(z.literal('')),
+		gstin: z.string().length(15, t('supplier.gstinLength')).optional().or(z.literal('')),
 		address: z.string().optional(),
 		city: z.string().optional(),
 		state: z.string().optional(),
@@ -49,10 +49,10 @@ const getSupplierSchema = () =>
 		gst_type: z.enum(['regular', 'composition', 'unregistered']),
 	});
 
-const GST_TYPE_OPTIONS: { label: string; value: GstType }[] = [
-	{ label: 'Regular', value: 'regular' },
-	{ label: 'Composition', value: 'composition' },
-	{ label: 'Unregistered', value: 'unregistered' },
+const GST_TYPE_OPTIONS: { labelKey: string; value: GstType }[] = [
+	{ labelKey: 'supplier.gstTypes.regular', value: 'regular' },
+	{ labelKey: 'supplier.gstTypes.composition', value: 'composition' },
+	{ labelKey: 'supplier.gstTypes.unregistered', value: 'unregistered' },
 ];
 
 export default function AddSupplierScreen() {
@@ -68,7 +68,7 @@ export default function AddSupplierScreen() {
 		setValue,
 		formState: { errors },
 	} = useForm<SupplierFormData>({
-		resolver: zodResolver(getSupplierSchema()) as Resolver<SupplierFormData>,
+		resolver: zodResolver(getSupplierSchema(t)) as Resolver<SupplierFormData>,
 		defaultValues: {
 			gst_type: 'regular',
 		},
@@ -99,18 +99,18 @@ export default function AddSupplierScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
-			header={<ScreenHeader title="Add Supplier" />}
+			header={<ScreenHeader title={t('supplier.add')} />}
 			scrollViewProps={{ keyboardDismissMode: 'on-drag' }}
 			contentContainerStyle={{ paddingTop: s.lg, paddingBottom: s.xl, gap: s.lg }}
 		>
-			<FormSection title="Basic Info">
+			<FormSection title={t('inventory.sections.basicInfo')}>
 				<Card padding="md">
 					<Controller
 						control={control}
 						name="name"
 						render={({ field: { onChange, value } }) => (
 							<FormField
-								label="Supplier Name"
+								label={t('supplier.supplierName')}
 								accessibilityLabel="supplier-name-input"
 								required
 								placeholder="Enter supplier name"
@@ -126,7 +126,7 @@ export default function AddSupplierScreen() {
 						name="contact_person"
 						render={({ field: { onChange, value } }) => (
 							<FormField
-								label="Contact Person"
+								label={t('supplier.contactPerson')}
 								accessibilityLabel="supplier-contact-person-input"
 								placeholder="Primary contact name"
 								value={value}
@@ -140,7 +140,7 @@ export default function AddSupplierScreen() {
 						name="phone"
 						render={({ field: { onChange, value } }) => (
 							<FormField
-								label="Phone"
+								label={t('supplier.phone')}
 								accessibilityLabel="supplier-phone-input"
 								placeholder="+91 XXXXX XXXXX"
 								keyboardType="phone-pad"
@@ -156,7 +156,7 @@ export default function AddSupplierScreen() {
 						name="email"
 						render={({ field: { onChange, value } }) => (
 							<FormField
-								label="Email"
+								label={t('supplier.email')}
 								accessibilityLabel="supplier-email-input"
 								placeholder="supplier@example.com"
 								keyboardType="email-address"
@@ -170,14 +170,14 @@ export default function AddSupplierScreen() {
 				</Card>
 			</FormSection>
 
-			<FormSection title="GST Details">
+			<FormSection title={t('supplier.gstDetails')}>
 				<Card padding="md">
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
 						style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
 					>
-						GST Type
+						{t('supplier.gstType')}
 					</ThemedText>
 					<View style={[layout.row, styles.gstToggleRow]}>
 						{GST_TYPE_OPTIONS.map((opt) => (
@@ -200,7 +200,7 @@ export default function AddSupplierScreen() {
 									variant="caption"
 									color={gstType === opt.value ? c.onPrimary : c.primary}
 								>
-									{opt.label}
+									{t(opt.labelKey)}
 								</ThemedText>
 							</Pressable>
 						))}
@@ -226,7 +226,7 @@ export default function AddSupplierScreen() {
 				</Card>
 			</FormSection>
 
-			<FormSection title="Address">
+			<FormSection title={t('supplier.address')}>
 				<Card padding="md">
 					<View style={[layout.row, { gap: s.lg }]}>
 						<View style={{ flex: 1 }}>
@@ -266,7 +266,7 @@ export default function AddSupplierScreen() {
 						name="address"
 						render={({ field: { onChange, value } }) => (
 							<FormField
-								label="Address"
+								label={t('supplier.address')}
 								accessibilityLabel="supplier-address-input"
 								placeholder="Full address"
 								multiline
@@ -279,14 +279,14 @@ export default function AddSupplierScreen() {
 				</Card>
 			</FormSection>
 
-			<FormSection title="Terms & Notes">
+			<FormSection title={t('supplier.termsNotes')}>
 				<Card padding="md">
 					<Controller
 						control={control}
 						name="payment_terms"
 						render={({ field: { onChange, value } }) => (
 							<FormField
-								label="Payment Terms"
+								label={t('supplier.paymentTerms')}
 								accessibilityLabel="supplier-payment-terms-input"
 								placeholder="e.g. Net 30, COD"
 								value={value}
@@ -300,7 +300,7 @@ export default function AddSupplierScreen() {
 						name="notes"
 						render={({ field: { onChange, value } }) => (
 							<FormField
-								label="Notes"
+								label={t('supplier.notes')}
 								accessibilityLabel="supplier-notes-input"
 								placeholder="Internal notes about this supplier"
 								multiline
@@ -315,7 +315,7 @@ export default function AddSupplierScreen() {
 
 			<View style={{ paddingHorizontal: s.lg }}>
 				<Button
-					title={submitting ? t('common.loading') : 'Save Supplier'}
+					title={submitting ? t('common.loading') : t('supplier.saveSupplier')}
 					accessibilityLabel="save-supplier-button"
 					accessibilityState={{ busy: submitting }}
 					onPress={handleSubmit(onSubmit)}

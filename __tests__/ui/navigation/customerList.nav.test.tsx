@@ -29,10 +29,13 @@ beforeEach(() => {
 
 describe('CustomerList Navigation Wiring', () => {
 	it('Press add button -> router.push("/(app)/customers/add" as any) called', async () => {
-		const { getByLabelText } = renderWithTheme(<CustomersScreen />);
-		// FAB might be labelled add-customer-button
-		await waitFor(() => expect(getByLabelText('add-customer-button')).toBeTruthy());
-		fireEvent.press(getByLabelText('add-customer-button'));
+		const { getAllByLabelText } = renderWithTheme(<CustomersScreen />);
+		await waitFor(() => expect(getAllByLabelText('Add Customer').length).toBeGreaterThan(0));
+		const fab = getAllByLabelText('Add Customer').find(
+			(node) => node.props.accessibilityHint === 'Add a new customer to your database.',
+		);
+		expect(fab).toBeTruthy();
+		fireEvent.press(fab!);
 		expect(mockPush).toHaveBeenCalledWith('/(app)/customers/add');
 	});
 

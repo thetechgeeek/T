@@ -45,17 +45,17 @@ function getTransactionIcon(type: RecentTransaction['type'], color: string) {
 	const size = 18;
 	switch (type) {
 		case 'sale':
-			return <TrendingUp size={size} color={color} />;
+			return <TrendingUp size={size} color={color} importantForAccessibility="no" />;
 		case 'purchase':
-			return <ShoppingCart size={size} color={color} />;
+			return <ShoppingCart size={size} color={color} importantForAccessibility="no" />;
 		case 'payment_in':
-			return <ArrowDownCircle size={size} color={color} />;
+			return <ArrowDownCircle size={size} color={color} importantForAccessibility="no" />;
 		case 'payment_out':
-			return <ArrowUpCircle size={size} color={color} />;
+			return <ArrowUpCircle size={size} color={color} importantForAccessibility="no" />;
 		case 'expense':
-			return <Wallet size={size} color={color} />;
+			return <Wallet size={size} color={color} importantForAccessibility="no" />;
 		default:
-			return <TrendingUp size={size} color={color} />;
+			return <TrendingUp size={size} color={color} importantForAccessibility="no" />;
 	}
 }
 
@@ -220,7 +220,10 @@ export default function DashboardScreen() {
 				<DashboardSkeleton />
 			) : (
 				<>
-					<View style={[styles.statsGrid, { paddingHorizontal: s.lg, marginTop: s.md }]}>
+					<View
+						style={[styles.statsGrid, { paddingHorizontal: s.lg, marginTop: s.md }]}
+						accessibilityLabel="Dashboard summary statistics"
+					>
 						{dashboardStats.map((stat) => (
 							<StatCard
 								key={stat.accessibilityLabel}
@@ -239,6 +242,7 @@ export default function DashboardScreen() {
 					{/* ── Alerts ── */}
 					{hasAlerts && (
 						<View
+							accessibilityLabel="Dashboard alerts"
 							style={{
 								marginHorizontal: s.md,
 								marginBottom: s.md,
@@ -264,6 +268,7 @@ export default function DashboardScreen() {
 											size={16}
 											color={c.error}
 											style={{ marginRight: s.sm }}
+											importantForAccessibility="no"
 										/>
 										<ThemedText variant="body">
 											{stats?.low_stock_count} items low on stock
@@ -279,7 +284,7 @@ export default function DashboardScreen() {
 
 					{/* ── Recent Activity ── */}
 					{recentTransactions.length > 0 && (
-						<View style={{ marginBottom: s.md }}>
+						<View style={{ marginBottom: s.md }} accessibilityLabel="Recent activity">
 							<SectionHeader
 								title="Recent Activity"
 								actionLabel="View All"
@@ -292,7 +297,12 @@ export default function DashboardScreen() {
 								}}
 							/>
 
-							<Card style={{ marginHorizontal: s.lg }} padding="none">
+							<Card
+								style={{ marginHorizontal: s.lg }}
+								padding="none"
+								accessibilityRole="list"
+								accessibilityLabel="Recent transactions"
+							>
 								{visibleRecentTransactions.map((tx, idx) => {
 									const incoming = isIncoming(tx.type);
 									const iconColor = incoming ? c.success : c.error;
@@ -314,10 +324,14 @@ export default function DashboardScreen() {
 													borderBottomColor: c.border,
 												},
 											]}
-											accessibilityLabel={`transaction-${tx.id}`}
+											accessibilityLabel={`${tx.party_name ?? tx.description ?? tx.type}. ${
+												incoming ? 'Incoming' : 'Outgoing'
+											} ${formatCurrency(tx.amount)}.`}
 										>
 											<View style={layout.row}>
 												<View
+													accessible={false}
+													importantForAccessibility="no"
 													style={[
 														styles.txIconWrap,
 														{

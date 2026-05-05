@@ -88,7 +88,11 @@ export default function ReportsHubScreen() {
 			scrollable
 			header={<ScreenHeader title="Reports" />}
 		>
-			<View style={{ padding: s.lg }}>
+			<View
+				style={{ padding: s.lg }}
+				accessibilityRole="list"
+				accessibilityLabel="Reports list"
+			>
 				{reportCards.map((card) => (
 					<TouchableCard
 						key={card.title}
@@ -116,7 +120,12 @@ export default function ReportsHubScreen() {
 								},
 							]}
 						>
-							<card.icon size={22} color={card.color} strokeWidth={2} />
+							<card.icon
+								size={22}
+								color={card.color}
+								strokeWidth={2}
+								importantForAccessibility="no"
+							/>
 						</View>
 						<View style={{ flex: 1 }}>
 							<ThemedText
@@ -133,7 +142,12 @@ export default function ReportsHubScreen() {
 								{card.description}
 							</ThemedText>
 						</View>
-						<ChevronRight size={18} color={c.placeholder} strokeWidth={2} />
+						<ChevronRight
+							size={18}
+							color={c.placeholder}
+							strokeWidth={2}
+							importantForAccessibility="no"
+						/>
 					</TouchableCard>
 				))}
 			</View>

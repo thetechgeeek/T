@@ -80,6 +80,29 @@ describe('ActionMenuSheet', () => {
 		expect(onSelect).toHaveBeenCalledWith('archive');
 	});
 
+	it('labels destructive and disabled actions with state and hints', () => {
+		const { getByTestId } = renderWithTheme(
+			<ActionMenuSheet
+				title="More actions"
+				open
+				testID="action-sheet"
+				actions={[
+					{ label: 'Delete category', value: 'delete', destructive: true },
+					{ label: 'Archive', value: 'archive', disabled: true },
+				]}
+				onSelect={jest.fn()}
+			/>,
+		);
+
+		expect(getByTestId('action-sheet-delete')).toHaveProp(
+			'accessibilityHint',
+			'Destructive action. Double tap to confirm this action.',
+		);
+		expect(getByTestId('action-sheet-archive')).toHaveProp('accessibilityState', {
+			disabled: true,
+		});
+	});
+
 	it('dismisses through the native back or escape request-close path', () => {
 		const onOpenChange = jest.fn();
 		const { getByTestId, UNSAFE_getAllByProps, UNSAFE_getByType } = renderWithTheme(

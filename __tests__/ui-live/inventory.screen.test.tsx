@@ -63,7 +63,7 @@ describe('Inventory screen live wiring', () => {
 			expect(inventoryService.fetchItems).toHaveBeenCalledTimes(1);
 		});
 
-		fireEvent.changeText(screen.getByLabelText('inventory-search-input'), 'Marble');
+		fireEvent.changeText(screen.getByLabelText('Search inventory'), 'Marble');
 		await advanceDebounce(400);
 
 		await waitFor(() => {

@@ -24,6 +24,7 @@ import { Badge } from '@easydesign/design-system';
 import { CustomerListSkeleton } from '@/app/components/molecules/skeletons/CustomerListSkeleton';
 import { useLocale } from '@/src/hooks/useLocale';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { announceListRefreshComplete } from '@/src/accessibility/announcements';
 import type { Customer } from '@/src/types/customer';
 
 const CUSTOMER_LIST_BOTTOM_PADDING = SPACING_PX['4xl'] + SPACING_PX.md + SPACING_PX.xs;
@@ -105,6 +106,7 @@ export default function CustomersScreen() {
 		setRefreshing(true);
 		try {
 			await fetchCustomers(true);
+			await announceListRefreshComplete(t('customer.title'), customers.length);
 		} finally {
 			setRefreshing(false);
 		}
@@ -167,7 +169,7 @@ export default function CustomersScreen() {
 				<SearchBar
 					value={search}
 					onChangeText={handleSearch}
-					placeholder="Search customers..."
+					placeholder={t('customer.form.placeholders.search')}
 					style={styles.searchBar}
 				/>
 				<FilterBar
@@ -178,7 +180,10 @@ export default function CustomersScreen() {
 					onClear={() => handleFilterSelect('all')}
 				/>
 				{/* Summary Bar */}
-				<View style={[styles.summaryBar, { backgroundColor: theme.colors.surfaceVariant }]}>
+				<View
+					style={[styles.summaryBar, { backgroundColor: theme.colors.surfaceVariant }]}
+					accessibilityLabel={`${customers.length} customers. ${formatCurrency(totalOutstanding)} to receive.`}
+				>
 					<ThemedText variant="caption" color={theme.colors.onSurfaceVariant}>
 						{`${customers.length} customers · ₹ ${formatCurrency(totalOutstanding)} to receive`}
 					</ThemedText>
@@ -189,6 +194,8 @@ export default function CustomersScreen() {
 				<CustomerListSkeleton />
 			) : (
 				<FlatList
+					accessibilityRole="list"
+					accessibilityLabel="Customers list"
 					data={customers}
 					renderItem={renderCustomer}
 					keyExtractor={(item) => item.id}
@@ -223,10 +230,15 @@ export default function CustomersScreen() {
 				onPress={() => router.push('/(app)/customers/add' as Href)}
 				activeOpacity={0.85}
 				accessibilityRole="button"
-				accessibilityLabel="add-customer-button"
+				accessibilityLabel={t('customer.addCustomer')}
 				accessibilityHint={t('customer.addHint')}
 			>
-				<UserPlus size={26} color="white" strokeWidth={2.5} />
+				<UserPlus
+					size={26}
+					color="white"
+					strokeWidth={2.5}
+					importantForAccessibility="no"
+				/>
 			</TouchableOpacity>
 		</AtomicScreen>
 	);

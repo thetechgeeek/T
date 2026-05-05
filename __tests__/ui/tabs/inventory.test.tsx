@@ -16,6 +16,7 @@ jest.mock('@/src/hooks/useLocale', () => ({
 			const map: Record<string, string> = {
 				'inventory.title': 'Inventory',
 				'inventory.noItems': 'No items found',
+				'inventory.addItem': 'Add Item',
 				'inventory.addFirstItem': 'Add your first item',
 				'inventory.emptyFilterHint': 'Try a different filter',
 				'inventory.loadError': 'Failed to load',
@@ -168,7 +169,7 @@ describe('InventoryTab', () => {
 
 	it('FAB press navigates to /(app)/inventory/add', () => {
 		const { getByLabelText } = renderWithTheme(<InventoryTab />);
-		fireEvent.press(getByLabelText('add-inventory-button'));
+		fireEvent.press(getByLabelText('Add Item'));
 		expect(mockPush).toHaveBeenCalledWith('/(app)/inventory/add');
 	});
 

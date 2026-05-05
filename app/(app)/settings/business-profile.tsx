@@ -24,6 +24,7 @@ import { Image } from 'expo-image';
 import { Camera, X, ChevronDown, ChevronUp } from 'lucide-react-native';
 import QRCode from 'react-native-qrcode-svg';
 import logger from '@/src/utils/logger';
+import { useLocale } from '@/src/hooks/useLocale';
 
 const MS_SAVED_TOAST = 3000;
 /** ImagePicker quality for business logo (medium – balances size vs clarity) */
@@ -62,6 +63,7 @@ export default function BusinessProfileScreen() {
 	const { theme } = useTheme();
 	const c = theme.colors;
 	const router = useRouter();
+	const { t } = useLocale();
 
 	const [fetchLoading, setFetchLoading] = useState(true);
 	const [saveLoading, setSaveLoading] = useState(false);
@@ -239,7 +241,7 @@ export default function BusinessProfileScreen() {
 			header={
 				<View style={[styles.header, { backgroundColor: c.primary }]}>
 					<ThemedText variant="h2" style={{ color: c.onPrimary }}>
-						Business Profile
+						{t('settings.businessProfileFields.title')}
 					</ThemedText>
 				</View>
 			}
@@ -391,7 +393,7 @@ export default function BusinessProfileScreen() {
 							{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
 						]}
 					>
-						Business Description (max 200 chars)
+						{t('settings.businessProfileFields.description')}
 					</ThemedText>
 					<TextInput
 						testID="desc-field"
@@ -410,12 +412,12 @@ export default function BusinessProfileScreen() {
 							{ color: c.onSurfaceVariant, marginTop: SPACING_PX.lg },
 						]}
 					>
-						Business Logo
+						{t('settings.businessProfileFields.logo')}
 					</ThemedText>
 					<ImagePickerBox
 						value={form.logo_url}
 						onChange={(v) => update('logo_url', v)}
-						label="Logo"
+						label={t('settings.businessProfileFields.logoLabel')}
 						c={c}
 						theme={theme}
 					/>

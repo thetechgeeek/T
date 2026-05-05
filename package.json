@@ -43,11 +43,12 @@
 		"check:runtime-boundaries": "node scripts/tooling.mjs check:runtime-boundaries",
 		"check:migrations": "node scripts/tooling.mjs check:migrations",
 		"check:db-types": "node scripts/tooling.mjs check:db-types",
+		"check:i18n": "node scripts/check-i18n-keys.mjs && node scripts/check-i18n-hardcoded.mjs",
 		"db:types:generate": "npx supabase gen types typescript --local > src/types/database.ts",
 		"generate:tokens": "node scripts/tooling.mjs generate:tokens",
 		"generate:ui-library": "node scripts/tooling.mjs generate:ui-library",
 		"generate:design-system": "npm run generate:tokens && npm run generate:ui-library && node scripts/tooling.mjs generate:component-catalog",
-		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run check:runtime-boundaries && npm run check:ui-tokens && npm run check:design-system && npm run check:ui-shell && npm run check:workspace-packages && npm run check:inventory-consumer && npm run check:release-discipline && npm run check:extraction-readiness && npm run lint && npm run test && npm run test:integration",
+		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run check:runtime-boundaries && npm run check:i18n && npm run check:ui-tokens && npm run check:design-system && npm run check:ui-shell && npm run check:workspace-packages && npm run check:inventory-consumer && npm run check:release-discipline && npm run check:extraction-readiness && npm run lint && npm run test && npm run test:integration",
 		"prepare": "husky"
 	},
 	"dependencies": {

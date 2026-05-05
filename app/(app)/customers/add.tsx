@@ -37,17 +37,17 @@ interface CustomerFormData {
 	notes?: string;
 }
 
-const getCustomerSchema = (t: (key: string) => string) =>
+const getCustomerSchema = (t: (key: string, options?: Record<string, unknown>) => string) =>
 	z.object({
 		name: z.string().min(2, t('common.required')),
 		phone: z
 			.string()
 			.min(1, t('common.required'))
 			.regex(/^[6-9]\d{9}$/, t('customer.invalidPhone')),
-		email: z.string().email('Invalid email').optional().or(z.literal('')),
+		email: z.string().email(t('customer.invalidEmail')).optional().or(z.literal('')),
 		gstin: z
 			.string()
-			.length(15, t('customer.gstin') + ' ' + t('order.detailsMissing'))
+			.length(15, t('customer.gstinInvalidLength', { field: t('customer.gstin') }))
 			.optional()
 			.or(z.literal('')),
 		address: z.string().optional(),
@@ -147,7 +147,7 @@ export default function AddCustomerScreen() {
 						color={c.onSurfaceVariant}
 						style={{ marginBottom: SPACING_PX.sm - SPACING_PX.xxs }}
 					>
-						Customer Type
+						{t('customer.customerType')}
 					</ThemedText>
 					<View style={[layout.row, styles.toggleRow]}>
 						<Pressable
@@ -168,7 +168,7 @@ export default function AddCustomerScreen() {
 								variant="caption"
 								color={customerType === 'individual' ? c.onPrimary : c.primary}
 							>
-								Individual
+								{t('customer.individual')}
 							</ThemedText>
 						</Pressable>
 						<Pressable
@@ -189,7 +189,7 @@ export default function AddCustomerScreen() {
 								variant="caption"
 								color={customerType === 'business' ? c.onPrimary : c.primary}
 							>
-								Business
+								{t('customer.business')}
 							</ThemedText>
 						</Pressable>
 					</View>
@@ -200,7 +200,7 @@ export default function AddCustomerScreen() {
 							name="company_name"
 							render={({ field: { onChange, value } }) => (
 								<FormField
-									label="Company Name"
+									label={t('customer.companyName')}
 									accessibilityLabel="customer-company-name-input"
 									placeholder="Enter company name"
 									value={value}
@@ -232,7 +232,7 @@ export default function AddCustomerScreen() {
 						name="email"
 						render={({ field: { onChange, value } }) => (
 							<FormField
-								label="Email"
+								label={t('supplier.email')}
 								accessibilityLabel="customer-email-input"
 								placeholder="customer@example.com"
 								keyboardType="email-address"

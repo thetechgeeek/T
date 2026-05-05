@@ -36,6 +36,8 @@ export interface PaginatedListProps<T> {
 	style?: StyleProp<ViewStyle>;
 	contentContainerStyle?: StyleProp<ViewStyle>;
 	testID?: string;
+	accessibilityLabel?: string;
+	accessibilityHint?: string;
 }
 
 /**
@@ -64,6 +66,8 @@ function PaginatedListComponent<T>({
 	style,
 	contentContainerStyle,
 	testID,
+	accessibilityLabel,
+	accessibilityHint,
 }: PaginatedListProps<T>) {
 	const { theme } = useTheme();
 	const c = theme.colors;
@@ -100,6 +104,9 @@ function PaginatedListComponent<T>({
 	return (
 		<FlatList
 			testID={testID}
+			accessibilityRole="list"
+			accessibilityLabel={accessibilityLabel}
+			accessibilityHint={accessibilityHint}
 			data={data}
 			renderItem={renderItem}
 			keyExtractor={keyExtractor}

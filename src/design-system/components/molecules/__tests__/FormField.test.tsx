@@ -47,4 +47,12 @@ describe('FormField', () => {
 			'Required. Needed before publish',
 		);
 	});
+
+	it('keeps non-error helper text in the accessibility tree', () => {
+		const { getByText } = renderWithTheme(
+			<FormField label="GSTIN" placeholder="22AAAAA0000A1Z5" helperText="15 characters" />,
+		);
+
+		expect(getByText('15 characters')).not.toHaveProp('importantForAccessibility', 'no');
+	});
 });

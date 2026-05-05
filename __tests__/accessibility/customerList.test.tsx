@@ -34,7 +34,15 @@ jest.mock('@/src/stores/customerStore', () => ({
 // Mock useLocale
 jest.mock('@/src/hooks/useLocale', () => ({
 	useLocale: () => ({
-		t: (key: string) => key,
+		t: (key: string) => {
+			const map: Record<string, string> = {
+				'customer.form.placeholders.search': 'Search customers...',
+				'customer.addCustomer': 'Add Customer',
+				'customer.addHint': 'Add a new customer to your database.',
+				'customer.title': 'Customers',
+			};
+			return map[key] ?? key;
+		},
 		formatCurrency: (val: number) => `₹${val}`,
 		currentLanguage: 'en',
 	}),
@@ -70,7 +78,7 @@ describe('Customer List Accessibility', () => {
 
 	it('has an identifiable Add Customer FAB', async () => {
 		const { findByLabelText } = renderWithTheme(<CustomersScreen />);
-		const fab = await findByLabelText('add-customer-button');
+		const fab = await findByLabelText('Add Customer');
 		expect(fab.props.accessibilityRole).toBe('button');
 	});
 });

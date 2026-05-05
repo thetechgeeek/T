@@ -322,6 +322,12 @@ jest.mock('react-native', () => {
 		ListFooterComponent,
 		ListEmptyComponent,
 		onEndReached,
+		testID,
+		accessibilityLabel,
+		accessibilityHint,
+		accessibilityRole,
+		accessibilityState,
+		accessible,
 	}: {
 		data?: unknown[];
 		renderItem: ({ item, index }: { item: unknown; index: number }) => React.ReactNode;
@@ -330,7 +336,21 @@ jest.mock('react-native', () => {
 		ListFooterComponent?: React.ReactNode | React.ComponentType;
 		ListEmptyComponent?: React.ReactNode | React.ComponentType;
 		onEndReached?: () => void;
+		testID?: string;
+		accessibilityLabel?: string;
+		accessibilityHint?: string;
+		accessibilityRole?: string;
+		accessibilityState?: Record<string, unknown>;
+		accessible?: boolean;
 	}) => {
+		const listA11yProps = {
+			testID,
+			accessibilityLabel,
+			accessibilityHint,
+			accessibilityRole,
+			accessibilityState,
+			accessible,
+		};
 		const header = ListHeaderComponent
 			? React.createElement(
 					'View',
@@ -365,7 +385,7 @@ jest.mock('react-native', () => {
 					: null;
 		return React.createElement(
 			'View',
-			null,
+			listA11yProps,
 			header,
 			items,
 			footer,

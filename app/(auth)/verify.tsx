@@ -20,7 +20,7 @@ import { ThemedText } from '@easydesign/design-system';
 import { businessProfileService } from '@/src/services/businessProfileService';
 import { SIZE_INPUT_HEIGHT } from '@easydesign/design-system/foundation';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
-import { AppError } from '@/src/errors';
+import { AppError, getTranslatedErrorMessage } from '@/src/errors';
 
 export default function VerifyOtpScreen() {
 	const { theme, c, s, r, typo } = useThemeTokens();
@@ -83,7 +83,7 @@ export default function VerifyOtpScreen() {
 			Alert.alert(
 				t('auth.errorVerifyFailed'),
 				e instanceof AppError
-					? e.userMessage
+					? getTranslatedErrorMessage(e, t)
 					: e instanceof Error
 						? e.message
 						: t('common.unexpectedError'),
@@ -101,7 +101,7 @@ export default function VerifyOtpScreen() {
 			Alert.alert(
 				t('common.error'),
 				e instanceof AppError
-					? e.userMessage
+					? getTranslatedErrorMessage(e, t)
 					: e instanceof Error
 						? e.message
 						: t('common.unexpectedError'),

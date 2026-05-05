@@ -90,6 +90,31 @@ describe('PaginatedList', () => {
 		expect(onEmptyAction).toHaveBeenCalledTimes(1);
 	});
 
+	it('exposes list role and contextual label to assistive technology', () => {
+		const { getByTestId } = renderWithTheme(
+			<PaginatedList
+				testID="records-list"
+				data={items}
+				renderItem={({ item }) => <Text>{(item as { name: string }).name}</Text>}
+				keyExtractor={(item) => (item as { id: string }).id}
+				isLoading={false}
+				hasError={false}
+				accessibilityLabel="Inventory items list"
+				accessibilityHint="Shows matching inventory records"
+			/>,
+		);
+
+		expect(getByTestId('records-list')).toHaveProp('accessibilityRole', 'list');
+		expect(getByTestId('records-list')).toHaveProp(
+			'accessibilityLabel',
+			'Inventory items list',
+		);
+		expect(getByTestId('records-list')).toHaveProp(
+			'accessibilityHint',
+			'Shows matching inventory records',
+		);
+	});
+
 	it('renders header component', () => {
 		const { getByText } = renderWithTheme(
 			<PaginatedList

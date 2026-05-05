@@ -18,7 +18,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { Screen } from '@easydesign/design-system';
 import { Button } from '@easydesign/design-system';
 import { ThemedText } from '@easydesign/design-system';
-import { AppError } from '@/src/errors';
+import { AppError, getTranslatedErrorMessage } from '@/src/errors';
 
 export default function LoginScreen() {
 	const { c, s, r, typo } = useThemeTokens();
@@ -69,7 +69,7 @@ export default function LoginScreen() {
 		} catch (e: unknown) {
 			setLoginError(
 				e instanceof AppError
-					? e.userMessage
+					? getTranslatedErrorMessage(e, t)
 					: e instanceof Error
 						? e.message
 						: t('common.unexpectedError'),
