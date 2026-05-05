@@ -17,7 +17,7 @@ export interface SettingsCardProps {
 	accessibilityLabel?: string;
 }
 
-export function SettingsCard({
+function SettingsCardComponent({
 	title,
 	subtitle,
 	children,
@@ -84,6 +84,9 @@ export function SettingsCard({
 		</Card>
 	);
 }
+
+export const SettingsCard = React.memo(SettingsCardComponent);
+SettingsCard.displayName = 'SettingsCard';
 
 const styles = StyleSheet.create({
 	content: {},

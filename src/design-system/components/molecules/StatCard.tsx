@@ -48,7 +48,7 @@ function buildSparklinePoints(values: number[]) {
 		.join(' ');
 }
 
-export const StatCard: React.FC<StatCardProps> = ({
+const StatCardComponent: React.FC<StatCardProps> = ({
 	label,
 	value,
 	icon: Icon,
@@ -228,6 +228,9 @@ export const StatCard: React.FC<StatCardProps> = ({
 		</Card>
 	);
 };
+
+export const StatCard = React.memo(StatCardComponent);
+StatCard.displayName = 'StatCard';
 
 const styles = StyleSheet.create({
 	headerRow: {

@@ -114,7 +114,7 @@ describe('Inventory store regression guards', () => {
 		expect(inventoryService.fetchItems).not.toHaveBeenCalled();
 	});
 
-	it('rehydrates persisted filters deterministically', async () => {
+	it('rehydrates persisted filters while dropping sensitive search text', async () => {
 		await AsyncStorage.setItem(
 			'inventory-storage',
 			JSON.stringify({
@@ -138,7 +138,7 @@ describe('Inventory store regression guards', () => {
 
 		expect(useInventoryStore.getState().filters).toEqual({
 			...defaultPersistedFilters,
-			search: 'Persisted Marble',
+			search: '',
 			lowStockOnly: true,
 		});
 	});

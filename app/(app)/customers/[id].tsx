@@ -18,11 +18,13 @@ import { ScreenHeader } from '@easydesign/ui-shell';
 import { CustomerDetailSkeleton } from '@/app/components/molecules/skeletons/CustomerDetailSkeleton';
 import { BORDER_RADIUS_PX, SPACING_PX } from '@easydesign/design-system/foundation';
 import { FONT_SIZE } from '@easydesign/design-system/foundation';
+import { parseUuidRouteParam } from '@/src/navigation/routeParamValidation';
 
 import type { CustomerLedgerEntry } from '@/src/types/customer';
 
 export default function CustomerDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
+	const customerId = parseUuidRouteParam(id, 'customer_id');
 	const { theme } = useThemeTokens();
 	const { formatCurrency, formatDate } = useLocale();
 	const { t } = useTranslation();
@@ -46,8 +48,8 @@ export default function CustomerDetailScreen() {
 	// background refresh (no blank-screen flash for the same customer).
 	useFocusEffect(
 		useCallback(() => {
-			if (id) fetchCustomerDetail(id);
-		}, [id, fetchCustomerDetail]),
+			if (customerId) fetchCustomerDetail(customerId);
+		}, [customerId, fetchCustomerDetail]),
 	);
 
 	const renderLedgerItem = ({ item }: { item: CustomerLedgerEntry }) => (

@@ -1,4 +1,4 @@
-import logger from './logger';
+import logger, { redactLogMeta } from './logger';
 import {
 	allowExpectedConsoleError,
 	allowExpectedConsoleWarn,
@@ -58,6 +58,21 @@ describe('logger', () => {
 				duration_ms: 12,
 			});
 		});
+
+		it('redacts sensitive metadata before logging', () => {
+			(global as unknown as { __DEV__: boolean }).__DEV__ = true;
+			logger.info('customer_update', {
+				phone: '+91 98765 43210',
+				gstin: '27ABCDE1234F1Z5',
+				nested: { access_token: 'secret-token', count: 2 },
+			});
+
+			expect(infoSpy).toHaveBeenCalledWith('[INFO] customer_update', {
+				phone: '[REDACTED]',
+				gstin: '[REDACTED]',
+				nested: { access_token: '[REDACTED]', count: 2 },
+			});
+		});
 	});
 
 	describe('warn()', () => {
@@ -97,6 +112,32 @@ describe('logger', () => {
 			allowExpectedConsoleError('[ERROR] no error object');
 			expect(() => logger.error('no error object')).not.toThrow();
 			expect(errorSpy).toHaveBeenCalled();
+		});
+
+		it('redacts PII from error messages and metadata', () => {
+			allowExpectedConsoleError('[ERROR] pii error');
+			const err = new Error('Failed for +91 98765 43210');
+			logger.error('pii error', err, { authorization: 'Bearer abc.def.ghi' });
+
+			const redactedError = errorSpy.mock.calls[0][1] as Error;
+			expect(redactedError.message).toBe('Failed for [REDACTED]');
+			expect(errorSpy).toHaveBeenCalledWith('[ERROR] pii error', redactedError, {
+				authorization: '[REDACTED]',
+			});
+		});
+	});
+
+	describe('redactLogMeta()', () => {
+		it('redacts nested arrays without mutating safe metadata', () => {
+			expect(
+				redactLogMeta({
+					safe: 'invoice-list',
+					items: [{ customer_name: 'John Doe' }, { value: 'GSTIN 27ABCDE1234F1Z5' }],
+				}),
+			).toEqual({
+				safe: 'invoice-list',
+				items: [{ customer_name: '[REDACTED]' }, { value: 'GSTIN [REDACTED]' }],
+			});
 		});
 	});
 

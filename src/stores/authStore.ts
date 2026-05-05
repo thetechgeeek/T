@@ -3,6 +3,7 @@ import type { Session, User } from '@supabase/supabase-js';
 import { authService } from '@/src/services/authService';
 import { getErrorMessage } from '@/src/errors/AppError';
 import { stopAuthSessionSubscription } from '@/src/orchestrators/authSessionSubscription';
+import { clearPersistedBusinessStores } from '@/src/stores/persistedStoreRegistry';
 
 interface AuthState {
 	user: User | null;
@@ -104,6 +105,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 			await authService.signOut();
 		} catch (error: unknown) {
 			set({ error: getErrorMessage(error) });
+		} finally {
+			await clearPersistedBusinessStores();
 		}
 		set({ user: null, session: null, isAuthenticated: false, loading: false });
 	},

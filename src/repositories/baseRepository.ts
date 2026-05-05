@@ -1,6 +1,8 @@
 import { supabase as defaultClient } from '../config/supabase';
 import { toAppError } from '../errors';
 import logger from '../utils/logger';
+import { recordQueryTiming } from '../utils/queryMetrics';
+import { normalizePage, normalizePageSize } from '../utils/queryGuards';
 import type { UUID } from '../types/common';
 import type { PublicTableName } from '../types/database';
 
@@ -13,6 +15,8 @@ export interface QueryOptions {
 	/** Page size when using cursor-based pagination. */
 	cursorPageSize?: number;
 	search?: { columns: string[]; term: string };
+	/** Optional screen or workflow label for production query-timing aggregation. */
+	context?: string;
 }
 
 export interface PaginatedResult<T> {
@@ -66,14 +70,18 @@ function applyFilters<Q extends QueryBuilder>(query: Q, options: QueryOptions): 
 	}
 
 	if (pagination) {
-		const from = (pagination.page - 1) * pagination.pageSize;
-		query = query.range(from, from + pagination.pageSize - 1);
+		const page = normalizePage(pagination.page);
+		const pageSize = normalizePageSize(pagination.pageSize);
+		const from = (page - 1) * pageSize;
+		query = query.range(from, from + pageSize - 1);
 	} else if (options.cursor) {
 		// Keyset pagination: more efficient than OFFSET for deep pages
-		query = query.lt('created_at', options.cursor).limit(options.cursorPageSize ?? 20);
+		query = query
+			.lt('created_at', options.cursor)
+			.limit(normalizePageSize(options.cursorPageSize ?? 20));
 	} else if (options.cursorPageSize && !options.cursor) {
 		// First page of keyset pagination (no cursor yet)
-		query = query.limit(options.cursorPageSize);
+		query = query.limit(normalizePageSize(options.cursorPageSize));
 	}
 
 	return query;
@@ -98,6 +106,35 @@ function getClient() {
 	return client;
 }
 
+function logQueryTiming(
+	tableName: PublicTableName,
+	op: string,
+	start: number,
+	context?: string,
+	extra?: Record<string, unknown>,
+) {
+	const durationMs = Math.round(performance.now() - start);
+	const snapshot = recordQueryTiming({
+		table: tableName,
+		op,
+		context,
+		durationMs,
+		release: process.env.EXPO_PUBLIC_APP_VERSION,
+	});
+	logger.info('db_query', {
+		table: tableName,
+		op,
+		context,
+		duration_ms: durationMs,
+		p50_ms: snapshot.p50Ms,
+		p95_ms: snapshot.p95Ms,
+		slow_count: snapshot.slowCount,
+		slow_threshold_ms: snapshot.slowThresholdMs,
+		release: snapshot.release,
+		...extra,
+	});
+}
+
 export function createRepository<T extends { id: UUID; created_at?: string }>(
 	tableName: PublicTableName,
 ) {
@@ -111,11 +148,7 @@ export function createRepository<T extends { id: UUID; created_at?: string }>(
 				.select('*', { count: useCursor ? undefined : 'exact' });
 			query = applyFilters(query, options);
 			const { data, count, error } = await query;
-			logger.info('db_query', {
-				table: tableName,
-				op: 'findMany',
-				duration_ms: Math.round(performance.now() - start),
-			});
+			logQueryTiming(tableName, 'findMany', start, options.context);
 			if (error) throw toAppError(error);
 			const rows = (data ?? []) as T[];
 			const pageSize = options.cursorPageSize ?? 20;
@@ -135,11 +168,7 @@ export function createRepository<T extends { id: UUID; created_at?: string }>(
 				.select('*')
 				.eq('id', id)
 				.single();
-			logger.info('db_query', {
-				table: tableName,
-				op: 'findById',
-				duration_ms: Math.round(performance.now() - start),
-			});
+			logQueryTiming(tableName, 'findById', start);
 			if (error) throw toAppError(error);
 			return data as T;
 		},
@@ -152,11 +181,7 @@ export function createRepository<T extends { id: UUID; created_at?: string }>(
 				.insert(payload)
 				.select()
 				.single();
-			logger.info('db_query', {
-				table: tableName,
-				op: 'create',
-				duration_ms: Math.round(performance.now() - start),
-			});
+			logQueryTiming(tableName, 'create', start);
 			if (error) throw toAppError(error);
 			return data as T;
 		},
@@ -170,11 +195,7 @@ export function createRepository<T extends { id: UUID; created_at?: string }>(
 				.eq('id', id)
 				.select()
 				.single();
-			logger.info('db_query', {
-				table: tableName,
-				op: 'update',
-				duration_ms: Math.round(performance.now() - start),
-			});
+			logQueryTiming(tableName, 'update', start);
 			if (error) throw toAppError(error);
 			return data as T;
 		},
@@ -183,11 +204,7 @@ export function createRepository<T extends { id: UUID; created_at?: string }>(
 			const start = performance.now();
 			const supabase = getClient();
 			const { error } = await supabase.from(tableName).delete().eq('id', id);
-			logger.info('db_query', {
-				table: tableName,
-				op: 'remove',
-				duration_ms: Math.round(performance.now() - start),
-			});
+			logQueryTiming(tableName, 'remove', start);
 			if (error) throw toAppError(error);
 		},
 
@@ -195,12 +212,7 @@ export function createRepository<T extends { id: UUID; created_at?: string }>(
 			const start = performance.now();
 			const supabase = getClient();
 			const { data, error } = await supabase.rpc(fnName, params);
-			logger.info('db_query', {
-				table: tableName,
-				op: 'rpc',
-				fn: fnName,
-				duration_ms: Math.round(performance.now() - start),
-			});
+			logQueryTiming(tableName, 'rpc', start, undefined, { fn: fnName });
 			if (error) throw toAppError(error);
 			return data as R;
 		},

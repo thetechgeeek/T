@@ -3,9 +3,12 @@ import { toAppError } from '../errors/AppError';
 import { invoiceRepository, type InvoiceCreatePayload } from '../repositories/invoiceRepository';
 import { validateWith } from '../utils/validation';
 import { generateUUID } from '../utils/uuid';
+import { normalizePage, normalizePageSize, resolveSortField } from '@/src/utils/queryGuards';
 import { InvoiceInputSchema } from '../schemas/invoice';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
 import type { UUID } from '../types/common';
+
+const INVOICE_SORT_FIELDS = ['invoice_date', 'grand_total', 'created_at'] as const;
 
 export function createInvoiceService(repo = invoiceRepository) {
 	return {
@@ -28,10 +31,13 @@ export function createInvoiceService(repo = invoiceRepository) {
 			if (filters.dateFrom) query = query.gte('invoice_date', filters.dateFrom);
 			if (filters.dateTo) query = query.lte('invoice_date', filters.dateTo);
 
-			const from = (page - 1) * limit;
+			const safePage = normalizePage(page);
+			const safeLimit = normalizePageSize(limit);
+			const sortField = resolveSortField(filters.sortBy, INVOICE_SORT_FIELDS, 'created_at');
+			const from = (safePage - 1) * safeLimit;
 			query = query
-				.order(filters.sortBy || 'created_at', { ascending: filters.sortDir === 'asc' })
-				.range(from, from + limit - 1);
+				.order(sortField, { ascending: filters.sortDir === 'asc' })
+				.range(from, from + safeLimit - 1);
 
 			const { data, count, error } = await query;
 			if (error) throw toAppError(error);

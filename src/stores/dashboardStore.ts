@@ -53,6 +53,9 @@ export const useDashboardStore = create<DashboardState>()(
 		{
 			name: 'dashboard-storage',
 			storage: createJSONStorage(() => AsyncStorage),
+			version: 1,
+			migrate: () => ({}),
+			partialize: () => ({}),
 		},
 	),
 );

@@ -37,138 +37,142 @@ interface SearchBarProps {
 	loadingAccessibilityLabel?: string;
 }
 
-export const SearchBar = forwardRef<NativeTextInput, SearchBarProps>(
-	(
-		{
-			value,
-			defaultValue = '',
-			onChangeText,
-			onValueChange,
-			onDebouncedChange,
-			debounceMs,
-			placeholder,
-			style,
-			testID,
-			accessibilityLabel,
-			accessibilityHint,
-			clearAccessibilityLabel = 'Clear search',
-			loading = false,
-			loadingAccessibilityLabel = 'Search loading',
-		},
-		ref,
-	) => {
-		const { theme, runtime } = useTheme();
-		const searchTokens = theme.components.searchBar;
-		const resolvedPlaceholder = placeholder ?? 'Search';
-		const resolvedAccessibilityLabel = accessibilityLabel ?? resolvedPlaceholder;
-		const resolvedWritingDirection = resolveWritingDirection(
-			runtime.detectedLocale,
-			runtime.runtimeRtl,
-		);
-		const [isFocused, setIsFocused] = useState(false);
-		const skipInitialDebounce = useRef(true);
-		const [currentValue, setCurrentValue] = useControllableState({
-			value,
-			defaultValue,
-			onChange: (nextValue, meta) => {
-				onChangeText(nextValue);
-				onValueChange?.(nextValue, {
-					source: meta?.source === 'clear' ? 'clear' : 'input',
-				});
+export const SearchBar = React.memo(
+	forwardRef<NativeTextInput, SearchBarProps>(
+		(
+			{
+				value,
+				defaultValue = '',
+				onChangeText,
+				onValueChange,
+				onDebouncedChange,
+				debounceMs,
+				placeholder,
+				style,
+				testID,
+				accessibilityLabel,
+				accessibilityHint,
+				clearAccessibilityLabel = 'Clear search',
+				loading = false,
+				loadingAccessibilityLabel = 'Search loading',
 			},
-		});
-		const debouncedValue = useDebounce(currentValue, debounceMs ?? 0);
-		const debouncedChangeRef = useRef(onDebouncedChange);
+			ref,
+		) => {
+			const { theme, runtime } = useTheme();
+			const searchTokens = theme.components.searchBar;
+			const resolvedPlaceholder = placeholder ?? 'Search';
+			const resolvedAccessibilityLabel = accessibilityLabel ?? resolvedPlaceholder;
+			const resolvedWritingDirection = resolveWritingDirection(
+				runtime.detectedLocale,
+				runtime.runtimeRtl,
+			);
+			const [isFocused, setIsFocused] = useState(false);
+			const skipInitialDebounce = useRef(true);
+			const [currentValue, setCurrentValue] = useControllableState({
+				value,
+				defaultValue,
+				onChange: (nextValue, meta) => {
+					onChangeText(nextValue);
+					onValueChange?.(nextValue, {
+						source: meta?.source === 'clear' ? 'clear' : 'input',
+					});
+				},
+			});
+			const debouncedValue = useDebounce(currentValue, debounceMs ?? 0);
+			const debouncedChangeRef = useRef(onDebouncedChange);
 
-		useEffect(() => {
-			debouncedChangeRef.current = onDebouncedChange;
-		}, [onDebouncedChange]);
+			useEffect(() => {
+				debouncedChangeRef.current = onDebouncedChange;
+			}, [onDebouncedChange]);
 
-		useEffect(() => {
-			if (!debouncedChangeRef.current) {
-				return;
-			}
+			useEffect(() => {
+				if (!debouncedChangeRef.current) {
+					return;
+				}
 
-			if (skipInitialDebounce.current) {
-				skipInitialDebounce.current = false;
-				return;
-			}
+				if (skipInitialDebounce.current) {
+					skipInitialDebounce.current = false;
+					return;
+				}
 
-			debouncedChangeRef.current(debouncedValue);
-		}, [debouncedValue]);
+				debouncedChangeRef.current(debouncedValue);
+			}, [debouncedValue]);
 
-		return (
-			<View
-				testID={testID}
-				style={[
-					styles.container,
-					{
-						backgroundColor: theme.colors.surface,
-						borderRadius: searchTokens.radius,
-						borderColor: isFocused ? theme.colors.primary : theme.colors.border,
-						borderWidth: isFocused ? 2 : StyleSheet.hairlineWidth,
-						paddingHorizontal: searchTokens.paddingX,
-						height: searchTokens.height,
-					},
-					style,
-				]}
-			>
-				<LucideIconGlyph
-					icon={Search}
-					size={searchTokens.iconSize}
-					color={theme.colors.onSurfaceVariant}
-					style={{ marginEnd: searchTokens.iconGap }}
-				/>
-				<TextInput
-					ref={ref}
-					accessible={true}
-					accessibilityRole="search"
-					accessibilityLabel={resolvedAccessibilityLabel}
-					accessibilityHint={accessibilityHint}
-					accessibilityState={{ busy: loading }}
+			return (
+				<View
+					testID={testID}
 					style={[
-						styles.input,
+						styles.container,
 						{
-							color: theme.colors.onSurface,
-							fontSize: theme.typography.sizes.md,
-							fontFamily: theme.typography.fontFamily,
-							writingDirection: resolvedWritingDirection,
+							backgroundColor: theme.colors.surface,
+							borderRadius: searchTokens.radius,
+							borderColor: isFocused ? theme.colors.primary : theme.colors.border,
+							borderWidth: isFocused ? 2 : StyleSheet.hairlineWidth,
+							paddingHorizontal: searchTokens.paddingX,
+							height: searchTokens.height,
 						},
+						style,
 					]}
-					value={currentValue}
-					onFocus={() => setIsFocused(true)}
-					onBlur={() => setIsFocused(false)}
-					onChangeText={(nextValue) => setCurrentValue(nextValue, { source: 'input' })}
-					placeholder={resolvedPlaceholder}
-					placeholderTextColor={theme.colors.placeholder}
-					autoCorrect={false}
-				/>
-				{loading ? (
-					<ActivityIndicator
-						size="small"
-						color={theme.colors.primary}
-						accessibilityLabel={loadingAccessibilityLabel}
+				>
+					<LucideIconGlyph
+						icon={Search}
+						size={searchTokens.iconSize}
+						color={theme.colors.onSurfaceVariant}
+						style={{ marginEnd: searchTokens.iconGap }}
 					/>
-				) : currentValue.length > 0 ? (
-					<Pressable
-						onPress={() => {
-							setCurrentValue('', { source: 'clear' });
-							void announceForScreenReader('Search cleared');
-						}}
-						hitSlop={10}
-						accessibilityRole="button"
-						accessibilityLabel={clearAccessibilityLabel}
-					>
-						<LucideIconGlyph
-							icon={X}
-							size={searchTokens.iconSize}
-							color={theme.colors.onSurfaceVariant}
+					<TextInput
+						ref={ref}
+						accessible={true}
+						accessibilityRole="search"
+						accessibilityLabel={resolvedAccessibilityLabel}
+						accessibilityHint={accessibilityHint}
+						accessibilityState={{ busy: loading }}
+						style={[
+							styles.input,
+							{
+								color: theme.colors.onSurface,
+								fontSize: theme.typography.sizes.md,
+								fontFamily: theme.typography.fontFamily,
+								writingDirection: resolvedWritingDirection,
+							},
+						]}
+						value={currentValue}
+						onFocus={() => setIsFocused(true)}
+						onBlur={() => setIsFocused(false)}
+						onChangeText={(nextValue) =>
+							setCurrentValue(nextValue, { source: 'input' })
+						}
+						placeholder={resolvedPlaceholder}
+						placeholderTextColor={theme.colors.placeholder}
+						autoCorrect={false}
+					/>
+					{loading ? (
+						<ActivityIndicator
+							size="small"
+							color={theme.colors.primary}
+							accessibilityLabel={loadingAccessibilityLabel}
 						/>
-					</Pressable>
-				) : null}
-			</View>
-		);
-	},
+					) : currentValue.length > 0 ? (
+						<Pressable
+							onPress={() => {
+								setCurrentValue('', { source: 'clear' });
+								void announceForScreenReader('Search cleared');
+							}}
+							hitSlop={10}
+							accessibilityRole="button"
+							accessibilityLabel={clearAccessibilityLabel}
+						>
+							<LucideIconGlyph
+								icon={X}
+								size={searchTokens.iconSize}
+								color={theme.colors.onSurfaceVariant}
+							/>
+						</Pressable>
+					) : null}
+				</View>
+			);
+		},
+	),
 );
 
 SearchBar.displayName = 'SearchBar';

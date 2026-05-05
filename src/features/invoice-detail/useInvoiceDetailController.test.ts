@@ -8,7 +8,7 @@ const mockPush = jest.fn();
 
 jest.mock('expo-router', () => ({
 	useRouter: jest.fn(() => ({ push: mockPush, back: jest.fn() })),
-	useLocalSearchParams: jest.fn(() => ({ id: 'inv-1' })),
+	useLocalSearchParams: jest.fn(() => ({ id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' })),
 }));
 
 jest.mock('@/src/stores/invoiceStore', () => ({
@@ -28,7 +28,7 @@ describe('useInvoiceDetailController', () => {
 	const mockFetchInvoiceById = jest.fn();
 	const mockClearCurrentInvoice = jest.fn();
 	const invoice = {
-		id: 'inv-1',
+		id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
 		invoice_number: 'TM/2026-27/0001',
 		grand_total: 100,
 		amount_paid: 0,
@@ -52,7 +52,7 @@ describe('useInvoiceDetailController', () => {
 	it('fetches invoice detail on mount and clears on unmount', () => {
 		const { unmount } = renderHook(() => useInvoiceDetailController(t, formatDateShort));
 
-		expect(mockFetchInvoiceById).toHaveBeenCalledWith('inv-1');
+		expect(mockFetchInvoiceById).toHaveBeenCalledWith('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11');
 
 		unmount();
 		expect(mockClearCurrentInvoice).toHaveBeenCalled();

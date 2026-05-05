@@ -2,6 +2,7 @@ import { supabase } from '@/src/config/supabase';
 import { AppError, NetworkError } from '../errors';
 import { withRetry } from '../utils/retry';
 import logger from '../utils/logger';
+import { otpAttemptLimiter } from '@/src/security/otpAttemptLimiter';
 
 function getAuthUserMessage(error: { message: string }, fallback: string): string {
 	const normalizedMessage = error.message.toLowerCase();
@@ -72,12 +73,17 @@ export const authService = {
 
 	/** Verify OTP entered by user */
 	async verifyOtp(phone: string, token: string) {
+		await otpAttemptLimiter.assertAllowed(phone);
 		const { data, error } = await supabase.auth.verifyOtp({
 			phone,
 			token,
 			type: 'sms',
 		});
-		if (error) throw wrapAuthError(error, 'गलत OTP — फिर से try करें।');
+		if (error) {
+			await otpAttemptLimiter.recordFailure(phone);
+			throw wrapAuthError(error, 'गलत OTP — फिर से try करें।');
+		}
+		await otpAttemptLimiter.reset(phone);
 		return data;
 	},
 

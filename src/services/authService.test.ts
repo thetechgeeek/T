@@ -2,6 +2,7 @@ import { authService } from './authService';
 import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
 import { AppError, NetworkError } from '@/src/errors';
 import { supabase } from '@/src/config/supabase';
+import { otpAttemptLimiter } from '@/src/security/otpAttemptLimiter';
 
 jest.mock('@/src/config/supabase', () => ({
 	supabase: {
@@ -21,6 +22,10 @@ jest.mock('@/src/config/supabase', () => ({
 describe('authService', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
+	});
+
+	afterEach(() => {
+		jest.restoreAllMocks();
 	});
 
 	it('signUp calls supabase.auth.signUp', async () => {
@@ -143,6 +148,37 @@ describe('authService', () => {
 
 		expect(supabase.auth.onAuthStateChange).toHaveBeenCalledWith(callback);
 		expect(result).toEqual(mockSub);
+	});
+
+	it('verifyOtp checks the client attempt limiter before calling Supabase', async () => {
+		const data = { session: { access_token: 'token' } };
+		const assertAllowed = jest.spyOn(otpAttemptLimiter, 'assertAllowed').mockResolvedValue();
+		const reset = jest.spyOn(otpAttemptLimiter, 'reset').mockResolvedValue();
+		(supabase.auth.verifyOtp as jest.Mock).mockResolvedValue({ data, error: null });
+
+		await expect(authService.verifyOtp('+919876543210', '123456')).resolves.toEqual(data);
+
+		expect(assertAllowed).toHaveBeenCalledWith('+919876543210');
+		expect(supabase.auth.verifyOtp).toHaveBeenCalledWith({
+			phone: '+919876543210',
+			token: '123456',
+			type: 'sms',
+		});
+		expect(reset).toHaveBeenCalledWith('+919876543210');
+	});
+
+	it('verifyOtp records failed attempts when Supabase rejects the token', async () => {
+		jest.spyOn(otpAttemptLimiter, 'assertAllowed').mockResolvedValue();
+		const recordFailure = jest.spyOn(otpAttemptLimiter, 'recordFailure').mockResolvedValue();
+		(supabase.auth.verifyOtp as jest.Mock).mockResolvedValue({
+			data: null,
+			error: { message: 'Invalid OTP', status: 400 },
+		});
+
+		await expect(authService.verifyOtp('+919876543210', '000000')).rejects.toBeInstanceOf(
+			AppError,
+		);
+		expect(recordFailure).toHaveBeenCalledWith('+919876543210');
 	});
 
 	it('signIn with rejected promise propagates as error', async () => {

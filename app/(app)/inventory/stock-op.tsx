@@ -18,6 +18,10 @@ import { Button } from '@easydesign/design-system';
 import { Screen as AtomicScreen } from '@easydesign/design-system';
 import type { UUID } from '@/src/types/common';
 import type { StockOpType, InventoryItem } from '@/src/types/inventory';
+import {
+	parseStockOpTypeRouteParam,
+	parseUuidRouteParam,
+} from '@/src/navigation/routeParamValidation';
 
 const REASON_OPTIONS = [
 	{ label: 'Damage', value: 'damage' },
@@ -43,6 +47,8 @@ export default function StockOpScreen() {
 	const { t } = useLocale();
 	const router = useRouter();
 	const { id, type } = useLocalSearchParams<{ id: UUID; type: StockOpType }>();
+	const itemId = parseUuidRouteParam(id, 'inventory_item_id');
+	const operationType = parseStockOpTypeRouteParam(type);
 
 	const { performStockOperation } = useInventoryStore();
 	const [submitting, setSubmitting] = useState(false);
@@ -53,16 +59,16 @@ export default function StockOpScreen() {
 	const [customReason, setCustomReason] = useState('');
 
 	useEffect(() => {
-		if (id) {
+		if (itemId) {
 			inventoryService
-				.fetchItemById(id)
+				.fetchItemById(itemId)
 				.then(setItem)
 				.catch((e) => {
 					logger.error('error', e instanceof Error ? e : new Error(String(e)));
 					setLoadError(true);
 				});
 		}
-	}, [id]);
+	}, [itemId]);
 
 	const {
 		control,
@@ -73,13 +79,13 @@ export default function StockOpScreen() {
 		defaultValues: { quantity: '', reason: '' },
 	});
 
-	const isStockIn = type === 'stock_in';
+	const isStockIn = operationType === 'stock_in';
 	const title = isStockIn
 		? `${t('inventory.stockIn')} (${t('common.add')})`
 		: `${t('inventory.stockOut')} (${t('common.remove')})`;
 
 	const onSubmit = async (data: FormData) => {
-		if (!id || !type) return;
+		if (!itemId || !operationType) return;
 		const qty = parseFloat(data.quantity);
 		if (isNaN(qty) || qty <= 0) {
 			Alert.alert(t('common.errorTitle'), t('inventory.stockOpValidationError'), [
@@ -99,8 +105,8 @@ export default function StockOpScreen() {
 		try {
 			const change = isStockIn ? qty : -qty;
 			await performStockOperation(
-				id,
-				type,
+				itemId,
+				operationType,
 				change,
 				reasonValue || (undefined as string | undefined),
 			);

@@ -17,6 +17,7 @@ import { FONT_SIZE } from '@easydesign/design-system/foundation';
 import { SIZE_THUMBNAIL_MD } from '@easydesign/design-system/foundation';
 import type { Supplier } from '@/src/types/supplier';
 import type { UUID } from '@/src/types/common';
+import { parseUuidRouteParam } from '@/src/navigation/routeParamValidation';
 
 function getInitials(name: string): string {
 	return name
@@ -34,6 +35,7 @@ type TabName = 'ledger' | 'purchases';
 
 export default function SupplierDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: UUID }>();
+	const supplierId = parseUuidRouteParam(id, 'supplier_id');
 	const router = useRouter();
 	const { c, s, r, theme } = useThemeTokens();
 	const { t } = useLocale();
@@ -44,11 +46,11 @@ export default function SupplierDetailScreen() {
 	const fetchedId = useRef<string | null>(null);
 
 	useEffect(() => {
-		if (!id || fetchedId.current === id) return;
-		fetchedId.current = id;
+		if (!supplierId || fetchedId.current === supplierId) return;
+		fetchedId.current = supplierId;
 		setLoading(true);
 		supplierService
-			.getSupplierById(id)
+			.getSupplierById(supplierId)
 			.then(setSupplier)
 			.catch((e: unknown) => {
 				Alert.alert(
@@ -59,7 +61,7 @@ export default function SupplierDetailScreen() {
 			})
 			.finally(() => setLoading(false));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id]);
+	}, [supplierId]);
 
 	const handleCall = () => {
 		if (!supplier?.phone) return;

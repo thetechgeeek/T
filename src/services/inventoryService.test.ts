@@ -77,6 +77,25 @@ describe('inventoryService', () => {
 			expect(builder.or).toHaveBeenCalledWith(expect.stringContaining('marble'));
 		});
 
+		it('caps oversized page sizes at 100 rows', async () => {
+			const builder = makeBuilder({ data: [], count: 0, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await inventoryService.fetchItems({}, 1, 10_000);
+
+			expect(builder.range).toHaveBeenCalledWith(0, 99);
+		});
+
+		it('rejects invalid sort fields before ordering', async () => {
+			const builder = makeBuilder({ data: [], count: 0, error: null });
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await expect(
+				inventoryService.fetchItems({ sortBy: 'unsafe_column' as never }),
+			).rejects.toMatchObject({ code: 'INVALID_SORT_FIELD' });
+			expect(builder.order).not.toHaveBeenCalled();
+		});
+
 		it('applies eq(category) when category filter is set and not ALL', async () => {
 			const builder = makeBuilder({ data: [], count: 0, error: null });
 			(supabase.from as jest.Mock).mockReturnValue(builder);

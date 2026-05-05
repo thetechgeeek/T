@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import {
 	RuntimeConfigError,
@@ -6,6 +5,7 @@ import {
 	validateSupabaseRuntimeConfig,
 	type SupabaseRuntimeConfig,
 } from './runtimeConfig';
+import { secureSupabaseStorage } from './secureSupabaseStorage';
 
 type SupabaseConfigEnv = Record<string, string | undefined>;
 
@@ -27,7 +27,7 @@ const appConfig = resolveAppRuntimeConfig();
 
 export const supabase = createClient(appConfig.supabase.url, appConfig.supabase.anonKey, {
 	auth: {
-		storage: AsyncStorage,
+		storage: secureSupabaseStorage,
 		autoRefreshToken: true,
 		persistSession: true,
 		detectSessionInUrl: false,

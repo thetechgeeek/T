@@ -224,13 +224,16 @@ export const useFinanceStore = create<FinanceState>()(
 		{
 			name: 'finance-storage',
 			storage: createJSONStorage(() => AsyncStorage),
-			// Persist the date range so the financial year filter survives app restarts.
-			// Expenses and purchases are cached to avoid a blank screen on cold start.
-			// Summary (P&L) is intentionally excluded — always re-fetched from DB.
+			version: 1,
+			migrate: (persistedState) => {
+				const state = persistedState as Partial<FinanceState>;
+				return {
+					dateRange: state.dateRange ?? { startDate: '', endDate: '' },
+				};
+			},
+			// Persist only the date range. Business records are re-fetched from the DB.
 			partialize: (state: FinanceState) => ({
 				dateRange: state.dateRange,
-				expenses: state.expenses,
-				purchases: state.purchases,
 			}),
 		},
 	),

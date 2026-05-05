@@ -12,6 +12,7 @@ import { useShellEnvironment } from '../../ShellEnvironment';
 interface Props {
 	children: React.ReactNode;
 	fallback?: React.ReactNode;
+	onError?: (error: Error, info: React.ErrorInfo) => void;
 }
 
 interface State {
@@ -64,8 +65,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 	}
 
 	componentDidCatch(error: Error, info: React.ErrorInfo) {
-		// In Phase 10, wire this to the observability logger
-		console.error('[ErrorBoundary]', error, info.componentStack);
+		this.props.onError?.(error, info);
 	}
 
 	handleReset = () => {

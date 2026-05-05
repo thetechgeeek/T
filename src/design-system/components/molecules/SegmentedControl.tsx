@@ -13,23 +13,25 @@ export interface SegmentedControlProps {
 	style?: StyleProp<ViewStyle>;
 }
 
-export const SegmentedControl = forwardRef<View, SegmentedControlProps>(
-	({ label, options, value, defaultValue, onChange, onValueChange, testID, style }, ref) => (
-		<View ref={ref} style={style}>
-			<ToggleButtonGroup
-				label={label}
-				options={options}
-				value={value}
-				defaultValue={defaultValue}
-				onChange={(nextValue) => onChange(nextValue as string)}
-				onValueChange={(nextValue, meta) =>
-					onValueChange?.(nextValue as string, {
-						source: meta?.source === 'selection' ? 'selection' : 'selection',
-					})
-				}
-				testID={testID}
-			/>
-		</View>
+export const SegmentedControl = React.memo(
+	forwardRef<View, SegmentedControlProps>(
+		({ label, options, value, defaultValue, onChange, onValueChange, testID, style }, ref) => (
+			<View ref={ref} style={style}>
+				<ToggleButtonGroup
+					label={label}
+					options={options}
+					value={value}
+					defaultValue={defaultValue}
+					onChange={(nextValue) => onChange(nextValue as string)}
+					onValueChange={(nextValue, meta) =>
+						onValueChange?.(nextValue as string, {
+							source: meta?.source === 'selection' ? 'selection' : 'selection',
+						})
+					}
+					testID={testID}
+				/>
+			</View>
+		),
 	),
 );
 

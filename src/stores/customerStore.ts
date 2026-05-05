@@ -192,10 +192,23 @@ export const useCustomerStore = create<CustomerState>()(
 		{
 			name: 'customer-storage',
 			storage: createJSONStorage(() => AsyncStorage),
+			version: 1,
+			migrate: (persistedState) => {
+				const state = persistedState as Partial<CustomerState>;
+				return {
+					filters: {
+						search: '',
+						type: state.filters?.type ?? 'ALL',
+						sortBy: state.filters?.sortBy ?? 'name',
+						sortDir: state.filters?.sortDir ?? 'asc',
+					},
+				};
+			},
 			partialize: (state: CustomerState) => ({
-				customers: state.customers,
-				totalCount: state.totalCount,
-				filters: state.filters,
+				filters: {
+					...state.filters,
+					search: '',
+				},
 			}),
 		},
 	),

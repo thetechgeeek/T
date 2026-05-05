@@ -3,12 +3,14 @@ import { ActionSheetIOS, Alert, Linking, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { pdfService } from '@/src/services/pdfService';
+import { parseUuidRouteParam } from '@/src/navigation/routeParamValidation';
 
 export function useInvoiceDetailController(
 	t: (key: string) => string,
 	formatDateShort: (date: string | Date) => string,
 ) {
 	const { id } = useLocalSearchParams();
+	const invoiceId = parseUuidRouteParam(id, 'invoice_id');
 	const router = useRouter();
 	const { currentInvoice, fetchInvoiceById, loading, error, clearCurrentInvoice } =
 		useInvoiceStore();
@@ -17,9 +19,9 @@ export function useInvoiceDetailController(
 	const [paymentsExpanded, setPaymentsExpanded] = useState(true);
 
 	useEffect(() => {
-		if (id) fetchInvoiceById(id as string);
+		if (invoiceId) fetchInvoiceById(invoiceId);
 		return () => clearCurrentInvoice();
-	}, [id, fetchInvoiceById, clearCurrentInvoice]);
+	}, [invoiceId, fetchInvoiceById, clearCurrentInvoice]);
 
 	const handleShare = useCallback(async () => {
 		if (!currentInvoice) return;
@@ -58,7 +60,7 @@ export function useInvoiceDetailController(
 	}, [currentInvoice, handlePrintComingSoon, router]);
 
 	return {
-		id,
+		id: invoiceId,
 		router,
 		currentInvoice,
 		fetchInvoiceById,

@@ -12,7 +12,7 @@ describe('Offline Resilience: Persistence Verification', () => {
 		useCustomerStore.getState().reset();
 	});
 
-	it('should persist customer data to AsyncStorage', async () => {
+	it('does not persist customer records to AsyncStorage', async () => {
 		const mockCustomers = [
 			{ id: '1', name: 'John Doe', phone: '123' },
 			{ id: '2', name: 'Jane Smith', phone: '456' },
@@ -30,8 +30,14 @@ describe('Offline Resilience: Persistence Verification', () => {
 		const stored = await AsyncStorage.getItem('customer-storage');
 		expect(stored).not.toBeNull();
 		const parsed = JSON.parse(stored!);
-		expect(parsed.state.customers).toHaveLength(2);
-		expect(parsed.state.customers[0].name).toBe('John Doe');
+		expect(parsed.state.customers).toBeUndefined();
+		expect(parsed.state.totalCount).toBeUndefined();
+		expect(parsed.state.filters).toEqual({
+			search: '',
+			type: 'ALL',
+			sortBy: 'name',
+			sortDir: 'asc',
+		});
 	});
 
 	it('should partialise state to only store essential data', async () => {
@@ -55,11 +61,12 @@ describe('Offline Resilience: Persistence Verification', () => {
 		const stored = await AsyncStorage.getItem('customer-storage');
 		const parsed = JSON.parse(stored!);
 
-		// Essential data should be there
-		expect(parsed.state.customers).toHaveLength(1);
+		// PII/business records should not be persisted.
+		expect(parsed.state.customers).toBeUndefined();
 
 		// Detail data should NOT be there (to save space/prevent stale details)
 		expect(parsed.state.selectedCustomer).toBeUndefined();
 		expect(parsed.state.ledger).toBeUndefined();
+		expect(parsed.state.filters.search).toBe('');
 	});
 });

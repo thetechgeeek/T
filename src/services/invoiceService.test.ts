@@ -524,6 +524,15 @@ describe('invoiceService', () => {
 			expect(builder.range).toHaveBeenCalledWith(20, 29);
 		});
 
+		it('caps oversized page sizes at 100 rows', async () => {
+			const builder = makeListBuilder();
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await invoiceService.fetchInvoices({}, 1, 10_000);
+
+			expect(builder.range).toHaveBeenCalledWith(0, 99);
+		});
+
 		it('sort: sortBy=invoice_date, sortDir=asc → order("invoice_date", { ascending: true })', async () => {
 			const builder = makeListBuilder();
 			(supabase.from as jest.Mock).mockReturnValue(builder);
@@ -531,6 +540,16 @@ describe('invoiceService', () => {
 			await invoiceService.fetchInvoices({ sortBy: 'invoice_date', sortDir: 'asc' });
 
 			expect(builder.order).toHaveBeenCalledWith('invoice_date', { ascending: true });
+		});
+
+		it('rejects invalid sort fields before querying', async () => {
+			const builder = makeListBuilder();
+			(supabase.from as jest.Mock).mockReturnValue(builder);
+
+			await expect(
+				invoiceService.fetchInvoices({ sortBy: 'unsafe_column' as never }),
+			).rejects.toMatchObject({ code: 'INVALID_SORT_FIELD' });
+			expect(builder.order).not.toHaveBeenCalled();
 		});
 
 		it('combined filters: search, status, and dates simultaneously', async () => {

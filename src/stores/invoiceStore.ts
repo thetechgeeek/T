@@ -133,10 +133,23 @@ export const useInvoiceStore = create<InvoiceState>()(
 		{
 			name: 'invoice-storage',
 			storage: createJSONStorage(() => AsyncStorage),
+			version: 1,
+			migrate: (persistedState) => {
+				const state = persistedState as Partial<InvoiceState>;
+				return {
+					filters: {
+						...state.filters,
+						search: undefined,
+						customer_id: undefined,
+					},
+				};
+			},
 			partialize: (state: InvoiceState) => ({
-				invoices: state.invoices,
-				totalCount: state.totalCount,
-				filters: state.filters,
+				filters: {
+					...state.filters,
+					search: undefined,
+					customer_id: undefined,
+				},
 			}),
 		},
 	),

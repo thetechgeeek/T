@@ -1,5 +1,6 @@
 import { supabase } from '@/src/config/supabase';
 import { ConflictError, toAppError, ValidationError } from '@/src/errors/AppError';
+import { normalizePage, normalizePageSize, resolveSortField } from '@/src/utils/queryGuards';
 import type {
 	InventoryItem,
 	InventoryItemInsert,
@@ -8,6 +9,8 @@ import type {
 	StockOperation,
 } from '@/src/types/inventory';
 import type { UUID } from '@/src/types/common';
+
+const INVENTORY_SORT_FIELDS = ['design_name', 'box_count', 'selling_price', 'created_at'] as const;
 
 export interface InventoryRatePartyOption {
 	id: UUID;
@@ -50,13 +53,15 @@ export const inventoryService = {
 			query = query.eq('supplier_id', filters.supplier_id);
 		}
 
-		const sortField = filters.sortBy || 'created_at';
+		const safePage = normalizePage(page);
+		const safePageSize = normalizePageSize(pageSize);
+		const sortField = resolveSortField(filters.sortBy, INVENTORY_SORT_FIELDS, 'created_at');
 		const sortAsc = filters.sortDir === 'asc';
 
 		query = query.order(sortField, { ascending: sortAsc });
 
-		const from = (page - 1) * pageSize;
-		const to = from + pageSize - 1;
+		const from = (safePage - 1) * safePageSize;
+		const to = from + safePageSize - 1;
 		query = query.range(from, to);
 
 		const { data, error, count } = await query;

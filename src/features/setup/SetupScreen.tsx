@@ -23,6 +23,7 @@ import {
 	type WizardData,
 } from './setupFlowModel';
 import { useSetupFlow } from './useSetupFlow';
+import logger from '@/src/utils/logger';
 
 /** ImagePicker quality for business logo (medium – balances file size vs clarity) */
 const LOGO_IMAGE_QUALITY = 0.7;
@@ -677,7 +678,7 @@ function LogoPicker({
 				const publicUrl = storageService.getPublicUrl('branding', path);
 				onChange(publicUrl);
 			} catch (e) {
-				console.error('Logo upload failed', e);
+				logger.error('Logo upload failed', e);
 				alert('Logo upload failed. Please try again.');
 			} finally {
 				setUploading(false);

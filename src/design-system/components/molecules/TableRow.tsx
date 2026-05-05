@@ -28,7 +28,7 @@ const HEADER_TEXT_MAX_LINES = 2;
 const CELL_TEXT_MAX_LINES = 1;
 const TRUNCATION_TOOLTIP_MIN_LENGTH = 24;
 
-export function TableRow({
+function TableRowComponent({
 	columns,
 	variant = 'default',
 	density = 'default',
@@ -112,6 +112,9 @@ export function TableRow({
 		</View>
 	);
 }
+
+export const TableRow = React.memo(TableRowComponent);
+TableRow.displayName = 'TableRow';
 
 const styles = StyleSheet.create({
 	row: { justifyContent: 'space-between' },

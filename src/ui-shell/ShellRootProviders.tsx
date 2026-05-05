@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { AppState, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -57,6 +57,31 @@ function ShellViewport({ children, hideOfflineBanner }: ShellViewportProps) {
 	);
 }
 
+function ShellErrorBoundary({
+	children,
+	fallback,
+}: {
+	children: React.ReactNode;
+	fallback?: React.ReactNode;
+}) {
+	const { analytics } = useShellEnvironment();
+	const handleError = useCallback(
+		(error: Error, info: React.ErrorInfo) => {
+			analytics.track('runtime_error_boundary', {
+				message: error.message,
+				componentStack: info.componentStack,
+			});
+		},
+		[analytics],
+	);
+
+	return (
+		<ErrorBoundary fallback={fallback} onError={handleError}>
+			{children}
+		</ErrorBoundary>
+	);
+}
+
 export interface ShellRootProvidersProps {
 	children: React.ReactNode;
 	environment?: ShellEnvironmentInput;
@@ -77,7 +102,7 @@ export function ShellRootProviders({
 	return (
 		<ThemeProvider {...themeProviderProps}>
 			<ShellEnvironmentProvider value={environment}>
-				<ErrorBoundary fallback={errorFallback}>
+				<ShellErrorBoundary fallback={errorFallback}>
 					<ShellSessionLifecycleBridge />
 					<ShellAssetGate fallback={assetFallback}>
 						<ShellOverlayProvider>
@@ -86,7 +111,7 @@ export function ShellRootProviders({
 							</ShellViewport>
 						</ShellOverlayProvider>
 					</ShellAssetGate>
-				</ErrorBoundary>
+				</ShellErrorBoundary>
 			</ShellEnvironmentProvider>
 		</ThemeProvider>
 	);

@@ -42,7 +42,7 @@ export interface PaginatedListProps<T> {
  * P0.7 — PaginatedList
  * FlatList-based paginated list with skeleton loading, empty state, and error/retry states.
  */
-export function PaginatedList<T>({
+function PaginatedListComponent<T>({
 	data,
 	renderItem,
 	keyExtractor,
@@ -131,3 +131,8 @@ export function PaginatedList<T>({
 		/>
 	);
 }
+
+const MemoizedPaginatedList = React.memo(PaginatedListComponent) as typeof PaginatedListComponent;
+(MemoizedPaginatedList as { displayName?: string }).displayName = 'PaginatedList';
+
+export { MemoizedPaginatedList as PaginatedList };

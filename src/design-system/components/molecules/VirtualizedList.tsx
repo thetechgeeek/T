@@ -46,7 +46,7 @@ export interface VirtualizedListProps<T> {
 	testID?: string;
 }
 
-export function VirtualizedList<T>({
+function VirtualizedListComponent<T>({
 	data = [],
 	sections,
 	renderItem,
@@ -186,3 +186,10 @@ export function VirtualizedList<T>({
 		/>
 	);
 }
+
+const MemoizedVirtualizedList = React.memo(
+	VirtualizedListComponent,
+) as typeof VirtualizedListComponent;
+(MemoizedVirtualizedList as { displayName?: string }).displayName = 'VirtualizedList';
+
+export { MemoizedVirtualizedList as VirtualizedList };

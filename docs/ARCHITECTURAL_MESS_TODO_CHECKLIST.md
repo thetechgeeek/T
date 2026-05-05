@@ -34,8 +34,13 @@ ownership and coverage-map scaffolding at the top of the file.
       ratchet, zero app raw-Supabase/repository/mock imports, normalized service/store errors,
       store/auth orchestrators, feature-owned route workflows, typed repository table names, and
       server-authoritative invoice totals.
-- [x] Phase 3 reached: PERF-003 is closed by memoizing invoice line-item totals and covering 10-line,
-      50-line, quantity, rate, discount, and GST-rate changes.
+- [~] Phase 3 implementation slice complete: PERF-001, PERF-002, PERF-005, and PERF-007 now have code
+  fixes; PERF-004, PERF-006, and PERF-008 have structural fixes plus profiler/sink evidence still
+  marked `[~]`.
+- [~] Phase 4 implementation slice complete: secure auth storage, persisted-cache minimization, OTP
+  limiting, PII redaction, route/query validation, and audit expansion are implemented; RLS,
+  offline-mutation HMAC, XLSX replacement, certificate-pinning implementation, and binary-security
+  controls remain explicitly marked `[~]`.
 - [ ] The unchecked ownership, coverage-map, and later-phase items below are still live work unless
       explicitly marked `[!]` or `[r]`.
 
@@ -688,28 +693,30 @@ Audit refs: Part III sections 14 through 16, Part XIII sections 49 through 54, R
 
 ### PERF-001 Fix Invoice List Re-Render Budget
 
-- [ ] Review `app/(app)/(tabs)/invoices.tsx` for the audited inline arrow functions.
-- [ ] Memoize `renderItem` with `useCallback`.
-- [ ] Move inline style objects into `StyleSheet.create` or memoized values.
-- [ ] Memoize date-chip render callbacks.
-- [ ] Memoize status-chip render callbacks.
-- [ ] Keep key extractors stable.
-- [ ] Add `getItemLayout` if invoice rows have a fixed or predictable height.
-- [ ] Add `removeClippedSubviews` if safe for the target platforms.
-- [ ] Split expensive row UI into memoized row components.
-- [ ] Add profiling before/after data for a list with at least 50 invoices.
-- [ ] Add a regression test or profiler note documenting expected render behavior.
-- [ ] Mark done only when list updates do not recreate unnecessary functions/styles per row.
+- [x] Review `app/(app)/(tabs)/invoices.tsx` for the audited inline arrow functions.
+- [x] Memoize `renderItem` with `useCallback`.
+- [x] Move inline style objects into `StyleSheet.create` or memoized values.
+- [x] Memoize date-chip render callbacks.
+- [x] Memoize status-chip render callbacks.
+- [x] Keep key extractors stable.
+- [x] Evaluate `getItemLayout`; documented why it is unsafe for variable-height invoice rows.
+- [x] Add `removeClippedSubviews` if safe for the target platforms.
+- [x] Split expensive row UI into memoized row components.
+- [~] Add profiling before/after data for a list with at least 50 invoices. Static profile note is
+  captured in `docs/PERFORMANCE_PROFILING_NOTES.md`; device profiler timings remain to capture.
+- [x] Add a regression test or profiler note documenting expected render behavior.
+- [~] Mark done only when list updates do not recreate unnecessary functions/styles per row. Code
+  path is fixed; final proof still needs a device profiler trace.
 
 ### PERF-002 Memoize Dashboard Allocations
 
-- [ ] Wrap `quickActions` in `useMemo`.
-- [ ] Wrap `dashboardStats` in `useMemo`.
-- [ ] Wrap `recentInvoices = invoices.slice(0, 5)` in `useMemo`.
-- [ ] Stabilize dashboard action handlers with `useCallback` where they are passed to children.
-- [ ] Review store subscriptions and use shallow selectors where appropriate.
-- [ ] Add a render-count check or profiling note for dashboard updates.
-- [ ] Mark done only when background store refreshes do not recreate all dashboard arrays unnecessarily.
+- [x] Wrap `quickActions` in `useMemo`.
+- [x] Wrap `dashboardStats` in `useMemo`.
+- [x] Wrap `recentInvoices = invoices.slice(0, 5)` in `useMemo`.
+- [x] Stabilize dashboard action handlers with `useCallback` where they are passed to children.
+- [x] Review store subscriptions and use shallow selectors where appropriate.
+- [x] Add a render-count check or profiling note for dashboard updates.
+- [x] Mark done only when background store refreshes do not recreate all dashboard arrays unnecessarily.
 
 ### PERF-003 Optimize Line Item Totals
 
@@ -726,76 +733,89 @@ Audit refs: Part III sections 14 through 16, Part XIII sections 49 through 54, R
 
 ### PERF-004 Add React.memo To High-Value Molecules
 
-- [ ] Confirm the current count of molecule components using `forwardRef`.
-- [ ] Confirm which `forwardRef` components already use `React.memo`.
-- [ ] Prioritize `ListItem`.
-- [ ] Prioritize `FormField`.
-- [ ] Prioritize `SearchBar`.
-- [ ] Prioritize `PaginatedList`.
-- [ ] Prioritize `VirtualizedList`.
-- [ ] Prioritize `StatCard`.
-- [ ] Prioritize `TableRow`.
-- [ ] Prioritize `SwipeableRow`.
-- [ ] Prioritize `SegmentedControl`.
-- [ ] Prioritize `SettingsCard`.
-- [ ] Add display names after memo-wrapping.
-- [ ] Ensure refs still forward correctly after memo-wrapping.
-- [ ] Add tests for ref behavior where components expose refs.
-- [ ] Measure render reduction in invoice list and dashboard after top components are memoized.
-- [ ] Mark done only when high-traffic molecule children bail out on stable props.
+- [x] Confirm the current count of molecule components using `forwardRef`.
+- [x] Confirm which `forwardRef` components already use `React.memo`.
+- [x] Prioritize `ListItem`.
+- [x] Prioritize `FormField`.
+- [x] Prioritize `SearchBar`.
+- [x] Prioritize `PaginatedList`.
+- [x] Prioritize `VirtualizedList`.
+- [x] Prioritize `StatCard`.
+- [x] Prioritize `TableRow`.
+- [x] Prioritize `SwipeableRow`.
+- [x] Prioritize `SegmentedControl`.
+- [x] Prioritize `SettingsCard`.
+- [x] Add display names after memo-wrapping.
+- [x] Ensure refs still forward correctly after memo-wrapping.
+- [~] Add tests for ref behavior where components expose refs. Typecheck preserves ref types; dedicated
+  ref behavior tests remain to add.
+- [~] Measure render reduction in invoice list and dashboard after top components are memoized. Static
+  notes are captured; profiler timings remain.
+- [~] Mark done only when high-traffic molecule children bail out on stable props. Memo wrappers are in
+  place; final proof needs a profiler pass.
 
 ### PERF-005 Rework Startup Prefetch Ownership
 
-- [ ] Map all startup calls in `app/_layout.tsx`.
-- [ ] Map all startup calls in `app/(app)/_layout.tsx`.
-- [ ] Confirm the audited startup budget of 1 auth call, 2 critical calls, and 6 deferred calls.
-- [ ] Decide which calls are required for first meaningful paint.
-- [ ] Move tab-specific data loading to tab ownership where possible.
-- [ ] Remove eager load for hidden `customers` tab if the tab remains hidden.
-- [ ] Define a cache warmup policy with owner, trigger, and stop conditions.
-- [ ] Ensure foreground resume does not repeat global work without cache policy.
-- [ ] Add telemetry for startup call count and duration.
-- [ ] Add a startup performance test or manual profile note.
-- [ ] Mark done only when startup work is intentional rather than global by default.
+- [x] Map all startup calls in `app/_layout.tsx`.
+- [x] Map all startup calls in `app/(app)/_layout.tsx`.
+- [x] Confirm the audited startup budget of 1 auth call, 2 critical calls, and 6 deferred calls, then
+      reduce deferred warmup to 3 calls by removing hidden-customer preload.
+- [x] Decide which calls are required for first meaningful paint.
+- [x] Move tab-specific data loading to tab ownership where possible.
+- [x] Remove eager load for hidden `customers` tab if the tab remains hidden.
+- [x] Define a cache warmup policy with owner, trigger, and stop conditions.
+- [x] Ensure foreground resume does not repeat global work without cache policy.
+- [x] Add telemetry for startup call count and duration.
+- [x] Add a startup performance test or manual profile note.
+- [x] Mark done only when startup work is intentional rather than global by default.
 
 ### PERF-006 Add Lazy Loading Where It Matters
 
-- [ ] Inventory report screens that are rarely used.
-- [ ] Inventory settings screens that are rarely used.
-- [ ] Inventory utility screens that are rarely used.
-- [ ] Check whether Expo Router already performs route-level splitting for the current app target.
-- [ ] Where supported, lazy-load rarely used flows.
-- [ ] Avoid loading the design-system workbench in normal app startup paths.
-- [ ] Ensure lazy-loaded screens have loading and error states.
-- [ ] Measure bundle/startup impact after changes.
-- [ ] Mark done only when rarely used surfaces are not part of unnecessary startup cost.
+- [x] Inventory report screens that are rarely used.
+- [x] Inventory settings screens that are rarely used.
+- [x] Inventory utility screens that are rarely used.
+- [x] Check whether Expo Router already performs route-level splitting for the current app target.
+- [~] Where supported, lazy-load rarely used flows. Expo Router route-level splitting is relied on;
+  no extra dynamic-import pass was added.
+- [x] Avoid loading the design-system workbench in normal app startup paths.
+- [~] Ensure lazy-loaded screens have loading and error states. Existing states remain mixed across
+  report/settings/utility screens.
+- [~] Measure bundle/startup impact after changes. Static startup notes are captured; bundle analyzer
+  evidence remains.
+- [~] Mark done only when rarely used surfaces are not part of unnecessary startup cost. Startup no
+  longer preloads those data paths; bundle proof remains.
 
 ### PERF-007 Add Missing Database Indexes
 
-- [ ] Profile Supabase dashboard for top screen-load queries.
-- [ ] Add or verify index for `orders.supplier_id`.
-- [ ] Add or verify index for `payments.purchase_id`.
-- [ ] Add or verify index for `stock_operations.reference_id`.
-- [ ] Add composite index for `invoices(customer_id, payment_status, created_at)` if query patterns confirm.
-- [ ] Add composite index for `customers(name, type)` if query patterns confirm.
-- [ ] Add composite index for `inventory_items(category_id, box_count)` if query patterns confirm.
-- [ ] Add migration comments explaining each index.
-- [ ] Add `EXPLAIN` evidence or Supabase dashboard evidence to the PR.
-- [ ] Verify write overhead is acceptable.
-- [ ] Mark done only when the top 5 screen-load query patterns have supporting indexes.
+- [~] Profile Supabase dashboard for top screen-load queries. Static query-profile evidence is captured;
+  live Supabase dashboard data remains to attach.
+- [x] Add or verify index for `orders.supplier_id`.
+- [x] Add or verify index for `payments.purchase_id`.
+- [x] Add or verify index for `stock_operations.reference_id`.
+- [x] Add composite index for `invoices(customer_id, payment_status, created_at)` if query patterns confirm.
+- [x] Add composite index for customer type/name ordering if query patterns confirm.
+- [x] Add composite index for `inventory_items(category_id, box_count)` if query patterns confirm.
+- [x] Add migration comments explaining each index.
+- [~] Add `EXPLAIN` evidence or Supabase dashboard evidence to the PR. Migration and pgTAP checks are
+  added; live `EXPLAIN` output remains.
+- [x] Verify write overhead is acceptable.
+- [x] Mark done only when the top 5 screen-load query patterns have supporting indexes.
 
 ### PERF-008 Aggregate Query Timing
 
-- [ ] Keep existing query timing instrumentation in `baseRepository.ts`.
-- [ ] Route query timing metrics to the production telemetry sink once it exists.
-- [ ] Tag query metrics by table.
-- [ ] Tag query metrics by operation.
-- [ ] Tag query metrics by screen/load context where possible.
-- [ ] Track p50 query duration.
-- [ ] Track p95 query duration.
-- [ ] Add slow-query alert threshold, initially p95 greater than 500ms.
-- [ ] Connect slow query events to release tags.
-- [ ] Mark done only when query timings are actionable outside local console output.
+- [x] Keep existing query timing instrumentation in `baseRepository.ts`.
+- [~] Route query timing metrics to the production telemetry sink once it exists. Structured logger
+  metadata is ready; sink selection remains.
+- [x] Tag query metrics by table.
+- [x] Tag query metrics by operation.
+- [~] Tag query metrics by screen/load context where possible. Repository options support context; not
+  every service call has been tagged yet.
+- [x] Track p50 query duration.
+- [x] Track p95 query duration.
+- [x] Add slow-query alert threshold, initially p95 greater than 500ms.
+- [x] Connect slow query events to release tags.
+- [~] Mark done only when query timings are actionable outside local console output. Aggregation is in
+  place; production sink integration remains.
 
 ## Phase 4: Security, Threat Model, And Data Protection
 
@@ -804,226 +824,252 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 
 ### SEC-001 Preserve Existing Security Strengths
 
-- [ ] Preserve env-based Supabase anon key loading.
-- [ ] Preserve no-hardcoded-secret convention in client code.
-- [ ] Preserve Zod validation at critical service entry points.
-- [ ] Preserve structured logging conventions that avoid casual `console.log`.
-- [ ] Preserve token refresh retry limits and backoff.
-- [ ] Preserve auth event handling for `TOKEN_REFRESHED`, `SIGNED_IN`, `INITIAL_SESSION`, and
+- [x] Preserve env-based Supabase anon key loading.
+- [x] Preserve no-hardcoded-secret convention in client code.
+- [x] Preserve Zod validation at critical service entry points.
+- [x] Preserve structured logging conventions that avoid casual `console.log`.
+- [x] Preserve token refresh retry limits and backoff.
+- [x] Preserve auth event handling for `TOKEN_REFRESHED`, `SIGNED_IN`, `INITIAL_SESSION`, and
       `SIGNED_OUT`.
-- [ ] Preserve storage bucket user scoping while fixing business-table RLS.
-- [ ] Add regression checks so security improvements do not remove existing fundamentals.
+- [~] Preserve storage bucket user scoping while fixing business-table RLS. Storage scoping is preserved;
+  business-table RLS remains partial in SEC-008.
+- [x] Add regression checks so security improvements do not remove existing fundamentals.
 
 ### SEC-002 Move Auth Tokens Out Of AsyncStorage
 
-- [ ] Confirm Supabase auth currently uses AsyncStorage.
-- [ ] Select `expo-secure-store`, `react-native-keychain`, or another approved secure storage layer.
-- [ ] Build a Supabase-compatible secure storage adapter.
-- [ ] Migrate existing sessions safely where possible.
-- [ ] Define forced re-login behavior if migration is not safe.
-- [ ] Store refresh tokens in secure storage.
-- [ ] Store access/session tokens in secure storage.
-- [ ] Add tests for read/write/remove behavior in the storage adapter.
-- [ ] Add logout tests proving tokens are removed.
-- [ ] Add release notes for session migration behavior.
-- [ ] Mark done only when JWT and refresh tokens are no longer persisted in plaintext AsyncStorage.
+- [x] Confirm Supabase auth currently uses AsyncStorage.
+- [x] Select `expo-secure-store`, `react-native-keychain`, or another approved secure storage layer.
+- [x] Build a Supabase-compatible secure storage adapter.
+- [~] Migrate existing sessions safely where possible. Migration was rejected as unsafe; forced re-login
+  is documented.
+- [x] Define forced re-login behavior if migration is not safe.
+- [x] Store refresh tokens in secure storage.
+- [x] Store access/session tokens in secure storage.
+- [x] Add tests for read/write/remove behavior in the storage adapter.
+- [~] Add logout tests proving tokens are removed. Adapter remove behavior is covered; full Supabase
+  logout-token integration remains to test.
+- [x] Add release notes for session migration behavior.
+- [x] Mark done only when JWT and refresh tokens are no longer persisted in plaintext AsyncStorage.
 
 ### SEC-003 Encrypt Or Minimize Local Business Data
 
-- [ ] Inventory every Zustand persisted store.
-- [ ] Inventory invoice data persisted to AsyncStorage.
-- [ ] Inventory customer data persisted to AsyncStorage.
-- [ ] Inventory inventory data persisted to AsyncStorage.
-- [ ] Inventory finance metrics persisted to AsyncStorage.
-- [ ] Inventory offline mutation payloads persisted to AsyncStorage.
-- [ ] Decide which business data must persist offline.
-- [ ] Remove persistence for data that does not need offline survival.
-- [ ] Encrypt business data that must persist.
-- [ ] Store encryption keys in Keychain/SecureStore.
-- [ ] Add cache TTLs for persisted business data.
-- [ ] Clear all persisted business data on logout.
-- [ ] Add tests proving logout clears business caches.
-- [ ] Add tests proving encrypted data is not plain JSON in storage.
-- [ ] Mark done only when device theft or backup extraction no longer reveals full business records.
+- [x] Inventory every Zustand persisted store.
+- [x] Inventory invoice data persisted to AsyncStorage.
+- [x] Inventory customer data persisted to AsyncStorage.
+- [x] Inventory inventory data persisted to AsyncStorage.
+- [x] Inventory finance metrics persisted to AsyncStorage.
+- [x] Inventory offline mutation payloads persisted to AsyncStorage.
+- [x] Decide which business data must persist offline.
+- [x] Remove persistence for data that does not need offline survival.
+- [~] Encrypt business data that must persist. Business caches were minimized; offline mutation payload
+  encryption remains.
+- [~] Store encryption keys in Keychain/SecureStore. SecureStore is available; no business-payload
+  encryption key is used yet.
+- [~] Add cache TTLs for persisted business data. Store migrations sanitize payloads; explicit TTLs remain.
+- [x] Clear all persisted business data on logout.
+- [x] Add tests proving logout clears business caches.
+- [~] Add tests proving encrypted data is not plain JSON in storage. Tests prove records are removed, not
+  encrypted.
+- [~] Mark done only when device theft or backup extraction no longer reveals full business records.
+  Zustand business caches are minimized; write queue payloads remain in SEC-004.
 
 ### SEC-004 Sign Offline Mutations
 
-- [ ] Define payload canonicalization for offline mutations.
-- [ ] Generate or retrieve a device key from secure storage.
-- [ ] Add HMAC signing for queued mutation payloads.
-- [ ] Verify HMAC before replay.
-- [ ] Reject tampered queued mutations.
-- [ ] Surface tamper rejection to telemetry.
-- [ ] Decide whether to surface tamper rejection to the user.
-- [ ] Rotate or recreate device keys safely on logout.
-- [ ] Add tests proving modified amount fails verification.
-- [ ] Add tests proving modified stock quantity fails verification.
-- [ ] Add tests proving idempotency key alone is not treated as payload integrity.
-- [ ] Mark done only when offline mutation tampering is detectable before sync.
+- [~] Define payload canonicalization for offline mutations. Requirement is documented in
+  `docs/SECURITY_PHASE4_NOTES.md`; implementation remains.
+- [~] Generate or retrieve a device key from secure storage. SecureStore is now present; queue key work remains.
+- [~] Add HMAC signing for queued mutation payloads. Not implemented in this slice.
+- [~] Verify HMAC before replay. Not implemented in this slice.
+- [~] Reject tampered queued mutations. Not implemented in this slice.
+- [~] Surface tamper rejection to telemetry. Not implemented in this slice.
+- [~] Decide whether to surface tamper rejection to the user. Risk is documented; product decision remains.
+- [~] Rotate or recreate device keys safely on logout. SecureStore logout policy remains to define for queue keys.
+- [~] Add tests proving modified amount fails verification. Blocked on queue signing implementation.
+- [~] Add tests proving modified stock quantity fails verification. Blocked on queue signing implementation.
+- [~] Add tests proving idempotency key alone is not treated as payload integrity. Blocked on queue
+  signing implementation.
+- [~] Mark done only when offline mutation tampering is detectable before sync. Open security blocker.
 
 ### SEC-005 Add Certificate Pinning Or Document A Risk Exception
 
-- [ ] Evaluate certificate pinning options compatible with Expo/React Native and Supabase.
-- [ ] Decide whether pinning is feasible in the current build workflow.
-- [ ] If feasible, pin Supabase API endpoints.
-- [ ] Add a rotation plan for certificates.
-- [ ] Add failure UX for pinning failures.
-- [ ] Add tests or manual QA for successful API calls with pinning enabled.
-- [ ] Add tests or manual QA for rejected MITM certificates where possible.
-- [ ] If not feasible, document the accepted risk and compensating controls.
-- [ ] Mark done only when the MITM risk is either reduced or explicitly owned.
+- [x] Evaluate certificate pinning options compatible with Expo/React Native and Supabase.
+- [x] Decide whether pinning is feasible in the current build workflow.
+- [~] If feasible, pin Supabase API endpoints. Deferred by documented risk exception.
+- [~] Add a rotation plan for certificates. Required if/when pinning is implemented.
+- [~] Add failure UX for pinning failures. Required if/when pinning is implemented.
+- [~] Add tests or manual QA for successful API calls with pinning enabled. Required if/when pinning is implemented.
+- [~] Add tests or manual QA for rejected MITM certificates where possible. Required if/when pinning is implemented.
+- [x] If not feasible, document the accepted risk and compensating controls.
+- [x] Mark done only when the MITM risk is either reduced or explicitly owned.
 
 ### SEC-006 Add OTP Attempt Limiting
 
-- [ ] Review `authService.verifyOtp()`.
-- [ ] Add client-side attempt tracking for OTP verification.
-- [ ] Set a maximum of 5 attempts per 15 minutes unless product/security chooses otherwise.
-- [ ] Persist attempt state carefully without leaking sensitive data.
-- [ ] Reset attempts after successful verification.
-- [ ] Display translatable user feedback when rate limited.
-- [ ] Confirm Supabase backend OTP rate limits are configured.
-- [ ] Add tests for attempt counting.
-- [ ] Add tests for cooldown expiry.
-- [ ] Add telemetry for OTP rate-limit events.
-- [ ] Mark done only when brute-force resistance is not entirely assumed from backend defaults.
+- [x] Review `authService.verifyOtp()`.
+- [x] Add client-side attempt tracking for OTP verification.
+- [x] Set a maximum of 5 attempts per 15 minutes unless product/security chooses otherwise.
+- [x] Persist attempt state carefully without leaking sensitive data.
+- [x] Reset attempts after successful verification.
+- [~] Display translatable user feedback when rate limited. User-facing text exists; i18n extraction remains.
+- [~] Confirm Supabase backend OTP rate limits are configured. Client-side guard is implemented; backend
+  console setting still needs owner verification.
+- [x] Add tests for attempt counting.
+- [x] Add tests for cooldown expiry.
+- [x] Add telemetry for OTP rate-limit events.
+- [~] Mark done only when brute-force resistance is not entirely assumed from backend defaults. Client
+  guard exists; backend confirmation remains.
 
 ### SEC-007 Add PII Redaction To Logger
 
-- [ ] Define PII fields: phone, GSTIN, email, address, customer name, supplier name, invoice payloads,
+- [x] Define PII fields: phone, GSTIN, email, address, customer name, supplier name, invoice payloads,
       tokens, OTPs, and service-role keys.
-- [ ] Add a redaction layer before logger metadata reaches any sink.
-- [ ] Redact nested objects.
-- [ ] Redact arrays of payloads.
-- [ ] Redact known token formats.
-- [ ] Add tests for phone redaction.
-- [ ] Add tests for GSTIN redaction.
-- [ ] Add tests for nested payload redaction.
-- [ ] Add tests proving safe metadata remains useful.
-- [ ] Require redaction before wiring Sentry, Datadog, or another sink.
-- [ ] Mark done only when production telemetry cannot leak PII by default.
+- [x] Add a redaction layer before logger metadata reaches any sink.
+- [x] Redact nested objects.
+- [x] Redact arrays of payloads.
+- [x] Redact known token formats.
+- [x] Add tests for phone redaction.
+- [x] Add tests for GSTIN redaction.
+- [x] Add tests for nested payload redaction.
+- [x] Add tests proving safe metadata remains useful.
+- [x] Require redaction before wiring Sentry, Datadog, or another sink.
+- [x] Mark done only when production telemetry cannot leak PII by default.
 
 ### SEC-008 Scope RLS Policies
 
-- [ ] Add `business_id` or `user_id` ownership columns to all business tables.
-- [ ] Backfill ownership columns safely.
-- [ ] Add NOT NULL constraints only after backfill validation.
-- [ ] Replace blanket `USING (true) WITH CHECK (true)` policies on business tables.
-- [ ] Scope policies to `auth.uid()` or business membership.
-- [ ] Remove unauthenticated public SELECT on master data tables unless explicitly public.
-- [ ] Scope `item_categories`.
-- [ ] Scope `item_units`.
-- [ ] Scope `item_batches`.
-- [ ] Scope `item_serials`.
-- [ ] Scope `item_party_rates`.
-- [ ] Add RLS tests for cross-user read denial.
-- [ ] Add RLS tests for cross-user write denial.
-- [ ] Add RLS tests for allowed owner access.
-- [ ] Add migration rollback or emergency-disable plan.
-- [ ] Mark done only when future multi-tenancy is not one column away from a breach.
+- [~] Add `business_id` or `user_id` ownership columns to all business tables. Not implemented; requires
+  tenant model/backfill design.
+- [~] Backfill ownership columns safely. Not implemented; blocked on ownership model.
+- [~] Add NOT NULL constraints only after backfill validation. Not implemented; blocked on ownership model.
+- [~] Replace blanket `USING (true) WITH CHECK (true)` policies on business tables. Not implemented in
+  this slice.
+- [~] Scope policies to `auth.uid()` or business membership. Not implemented in this slice.
+- [~] Remove unauthenticated public SELECT on master data tables unless explicitly public. Requires RLS
+  policy migration.
+- [~] Scope `item_categories`. Requires RLS policy migration.
+- [~] Scope `item_units`. Requires RLS policy migration.
+- [~] Scope `item_batches`. Requires RLS policy migration.
+- [~] Scope `item_serials`. Requires RLS policy migration.
+- [~] Scope `item_party_rates`. Requires RLS policy migration.
+- [~] Add RLS tests for cross-user read denial. Blocked on scoped policies.
+- [~] Add RLS tests for cross-user write denial. Blocked on scoped policies.
+- [~] Add RLS tests for allowed owner access. Blocked on scoped policies.
+- [~] Add migration rollback or emergency-disable plan. Required with the RLS migration.
+- [~] Mark done only when future multi-tenancy is not one column away from a breach. Open backend security blocker.
 
 ### SEC-009 Expand Audit Logging
 
-- [ ] Confirm audit triggers currently cover invoices.
-- [ ] Confirm audit triggers currently cover payments.
-- [ ] Confirm audit triggers currently cover inventory_items.
-- [ ] Confirm audit triggers currently cover expenses.
-- [ ] Add audit triggers for customers.
-- [ ] Add audit triggers for suppliers.
-- [ ] Add audit triggers for stock_operations.
-- [ ] Add audit triggers for business_profile.
-- [ ] Add audit triggers for purchases.
-- [ ] Add audit triggers for purchase_line_items.
-- [ ] Consider audit triggers for remaining tables up to all 19 tables.
-- [ ] Restrict manual audit-log insertion by authenticated users.
-- [ ] Add `SET search_path` to `SECURITY DEFINER` audit functions.
-- [ ] Evaluate a tamper-evident hash chain for audit entries.
-- [ ] Add tests proving key table changes write audit entries.
-- [ ] Mark done only when important business changes cannot happen without an audit trail.
+- [x] Confirm audit triggers currently cover invoices.
+- [x] Confirm audit triggers currently cover payments.
+- [x] Confirm audit triggers currently cover inventory_items.
+- [x] Confirm audit triggers currently cover expenses.
+- [x] Add audit triggers for customers.
+- [x] Add audit triggers for suppliers.
+- [x] Add audit triggers for stock_operations.
+- [x] Add audit triggers for business_profile.
+- [x] Add audit triggers for purchases.
+- [x] Add audit triggers for purchase_line_items.
+- [x] Consider audit triggers for remaining tables up to all 19 tables.
+- [x] Restrict manual audit-log insertion by authenticated users.
+- [x] Add `SET search_path` to `SECURITY DEFINER` audit functions.
+- [~] Evaluate a tamper-evident hash chain for audit entries. Not implemented; remains a future
+  hardening decision.
+- [x] Add tests proving key table changes write audit entries.
+- [~] Mark done only when important business changes cannot happen without an audit trail. Coverage is
+  expanded; hash-chain hardening remains.
 
 ### SEC-010 Validate Deep Links And Query Parameters
 
-- [ ] Inventory deep link schemes `easystock://` and `easydesign://`.
-- [ ] Inventory routes that consume deep link parameters.
-- [ ] Add Zod validation for route parameters that can arrive from deep links.
-- [ ] Reject malformed UUIDs before they reach services.
-- [ ] Reject unexpected enum values.
-- [ ] Reject oversized string parameters.
-- [ ] Add safe fallback navigation for invalid deep links.
-- [ ] Add tests for crafted invalid URIs.
-- [ ] Mark done only when deep links cannot inject unexpected route state.
+- [x] Inventory deep link schemes `easystock://` and `easydesign://`.
+- [x] Inventory routes that consume deep link parameters.
+- [x] Add Zod validation for route parameters that can arrive from deep links.
+- [x] Reject malformed UUIDs before they reach services.
+- [x] Reject unexpected enum values.
+- [x] Reject oversized string parameters.
+- [~] Add safe fallback navigation for invalid deep links. Invalid params are rejected/logged; full
+  fallback navigation pass remains.
+- [x] Add tests for crafted invalid URIs.
+- [~] Mark done only when deep links cannot inject unexpected route state. High-risk detail/stock routes
+  are guarded; remaining routes need the same pass.
 
 ### SEC-011 Validate API Query Limits And Sorts
 
-- [ ] Add max page-size validation in inventory service queries.
-- [ ] Add max page-size validation in invoice service queries.
-- [ ] Add max page-size validation in customer service queries.
-- [ ] Add max page-size validation anywhere a page-size argument crosses a service boundary.
-- [ ] Whitelist allowed sort column names.
-- [ ] Reject unrecognized sort columns.
-- [ ] Add tests for `pageSize=10000`.
-- [ ] Add tests for invalid sort fields.
-- [ ] Mark done only when bypassing UI controls cannot create huge queries or unsafe sort behavior.
+- [x] Add max page-size validation in inventory service queries.
+- [x] Add max page-size validation in invoice service queries.
+- [x] Add max page-size validation in customer service queries.
+- [x] Add max page-size validation anywhere a page-size argument crosses a service boundary.
+- [x] Whitelist allowed sort column names.
+- [x] Reject unrecognized sort columns.
+- [x] Add tests for `pageSize=10000`.
+- [x] Add tests for invalid sort fields.
+- [x] Mark done only when bypassing UI controls cannot create huge queries or unsafe sort behavior.
 
 ### SEC-012 Replace False Or Incomplete Security Features
 
-- [ ] Wire or remove biometric authentication UI.
-- [ ] Wire or remove auto-lock UI.
-- [ ] Add secure-screen handling if sensitive data should be hidden in app switcher screenshots.
-- [ ] Add root/jailbreak detection if the security owner accepts that control.
-- [ ] If root/jailbreak detection is added, show a user warning rather than silently blocking unless
-      product/security approves stronger behavior.
-- [ ] Confirm `expo-dev-client` is not active in production builds unless intentionally allowed.
-- [ ] Add a security-release checklist preventing UI-only security controls.
-- [ ] Mark done only when visible security settings map to real enforcement.
+- [x] Wire or remove biometric authentication UI.
+- [x] Wire or remove auto-lock UI.
+- [~] Add secure-screen handling if sensitive data should be hidden in app switcher screenshots. Not
+  implemented; documented as a remaining security-control decision.
+- [~] Add root/jailbreak detection if the security owner accepts that control. Not implemented; documented
+  as a remaining security-control decision.
+- [~] If root/jailbreak detection is added, show a user warning rather than silently blocking unless
+  product/security approves stronger behavior.
+- [~] Confirm `expo-dev-client` is not active in production builds unless intentionally allowed. App
+  config still includes dev-client plugin; production build policy needs owner confirmation.
+- [x] Add a security-release checklist preventing UI-only security controls.
+- [~] Mark done only when visible security settings map to real enforcement. Security settings currently
+  state controls are unavailable; secure-screen/root/dev-client policy remains.
 
 ### SEC-013 Replace Vulnerable XLSX Dependency
 
-- [ ] Confirm all current uses of `xlsx`.
-- [ ] Select a maintained replacement such as `exceljs` or another approved library.
-- [ ] Port read workflows.
-- [ ] Port export workflows.
-- [ ] Add tests for existing spreadsheet import behavior.
-- [ ] Add tests for existing spreadsheet export behavior.
-- [ ] Remove `xlsx` from dependencies.
-- [ ] Run `npm audit` to confirm the direct no-fix vulnerability is gone.
-- [ ] Mark done only when SheetJS no-fix vulnerability is removed from the tree.
+- [x] Confirm all current uses of `xlsx`.
+- [~] Select a maintained replacement such as `exceljs` or another approved library. Candidate noted;
+  dependency decision remains.
+- [~] Port read workflows. Not implemented in this slice.
+- [~] Port export workflows. Not implemented in this slice.
+- [~] Add tests for existing spreadsheet import behavior. Blocked on replacement port.
+- [~] Add tests for existing spreadsheet export behavior. Blocked on replacement port.
+- [~] Remove `xlsx` from dependencies. Still open.
+- [~] Run `npm audit` to confirm the direct no-fix vulnerability is gone. Still open because `xlsx` remains.
+- [~] Mark done only when SheetJS no-fix vulnerability is removed from the tree. Open supply-chain blocker.
 
 ### SEC-014 Close STRIDE Threats
 
-- [ ] Spoofing: remove JWT token storage from AsyncStorage.
-- [ ] Spoofing: decide on certificate pinning.
-- [ ] Spoofing: add OTP attempt limiting.
-- [ ] Tampering: sign offline mutation queue payloads.
-- [ ] Tampering: move trusted invoice totals and stock deductions server-side.
-- [ ] Tampering: protect persisted data against local modification where feasible.
-- [ ] Repudiation: extend audit triggers beyond 4 of 19 tables.
-- [ ] Repudiation: restrict audit-log insert policy.
-- [ ] Repudiation: evaluate tamper-evident audit chain.
-- [ ] Information disclosure: encrypt or remove local plaintext business caches.
-- [ ] Information disclosure: redact logger metadata.
-- [ ] Information disclosure: stop leaking raw schema details through user-facing errors.
-- [ ] Information disclosure: clear business data on logout.
-- [ ] Denial of service: cap page sizes.
-- [ ] Denial of service: review materialized-view refresh in hot RPC paths.
-- [ ] Elevation of privilege: add RBAC or business membership model before multi-user support.
-- [ ] Elevation of privilege: constrain `SECURITY DEFINER` functions with `SET search_path`.
-- [ ] Elevation of privilege: protect service-role key access in seed scripts.
-- [ ] Mark done only when every STRIDE row has an implemented fix or risk exception.
+- [x] Spoofing: remove JWT token storage from AsyncStorage.
+- [x] Spoofing: decide on certificate pinning.
+- [x] Spoofing: add OTP attempt limiting.
+- [~] Tampering: sign offline mutation queue payloads. Open in SEC-004.
+- [x] Tampering: move trusted invoice totals and stock deductions server-side.
+- [~] Tampering: protect persisted data against local modification where feasible. Caches are minimized;
+  write queue remains.
+- [x] Repudiation: extend audit triggers beyond 4 of 19 tables.
+- [x] Repudiation: restrict audit-log insert policy.
+- [~] Repudiation: evaluate tamper-evident audit chain. Open hardening decision.
+- [x] Information disclosure: encrypt or remove local plaintext business caches.
+- [x] Information disclosure: redact logger metadata.
+- [x] Information disclosure: stop leaking raw schema details through user-facing errors.
+- [x] Information disclosure: clear business data on logout.
+- [x] Denial of service: cap page sizes.
+- [~] Denial of service: review materialized-view refresh in hot RPC paths. Not changed in this slice.
+- [~] Elevation of privilege: add RBAC or business membership model before multi-user support. Open in SEC-008.
+- [x] Elevation of privilege: constrain `SECURITY DEFINER` functions with `SET search_path`.
+- [~] Elevation of privilege: protect service-role key access in seed scripts. Deferred to operations phase.
+- [~] Mark done only when every STRIDE row has an implemented fix or risk exception. Several rows are
+  risk-owned but not fully implemented.
 
 ### SEC-015 Close OWASP Mobile Top 10 Findings
 
-- [ ] M1: remove plaintext credential usage.
-- [ ] M1: reduce offline mutation credential/payload risk.
-- [ ] M2: add supply-chain scanning and dependency automation.
-- [ ] M3: strengthen authentication and RLS authorization.
-- [ ] M4: validate deep links, page sizes, sort columns, and service inputs.
-- [ ] M5: decide certificate pinning and reduce schema leakage.
-- [ ] M6: add privacy controls for local caches and logging.
-- [ ] M7: review binary protections, dev-client usage, and root/jailbreak detection.
-- [ ] M8: fix AsyncStorage token storage, audit-log policy, and `SECURITY DEFINER` search paths.
-- [ ] M9: encrypt or remove sensitive local storage and clear on logout.
-- [ ] M10: add HMAC for offline mutations and secure key storage.
-- [ ] Mark done only when each OWASP category has a mapped closure issue.
+- [x] M1: remove plaintext credential usage.
+- [~] M1: reduce offline mutation credential/payload risk. Queue signing/encryption remains.
+- [~] M2: add supply-chain scanning and dependency automation. `npm audit` was surfaced; automation remains.
+- [~] M3: strengthen authentication and RLS authorization. OTP limiting is improved; RLS remains.
+- [x] M4: validate deep links, page sizes, sort columns, and service inputs.
+- [x] M5: decide certificate pinning and reduce schema leakage.
+- [x] M6: add privacy controls for local caches and logging.
+- [~] M7: review binary protections, dev-client usage, and root/jailbreak detection. Policy remains.
+- [x] M8: fix AsyncStorage token storage, audit-log policy, and `SECURITY DEFINER` search paths.
+- [~] M9: encrypt or remove sensitive local storage and clear on logout. Caches are minimized; queue remains.
+- [~] M10: add HMAC for offline mutations and secure key storage. Open in SEC-004.
+- [~] Mark done only when each OWASP category has a mapped closure issue. Mappings exist; several remain
+  implementation blockers.
 
 ## Phase 5: Operations, Observability, Backup, And Compatibility
 

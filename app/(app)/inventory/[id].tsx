@@ -24,6 +24,7 @@ import { layout } from '@easydesign/design-system/foundation';
 import { itemPartyRateService } from '@/src/services/itemPartyRateService';
 import type { UUID } from '@/src/types/common';
 import type { InventoryItem, StockOperation, ItemPartyRate } from '@/src/types/inventory';
+import { parseUuidRouteParam } from '@/src/navigation/routeParamValidation';
 import {
 	OPACITY_ROW_HIGHLIGHT,
 	OPACITY_SKELETON_BASE,
@@ -43,6 +44,7 @@ export default function ItemDetailScreen() {
 	const { formatCurrency, formatDateShort, t } = useLocale();
 	const router = useRouter();
 	const { id } = useLocalSearchParams<{ id: UUID }>();
+	const itemId = parseUuidRouteParam(id, 'inventory_item_id');
 	const actionPaddingVertical = s.md + s.xxs;
 	const modalOverlayPadding = s.lg + s.xs;
 	const partyItemPadding = s.sm + s.xxs;
@@ -68,16 +70,16 @@ export default function ItemDetailScreen() {
 	// update silently in the background to avoid blanking the screen.
 	useFocusEffect(
 		useCallback(() => {
-			if (!id) return;
+			if (!itemId) return;
 			let isMounted = true;
 			const isFirstLoad = item === null;
 			if (isFirstLoad) setLoading(true);
 			const fetchAll = async () => {
 				try {
 					const [itemData, historyData, ratesData] = await Promise.all([
-						inventoryService.fetchItemById(id),
-						inventoryService.fetchStockHistory(id),
-						itemPartyRateService.fetchByItem(id),
+						inventoryService.fetchItemById(itemId),
+						inventoryService.fetchStockHistory(itemId),
+						itemPartyRateService.fetchByItem(itemId),
 					]);
 					if (isMounted) {
 						setItem(itemData);
@@ -95,7 +97,7 @@ export default function ItemDetailScreen() {
 				isMounted = false;
 			};
 			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [id]),
+		}, [itemId]),
 	);
 
 	const fetchParties = async () => {
@@ -107,6 +109,10 @@ export default function ItemDetailScreen() {
 	};
 
 	const handleAddRate = async () => {
+		if (!itemId) {
+			Alert.alert('Error', 'Invalid item link');
+			return;
+		}
 		if (!selectedParty || !customRate) {
 			Alert.alert('Error', 'Please select a party and enter a rate');
 			return;
@@ -117,7 +123,7 @@ export default function ItemDetailScreen() {
 
 		try {
 			await itemPartyRateService.upsertRate({
-				item_id: id as UUID,
+				item_id: itemId,
 				customer_id: party.type === 'customer' ? (party.id as UUID) : undefined,
 				supplier_id: party.type === 'supplier' ? (party.id as UUID) : undefined,
 				custom_rate: parseFloat(customRate),
@@ -128,7 +134,7 @@ export default function ItemDetailScreen() {
 			setCustomRate('');
 
 			// Refresh rates
-			const ratesData = await itemPartyRateService.fetchByItem(id as UUID);
+			const ratesData = await itemPartyRateService.fetchByItem(itemId);
 			setPartyRates(ratesData || []);
 			Alert.alert('Success', 'Special rate added');
 		} catch {

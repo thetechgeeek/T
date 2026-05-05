@@ -23,6 +23,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { Camera, X, ChevronDown, ChevronUp } from 'lucide-react-native';
 import QRCode from 'react-native-qrcode-svg';
+import logger from '@/src/utils/logger';
 
 const MS_SAVED_TOAST = 3000;
 /** ImagePicker quality for business logo (medium – balances size vs clarity) */
@@ -743,7 +744,7 @@ function ImagePickerBox({
 				const publicUrl = storageService.getPublicUrl('branding', path);
 				onChange(publicUrl);
 			} catch (e) {
-				console.error(`${label} upload failed`, e);
+				logger.error(`${label} upload failed`, e);
 				alert(`${label} upload failed. Please try again.`);
 			} finally {
 				setUploading(false);

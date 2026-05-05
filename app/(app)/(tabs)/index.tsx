@@ -89,72 +89,104 @@ export default function DashboardScreen() {
 		fetchInvoices(1);
 	}, [fetchStats, fetchInvoices]);
 
-	const quickActions = [
-		{
-			label: t('dashboard.newInvoice'),
-			accessibilityLabel: 'quick-action-new-invoice',
-			icon: FileText,
-			route: '/(app)/invoices/create',
-			color: c.primary,
-		},
-		{
-			label: 'Receive Payment',
-			accessibilityLabel: 'quick-action-record-payment',
-			icon: ArrowDownCircle,
-			route: '/(app)/finance/payments/receive',
-			color: c.success,
-		},
-		{
-			label: 'New Purchase',
-			accessibilityLabel: 'quick-action-scan-item',
-			icon: ShoppingCart,
-			route: '/(app)/finance/purchases/create',
-			color: c.info,
-		},
-		{
-			label: t('dashboard.addStock'),
-			accessibilityLabel: 'quick-action-add-stock',
-			icon: Package,
-			route: '/(app)/(tabs)/inventory',
-			color: c.warning,
-		},
-	];
+	const quickActions = React.useMemo(
+		() => [
+			{
+				label: t('dashboard.newInvoice'),
+				accessibilityLabel: 'quick-action-new-invoice',
+				icon: FileText,
+				route: '/(app)/invoices/create',
+				color: c.primary,
+			},
+			{
+				label: 'Receive Payment',
+				accessibilityLabel: 'quick-action-record-payment',
+				icon: ArrowDownCircle,
+				route: '/(app)/finance/payments/receive',
+				color: c.success,
+			},
+			{
+				label: 'New Purchase',
+				accessibilityLabel: 'quick-action-scan-item',
+				icon: ShoppingCart,
+				route: '/(app)/finance/purchases/create',
+				color: c.info,
+			},
+			{
+				label: t('dashboard.addStock'),
+				accessibilityLabel: 'quick-action-add-stock',
+				icon: Package,
+				route: '/(app)/(tabs)/inventory',
+				color: c.warning,
+			},
+		],
+		[c.info, c.primary, c.success, c.warning, t],
+	);
 
-	const dashboardStats = [
-		{
-			label: t('dashboard.todaySales'),
-			accessibilityLabel: 'stat-today-sales',
-			value: formatCurrency(stats?.today_sales ?? 0),
-			icon: TrendingUp,
-			color: c.success,
-		},
-		{
-			label: 'To Receive',
-			accessibilityLabel: 'stat-outstanding',
-			value: formatCurrency(stats?.total_outstanding_credit ?? 0),
-			icon: Users,
-			color: c.error,
-		},
-		{
-			label: t('dashboard.lowStock'),
-			accessibilityLabel: 'stat-low-stock',
-			value: t('inventory.stockStatus', { count: stats?.low_stock_count ?? 0 }),
-			icon: AlertTriangle,
-			color: c.warning,
-		},
-		{
-			label: 'Today Collection',
-			accessibilityLabel: 'stat-today-collection',
-			value: formatCurrency(stats?.today_collection ?? 0),
-			icon: ArrowDownCircle,
-			color: c.info,
-		},
-	];
+	const dashboardStats = React.useMemo(
+		() => [
+			{
+				label: t('dashboard.todaySales'),
+				accessibilityLabel: 'stat-today-sales',
+				value: formatCurrency(stats?.today_sales ?? 0),
+				icon: TrendingUp,
+				color: c.success,
+			},
+			{
+				label: 'To Receive',
+				accessibilityLabel: 'stat-outstanding',
+				value: formatCurrency(stats?.total_outstanding_credit ?? 0),
+				icon: Users,
+				color: c.error,
+			},
+			{
+				label: t('dashboard.lowStock'),
+				accessibilityLabel: 'stat-low-stock',
+				value: t('inventory.stockStatus', { count: stats?.low_stock_count ?? 0 }),
+				icon: AlertTriangle,
+				color: c.warning,
+			},
+			{
+				label: 'Today Collection',
+				accessibilityLabel: 'stat-today-collection',
+				value: formatCurrency(stats?.today_collection ?? 0),
+				icon: ArrowDownCircle,
+				color: c.info,
+			},
+		],
+		[
+			c.error,
+			c.info,
+			c.success,
+			c.warning,
+			formatCurrency,
+			stats?.low_stock_count,
+			stats?.today_collection,
+			stats?.today_sales,
+			stats?.total_outstanding_credit,
+			t,
+		],
+	);
 
 	const hasAlerts = (stats?.low_stock_count ?? 0) > 0;
-	const recentInvoices = invoices.slice(0, 5);
+	const recentInvoices = React.useMemo(() => invoices.slice(0, 5), [invoices]);
 
-	const recentTransactions = stats?.recentTransactions ?? [];
+	const recentTransactions = React.useMemo(
+		() => stats?.recentTransactions ?? [],
+		[stats?.recentTransactions],
+	);
+	const visibleRecentTransactions = React.useMemo(
+		() => recentTransactions.slice(0, 5),
+		[recentTransactions],
+	);
+
+	const handleLowStockPress = React.useCallback(() => {
+		router.push('/(app)/(tabs)/inventory');
+	}, [router]);
+
+	const handleViewAllTransactions = React.useCallback(() => {
+		router.push('/(app)/reports/all-transactions' as never);
+	}, [router]);
 
 	const onRefresh = React.useCallback(async () => {
 		setRefreshing(true);
@@ -222,7 +254,7 @@ export default function DashboardScreen() {
 							</ThemedText>
 							{(stats?.low_stock_count ?? 0) > 0 && (
 								<Pressable
-									onPress={() => router.push('/(app)/(tabs)/inventory')}
+									onPress={handleLowStockPress}
 									accessibilityRole="button"
 									accessibilityLabel="alert-low-stock"
 									style={[layout.rowBetween, { paddingVertical: s.xs }]}
@@ -251,9 +283,7 @@ export default function DashboardScreen() {
 							<SectionHeader
 								title="Recent Activity"
 								actionLabel="View All"
-								onActionPress={() =>
-									router.push('/(app)/reports/all-transactions' as never)
-								}
+								onActionPress={handleViewAllTransactions}
 								variant="uppercase"
 								style={{
 									marginBottom: s.xs,
@@ -263,7 +293,7 @@ export default function DashboardScreen() {
 							/>
 
 							<Card style={{ marginHorizontal: s.lg }} padding="none">
-								{recentTransactions.slice(0, 5).map((tx, idx) => {
+								{visibleRecentTransactions.map((tx, idx) => {
 									const incoming = isIncoming(tx.type);
 									const iconColor = incoming ? c.success : c.error;
 									const amountColor = incoming ? c.success : c.error;
@@ -278,8 +308,7 @@ export default function DashboardScreen() {
 													paddingHorizontal: s.md,
 													paddingVertical: s.sm,
 													borderBottomWidth:
-														idx < recentTransactions.length - 1 &&
-														idx < 4
+														idx < visibleRecentTransactions.length - 1
 															? StyleSheet.hairlineWidth
 															: 0,
 													borderBottomColor: c.border,

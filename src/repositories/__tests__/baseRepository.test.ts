@@ -136,6 +136,15 @@ describe('createRepository — findMany with pagination', () => {
 		expect(builder.range).toHaveBeenCalledWith(10, 19);
 	});
 
+	it('caps oversized pagination page sizes', async () => {
+		const builder = makeBuilder({ data: [], count: 0, error: null });
+		mockFrom.mockReturnValue(builder);
+
+		await repo.findMany({ pagination: { page: 1, pageSize: 10_000 } });
+
+		expect(builder.range).toHaveBeenCalledWith(0, 99);
+	});
+
 	it('applies sort options via .order()', async () => {
 		const builder = makeBuilder({ data: [], count: 0, error: null });
 		mockFrom.mockReturnValue(builder);

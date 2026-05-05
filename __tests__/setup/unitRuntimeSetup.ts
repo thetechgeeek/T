@@ -770,6 +770,14 @@ jest.mock('expo-document-picker', () => ({
 	getDocumentAsync: jest.fn(),
 }));
 
+jest.mock('expo-secure-store', () => ({
+	AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: 'AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY',
+	getItemAsync: jest.fn().mockResolvedValue(null),
+	setItemAsync: jest.fn().mockResolvedValue(undefined),
+	deleteItemAsync: jest.fn().mockResolvedValue(undefined),
+	isAvailableAsync: jest.fn().mockResolvedValue(true),
+}));
+
 jest.mock(
 	'expo-clipboard',
 	() => ({

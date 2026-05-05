@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { supabase } from '../config/supabase';
 import { toAppError } from '../errors/AppError';
 import { validateWith } from '../utils/validation';
+import { normalizePage, normalizePageSize, resolveSortField } from '@/src/utils/queryGuards';
 import { CustomerSchema } from '../schemas/customer';
 import type {
 	Customer,
@@ -12,6 +13,8 @@ import type {
 	AgingBucket,
 } from '../types/customer';
 import type { UUID } from '../types/common';
+
+const CUSTOMER_SORT_FIELDS = ['name', 'outstanding_balance', 'created_at'] as const;
 
 export const customerService = {
 	async fetchCustomers(filters: CustomerFilters, page = 1, limit = 20) {
@@ -27,12 +30,13 @@ export const customerService = {
 			query = query.eq('type', filters.type);
 		}
 
-		const from = (page - 1) * limit;
-		const to = from + limit - 1;
+		const safePage = normalizePage(page);
+		const safeLimit = normalizePageSize(limit);
+		const sortField = resolveSortField(filters.sortBy, CUSTOMER_SORT_FIELDS, 'name');
+		const from = (safePage - 1) * safeLimit;
+		const to = from + safeLimit - 1;
 
-		query = query
-			.order(filters.sortBy || 'name', { ascending: filters.sortDir !== 'desc' })
-			.range(from, to);
+		query = query.order(sortField, { ascending: filters.sortDir !== 'desc' }).range(from, to);
 
 		const { data, count, error } = await query;
 

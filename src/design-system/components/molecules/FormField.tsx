@@ -23,90 +23,96 @@ export interface FormFieldProps extends AtomTextInputProps {
 	containerStyle?: StyleProp<ViewStyle>;
 }
 
-export const FormField = forwardRef<NativeTextInput, FormFieldProps>(
-	(
-		{
-			label,
-			accessibilityLabel,
-			error,
-			required,
-			helperText,
-			warningText,
-			editable,
-			containerStyle,
-			...props
-		},
-		ref,
-	) => {
-		const { theme } = useTheme();
-		const c = theme.colors;
+export const FormField = React.memo(
+	forwardRef<NativeTextInput, FormFieldProps>(
+		(
+			{
+				label,
+				accessibilityLabel,
+				error,
+				required,
+				helperText,
+				warningText,
+				editable,
+				containerStyle,
+				...props
+			},
+			ref,
+		) => {
+			const { theme } = useTheme();
+			const c = theme.colors;
 
-		// Compose a full hint so required/error state is announced with the field.
-		const hint =
-			[
-				required ? 'Required' : null,
-				error
-					? `Error: ${error}`
-					: warningText
-						? `Warning: ${warningText}`
-						: (helperText ?? null),
-			]
-				.filter(Boolean)
-				.join('. ') || undefined;
-		const footerCopy = error || warningText || helperText;
-		const footerColor = error ? c.error : warningText ? c.warning : c.onSurfaceVariant;
+			// Compose a full hint so required/error state is announced with the field.
+			const hint =
+				[
+					required ? 'Required' : null,
+					error
+						? `Error: ${error}`
+						: warningText
+							? `Warning: ${warningText}`
+							: (helperText ?? null),
+				]
+					.filter(Boolean)
+					.join('. ') || undefined;
+			const footerCopy = error || warningText || helperText;
+			const footerColor = error ? c.error : warningText ? c.warning : c.onSurfaceVariant;
 
-		return (
-			<View style={[styles.container, containerStyle]}>
-				{/* Visual label row — hidden from a11y tree; input carries the label */}
-				<View
-					importantForAccessibility="no"
-					style={[layout.row, styles.labelRow, { marginBottom: theme.spacing.xs }]}
-				>
-					<ThemedText variant="label" color={c.onSurfaceVariant} style={styles.labelText}>
-						{label}
-					</ThemedText>
-					{required && (
-						<ThemedText color={c.error} style={{ marginStart: theme.spacing.xxs }}>
-							*
+			return (
+				<View style={[styles.container, containerStyle]}>
+					{/* Visual label row — hidden from a11y tree; input carries the label */}
+					<View
+						importantForAccessibility="no"
+						style={[layout.row, styles.labelRow, { marginBottom: theme.spacing.xs }]}
+					>
+						<ThemedText
+							variant="label"
+							color={c.onSurfaceVariant}
+							style={styles.labelText}
+						>
+							{label}
 						</ThemedText>
-					)}
+						{required && (
+							<ThemedText color={c.error} style={{ marginStart: theme.spacing.xxs }}>
+								*
+							</ThemedText>
+						)}
+					</View>
+					<AtomTextInput
+						ref={ref}
+						{...props}
+						editable={editable}
+						accessibilityLabel={accessibilityLabel ?? label}
+						accessibilityHint={hint}
+						error={undefined}
+						helperText={undefined}
+						label={undefined}
+						warningText={undefined}
+					/>
+					{/* Error copy stays visible and is also exposed for automation; helper text remains visual-only. */}
+					{!!footerCopy &&
+						(error ? (
+							<ThemedText
+								accessibilityRole="alert"
+								variant="caption"
+								color={footerColor}
+								style={{ marginTop: theme.spacing.xs }}
+							>
+								{footerCopy}
+							</ThemedText>
+						) : (
+							<ThemedText
+								importantForAccessibility="no"
+								variant="caption"
+								color={footerColor}
+								style={{ marginTop: theme.spacing.xs }}
+							>
+								{footerCopy}
+							</ThemedText>
+						))}
 				</View>
-				<AtomTextInput
-					ref={ref}
-					{...props}
-					editable={editable}
-					accessibilityLabel={accessibilityLabel ?? label}
-					accessibilityHint={hint}
-					error={undefined}
-					helperText={undefined}
-					label={undefined}
-					warningText={undefined}
-				/>
-				{/* Error copy stays visible and is also exposed for automation; helper text remains visual-only. */}
-				{!!footerCopy &&
-					(error ? (
-						<ThemedText
-							accessibilityRole="alert"
-							variant="caption"
-							color={footerColor}
-							style={{ marginTop: theme.spacing.xs }}
-						>
-							{footerCopy}
-						</ThemedText>
-					) : (
-						<ThemedText
-							importantForAccessibility="no"
-							variant="caption"
-							color={footerColor}
-							style={{ marginTop: theme.spacing.xs }}
-						>
-							{footerCopy}
-						</ThemedText>
-					))}
-			</View>
-		);
-	},
+			);
+		},
+	),
 );
 
 FormField.displayName = 'FormField';

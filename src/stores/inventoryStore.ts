@@ -345,11 +345,22 @@ export const useInventoryStore = create<InventoryState>()(
 		{
 			name: 'inventory-storage',
 			storage: createJSONStorage(() => AsyncStorage),
+			version: 1,
+			migrate: (persistedState) => {
+				const state = persistedState as Partial<InventoryState>;
+				return {
+					filters: {
+						...DEFAULT_FILTERS,
+						...state.filters,
+						search: '',
+					},
+				};
+			},
 			partialize: (state: InventoryState) => ({
-				items: state.items,
-				totalCount: state.totalCount,
-				filters: state.filters,
-				hasMore: state.hasMore,
+				filters: {
+					...state.filters,
+					search: '',
+				},
 			}),
 		},
 	),

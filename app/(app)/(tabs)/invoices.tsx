@@ -1,6 +1,17 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	FlatList,
+	TouchableOpacity,
+	Alert,
+	TextInput,
+	type ListRenderItem,
+	type StyleProp,
+	type TextStyle,
+	type ViewStyle,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
@@ -14,6 +25,7 @@ import type { InvoiceStatus } from '@/app/components/molecules/InvoiceStatusBadg
 import { InvoiceListSkeleton } from '@/app/components/molecules/skeletons/InvoiceListSkeleton';
 import type { Invoice, PaymentStatus } from '@/src/types/invoice';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
+import type { UUID } from '@/src/types/common';
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
@@ -59,8 +71,198 @@ const DATE_CHIP_LABELS: Record<DateChip, string> = {
 	fy: 'This FY',
 };
 
+const DATE_CHIPS: DateChip[] = ['all', 'today', 'week', 'month', 'fy'];
 const STATUS_CHIPS: StatusChip[] = ['ALL', 'paid', 'partial', 'unpaid'];
 const INVOICES_SCREEN_ACCESSIBILITY_LABEL = 'invoices-screen';
+const chipKeyExtractor = (chip: string) => chip;
+const invoiceKeyExtractor = (invoice: Invoice) => invoice.id;
+
+function getStatusDotColor(
+	status: PaymentStatus,
+	isOverdue: boolean,
+	colors: {
+		error: string;
+		overdue: string;
+		success: string;
+		warning: string;
+	},
+) {
+	if (isOverdue) return colors.overdue;
+	if (status === 'paid') return colors.success;
+	if (status === 'partial') return colors.warning;
+	return colors.error;
+}
+
+interface DateChipButtonProps {
+	chip: DateChip;
+	isActive: boolean;
+	label: string;
+	activeBackgroundColor: string;
+	inactiveBackgroundColor: string;
+	activeTextColor: string;
+	inactiveTextColor: string;
+	borderRadius: number;
+	onPress: (chip: DateChip) => void;
+}
+
+const DateChipButton = React.memo(function DateChipButton({
+	chip,
+	isActive,
+	label,
+	activeBackgroundColor,
+	inactiveBackgroundColor,
+	activeTextColor,
+	inactiveTextColor,
+	borderRadius,
+	onPress,
+}: DateChipButtonProps) {
+	const handlePress = useCallback(() => onPress(chip), [chip, onPress]);
+
+	return (
+		<TouchableOpacity
+			style={[
+				styles.chip,
+				{
+					backgroundColor: isActive ? activeBackgroundColor : inactiveBackgroundColor,
+					borderRadius,
+				},
+			]}
+			onPress={handlePress}
+			accessibilityRole="button"
+			accessibilityLabel={`date-filter-${chip}`}
+		>
+			<ThemedText
+				variant="captionBold"
+				color={isActive ? activeTextColor : inactiveTextColor}
+			>
+				{label}
+			</ThemedText>
+		</TouchableOpacity>
+	);
+});
+
+interface StatusChipButtonProps {
+	chip: StatusChip;
+	isActive: boolean;
+	activeBackgroundColor: string;
+	inactiveBackgroundColor: string;
+	activeTextColor: string;
+	inactiveTextColor: string;
+	dotColor: string;
+	borderRadius: number;
+	onPress: (chip: StatusChip) => void;
+}
+
+const StatusChipButton = React.memo(function StatusChipButton({
+	chip,
+	isActive,
+	activeBackgroundColor,
+	inactiveBackgroundColor,
+	activeTextColor,
+	inactiveTextColor,
+	dotColor,
+	borderRadius,
+	onPress,
+}: StatusChipButtonProps) {
+	const handlePress = useCallback(() => onPress(chip), [chip, onPress]);
+
+	return (
+		<TouchableOpacity
+			style={[
+				styles.chip,
+				styles.statusChip,
+				{
+					backgroundColor: isActive ? activeBackgroundColor : inactiveBackgroundColor,
+					borderRadius,
+				},
+			]}
+			onPress={handlePress}
+			accessibilityRole="button"
+			accessibilityLabel={`status-filter-${chip}`}
+		>
+			{chip !== 'ALL' && (
+				<View
+					style={[
+						styles.statusDot,
+						{ backgroundColor: isActive ? activeTextColor : dotColor },
+					]}
+				/>
+			)}
+			<ThemedText
+				variant="captionBold"
+				color={isActive ? activeTextColor : inactiveTextColor}
+			>
+				{chip === 'ALL' ? 'All' : chip.charAt(0).toUpperCase() + chip.slice(1)}
+			</ThemedText>
+		</TouchableOpacity>
+	);
+});
+
+interface InvoiceRowProps {
+	invoice: Invoice;
+	cardStyle: StyleProp<ViewStyle>;
+	customerNameStyle: StyleProp<TextStyle>;
+	onSurfaceVariantColor: string;
+	primaryColor: string;
+	statusColors: {
+		error: string;
+		overdue: string;
+		success: string;
+		warning: string;
+	};
+	formatCurrency: (amount: number) => string;
+	formatDate: (date: string) => string;
+	onPressInvoice: (id: UUID) => void;
+	t: (key: string) => string;
+}
+
+const InvoiceRow = React.memo(function InvoiceRow({
+	invoice,
+	cardStyle,
+	customerNameStyle,
+	onSurfaceVariantColor,
+	primaryColor,
+	statusColors,
+	formatCurrency,
+	formatDate,
+	onPressInvoice,
+	t,
+}: InvoiceRowProps) {
+	const dueDateStr = invoice.due_date;
+	const isOverdue =
+		invoice.payment_status === 'unpaid' && !!dueDateStr && new Date(dueDateStr) < new Date();
+	const dotColor = getStatusDotColor(invoice.payment_status, isOverdue, statusColors);
+	const handlePress = useCallback(() => onPressInvoice(invoice.id), [invoice.id, onPressInvoice]);
+
+	return (
+		<TouchableOpacity
+			style={cardStyle}
+			accessibilityRole="button"
+			accessibilityLabel={`invoice-${invoice.invoice_number}`}
+			accessibilityHint={`${t('invoice.' + invoice.payment_status)}, ${formatCurrency(invoice.grand_total)}. ${t('invoice.tapToOpen')}`}
+			onPress={handlePress}
+		>
+			<View style={styles.cardHeader}>
+				<View style={[styles.statusDotInline, { backgroundColor: dotColor }]} />
+				<ThemedText weight="bold" variant="body" style={styles.cardTitle}>
+					{invoice.invoice_number}
+				</ThemedText>
+				<ThemedText variant="caption" color={onSurfaceVariantColor}>
+					{formatDate(invoice.invoice_date)}
+				</ThemedText>
+			</View>
+			<ThemedText color={onSurfaceVariantColor} style={customerNameStyle}>
+				{invoice.customer_name}
+			</ThemedText>
+			<View style={styles.cardFooter}>
+				<InvoiceStatusBadge status={invoice.payment_status as InvoiceStatus} size="sm" />
+				<ThemedText variant="h3" color={primaryColor}>
+					{formatCurrency(invoice.grand_total)}
+				</ThemedText>
+			</View>
+		</TouchableOpacity>
+	);
+});
 
 // ─── component ───────────────────────────────────────────────────────────────
 
@@ -81,6 +283,21 @@ export default function InvoicesListScreen() {
 	const [search, setSearch] = useState('');
 	const [dateChip, setDateChip] = useState<DateChip>('all');
 	const [statusChip, setStatusChip] = useState<StatusChip>('ALL');
+
+	const handleNewInvoice = useCallback(() => {
+		router.push('/(app)/invoices/create');
+	}, [router]);
+
+	const handleOpenInvoice = useCallback(
+		(id: UUID) => {
+			router.push(`/(app)/invoices/${id}`);
+		},
+		[router],
+	);
+
+	const handleClearSearch = useCallback(() => setSearch(''), []);
+	const handleDateChipPress = useCallback((chip: DateChip) => setDateChip(chip), []);
+	const handleStatusChipPress = useCallback((chip: StatusChip) => setStatusChip(chip), []);
 
 	useEffect(() => {
 		fetchInvoices().catch(() => {
@@ -145,6 +362,177 @@ export default function InvoicesListScreen() {
 		return { billed, collected, pending };
 	}, [invoices]);
 
+	const summaryCardStyle = useMemo<StyleProp<ViewStyle>>(
+		() => [
+			styles.summaryCard,
+			{
+				backgroundColor: c.card,
+				marginHorizontal: s.md,
+				marginTop: s.md,
+				borderRadius: r.md,
+				...theme.shadows.sm,
+			},
+		],
+		[c.card, r.md, s.md, theme.shadows.sm],
+	);
+
+	const searchBarStyle = useMemo<StyleProp<ViewStyle>>(
+		() => [
+			styles.searchBar,
+			{
+				backgroundColor: c.surfaceVariant,
+				borderRadius: r.md,
+				marginHorizontal: s.md,
+				marginTop: s.md,
+			},
+		],
+		[c.surfaceVariant, r.md, s.md],
+	);
+
+	const searchInputStyle = useMemo<StyleProp<TextStyle>>(
+		() => [
+			styles.searchInput,
+			{ color: c.onSurface, fontSize: typo.variants.caption.fontSize },
+		],
+		[c.onSurface, typo.variants.caption.fontSize],
+	);
+
+	const invoiceCardStyle = useMemo<StyleProp<ViewStyle>>(
+		() => [
+			styles.invoiceCard,
+			{
+				backgroundColor: theme.colors.card,
+				borderRadius: r.lg,
+				...theme.shadows.sm,
+			},
+		],
+		[r.lg, theme.colors.card, theme.shadows.sm],
+	);
+
+	const statusColors = useMemo(
+		() => ({
+			error: c.error,
+			overdue: c.overdue,
+			success: c.success,
+			warning: c.warning,
+		}),
+		[c.error, c.overdue, c.success, c.warning],
+	);
+
+	const renderDateChip = useCallback<ListRenderItem<DateChip>>(
+		({ item: chip }) => (
+			<DateChipButton
+				chip={chip}
+				isActive={dateChip === chip}
+				label={DATE_CHIP_LABELS[chip]}
+				activeBackgroundColor={c.primary}
+				inactiveBackgroundColor={c.surfaceVariant}
+				activeTextColor={c.onPrimary}
+				inactiveTextColor={c.onSurfaceVariant}
+				borderRadius={r.full}
+				onPress={handleDateChipPress}
+			/>
+		),
+		[
+			c.onPrimary,
+			c.onSurfaceVariant,
+			c.primary,
+			c.surfaceVariant,
+			dateChip,
+			handleDateChipPress,
+			r.full,
+		],
+	);
+
+	const renderStatusChip = useCallback<ListRenderItem<StatusChip>>(
+		({ item: chip }) => {
+			const isActive = statusChip === chip;
+			const dotColor =
+				chip === 'paid'
+					? c.success
+					: chip === 'partial'
+						? c.warning
+						: chip === 'unpaid'
+							? c.error
+							: 'transparent';
+
+			return (
+				<StatusChipButton
+					chip={chip}
+					isActive={isActive}
+					activeBackgroundColor={c.primary}
+					inactiveBackgroundColor={c.surfaceVariant}
+					activeTextColor={c.onPrimary}
+					inactiveTextColor={c.onSurfaceVariant}
+					dotColor={dotColor}
+					borderRadius={r.full}
+					onPress={handleStatusChipPress}
+				/>
+			);
+		},
+		[
+			c.error,
+			c.onPrimary,
+			c.onSurfaceVariant,
+			c.primary,
+			c.success,
+			c.surfaceVariant,
+			c.warning,
+			handleStatusChipPress,
+			r.full,
+			statusChip,
+		],
+	);
+
+	const renderInvoice = useCallback<ListRenderItem<Invoice>>(
+		({ item }) => (
+			<InvoiceRow
+				invoice={item}
+				cardStyle={invoiceCardStyle}
+				customerNameStyle={styles.invoiceCustomerName}
+				onSurfaceVariantColor={c.onSurfaceVariant}
+				primaryColor={c.primary}
+				statusColors={statusColors}
+				formatCurrency={formatCurrency}
+				formatDate={formatDate}
+				onPressInvoice={handleOpenInvoice}
+				t={t}
+			/>
+		),
+		[
+			c.onSurfaceVariant,
+			c.primary,
+			formatCurrency,
+			formatDate,
+			handleOpenInvoice,
+			invoiceCardStyle,
+			statusColors,
+			t,
+		],
+	);
+
+	const renderEmptyInvoices = useCallback(
+		() => (
+			<View style={styles.emptyState}>
+				<FileText color={c.placeholder} size={64} />
+				<ThemedText color={c.onSurfaceVariant} style={styles.emptyText}>
+					{search || statusChip !== 'ALL' || dateChip !== 'all'
+						? t('common.noResults')
+						: t('invoice.noInvoices')}
+				</ThemedText>
+				{!search && statusChip === 'ALL' && dateChip === 'all' && (
+					<Button
+						title={t('invoice.createFirst')}
+						variant="outline"
+						style={styles.createFirstButton}
+						onPress={handleNewInvoice}
+					/>
+				)}
+			</View>
+		),
+		[c.onSurfaceVariant, c.placeholder, dateChip, handleNewInvoice, search, statusChip, t],
+	);
+
 	return (
 		<AtomicScreen safeAreaEdges={['top']}>
 			{/* ── Top Header ── */}
@@ -156,28 +544,17 @@ export default function InvoicesListScreen() {
 					title={t('invoice.newInvoice')}
 					accessibilityLabel="new-invoice-button"
 					leftIcon={<Plus color={c.onPrimary} size={20} />}
-					onPress={() => router.push('/(app)/invoices/create')}
+					onPress={handleNewInvoice}
 				/>
 			</View>
 
 			{/* ── Monthly Summary Card ── */}
 			{invoices.length > 0 && (
-				<View
-					style={[
-						styles.summaryCard,
-						{
-							backgroundColor: c.card,
-							marginHorizontal: s.md,
-							marginTop: s.md,
-							borderRadius: r.md,
-							...theme.shadows.sm,
-						},
-					]}
-				>
+				<View style={summaryCardStyle}>
 					<ThemedText
 						variant="caption"
 						color={c.onSurfaceVariant}
-						style={{ marginBottom: s.xs }}
+						style={styles.summaryTitle}
 					>
 						This Month
 					</ThemedText>
@@ -216,23 +593,10 @@ export default function InvoicesListScreen() {
 			)}
 
 			{/* ── Search Bar ── */}
-			<View
-				style={[
-					styles.searchBar,
-					{
-						backgroundColor: c.surfaceVariant,
-						borderRadius: r.md,
-						marginHorizontal: s.md,
-						marginTop: s.md,
-					},
-				]}
-			>
-				<Search size={16} color={c.placeholder} style={{ marginRight: SPACING_PX.xs }} />
+			<View style={searchBarStyle}>
+				<Search size={16} color={c.placeholder} style={styles.searchIcon} />
 				<TextInput
-					style={[
-						styles.searchInput,
-						{ color: c.onSurface, fontSize: typo.variants.caption.fontSize },
-					]}
+					style={searchInputStyle}
 					placeholder="Search invoice no. or customer..."
 					placeholderTextColor={c.placeholder}
 					value={search}
@@ -242,10 +606,7 @@ export default function InvoicesListScreen() {
 					accessibilityLabel="invoice-search-input"
 				/>
 				{search.length > 0 && (
-					<TouchableOpacity
-						onPress={() => setSearch('')}
-						accessibilityLabel="clear-search"
-					>
+					<TouchableOpacity onPress={handleClearSearch} accessibilityLabel="clear-search">
 						<X size={16} color={c.placeholder} />
 					</TouchableOpacity>
 				)}
@@ -254,179 +615,37 @@ export default function InvoicesListScreen() {
 			{/* ── Date Filter Chips ── */}
 			<FlatList
 				horizontal
-				data={Object.keys(DATE_CHIP_LABELS) as DateChip[]}
-				keyExtractor={(k) => k}
+				data={DATE_CHIPS}
+				keyExtractor={chipKeyExtractor}
 				showsHorizontalScrollIndicator={false}
-				contentContainerStyle={{ paddingHorizontal: s.md, paddingTop: s.sm, gap: s.xs }}
-				renderItem={({ item: chip }) => (
-					<TouchableOpacity
-						style={[
-							styles.chip,
-							{
-								backgroundColor: dateChip === chip ? c.primary : c.surfaceVariant,
-								borderRadius: r.full,
-								paddingHorizontal: s.md,
-								paddingVertical: s.xs,
-							},
-						]}
-						onPress={() => setDateChip(chip)}
-						accessibilityRole="button"
-						accessibilityLabel={`date-filter-${chip}`}
-					>
-						<ThemedText
-							variant="captionBold"
-							color={dateChip === chip ? c.onPrimary : c.onSurfaceVariant}
-						>
-							{DATE_CHIP_LABELS[chip]}
-						</ThemedText>
-					</TouchableOpacity>
-				)}
+				contentContainerStyle={styles.dateChipContent}
+				renderItem={renderDateChip}
 			/>
 
 			{/* ── Status Filter Chips ── */}
 			<FlatList
 				horizontal
 				data={STATUS_CHIPS}
-				keyExtractor={(k) => k}
+				keyExtractor={chipKeyExtractor}
 				showsHorizontalScrollIndicator={false}
-				contentContainerStyle={{
-					paddingHorizontal: s.md,
-					paddingTop: s.xs,
-					paddingBottom: s.sm,
-					gap: s.xs,
-				}}
-				renderItem={({ item: chip }) => {
-					const isActive = statusChip === chip;
-					const dotColor =
-						chip === 'paid'
-							? c.success
-							: chip === 'partial'
-								? c.warning
-								: chip === 'unpaid'
-									? c.error
-									: 'transparent';
-					return (
-						<TouchableOpacity
-							style={[
-								styles.chip,
-								{
-									backgroundColor: isActive ? c.primary : c.surfaceVariant,
-									borderRadius: r.full,
-									paddingHorizontal: s.md,
-									paddingVertical: s.xs,
-									flexDirection: 'row',
-									alignItems: 'center',
-									gap: s.xs,
-								},
-							]}
-							onPress={() => setStatusChip(chip)}
-							accessibilityRole="button"
-							accessibilityLabel={`status-filter-${chip}`}
-						>
-							{chip !== 'ALL' && (
-								<View
-									style={[
-										styles.statusDot,
-										{ backgroundColor: isActive ? c.onPrimary : dotColor },
-									]}
-								/>
-							)}
-							<ThemedText
-								variant="captionBold"
-								color={isActive ? c.onPrimary : c.onSurfaceVariant}
-							>
-								{chip === 'ALL'
-									? 'All'
-									: chip.charAt(0).toUpperCase() + chip.slice(1)}
-							</ThemedText>
-						</TouchableOpacity>
-					);
-				}}
+				contentContainerStyle={styles.statusChipContent}
+				renderItem={renderStatusChip}
 			/>
 
 			{/* ── Invoice List ── */}
 			{loading && invoices.length === 0 ? <InvoiceListSkeleton /> : null}
 			<FlatList
 				data={loading && invoices.length === 0 ? [] : filtered}
-				keyExtractor={(item) => item.id}
+				keyExtractor={invoiceKeyExtractor}
 				refreshing={refreshing}
 				onRefresh={handleRefresh}
 				initialNumToRender={10}
 				windowSize={5}
 				maxToRenderPerBatch={10}
-				contentContainerStyle={{ padding: s.md, flexGrow: 1 }}
-				ListEmptyComponent={() => (
-					<View style={{ alignItems: 'center', marginTop: s['2xl'] }}>
-						<FileText color={c.placeholder} size={64} />
-						<ThemedText color={c.onSurfaceVariant} style={{ marginTop: s.md }}>
-							{search || statusChip !== 'ALL' || dateChip !== 'all'
-								? t('common.noResults')
-								: t('invoice.noInvoices')}
-						</ThemedText>
-						{!search && statusChip === 'ALL' && dateChip === 'all' && (
-							<Button
-								title={t('invoice.createFirst')}
-								variant="outline"
-								style={{ marginTop: s.lg }}
-								onPress={() => router.push('/(app)/invoices/create')}
-							/>
-						)}
-					</View>
-				)}
-				renderItem={({ item }) => {
-					const dueDateStr = item.due_date;
-					const isOverdue =
-						item.payment_status === 'unpaid' &&
-						!!dueDateStr &&
-						new Date(dueDateStr) < new Date();
-					const dotColor = isOverdue
-						? c.overdue
-						: item.payment_status === 'paid'
-							? c.success
-							: item.payment_status === 'partial'
-								? c.warning
-								: c.error;
-					return (
-						<TouchableOpacity
-							style={[
-								styles.invoiceCard,
-								{
-									backgroundColor: theme.colors.card,
-									borderRadius: r.lg,
-									...theme.shadows.sm,
-								},
-							]}
-							accessibilityRole="button"
-							accessibilityLabel={`invoice-${item.invoice_number}`}
-							accessibilityHint={`${t('invoice.' + item.payment_status)}, ${formatCurrency(item.grand_total)}. ${t('invoice.tapToOpen')}`}
-							onPress={() => router.push(`/(app)/invoices/${item.id}`)}
-						>
-							<View style={styles.cardHeader}>
-								<View
-									style={[styles.statusDotInline, { backgroundColor: dotColor }]}
-								/>
-								<ThemedText weight="bold" variant="body" style={{ flex: 1 }}>
-									{item.invoice_number}
-								</ThemedText>
-								<ThemedText variant="caption" color={c.onSurfaceVariant}>
-									{formatDate(item.invoice_date)}
-								</ThemedText>
-							</View>
-							<ThemedText color={c.onSurfaceVariant} style={{ marginBottom: s.sm }}>
-								{item.customer_name}
-							</ThemedText>
-							<View style={styles.cardFooter}>
-								<InvoiceStatusBadge
-									status={item.payment_status as InvoiceStatus}
-									size="sm"
-								/>
-								<ThemedText variant="h3" color={c.primary}>
-									{formatCurrency(item.grand_total)}
-								</ThemedText>
-							</View>
-						</TouchableOpacity>
-					);
-				}}
+				removeClippedSubviews={true}
+				contentContainerStyle={styles.invoiceListContent}
+				ListEmptyComponent={renderEmptyInvoices}
+				renderItem={renderInvoice}
 			/>
 		</AtomicScreen>
 	);
@@ -444,6 +663,9 @@ const styles = StyleSheet.create({
 	},
 	summaryCard: {
 		padding: SPACING_PX.md,
+	},
+	summaryTitle: {
+		marginBottom: SPACING_PX.xs,
 	},
 	summaryRow: {
 		flexDirection: 'row',
@@ -469,8 +691,28 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingVertical: 0,
 	},
+	searchIcon: {
+		marginRight: SPACING_PX.xs,
+	},
+	dateChipContent: {
+		paddingHorizontal: SPACING_PX.md,
+		paddingTop: SPACING_PX.sm,
+		gap: SPACING_PX.xs,
+	},
+	statusChipContent: {
+		paddingHorizontal: SPACING_PX.md,
+		paddingTop: SPACING_PX.xs,
+		paddingBottom: SPACING_PX.sm,
+		gap: SPACING_PX.xs,
+	},
 	chip: {
-		// dynamic styles applied inline
+		paddingHorizontal: SPACING_PX.md,
+		paddingVertical: SPACING_PX.xs,
+	},
+	statusChip: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: SPACING_PX.xs,
 	},
 	statusDot: {
 		width: SPACING_PX.sm,
@@ -481,11 +723,21 @@ const styles = StyleSheet.create({
 		padding: SPACING_PX.lg,
 		marginBottom: SPACING_PX.md,
 	},
+	invoiceListContent: {
+		padding: SPACING_PX.md,
+		flexGrow: 1,
+	},
 	cardHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		marginBottom: SPACING_PX.xs,
 		gap: SPACING_PX.xs,
+	},
+	cardTitle: {
+		flex: 1,
+	},
+	invoiceCustomerName: {
+		marginBottom: SPACING_PX.sm,
 	},
 	statusDotInline: {
 		width: SPACING_PX.sm,
@@ -497,5 +749,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		marginTop: SPACING_PX.sm,
+	},
+	emptyState: {
+		alignItems: 'center',
+		marginTop: SPACING_PX['2xl'],
+	},
+	emptyText: {
+		marginTop: SPACING_PX.md,
+	},
+	createFirstButton: {
+		marginTop: SPACING_PX.lg,
 	},
 });
