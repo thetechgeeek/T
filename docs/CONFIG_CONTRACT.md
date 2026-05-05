@@ -39,20 +39,20 @@ Real test credentials live outside the repository:
 
 - Local: `.env.test`, ignored by git.
 - CI: GitHub Actions secrets named `SUPABASE_TEST_URL`, `SUPABASE_TEST_ANON_KEY`,
-  `SUPABASE_TEST_SERVICE_ROLE_KEY`, `INTEGRATION_TEST_EMAIL`, and
-  `INTEGRATION_TEST_PASSWORD`.
+  `SUPABASE_TEST_SERVICE_ROLE_KEY`, `SUPABASE_TEST_PROJECT_REF_ALLOWLIST`,
+  `INTEGRATION_TEST_EMAIL`, and `INTEGRATION_TEST_PASSWORD`.
 
 `.env.example` contains safe placeholders only.
 
 ## Execution Contexts
 
-| Context          | Config owner                                                       | Required env                                  | Notes                                            |
-| ---------------- | ------------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------ |
-| Unit Jest        | `jest.config.js` + `jest.setup.ts`                                 | none for pure unit tests                      | Unit setup does not load `.env.test`.            |
-| Integration Jest | `jest.integration.config.js` + `__tests__/utils/integrationEnv.js` | `SUPABASE_TEST_URL`, `SUPABASE_TEST_ANON_KEY` | Adapter maps test values before app imports.     |
-| Expo e2e         | `scripts/run-expo-e2e.mjs`                                         | `SUPABASE_TEST_*` or matching `EXPO_PUBLIC_*` | Runs with `EXPO_NO_DOTENV=1`.                    |
-| Maestro e2e      | `scripts/run-maestro-suite.mjs`                                    | e2e env plus integration user credentials     | Uses PATH discovery and supports `--dry-run`.    |
-| Seed reset       | `scripts/test-seed-reset.mjs`                                      | test Supabase and integration user env        | Uses service role only when explicitly provided. |
+| Context          | Config owner                                                       | Required env                                                 | Notes                                                                               |
+| ---------------- | ------------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| Unit Jest        | `jest.config.js` + `jest.setup.ts`                                 | none for pure unit tests                                     | Unit setup does not load `.env.test`.                                               |
+| Integration Jest | `jest.integration.config.js` + `__tests__/utils/integrationEnv.js` | `SUPABASE_TEST_URL`, `SUPABASE_TEST_ANON_KEY`                | Adapter maps test values before app imports.                                        |
+| Expo e2e         | `scripts/run-expo-e2e.mjs`                                         | `SUPABASE_TEST_*` or matching `EXPO_PUBLIC_*`                | Runs with `EXPO_NO_DOTENV=1`.                                                       |
+| Maestro e2e      | `scripts/run-maestro-suite.mjs`                                    | e2e env plus integration user credentials                    | Uses PATH discovery and supports `--dry-run`.                                       |
+| Seed reset       | `scripts/test-seed-reset.mjs`                                      | test Supabase, integration user env, allowlisted project ref | Uses service role only when explicitly provided and blocks production-like targets. |
 
 ## Verification
 

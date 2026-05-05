@@ -3,6 +3,7 @@ import { toAppError } from '../errors/AppError';
 import { validateWith } from '../utils/validation';
 import { PaymentSchema } from '../schemas/payment';
 import { eventBus } from '../events/appEvents';
+import logger from '../utils/logger';
 import type { PaymentInput } from '../types/finance';
 
 export type { PaymentInput };
@@ -26,8 +27,19 @@ export function createPaymentService(repo = paymentRepository) {
 					customerId: input.customer_id,
 				});
 
+				logger.telemetry('payment.record.success', {
+					direction: input.direction,
+					hasInvoice: Boolean(input.invoice_id),
+					hasPurchase: Boolean(input.purchase_id),
+				});
+
 				return result;
 			} catch (error: unknown) {
+				logger.telemetry('payment.record.failure', {
+					direction: input.direction,
+					hasInvoice: Boolean(input.invoice_id),
+					hasPurchase: Boolean(input.purchase_id),
+				});
 				throw toAppError(error);
 			}
 		},

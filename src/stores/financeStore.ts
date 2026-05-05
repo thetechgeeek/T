@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { financeService } from '../services/financeService';
 import { eventBus } from '../events/appEvents';
 import { getErrorMessage } from '../errors/AppError';
+import { BUSINESS_PERSISTED_STORE_VERSION, migrateFinanceStore } from './persistedStoreMigrations';
 import type { Expense, Purchase, ProfitLossReport as ProfitLossSummary } from '../types/finance';
 
 // Returns the current Indian financial year range (April 1 – March 31)
@@ -224,13 +225,8 @@ export const useFinanceStore = create<FinanceState>()(
 		{
 			name: 'finance-storage',
 			storage: createJSONStorage(() => AsyncStorage),
-			version: 1,
-			migrate: (persistedState) => {
-				const state = persistedState as Partial<FinanceState>;
-				return {
-					dateRange: state.dateRange ?? { startDate: '', endDate: '' },
-				};
-			},
+			version: BUSINESS_PERSISTED_STORE_VERSION,
+			migrate: migrateFinanceStore,
 			// Persist only the date range. Business records are re-fetched from the DB.
 			partialize: (state: FinanceState) => ({
 				dateRange: state.dateRange,

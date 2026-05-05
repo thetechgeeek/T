@@ -1,6 +1,7 @@
 import { supabase } from '@/src/config/supabase';
 import { ConflictError, toAppError, ValidationError } from '@/src/errors/AppError';
 import { normalizePage, normalizePageSize, resolveSortField } from '@/src/utils/queryGuards';
+import logger from '@/src/utils/logger';
 import type {
 	InventoryItem,
 	InventoryItemInsert,
@@ -189,7 +190,17 @@ export const inventoryService = {
 			p_reference_id: referenceId || null,
 		});
 
-		if (error) throw toAppError(error);
+		if (error) {
+			logger.telemetry('stock.operation.failure', {
+				operationType,
+				hasReference: Boolean(referenceId),
+			});
+			throw toAppError(error);
+		}
+		logger.telemetry('stock.operation.success', {
+			operationType,
+			hasReference: Boolean(referenceId),
+		});
 		return data;
 	},
 

@@ -3,6 +3,9 @@
 import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
+import { ensureCleanDirInsideAllowedRoots } from './lib/destructive-ops.mjs';
+
+const SUPPORTED_PLATFORMS = new Set(['ios', 'android']);
 
 function parseArgs(argv) {
 	const options = {
@@ -37,11 +40,6 @@ function parseArgs(argv) {
 	return options;
 }
 
-function ensureCleanDir(dirPath) {
-	fs.rmSync(dirPath, { recursive: true, force: true });
-	fs.mkdirSync(dirPath, { recursive: true });
-}
-
 function runCommand(command, args, options = {}) {
 	if (options.dryRun) {
 		console.log(
@@ -72,6 +70,9 @@ function runCommand(command, args, options = {}) {
 
 function main() {
 	const options = parseArgs(process.argv.slice(2));
+	if (!SUPPORTED_PLATFORMS.has(options.platform)) {
+		throw new Error(`Unsupported platform: ${options.platform}`);
+	}
 	const artifactRoot = path.join(
 		options.root,
 		'artifacts',
@@ -89,8 +90,8 @@ function main() {
 	);
 
 	if (!options.dryRun) {
-		ensureCleanDir(screenshotDir);
-		ensureCleanDir(debugDir);
+		ensureCleanDirInsideAllowedRoots(screenshotDir, [artifactRoot], 'screenshotDir');
+		ensureCleanDirInsideAllowedRoots(debugDir, [artifactRoot], 'debugDir');
 		fs.mkdirSync(path.dirname(reportPath), { recursive: true });
 	}
 
@@ -134,6 +135,9 @@ function main() {
 
 	if (options.updateBaseline) {
 		compareArgs.push('--update-baseline');
+	}
+	if (options.dryRun) {
+		compareArgs.push('--dry-run');
 	}
 
 	runCommand('node', compareArgs, { cwd: options.root, dryRun: options.dryRun });

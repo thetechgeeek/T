@@ -1,4 +1,4 @@
-import logger, { redactLogMeta } from './logger';
+import logger, { clearTelemetrySink, redactLogMeta, setTelemetrySink } from './logger';
 import {
 	allowExpectedConsoleError,
 	allowExpectedConsoleWarn,
@@ -18,6 +18,7 @@ describe('logger', () => {
 	});
 
 	afterEach(() => {
+		clearTelemetrySink();
 		jest.restoreAllMocks();
 	});
 
@@ -124,6 +125,55 @@ describe('logger', () => {
 			expect(errorSpy).toHaveBeenCalledWith('[ERROR] pii error', redactedError, {
 				authorization: '[REDACTED]',
 			});
+		});
+	});
+
+	describe('telemetry sink', () => {
+		it('forwards redacted warning and error events with release tags', () => {
+			const captureEvent = jest.fn();
+			setTelemetrySink({ captureEvent });
+			allowExpectedConsoleWarn('[WARN] queue backlog');
+			allowExpectedConsoleError('[ERROR] token refresh');
+
+			logger.warn('queue backlog', { phone: '+91 98765 43210', pendingCount: 500 });
+			logger.error('token refresh', new Error('Bearer abc.def failed'), {
+				refresh_token: 'secret',
+			});
+
+			expect(captureEvent).toHaveBeenCalledWith(
+				expect.objectContaining({
+					level: 'warn',
+					message: 'queue backlog',
+					release: expect.any(String),
+					meta: { phone: '[REDACTED]', pendingCount: 500 },
+				}),
+			);
+			expect(captureEvent).toHaveBeenCalledWith(
+				expect.objectContaining({
+					level: 'error',
+					message: 'token refresh',
+					error: { name: 'Error', message: 'Bearer [REDACTED] failed' },
+					meta: { refresh_token: '[REDACTED]' },
+				}),
+			);
+		});
+
+		it('captures explicit business funnel events without requiring console errors', () => {
+			(global as unknown as { __DEV__: boolean }).__DEV__ = false;
+			const captureEvent = jest.fn();
+			setTelemetrySink({ captureEvent });
+
+			logger.telemetry('invoice.create.success', { lineItemCount: 2 });
+
+			expect(infoSpy).not.toHaveBeenCalled();
+			expect(captureEvent).toHaveBeenCalledWith(
+				expect.objectContaining({
+					level: 'telemetry',
+					message: 'invoice.create.success',
+					meta: { lineItemCount: 2 },
+				}),
+			);
+			(global as unknown as { __DEV__: boolean }).__DEV__ = true;
 		});
 	});
 

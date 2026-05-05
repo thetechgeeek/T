@@ -4,6 +4,13 @@ import fs from 'fs';
 import path from 'path';
 import { PNG } from 'pngjs';
 import pixelmatch from 'pixelmatch';
+import {
+	confirmDestructiveOperation,
+	emitDestructiveOperationLog,
+	ensureCleanDirInsideAllowedRoots,
+} from './lib/destructive-ops.mjs';
+
+const SUPPORTED_PLATFORMS = new Set(['ios', 'android']);
 
 function parseArgs(argv) {
 	const options = {
@@ -12,6 +19,7 @@ function parseArgs(argv) {
 		maxDiffRatio: 0.001,
 		updateBaseline: false,
 		dryRun: false,
+		yes: false,
 		root: process.cwd(),
 	};
 
@@ -39,6 +47,8 @@ function parseArgs(argv) {
 			options.updateBaseline = true;
 		} else if (value === '--dry-run') {
 			options.dryRun = true;
+		} else if (value === '--yes') {
+			options.yes = true;
 		}
 	}
 
@@ -47,6 +57,9 @@ function parseArgs(argv) {
 	}
 	if (!options.baselineDir) {
 		throw new Error('Missing required --baseline-dir');
+	}
+	if (!SUPPORTED_PLATFORMS.has(options.platform)) {
+		throw new Error(`Unsupported platform: ${options.platform}`);
 	}
 
 	options.actualDir = path.resolve(options.root, options.actualDir);
@@ -100,17 +113,25 @@ function writePng(filePath, png) {
 	fs.writeFileSync(filePath, PNG.sync.write(png));
 }
 
-function clearDirectory(dirPath) {
-	fs.rmSync(dirPath, { recursive: true, force: true });
-	ensureDir(dirPath);
-}
-
 function formatPercent(value) {
 	return `${(value * 100).toFixed(2)}%`;
 }
 
-function main() {
+async function main() {
 	const options = parseArgs(process.argv.slice(2));
+	const allowedBaselineRoot = path.join(
+		options.root,
+		'artifacts',
+		'design-system-baselines',
+		options.platform,
+	);
+	const allowedDiffRoot = path.join(
+		options.root,
+		'artifacts',
+		'design-system-proof',
+		options.platform,
+		'diff',
+	);
 	const actualFiles = walkPngs(options.actualDir);
 
 	if (actualFiles.length === 0) {
@@ -118,36 +139,44 @@ function main() {
 	}
 
 	if (options.updateBaseline) {
+		await confirmDestructiveOperation({
+			argv: options.yes ? ['--yes'] : process.argv.slice(2),
+			dryRun: options.dryRun,
+			operationName: 'design-system baseline update',
+			confirmationPhrase: 'UPDATE DESIGN BASELINE',
+			target: {
+				projectRef: options.platform,
+			},
+		});
+
 		if (options.dryRun) {
-			console.log(
-				JSON.stringify(
-					{
-						ok: true,
-						dryRun: true,
-						action: 'update-design-system-baseline',
-						platform: options.platform,
-						actualFiles: actualFiles.length,
-						baselineDir: options.baselineDir,
-					},
-					null,
-					2,
-				),
-			);
+			emitDestructiveOperationLog({
+				ok: true,
+				dryRun: true,
+				action: 'update-design-system-baseline',
+				platform: options.platform,
+				actualFiles: actualFiles.length,
+				baselineDir: options.baselineDir,
+			});
 			return;
 		}
 
-		clearDirectory(options.baselineDir);
+		ensureCleanDirInsideAllowedRoots(options.baselineDir, [allowedBaselineRoot], 'baselineDir');
 		for (const file of actualFiles) {
 			copyFile(file.path, path.join(options.baselineDir, file.name));
 		}
-		console.log(
-			`Updated ${actualFiles.length} ${options.platform} design-system baselines in ${options.baselineDir}`,
-		);
+		emitDestructiveOperationLog({
+			ok: true,
+			action: 'update-design-system-baseline',
+			platform: options.platform,
+			actualFiles: actualFiles.length,
+			baselineDir: options.baselineDir,
+		});
 		return;
 	}
 
 	if (!options.dryRun) {
-		clearDirectory(options.diffDir);
+		ensureCleanDirInsideAllowedRoots(options.diffDir, [allowedDiffRoot], 'diffDir');
 	}
 
 	const failures = [];
@@ -210,4 +239,7 @@ function main() {
 	);
 }
 
-main();
+main().catch((error) => {
+	console.error(error instanceof Error ? error.message : String(error));
+	process.exit(1);
+});

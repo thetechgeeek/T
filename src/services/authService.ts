@@ -30,7 +30,13 @@ export const authService = {
 
 	async signIn(email: string, password: string) {
 		const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-		if (error) throw wrapAuthError(error, 'Invalid credentials.');
+		if (error) {
+			logger.telemetry('auth.sign_in.failure', {
+				status: error.status,
+			});
+			throw wrapAuthError(error, 'Invalid credentials.');
+		}
+		logger.telemetry('auth.sign_in.success', { provider: 'password' });
 		return data;
 	},
 
@@ -51,9 +57,13 @@ export const authService = {
 			async () => {
 				const { data, error } = await supabase.auth.refreshSession();
 				if (error) {
-					logger.error('Token refresh failed', new Error(error.message));
+					logger.error('Token refresh failed', new Error(error.message), {
+						event: 'auth.token_refresh.failure',
+						status: error.status,
+					});
 					throw wrapAuthError(error, 'Session refresh failed. Please sign in again.');
 				}
+				logger.telemetry('auth.token_refresh.success');
 				return data.session;
 			},
 			{

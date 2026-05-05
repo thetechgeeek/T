@@ -3,6 +3,9 @@
  */
 
 import { WriteQueueService, type QueuedMutation } from './writeQueueService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
+import { clearTelemetrySink, setTelemetrySink } from '../utils/logger';
 
 // Mock AsyncStorage
 const mockStorage: Record<string, string> = {};
@@ -24,7 +27,13 @@ describe('WriteQueueService', () => {
 	beforeEach(() => {
 		// Clear storage between tests
 		Object.keys(mockStorage).forEach((k) => delete mockStorage[k]);
+		jest.clearAllMocks();
+		clearTelemetrySink();
 		service = new WriteQueueService();
+	});
+
+	afterEach(() => {
+		clearTelemetrySink();
 	});
 
 	it('enqueue adds a mutation to the queue', async () => {
@@ -149,6 +158,48 @@ describe('WriteQueueService', () => {
 		).rejects.toThrow(/queue is full/);
 	});
 
+	it('emits telemetry and diagnostics when the queue is full', async () => {
+		const captureEvent = jest.fn();
+		setTelemetrySink({ captureEvent });
+
+		for (let i = 0; i < 500; i++) {
+			await service.enqueue({
+				id: `mut-${i}`,
+				type: 'insert',
+				table: 't',
+				payload: {},
+				idempotencyKey: `k-${i}`,
+				retryCount: 0,
+			});
+		}
+
+		await expect(
+			service.enqueue({
+				id: 'mut-overflow',
+				type: 'insert',
+				table: 't',
+				payload: {},
+				idempotencyKey: 'k-overflow',
+				retryCount: 0,
+			}),
+		).rejects.toThrow(/queue is full/);
+
+		expect(captureEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				level: 'telemetry',
+				message: 'offline_queue.full',
+				meta: expect.objectContaining({ pendingCount: 500 }),
+			}),
+		);
+		await expect(service.getDiagnostics()).resolves.toEqual(
+			expect.objectContaining({
+				pendingCount: 500,
+				deadLetterCount: 0,
+				lastQueueFullAt: expect.any(String),
+			}),
+		);
+	});
+
 	it('replay executes in priority order (high to low)', async () => {
 		// Lower priority added first
 		await service.enqueue({
@@ -222,5 +273,104 @@ describe('WriteQueueService', () => {
 
 		// Within same priority 100, earlier pendingAt should execute first
 		expect(executionOrder).toEqual(['first-added', 'second-added']);
+	});
+
+	it('moves exhausted retries to dead letter and exposes a support snapshot', async () => {
+		const captureEvent = jest.fn();
+		setTelemetrySink({ captureEvent });
+		await service.enqueue({
+			id: 'will-dead-letter',
+			type: 'update',
+			table: 'invoices',
+			payload: { customer_phone: '9876543210' },
+			idempotencyKey: 'dead-letter-key',
+			retryCount: 2,
+			lastAttemptAt: new Date(Date.now() - 30_000).toISOString(),
+		});
+
+		await service.replay(jest.fn().mockRejectedValue(new Error('network down')));
+
+		expect(await service.getPendingCount()).toBe(0);
+		expect(await service.getDeadLetterCount()).toBe(1);
+		await expect(service.getSupportSnapshot()).resolves.toEqual(
+			expect.objectContaining({
+				diagnostics: expect.objectContaining({
+					pendingCount: 0,
+					deadLetterCount: 1,
+					lastReplayError: 'network down',
+					lastDeadLetterAt: expect.any(String),
+				}),
+				deadLetter: [
+					expect.objectContaining({
+						id: 'will-dead-letter',
+						table: 'invoices',
+						retryCount: 3,
+						lastError: 'network down',
+					}),
+				],
+			}),
+		);
+		expect(captureEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				message: 'offline_queue.dead_letter',
+				meta: expect.objectContaining({ table: 'invoices', retryCount: 3 }),
+			}),
+		);
+	});
+
+	it('cleans up dead-letter entries older than the seven-day TTL', async () => {
+		mockStorage['@writeQueue/deadLetter'] = JSON.stringify([
+			{
+				id: 'old',
+				type: 'insert',
+				table: 'customers',
+				payload: {},
+				idempotencyKey: 'old',
+				retryCount: 3,
+				lastAttemptAt: '2026-04-01T00:00:00.000Z',
+			},
+			{
+				id: 'fresh',
+				type: 'insert',
+				table: 'customers',
+				payload: {},
+				idempotencyKey: 'fresh',
+				retryCount: 3,
+				lastAttemptAt: '2026-05-04T00:00:00.000Z',
+			},
+		]);
+
+		await expect(
+			service.clearExpiredDeadLetters(new Date('2026-05-05T00:00:00.000Z')),
+		).resolves.toBe(1);
+
+		expect(await service.readDeadLetter()).toEqual([expect.objectContaining({ id: 'fresh' })]);
+	});
+
+	it('wraps AsyncStorage quota failures with a recoverable app error', async () => {
+		allowExpectedConsoleError('[ERROR] Offline queue storage write failed');
+		(AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error('Quota exceeded'));
+
+		await expect(
+			service.enqueue({
+				id: 'quota',
+				type: 'insert',
+				table: 'customers',
+				payload: {},
+				idempotencyKey: 'quota',
+				retryCount: 0,
+			}),
+		).rejects.toMatchObject({
+			code: 'WRITE_QUEUE_STORAGE_ERROR',
+			userMessage:
+				'Your device could not save offline changes. Free up storage and try again.',
+		});
+
+		await expect(service.getDiagnostics()).resolves.toEqual(
+			expect.objectContaining({
+				lastStorageError: 'Quota exceeded',
+				lastStorageErrorAt: expect.any(String),
+			}),
+		);
 	});
 });

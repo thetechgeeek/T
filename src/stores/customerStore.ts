@@ -6,6 +6,7 @@ import { customerService } from '../services/customerService';
 import { eventBus } from '../events/appEvents';
 import { getErrorMessage } from '../errors/AppError';
 import { withRetry } from '../utils/retry';
+import { BUSINESS_PERSISTED_STORE_VERSION, migrateCustomerStore } from './persistedStoreMigrations';
 import type {
 	Customer,
 	CustomerInsert,
@@ -192,18 +193,8 @@ export const useCustomerStore = create<CustomerState>()(
 		{
 			name: 'customer-storage',
 			storage: createJSONStorage(() => AsyncStorage),
-			version: 1,
-			migrate: (persistedState) => {
-				const state = persistedState as Partial<CustomerState>;
-				return {
-					filters: {
-						search: '',
-						type: state.filters?.type ?? 'ALL',
-						sortBy: state.filters?.sortBy ?? 'name',
-						sortDir: state.filters?.sortDir ?? 'asc',
-					},
-				};
-			},
+			version: BUSINESS_PERSISTED_STORE_VERSION,
+			migrate: migrateCustomerStore,
 			partialize: (state: CustomerState) => ({
 				filters: {
 					...state.filters,

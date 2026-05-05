@@ -6,6 +6,7 @@ import { invoiceService } from '../services/invoiceService';
 import { eventBus } from '../events/appEvents';
 import { getErrorMessage } from '../errors/AppError';
 import { withRetry } from '../utils/retry';
+import { BUSINESS_PERSISTED_STORE_VERSION, migrateInvoiceStore } from './persistedStoreMigrations';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
 import type { UUID } from '../types/common';
 
@@ -133,17 +134,8 @@ export const useInvoiceStore = create<InvoiceState>()(
 		{
 			name: 'invoice-storage',
 			storage: createJSONStorage(() => AsyncStorage),
-			version: 1,
-			migrate: (persistedState) => {
-				const state = persistedState as Partial<InvoiceState>;
-				return {
-					filters: {
-						...state.filters,
-						search: undefined,
-						customer_id: undefined,
-					},
-				};
-			},
+			version: BUSINESS_PERSISTED_STORE_VERSION,
+			migrate: migrateInvoiceStore,
 			partialize: (state: InvoiceState) => ({
 				filters: {
 					...state.filters,

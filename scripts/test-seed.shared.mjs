@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import scriptConfig from './lib/script-config.cjs';
 
 const { resolveTestSeedEnv } = scriptConfig;
-const seedEnv = resolveTestSeedEnv({
+export const seedEnv = resolveTestSeedEnv({
 	envFilePath: '.env.test',
 	env: process.env,
 });

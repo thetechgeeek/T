@@ -11,6 +11,10 @@ import { inventoryService } from '../services/inventoryService';
 import { eventBus } from '../events/appEvents';
 import { getErrorMessage } from '../errors/AppError';
 import { withRetry } from '../utils/retry';
+import {
+	BUSINESS_PERSISTED_STORE_VERSION,
+	migrateInventoryStore,
+} from './persistedStoreMigrations';
 import type {
 	InventoryItem,
 	InventoryItemInsert,
@@ -345,17 +349,8 @@ export const useInventoryStore = create<InventoryState>()(
 		{
 			name: 'inventory-storage',
 			storage: createJSONStorage(() => AsyncStorage),
-			version: 1,
-			migrate: (persistedState) => {
-				const state = persistedState as Partial<InventoryState>;
-				return {
-					filters: {
-						...DEFAULT_FILTERS,
-						...state.filters,
-						search: '',
-					},
-				};
-			},
+			version: BUSINESS_PERSISTED_STORE_VERSION,
+			migrate: migrateInventoryStore,
 			partialize: (state: InventoryState) => ({
 				filters: {
 					...state.filters,

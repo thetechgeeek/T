@@ -39,8 +39,12 @@ Scripts:
 - `npm run test:seed:verify`
 - `npm run test:integration`
 
-`test:seed:reset` will use `SUPABASE_TEST_SERVICE_ROLE_KEY` when present.
-If it is missing, it falls back to fetching the service-role key through the Supabase CLI for the linked test project, and finally to an authenticated integration-user reset path when table policies allow it.
+`test:seed:reset` will use `SUPABASE_TEST_SERVICE_ROLE_KEY` when present. If it is missing, it falls
+back to the authenticated integration-user reset path when table policies allow it.
+
+Before deleting seed data, the reset script prints the target Supabase URL/project ref, blocks
+production mode, requires the project ref in `SUPABASE_TEST_PROJECT_REF_ALLOWLIST`, and requires
+local confirmation unless `CI=true`, `--yes`, or `--dry-run` is used.
 
 `test:integration` verifies seeded state before running the real backend suite.
 

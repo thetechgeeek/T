@@ -34,6 +34,14 @@ const COMMANDS = {
 		script: 'check-runtime-boundaries.mjs',
 		class: 'runtime governance',
 	},
+	'check:migrations': {
+		script: 'check-supabase-migrations.mjs',
+		class: 'database governance',
+	},
+	'check:db-types': {
+		script: 'check-database-types.mjs',
+		class: 'database governance',
+	},
 	'generate:tokens': { script: 'generate-design-tokens.mjs', class: 'build' },
 	'generate:ui-library': { script: 'generate-ui-library-catalog.mjs', class: 'build' },
 	'generate:component-catalog': { script: 'generate-component-catalog.mjs', class: 'build' },

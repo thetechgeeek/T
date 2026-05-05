@@ -5,6 +5,7 @@ import { validateWith } from '../utils/validation';
 import { generateUUID } from '../utils/uuid';
 import { normalizePage, normalizePageSize, resolveSortField } from '@/src/utils/queryGuards';
 import { InvoiceInputSchema } from '../schemas/invoice';
+import logger from '../utils/logger';
 import type { Invoice, InvoiceInput, InvoiceFilters } from '../types/invoice';
 import type { UUID } from '../types/common';
 
@@ -120,9 +121,17 @@ export function createInvoiceService(repo = invoiceRepository) {
 
 			try {
 				const result = await repo.createAtomic(invoiceData, lineItems);
+				logger.telemetry('invoice.create.success', {
+					lineItemCount: lineItems.length,
+					paymentStatus: invoiceData.payment_status,
+					hasAmountPaid: Boolean(invoiceData.amount_paid),
+				});
 				// Re-fetch to return full Invoice type for store consistency
 				return await repo.findById(result.id);
 			} catch (error: unknown) {
+				logger.telemetry('invoice.create.failure', {
+					lineItemCount: lineItems.length,
+				});
 				throw toAppError(error);
 			}
 		},

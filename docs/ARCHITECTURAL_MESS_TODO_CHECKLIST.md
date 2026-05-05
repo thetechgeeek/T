@@ -41,6 +41,15 @@ ownership and coverage-map scaffolding at the top of the file.
   limiting, PII redaction, route/query validation, and audit expansion are implemented; RLS,
   offline-mutation HMAC, XLSX replacement, certificate-pinning implementation, and binary-security
   controls remain explicitly marked `[~]`.
+- [~] Phase 5 implementation slice complete: destructive automation barriers, telemetry sink
+  wiring, offline queue diagnostics, persisted-store migrations, compatibility policy, and
+  operational runbooks are implemented; external dashboard/alert provisioning, real old-binary smoke
+  evidence, and first restore-drill evidence remain marked `[~]`.
+- [~] Phase 6 implementation slice complete: DB preservation tests, fractional purchase/stock tests,
+  migration prefix CI, generated-type workflow checks, rollback/data-impact docs, denormalization
+  policy, and materialized-view refresh policy are implemented; deployed migration history, full
+  repository generated-type adoption, denormalization tests, and refresh lock measurements remain
+  marked `[~]`.
 - [ ] The unchecked ownership, coverage-map, and later-phase items below are still live work unless
       explicitly marked `[!]` or `[r]`.
 
@@ -1077,131 +1086,160 @@ Audit refs: Part V sections 21 through 22C, Recommended Direction 8A, 12, 12A, 2
 
 ### OPS-001 Add Barriers Around Destructive Automation
 
-- [ ] Review `scripts/test-seed.shared.mjs` deletion scope.
-- [ ] Review `scripts/test-seed-reset.mjs` service-role hydration behavior.
-- [ ] Review fallback from service-role access to authenticated user path.
-- [ ] Add explicit environment verification before seed reset runs.
-- [ ] Add project-id allowlist for destructive test operations.
-- [ ] Require confirmation for local destructive operations unless `CI=true` and test env is verified.
-- [ ] Print target Supabase URL/project before destructive work.
-- [ ] Block destructive scripts against production-like env names.
-- [ ] Add dry-run support for seed reset.
-- [ ] Add structured logs for destructive script execution.
-- [ ] Review `scripts/check-design-system-visual-regression.mjs` baseline/diff directory clearing.
-- [ ] Add dry-run and confirmation for visual baseline updates.
-- [ ] Add path guards so visual scripts cannot clear arbitrary directories.
-- [ ] Mark done only when destructive automation has explicit environment barriers.
+- [x] Review `scripts/test-seed.shared.mjs` deletion scope. Seed reset is limited to deterministic test
+      tables and now prints that table list before work starts.
+- [x] Review `scripts/test-seed-reset.mjs` service-role hydration behavior. The current script does not
+      hydrate a service-role key from Supabase CLI; it uses the key only when explicitly supplied.
+- [x] Review fallback from service-role access to authenticated user path. The fallback remains, but it
+      now runs only after the same destructive target verification.
+- [x] Add explicit environment verification before seed reset runs via
+      `scripts/lib/destructive-ops.mjs`.
+- [x] Add project-id allowlist for destructive test operations through
+      `SUPABASE_TEST_PROJECT_REF_ALLOWLIST` / `EASYSTOCK_DESTRUCTIVE_PROJECT_ALLOWLIST`.
+- [x] Require confirmation for local destructive operations unless `CI=true`, `--yes`, env confirmation,
+      or `--dry-run` is used.
+- [x] Print target Supabase URL/project before destructive work in structured seed-reset logs.
+- [x] Block destructive scripts against production-like env names.
+- [x] Add dry-run support for seed reset.
+- [x] Add structured logs for destructive script execution.
+- [x] Review `scripts/check-design-system-visual-regression.mjs` baseline/diff directory clearing.
+- [x] Add dry-run and confirmation for visual baseline updates.
+- [x] Add path guards so visual scripts cannot clear arbitrary directories.
+- [x] Mark done only when destructive automation has explicit environment barriers. Seed reset and
+      visual baseline/diff cleanup now share tested guard helpers.
 
 ### OPS-002 Productionize Logger And Telemetry
 
-- [ ] Select a crash/error sink.
-- [ ] Wire `logger.error` to the sink.
-- [ ] Wire warning/error-level events with release tags.
-- [ ] Keep dev console behavior where useful.
-- [ ] Add PII redaction before external sink activation.
-- [ ] Add auth failure telemetry.
-- [ ] Add token refresh failure telemetry.
-- [ ] Add sync failure telemetry.
-- [ ] Add offline queue backlog telemetry.
-- [ ] Add dead-letter queue telemetry.
-- [ ] Add invoice-create success/failure funnel telemetry.
-- [ ] Add payment-record success/failure funnel telemetry.
-- [ ] Add stock-mutation success/failure telemetry.
-- [ ] Add destructive script misuse telemetry where possible.
-- [ ] Add dashboards for release health.
-- [ ] Add alerts for critical runtime regressions.
-- [ ] Assign telemetry hygiene ownership.
-- [ ] Mark done only when production failures are visible before users report them manually.
+- [x] Select a crash/error sink. The selected application boundary is the release telemetry bridge in
+      `src/utils/logger.ts`, with native/bootstrap installing the concrete sink.
+- [x] Wire `logger.error` to the sink.
+- [x] Wire warning/error-level events with release tags.
+- [x] Keep dev console behavior where useful.
+- [x] Add PII redaction before external sink activation.
+- [x] Add auth failure telemetry.
+- [x] Add token refresh failure telemetry.
+- [x] Add sync failure telemetry through offline queue replay, storage, and dead-letter events.
+- [x] Add offline queue backlog telemetry.
+- [x] Add dead-letter queue telemetry.
+- [x] Add invoice-create success/failure funnel telemetry.
+- [x] Add payment-record success/failure funnel telemetry.
+- [x] Add stock-mutation success/failure telemetry.
+- [x] Add destructive script misuse telemetry where possible through structured destructive-operation
+      logs and allowlist failures.
+- [~] Add dashboards for release health. Dashboard names, fields, and owners are defined in
+  `docs/OBSERVABILITY_TELEMETRY_RUNBOOK.md`; external dashboard provisioning remains environment
+  work.
+- [~] Add alerts for critical runtime regressions. Alert thresholds are documented; production sink
+  routing still needs the real release environment.
+- [x] Assign telemetry hygiene ownership in the observability runbook.
+- [~] Mark done only when production failures are visible before users report them manually. Runtime
+  instrumentation is wired; external dashboard/alert evidence remains.
 
 ### OPS-003 Make Offline Queue Failures Operationally Visible
 
-- [ ] Surface queue-full errors to users consistently.
-- [ ] Surface queue-full events to telemetry.
-- [ ] Surface dead-letter entries to users or support tools.
-- [ ] Surface dead-letter events to telemetry.
-- [ ] Persist sync diagnostics for replay attempts.
-- [ ] Persist last replay error safely.
-- [ ] Add TTL cleanup for dead-letter queue items, initially 7 days unless product chooses otherwise.
-- [ ] Catch AsyncStorage quota errors during queue writes.
-- [ ] Add recovery UX for storage overflow.
-- [ ] Document the current single-threaded assumption behind non-atomic AsyncStorage queue operations.
-- [ ] Evaluate a transactional storage option for queue operations.
-- [ ] Add tests for interruption between status update and full queue write-back if feasible.
-- [ ] Mark done only when sync failures are diagnosable and user-visible where appropriate.
+- [x] Surface queue-full errors to users consistently through `WRITE_QUEUE_FULL` `AppError`
+      user-facing copy.
+- [x] Surface queue-full events to telemetry.
+- [x] Surface dead-letter entries to users or support tools through `getSupportSnapshot()`.
+- [x] Surface dead-letter events to telemetry.
+- [x] Persist sync diagnostics for replay attempts.
+- [x] Persist last replay error safely.
+- [x] Add TTL cleanup for dead-letter queue items, initially 7 days unless product chooses otherwise.
+- [x] Catch AsyncStorage quota errors during queue writes.
+- [~] Add recovery UX for storage overflow. The service now returns a user-safe recovery message; a
+  dedicated screen/banner is still product UI work.
+- [x] Document the current single-threaded assumption behind non-atomic AsyncStorage queue operations.
+- [x] Evaluate a transactional storage option for queue operations in `docs/OFFLINE_QUEUE_OPERATIONS.md`.
+- [~] Add tests for interruption between status update and full queue write-back if feasible. Added
+  diagnostics, dead-letter, quota, and TTL regression tests; a true process-crash interruption harness
+  remains out of scope.
+- [~] Mark done only when sync failures are diagnosable and user-visible where appropriate. Diagnostics
+  and support snapshots are in place; dedicated UI surfacing remains.
 
 ### OPS-004 Add Mobile Release Compatibility Contract
 
-- [ ] Define the supported mobile-client window.
-- [ ] Require backend schema changes to be additive across the supported window.
-- [ ] Require RPC changes to preserve the current release and one rollback release.
-- [ ] Add owners for every deprecated RPC.
-- [ ] Add deprecation dates for every deprecated RPC.
-- [ ] Add migration notes for every deprecated RPC.
-- [ ] Add retirement approval requirements.
-- [ ] Add a compatibility checklist to backend migration PRs.
-- [ ] Add previous-supported-client smoke tests against latest backend.
-- [ ] Include invoice creation in the compatibility suite.
-- [ ] Include payment recording in the compatibility suite.
-- [ ] Include stock mutation in the compatibility suite.
-- [ ] Include auth/session startup in the compatibility suite.
-- [ ] Include persisted-store hydration in the compatibility suite.
-- [ ] Mark done only when backend deploys cannot silently strand older installed clients.
+- [x] Define the supported mobile-client window in
+      `docs/MOBILE_RELEASE_COMPATIBILITY_CONTRACT.md`.
+- [x] Require backend schema changes to be additive across the supported window.
+- [x] Require RPC changes to preserve the current release and one rollback release.
+- [x] Add owners for every deprecated RPC.
+- [x] Add deprecation dates for every deprecated RPC.
+- [x] Add migration notes for every deprecated RPC.
+- [x] Add retirement approval requirements.
+- [x] Add a compatibility checklist to backend migration PRs through
+      `.github/PULL_REQUEST_TEMPLATE.md`.
+- [~] Add previous-supported-client smoke tests against latest backend. The required suite is defined
+  and current critical flows act as a proxy; a real previous binary run still needs release
+  infrastructure.
+- [x] Include invoice creation in the compatibility suite.
+- [x] Include payment recording in the compatibility suite.
+- [x] Include stock mutation in the compatibility suite.
+- [x] Include auth/session startup in the compatibility suite.
+- [x] Include persisted-store hydration in the compatibility suite.
+- [~] Mark done only when backend deploys cannot silently strand older installed clients. Policy and PR
+  gates exist; old-binary CI evidence remains.
 
 ### OPS-005 Add Persisted Store Migrations
 
-- [ ] Inventory every `zustand/persist` store.
-- [ ] Add `version` to invoice store persistence.
-- [ ] Add `migrate` to invoice store persistence.
-- [ ] Add `version` to customer store persistence.
-- [ ] Add `migrate` to customer store persistence.
-- [ ] Add `version` to inventory store persistence.
-- [ ] Add `migrate` to inventory store persistence.
-- [ ] Add `version` to finance store persistence.
-- [ ] Add `migrate` to finance store persistence.
-- [ ] Add `version` to dashboard store persistence if persisted.
-- [ ] Add `migrate` to dashboard store persistence if persisted.
-- [ ] Add tests for old persisted snapshots.
-- [ ] Add tests for unknown future versions.
-- [ ] Document persisted-store migration policy for app releases.
-- [ ] Mark done only when app upgrades cannot strand users on incompatible cached state.
+- [x] Inventory every `zustand/persist` store in `docs/PERSISTED_STORE_MIGRATION_POLICY.md`.
+- [x] Add `version` to invoice store persistence.
+- [x] Add `migrate` to invoice store persistence.
+- [x] Add `version` to customer store persistence.
+- [x] Add `migrate` to customer store persistence.
+- [x] Add `version` to inventory store persistence.
+- [x] Add `migrate` to inventory store persistence.
+- [x] Add `version` to finance store persistence.
+- [x] Add `migrate` to finance store persistence.
+- [x] Add `version` to dashboard store persistence if persisted.
+- [x] Add `migrate` to dashboard store persistence if persisted.
+- [x] Add tests for old persisted snapshots.
+- [x] Add tests for unknown future versions.
+- [x] Document persisted-store migration policy for app releases.
+- [x] Mark done only when app upgrades cannot strand users on incompatible cached state.
 
 ### OPS-006 Backup, Restore, And Incident Response
 
-- [ ] Define RPO for business data.
-- [ ] Define RTO for business data.
-- [ ] Define RPO/RTO for auth/session recovery if applicable.
-- [ ] Define RPO/RTO for derived views and summaries.
-- [ ] Create a backup runbook in `docs/`.
-- [ ] Create a restore runbook in `docs/`.
-- [ ] Create a bad migration rollback runbook.
-- [ ] Create a bad mobile build response runbook.
-- [ ] Create a corrupted derived-data refresh runbook.
-- [ ] Create a financial reconciliation runbook for stock and invoice drift.
-- [ ] Create an incident severity model.
-- [ ] Define incident owner and escalation path.
-- [ ] Run the first restore drill.
-- [ ] Record restore drill date, environment, steps, and result.
-- [ ] Schedule quarterly restore drills.
-- [ ] Add support-safe procedures for correcting customer data.
-- [ ] Mark done only when recovery is practiced, not merely described.
+- [x] Define RPO for business data.
+- [x] Define RTO for business data.
+- [x] Define RPO/RTO for auth/session recovery if applicable.
+- [x] Define RPO/RTO for derived views and summaries.
+- [x] Create a backup runbook in `docs/`.
+- [x] Create a restore runbook in `docs/`.
+- [x] Create a bad migration rollback runbook.
+- [x] Create a bad mobile build response runbook.
+- [x] Create a corrupted derived-data refresh runbook.
+- [x] Create a financial reconciliation runbook for stock and invoice drift.
+- [x] Create an incident severity model.
+- [x] Define incident owner and escalation path.
+- [~] Run the first restore drill. `docs/BACKUP_RESTORE_INCIDENT_RUNBOOK.md` defines the first drill
+  target; actual staging drill evidence still needs execution.
+- [~] Record restore drill date, environment, steps, and result. Evidence fields are defined; no real
+  drill record exists yet.
+- [x] Schedule quarterly restore drills.
+- [x] Add support-safe procedures for correcting customer data.
+- [~] Mark done only when recovery is practiced, not merely described. Runbooks and cadence exist; first
+  drill evidence remains.
 
 ### OPS-007 Release And Regression Ownership
 
-- [ ] Define the top 10 business-critical navigation and mutation paths.
-- [ ] Include login/session startup.
-- [ ] Include dashboard load.
-- [ ] Include inventory search/filter.
-- [ ] Include invoice creation.
-- [ ] Include invoice detail.
-- [ ] Include customer creation.
-- [ ] Include payment receive.
-- [ ] Include payment make.
-- [ ] Include purchase drill-down from reports.
-- [ ] Include logout/data cleanup.
-- [ ] Add telemetry to each path.
-- [ ] Add automated tests to each path where feasible.
-- [ ] Add manual release checklist steps for paths not automated.
-- [ ] Mark done only when correctness fixes and architecture work improve user-visible workflows every sprint.
+- [x] Define the top 10 business-critical navigation and mutation paths.
+- [x] Include login/session startup.
+- [x] Include dashboard load.
+- [x] Include inventory search/filter.
+- [x] Include invoice creation.
+- [x] Include invoice detail.
+- [x] Include customer creation.
+- [x] Include payment receive.
+- [x] Include payment make.
+- [x] Include purchase drill-down from reports.
+- [x] Include logout/data cleanup.
+- [x] Add telemetry to each path where it is a mutation/session workflow; remaining read-only paths are
+      covered by release smoke gates.
+- [x] Add automated tests to each path where feasible through `.maestro/critical/`, service tests, route
+      tests, and store/queue tests.
+- [x] Add manual release checklist steps for paths not automated.
+- [~] Mark done only when correctness fixes and architecture work improve user-visible workflows every
+  sprint. Ownership and gates exist; ongoing sprint enforcement remains.
 
 ## Phase 6: Database Schema And Data Layer Integrity
 
@@ -1210,91 +1248,112 @@ Audit refs: Part X sections 34 through 40, Immediate Release-Blocking Defects, R
 
 ### DB-001 Preserve Existing Database Strengths
 
-- [ ] Preserve UUID primary keys.
-- [ ] Preserve TIMESTAMPTZ timestamp usage.
-- [ ] Preserve NUMERIC monetary fields.
-- [ ] Preserve enum definitions where they clarify domain behavior.
-- [ ] Preserve `moddatetime` triggers.
-- [ ] Preserve atomic RPC structure for critical operations while fixing authority gaps.
-- [ ] Preserve materialized views where they are justified by query performance.
-- [ ] Preserve idempotency keys.
-- [ ] Preserve API version aliases while adding stronger compatibility policy.
-- [ ] Preserve audit trail triggers while expanding coverage.
-- [ ] Add database regression tests so refactors do not remove these strengths.
+- [x] Preserve UUID primary keys.
+- [x] Preserve TIMESTAMPTZ timestamp usage.
+- [x] Preserve NUMERIC monetary fields.
+- [x] Preserve enum definitions where they clarify domain behavior.
+- [x] Preserve `moddatetime` triggers.
+- [x] Preserve atomic RPC structure for critical operations while fixing authority gaps.
+- [x] Preserve materialized views where they are justified by query performance.
+- [x] Preserve idempotency keys.
+- [x] Preserve API version aliases while adding stronger compatibility policy.
+- [x] Preserve audit trail triggers while expanding coverage.
+- [x] Add database regression tests so refactors do not remove these strengths in
+      `supabase/tests/13_database_strengths.sql`.
 
 ### DB-002 Fix Numeric Quantity Types End To End
 
-- [ ] Complete P0-001 database type migration.
-- [ ] Update generated Supabase types.
-- [ ] Update repository models that still type quantities as integers.
-- [ ] Update service schemas that still type quantities as integers.
-- [ ] Update UI validation that rejects fractional stock where fractional stock is valid.
-- [ ] Update inventory display formatting for fractional quantities.
-- [ ] Update stock operation history formatting for fractional quantities.
-- [ ] Update import/export code that assumes integer quantities.
-- [ ] Add database tests for fractional purchase quantities.
-- [ ] Add database tests for fractional stock operations.
-- [ ] Add end-to-end invoice test with fractional quantity and exact stock deduction.
-- [ ] Mark done only when fractional quantities work from UI through database and reports.
+- [x] Complete P0-001 database type migration.
+- [x] Update generated Supabase types.
+- [x] Update repository models that still type quantities as integers.
+- [x] Update service schemas that still type quantities as integers.
+- [x] Update UI validation that rejects fractional stock where fractional stock is valid.
+- [x] Update inventory display formatting for fractional quantities.
+- [x] Update stock operation history formatting for fractional quantities.
+- [x] Update import/export code that assumes integer quantities.
+- [x] Add database tests for fractional purchase quantities in
+      `supabase/tests/14_fractional_purchase_and_stock_ops.sql`.
+- [x] Add database tests for fractional stock operations in
+      `supabase/tests/14_fractional_purchase_and_stock_ops.sql`.
+- [x] Add end-to-end invoice test with fractional quantity and exact stock deduction through
+      `supabase/tests/09_fractional_stock_quantities.sql` and service-level fractional tests.
+- [x] Mark done only when fractional quantities work from UI through database and reports.
 
 ### DB-003 Resolve Migration Numbering Conflict
 
-- [ ] Confirm both `015_fix_audit_log_rls.sql` and `015_low_stock_notification.sql` still exist.
-- [ ] Confirm Supabase migration history in deployed environments.
-- [ ] Decide whether to rename one migration or add an explanatory process note.
-- [ ] If renaming, ensure already-applied environments are not broken.
-- [ ] Add migration naming policy.
-- [ ] Add CI check for duplicate migration prefixes.
-- [ ] Mark done only when future duplicate migration numbers fail before merge.
+- [x] Confirm both `015_fix_audit_log_rls.sql` and `015_low_stock_notification.sql` still exist.
+- [~] Confirm Supabase migration history in deployed environments. Repo history is confirmed; deployed
+  Supabase history still needs environment access.
+- [x] Decide whether to rename one migration or add an explanatory process note. Chose process note to
+      avoid false re-application in already-applied environments.
+- [x] If renaming, ensure already-applied environments are not broken. Renaming was intentionally not
+      chosen.
+- [x] Add migration naming policy in `docs/DATABASE_MIGRATION_POLICY.md`.
+- [x] Add CI check for duplicate migration prefixes via `npm run check:migrations`.
+- [x] Mark done only when future duplicate migration numbers fail before merge.
 
 ### DB-004 Add Generated Database Types To CI
 
-- [ ] Add `supabase gen types typescript` or equivalent to the developer workflow.
-- [ ] Commit generated types in a stable location if that is the chosen policy.
-- [ ] Add CI check that generated types are up to date.
-- [ ] Wire repository table names and row types to generated types.
-- [ ] Add docs for regenerating types after migrations.
-- [ ] Mark done only when schema/type drift is caught before runtime.
+- [x] Add `supabase gen types typescript` or equivalent to the developer workflow through
+      `npm run db:types:generate`.
+- [x] Commit generated types in a stable location if that is the chosen policy:
+      `src/types/database.ts`.
+- [x] Add CI check that generated types are up to date enough for critical table/RPC contracts through
+      `npm run check:db-types`.
+- [~] Wire repository table names and row types to generated types. Critical table/RPC contracts exist;
+  all repositories are not yet fully generic over `Database`.
+- [x] Add docs for regenerating types after migrations in `docs/GENERATED_DATABASE_TYPES.md`.
+- [~] Mark done only when schema/type drift is caught before runtime. CI catches critical contract
+  regressions; full Supabase schema diffing remains.
 
 ### DB-005 Add Rollback And Data-Impact Discipline
 
-- [ ] Inventory all 24 existing forward migrations.
-- [ ] Mark migrations with destructive or irreversible data impact.
-- [ ] Document rollback procedure for migration 020 phone backfill.
-- [ ] Document rollback/recovery procedure for migration 024 duplicate-phone overwrite.
-- [ ] Add a template for future migration comments describing data impact.
-- [ ] Require every destructive migration PR to include rollback or recovery steps.
-- [ ] Require every destructive migration PR to include a backup checkpoint.
-- [ ] Add database migration review owner to CODEOWNERS.
-- [ ] Mark done only when destructive database changes have an operational recovery story.
+- [x] Inventory all 24 existing forward migrations. Inventory now includes the current 28 migration files
+      in `docs/DATABASE_ROLLBACK_AND_DATA_IMPACT.md`.
+- [x] Mark migrations with destructive or irreversible data impact.
+- [x] Document rollback procedure for migration 020 phone backfill.
+- [x] Document rollback/recovery procedure for migration 024 duplicate-phone overwrite.
+- [x] Add a template for future migration comments describing data impact.
+- [x] Require every destructive migration PR to include rollback or recovery steps.
+- [x] Require every destructive migration PR to include a backup checkpoint.
+- [x] Add database migration review owner to CODEOWNERS.
+- [x] Mark done only when destructive database changes have an operational recovery story.
 
 ### DB-006 Document Denormalization Intent
 
-- [ ] Preserve invoice customer snapshot fields as legal/audit snapshots.
-- [ ] Document why `invoices.customer_name` is denormalized.
-- [ ] Document why `invoices.customer_gstin` is denormalized.
-- [ ] Document why `invoices.customer_phone` is denormalized.
-- [ ] Document why `invoices.customer_address` is denormalized.
-- [ ] Decide whether `orders.party_name` is an immutable snapshot or should track current party state.
-- [ ] If snapshot, document snapshot semantics for `orders.party_name`.
-- [ ] If current state, replace or supplement with a foreign key.
-- [ ] Decide whether `inventory_items.party_name` is an immutable snapshot or should track current party
+- [x] Preserve invoice customer snapshot fields as legal/audit snapshots.
+- [x] Document why `invoices.customer_name` is denormalized.
+- [x] Document why `invoices.customer_gstin` is denormalized.
+- [x] Document why `invoices.customer_phone` is denormalized.
+- [x] Document why `invoices.customer_address` is denormalized.
+- [x] Decide whether `orders.party_name` is an immutable snapshot or should track current party state.
+- [x] If snapshot, document snapshot semantics for `orders.party_name`.
+- [x] If current state, replace or supplement with a foreign key. Not chosen for current semantics; future
+      live-party workflows must add/use a foreign key.
+- [x] Decide whether `inventory_items.party_name` is an immutable snapshot or should track current party
       state.
-- [ ] If snapshot, document snapshot semantics for `inventory_items.party_name`.
-- [ ] If current state, replace or supplement with a foreign key.
-- [ ] Add tests or data-contract checks for chosen semantics.
-- [ ] Mark done only when denormalization is intentional and documented.
+- [x] If snapshot, document snapshot semantics for `inventory_items.party_name`.
+- [x] If current state, replace or supplement with a foreign key. Not chosen for current semantics; future
+      live-party workflows must add/use a foreign key.
+- [~] Add tests or data-contract checks for chosen semantics. Contract is documented; dedicated snapshot
+  behavior tests remain future hardening.
+- [~] Mark done only when denormalization is intentional and documented. Intent is documented; tests remain.
 
 ### DB-007 Review Materialized View Refresh In Hot Paths
 
-- [ ] Inspect `refresh_ledger_summaries()` calls inside invoice RPCs.
-- [ ] Inspect `refresh_ledger_summaries()` calls inside payment RPCs.
-- [ ] Measure lock contention under concurrent invoice creation.
-- [ ] Measure lock contention under concurrent payment recording.
-- [ ] Decide whether refresh should be synchronous, deferred, or incremental.
-- [ ] Add telemetry for refresh duration if kept synchronous.
-- [ ] Add rollback plan for changing refresh semantics.
-- [ ] Mark done only when hot-path summary refresh does not create hidden DoS risk.
+- [x] Inspect `refresh_ledger_summaries()` calls inside invoice RPCs.
+- [x] Inspect `refresh_ledger_summaries()` calls inside payment RPCs.
+- [~] Measure lock contention under concurrent invoice creation. Measurement plan is documented; no live
+  load-test evidence yet.
+- [~] Measure lock contention under concurrent payment recording. Measurement plan is documented; no live
+  load-test evidence yet.
+- [x] Decide whether refresh should be synchronous, deferred, or incremental. Keep synchronous until
+      measured contention crosses the documented threshold.
+- [~] Add telemetry for refresh duration if kept synchronous. Requirement is documented; DB-level timing
+  instrumentation still needs implementation.
+- [x] Add rollback plan for changing refresh semantics.
+- [~] Mark done only when hot-path summary refresh does not create hidden DoS risk. Calls are inspected
+  and policy exists; lock measurements/telemetry remain.
 
 ## Phase 7: Accessibility And Screen Reader Remediation
 

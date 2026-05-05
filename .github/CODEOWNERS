@@ -6,6 +6,7 @@
 /src/services/ @app-architecture-owner
 /src/repositories/ @data-owner
 /supabase/ @data-owner @security-owner
+/supabase/migrations/ @data-owner @reliability-owner @release-qe-owner
 /src/config/ @platform-owner @security-owner
 /scripts/ @platform-owner
 /jest*.js @platform-owner @release-qe-owner

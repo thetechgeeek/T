@@ -5,6 +5,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { dashboardService } from '../services/dashboardService';
 import { getErrorMessage } from '../errors/AppError';
 import { withRetry } from '../utils/retry';
+import {
+	BUSINESS_PERSISTED_STORE_VERSION,
+	migrateDashboardStore,
+} from './persistedStoreMigrations';
 import type { DashboardStats } from '../types/finance';
 
 export interface DashboardState {
@@ -53,8 +57,8 @@ export const useDashboardStore = create<DashboardState>()(
 		{
 			name: 'dashboard-storage',
 			storage: createJSONStorage(() => AsyncStorage),
-			version: 1,
-			migrate: () => ({}),
+			version: BUSINESS_PERSISTED_STORE_VERSION,
+			migrate: migrateDashboardStore,
 			partialize: () => ({}),
 		},
 	),

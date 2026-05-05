@@ -56,6 +56,12 @@ jobs:
             - name: Runtime boundary check
               run: npm run check:runtime-boundaries
 
+            - name: Supabase migration naming check
+              run: npm run check:migrations
+
+            - name: Database type contract check
+              run: npm run check:db-types
+
             - name: Strict Jest
               run: npm run test:coverage
 
@@ -74,6 +80,7 @@ jobs:
             SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
             SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
             SUPABASE_TEST_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_TEST_SERVICE_ROLE_KEY }}
+            SUPABASE_TEST_PROJECT_REF_ALLOWLIST: ${{ secrets.SUPABASE_TEST_PROJECT_REF_ALLOWLIST }}
             EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
             EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
             INTEGRATION_TEST_EMAIL: ${{ secrets.INTEGRATION_TEST_EMAIL }}
@@ -107,6 +114,7 @@ jobs:
             SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
             SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
             SUPABASE_TEST_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_TEST_SERVICE_ROLE_KEY }}
+            SUPABASE_TEST_PROJECT_REF_ALLOWLIST: ${{ secrets.SUPABASE_TEST_PROJECT_REF_ALLOWLIST }}
             EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
             EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
             INTEGRATION_TEST_EMAIL: ${{ secrets.INTEGRATION_TEST_EMAIL }}
@@ -149,6 +157,7 @@ jobs:
             SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
             SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
             SUPABASE_TEST_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_TEST_SERVICE_ROLE_KEY }}
+            SUPABASE_TEST_PROJECT_REF_ALLOWLIST: ${{ secrets.SUPABASE_TEST_PROJECT_REF_ALLOWLIST }}
             EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
             EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
             INTEGRATION_TEST_EMAIL: ${{ secrets.INTEGRATION_TEST_EMAIL }}
