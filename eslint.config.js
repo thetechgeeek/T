@@ -54,7 +54,7 @@ module.exports = [
 		],
 	},
 	{
-		files: ['*.js', 'supabase/migrations/*.js'],
+		files: ['**/*.js', 'supabase/migrations/*.js'],
 		languageOptions: {
 			globals: {
 				...globals,
@@ -138,6 +138,37 @@ module.exports = [
 							message:
 								'Runtime UI code should read live theme state from `ThemeProvider` or `useThemeTokens()` instead of importing fixed themes.',
 						},
+						{
+							name: '@/src/config/supabase',
+							message:
+								'Routes and feature UI must go through services/use-cases instead of importing the raw Supabase client.',
+						},
+						{
+							name: '@/config/supabase',
+							message:
+								'Routes and feature UI must go through services/use-cases instead of importing the raw Supabase client.',
+						},
+					],
+					patterns: [
+						{
+							group: [
+								'@/src/repositories',
+								'@/src/repositories/*',
+								'@/repositories/*',
+							],
+							message:
+								'Routes and feature UI must go through services/use-cases instead of repositories.',
+						},
+						{
+							group: ['@/src/mocks', '@/src/mocks/*', '@/mocks/*'],
+							message:
+								'Live routes and feature UI must not import mock product data.',
+						},
+						{
+							group: ['@easydesign/ui-shell/*'],
+							message:
+								'Consumers must import UI shell APIs from the public @easydesign/ui-shell entrypoint.',
+						},
 					],
 				},
 			],
@@ -151,6 +182,80 @@ module.exports = [
 					selector:
 						"Property[key.name='zIndex'][value.type='UnaryExpression'][operator='-']",
 					message: 'Use `Z_INDEX.*` tokens instead of raw numeric `zIndex` values.',
+				},
+			],
+		},
+	},
+	{
+		files: ['src/design-system/**/*.{ts,tsx}'],
+		ignores: ['src/design-system/**/__tests__/**'],
+		rules: {
+			'no-restricted-imports': [
+				'error',
+				{
+					patterns: [
+						{
+							group: [
+								'@/app/**',
+								'@/src/stores/**',
+								'@/src/services/**',
+								'@/src/features/**',
+								'@/src/components/**',
+								'@/src/hooks/**',
+								'@/src/utils/**',
+								'@/src/i18n/**',
+								'@/src/theme/**',
+								'@/theme/**',
+							],
+							message:
+								'Design-system source must stay independent of product app, store, service, hook, theme, and utility layers.',
+						},
+						{
+							group: [
+								'@/src/design-system/**',
+								'@easydesign/design-system/*',
+								'@easydesign/design-system/foundation/*',
+							],
+							message:
+								'Design-system source must use relative imports internally; public package aliases are for consumers.',
+						},
+					],
+				},
+			],
+		},
+	},
+	{
+		files: ['src/ui-shell/**/*.{ts,tsx}'],
+		ignores: ['src/ui-shell/**/__tests__/**'],
+		rules: {
+			'no-restricted-imports': [
+				'error',
+				{
+					patterns: [
+						{
+							group: [
+								'@/app/**',
+								'@/src/stores/**',
+								'@/src/services/**',
+								'@/src/features/**',
+								'@/src/hooks/**',
+								'@/src/theme/**',
+								'@/theme/**',
+								'@/src/utils/**',
+							],
+							message:
+								'UI shell source must stay detached from product app, store, service, hook, theme, and utility layers.',
+						},
+						{
+							group: [
+								'@easydesign/design-system/components/**',
+								'@easydesign/design-system/foundation/**',
+								'@/src/design-system/**',
+							],
+							message:
+								'UI shell source must consume design-system APIs through @easydesign/design-system or @easydesign/design-system/foundation.',
+						},
+					],
 				},
 			],
 		},

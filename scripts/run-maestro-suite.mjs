@@ -4,16 +4,13 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { spawn, spawnSync } from 'child_process';
+import scriptConfig from './lib/script-config.cjs';
 
 const APP_ID = 'com.easystock.app';
 const DEFAULT_DESIGN_SYSTEM_DEEPLINK = 'easystock://design-system';
 const DEFAULT_DEV_CLIENT_SCHEME = 'easystock';
 const DEFAULT_E2E_EXPO_PORT = '8088';
 const DEFAULT_TEST_OUTPUT_DIR = path.join(os.homedir(), '.maestro', 'artifacts');
-const DEFAULT_MAESTRO_PATHS = [
-	path.join(os.homedir(), '.maestro', 'bin', 'maestro'),
-	'/opt/homebrew/bin/maestro',
-];
 const IOS_PERMISSION_SERVICES = ['camera', 'photos', 'faceid'];
 const MAESTRO_FLOW_ENV_KEYS = [
 	'INTEGRATION_TEST_EMAIL',
@@ -38,6 +35,7 @@ const RETRIABLE_MAESTRO_PATTERNS = [
 	/only one gesture can be performed at a time/i,
 ];
 const EXPO_SERVER_START_TIMEOUT_MS = 120_000;
+const { resolveE2EExpoEnv } = scriptConfig;
 
 let managedExpoServerProcess = null;
 let managedExpoServerLogTail = '';
@@ -188,8 +186,7 @@ function startExpoE2eServer(port) {
 async function ensureExpoE2eServer(envFromFile) {
 	const port = getExpoPort(envFromFile);
 	const manifestUrls = createExpoIosManifestUrls(port);
-	const expectedSupabaseUrl =
-		envFromFile.EXPO_PUBLIC_SUPABASE_URL ?? envFromFile.SUPABASE_TEST_URL ?? '';
+	const expectedSupabaseUrl = resolveE2EExpoEnv({ env: envFromFile }).EXPO_PUBLIC_SUPABASE_URL;
 	const expectedAppEnv = envFromFile.EXPO_PUBLIC_APP_ENV ?? 'e2e';
 
 	const existingManifest = await resolveReadyExpoManifest(
@@ -276,6 +273,13 @@ function collectExcludeArgs(args) {
 	return { filteredArgs, excludedTargets };
 }
 
+function collectRuntimeArgs(args) {
+	return {
+		dryRun: args.includes('--dry-run'),
+		args: args.filter((arg) => arg !== '--dry-run'),
+	};
+}
+
 function normalizeComparablePath(candidate) {
 	if (!candidate || candidate.startsWith('-')) {
 		return candidate;
@@ -309,59 +313,23 @@ function isExecutable(filePath) {
 	}
 }
 
-function resolveExecutable(commandName, fallbacks = []) {
-	const lookup = spawnSync('bash', ['-lc', `command -v ${commandName}`], {
-		encoding: 'utf8',
-	});
-	const fromPath = lookup.status === 0 ? lookup.stdout.trim() : '';
-	if (fromPath && isExecutable(fromPath)) {
-		return fromPath;
-	}
+function resolveExecutable(commandName) {
+	const executableNames =
+		process.platform === 'win32'
+			? [commandName, `${commandName}.cmd`, `${commandName}.exe`]
+			: [commandName];
+	const pathEntries = String(process.env.PATH ?? '')
+		.split(path.delimiter)
+		.filter(Boolean);
 
-	for (const candidate of fallbacks) {
-		if (candidate && isExecutable(candidate)) {
-			return candidate;
+	for (const dir of pathEntries) {
+		for (const executableName of executableNames) {
+			const candidate = path.join(dir, executableName);
+			if (isExecutable(candidate)) return candidate;
 		}
 	}
 
 	return null;
-}
-
-function loadEnvFile(filePath) {
-	if (!fs.existsSync(filePath)) {
-		return {};
-	}
-
-	const parsed = {};
-	const contents = fs.readFileSync(filePath, 'utf8');
-
-	for (const rawLine of contents.split(/\r?\n/u)) {
-		const line = rawLine.trim();
-		if (!line || line.startsWith('#')) {
-			continue;
-		}
-
-		const separatorIndex = line.indexOf('=');
-		if (separatorIndex <= 0) {
-			continue;
-		}
-
-		const key = line.slice(0, separatorIndex).trim();
-		let value = line.slice(separatorIndex + 1).trim();
-
-		if (
-			(value.startsWith('"') && value.endsWith('"')) ||
-			(value.startsWith("'") && value.endsWith("'"))
-		) {
-			value = value.slice(1, -1);
-		}
-
-		if (key) {
-			parsed[key] = value;
-		}
-	}
-
-	return parsed;
 }
 
 function run(command, args, options = {}) {
@@ -426,7 +394,7 @@ function injectFlowEnvArgs(args, env) {
 	return injectedArgs;
 }
 
-function injectTestOutputDirArg(args) {
+function injectTestOutputDirArg(args, options = {}) {
 	if (args[0] !== 'test') {
 		return args;
 	}
@@ -438,7 +406,9 @@ function injectTestOutputDirArg(args) {
 		return args;
 	}
 
-	fs.mkdirSync(DEFAULT_TEST_OUTPUT_DIR, { recursive: true });
+	if (!options.dryRun) {
+		fs.mkdirSync(DEFAULT_TEST_OUTPUT_DIR, { recursive: true });
+	}
 	return ['test', '--test-output-dir', DEFAULT_TEST_OUTPUT_DIR, ...args.slice(1)];
 }
 
@@ -518,7 +488,7 @@ function ensureBootedIosSimulator() {
 		return;
 	}
 
-	const xcrunPath = resolveExecutable('xcrun', ['/usr/bin/xcrun']);
+	const xcrunPath = resolveExecutable('xcrun');
 	if (!xcrunPath) {
 		return;
 	}
@@ -532,7 +502,10 @@ function ensureBootedIosSimulator() {
 		return;
 	}
 
-	run('/usr/bin/open', ['-a', 'Simulator'], { stdio: 'ignore' });
+	const openPath = resolveExecutable('open');
+	if (openPath) {
+		run(openPath, ['-a', 'Simulator'], { stdio: 'ignore' });
+	}
 	run(xcrunPath, ['simctl', 'boot', preferredDevice.udid], { stdio: 'ignore' });
 	run(xcrunPath, ['simctl', 'bootstatus', preferredDevice.udid, '-b'], { stdio: 'ignore' });
 	console.error(
@@ -545,7 +518,7 @@ function pregrantIosSimulatorPermissions() {
 		return;
 	}
 
-	const xcrunPath = resolveExecutable('xcrun', ['/usr/bin/xcrun']);
+	const xcrunPath = resolveExecutable('xcrun');
 	if (!xcrunPath || !bootedSimulatorExists(xcrunPath)) {
 		return;
 	}
@@ -738,38 +711,83 @@ async function runSequentialTestFlows(maestroPath, args, env) {
 	return 0;
 }
 
+function buildMaestroArgs(rawArgs, env, options = {}) {
+	const { filteredArgs, excludedTargets } = collectExcludeArgs(rawArgs);
+	return injectFlowEnvArgs(
+		injectTestOutputDirArg(filterExcludedTargets(filteredArgs, excludedTargets), options),
+		env,
+	);
+}
+
 async function main() {
-	const maestroPath = resolveExecutable('maestro', DEFAULT_MAESTRO_PATHS);
+	const runtimeArgs = collectRuntimeArgs(process.argv.slice(2));
+
+	let e2eEnv;
+	try {
+		e2eEnv = resolveE2EExpoEnv({
+			envFilePath: path.join(process.cwd(), '.env.test'),
+			env: process.env,
+		});
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : String(error));
+		process.exit(1);
+	}
+
+	const baseEnv = {
+		...e2eEnv,
+		E2E_EXPO_PORT: e2eEnv.E2E_EXPO_PORT ?? DEFAULT_E2E_EXPO_PORT,
+		DESIGN_SYSTEM_DEEPLINK: e2eEnv.DESIGN_SYSTEM_DEEPLINK || DEFAULT_DESIGN_SYSTEM_DEEPLINK,
+	};
+
+	if (runtimeArgs.dryRun) {
+		const args = buildMaestroArgs(
+			runtimeArgs.args,
+			{
+				...baseEnv,
+				E2E_DEV_CLIENT_URL: e2eEnv.E2E_DEV_CLIENT_URL ?? '<resolved after Expo manifest>',
+			},
+			{ dryRun: true },
+		);
+		console.log(
+			JSON.stringify(
+				{
+					ok: true,
+					dryRun: true,
+					command: 'maestro',
+					args,
+					expoPort: baseEnv.E2E_EXPO_PORT,
+					envKeys: MAESTRO_FLOW_ENV_KEYS.filter((key) =>
+						key === 'E2E_DEV_CLIENT_URL' ? true : Boolean(baseEnv[key] || e2eEnv[key]),
+					),
+				},
+				null,
+				2,
+			),
+		);
+		return;
+	}
+
+	const maestroPath = resolveExecutable('maestro');
 	if (!maestroPath) {
 		console.error(
-			'Maestro CLI was not found. Install it or add ~/.maestro/bin to your PATH before running e2e tests.',
+			'Maestro CLI was not found on PATH. Install it and add its bin directory to PATH before running e2e tests.',
 		);
 		process.exit(127);
 	}
 
-	const envFromFile = loadEnvFile(path.join(process.cwd(), '.env.test'));
 	ensureBootedIosSimulator();
 	pregrantIosSimulatorPermissions();
-	const expoServer = await ensureExpoE2eServer(envFromFile);
+	const expoServer = await ensureExpoE2eServer(baseEnv);
 	await warmExpoIosBundle({ launchAssetUrl: expoServer.launchAssetUrl });
 
 	const env = {
-		...envFromFile,
-		...process.env,
-		E2E_EXPO_PORT: process.env.E2E_EXPO_PORT ?? expoServer.port,
-		DESIGN_SYSTEM_DEEPLINK:
-			process.env.DESIGN_SYSTEM_DEEPLINK ||
-			envFromFile.DESIGN_SYSTEM_DEEPLINK ||
-			DEFAULT_DESIGN_SYSTEM_DEEPLINK,
+		...baseEnv,
+		E2E_EXPO_PORT: baseEnv.E2E_EXPO_PORT ?? expoServer.port,
 		E2E_DEV_CLIENT_URL:
-			process.env.E2E_DEV_CLIENT_URL ?? buildDevClientOpenUrl(expoServer.launchAssetUrl),
+			e2eEnv.E2E_DEV_CLIENT_URL ?? buildDevClientOpenUrl(expoServer.launchAssetUrl),
 	};
 
-	const { filteredArgs, excludedTargets } = collectExcludeArgs(process.argv.slice(2));
-	const args = injectFlowEnvArgs(
-		injectTestOutputDirArg(filterExcludedTargets(filteredArgs, excludedTargets)),
-		env,
-	);
+	const args = buildMaestroArgs(runtimeArgs.args, env);
 	const shouldRunSequentially =
 		args[0] === 'test' &&
 		!args.some(

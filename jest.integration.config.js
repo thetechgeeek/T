@@ -2,7 +2,7 @@
  * Jest configuration for INTEGRATION tests.
  *
  * These tests hit a REAL Supabase test project (never production).
- * Requires .env.test with:
+ * Requires .env.test or CI secrets with:
  *   SUPABASE_TEST_URL=https://your-test-project.supabase.co
  *   SUPABASE_TEST_ANON_KEY=your-anon-key
  *
@@ -15,20 +15,11 @@
  *  - Runs serially (--runInBand) to avoid race conditions on shared test DB
  */
 
-require('dotenv').config({ path: '.env.test' });
-
-// Map test variables to EXPO ones so the production client uses the test project
-if (process.env.SUPABASE_TEST_URL) {
-	process.env.EXPO_PUBLIC_SUPABASE_URL = process.env.SUPABASE_TEST_URL;
-}
-if (process.env.SUPABASE_TEST_ANON_KEY) {
-	process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = process.env.SUPABASE_TEST_ANON_KEY;
-}
-
 module.exports = {
 	preset: 'jest-expo',
 	testMatch: ['<rootDir>/__tests__/integration/**/*.test.{ts,tsx}'],
 	testTimeout: 30000,
+	setupFiles: ['<rootDir>/__tests__/utils/integrationEnv.js'],
 	moduleNameMapper: {
 		'^@easydesign/design-system/foundation$': '<rootDir>/src/design-system/foundation/index.ts',
 		'^@easydesign/design-system$': '<rootDir>/src/design-system/index.ts',
@@ -59,7 +50,7 @@ module.exports = {
 	transformIgnorePatterns: [
 		'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@formatjs/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|immer|zustand|lucide-react-native)',
 	],
-	// Minimal setup — NO Supabase mock, NO RN component mocks
-	// Integration tests only need basic env, not React Native UI mocks
+	// Minimal setup — NO Supabase mock, NO RN component mocks.
+	// Env mapping happens in setupFiles before app runtime modules load.
 	setupFilesAfterEnv: ['<rootDir>/__tests__/utils/integrationSetup.ts'],
 };

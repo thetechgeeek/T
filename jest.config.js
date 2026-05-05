@@ -8,9 +8,10 @@
  *   @/src/...        →  <rootDir>/src/...
  *   @/app/...        →  <rootDir>/app/...   (catch-all)
  *
- * Supabase is NOT globally mocked here or in jest.setup.ts.
- * Each test file that needs a Supabase mock must declare its own local
- * jest.mock() using the shared builder in __tests__/utils/supabaseMock.ts.
+ * Unit tests receive a default Supabase mock from jest.setup.ts so they stay
+ * env-free. Tests that assert Supabase behavior should override it locally with
+ * the shared builder in __tests__/utils/supabaseMock.ts. Integration tests use
+ * jest.integration.config.js and do not load this setup.
  */
 module.exports = {
 	preset: 'jest-expo',

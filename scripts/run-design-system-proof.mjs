@@ -9,6 +9,7 @@ function parseArgs(argv) {
 		platform: 'ios',
 		updateBaseline: false,
 		skipVisualRegression: false,
+		dryRun: false,
 		root: process.cwd(),
 		deepLink: 'easydesign://design-system',
 	};
@@ -25,6 +26,8 @@ function parseArgs(argv) {
 			options.updateBaseline = true;
 		} else if (value === '--skip-visual-regression') {
 			options.skipVisualRegression = true;
+		} else if (value === '--dry-run') {
+			options.dryRun = true;
 		} else if (value === '--deep-link') {
 			options.deepLink = argv[index + 1];
 			index += 1;
@@ -40,6 +43,22 @@ function ensureCleanDir(dirPath) {
 }
 
 function runCommand(command, args, options = {}) {
+	if (options.dryRun) {
+		console.log(
+			JSON.stringify(
+				{
+					dryRun: true,
+					command,
+					args,
+					cwd: options.cwd ?? process.cwd(),
+				},
+				null,
+				2,
+			),
+		);
+		return;
+	}
+
 	const result = spawnSync(command, args, {
 		stdio: 'inherit',
 		cwd: options.cwd ?? process.cwd(),
@@ -69,9 +88,11 @@ function main() {
 		options.platform,
 	);
 
-	ensureCleanDir(screenshotDir);
-	ensureCleanDir(debugDir);
-	fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+	if (!options.dryRun) {
+		ensureCleanDir(screenshotDir);
+		ensureCleanDir(debugDir);
+		fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+	}
 
 	const maestroArgs = [
 		'test',
@@ -95,7 +116,7 @@ function main() {
 		maestroArgs.push('--udid', options.device);
 	}
 
-	runCommand('maestro', maestroArgs, { cwd: options.root });
+	runCommand('maestro', maestroArgs, { cwd: options.root, dryRun: options.dryRun });
 
 	if (options.skipVisualRegression) {
 		return;
@@ -115,7 +136,7 @@ function main() {
 		compareArgs.push('--update-baseline');
 	}
 
-	runCommand('node', compareArgs, { cwd: options.root });
+	runCommand('node', compareArgs, { cwd: options.root, dryRun: options.dryRun });
 }
 
 main();

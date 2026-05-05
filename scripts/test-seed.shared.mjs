@@ -1,7 +1,11 @@
-import { config as loadEnv } from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
+import scriptConfig from './lib/script-config.cjs';
 
-loadEnv({ path: '.env.test' });
+const { resolveTestSeedEnv } = scriptConfig;
+const seedEnv = resolveTestSeedEnv({
+	envFilePath: '.env.test',
+	env: process.env,
+});
 
 export const seedFixtures = {
 	businessProfile: {
@@ -73,7 +77,7 @@ export const seedFixtures = {
 };
 
 function requiredEnv(name) {
-	const value = process.env[name];
+	const value = seedEnv[name];
 	if (!value) {
 		throw new Error(`Missing ${name} in .env.test or CI secrets.`);
 	}
@@ -81,12 +85,20 @@ function requiredEnv(name) {
 }
 
 export function createAdminClient() {
-	return createClient(requiredEnv('SUPABASE_TEST_URL'), requiredEnv('SUPABASE_TEST_SERVICE_ROLE_KEY'), {
-		auth: {
-			autoRefreshToken: false,
-			persistSession: false,
+	return createClient(
+		requiredEnv('SUPABASE_TEST_URL'),
+		requiredEnv('SUPABASE_TEST_SERVICE_ROLE_KEY'),
+		{
+			auth: {
+				autoRefreshToken: false,
+				persistSession: false,
+			},
 		},
-	});
+	);
+}
+
+export function hasServiceRoleKey() {
+	return Boolean(seedEnv.SUPABASE_TEST_SERVICE_ROLE_KEY);
 }
 
 export function createTestClient() {
@@ -148,7 +160,9 @@ export async function resetSeedData(adminClient) {
 		.select();
 
 	if (customerError || !seededCustomers) {
-		throw new Error(`Failed seeding customers: ${customerError?.message ?? 'No customer rows returned'}`);
+		throw new Error(
+			`Failed seeding customers: ${customerError?.message ?? 'No customer rows returned'}`,
+		);
 	}
 
 	const { data: seededInventory, error: inventoryError } = await adminClient
@@ -214,7 +228,9 @@ export async function resetSeedData(adminClient) {
 	);
 
 	if (invoiceError || !seededInvoice) {
-		throw new Error(`Failed seeding unpaid invoice: ${invoiceError?.message ?? 'No invoice returned'}`);
+		throw new Error(
+			`Failed seeding unpaid invoice: ${invoiceError?.message ?? 'No invoice returned'}`,
+		);
 	}
 
 	return {
@@ -228,13 +244,12 @@ export async function resetSeedData(adminClient) {
 export async function verifySeedData(client) {
 	await signInIntegrationUser(client);
 
-	const [
-		profileResult,
-		customersResult,
-		inventoryResult,
-		invoiceResult,
-	] = await Promise.all([
-		client.from('business_profile').select('business_name, invoice_prefix').limit(1).maybeSingle(),
+	const [profileResult, customersResult, inventoryResult, invoiceResult] = await Promise.all([
+		client
+			.from('business_profile')
+			.select('business_name, invoice_prefix')
+			.limit(1)
+			.maybeSingle(),
 		client
 			.from('customers')
 			.select('id, name')
@@ -258,15 +273,22 @@ export async function verifySeedData(client) {
 	]);
 
 	if (profileResult.error || !profileResult.data) {
-		throw new Error(`Seed verification failed for business profile: ${profileResult.error?.message ?? 'Missing profile'}`);
+		throw new Error(
+			`Seed verification failed for business profile: ${profileResult.error?.message ?? 'Missing profile'}`,
+		);
 	}
 
 	if (profileResult.data.business_name !== seedFixtures.businessProfile.business_name) {
 		throw new Error('Seed verification found an unexpected business profile.');
 	}
 
-	if (customersResult.error || (customersResult.data?.length ?? 0) < seedFixtures.customers.length) {
-		throw new Error(`Seed verification failed for customers: ${customersResult.error?.message ?? 'Missing customer fixtures'}`);
+	if (
+		customersResult.error ||
+		(customersResult.data?.length ?? 0) < seedFixtures.customers.length
+	) {
+		throw new Error(
+			`Seed verification failed for customers: ${customersResult.error?.message ?? 'Missing customer fixtures'}`,
+		);
 	}
 
 	if (
@@ -279,7 +301,9 @@ export async function verifySeedData(client) {
 	}
 
 	if (invoiceResult.error || !invoiceResult.data) {
-		throw new Error(`Seed verification failed for invoice fixture: ${invoiceResult.error?.message ?? 'Missing unpaid invoice fixture'}`);
+		throw new Error(
+			`Seed verification failed for invoice fixture: ${invoiceResult.error?.message ?? 'Missing unpaid invoice fixture'}`,
+		);
 	}
 
 	return {

@@ -1,0 +1,20 @@
+# Phase 1 remediation ownership tracks.
+
+/app/ @app-architecture-owner @release-qe-owner
+/src/features/ @app-architecture-owner
+/src/stores/ @app-architecture-owner
+/src/services/ @app-architecture-owner
+/src/repositories/ @data-owner
+/supabase/ @data-owner @security-owner
+/src/config/ @platform-owner @security-owner
+/scripts/ @platform-owner
+/jest*.js @platform-owner @release-qe-owner
+/jest.setup.ts @platform-owner @release-qe-owner
+/__tests__/integration/ @data-owner @release-qe-owner
+/__tests__/visual/ @design-system-owner @release-qe-owner
+/.maestro/ @release-qe-owner
+/src/design-system/ @design-system-owner
+/src/ui-shell/ @design-system-owner @platform-owner
+/examples/ @platform-owner
+/.github/ @platform-owner @security-owner @release-qe-owner
+/docs/ @platform-owner

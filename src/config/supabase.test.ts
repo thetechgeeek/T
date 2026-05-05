@@ -64,4 +64,22 @@ describe('supabase config', () => {
 			});
 		});
 	});
+
+	it('does not fall back from app runtime config to SUPABASE_TEST_* variables', () => {
+		jest.isolateModules(() => {
+			process.env.EXPO_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
+			process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = 'anon-key';
+			process.env.SUPABASE_TEST_URL = 'https://test-project.supabase.co';
+			process.env.SUPABASE_TEST_ANON_KEY = 'test-anon-key';
+			const { validateSupabaseConfig, SupabaseConfigError } =
+				jest.requireActual('./supabase');
+
+			expect(() =>
+				validateSupabaseConfig({
+					SUPABASE_TEST_URL: 'https://test-project.supabase.co',
+					SUPABASE_TEST_ANON_KEY: 'test-anon-key',
+				}),
+			).toThrow(SupabaseConfigError);
+		});
+	});
 });

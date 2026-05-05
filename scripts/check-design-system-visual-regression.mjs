@@ -11,6 +11,7 @@ function parseArgs(argv) {
 		threshold: 0.1,
 		maxDiffRatio: 0.001,
 		updateBaseline: false,
+		dryRun: false,
 		root: process.cwd(),
 	};
 
@@ -36,6 +37,8 @@ function parseArgs(argv) {
 			index += 1;
 		} else if (value === '--update-baseline') {
 			options.updateBaseline = true;
+		} else if (value === '--dry-run') {
+			options.dryRun = true;
 		}
 	}
 
@@ -115,6 +118,24 @@ function main() {
 	}
 
 	if (options.updateBaseline) {
+		if (options.dryRun) {
+			console.log(
+				JSON.stringify(
+					{
+						ok: true,
+						dryRun: true,
+						action: 'update-design-system-baseline',
+						platform: options.platform,
+						actualFiles: actualFiles.length,
+						baselineDir: options.baselineDir,
+					},
+					null,
+					2,
+				),
+			);
+			return;
+		}
+
 		clearDirectory(options.baselineDir);
 		for (const file of actualFiles) {
 			copyFile(file.path, path.join(options.baselineDir, file.name));
@@ -125,7 +146,9 @@ function main() {
 		return;
 	}
 
-	clearDirectory(options.diffDir);
+	if (!options.dryRun) {
+		clearDirectory(options.diffDir);
+	}
 
 	const failures = [];
 
@@ -139,10 +162,7 @@ function main() {
 		const actualPng = loadPng(actualFile.path);
 		const baselinePng = loadPng(baselinePath);
 
-		if (
-			actualPng.width !== baselinePng.width ||
-			actualPng.height !== baselinePng.height
-		) {
+		if (actualPng.width !== baselinePng.width || actualPng.height !== baselinePng.height) {
 			failures.push(
 				`${actualFile.name}: dimension mismatch actual=${actualPng.width}x${actualPng.height} baseline=${baselinePng.width}x${baselinePng.height}`,
 			);
@@ -163,7 +183,9 @@ function main() {
 			const totalPixels = actualPng.width * actualPng.height;
 			const ratio = diffPixels / totalPixels;
 			if (ratio > options.maxDiffRatio) {
-				writePng(path.join(options.diffDir, actualFile.name), diffPng);
+				if (!options.dryRun) {
+					writePng(path.join(options.diffDir, actualFile.name), diffPng);
+				}
 				failures.push(
 					`${actualFile.name}: ${diffPixels} pixels changed (${formatPercent(ratio)})`,
 				);
@@ -176,7 +198,9 @@ function main() {
 			[
 				`${options.platform} design-system visual regression failed:`,
 				...failures.map((failure) => `- ${failure}`),
-				`Diff images written to ${options.diffDir}`,
+				options.dryRun
+					? 'Dry run: diff images were not written.'
+					: `Diff images written to ${options.diffDir}`,
 			].join('\n'),
 		);
 	}

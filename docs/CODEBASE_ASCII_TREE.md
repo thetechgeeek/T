@@ -275,7 +275,7 @@ Manual Jest mocks for Expo modules that either require native code or do disk I/
 ### `src/config/`
 
 - `featureFlags.ts` — compile-time feature toggles (`PURCHASE_RETURNS`, `AI_ORDER_PARSING`, `MULTI_WAREHOUSE`, `GST_E_INVOICE`, `NOTIFICATIONS`).
-- `supabase.ts` — creates the Supabase JS client from `EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_ANON_KEY` (falls back to `SUPABASE_TEST_*` for tests), pinning `AsyncStorage` as the auth session store.
+- `supabase.ts` — creates the Supabase JS client from `EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_ANON_KEY`; integration and e2e adapters map `SUPABASE_TEST_*` before app startup, pinning `AsyncStorage` as the auth session store.
 
 ### `src/constants/`
 

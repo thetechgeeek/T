@@ -190,7 +190,12 @@ export function assertToolAvailable(command, options = {}) {
 	for (const dir of pathEntries) {
 		for (const executableName of executableNames) {
 			const candidate = path.join(dir, executableName);
-			if (fs.existsSync(candidate)) return candidate;
+			try {
+				fs.accessSync(candidate, fs.constants.X_OK);
+				return candidate;
+			} catch {
+				// Keep scanning PATH.
+			}
 		}
 	}
 

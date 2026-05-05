@@ -26,8 +26,10 @@ ownership and coverage-map scaffolding at the top of the file.
 - [!] P0-005 Immediate Security Scanning Gate is active in CI, with a documented vulnerability
   baseline; `npm audit fix` remains blocked because the compatible path requires peer, engine, and
   major Expo/Jest dependency decisions.
-- [x] Phase 1 reached: TOOL-001 is closed and TOOL-002 has a shared tooling foundation plus one
-      migrated proof-of-pattern script.
+- [~] Phase 1 has a completed config/tooling/package/local-machine/governance slice: TOOL-003,
+  TOOL-008, TOOL-009, and TOOL-010 are closed, package scripts route through the platform
+  entrypoint, and the remaining Phase 1 work is explicitly marked `[~]` inside TOOL-002,
+  TOOL-004, TOOL-005, TOOL-006, and TOOL-007.
 - [x] Phase 2 complete: RUNTIME-001 through RUNTIME-014 are closed by the expanded runtime-boundary
       ratchet, zero app raw-Supabase/repository/mock imports, normalized service/store errors,
       store/auth orchestrators, feature-owned route workflows, typed repository table names, and
@@ -317,146 +319,148 @@ Audit refs: Part I sections 1 through 8, Part VI section 23, Recommended Directi
 - [x] Add tests for missing prerequisite tools.
 - [x] Add tests for structured violation output.
 - [x] Migrate one low-risk script first as a proof of pattern.
-- [ ] Migrate the remaining scripts in small batches.
+- [~] Migrate the remaining scripts in small batches.
 - [x] Delete duplicated helper logic after each script migration.
-- [ ] Update package scripts to call the consolidated entry points.
-- [ ] Mark done only when new governance scripts can be built by extending the shared module.
+- [x] Update package scripts to call the consolidated entry points.
+- [x] Mark done only when new governance scripts can be built by extending the shared module.
 
 ### TOOL-003 Centralize Configuration Resolution
 
-- [ ] Define explicit config modes: `dev`, `test`, `integration`, `e2e`, `ci`, and `production`.
-- [ ] Build one typed config module used by app runtime where possible.
-- [ ] Build one typed config module used by Node scripts.
-- [ ] Decide whether app and Node config share a package or share generated schema definitions.
-- [ ] Remove implicit fallback from `EXPO_PUBLIC_*` to `SUPABASE_TEST_*` in app runtime.
-- [ ] Remove global test credential loading from unit-test setup.
-- [ ] Remove `process.env` mutation from `jest.integration.config.js` once a typed config adapter exists.
-- [ ] Remove manual `.env.test` parsing from `scripts/run-expo-e2e.mjs`.
-- [ ] Remove manual `.env.test` parsing from `scripts/run-maestro-suite.mjs`.
-- [ ] Add mode-explicit env validation at each command entry point.
-- [ ] Add fail-fast errors for ambiguous config, missing config, or mixed mode variables.
-- [ ] Add `.env.example` documenting all required public app variables.
-- [ ] Add `.env.example` documenting all required integration/e2e variables without secrets.
-- [ ] Document where real test credentials live outside the repo.
-- [ ] Add tests proving unit tests do not inherit integration credentials.
-- [ ] Add tests proving integration tests fail clearly when test credentials are missing.
-- [ ] Add tests proving e2e launch fails clearly when bundle env variables are missing.
-- [ ] Mark done only after every execution context uses one config contract.
+- [x] Define explicit config modes: `dev`, `test`, `integration`, `e2e`, `ci`, and `production`.
+- [x] Build one typed config module used by app runtime where possible.
+- [x] Build one typed config module used by Node scripts.
+- [x] Decide whether app and Node config share a package or share generated schema definitions.
+- [x] Remove implicit fallback from `EXPO_PUBLIC_*` to `SUPABASE_TEST_*` in app runtime.
+- [x] Remove global test credential loading from unit-test setup.
+- [x] Remove `process.env` mutation from `jest.integration.config.js` once a typed config adapter exists.
+- [x] Remove manual `.env.test` parsing from `scripts/run-expo-e2e.mjs`.
+- [x] Remove manual `.env.test` parsing from `scripts/run-maestro-suite.mjs`.
+- [x] Add mode-explicit env validation at each command entry point.
+- [x] Add fail-fast errors for ambiguous config, missing config, or mixed mode variables.
+- [x] Add `.env.example` documenting all required public app variables.
+- [x] Add `.env.example` documenting all required integration/e2e variables without secrets.
+- [x] Document where real test credentials live outside the repo.
+- [x] Add tests proving unit tests do not inherit integration credentials.
+- [x] Add tests proving integration tests fail clearly when test credentials are missing.
+- [x] Add tests proving e2e launch fails clearly when bundle env variables are missing.
+- [x] Mark done only after every execution context uses one config contract.
 
 ### TOOL-004 Make The Test Environment Hermetic
 
-- [ ] Shrink `jest.setup.ts` toward a target under 200 lines.
-- [ ] Split unit, integration, visual, and e2e setup responsibilities.
-- [ ] Remove global `.env.test` loading from unit tests.
-- [ ] Remove global Supabase mocking from tests that do not need Supabase.
-- [ ] Fix contradictory comments about Supabase mocking.
-- [ ] Remove or isolate the global `console.error` interception.
-- [ ] Remove or isolate the global `console.warn` interception.
-- [ ] Remove or isolate the monkey patch of `jest.spyOn`.
-- [ ] Move native registry logic into a dedicated per-suite helper.
-- [ ] Move large React Native mocks into explicit setup modules.
-- [ ] Move `@shopify/flash-list` mocking into suites that render virtualized lists.
-- [ ] Move `expo-router` mocking into router-aware test helpers.
-- [ ] Move i18next mocking into i18n-aware test helpers.
-- [ ] Avoid loading real `en.json` at global module load unless the test explicitly needs it.
-- [ ] Add a smoke test proving a pure unit test starts without app env variables.
-- [ ] Add a smoke test proving an integration test uses the integration setup.
-- [ ] Add documentation for which setup file belongs to which test layer.
-- [ ] Mark done only when test setup no longer behaves like an alternate runtime.
+- [x] Shrink `jest.setup.ts` toward a target under 200 lines.
+- [x] Split unit, integration, visual, and e2e setup responsibilities.
+- [x] Remove global `.env.test` loading from unit tests.
+- [~] Remove global Supabase mocking from tests that do not need Supabase.
+- [x] Fix contradictory comments about Supabase mocking.
+- [x] Remove or isolate the global `console.error` interception.
+- [x] Remove or isolate the global `console.warn` interception.
+- [x] Remove or isolate the monkey patch of `jest.spyOn`.
+- [~] Move native registry logic into a dedicated per-suite helper.
+- [x] Move large React Native mocks into explicit setup modules.
+- [~] Move `@shopify/flash-list` mocking into suites that render virtualized lists.
+- [~] Move `expo-router` mocking into router-aware test helpers.
+- [~] Move i18next mocking into i18n-aware test helpers.
+- [x] Avoid loading real `en.json` at global module load unless the test explicitly needs it.
+- [x] Add a smoke test proving a pure unit test starts without app env variables.
+- [x] Add a smoke test proving an integration test uses the integration setup.
+- [x] Add documentation for which setup file belongs to which test layer.
+- [~] Mark done only when test setup no longer behaves like an alternate runtime.
 
 ### TOOL-005 Redesign The Test Pyramid
 
-- [ ] Create a test taxonomy document with unit, integration, e2e, visual, source-contract, and script
+- [x] Create a test taxonomy document with unit, integration, e2e, visual, source-contract, and script
       test definitions.
-- [ ] Move static source-shape rules to ESLint, TypeScript, package tooling, or purpose-built static
-      checks.
-- [ ] Keep Jest tests focused on runtime behavior unless a source-contract test is explicitly justified.
-- [ ] Split `__tests__/visual/snapshots.test.tsx` into smaller owned suites.
-- [ ] Remove hand-maintained visual-suite mocks that duplicate application runtime logic where possible.
-- [ ] Make `jest-image-snapshot` availability deterministic in CI.
-- [ ] Update integration-test docs to use the actual package manager and script names.
-- [ ] Add explicit owners for visual baselines.
-- [ ] Reduce e2e coverage to critical workflows plus smoke tests, not broad UI duplication.
-- [ ] Define top 10 business-critical workflows for regression coverage.
-- [ ] Define which failures block PRs and which failures are nightly-only.
-- [ ] Add a CI job matrix that makes each layer visible as its own responsibility.
-- [ ] Mark done only after test count communicates confidence instead of hiding overlap.
+- [~] Move static source-shape rules to ESLint, TypeScript, package tooling, or purpose-built static
+  checks.
+- [~] Keep Jest tests focused on runtime behavior unless a source-contract test is explicitly justified.
+- [~] Split `__tests__/visual/snapshots.test.tsx` into smaller owned suites.
+- [~] Remove hand-maintained visual-suite mocks that duplicate application runtime logic where possible.
+- [x] Make `jest-image-snapshot` availability deterministic in CI.
+- [x] Update integration-test docs to use the actual package manager and script names.
+- [x] Add explicit owners for visual baselines.
+- [x] Reduce e2e coverage to critical workflows plus smoke tests, not broad UI duplication.
+- [x] Define top 10 business-critical workflows for regression coverage.
+- [x] Define which failures block PRs and which failures are nightly-only.
+- [x] Add a CI job matrix that makes each layer visible as its own responsibility.
+- [~] Mark done only after test count communicates confidence instead of hiding overlap.
 
 ### TOOL-006 Replace Regex Boundary Enforcement With Structural Boundaries
 
-- [ ] Inventory every regex import scanner in `scripts/check-design-system-guardrails.mjs`.
-- [ ] Inventory every regex import scanner in `scripts/check-ui-shell-guardrails.mjs`.
-- [ ] Inventory every regex import scanner in `scripts/check-inventory-app-ui-contract.mjs`.
-- [ ] Inventory every regex import scanner in `scripts/check-workspace-packages.mjs`.
-- [ ] Inventory every regex import scanner in `scripts/check-ui-tokens.mjs`.
-- [ ] Inventory source-text contract checks in `src/design-system/__tests__/componentContract.test.ts`.
-- [ ] Inventory source-text contract checks in `src/design-system/__tests__/boundary.test.ts`.
-- [ ] Replace import-boundary checks with ESLint `no-restricted-imports` where possible.
-- [ ] Replace package-boundary checks with workspace package `exports` where possible.
-- [ ] Add TypeScript project references if package boundaries need compile-time enforcement.
-- [ ] Add dependency graph enforcement through existing tooling where possible.
-- [ ] Keep only those custom scanners that cannot be represented structurally.
-- [ ] Add tests for custom ESLint rules if new custom rules are created.
-- [ ] Delete redundant scanner rules after structural replacements land.
-- [ ] Mark done only when satisfying a regex is no longer the primary proof of architecture.
+- [x] Inventory every regex import scanner in `scripts/check-design-system-guardrails.mjs`.
+- [x] Inventory every regex import scanner in `scripts/check-ui-shell-guardrails.mjs`.
+- [x] Inventory every regex import scanner in `scripts/check-inventory-app-ui-contract.mjs`.
+- [x] Inventory every regex import scanner in `scripts/check-workspace-packages.mjs`.
+- [x] Inventory every regex import scanner in `scripts/check-ui-tokens.mjs`.
+- [x] Inventory source-text contract checks in `src/design-system/__tests__/componentContract.test.ts`.
+- [x] Inventory source-text contract checks in `src/design-system/__tests__/boundary.test.ts`.
+- [x] Replace import-boundary checks with ESLint `no-restricted-imports` where possible.
+- [x] Replace package-boundary checks with workspace package `exports` where possible.
+- [x] Not needed in this slice: defer TypeScript project references until package boundaries need
+      compile-time enforcement beyond package exports and ESLint.
+- [x] Add dependency graph enforcement through existing tooling where possible.
+- [~] Keep only those custom scanners that cannot be represented structurally.
+- [x] Add tests for custom ESLint rules if new custom rules are created.
+- [~] Delete redundant scanner rules after structural replacements land.
+- [~] Mark done only when satisfying a regex is no longer the primary proof of architecture.
 
 ### TOOL-007 Demote Documentation From Build Artifact To Support Artifact
 
-- [ ] Inventory every script and test that requires exact markdown phrases.
-- [ ] Classify each phrase check as contract, generated-doc verification, stale guardrail, or removable.
-- [ ] Replace phrase checks with schema checks where the doc describes structured data.
-- [ ] Replace phrase checks with generated docs where the doc is derived from code.
-- [ ] Replace phrase checks with PR review checklist items where human judgment is required.
-- [ ] Remove build failures caused only by harmless prose wording changes.
-- [ ] Keep docs that explain architecture and operational runbooks.
-- [ ] Delete obsolete docs that duplicate active source-of-truth files.
-- [ ] Add a docs ownership policy.
-- [ ] Add a docs freshness review cadence for critical docs only.
-- [ ] Mark done only when docs support architecture instead of acting as the control plane.
+- [x] Inventory every script and test that requires exact markdown phrases.
+- [x] Classify each phrase check as contract, generated-doc verification, stale guardrail, or removable.
+- [~] Replace phrase checks with schema checks where the doc describes structured data.
+- [~] Replace phrase checks with generated docs where the doc is derived from code.
+- [x] Replace phrase checks with PR review checklist items where human judgment is required.
+- [~] Remove build failures caused only by harmless prose wording changes.
+- [x] Keep docs that explain architecture and operational runbooks.
+- [~] Delete obsolete docs that duplicate active source-of-truth files.
+- [x] Add a docs ownership policy.
+- [x] Add a docs freshness review cadence for critical docs only.
+- [~] Mark done only when docs support architecture instead of acting as the control plane.
 
 ### TOOL-008 Decide Package Extraction Strategy
 
-- [ ] Decide whether `src/design-system` is a real package or an internal module with extraction intent.
-- [ ] Decide whether `src/ui-shell` is a real package or an internal module with extraction intent.
-- [ ] Decide whether `examples/ops-console` is a true second consumer or a proof fixture.
-- [ ] If real packages, add package build outputs or TS project references.
-- [ ] If real packages, make package `exports` the boundary rather than source scanners.
-- [ ] If real packages, ensure consumers import through package names, not internal source paths.
-- [ ] If internal modules, reduce extraction-readiness guardrails to a lighter policy.
-- [ ] Remove hybrid claims that require constant script policing.
-- [ ] Fix token provenance so foundations do not point back into legacy app surfaces unless intentional.
-- [ ] Define measurable extraction exit criteria.
-- [ ] Mark done only after package status is explicit and enforcement matches that status.
+- [x] Decide whether `src/design-system` is a real package or an internal module with extraction intent.
+- [x] Decide whether `src/ui-shell` is a real package or an internal module with extraction intent.
+- [x] Decide whether `examples/ops-console` is a true second consumer or a proof fixture.
+- [x] Not required for source workspaces in this slice: package build outputs or TypeScript project
+      references are deferred until publishing or supporting a non-Expo consumer.
+- [x] If real packages, make package `exports` the boundary rather than source scanners.
+- [x] If real packages, ensure consumers import through package names, not internal source paths.
+- [x] If internal modules, reduce extraction-readiness guardrails to a lighter policy.
+- [x] Remove hybrid claims that require constant script policing.
+- [x] Fix token provenance so foundations do not point back into legacy app surfaces unless intentional.
+- [x] Define measurable extraction exit criteria.
+- [x] Mark done only after package status is explicit and enforcement matches that status.
 
 ### TOOL-009 Remove Hidden Local-Machine Assumptions
 
-- [ ] Inventory references to `~/.nvm/nvm.sh`.
-- [ ] Inventory direct `npx supabase` calls.
-- [ ] Inventory `bash -lc command -v` tool discovery.
-- [ ] Inventory `/opt/homebrew/bin/maestro`.
-- [ ] Inventory `/usr/bin/open`.
-- [ ] Inventory `xcrun simctl` assumptions.
-- [ ] Add prerequisite validation at script entry points.
-- [ ] Prefer PATH-based tool discovery with clear installation instructions.
-- [ ] Add CI-friendly non-interactive behavior for all scripts.
-- [ ] Add platform checks for macOS-only commands.
-- [ ] Add fallback instructions when optional tools are absent.
-- [ ] Add dry-run mode for commands that mutate simulator, filesystem, or baselines.
-- [ ] Consider container or CI parity for scripts that must be portable.
-- [ ] Mark done only when a new engineer can run the core commands without reverse-engineering the
+- [x] Inventory references to `~/.nvm/nvm.sh`.
+- [x] Inventory direct `npx supabase` calls.
+- [x] Inventory `bash -lc command -v` tool discovery.
+- [x] Inventory `/opt/homebrew/bin/maestro`.
+- [x] Inventory `/usr/bin/open`.
+- [x] Inventory `xcrun simctl` assumptions.
+- [x] Add prerequisite validation at script entry points.
+- [x] Prefer PATH-based tool discovery with clear installation instructions.
+- [x] Add CI-friendly non-interactive behavior for all scripts.
+- [x] Add platform checks for macOS-only commands.
+- [x] Add fallback instructions when optional tools are absent.
+- [x] Add dry-run mode for commands that mutate simulator, filesystem, or baselines.
+- [x] Consider container or CI parity for scripts that must be portable.
+- [x] Mark done only when a new engineer can run the core commands without reverse-engineering the
       local machine setup.
 
 ### TOOL-010 Stop Governance Accretion
 
-- [ ] Add a temporary moratorium on new one-off governance scripts.
-- [ ] Require platform-owner approval for new scripts.
-- [ ] Require each new governance mechanism to replace or consolidate an existing one where feasible.
-- [ ] Create a deletion list for redundant docs, scripts, generated artifacts, and source-contract tests.
-- [ ] Track net script count per remediation sprint.
-- [ ] Track net docs count or docs LOC for governance docs.
-- [ ] Track time spent maintaining governance code separately from product code.
-- [ ] Add an architecture decision record for the governance simplification strategy.
-- [ ] Mark done only when the control surface is stable or shrinking.
+- [x] Add a temporary moratorium on new one-off governance scripts.
+- [x] Require platform-owner approval for new scripts.
+- [x] Require each new governance mechanism to replace or consolidate an existing one where feasible.
+- [x] Create a deletion list for redundant docs, scripts, generated artifacts, and source-contract tests.
+- [x] Track net script count per remediation sprint.
+- [x] Track net docs count or docs LOC for governance docs.
+- [x] Track time spent maintaining governance code separately from product code.
+- [x] Add an architecture decision record for the governance simplification strategy.
+- [x] Mark done only when the control surface is stable or shrinking.
 
 ## Phase 2: Runtime Architecture And Code Quality
 

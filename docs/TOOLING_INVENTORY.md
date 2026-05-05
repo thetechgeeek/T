@@ -2,19 +2,22 @@
 
 Status: Phase 1 baseline for the bespoke script/toolchain audit.
 
-Date: 2026-05-04
+Date: 2026-05-05
 
 ## Counts
 
 - Root `package.json` scripts: 43. Audit baseline: 41. Difference: +2 from `audit:security` and
   `check:runtime-boundaries`.
-- Root `scripts/*.mjs` files: 20. Audit baseline: 19. Difference: +1 from the runtime-boundary ratchet.
-- Root `scripts/*.mjs` LOC: 4,940. Audit baseline: 4,806. Difference: +134 after adding the
-  runtime-boundary ratchet and extracting shared route-check helper logic.
+- Root `scripts/*.mjs` files: 21. Audit baseline: 19. Difference: +2 from the runtime-boundary
+  ratchet and the consolidated `scripts/tooling.mjs` entrypoint.
+- Root `scripts/*.mjs` LOC: 5,291. Audit baseline: 4,806. Difference: +485 after adding the
+  runtime-boundary ratchet, consolidated platform entrypoint, dry-run support, and e2e prerequisite
+  cleanup.
 
 ## Target
 
-Target one-off script count after consolidation: 12 or fewer root `scripts/*.mjs` files, with shared behavior in `scripts/lib/`.
+Target one-off script count after consolidation: 12 or fewer root `scripts/*.mjs` files, with shared
+behavior in `scripts/lib/` and package scripts routed through `scripts/tooling.mjs`.
 
 ## Inventory
 
@@ -34,12 +37,13 @@ Target one-off script count after consolidation: 12 or fewer root `scripts/*.mjs
 | `generate-component-catalog.mjs`            | Design System    | build                    | no   | no       | no         | yes          | no         | fixed paths                              |
 | `generate-design-tokens.mjs`                | Design System    | build                    | no   | no       | no         | yes          | no         | fixed paths                              |
 | `generate-ui-library-catalog.mjs`           | UI Shell         | build                    | no   | no       | no         | yes          | no         | fixed paths                              |
-| `run-design-system-proof.mjs`               | Release / QE     | e2e                      | yes  | no       | yes        | no           | no         | `process.cwd()`                          |
-| `run-expo-e2e.mjs`                          | Release / QE     | e2e                      | yes  | no       | yes        | no           | no         | manual `.env.test` loading               |
-| `run-maestro-suite.mjs`                     | Release / QE     | e2e                      | yes  | yes      | yes        | yes          | no         | manual `.env.test` loading               |
-| `test-seed-reset.mjs`                       | Data             | seed/reset               | no   | no       | yes        | no           | no         | Supabase test env                        |
+| `run-design-system-proof.mjs`               | Release / QE     | e2e                      | yes  | no       | yes        | no           | no         | PATH tools plus dry-run                  |
+| `run-expo-e2e.mjs`                          | Release / QE     | e2e                      | yes  | no       | yes        | no           | no         | uses shared e2e config                   |
+| `run-maestro-suite.mjs`                     | Release / QE     | e2e                      | yes  | yes      | yes        | yes          | no         | PATH discovery and shared e2e config     |
+| `test-seed-reset.mjs`                       | Data             | seed/reset               | yes  | no       | yes        | no           | no         | shared config plus dry-run               |
 | `test-seed-verify.mjs`                      | Data             | seed/reset               | no   | no       | no         | no           | no         | imports shared seed helper               |
-| `test-seed.shared.mjs`                      | Data             | seed/reset               | no   | no       | no         | no           | no         | `dotenv` `.env.test` loading             |
+| `test-seed.shared.mjs`                      | Data             | seed/reset               | no   | no       | no         | no           | no         | uses `scripts/lib/script-config.cjs`     |
+| `tooling.mjs`                               | Platform         | platform entrypoint      | yes  | no       | yes        | no           | no         | consolidated package-script dispatcher   |
 
 ## Duplication Clusters
 
@@ -49,7 +53,8 @@ Target one-off script count after consolidation: 12 or fewer root `scripts/*.mjs
 - Plain-text source reads: at least 14 scripts read source files directly.
 - Plain-text docs reads: at least 7 scripts read docs as an enforcement input.
 - Duplicated root resolution: guardrail scripts repeatedly derive roots through `__dirname`, `process.cwd()`, or custom `--root` parsing.
-- Duplicated env loading: e2e and seed scripts load `.env.test` independently.
+- Duplicated env loading: e2e and seed scripts now use `scripts/lib/script-config.cjs`; remaining
+  custom env/root parsing belongs to non-migrated guardrail scripts.
 - Duplicated violation reporting: guardrail scripts each define their own violation shape and console formatting.
 
 ## First Consolidation Slice
@@ -67,4 +72,6 @@ Target one-off script count after consolidation: 12 or fewer root `scripts/*.mjs
 - human and JSON violation output
 - dry-run flag interpretation
 
-`scripts/check-expo-route-collisions.mjs` is the first migrated proof of pattern.
+`scripts/tooling.mjs` is the package-script entrypoint for checks, generators, seed commands, e2e
+runners, and design-system proof commands. `scripts/check-expo-route-collisions.mjs` remains the
+first fully migrated scanner proof of pattern; e2e and seed scripts now share the config module.
