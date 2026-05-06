@@ -82,6 +82,9 @@ jobs:
             - name: Runtime boundary check
               run: npm run check:runtime-boundaries
 
+            - name: Target architecture check
+              run: npm run check:target-architecture
+
             - name: Product surface truthfulness check
               run: npm run check:product-surfaces
 

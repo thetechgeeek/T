@@ -34,6 +34,10 @@ const COMMANDS = {
 		script: 'check-runtime-boundaries.mjs',
 		class: 'runtime governance',
 	},
+	'check:target-architecture': {
+		script: 'check-target-architecture.mjs',
+		class: 'runtime governance',
+	},
 	'check:product-surfaces': {
 		script: 'check-product-surfaces.mjs',
 		class: 'product governance',

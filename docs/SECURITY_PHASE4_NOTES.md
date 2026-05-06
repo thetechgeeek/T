@@ -60,5 +60,8 @@ Date: 2026-05-05
 
 ## STRIDE And OWASP Closure
 
-- Closed or partially mitigated in code: token storage, local data minimization, OTP throttling, PII logging, route param validation, page-size/sort guards, audit coverage hardening.
-- Still open/partial: RLS tenant scoping, signed offline mutations, certificate pinning, secure-screen/root-detection/auto-lock enforcement, full threat-table closure.
+- Closed or partially mitigated in code: token storage, local data minimization, OTP throttling, PII
+  logging, route param validation, page-size/sort guards, audit coverage hardening, business-table
+  RLS scoping.
+- Still open/partial: signed offline mutations, certificate pinning,
+  secure-screen/root-detection/auto-lock enforcement, full threat-table closure.

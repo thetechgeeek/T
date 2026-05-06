@@ -35,6 +35,7 @@ Status: active Phase 6 rollback contract.
 | 026_server_authoritative_invoice_totals | RPC authority change             | Keep alias and forward repair.                        |
 | 027_performance_query_indexes           | Additive indexes                 | Drop indexes if needed.                               |
 | 028_expand_audit_logging                | Additive triggers                | Disable only with Security owner approval.            |
+| 029_scope_business_rls                  | RLS ownership hardening          | Forward policy correction preferred; validate backup. |
 
 ## Migration 020 Recovery
 

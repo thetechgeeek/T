@@ -41,6 +41,7 @@
 		"check:extraction-readiness": "node scripts/tooling.mjs check:extraction-readiness",
 		"check:routes": "node scripts/tooling.mjs check:routes",
 		"check:runtime-boundaries": "node scripts/tooling.mjs check:runtime-boundaries",
+		"check:target-architecture": "node scripts/tooling.mjs check:target-architecture",
 		"check:product-surfaces": "node scripts/tooling.mjs check:product-surfaces",
 		"check:migrations": "node scripts/tooling.mjs check:migrations",
 		"check:db-types": "node scripts/tooling.mjs check:db-types",
@@ -51,7 +52,7 @@
 		"generate:tokens": "node scripts/tooling.mjs generate:tokens",
 		"generate:ui-library": "node scripts/tooling.mjs generate:ui-library",
 		"generate:design-system": "npm run generate:tokens && npm run generate:ui-library && node scripts/tooling.mjs generate:component-catalog",
-		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run check:runtime-boundaries && npm run check:i18n && npm run check:ui-tokens && npm run check:design-system && npm run check:ui-shell && npm run check:workspace-packages && npm run check:inventory-consumer && npm run check:release-discipline && npm run check:extraction-readiness && npm run lint && npm run test && npm run test:integration",
+		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run check:runtime-boundaries && npm run check:target-architecture && npm run check:i18n && npm run check:ui-tokens && npm run check:design-system && npm run check:ui-shell && npm run check:workspace-packages && npm run check:inventory-consumer && npm run check:release-discipline && npm run check:extraction-readiness && npm run lint && npm run test && npm run test:integration",
 		"prepare": "husky"
 	},
 	"dependencies": {

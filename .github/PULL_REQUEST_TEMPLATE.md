@@ -6,6 +6,7 @@
 - [ ] `npm run lint`
 - [ ] `npm run test:coverage` or a documented narrower Jest target
 - [ ] `npm run check:runtime-boundaries`
+- [ ] `npm run check:target-architecture`
 - [ ] `npm run check:product-surfaces`
 - [ ] `npm run check:i18n` when user-facing copy changed
 - [ ] `npm run check:migrations` when Supabase files changed

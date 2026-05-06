@@ -65,6 +65,10 @@ Clients in the server-authoritative lane send intent and draft values. The serve
 `scripts/check-runtime-boundaries.mjs` scans route, feature, store, service, and repository imports
 and compares them with `scripts/baselines/runtime-boundaries.json`.
 
+`scripts/check-target-architecture.mjs` adds target-state ownership checks for auth subscriptions,
+event subscriptions, backend-touching service error normalization, typed env ownership, persisted
+store migrations, security UI enforcement, scoped RLS evidence, and critical-write evidence.
+
 The baseline is the current debt list. The check fails on any new raw Supabase import, route-level
 repository import, live-route mock import, feature/store repository import, service-to-store import,
 or repository-to-service/store/app import. When an existing violation is removed, delete its

@@ -7,19 +7,25 @@ import { ScreenHeader } from '@easydesign/ui-shell';
 import { SectionHeader } from '@easydesign/design-system';
 import { SettingsCard } from '@easydesign/design-system';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { useLocale } from '@/src/hooks/useLocale';
 
 export default function SecuritySettingsScreen() {
 	const { c } = useThemeTokens();
+	const { t } = useLocale();
 
 	return (
 		<Screen
 			safeAreaEdges={['bottom']}
 			withKeyboard={false}
 			scrollable
-			header={<ScreenHeader title="Security Settings" />}
+			header={<ScreenHeader title={t('settings.security')} />}
 			contentContainerStyle={{ paddingBottom: SPACING_PX['2xl'] }}
 		>
-			<SectionHeader title="Status" variant="uppercase" titleColor={c.primary} />
+			<SectionHeader
+				title={t('settings.securityStatus')}
+				variant="uppercase"
+				titleColor={c.primary}
+			/>
 			<SettingsCard
 				padding="lg"
 				style={{
@@ -30,11 +36,10 @@ export default function SecuritySettingsScreen() {
 			>
 				<View style={styles.notice}>
 					<ThemedText variant="body" weight="semibold">
-						Security controls are unavailable
+						{t('settings.securityUnavailableTitle')}
 					</ThemedText>
 					<ThemedText variant="caption" style={{ color: c.onSurfaceVariant }}>
-						PIN, biometric authentication, auto-lock, and transaction protection are not
-						enforced in this build.
+						{t('settings.securityUnavailableBody')}
 					</ThemedText>
 				</View>
 			</SettingsCard>

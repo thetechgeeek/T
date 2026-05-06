@@ -13,7 +13,9 @@ export default function SecurityLockScreen() {
 		<Screen safeAreaEdges={['bottom']}>
 			<ScreenHeader title={t('settings.security')} />
 			<View style={styles.center}>
-				<ThemedText color={c.placeholder}>{t('settings.securityComingSoon')}</ThemedText>
+				<ThemedText color={c.placeholder}>
+					{t('settings.securityUnavailableTitle')}
+				</ThemedText>
 			</View>
 		</Screen>
 	);

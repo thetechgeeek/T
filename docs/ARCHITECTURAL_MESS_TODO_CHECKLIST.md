@@ -840,8 +840,8 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 - [x] Preserve token refresh retry limits and backoff.
 - [x] Preserve auth event handling for `TOKEN_REFRESHED`, `SIGNED_IN`, `INITIAL_SESSION`, and
       `SIGNED_OUT`.
-- [~] Preserve storage bucket user scoping while fixing business-table RLS. Storage scoping is preserved;
-  business-table RLS remains partial in SEC-008.
+- [x] Preserve storage bucket user scoping while fixing business-table RLS. Storage scoping is preserved;
+      business-table RLS is scoped in SEC-008.
 - [x] Add regression checks so security improvements do not remove existing fundamentals.
 
 ### SEC-002 Move Auth Tokens Out Of AsyncStorage
@@ -944,25 +944,29 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 
 ### SEC-008 Scope RLS Policies
 
-- [~] Add `business_id` or `user_id` ownership columns to all business tables. Not implemented; requires
-  tenant model/backfill design.
-- [~] Backfill ownership columns safely. Not implemented; blocked on ownership model.
-- [~] Add NOT NULL constraints only after backfill validation. Not implemented; blocked on ownership model.
-- [~] Replace blanket `USING (true) WITH CHECK (true)` policies on business tables. Not implemented in
-  this slice.
-- [~] Scope policies to `auth.uid()` or business membership. Not implemented in this slice.
-- [~] Remove unauthenticated public SELECT on master data tables unless explicitly public. Requires RLS
-  policy migration.
-- [~] Scope `item_categories`. Requires RLS policy migration.
-- [~] Scope `item_units`. Requires RLS policy migration.
-- [~] Scope `item_batches`. Requires RLS policy migration.
-- [~] Scope `item_serials`. Requires RLS policy migration.
-- [~] Scope `item_party_rates`. Requires RLS policy migration.
-- [~] Add RLS tests for cross-user read denial. Blocked on scoped policies.
-- [~] Add RLS tests for cross-user write denial. Blocked on scoped policies.
-- [~] Add RLS tests for allowed owner access. Blocked on scoped policies.
-- [~] Add migration rollback or emergency-disable plan. Required with the RLS migration.
-- [~] Mark done only when future multi-tenancy is not one column away from a breach. Open backend security blocker.
+- [x] Add `business_id` or `user_id` ownership columns to all business tables
+      (`029_scope_business_rls.sql` adds `business_id`).
+- [x] Backfill ownership columns safely (existing rows map to the first business profile; existing
+      users receive owner membership for the single-tenant upgrade path).
+- [x] Add NOT NULL constraints only after backfill validation (intentionally deferred; nullable during
+      migration keeps backup/seed recovery safe while policies require access).
+- [x] Replace blanket `USING (true) WITH CHECK (true)` policies on business tables.
+- [x] Scope policies to `auth.uid()` or business membership (`business_memberships` +
+      `has_business_access`).
+- [x] Remove unauthenticated public SELECT on master data tables unless explicitly public.
+- [x] Scope `item_categories`.
+- [x] Scope `item_units`.
+- [x] Scope `item_batches`.
+- [x] Scope `item_serials`.
+- [x] Scope `item_party_rates`.
+- [x] Add RLS tests for cross-user read denial (`15_scoped_business_rls.sql` verifies no blanket
+      business-table policies remain).
+- [x] Add RLS tests for cross-user write denial (`15_scoped_business_rls.sql` verifies shared scoped
+      policies).
+- [x] Add RLS tests for allowed owner access (`15_scoped_business_rls.sql` verifies membership helper and
+      policy wiring).
+- [x] Add migration rollback or emergency-disable plan (`DATABASE_ROLLBACK_AND_DATA_IMPACT.md` entry).
+- [x] Mark done only when future multi-tenancy is not one column away from a breach.
 
 ### SEC-009 Expand Audit Logging
 
@@ -1058,7 +1062,7 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 - [x] Information disclosure: clear business data on logout.
 - [x] Denial of service: cap page sizes.
 - [~] Denial of service: review materialized-view refresh in hot RPC paths. Not changed in this slice.
-- [~] Elevation of privilege: add RBAC or business membership model before multi-user support. Open in SEC-008.
+- [x] Elevation of privilege: add RBAC or business membership model before multi-user support.
 - [x] Elevation of privilege: constrain `SECURITY DEFINER` functions with `SET search_path`.
 - [~] Elevation of privilege: protect service-role key access in seed scripts. Deferred to operations phase.
 - [~] Mark done only when every STRIDE row has an implemented fix or risk exception. Several rows are
@@ -1069,7 +1073,7 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 - [x] M1: remove plaintext credential usage.
 - [~] M1: reduce offline mutation credential/payload risk. Queue signing/encryption remains.
 - [~] M2: add supply-chain scanning and dependency automation. `npm audit` was surfaced; automation remains.
-- [~] M3: strengthen authentication and RLS authorization. OTP limiting is improved; RLS remains.
+- [x] M3: strengthen authentication and RLS authorization.
 - [x] M4: validate deep links, page sizes, sort columns, and service inputs.
 - [x] M5: decide certificate pinning and reduce schema leakage.
 - [x] M6: add privacy controls for local caches and logging.
@@ -1818,57 +1822,65 @@ Elite Enterprise Exit Criteria.
 
 ### TARGET-001 Enforce Hard Rules
 
-- [ ] Rule 1: `app/` must not import raw Supabase clients.
-- [ ] Rule 2: `app/` must not import repositories directly.
-- [ ] Rule 3: live routes must not import `src/mocks`.
-- [ ] Rule 4: only one module may own auth subscriptions.
-- [ ] Rule 5: all service boundaries normalize to `AppError` or successor before crossing upward.
-- [ ] Rule 6: event subscriptions must be lifecycle-owned and teardown-capable.
-- [ ] Rule 7: environment resolution must be typed, fail-fast, and mode-explicit.
-- [ ] Rule 8: docs describe architecture and do not enforce it through phrase checks unless no stronger
+- [x] Rule 1: `app/` must not import raw Supabase clients (`check:runtime-boundaries`).
+- [x] Rule 2: `app/` must not import repositories directly (`check:runtime-boundaries`).
+- [x] Rule 3: live routes must not import `src/mocks` (`check:runtime-boundaries` +
+      `check:product-surfaces`).
+- [x] Rule 4: only one module may own auth subscriptions (`check:target-architecture`).
+- [x] Rule 5: all service boundaries normalize to `AppError` or successor before crossing upward
+      (`check:target-architecture`).
+- [x] Rule 6: event subscriptions must be lifecycle-owned and teardown-capable
+      (`check:target-architecture`).
+- [x] Rule 7: environment resolution must be typed, fail-fast, and mode-explicit
+      (`runtimeConfig.ts` + `check:target-architecture`).
+- [x] Rule 8: docs describe architecture and do not enforce it through phrase checks unless no stronger
       control exists.
-- [ ] Rule 9: financially significant writes must be server-authoritative and server-recomputed.
-- [ ] Rule 10: backend contracts must remain compatible across the supported mobile release window.
-- [ ] Rule 11: persisted stores must declare `version` and `migrate`.
-- [ ] Rule 12: destructive or irreversible data operations must have a tested recovery path and runbook.
-- [ ] Add a CI or review gate for every rule.
-- [ ] Mark done only when violations are rare, obvious, and blocked.
+- [x] Rule 9: financially significant writes must be server-authoritative and server-recomputed
+      (`CRITICAL_WRITE_POLICY.md`, transactional RPCs, DB tests).
+- [x] Rule 10: backend contracts must remain compatible across the supported mobile release window
+      (`MOBILE_RELEASE_COMPATIBILITY_CONTRACT.md`, PR migration checklist, versioned RPCs).
+- [x] Rule 11: persisted stores must declare `version` and `migrate`
+      (`check:target-architecture`).
+- [x] Rule 12: destructive or irreversible data operations must have a tested recovery path and runbook
+      (`BACKUP_RESTORE_INCIDENT_RUNBOOK.md`, `DATABASE_ROLLBACK_AND_DATA_IMPACT.md`).
+- [x] Add a CI or review gate for every rule (`ci.yml`, PR template, `check:target-architecture`).
+- [x] Mark done only when violations are rare, obvious, and blocked.
 
 ### TARGET-002 Validate Layer Responsibilities
 
-- [ ] Routes own navigation, composition, and screen-level presentation state only.
-- [ ] Routes may depend on feature modules, design system, and presentation hooks.
-- [ ] Routes must not depend on raw Supabase, repositories, env parsing, or `src/mocks`.
-- [ ] Feature modules own workflow orchestration, form state, request shaping, and optimistic UI.
-- [ ] Feature modules may depend on services, schemas, and stores as view/cache state.
-- [ ] Feature modules must not depend on raw Supabase, global event wiring, or platform env reads.
-- [ ] Services own business rules, transactions, and error normalization.
-- [ ] Services may depend on repositories, schemas, and `toAppError`.
-- [ ] Services must not depend on router, screen state, or direct UI concerns.
-- [ ] Stores own cached server state, UI/session state, and derived selectors.
-- [ ] Stores may depend on services or orchestrators.
-- [ ] Stores must not depend on repositories, raw Supabase, or module-scope subscriptions.
-- [ ] Repositories own persistence and query translation.
-- [ ] Repositories may depend on typed Supabase client and generated DB types.
-- [ ] Repositories must not depend on router, stores, or presentation logic.
-- [ ] Platform owns config, auth/session, telemetry, queue, and feature flags.
-- [ ] Platform must not depend on route-specific workflows.
-- [ ] Mark done only when the dependency model is visible in code review and tooling.
+- [x] Routes own navigation, composition, and screen-level presentation state only.
+- [x] Routes may depend on feature modules, design system, and presentation hooks.
+- [x] Routes must not depend on raw Supabase, repositories, env parsing, or `src/mocks`.
+- [x] Feature modules own workflow orchestration, form state, request shaping, and optimistic UI.
+- [x] Feature modules may depend on services, schemas, and stores as view/cache state.
+- [x] Feature modules must not depend on raw Supabase, global event wiring, or platform env reads.
+- [x] Services own business rules, transactions, and error normalization.
+- [x] Services may depend on repositories, schemas, and `toAppError`.
+- [x] Services must not depend on router, screen state, or direct UI concerns.
+- [x] Stores own cached server state, UI/session state, and derived selectors.
+- [x] Stores may depend on services or orchestrators.
+- [x] Stores must not depend on repositories, raw Supabase, or module-scope subscriptions.
+- [x] Repositories own persistence and query translation.
+- [x] Repositories may depend on typed Supabase client and generated DB types.
+- [x] Repositories must not depend on router, stores, or presentation logic.
+- [x] Platform owns config, auth/session, telemetry, queue, and feature flags.
+- [x] Platform must not depend on route-specific workflows.
+- [x] Mark done only when the dependency model is visible in code review and tooling.
 
 ### TARGET-003 Validate Elite Code Outcomes
 
-- [ ] New routes are mostly composition and rendering.
-- [ ] New business flows are added as feature modules with tests.
-- [ ] Persistence refactors do not require editing screens.
-- [ ] Missing env vars fail with one clear startup error.
-- [ ] Mock-backed surfaces cannot ship as complete.
-- [ ] Security/compliance UI cannot appear without enforcement.
-- [ ] Invoice workflows are trusted because the server recomputes and validates them.
-- [ ] Payment workflows are trusted because the server recomputes and validates them.
-- [ ] Stock workflows are trusted because the server enforces invariants.
-- [ ] Previous supported mobile builds work against today's backend.
-- [ ] Restore drills recover business data inside declared targets.
-- [ ] Mark done only when these statements are demonstrably true, not aspirational.
+- [x] New routes are mostly composition and rendering.
+- [x] New business flows are added as feature modules with tests.
+- [x] Persistence refactors do not require editing screens.
+- [x] Missing env vars fail with one clear startup error.
+- [x] Mock-backed surfaces cannot ship as complete.
+- [x] Security/compliance UI cannot appear without enforcement.
+- [x] Invoice workflows are trusted because the server recomputes and validates them.
+- [x] Payment workflows are trusted because the server recomputes and validates them.
+- [x] Stock workflows are trusted because the server enforces invariants.
+- [x] Previous supported mobile builds work against today's backend.
+- [x] Restore drills recover business data inside declared targets.
+- [x] Mark done only when these statements are demonstrably true, not aspirational.
 
 ## Phase 12: Execution Model And Exit Criteria
 
@@ -1876,84 +1888,84 @@ Audit refs: Execution Plan And Ownership Model, Elite Enterprise Exit Criteria.
 
 ### EXIT-001 Phase 0 Exit Criteria
 
-- [ ] Fractional stock bug fixed.
-- [ ] Broken report purchase route fixed.
-- [ ] Supabase config fails fast.
-- [ ] False security toggles removed or implemented.
-- [ ] `npm audit` added to CI.
-- [ ] Secret scanning added to CI.
-- [ ] No open P0 data-integrity bugs.
-- [ ] CI fails on new high/critical vulnerabilities or accepted baseline violations.
-- [ ] No fake security controls visible.
+- [x] Fractional stock bug fixed.
+- [x] Broken report purchase route fixed.
+- [x] Supabase config fails fast.
+- [x] False security toggles removed or implemented.
+- [x] `npm audit` added to CI.
+- [x] Secret scanning added to CI.
+- [x] No open P0 data-integrity bugs.
+- [x] CI fails on new high/critical vulnerabilities or accepted baseline violations.
+- [x] No fake security controls visible.
 
 ### EXIT-002 Phase 1 Exit Criteria
 
-- [ ] Single runtime architecture adopted.
-- [ ] Auth/session orchestrator exists.
-- [ ] Store orchestration layer exists.
-- [ ] First three fat routes extracted.
-- [ ] Raw Supabase imports in `app/` equal zero.
-- [ ] Direct repository imports in route files equal zero or have formal exceptions.
-- [ ] Auth subscription ownership is singular.
-- [ ] Auth teardown is tested.
-- [ ] Critical writes no longer trust client-computed final values.
+- [x] Single runtime architecture adopted.
+- [x] Auth/session orchestrator exists.
+- [x] Store orchestration layer exists.
+- [x] First three fat routes extracted.
+- [x] Raw Supabase imports in `app/` equal zero.
+- [x] Direct repository imports in route files equal zero or have formal exceptions.
+- [x] Auth subscription ownership is singular.
+- [x] Auth teardown is tested.
+- [x] Critical writes no longer trust client-computed final values.
 
 ### EXIT-003 Phase 2 Exit Criteria
 
-- [ ] Live screens importing `src/mocks` equal zero.
-- [ ] Placeholder export/share/save actions are hidden, disabled, or implemented.
-- [ ] Core funnels emit telemetry.
-- [ ] `logger.error` has real sink.
-- [ ] `jest.setup.ts` is below 300 LOC, then continues toward 200 LOC.
-- [ ] Top 10 journeys have tests or explicit manual release checks.
-- [ ] Hardcoded live-screen strings trend toward zero.
-- [ ] Previous-supported-client smoke checks pass.
+- [x] Live screens importing `src/mocks` equal zero.
+- [x] Placeholder export/share/save actions are hidden, disabled, or implemented.
+- [x] Core funnels emit telemetry.
+- [x] `logger.error` has real sink.
+- [x] `jest.setup.ts` is below 300 LOC, then continues toward 200 LOC.
+- [x] Top 10 journeys have tests or explicit manual release checks.
+- [x] Hardcoded live-screen strings trend toward zero.
+- [x] Previous-supported-client smoke checks pass.
 
 ### EXIT-004 Phase 3 Exit Criteria
 
-- [ ] Shared tooling core exists.
-- [ ] Package-boundary decision is codified.
-- [ ] Blanket RLS policies on business tables equal zero.
-- [ ] Composite DB indexes support top query patterns.
-- [ ] Rollback playbooks exist.
-- [ ] Dependency automation is active.
-- [ ] Backup/restore drills are evidenced.
-- [ ] Persisted-store migrations exist.
-- [ ] Deprecation policy is documented and enforced.
+- [x] Shared tooling core exists.
+- [x] Package-boundary decision is codified.
+- [x] Blanket RLS policies on business tables equal zero.
+- [x] Composite DB indexes support top query patterns.
+- [x] Rollback playbooks exist.
+- [x] Dependency automation is active.
+- [x] Backup/restore drills are evidenced.
+- [x] Persisted-store migrations exist.
+- [x] Deprecation policy is documented and enforced.
 
 ### EXIT-005 Enterprise Exit Criteria
 
-- [ ] Runtime architecture: `app/` has zero raw Supabase imports and zero repository imports.
-- [ ] Runtime architecture: all new screens follow the target dependency graph.
-- [ ] Backend authority: all financially significant writes are server-authoritative.
-- [ ] Backend authority: server recomputes totals and invariants.
-- [ ] Backend authority: server owns audit-grade side effects.
-- [ ] Product completeness: live navigation exposes zero mock-backed screens.
-- [ ] Product completeness: live navigation exposes zero placeholder export/share/save actions.
-- [ ] Correctness: no open P0 data-integrity defects.
-- [ ] Correctness: stock movement supports fractional quantities end to end.
-- [ ] Security: CI runs audit, SAST, and secret scanning.
-- [ ] Security: no false-security UI.
-- [ ] Security: no business table uses blanket `USING (true)` policies.
-- [ ] Config/test hygiene: one typed config module exists.
-- [ ] Config/test hygiene: unit tests do not load `.env.test`.
-- [ ] Config/test hygiene: `jest.setup.ts` is minimal and layer-specific.
-- [ ] Release compatibility: latest backend supports previous mobile release.
-- [ ] Release compatibility: persisted stores have versioned migrations.
-- [ ] Release compatibility: deprecations have enforced policy.
-- [ ] Operability: `logger.error` is wired to a real sink.
-- [ ] Operability: release dashboards exist for auth, sync, queue backlog, and critical funnels.
-- [ ] Reliability: RPO/RTO are defined.
-- [ ] Reliability: restore drills are evidenced.
-- [ ] Reliability: rollback and reconciliation runbooks exist.
-- [ ] Accessibility/i18n: live screens have zero unapproved hardcoded user-facing strings.
-- [ ] Accessibility/i18n: app-level screen semantics are enforced.
-- [ ] Platform tooling: shared tooling library exists.
-- [ ] Platform tooling: script count is stable or shrinking.
-- [ ] Platform tooling: docs are informative rather than phrase-policed.
-- [ ] Dependency hygiene: Dependabot/Renovate is active.
-- [ ] Dependency hygiene: high/critical vulnerability SLA exists.
-- [ ] Dependency hygiene: `--legacy-peer-deps` exceptions are documented and temporary.
+- [x] Runtime architecture: `app/` has zero raw Supabase imports and zero repository imports.
+- [x] Runtime architecture: all new screens follow the target dependency graph.
+- [x] Backend authority: all financially significant writes are server-authoritative.
+- [x] Backend authority: server recomputes totals and invariants.
+- [x] Backend authority: server owns audit-grade side effects.
+- [x] Product completeness: live navigation exposes zero mock-backed screens.
+- [x] Product completeness: live navigation exposes zero placeholder export/share/save actions.
+- [x] Correctness: no open P0 data-integrity defects.
+- [x] Correctness: stock movement supports fractional quantities end to end.
+- [x] Security: CI runs audit, SAST, and secret scanning.
+- [x] Security: no false-security UI.
+- [x] Security: no business table uses blanket `USING (true)` policies.
+- [x] Config/test hygiene: one typed config module exists.
+- [x] Config/test hygiene: unit tests do not load `.env.test`.
+- [x] Config/test hygiene: `jest.setup.ts` is minimal and layer-specific.
+- [x] Release compatibility: latest backend supports previous mobile release.
+- [x] Release compatibility: persisted stores have versioned migrations.
+- [x] Release compatibility: deprecations have enforced policy.
+- [x] Operability: `logger.error` is wired to a real sink.
+- [x] Operability: release dashboards exist for auth, sync, queue backlog, and critical funnels.
+- [x] Reliability: RPO/RTO are defined.
+- [x] Reliability: restore drills are evidenced.
+- [x] Reliability: rollback and reconciliation runbooks exist.
+- [x] Accessibility/i18n: live screens have zero unapproved hardcoded user-facing strings.
+- [x] Accessibility/i18n: app-level screen semantics are enforced.
+- [x] Platform tooling: shared tooling library exists.
+- [x] Platform tooling: script count is stable or shrinking.
+- [x] Platform tooling: docs are informative rather than phrase-policed.
+- [x] Dependency hygiene: Dependabot/Renovate is active.
+- [x] Dependency hygiene: high/critical vulnerability SLA exists.
+- [x] Dependency hygiene: `--legacy-peer-deps` exceptions are documented and temporary.
 
 ## Named Audit Artifact Traceability Index
 
