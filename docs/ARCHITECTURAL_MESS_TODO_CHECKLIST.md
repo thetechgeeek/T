@@ -1971,165 +1971,175 @@ Audit refs: Execution Plan And Ownership Model, Elite Enterprise Exit Criteria.
 
 Use this index only as a reviewer aid. The real work lives in the phase checklists above.
 
-- [ ] Trace: `Release / QE owner` is covered by Ownership Tracks and OPS-007.
-- [ ] Trace: `auth/session orchestrator` is covered by RUNTIME-011 and TARGET-001.
-- [ ] Trace: `routes/screens -> feature modules/view models -> services/use cases -> repositories/read models -> typed backend interface` is covered by RUNTIME-001 and TARGET-002.
-- [ ] Trace: `workspaces: ["src/design-system", "src/ui-shell", "examples/*"]` is covered by
+- [x] Trace: `Release / QE owner` is covered by Ownership Tracks and OPS-007.
+- [x] Trace: `auth/session orchestrator` is covered by RUNTIME-011 and TARGET-001.
+- [x] Trace: `routes/screens -> feature modules/view models -> services/use cases -> repositories/read models -> typed backend interface` is covered by RUNTIME-001 and TARGET-002.
+- [x] Trace: `workspaces: ["src/design-system", "src/ui-shell", "examples/*"]` is covered by
       TOOL-008 and DEP-002.
-- [ ] Trace: `import { ListItem } from '@/design-system/components/molecules/ListItem'` is covered by
+- [x] Trace: `import { ListItem } from '@/design-system/components/molecules/ListItem'` is covered by
       RUNTIME-012.
-- [ ] Trace: `{ ListItem } from '@/design-system/components/molecules'` is covered by RUNTIME-012.
-- [ ] Trace: `\` code-block escape artifacts in the audit are non-actionable and do not represent a
+- [x] Trace: `{ ListItem } from '@/design-system/components/molecules'` is covered by RUNTIME-012.
+- [x] Trace: `\` code-block escape artifacts in the audit are non-actionable and do not represent a
       remediation target.
-- [ ] Trace: `.github/workflows/ci.yml` is covered by CI-001, CI-002, CI-005, and EXIT-005.
-- [ ] Trace: `.github/ISSUE_TEMPLATE/` is covered by CI-003.
-- [ ] Trace: `.github/PULL_REQUEST_TEMPLATE.md` is covered by CI-003.
-- [ ] Trace: `.husky/pre-commit` is covered by CI-001.
-- [ ] Trace: `.husky/pre-push` is covered by CI-001.
-- [ ] Trace: `__tests__/` is covered by TOOL-004 and TOOL-005.
-- [ ] Trace: `__tests__/integration/authFlow.test.ts` is covered by TOOL-005.
-- [ ] Trace: `__tests__/scripts/*.test.ts` is covered by TOOL-005.
-- [ ] Trace: `__tests__/visual/snapshots.test.tsx` is covered by TOOL-005.
-- [ ] Trace: `__tests__/visual/setup/renderToSnapshot.tsx` is covered by TOOL-005.
-- [ ] Trace: `accessibilityAuditContract.test.ts` is covered by A11Y-001.
-- [ ] Trace: `app.json` is covered by A11Y-010 and SEC-012.
-- [ ] Trace: `app/(app)/(tabs)/index.tsx` is covered by PERF-002, A11Y-003, A11Y-005, and
+- [x] Trace: `.github/workflows/ci.yml` is covered by CI-001, CI-002, CI-005, and EXIT-005.
+- [x] Trace: `.github/ISSUE_TEMPLATE/` is covered by CI-003.
+- [x] Trace: `.github/PULL_REQUEST_TEMPLATE.md` is covered by CI-003.
+- [x] Trace: `.husky/pre-commit` is covered by CI-001.
+- [x] Trace: `.husky/pre-push` is covered by CI-001.
+- [x] Trace: `__tests__/` is covered by TOOL-004 and TOOL-005.
+- [x] Trace: `__tests__/integration/authFlow.test.ts` is covered by TOOL-005.
+- [x] Trace: `__tests__/scripts/*.test.ts` is covered by TOOL-005.
+- [x] Trace: `__tests__/visual/snapshots.test.tsx` is covered by TOOL-005.
+- [x] Trace: `__tests__/visual/setup/renderToSnapshot.tsx` is covered by TOOL-005.
+- [x] Trace: `src/design-system/__tests__/accessibilityAuditContract.test.ts` is covered by A11Y-001.
+- [x] Trace: `app.json` is covered by A11Y-010 and SEC-012.
+- [x] Trace: `app/(app)/(tabs)/index.tsx` is covered by PERF-002, A11Y-003, A11Y-005, and
       OPS-007.
-- [ ] Trace: `app/(app)/(tabs)/invoices.tsx` is covered by PERF-001 and A11Y-009.
-- [ ] Trace: `app/(app)/_layout.tsx` is covered by PERF-005.
-- [ ] Trace: `app/_layout.tsx` is covered by PERF-005.
-- [ ] Trace: `app/(app)/customers/add.tsx` is covered by I18N-003.
-- [ ] Trace: `app/(app)/finance/bank-accounts/index.tsx` is covered by RUNTIME-004 and
+- [x] Trace: `app/(app)/(tabs)/invoices.tsx` is covered by PERF-001 and A11Y-009.
+- [x] Trace: `app/(app)/_layout.tsx` is covered by PERF-005.
+- [x] Trace: `app/_layout.tsx` is covered by PERF-005.
+- [x] Trace: `app/(app)/customers/add.tsx` is covered by I18N-003.
+- [x] Trace: `app/(app)/finance/bank-accounts/index.tsx` is covered by RUNTIME-004 and
       PRODUCT-003.
-- [ ] Trace: `app/(app)/finance/cash.tsx` is covered by RUNTIME-004 and PRODUCT-003.
-- [ ] Trace: `app/(app)/finance/payments/make.tsx` is covered by RUNTIME-003.
-- [ ] Trace: `app/(app)/finance/purchases/[id].tsx` is covered by RUNTIME-002 and OPS-007.
-- [ ] Trace: `app/(app)/inventory/[id].tsx` is covered by RUNTIME-002.
-- [ ] Trace: `app/(app)/inventory/add.tsx` is covered by RUNTIME-013, A11Y-006, and I18N-003.
-- [ ] Trace: `app/(app)/invoices/[id].tsx` is covered by RUNTIME-013 and A11Y-005.
-- [ ] Trace: `app/(app)/reports/all-parties.tsx` is covered by RUNTIME-003.
-- [ ] Trace: `app/(app)/reports/all-transactions.tsx` is covered by P0-002.
-- [ ] Trace: `app/(app)/reports/gstr1.tsx` is covered by RUNTIME-004 and PRODUCT-003.
-- [ ] Trace: `app/(app)/reports/gstr3b.tsx` is covered by RUNTIME-004 and PRODUCT-003.
-- [ ] Trace: `app/(app)/reports/party-statement.tsx` is covered by RUNTIME-004 and PRODUCT-003.
-- [ ] Trace: `app/(app)/settings/business-profile.tsx` is covered by I18N-002.
-- [ ] Trace: `app/(app)/settings/firms.tsx` is covered by I18N-002.
-- [ ] Trace: `app/(app)/settings/index.tsx` is covered by A11Y-003.
-- [ ] Trace: `app/(app)/settings/item-categories.tsx` is covered by A11Y-004 and A11Y-005.
-- [ ] Trace: `app/(app)/settings/items.tsx` is covered by I18N-002.
-- [ ] Trace: `app/(app)/settings/reminders.tsx` is covered by I18N-002.
-- [ ] Trace: `app/(app)/settings/security.tsx` is covered by P0-003 and SEC-012.
-- [ ] Trace: `app/(app)/suppliers/add.tsx` is covered by I18N-003 and I18N-005.
-- [ ] Trace: `app/(app)/suppliers/index.tsx` is covered by RUNTIME-003.
-- [ ] Trace: `app/(auth)/setup.tsx` is covered by RUNTIME-013.
-- [ ] Trace: `contrastPolicy.test.ts` is covered by A11Y-001 and A11Y-008.
-- [ ] Trace: `src/` production code scanning is covered by TOOL-006, RUNTIME-001, RUNTIME-007, and
+- [x] Trace: `app/(app)/finance/cash.tsx` is covered by RUNTIME-004 and PRODUCT-003.
+- [x] Trace: `app/(app)/finance/payments/make.tsx` is covered by RUNTIME-003.
+- [x] Trace: `app/(app)/finance/purchases/[id].tsx` is covered by RUNTIME-002 and OPS-007.
+- [x] Trace: `app/(app)/inventory/[id].tsx` is covered by RUNTIME-002.
+- [x] Trace: `app/(app)/inventory/add.tsx` is covered by RUNTIME-013, A11Y-006, and I18N-003.
+- [x] Trace: `app/(app)/invoices/[id].tsx` is covered by RUNTIME-013 and A11Y-005.
+- [x] Trace: `app/(app)/reports/all-parties.tsx` is covered by RUNTIME-003.
+- [x] Trace: `app/(app)/reports/all-transactions.tsx` is covered by P0-002.
+- [x] Trace: `app/(app)/reports/gstr1.tsx` is covered by RUNTIME-004 and PRODUCT-003.
+- [x] Trace: `app/(app)/reports/gstr3b.tsx` is covered by RUNTIME-004 and PRODUCT-003.
+- [x] Trace: `app/(app)/reports/party-statement.tsx` is covered by RUNTIME-004 and PRODUCT-003.
+- [x] Trace: `app/(app)/settings/business-profile.tsx` is covered by I18N-002.
+- [x] Trace: `app/(app)/settings/firms.tsx` is covered by I18N-002.
+- [x] Trace: `app/(app)/settings/index.tsx` is covered by A11Y-003.
+- [x] Trace: `app/(app)/settings/item-categories.tsx` is covered by A11Y-004 and A11Y-005.
+- [x] Trace: `app/(app)/settings/items.tsx` is covered by I18N-002.
+- [x] Trace: `app/(app)/settings/reminders.tsx` is covered by I18N-002.
+- [x] Trace: `app/(app)/settings/security.tsx` is covered by P0-003 and SEC-012.
+- [x] Trace: `app/(app)/suppliers/add.tsx` is covered by I18N-003 and I18N-005.
+- [x] Trace: `app/(app)/suppliers/index.tsx` is covered by RUNTIME-003.
+- [x] Trace: `app/(auth)/setup.tsx` is covered by RUNTIME-013.
+- [x] Trace: `contrastPolicy.test.ts` is covered by A11Y-001 and A11Y-008.
+- [x] Trace: `src/` production code scanning is covered by TOOL-006, RUNTIME-001, RUNTIME-007, and
       I18N-007.
-- [ ] Trace: `src/config/supabase.ts` is covered by P0-004, TOOL-003, SEC-002, and SEC-005.
-- [ ] Trace: `src/config/supabase.ts:5` is covered by SEC-001 and SEC-014.
-- [ ] Trace: `src/config/supabase.ts:27` is covered by SEC-002.
-- [ ] Trace: `src/design-system/` is covered by TOOL-006, TOOL-008, and A11Y-001.
-- [ ] Trace: `src/design-system/__tests__/boundary.test.ts` is covered by TOOL-006.
-- [ ] Trace: `src/design-system/__tests__/componentContract.test.ts` is covered by TOOL-006.
-- [ ] Trace: `src/design-system/components/atoms/Button.tsx` is covered by A11Y-008.
-- [ ] Trace: `src/design-system/components/molecules/ActionMenuSheet.tsx` is covered by A11Y-004.
-- [ ] Trace: `src/design-system/components/molecules/FormField.tsx` is covered by PERF-004, A11Y-007,
+- [x] Trace: `src/config/supabase.ts` is covered by P0-004, TOOL-003, SEC-002, and SEC-005.
+- [x] Trace: `src/config/supabase.ts:5` is covered by SEC-001 and SEC-014.
+- [x] Trace: `src/config/supabase.ts:27` is covered by SEC-002.
+- [x] Trace: `src/design-system/` is covered by TOOL-006, TOOL-008, and A11Y-001.
+- [x] Trace: `src/design-system/__tests__/boundary.test.ts` is covered by TOOL-006.
+- [x] Trace: `src/design-system/__tests__/componentContract.test.ts` is covered by TOOL-006.
+- [x] Trace: `src/design-system/components/atoms/Button.tsx` is covered by A11Y-008.
+- [x] Trace: `src/design-system/components/molecules/ActionMenuSheet.tsx` is covered by A11Y-004.
+- [x] Trace: `src/design-system/components/molecules/FormField.tsx` is covered by PERF-004, A11Y-007,
       and RUNTIME-012.
-- [ ] Trace: `src/design-system/components/molecules/FormSection.tsx` is covered by A11Y-003.
-- [ ] Trace: `src/design-system/components/molecules/ListItem` import paths are covered by
+- [x] Trace: `src/design-system/components/molecules/FormSection.tsx` is covered by A11Y-003.
+- [x] Trace: `src/design-system/components/molecules/ListItem` import paths are covered by
       RUNTIME-012 and PERF-004.
-- [ ] Trace: `src/design-system/components/molecules/PaginatedList.tsx` is covered by A11Y-002 and
+- [x] Trace: `src/design-system/components/molecules/PaginatedList.tsx` is covered by A11Y-002 and
       PERF-004.
-- [ ] Trace: `src/design-system/components/molecules/VirtualizedList.tsx` is covered by PERF-004 and
+- [x] Trace: `src/design-system/components/molecules/VirtualizedList.tsx` is covered by PERF-004 and
       DB/PERF preservation tasks.
-- [ ] Trace: `src/design-system/foundation/theme/layoutMetrics.ts` is covered by A11Y-001.
-- [ ] Trace: `src/errors/AppError.ts` is covered by RUNTIME-005, RUNTIME-006, I18N-004, and SEC-007.
-- [ ] Trace: `src/errors/AppError.ts:72-123` is covered by I18N-004 and SEC-014.
-- [ ] Trace: `src/events/appEvents.ts:17-22` is covered by RUNTIME-009.
-- [ ] Trace: `src/features/invoice-create/InvoiceCreateScreen.tsx` is covered by RUNTIME-013 and
+- [x] Trace: `src/design-system/foundation/theme/layoutMetrics.ts` is covered by A11Y-001.
+- [x] Trace: `src/errors/AppError.ts` is covered by RUNTIME-005, RUNTIME-006, I18N-004, and SEC-007.
+- [x] Trace: `src/errors/AppError.ts:72-123` is covered by I18N-004 and SEC-014.
+- [x] Trace: `src/events/appEvents.ts:17-22` is covered by RUNTIME-009.
+- [x] Trace: `src/features/invoice-create/InvoiceCreateScreen.tsx` is covered by RUNTIME-013 and
       OPS-007.
-- [ ] Trace: `src/features/invoice-create/LineItemsStep.tsx` is covered by PERF-003.
-- [ ] Trace: `src/features/invoice-create/useInvoiceCreateFlow.ts` is covered by A11Y-004 and OPS-007.
-- [ ] Trace: `src/hooks/useLocale.ts` is covered by I18N-001.
-- [ ] Trace: `src/hooks/useNetworkStatus.ts` is covered by A11Y-009 and DB/MEM preservation tasks.
-- [ ] Trace: `src/i18n/__tests__/rtl.test.ts` is covered by I18N-001.
-- [ ] Trace: `src/i18n/polyfills.ts` is covered by I18N-001.
-- [ ] Trace: `src/i18n/rtl.ts` is covered by I18N-001.
-- [ ] Trace: `src/mocks` live usage is covered by RUNTIME-004, PRODUCT-001, PRODUCT-002, and
+- [x] Trace: `src/features/invoice-create/LineItemsStep.tsx` is covered by PERF-003.
+- [x] Trace: `src/features/invoice-create/useInvoiceCreateFlow.ts` is covered by A11Y-004 and OPS-007.
+- [x] Trace: `src/hooks/useLocale.ts` is covered by I18N-001.
+- [x] Trace: `src/hooks/useNetworkStatus.ts` is covered by A11Y-009 and DB/MEM preservation tasks.
+- [x] Trace: `src/i18n/__tests__/rtl.test.ts` is covered by I18N-001.
+- [x] Trace: `src/i18n/polyfills.ts` is covered by I18N-001.
+- [x] Trace: `src/i18n/rtl.ts` is covered by I18N-001.
+- [x] Trace: `src/mocks` live usage is covered by RUNTIME-004, PRODUCT-001, PRODUCT-002, and
       PRODUCT-003.
-- [ ] Trace: `src/repositories/baseRepository.ts` is covered by P0-004, PERF-008, RUNTIME-007,
+- [x] Trace: `src/repositories/baseRepository.ts` is covered by P0-004, PERF-008, RUNTIME-007,
       SEC-010, and SEC-011.
-- [ ] Trace: `src/repositories/baseRepository.ts:24-27` is covered by SEC-011 and SEC-014.
-- [ ] Trace: `src/repositories/index.ts` is covered by RUNTIME-012.
-- [ ] Trace: `src/schemas/inventory.ts` is covered by I18N-005 and RUNTIME-007.
-- [ ] Trace: `src/schemas/invoice.ts` is covered by I18N-005 and RUNTIME-007.
-- [ ] Trace: `src/schemas/payment.ts` is covered by I18N-005 and RUNTIME-007.
-- [ ] Trace: `src/services/authService.ts:73-81` is covered by SEC-006.
-- [ ] Trace: `src/services/invoiceService.ts:50-144` is covered by RUNTIME-014 and SEC-014.
-- [ ] Trace: `src/services/writeQueueService.ts` is covered by OPS-003, SEC-004, and SEC-014.
-- [ ] Trace: `src/services/writeQueueService.ts:24` is covered by OPS-003 and SEC-011.
-- [ ] Trace: `src/services/writeQueueService.ts:73-89` is covered by SEC-004.
-- [ ] Trace: `src/stores/authStore.ts:101-108` is covered by RUNTIME-011 and SEC-003.
-- [ ] Trace: `src/theme/__tests__/accessibilityPolicy.test.ts` is covered by A11Y-001.
-- [ ] Trace: `src/theme/__tests__/contrastPolicy.test.ts` is covered by A11Y-001 and A11Y-008.
-- [ ] Trace: `src/theme/designTokens.ts` is covered by TOOL-008.
-- [ ] Trace: `src/ui-shell` is covered by TOOL-008.
-- [ ] Trace: `src/utils/currency.ts` is covered by I18N-001.
-- [ ] Trace: `src/utils/dateUtils.ts` is covered by I18N-001.
-- [ ] Trace: `src/utils/logger.ts` is covered by OPS-002 and SEC-007.
-- [ ] Trace: `src/utils/logger.ts:9-26` is covered by SEC-007.
-- [ ] Trace: `supabase/migrations/003_orders_inventory.sql:62` is covered by P0-001 and DB-002.
-- [ ] Trace: `supabase/migrations/004_stock_operations.sql` is covered by P0-001 and DB-002.
-- [ ] Trace: `supabase/migrations/004_stock_operations.sql:7` is covered by P0-001 and DB-002.
-- [ ] Trace: `supabase/migrations/007_views_functions_rls.sql:195` is covered by SEC-008.
-- [ ] Trace: `009_missing_indexes.sql` is covered by PERF-007.
-- [ ] Trace: `supabase/migrations/009_missing_indexes.sql` is covered by PERF-007.
-- [ ] Trace: `supabase/migrations/011_transactional_invoice.sql` is covered by P0-001 and DB-002.
-- [ ] Trace: `supabase/migrations/014_audit_log.sql:33` is covered by SEC-009 and SEC-014.
-- [ ] Trace: `supabase/migrations/014_audit_log.sql:35-46` is covered by SEC-009.
-- [ ] Trace: `supabase/migrations/015_fix_audit_log_rls.sql` is covered by DB-003 and SEC-009.
-- [ ] Trace: `supabase/migrations/015_fix_audit_log_rls.sql:5-8` is covered by SEC-009.
-- [ ] Trace: `supabase/migrations/015_low_stock_notification.sql` is covered by DB-003.
-- [ ] Trace: `supabase/migrations/021_refresh_summaries_in_rpcs.sql` is covered by P0-001, DB-002, and
+- [x] Trace: `src/repositories/baseRepository.ts:24-27` is covered by SEC-011 and SEC-014.
+- [x] Trace: `src/repositories/index.ts` is covered by RUNTIME-012.
+- [x] Trace: `src/schemas/inventory.ts` is covered by I18N-005 and RUNTIME-007.
+- [x] Trace: `src/schemas/invoice.ts` is covered by I18N-005 and RUNTIME-007.
+- [x] Trace: `src/schemas/payment.ts` is covered by I18N-005 and RUNTIME-007.
+- [x] Trace: `src/services/authService.ts:73-81` is covered by SEC-006.
+- [x] Trace: `src/services/invoiceService.ts:50-144` is covered by RUNTIME-014 and SEC-014.
+- [x] Trace: `src/services/writeQueueService.ts` is covered by OPS-003, SEC-004, and SEC-014.
+- [x] Trace: `src/services/writeQueueService.ts:24` is covered by OPS-003 and SEC-011.
+- [x] Trace: `src/services/writeQueueService.ts:73-89` is covered by SEC-004.
+- [x] Trace: `src/stores/authStore.ts:101-108` is covered by RUNTIME-011 and SEC-003.
+- [x] Trace: `src/theme/__tests__/accessibilityPolicy.test.ts` is covered by A11Y-001.
+- [x] Trace: `src/theme/__tests__/contrastPolicy.test.ts` is covered by A11Y-001 and A11Y-008.
+- [x] Trace: `src/theme/designTokens.ts` is covered by TOOL-008.
+- [x] Trace: `src/ui-shell` is covered by TOOL-008.
+- [x] Trace: `src/utils/currency.ts` is covered by I18N-001.
+- [x] Trace: `src/utils/dateUtils.ts` is covered by I18N-001.
+- [x] Trace: `src/utils/logger.ts` is covered by OPS-002 and SEC-007.
+- [x] Trace: `src/utils/logger.ts:9-26` is covered by SEC-007.
+- [x] Trace: `docs/TARGET_STATE_ARCHITECTURE_GATES.md` is covered by TARGET-001, TARGET-002,
+      TARGET-003, and EXIT-005.
+- [x] Trace: `docs/ENTERPRISE_EXIT_CRITERIA_EVIDENCE.md` is covered by EXIT-005.
+- [x] Trace: `supabase/migrations/003_orders_inventory.sql:62` is covered by P0-001 and DB-002.
+- [x] Trace: `supabase/migrations/004_stock_operations.sql` is covered by P0-001 and DB-002.
+- [x] Trace: `supabase/migrations/004_stock_operations.sql:7` is covered by P0-001 and DB-002.
+- [x] Trace: `supabase/migrations/007_views_functions_rls.sql:195` is covered by SEC-008.
+- [x] Trace: `009_missing_indexes.sql` is covered by PERF-007.
+- [x] Trace: `supabase/migrations/009_missing_indexes.sql` is covered by PERF-007.
+- [x] Trace: `supabase/migrations/011_transactional_invoice.sql` is covered by P0-001 and DB-002.
+- [x] Trace: `supabase/migrations/014_audit_log.sql:33` is covered by SEC-009 and SEC-014.
+- [x] Trace: `supabase/migrations/014_audit_log.sql:35-46` is covered by SEC-009.
+- [x] Trace: `supabase/migrations/015_fix_audit_log_rls.sql` is covered by DB-003 and SEC-009.
+- [x] Trace: `supabase/migrations/015_fix_audit_log_rls.sql:5-8` is covered by SEC-009.
+- [x] Trace: `supabase/migrations/015_low_stock_notification.sql` is covered by DB-003.
+- [x] Trace: `supabase/migrations/021_refresh_summaries_in_rpcs.sql` is covered by P0-001, DB-002, and
       DB-007.
-- [ ] Trace: `zustand/middleware` persistence is covered by OPS-005.
-- [ ] Trace: `scripts/check-design-system-guardrails.mjs` is covered by TOOL-006.
-- [ ] Trace: `scripts/check-design-system-visual-regression.mjs` is covered by OPS-001.
-- [ ] Trace: `scripts/check-inventory-app-ui-contract.mjs` is covered by TOOL-006.
-- [ ] Trace: `scripts/check-package-release-discipline.mjs` is covered by TOOL-001 and TOOL-002.
-- [ ] Trace: `scripts/check-ui-package-extraction-readiness.mjs` is covered by TOOL-001, TOOL-002, and
+- [x] Trace: `supabase/migrations/029_scope_business_rls.sql` is covered by SEC-008 and EXIT-005.
+- [x] Trace: `supabase/tests/15_scoped_business_rls.sql` is covered by SEC-008 and EXIT-005.
+- [x] Trace: `zustand/middleware` persistence is covered by OPS-005.
+- [x] Trace: `scripts/check-design-system-guardrails.mjs` is covered by TOOL-006.
+- [x] Trace: `scripts/check-design-system-visual-regression.mjs` is covered by OPS-001.
+- [x] Trace: `scripts/check-inventory-app-ui-contract.mjs` is covered by TOOL-006.
+- [x] Trace: `scripts/check-package-release-discipline.mjs` is covered by TOOL-001 and TOOL-002.
+- [x] Trace: `scripts/check-target-architecture.mjs` is covered by TARGET-001, TARGET-002,
+      TARGET-003, and EXIT-005.
+- [x] Trace: `scripts/check-ui-package-extraction-readiness.mjs` is covered by TOOL-001, TOOL-002, and
       TOOL-008.
-- [ ] Trace: `scripts/check-ui-shell-guardrails.mjs` is covered by TOOL-006.
-- [ ] Trace: `scripts/check-ui-tokens.mjs` is covered by TOOL-006 and CI-001.
-- [ ] Trace: `scripts/check-workspace-packages.mjs` is covered by TOOL-006 and TOOL-008.
-- [ ] Trace: `scripts/generate-design-tokens.mjs` is covered by TOOL-001, TOOL-002, and TOOL-008.
-- [ ] Trace: `scripts/run-design-system-proof.mjs` is covered by TOOL-001, TOOL-002, and CI-001.
-- [ ] Trace: `scripts/run-expo-e2e.mjs` is covered by TOOL-003 and TOOL-009.
-- [ ] Trace: `scripts/run-maestro-suite.mjs` is covered by TOOL-003 and TOOL-009.
-- [ ] Trace: `scripts/test-seed-reset.mjs` is covered by OPS-001 and SEC-014.
-- [ ] Trace: `scripts/test-seed.shared.mjs` is covered by OPS-001.
-- [ ] Trace: `AppError.ts` shorthand is covered by `src/errors/AppError.ts` tasks.
-- [ ] Trace: `PaginatedList.tsx` shorthand is covered by
+- [x] Trace: `scripts/check-ui-shell-guardrails.mjs` is covered by TOOL-006.
+- [x] Trace: `scripts/check-ui-tokens.mjs` is covered by TOOL-006 and CI-001.
+- [x] Trace: `scripts/check-workspace-packages.mjs` is covered by TOOL-006 and TOOL-008.
+- [x] Trace: `scripts/generate-design-tokens.mjs` is covered by TOOL-001, TOOL-002, and TOOL-008.
+- [x] Trace: `scripts/run-design-system-proof.mjs` is covered by TOOL-001, TOOL-002, and CI-001.
+- [x] Trace: `scripts/run-expo-e2e.mjs` is covered by TOOL-003 and TOOL-009.
+- [x] Trace: `scripts/run-maestro-suite.mjs` is covered by TOOL-003 and TOOL-009.
+- [x] Trace: `scripts/test-seed-reset.mjs` is covered by OPS-001 and SEC-014.
+- [x] Trace: `scripts/test-seed.shared.mjs` is covered by OPS-001.
+- [x] Trace: `AppError.ts` shorthand is covered by `src/errors/AppError.ts` tasks.
+- [x] Trace: `PaginatedList.tsx` shorthand is covered by
       `src/design-system/components/molecules/PaginatedList.tsx` tasks.
-- [ ] Trace: `VirtualizedList.tsx` shorthand is covered by
+- [x] Trace: `VirtualizedList.tsx` shorthand is covered by
       `src/design-system/components/molecules/VirtualizedList.tsx` tasks.
-- [ ] Trace: `supabase.ts` shorthand is covered by `src/config/supabase.ts` tasks.
-- [ ] Trace: `useInvoiceCreateFlow.ts` shorthand is covered by
+- [x] Trace: `supabase.ts` shorthand is covered by `src/config/supabase.ts` tasks.
+- [x] Trace: `useInvoiceCreateFlow.ts` shorthand is covered by
       `src/features/invoice-create/useInvoiceCreateFlow.ts` tasks.
 
 ## Verification Checklist For This Todo File
 
-- [ ] Verify every numbered audit section from 1 through 62 appears in the coverage map.
-- [ ] Verify every Immediate Release-Blocking Defect has a P0 checklist.
-- [ ] Verify every Recommended Direction item from 1 through 23 maps to at least one checklist section.
-- [ ] Verify every Target-State hard rule maps to an enforcement checklist item.
-- [ ] Verify every Elite Enterprise Exit Criterion appears under EXIT-005.
-- [ ] Verify every STRIDE table row maps to SEC-014 or a more specific security task.
-- [ ] Verify every OWASP category maps to SEC-015 or a more specific security task.
-- [ ] Verify every named file in the audit appears in at least one relevant remediation task or inventory
+Verification pass completed against the audit coverage map, immediate blockers, recommended directions,
+target-state rules, exit criteria, STRIDE/OWASP mappings, positive findings, and named artifact traces.
+
+- [x] Verify every numbered audit section from 1 through 62 appears in the coverage map.
+- [x] Verify every Immediate Release-Blocking Defect has a P0 checklist.
+- [x] Verify every Recommended Direction item from 1 through 23 maps to at least one checklist section.
+- [x] Verify every Target-State hard rule maps to an enforcement checklist item.
+- [x] Verify every Elite Enterprise Exit Criterion appears under EXIT-005.
+- [x] Verify every STRIDE table row maps to SEC-014 or a more specific security task.
+- [x] Verify every OWASP category maps to SEC-015 or a more specific security task.
+- [x] Verify every named file in the audit appears in at least one relevant remediation task or inventory
       task.
-- [ ] Verify positive audit findings are represented as preservation tasks, not ignored.
-- [ ] Verify no task asks engineers to add another one-off guardrail when structural enforcement is
+- [x] Verify positive audit findings are represented as preservation tasks, not ignored.
+- [x] Verify no task asks engineers to add another one-off guardrail when structural enforcement is
       available.
-- [ ] Verify no task closes an issue by documentation alone when runtime behavior is the audited problem.
-- [ ] Verify remediation produces user-visible correctness improvements, not only architectural cleanup.
+- [x] Verify no task closes an issue by documentation alone when runtime behavior is the audited problem.
+- [x] Verify remediation produces user-visible correctness improvements, not only architectural cleanup.
