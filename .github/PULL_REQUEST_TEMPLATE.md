@@ -41,3 +41,10 @@
 
 - [ ] Not user-visible
 - [ ] User-visible change is captured in `CHANGELOG.md` or generated release notes
+
+## Architectural Remediation Tracking
+
+- [ ] No architectural-remediation checklist item changed
+- [ ] Relevant IDs in `docs/ARCHITECTURAL_MESS_TODO_CHECKLIST.md` were updated
+- [ ] Linked issue uses `.github/ISSUE_TEMPLATE/architecture_remediation.yml`
+- [ ] Any `[r]` risk acceptance includes owner, expiry, mitigation, and rollback/support path

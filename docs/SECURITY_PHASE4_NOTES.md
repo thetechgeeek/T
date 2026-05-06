@@ -17,7 +17,10 @@ Date: 2026-05-05
     - Finance store persists date range only.
     - Dashboard store persists no stats payload.
 - Store migrations move older persisted payloads to sanitized version 1 shapes.
-- Remaining offline-sensitive surface: write queue payloads still use AsyncStorage. That queue needs signed/encrypted payload work before SEC-004 can be fully closed.
+- Remaining offline-sensitive surface: write queue payloads still use AsyncStorage, but queued
+  mutations are now HMAC-signed with a SecureStore-held device key before persistence.
+- Logout clears pending queue payloads, dead-letter queue payloads, queue diagnostics, and the queue
+  signing key.
 
 ## OTP Attempt Limiting
 
@@ -62,6 +65,19 @@ Date: 2026-05-05
 
 - Closed or partially mitigated in code: token storage, local data minimization, OTP throttling, PII
   logging, route param validation, page-size/sort guards, audit coverage hardening, business-table
-  RLS scoping.
-- Still open/partial: signed offline mutations, certificate pinning,
+  RLS scoping, and offline mutation HMAC verification.
+- Still open/partial: offline queue payload encryption, certificate pinning,
   secure-screen/root-detection/auto-lock enforcement, full threat-table closure.
+
+## Offline Queue Integrity
+
+- `writeQueueService.enqueue` signs the mutation identity, table, type, idempotency key, pending
+  timestamp, priority, and canonicalized payload.
+- Replay verifies the signature before invoking the executor. Tampered or unsigned queued mutations
+  move to the dead-letter queue and emit `offline_queue.integrity_rejected` telemetry.
+- Integrity-rejected dead-letter entries are intentionally not retried by bulk retry, because retrying
+  would re-authorize a payload that failed verification.
+- The signing key is stored in SecureStore and rotated when local business persistence is cleared on
+  logout.
+- User-facing behavior: integrity failures are surfaced through the sync diagnostics/dead-letter path
+  rather than interrupting the current screen during replay.

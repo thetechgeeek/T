@@ -769,6 +769,33 @@
 			"invalidDate": "Date must be in YYYY-MM-DD format",
 			"linkedBoth": "Payment cannot be linked to both a customer and a supplier",
 			"linkedRequired": "Payment must be linked to either a customer or a supplier"
+		},
+		"customer": {
+			"nameRequired": "Name is required",
+			"invalidPhone": "Enter a valid 10-digit Indian mobile number",
+			"invalidGstin": "Invalid GSTIN format",
+			"invalidEmail": "Invalid email address"
+		},
+		"businessProfile": {
+			"businessNameRequired": "Business name is required",
+			"invalidGstin": "Invalid GSTIN format",
+			"addressRequired": "Address is required for GST compliance",
+			"cityRequired": "City is required for GST compliance",
+			"stateRequired": "State is required for GST compliance",
+			"invalidPincode": "Pincode must be 6 digits",
+			"invalidPhone": "Enter a valid 10-digit Indian mobile number",
+			"invalidAlternatePhone": "Enter a valid 10-digit mobile number",
+			"invalidEmail": "Invalid email address",
+			"invalidWebsite": "Invalid website URL",
+			"invalidUpi": "Invalid UPI ID format",
+			"invalidIfsc": "Invalid IFSC format",
+			"invoicePrefixRequired": "Invoice prefix is required",
+			"invoicePrefixMax": "Invoice prefix must be 5 characters or fewer"
+		},
+		"expense": {
+			"amountPositive": "Amount must be positive",
+			"invalidCategory": "Invalid expense category",
+			"invalidDate": "Date must be in YYYY-MM-DD format"
 		}
 	},
 	"error": {

@@ -1,12 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppError } from '../errors/AppError';
+import {
+	resetWriteQueueIntegrityKey,
+	signQueuedMutation,
+	verifyQueuedMutationSignature,
+	type WriteQueueSignatureFields,
+} from '../security/writeQueueIntegrity';
 import logger from '../utils/logger';
 
 export type MutationType = 'insert' | 'update' | 'delete';
 
 export type MutationStatus = 'pending' | 'syncing' | 'failed';
 
-export interface QueuedMutation {
+export interface QueuedMutation extends Partial<WriteQueueSignatureFields> {
 	id: string;
 	type: MutationType;
 	table: string;
@@ -55,6 +61,7 @@ const DIAGNOSTICS_KEY = '@writeQueue/diagnostics';
 const MAX_RETRIES = 3;
 const MAX_QUEUE_SIZE = 500;
 const DEFAULT_PRIORITY = 100;
+const INTEGRITY_REJECTION_MESSAGE = 'Offline queued mutation failed integrity verification';
 const RETRY_BACKOFF_SECONDS = [1, 3, 9];
 const DEAD_LETTER_TTL_DAYS = 7;
 const HOURS_PER_DAY = 24;
@@ -181,11 +188,16 @@ export class WriteQueueService {
 			);
 		}
 
-		queue.push({
+		const queuedMutation: QueuedMutation = {
 			...mutation,
 			pendingAt: mutation.pendingAt ?? new Date().toISOString(),
 			priority: mutation.priority ?? DEFAULT_PRIORITY,
 			status: 'pending',
+		};
+
+		queue.push({
+			...queuedMutation,
+			...(await signQueuedMutation(queuedMutation)),
 		});
 		await this.writeQueue(queue);
 	}
@@ -271,6 +283,23 @@ export class WriteQueueService {
 		const now = Date.now();
 
 		for (const mutation of queue) {
+			if (!(await verifyQueuedMutationSignature(mutation))) {
+				const rejectedAt = new Date().toISOString();
+				const rejected = this.createIntegrityRejectedMutation(mutation, rejectedAt);
+				dead.push(rejected);
+				await this.writeDiagnostics({
+					lastReplayError: rejected.lastError,
+					lastReplayErrorAt: rejectedAt,
+					lastDeadLetterAt: rejectedAt,
+				});
+				logger.telemetry('offline_queue.integrity_rejected', {
+					table: mutation.table,
+					type: mutation.type,
+					signatureVersion: mutation.signatureVersion ?? 0,
+				});
+				continue;
+			}
+
 			if (seen.has(mutation.idempotencyKey)) {
 				// Duplicate — skip silently
 				continue;
@@ -359,6 +388,7 @@ export class WriteQueueService {
 	 */
 	async clearQueue(): Promise<void> {
 		await AsyncStorage.removeItem(QUEUE_KEY);
+		await resetWriteQueueIntegrityKey();
 	}
 
 	/**
@@ -366,6 +396,15 @@ export class WriteQueueService {
 	 */
 	async clearDeadLetter(): Promise<void> {
 		await AsyncStorage.removeItem(DEAD_LETTER_KEY);
+	}
+
+	async clearAllPersistence(): Promise<void> {
+		await Promise.all([
+			AsyncStorage.removeItem(QUEUE_KEY),
+			AsyncStorage.removeItem(DEAD_LETTER_KEY),
+			AsyncStorage.removeItem(DIAGNOSTICS_KEY),
+			resetWriteQueueIntegrityKey(),
+		]);
 	}
 
 	async clearExpiredDeadLetters(now = new Date()): Promise<number> {
@@ -399,17 +438,50 @@ export class WriteQueueService {
 		if (dead.length === 0) return;
 
 		const queue = await this.readQueue();
-		const retried = dead.map((m) => ({
-			...m,
-			retryCount: 0,
-			status: 'pending' as MutationStatus,
-		}));
+		const retryable = dead.filter(
+			(mutation) => mutation.lastError !== INTEGRITY_REJECTION_MESSAGE,
+		);
+		const retainedDead = dead.filter(
+			(mutation) => mutation.lastError === INTEGRITY_REJECTION_MESSAGE,
+		);
+		const retried = await Promise.all(
+			retryable.map(async (mutation) => {
+				const nextMutation: QueuedMutation = {
+					...mutation,
+					retryCount: 0,
+					status: 'pending',
+					lastError: undefined,
+					lastAttemptAt: undefined,
+					signature: undefined,
+					signatureVersion: undefined,
+					signedAt: undefined,
+				};
+				return {
+					...nextMutation,
+					...(await signQueuedMutation(nextMutation)),
+				};
+			}),
+		);
 
 		await this.writeQueue([...queue, ...retried]);
-		await this.clearDeadLetter();
+		await this.writeDeadLetter(retainedDead);
 		logger.telemetry('offline_queue.dead_letter_retry_all', {
 			retried: retried.length,
+			retainedIntegrityFailures: retainedDead.length,
 		});
+	}
+
+	private createIntegrityRejectedMutation(
+		mutation: QueuedMutation,
+		rejectedAt: string,
+	): QueuedMutation {
+		return {
+			...mutation,
+			retryCount: MAX_RETRIES,
+			status: 'failed',
+			lastError: INTEGRITY_REJECTION_MESSAGE,
+			lastAttemptAt: rejectedAt,
+		};
 	}
 }
 

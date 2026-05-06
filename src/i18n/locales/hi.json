@@ -769,6 +769,33 @@
 			"invalidDate": "तारीख YYYY-MM-DD फ़ॉर्मेट में होनी चाहिए",
 			"linkedBoth": "भुगतान ग्राहक और सप्लायर दोनों से लिंक नहीं हो सकता",
 			"linkedRequired": "भुगतान ग्राहक या सप्लायर में से किसी एक से लिंक होना चाहिए"
+		},
+		"customer": {
+			"nameRequired": "नाम आवश्यक है",
+			"invalidPhone": "मान्य 10 अंकों का भारतीय मोबाइल नंबर दर्ज करें",
+			"invalidGstin": "अमान्य GSTIN फ़ॉर्मेट",
+			"invalidEmail": "अमान्य ईमेल पता"
+		},
+		"businessProfile": {
+			"businessNameRequired": "व्यवसाय नाम आवश्यक है",
+			"invalidGstin": "अमान्य GSTIN फ़ॉर्मेट",
+			"addressRequired": "GST अनुपालन के लिए पता आवश्यक है",
+			"cityRequired": "GST अनुपालन के लिए शहर आवश्यक है",
+			"stateRequired": "GST अनुपालन के लिए राज्य आवश्यक है",
+			"invalidPincode": "पिनकोड 6 अंकों का होना चाहिए",
+			"invalidPhone": "मान्य 10 अंकों का भारतीय मोबाइल नंबर दर्ज करें",
+			"invalidAlternatePhone": "मान्य 10 अंकों का मोबाइल नंबर दर्ज करें",
+			"invalidEmail": "अमान्य ईमेल पता",
+			"invalidWebsite": "अमान्य वेबसाइट URL",
+			"invalidUpi": "अमान्य UPI ID फ़ॉर्मेट",
+			"invalidIfsc": "अमान्य IFSC फ़ॉर्मेट",
+			"invoicePrefixRequired": "इनवॉइस प्रीफ़िक्स आवश्यक है",
+			"invoicePrefixMax": "इनवॉइस प्रीफ़िक्स 5 अक्षर या उससे कम होना चाहिए"
+		},
+		"expense": {
+			"amountPositive": "राशि धनात्मक होनी चाहिए",
+			"invalidCategory": "अमान्य खर्च श्रेणी",
+			"invalidDate": "तारीख YYYY-MM-DD फ़ॉर्मेट में होनी चाहिए"
 		}
 	},
 	"error": {

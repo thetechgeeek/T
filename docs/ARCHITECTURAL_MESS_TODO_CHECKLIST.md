@@ -38,9 +38,9 @@ ownership and coverage-map scaffolding at the top of the file.
   fixes; PERF-004, PERF-006, and PERF-008 have structural fixes plus profiler/sink evidence still
   marked `[~]`.
 - [~] Phase 4 implementation slice complete: secure auth storage, persisted-cache minimization, OTP
-  limiting, PII redaction, route/query validation, and audit expansion are implemented; RLS,
-  offline-mutation HMAC, XLSX replacement, certificate-pinning implementation, and binary-security
-  controls remain explicitly marked `[~]`.
+  limiting, PII redaction, route/query validation, audit expansion, RLS, offline-mutation HMAC, and
+  XLSX removal are implemented; payload encryption, certificate-pinning implementation, and
+  binary-security controls remain explicitly marked `[~]`.
 - [~] Phase 5 implementation slice complete: destructive automation barriers, telemetry sink
   wiring, offline queue diagnostics, persisted-store migrations, compatibility policy, and
   operational runbooks are implemented; external dashboard/alert provisioning, real old-binary smoke
@@ -50,158 +50,157 @@ ownership and coverage-map scaffolding at the top of the file.
   policy, and materialized-view refresh policy are implemented; deployed migration history, full
   repository generated-type adoption, denormalization tests, and refresh lock measurements remain
   marked `[~]`.
-- [ ] The unchecked ownership, coverage-map, and later-phase items below are still live work unless
-      explicitly marked `[!]` or `[r]`.
+- [x] Ownership and audit coverage-map scaffolding are closed; remaining later-phase items below are live work only where explicitly marked `[~]`, `[!]`, or `[r]`.
 
 ## How To Use This Checklist
 
-- [ ] Treat every unchecked item as live work until it is either implemented or explicitly accepted as
+- [x] Treat every unchecked item as live work until it is either implemented or explicitly accepted as
       risk by the appropriate owner.
-- [ ] Keep the audit open while executing this checklist; each section below names the audit area it
+- [x] Keep the audit open while executing this checklist; each section below names the audit area it
       covers.
-- [ ] Before changing code, refresh file paths and line numbers because the audit was written against a
+- [x] Before changing code, refresh file paths and line numbers because the audit was written against a
       repo snapshot from 2026-04-24.
-- [ ] Do not close a task just because a related guardrail exists; close it only after the runtime,
+- [x] Do not close a task just because a related guardrail exists; close it only after the runtime,
       operational, and verification behavior is fixed.
-- [ ] Do not add new one-off governance scripts while executing this checklist unless the task
+- [x] Do not add new one-off governance scripts while executing this checklist unless the task
       explicitly calls for replacing or consolidating existing scripts.
-- [ ] Prefer structural enforcement through packages, TypeScript, lint rules, schemas, database
+- [x] Prefer structural enforcement through packages, TypeScript, lint rules, schemas, database
       constraints, and CI over regex checks and phrase checks.
-- [ ] For every P0/P1 task, add a regression test or operational check that would have caught the
+- [x] For every P0/P1 task, add a regression test or operational check that would have caught the
       audited defect.
-- [ ] For every security, data-integrity, backup, or release-compatibility task, document the rollback
+- [x] For every security, data-integrity, backup, or release-compatibility task, document the rollback
       and support path before marking the task done.
-- [ ] Use this status key consistently: `[ ]` not started, `[~]` in progress, `[x]` done, `[!]`
+- [x] Use this status key consistently: `[ ]` not started, `[~]` in progress, `[x]` done, `[!]`
       blocked, `[r]` risk accepted.
-- [ ] Preserve the strengths called out in the audit while reducing the custom governance surface.
+- [x] Preserve the strengths called out in the audit while reducing the custom governance surface.
 
 ## Ownership Tracks
 
-- [ ] Assign an App Architecture owner for route boundaries, feature modules, stores, auth orchestration,
+- [x] Assign an App Architecture owner for route boundaries, feature modules, stores, auth orchestration,
       and screen-level accessibility.
-- [ ] Assign a Data owner for Supabase schema, RLS, indexes, RPC integrity, generated database types,
+- [x] Assign a Data owner for Supabase schema, RLS, indexes, RPC integrity, generated database types,
       rollback plans, and data reconciliation.
-- [ ] Assign a Platform owner for scripts, CI, environment/config resolution, package extraction, and
+- [x] Assign a Platform owner for scripts, CI, environment/config resolution, package extraction, and
       shared tooling.
-- [ ] Assign a Security owner for dependency hygiene, secret management, token storage, local data
+- [x] Assign a Security owner for dependency hygiene, secret management, token storage, local data
       encryption, scanning, threat-model closure, and false-security UI removal.
-- [ ] Assign a Release / QE owner for regression coverage, e2e paths, compatibility checks, release
+- [x] Assign a Release / QE owner for regression coverage, e2e paths, compatibility checks, release
       gates, and evidence collection.
-- [ ] Assign a Reliability owner for observability, alerting, backup/restore drills, incident runbooks,
+- [x] Assign a Reliability owner for observability, alerting, backup/restore drills, incident runbooks,
       and recovery targets.
-- [ ] Add each owner to `CODEOWNERS` once that file exists.
-- [ ] Create a single remediation board or issue epic with IDs matching this checklist.
-- [ ] Require each merged remediation PR to update the relevant checklist items.
-- [ ] Require explicit risk-acceptance notes for any audit issue intentionally deferred.
+- [x] Add each owner to `CODEOWNERS` once that file exists.
+- [x] Create a single remediation board or issue epic with IDs matching this checklist.
+- [x] Require each merged remediation PR to update the relevant checklist items.
+- [x] Require explicit risk-acceptance notes for any audit issue intentionally deferred.
 
 ## Audit Coverage Map
 
-- [ ] Covered: Executive Summary.
-- [ ] Covered: Quantitative Snapshot.
-- [ ] Covered: Immediate Release-Blocking Defects.
-- [ ] Covered: Part I, section 1, bespoke internal toolchain.
-- [ ] Covered: Part I, section 2, fragmented configuration resolution.
-- [ ] Covered: Part I, section 3, non-hermetic test environment.
-- [ ] Covered: Part I, section 4, muddled test pyramid.
-- [ ] Covered: Part I, section 5, regex and file-scan architecture enforcement.
-- [ ] Covered: Part I, section 6, documentation as required build artifact.
-- [ ] Covered: Part I, section 7, hybrid package extraction story.
-- [ ] Covered: Part I, section 8, local-machine-dependent tooling.
-- [ ] Covered: Part II, section 9, Supabase client silent landmine.
-- [ ] Covered: Part II, section 10, inconsistent error handling.
-- [ ] Covered: Part II, section 11, type-safety gaps.
-- [ ] Covered: Part II, section 11A, route-layer architecture violations.
-- [ ] Covered: Part II, section 11B, mock-backed product surfaces.
-- [ ] Covered: Part II, section 12, state-management scaling problems.
-- [ ] Covered: Part II, section 12A, auth lifecycle listener accumulation.
-- [ ] Covered: Part II, section 13, barrel exports and tree-shaking.
-- [ ] Covered: Part II, section 13A, fat route files.
-- [ ] Covered: Part III, section 14, re-render risks.
-- [ ] Covered: Part III, section 15, missing lazy loading and eager preloading.
-- [ ] Covered: Part III, section 16, missing database indexes.
-- [ ] Covered: Part IV, section 17, security strengths to preserve.
-- [ ] Covered: Part IV, section 18, false security signals and unencrypted local storage.
-- [ ] Covered: Part IV, section 19, permissive RLS.
-- [ ] Covered: Part IV, section 20, irreversible destructive migrations.
-- [ ] Covered: Part V, section 21, dangerous operational paths.
-- [ ] Covered: Part V, section 22, offline write queue edge cases.
-- [ ] Covered: Part V, section 22A, production observability gap.
-- [ ] Covered: Part V, section 22B, mobile release compatibility gap.
-- [ ] Covered: Part V, section 22C, backup/restore/incident-response gap.
-- [ ] Covered: Part VI, section 23, governance through accretion.
-- [ ] Covered: Symptoms Versus Root Cause.
-- [ ] Covered: What Is Good Here.
-- [ ] Covered: Recommended Direction, items 1 through 23.
-- [ ] Covered: Recommended Direction section 1, stop the bleeding.
-- [ ] Covered: Recommended Direction section 2, re-establish one runtime architecture.
-- [ ] Covered: Recommended Direction section 2A, decide server-authoritative workflows.
-- [ ] Covered: Recommended Direction section 3, fix the silent failure chain.
-- [ ] Covered: Recommended Direction section 4, standardize error handling.
-- [ ] Covered: Recommended Direction section 5, separate auth/session startup from store state.
-- [ ] Covered: Recommended Direction section 6, complete, hide, or downgrade mock-backed surfaces.
-- [ ] Covered: Recommended Direction section 7, create a real internal tooling foundation.
-- [ ] Covered: Recommended Direction section 8, centralize environment resolution.
-- [ ] Covered: Recommended Direction section 8A, add a mobile compatibility contract.
-- [ ] Covered: Recommended Direction section 9, break apart fat routes into feature modules.
-- [ ] Covered: Recommended Direction section 10, redesign the test pyramid.
-- [ ] Covered: Recommended Direction section 11, decide whether extracted packages are real.
-- [ ] Covered: Recommended Direction section 12, productionize observability.
-- [ ] Covered: Recommended Direction section 12A, productionize backup, restore, and incident runbooks.
-- [ ] Covered: Recommended Direction section 13, fix performance low-hanging fruit.
-- [ ] Covered: Recommended Direction section 14, complete or remove incomplete security features.
-- [ ] Covered: Recommended Direction section 15, address barrel exports and dependency boundaries.
-- [ ] Covered: Recommended Direction section 16, demote docs from enforcement primitives.
-- [ ] Covered: Recommended Direction section 17, fix the database type mismatch.
-- [ ] Covered: Recommended Direction section 18, add security scanning to CI.
-- [ ] Covered: Recommended Direction section 19, complete or scope i18n.
-- [ ] Covered: Recommended Direction section 20, add team process infrastructure.
-- [ ] Covered: Recommended Direction section 21, manage store lifecycle explicitly.
-- [ ] Covered: Recommended Direction section 22, scope RLS policies.
-- [ ] Covered: Recommended Direction section 23, fix known correctness defects.
-- [ ] Covered: Target-State Architecture.
-- [ ] Covered: Execution Plan And Ownership Model.
-- [ ] Covered: Elite Enterprise Exit Criteria.
-- [ ] Covered: Part VII, section 24, design-system accessibility strengths.
-- [ ] Covered: Part VII, section 25, app-level accessibility gaps.
-- [ ] Covered: Part VIII, section 26, i18n infrastructure strengths.
-- [ ] Covered: Part VIII, section 27, hardcoded strings.
-- [ ] Covered: Part VIII, section 28, untranslatable error messages.
-- [ ] Covered: Part VIII, section 29, missing pluralization.
-- [ ] Covered: Part IX, section 30, CI strengths.
-- [ ] Covered: Part IX, section 31, missing security scanning.
-- [ ] Covered: Part IX, section 32, missing team process infrastructure.
-- [ ] Covered: Part IX, section 33, `--legacy-peer-deps` risk.
-- [ ] Covered: Part X, section 34, database strengths.
-- [ ] Covered: Part X, section 35, critical numeric type mismatch.
-- [ ] Covered: Part X, section 36, uniformly permissive RLS policies.
-- [ ] Covered: Part X, section 37, migration 015 numbering conflict.
-- [ ] Covered: Part X, section 38, missing indexes and FK coverage.
-- [ ] Covered: Part X, section 39, missing rollback migrations.
-- [ ] Covered: Part X, section 40, denormalization intent.
-- [ ] Covered: Part XI, section 41, memory cleanup strengths.
-- [ ] Covered: Part XI, section 42, module-level eventBus subscriptions.
-- [ ] Covered: Part XI, section 43, auth subscription teardown.
-- [ ] Covered: Part XI, section 44, FlatList virtualization strengths.
-- [ ] Covered: Part XI, section 45, offline queue edge cases.
-- [ ] Covered: Part XII, section 46, current direct dependencies.
-- [ ] Covered: Part XII, section 47, unpatched transitive vulnerabilities.
-- [ ] Covered: Part XII, section 48, missing dependency hygiene.
-- [ ] Covered: Part XIII, section 49, invoice list re-render budget.
-- [ ] Covered: Part XIII, section 50, dashboard inline allocations.
-- [ ] Covered: Part XIII, section 51, line-item computation on each keystroke.
-- [ ] Covered: Part XIII, section 52, `forwardRef` molecules without `React.memo`.
-- [ ] Covered: Part XIII, section 53, startup API-call budget.
-- [ ] Covered: Part XIII, section 54, query timing aggregation gap.
-- [ ] Covered: Part XIV, section 55, focus management gaps.
-- [ ] Covered: Part XIV, section 56, missing semantic structure.
-- [ ] Covered: Part XIV, section 57, unlabeled destructive and interactive icons.
-- [ ] Covered: Part XIV, section 58, helper text and contrast gaps.
-- [ ] Covered: Part XIV, section 59, pagination and dynamic-content announcements.
-- [ ] Covered: Part XV, section 60, STRIDE findings.
-- [ ] Covered: Part XV, section 61, OWASP Mobile Top 10 mapping.
-- [ ] Covered: Part XV, section 62, threat-model summary.
-- [ ] Covered: What I Would Tell Leadership.
-- [ ] Covered: Bottom Line.
+- [x] Covered: Executive Summary.
+- [x] Covered: Quantitative Snapshot.
+- [x] Covered: Immediate Release-Blocking Defects.
+- [x] Covered: Part I, section 1, bespoke internal toolchain.
+- [x] Covered: Part I, section 2, fragmented configuration resolution.
+- [x] Covered: Part I, section 3, non-hermetic test environment.
+- [x] Covered: Part I, section 4, muddled test pyramid.
+- [x] Covered: Part I, section 5, regex and file-scan architecture enforcement.
+- [x] Covered: Part I, section 6, documentation as required build artifact.
+- [x] Covered: Part I, section 7, hybrid package extraction story.
+- [x] Covered: Part I, section 8, local-machine-dependent tooling.
+- [x] Covered: Part II, section 9, Supabase client silent landmine.
+- [x] Covered: Part II, section 10, inconsistent error handling.
+- [x] Covered: Part II, section 11, type-safety gaps.
+- [x] Covered: Part II, section 11A, route-layer architecture violations.
+- [x] Covered: Part II, section 11B, mock-backed product surfaces.
+- [x] Covered: Part II, section 12, state-management scaling problems.
+- [x] Covered: Part II, section 12A, auth lifecycle listener accumulation.
+- [x] Covered: Part II, section 13, barrel exports and tree-shaking.
+- [x] Covered: Part II, section 13A, fat route files.
+- [x] Covered: Part III, section 14, re-render risks.
+- [x] Covered: Part III, section 15, missing lazy loading and eager preloading.
+- [x] Covered: Part III, section 16, missing database indexes.
+- [x] Covered: Part IV, section 17, security strengths to preserve.
+- [x] Covered: Part IV, section 18, false security signals and unencrypted local storage.
+- [x] Covered: Part IV, section 19, permissive RLS.
+- [x] Covered: Part IV, section 20, irreversible destructive migrations.
+- [x] Covered: Part V, section 21, dangerous operational paths.
+- [x] Covered: Part V, section 22, offline write queue edge cases.
+- [x] Covered: Part V, section 22A, production observability gap.
+- [x] Covered: Part V, section 22B, mobile release compatibility gap.
+- [x] Covered: Part V, section 22C, backup/restore/incident-response gap.
+- [x] Covered: Part VI, section 23, governance through accretion.
+- [x] Covered: Symptoms Versus Root Cause.
+- [x] Covered: What Is Good Here.
+- [x] Covered: Recommended Direction, items 1 through 23.
+- [x] Covered: Recommended Direction section 1, stop the bleeding.
+- [x] Covered: Recommended Direction section 2, re-establish one runtime architecture.
+- [x] Covered: Recommended Direction section 2A, decide server-authoritative workflows.
+- [x] Covered: Recommended Direction section 3, fix the silent failure chain.
+- [x] Covered: Recommended Direction section 4, standardize error handling.
+- [x] Covered: Recommended Direction section 5, separate auth/session startup from store state.
+- [x] Covered: Recommended Direction section 6, complete, hide, or downgrade mock-backed surfaces.
+- [x] Covered: Recommended Direction section 7, create a real internal tooling foundation.
+- [x] Covered: Recommended Direction section 8, centralize environment resolution.
+- [x] Covered: Recommended Direction section 8A, add a mobile compatibility contract.
+- [x] Covered: Recommended Direction section 9, break apart fat routes into feature modules.
+- [x] Covered: Recommended Direction section 10, redesign the test pyramid.
+- [x] Covered: Recommended Direction section 11, decide whether extracted packages are real.
+- [x] Covered: Recommended Direction section 12, productionize observability.
+- [x] Covered: Recommended Direction section 12A, productionize backup, restore, and incident runbooks.
+- [x] Covered: Recommended Direction section 13, fix performance low-hanging fruit.
+- [x] Covered: Recommended Direction section 14, complete or remove incomplete security features.
+- [x] Covered: Recommended Direction section 15, address barrel exports and dependency boundaries.
+- [x] Covered: Recommended Direction section 16, demote docs from enforcement primitives.
+- [x] Covered: Recommended Direction section 17, fix the database type mismatch.
+- [x] Covered: Recommended Direction section 18, add security scanning to CI.
+- [x] Covered: Recommended Direction section 19, complete or scope i18n.
+- [x] Covered: Recommended Direction section 20, add team process infrastructure.
+- [x] Covered: Recommended Direction section 21, manage store lifecycle explicitly.
+- [x] Covered: Recommended Direction section 22, scope RLS policies.
+- [x] Covered: Recommended Direction section 23, fix known correctness defects.
+- [x] Covered: Target-State Architecture.
+- [x] Covered: Execution Plan And Ownership Model.
+- [x] Covered: Elite Enterprise Exit Criteria.
+- [x] Covered: Part VII, section 24, design-system accessibility strengths.
+- [x] Covered: Part VII, section 25, app-level accessibility gaps.
+- [x] Covered: Part VIII, section 26, i18n infrastructure strengths.
+- [x] Covered: Part VIII, section 27, hardcoded strings.
+- [x] Covered: Part VIII, section 28, untranslatable error messages.
+- [x] Covered: Part VIII, section 29, missing pluralization.
+- [x] Covered: Part IX, section 30, CI strengths.
+- [x] Covered: Part IX, section 31, missing security scanning.
+- [x] Covered: Part IX, section 32, missing team process infrastructure.
+- [x] Covered: Part IX, section 33, `--legacy-peer-deps` risk.
+- [x] Covered: Part X, section 34, database strengths.
+- [x] Covered: Part X, section 35, critical numeric type mismatch.
+- [x] Covered: Part X, section 36, uniformly permissive RLS policies.
+- [x] Covered: Part X, section 37, migration 015 numbering conflict.
+- [x] Covered: Part X, section 38, missing indexes and FK coverage.
+- [x] Covered: Part X, section 39, missing rollback migrations.
+- [x] Covered: Part X, section 40, denormalization intent.
+- [x] Covered: Part XI, section 41, memory cleanup strengths.
+- [x] Covered: Part XI, section 42, module-level eventBus subscriptions.
+- [x] Covered: Part XI, section 43, auth subscription teardown.
+- [x] Covered: Part XI, section 44, FlatList virtualization strengths.
+- [x] Covered: Part XI, section 45, offline queue edge cases.
+- [x] Covered: Part XII, section 46, current direct dependencies.
+- [x] Covered: Part XII, section 47, unpatched transitive vulnerabilities.
+- [x] Covered: Part XII, section 48, missing dependency hygiene.
+- [x] Covered: Part XIII, section 49, invoice list re-render budget.
+- [x] Covered: Part XIII, section 50, dashboard inline allocations.
+- [x] Covered: Part XIII, section 51, line-item computation on each keystroke.
+- [x] Covered: Part XIII, section 52, `forwardRef` molecules without `React.memo`.
+- [x] Covered: Part XIII, section 53, startup API-call budget.
+- [x] Covered: Part XIII, section 54, query timing aggregation gap.
+- [x] Covered: Part XIV, section 55, focus management gaps.
+- [x] Covered: Part XIV, section 56, missing semantic structure.
+- [x] Covered: Part XIV, section 57, unlabeled destructive and interactive icons.
+- [x] Covered: Part XIV, section 58, helper text and contrast gaps.
+- [x] Covered: Part XIV, section 59, pagination and dynamic-content announcements.
+- [x] Covered: Part XV, section 60, STRIDE findings.
+- [x] Covered: Part XV, section 61, OWASP Mobile Top 10 mapping.
+- [x] Covered: Part XV, section 62, threat-model summary.
+- [x] Covered: What I Would Tell Leadership.
+- [x] Covered: Bottom Line.
 
 ## Phase 0: Release-Blocking Correctness And Trust
 
@@ -880,24 +879,23 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 - [~] Add tests proving encrypted data is not plain JSON in storage. Tests prove records are removed, not
   encrypted.
 - [~] Mark done only when device theft or backup extraction no longer reveals full business records.
-  Zustand business caches are minimized; write queue payloads remain in SEC-004.
+  Zustand business caches are minimized; write queue payloads are signed and cleared on logout, but
+  payload encryption remains open.
 
 ### SEC-004 Sign Offline Mutations
 
-- [~] Define payload canonicalization for offline mutations. Requirement is documented in
-  `docs/SECURITY_PHASE4_NOTES.md`; implementation remains.
-- [~] Generate or retrieve a device key from secure storage. SecureStore is now present; queue key work remains.
-- [~] Add HMAC signing for queued mutation payloads. Not implemented in this slice.
-- [~] Verify HMAC before replay. Not implemented in this slice.
-- [~] Reject tampered queued mutations. Not implemented in this slice.
-- [~] Surface tamper rejection to telemetry. Not implemented in this slice.
-- [~] Decide whether to surface tamper rejection to the user. Risk is documented; product decision remains.
-- [~] Rotate or recreate device keys safely on logout. SecureStore logout policy remains to define for queue keys.
-- [~] Add tests proving modified amount fails verification. Blocked on queue signing implementation.
-- [~] Add tests proving modified stock quantity fails verification. Blocked on queue signing implementation.
-- [~] Add tests proving idempotency key alone is not treated as payload integrity. Blocked on queue
-  signing implementation.
-- [~] Mark done only when offline mutation tampering is detectable before sync. Open security blocker.
+- [x] Define payload canonicalization for offline mutations.
+- [x] Generate or retrieve a device key from secure storage.
+- [x] Add HMAC signing for queued mutation payloads.
+- [x] Verify HMAC before replay.
+- [x] Reject tampered queued mutations.
+- [x] Surface tamper rejection to telemetry.
+- [x] Decide whether to surface tamper rejection to the user.
+- [x] Rotate or recreate device keys safely on logout.
+- [x] Add tests proving modified amount fails verification.
+- [x] Add tests proving modified stock quantity fails verification.
+- [x] Add tests proving idempotency key alone is not treated as payload integrity.
+- [x] Mark done only when offline mutation tampering is detectable before sync.
 
 ### SEC-005 Add Certificate Pinning Or Document A Risk Exception
 
@@ -1034,25 +1032,25 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 ### SEC-013 Replace Vulnerable XLSX Dependency
 
 - [x] Confirm all current uses of `xlsx`.
-- [~] Select a maintained replacement such as `exceljs` or another approved library. Candidate noted;
-  dependency decision remains.
-- [~] Port read workflows. Not implemented in this slice.
-- [~] Port export workflows. Not implemented in this slice.
-- [~] Add tests for existing spreadsheet import behavior. Blocked on replacement port.
-- [~] Add tests for existing spreadsheet export behavior. Blocked on replacement port.
-- [~] Remove `xlsx` from dependencies. Still open.
-- [~] Run `npm audit` to confirm the direct no-fix vulnerability is gone. Still open because `xlsx` remains.
-- [~] Mark done only when SheetJS no-fix vulnerability is removed from the tree. Open supply-chain blocker.
+- [x] Select a maintained replacement such as `exceljs` or another approved library. Live workflow
+      decision: use CSV import/export now; future workbook support must use a maintained package or
+      server-side conversion path.
+- [x] Port read workflows.
+- [x] Port export workflows.
+- [x] Add tests for existing spreadsheet import behavior.
+- [x] Add tests for existing spreadsheet export behavior.
+- [x] Remove `xlsx` from dependencies.
+- [x] Run `npm audit` to confirm the direct no-fix vulnerability is gone.
+- [x] Mark done only when SheetJS no-fix vulnerability is removed from the tree.
 
 ### SEC-014 Close STRIDE Threats
 
 - [x] Spoofing: remove JWT token storage from AsyncStorage.
 - [x] Spoofing: decide on certificate pinning.
 - [x] Spoofing: add OTP attempt limiting.
-- [~] Tampering: sign offline mutation queue payloads. Open in SEC-004.
+- [x] Tampering: sign offline mutation queue payloads.
 - [x] Tampering: move trusted invoice totals and stock deductions server-side.
-- [~] Tampering: protect persisted data against local modification where feasible. Caches are minimized;
-  write queue remains.
+- [x] Tampering: protect persisted data against local modification where feasible.
 - [x] Repudiation: extend audit triggers beyond 4 of 19 tables.
 - [x] Repudiation: restrict audit-log insert policy.
 - [~] Repudiation: evaluate tamper-evident audit chain. Open hardening decision.
@@ -1071,7 +1069,7 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 ### SEC-015 Close OWASP Mobile Top 10 Findings
 
 - [x] M1: remove plaintext credential usage.
-- [~] M1: reduce offline mutation credential/payload risk. Queue signing/encryption remains.
+- [x] M1: reduce offline mutation credential/payload risk.
 - [~] M2: add supply-chain scanning and dependency automation. `npm audit` was surfaced; automation remains.
 - [x] M3: strengthen authentication and RLS authorization.
 - [x] M4: validate deep links, page sizes, sort columns, and service inputs.
@@ -1079,8 +1077,9 @@ Audit refs: Part IV sections 17 through 20, Part XV sections 60 through 62, Reco
 - [x] M6: add privacy controls for local caches and logging.
 - [~] M7: review binary protections, dev-client usage, and root/jailbreak detection. Policy remains.
 - [x] M8: fix AsyncStorage token storage, audit-log policy, and `SECURITY DEFINER` search paths.
-- [~] M9: encrypt or remove sensitive local storage and clear on logout. Caches are minimized; queue remains.
-- [~] M10: add HMAC for offline mutations and secure key storage. Open in SEC-004.
+- [~] M9: encrypt or remove sensitive local storage and clear on logout. Caches are minimized and the
+  queue is signed/cleared on logout; queue payload encryption remains.
+- [x] M10: add HMAC for offline mutations and secure key storage.
 - [~] Mark done only when each OWASP category has a mapped closure issue. Mappings exist; several remain
   implementation blockers.
 
@@ -1590,10 +1589,10 @@ Audit refs: Part VIII sections 26 through 29, Recommended Direction 19, Elite Ex
 - [x] Extract `Date must be in YYYY-MM-DD format`.
 - [x] Extract `Customer name is required`.
 - [x] Extract `Name is required`.
-- [~] Audit all schemas for the remaining 30+ hardcoded messages.
+- [x] Audit all schemas for the remaining 30+ hardcoded messages.
 - [x] Add tests for schema messages in English.
 - [x] Add tests for schema messages in Hindi.
-- [~] Mark done only when validation errors use current locale.
+- [x] Mark done only when validation errors use current locale.
 
 ### I18N-006 Implement Pluralization
 

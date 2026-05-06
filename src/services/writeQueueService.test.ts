@@ -4,7 +4,9 @@
 
 import { WriteQueueService, type QueuedMutation } from './writeQueueService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
+import { clearWriteQueueIntegrityKeyCacheForTests } from '../security/writeQueueIntegrity';
 import { clearTelemetrySink, setTelemetrySink } from '../utils/logger';
 
 // Mock AsyncStorage
@@ -28,6 +30,10 @@ describe('WriteQueueService', () => {
 		// Clear storage between tests
 		Object.keys(mockStorage).forEach((k) => delete mockStorage[k]);
 		jest.clearAllMocks();
+		clearWriteQueueIntegrityKeyCacheForTests();
+		(SecureStore.getItemAsync as jest.Mock).mockResolvedValue(null);
+		(SecureStore.setItemAsync as jest.Mock).mockResolvedValue(undefined);
+		(SecureStore.deleteItemAsync as jest.Mock).mockResolvedValue(undefined);
 		clearTelemetrySink();
 		service = new WriteQueueService();
 	});
@@ -47,6 +53,33 @@ describe('WriteQueueService', () => {
 		};
 		await service.enqueue(mutation);
 		expect(await service.getPendingCount()).toBe(1);
+	});
+
+	it('signs queued mutations with a SecureStore-backed device key', async () => {
+		await service.enqueue({
+			id: 'signed',
+			type: 'insert',
+			table: 'invoices',
+			payload: { amount: 500 },
+			idempotencyKey: 'signed-key',
+			retryCount: 0,
+		});
+
+		const storedQueue = JSON.parse(mockStorage['@writeQueue/mutations']) as QueuedMutation[];
+		expect(SecureStore.setItemAsync).toHaveBeenCalledWith(
+			'write-queue:hmac-key:v1',
+			expect.stringMatching(/^[a-f0-9]{64}$/),
+			expect.objectContaining({
+				keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
+			}),
+		);
+		expect(storedQueue[0]).toEqual(
+			expect.objectContaining({
+				signature: expect.stringMatching(/^[a-f0-9]{64}$/),
+				signatureVersion: 1,
+				signedAt: expect.any(String),
+			}),
+		);
 	});
 
 	it('getPendingCount returns 0 when queue is empty', async () => {
@@ -88,6 +121,122 @@ describe('WriteQueueService', () => {
 
 		expect(executor).toHaveBeenCalledTimes(1);
 		expect(executor).toHaveBeenCalledWith(expect.objectContaining({ idempotencyKey: 'k1' }));
+	});
+
+	it('rejects a queued invoice mutation when the amount is changed before replay', async () => {
+		const captureEvent = jest.fn();
+		setTelemetrySink({ captureEvent });
+
+		await service.enqueue({
+			id: 'tampered-amount',
+			type: 'insert',
+			table: 'invoices',
+			payload: { amount: 500 },
+			idempotencyKey: 'amount-key',
+			retryCount: 0,
+		});
+		const storedQueue = JSON.parse(mockStorage['@writeQueue/mutations']) as QueuedMutation[];
+		storedQueue[0].payload = { amount: 50_000 };
+		mockStorage['@writeQueue/mutations'] = JSON.stringify(storedQueue);
+
+		const executor = jest.fn().mockResolvedValue(undefined);
+		await service.replay(executor);
+
+		expect(executor).not.toHaveBeenCalled();
+		expect(await service.getPendingCount()).toBe(0);
+		expect(await service.getDeadLetterCount()).toBe(1);
+		await expect(service.getSupportSnapshot()).resolves.toEqual(
+			expect.objectContaining({
+				diagnostics: expect.objectContaining({
+					lastReplayError: 'Offline queued mutation failed integrity verification',
+					lastDeadLetterAt: expect.any(String),
+				}),
+				deadLetter: [
+					expect.objectContaining({
+						id: 'tampered-amount',
+						lastError: 'Offline queued mutation failed integrity verification',
+					}),
+				],
+			}),
+		);
+		expect(captureEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				message: 'offline_queue.integrity_rejected',
+				meta: expect.objectContaining({ table: 'invoices', type: 'insert' }),
+			}),
+		);
+	});
+
+	it('rejects a queued stock mutation when the quantity is changed before replay', async () => {
+		await service.enqueue({
+			id: 'tampered-stock',
+			type: 'update',
+			table: 'stock_operations',
+			payload: { quantity_change: 1.5 },
+			idempotencyKey: 'stock-key',
+			retryCount: 0,
+		});
+		const storedQueue = JSON.parse(mockStorage['@writeQueue/mutations']) as QueuedMutation[];
+		storedQueue[0].payload = { quantity_change: 150 };
+		mockStorage['@writeQueue/mutations'] = JSON.stringify(storedQueue);
+
+		const executor = jest.fn().mockResolvedValue(undefined);
+		await service.replay(executor);
+
+		expect(executor).not.toHaveBeenCalled();
+		expect(await service.getPendingCount()).toBe(0);
+		expect(await service.getDeadLetterCount()).toBe(1);
+	});
+
+	it('does not treat the idempotency key as payload integrity', async () => {
+		await service.enqueue({
+			id: 'same-key-tamper',
+			type: 'insert',
+			table: 'invoices',
+			payload: { amount: 100 },
+			idempotencyKey: 'same-idempotency-key',
+			retryCount: 0,
+		});
+		const storedQueue = JSON.parse(mockStorage['@writeQueue/mutations']) as QueuedMutation[];
+		storedQueue[0].payload = { amount: 101 };
+		mockStorage['@writeQueue/mutations'] = JSON.stringify(storedQueue);
+
+		const executor = jest.fn().mockResolvedValue(undefined);
+		await service.replay(executor);
+
+		expect(executor).not.toHaveBeenCalled();
+		expect(await service.getDeadLetterCount()).toBe(1);
+	});
+
+	it('does not let a tampered duplicate suppress a valid mutation with the same idempotency key', async () => {
+		await service.enqueue({
+			id: 'tampered-duplicate',
+			type: 'insert',
+			table: 'invoices',
+			payload: { amount: 100 },
+			idempotencyKey: 'shared-key',
+			retryCount: 0,
+			priority: 200,
+		});
+		await service.enqueue({
+			id: 'valid-duplicate',
+			type: 'insert',
+			table: 'invoices',
+			payload: { amount: 100 },
+			idempotencyKey: 'shared-key',
+			retryCount: 0,
+			priority: 100,
+		});
+		const storedQueue = JSON.parse(mockStorage['@writeQueue/mutations']) as QueuedMutation[];
+		storedQueue[0].payload = { amount: 999 };
+		mockStorage['@writeQueue/mutations'] = JSON.stringify(storedQueue);
+
+		const executor = jest.fn().mockResolvedValue(undefined);
+		await service.replay(executor);
+
+		expect(executor).toHaveBeenCalledTimes(1);
+		expect(executor).toHaveBeenCalledWith(expect.objectContaining({ id: 'valid-duplicate' }));
+		expect(await service.getDeadLetterCount()).toBe(1);
 	});
 
 	it('replay clears queue after successful execution', async () => {
@@ -314,6 +463,47 @@ describe('WriteQueueService', () => {
 			expect.objectContaining({
 				message: 'offline_queue.dead_letter',
 				meta: expect.objectContaining({ table: 'invoices', retryCount: 3 }),
+			}),
+		);
+	});
+
+	it('does not retry dead-letter mutations rejected for integrity failures', async () => {
+		await service.enqueue({
+			id: 'blocked-retry',
+			type: 'insert',
+			table: 'invoices',
+			payload: { amount: 500 },
+			idempotencyKey: 'blocked-retry',
+			retryCount: 0,
+		});
+		const storedQueue = JSON.parse(mockStorage['@writeQueue/mutations']) as QueuedMutation[];
+		storedQueue[0].payload = { amount: 600 };
+		mockStorage['@writeQueue/mutations'] = JSON.stringify(storedQueue);
+
+		await service.replay(jest.fn().mockResolvedValue(undefined));
+		await service.retryAllFailed();
+
+		expect(await service.getPendingCount()).toBe(0);
+		expect(await service.getDeadLetterCount()).toBe(1);
+	});
+
+	it('removes the offline queue signing key when the queue is cleared', async () => {
+		await service.enqueue({
+			id: 'clear-key',
+			type: 'insert',
+			table: 'invoices',
+			payload: { amount: 500 },
+			idempotencyKey: 'clear-key',
+			retryCount: 0,
+		});
+
+		await service.clearQueue();
+
+		expect(AsyncStorage.removeItem).toHaveBeenCalledWith('@writeQueue/mutations');
+		expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith(
+			'write-queue:hmac-key:v1',
+			expect.objectContaining({
+				keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
 			}),
 		);
 	});
