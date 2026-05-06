@@ -50,13 +50,15 @@ Date: 2026-05-05
 
 ## XLSX Dependency
 
-- `xlsx` remains in use for inventory import/export and design-system demo export paths.
+- `xlsx` has been removed from live inventory import/export and from `package.json`.
+- Inventory import/export now uses CSV utilities. The design-system productivity demo still contains
+  an `xlsx` format label for pattern coverage, but it does not import SheetJS or ship the dependency.
 - Required before closure:
-    - Replace with a maintained package or server-side conversion path.
-    - Port import/export tests.
-    - Remove `xlsx` from `package.json`.
+    - Confirm any future spreadsheet workbook support uses a maintained package or server-side
+      conversion path.
+    - Keep CSV import/export tests in place.
 
 ## STRIDE And OWASP Closure
 
 - Closed or partially mitigated in code: token storage, local data minimization, OTP throttling, PII logging, route param validation, page-size/sort guards, audit coverage hardening.
-- Still open/partial: RLS tenant scoping, signed offline mutations, certificate pinning, XLSX replacement, secure-screen/root-detection/auto-lock enforcement, full threat-table closure.
+- Still open/partial: RLS tenant scoping, signed offline mutations, certificate pinning, secure-screen/root-detection/auto-lock enforcement, full threat-table closure.

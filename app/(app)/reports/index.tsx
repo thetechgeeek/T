@@ -1,6 +1,6 @@
 import { OPACITY_TINT_LIGHT, SIZE_ICON_CIRCLE_MD } from '@easydesign/design-system/foundation';
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 import {
 	TrendingUp,
@@ -18,13 +18,15 @@ import { ScreenHeader } from '@easydesign/ui-shell';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { withOpacity } from '@easydesign/design-system/foundation';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { Features } from '@/src/config/featureFlags';
 
 interface ReportCard {
 	title: string;
 	description: string;
 	icon: React.ElementType;
 	color: string;
-	route?: Href;
+	route: Href;
+	enabled: boolean;
 }
 
 export default function ReportsHubScreen() {
@@ -38,6 +40,7 @@ export default function ReportsHubScreen() {
 			icon: TrendingUp,
 			color: c.success,
 			route: './sale' as Href,
+			enabled: true,
 		},
 		{
 			title: 'Purchase Report',
@@ -45,6 +48,7 @@ export default function ReportsHubScreen() {
 			icon: ShoppingCart,
 			color: c.info,
 			route: './purchase' as Href,
+			enabled: true,
 		},
 		{
 			title: 'Party Outstanding',
@@ -52,34 +56,36 @@ export default function ReportsHubScreen() {
 			icon: Users,
 			color: c.warning,
 			route: './all-parties' as Href,
+			enabled: true,
 		},
 		{
 			title: 'Stock Report',
 			description: 'Current stock levels by item',
 			icon: Package,
 			color: c.primary,
+			route: './stock-summary' as Href,
+			enabled: true,
 		},
 		{
 			title: 'Expense Report',
 			description: 'Category-wise expense breakdown',
 			icon: Receipt,
 			color: c.error,
+			route: './expense-summary' as Href,
+			enabled: Features.LIVE_EXPENSE_SUMMARY_REPORT,
 		},
 		{
 			title: 'P&L Report',
-			description: 'Profit & Loss for the financial year',
+			description: 'Beta: excludes other income and stock valuation',
 			icon: BarChart,
 			color: c.onSurfaceVariant,
 			route: '/(app)/finance/profit-loss' as Href,
+			enabled: true,
 		},
-	];
+	].filter((card) => card.enabled);
 
 	const handlePress = (card: ReportCard) => {
-		if (card.route) {
-			router.push(card.route);
-		} else {
-			Alert.alert('Coming Soon', `${card.title} is coming soon.`);
-		}
+		router.push(card.route);
 	};
 
 	return (

@@ -1,0 +1,40 @@
+name: Bug Report
+description: Report a reproducible product or runtime defect.
+title: 'fix: '
+labels: ['bug', 'triage']
+body:
+    - type: textarea
+      id: summary
+      attributes:
+          label: Summary
+          description: What broke, and what did you expect instead?
+      validations:
+          required: true
+    - type: textarea
+      id: steps
+      attributes:
+          label: Reproduction Steps
+          description: Include account state, route, and exact taps or commands.
+          placeholder: |
+              1. Open ...
+              2. Tap ...
+              3. Observe ...
+      validations:
+          required: true
+    - type: dropdown
+      id: surface
+      attributes:
+          label: Surface
+          options:
+              - App runtime
+              - Supabase/backend
+              - CI/tooling
+              - Design system
+              - Documentation
+      validations:
+          required: true
+    - type: textarea
+      id: verification
+      attributes:
+          label: Verification
+          description: Screenshots, logs, test output, or device details.

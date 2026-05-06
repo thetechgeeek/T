@@ -5,26 +5,17 @@ import { useRouter } from 'expo-router';
 import { Screen, ThemedText, Button } from '@easydesign/design-system';
 import { ScreenHeader } from '@easydesign/ui-shell';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
+import { useLocale } from '@/src/hooks/useLocale';
 
 interface UnavailableProductSurfaceProps {
 	title: string;
 	area: 'Finance' | 'Reports' | 'Transactions' | 'Utilities';
 }
 
-const COPY: Record<UnavailableProductSurfaceProps['area'], string> = {
-	Finance:
-		'This finance workflow is disabled until it is connected to live banking, ledger, and audit data.',
-	Reports:
-		'This report is disabled until live ledgers, statutory calculations, exports, and regression tests are wired.',
-	Transactions:
-		'This transaction workflow is disabled until draft, approval, numbering, posting, and export paths are wired.',
-	Utilities:
-		'This utility is disabled until live validation, audit output, and regression coverage are wired.',
-};
-
 export function UnavailableProductSurface({ title, area }: UnavailableProductSurfaceProps) {
 	const router = useRouter();
 	const { c, s, r } = useThemeTokens();
+	const { t } = useLocale();
 
 	return (
 		<Screen
@@ -32,6 +23,7 @@ export function UnavailableProductSurface({ title, area }: UnavailableProductSur
 			withKeyboard={false}
 			header={<ScreenHeader title={title} />}
 			contentContainerStyle={[styles.content, { padding: s.xl }]}
+			testID="unavailable-product-surface"
 		>
 			<View
 				style={[
@@ -50,10 +42,14 @@ export function UnavailableProductSurface({ title, area }: UnavailableProductSur
 				{title}
 			</ThemedText>
 			<ThemedText color={c.onSurfaceVariant} style={[styles.message, { marginTop: s.sm }]}>
-				{COPY[area]}
+				{t(`productReadiness.unavailable.${area}`)}
 			</ThemedText>
 			<View style={{ marginTop: s.xl }}>
-				<Button title="Go Back" variant="secondary" onPress={() => router.back()} />
+				<Button
+					title={t('common.goBack')}
+					variant="secondary"
+					onPress={() => router.back()}
+				/>
 			</View>
 		</Screen>
 	);

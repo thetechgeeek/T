@@ -17,7 +17,7 @@ An Expo (React Native 0.81 / React 19) + Supabase business-management app target
 - **Reports** (GSTR-1, GSTR-3B, day book, balance sheet, cashflow, item/party profit, etc.)
 - **Governance** (business profile, firms, item categories/units, users, security, FY close)
 
-**Stack:** Expo Router, Zustand (+ `immer`, `persist`), React Hook Form + Zod, Supabase JS (auth, Postgres RPC, storage, edge functions), i18next (en/hi with RTL diagnostics), Lucide icons, `@shopify/flash-list`, Reanimated 4, Gesture Handler, `react-native-keyboard-controller`, `expo-local-authentication`, `xlsx`, `date-fns`.
+**Stack:** Expo Router, Zustand (+ `immer`, `persist`), React Hook Form + Zod, Supabase JS (auth, Postgres RPC, storage, edge functions), i18next (en/hi with RTL diagnostics), Lucide icons, `@shopify/flash-list`, Reanimated 4, Gesture Handler, `react-native-keyboard-controller`, `expo-local-authentication`, CSV import/export utilities, `date-fns`.
 
 **Architecture:** `app/` routes → `src/stores/` (Zustand) → `src/services/` (business rules) → `src/repositories/` (Supabase access) → `supabase/` (SQL schema, migrations, RPCs). A parallel governed `src/design-system/` supplies all reusable UI and lives behind lint + contract tests.
 
@@ -149,7 +149,7 @@ Expo Router file-system routes. Three top-level route groups plus the design-sys
     - `payments/` — `[id].tsx`, `[id]/receipt.tsx`, `index.tsx`, `make.tsx` (money-out), `receive.tsx` (money-in).
     - `purchases/` — `[id].tsx`, `create.tsx`, `index.tsx`.
     - Single-screen tools: `cash.tsx`, `cheques.tsx`, `ewallets.tsx`, `profit-loss.tsx`, `transfer.tsx`.
-- `inventory/` — `[id].tsx` (item detail), `add.tsx`, `import.tsx` (CSV/XLSX bulk import), `stock-op.tsx` (adjust/receive/consume).
+- `inventory/` — `[id].tsx` (item detail), `add.tsx`, `import.tsx` (CSV bulk import), `stock-op.tsx` (adjust/receive/consume).
 - `invoices/` — `[id].tsx`, `create.tsx` (mounts `src/features/invoice-create/InvoiceCreateScreen`).
 - `orders/` — `[id].tsx`, `import.tsx` (PDF/AI order parsing), `index.tsx`.
 - `reports/` — full GST-era reporting surface.
@@ -433,7 +433,7 @@ Business-rule layer between stores and repositories. Services orchestrate reposi
 - `businessProfileService.ts` — single-firm profile lifecycle.
 - `customerService.ts`, `supplierService.ts` (via `customerRepository`-style helpers).
 - `dashboardService.ts` — aggregate stats (consumed by dashboard widgets).
-- `exportService.ts` — XLSX/CSV export pipeline built on `xlsx`.
+- `exportService.ts` — GST CSV export pipeline.
 - `financeService.ts` — cash/bank/cheque/e-wallet/loan/transfer flows.
 - `inventoryService.ts` — stock operations, low-stock checks.
 - `invoiceService.ts` — invoice CRUD + atomic RPC creation (via migration 011's transactional stored procedure) + totals via `utils/gstCalculator`.

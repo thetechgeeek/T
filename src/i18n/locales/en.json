@@ -66,6 +66,15 @@
 		"days": "days",
 		"selected": "Selected"
 	},
+	"productReadiness": {
+		"unavailable": {
+			"Finance": "This finance workflow is disabled until it is connected to live banking, ledger, and audit data.",
+			"Reports": "This report is disabled until live ledgers, statutory calculations, exports, and regression tests are wired.",
+			"Transactions": "This transaction workflow is disabled until draft, approval, numbering, posting, and export paths are wired.",
+			"Utilities": "This utility is disabled until live validation, audit output, and regression coverage are wired."
+		},
+		"hiddenActionHint": "Unavailable until the workflow is wired to live data and regression coverage."
+	},
 	"auth": {
 		"signIn": "Sign In",
 		"signUp": "Sign Up",
@@ -216,6 +225,7 @@
 		"importItems": "Import Items",
 		"exportItems": "Export Items",
 		"exportingItems": "Exporting items...",
+		"exportCsv": "Export inventory CSV",
 		"exportFailed": "Export failed",
 		"sortTitle": "Sort inventory",
 		"sortDescription": "Choose how inventory sets should be ordered",
@@ -523,7 +533,7 @@
 		"viewExpenses": "View all business expenses",
 		"viewPurchases": "View all inventory purchases",
 		"viewAging": "View customer outstanding aging report",
-		"viewProfitLoss": "View detailed profit and loss statement",
+		"viewProfitLoss": "Beta: excludes other income and stock valuation",
 		"expenseCategories": {
 			"Rent": "Rent",
 			"Transport": "Transport",

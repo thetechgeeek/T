@@ -229,9 +229,9 @@ export const inventoryService = {
 	},
 
 	/**
-	 * Export entire inventory to Excel format
+	 * Export entire inventory to a flat row set for CSV generation.
 	 */
-	async exportToExcel() {
+	async exportToCsvRows() {
 		const { data, error } = await supabase
 			.from('inventory_items')
 			.select(

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, StyleSheet, FlatList, Pressable, ScrollView, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Pressable, ScrollView } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 import { Download } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@easydesign/design-system';
@@ -15,6 +15,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
 import { FONT_SIZE } from '@easydesign/design-system/foundation';
 import type { InventoryItem, TileCategory } from '@/src/types/inventory';
+import { Features } from '@/src/config/featureFlags';
 
 type CategoryFilter = 'ALL' | TileCategory;
 type StockLevelFilter = 'all' | 'low' | 'out';
@@ -38,7 +39,7 @@ const STOCK_LEVEL_CHIPS: { label: string; value: StockLevelFilter }[] = [
 
 export default function StockSummaryScreen() {
 	const { theme, c, r } = useThemeTokens();
-	const { formatCurrency } = useLocale();
+	const { formatCurrency, t } = useLocale();
 
 	const { items, loading, fetchItems } = useInventoryStore(
 		useShallow((state) => ({
@@ -188,12 +189,22 @@ export default function StockSummaryScreen() {
 				showBackButton
 				rightElement={
 					<Pressable
-						onPress={() => Alert.alert('Export', 'Export feature coming soon.')}
+						disabled={!Features.LIVE_REPORT_EXPORTS}
 						style={styles.exportBtn}
 						accessibilityRole="button"
+						accessibilityState={{ disabled: !Features.LIVE_REPORT_EXPORTS }}
+						accessibilityHint={
+							Features.LIVE_REPORT_EXPORTS
+								? undefined
+								: t('productReadiness.hiddenActionHint')
+						}
 						accessibilityLabel="Export stock summary"
 					>
-						<Download size={20} color={c.primary} strokeWidth={2} />
+						<Download
+							size={20}
+							color={Features.LIVE_REPORT_EXPORTS ? c.primary : c.placeholder}
+							strokeWidth={2}
+						/>
 					</Pressable>
 				}
 			/>

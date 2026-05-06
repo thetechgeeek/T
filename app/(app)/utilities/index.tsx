@@ -1,6 +1,6 @@
 import { OPACITY_TINT_LIGHT, SIZE_ICON_CIRCLE_MD } from '@easydesign/design-system/foundation';
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 import { ShieldCheck, Calculator, Calendar, FileCode, ChevronRight } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@easydesign/design-system';
@@ -10,13 +10,15 @@ import { ScreenHeader } from '@easydesign/ui-shell';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { withOpacity } from '@easydesign/design-system/foundation';
 import { SPACING_PX } from '@easydesign/design-system/foundation';
+import { Features } from '@/src/config/featureFlags';
 
 interface UtilityCard {
 	title: string;
 	description: string;
 	icon: React.ElementType;
 	color: string;
-	route?: Href;
+	route: Href;
+	enabled: boolean;
 }
 
 export default function UtilitiesHubScreen() {
@@ -30,6 +32,7 @@ export default function UtilitiesHubScreen() {
 			icon: ShieldCheck,
 			color: c.success,
 			route: './verify' as Href,
+			enabled: Features.LIVE_DATA_VERIFICATION,
 		},
 		{
 			title: 'Calculator',
@@ -37,6 +40,7 @@ export default function UtilitiesHubScreen() {
 			icon: Calculator,
 			color: c.primary,
 			route: './calculator' as Href,
+			enabled: true,
 		},
 		{
 			title: 'Close Financial Year',
@@ -44,6 +48,7 @@ export default function UtilitiesHubScreen() {
 			icon: Calendar,
 			color: c.warning,
 			route: './close-fy' as Href,
+			enabled: Features.LIVE_CLOSE_FINANCIAL_YEAR,
 		},
 		{
 			title: 'Export to Tally',
@@ -51,15 +56,12 @@ export default function UtilitiesHubScreen() {
 			icon: FileCode,
 			color: c.info,
 			route: './tally-export' as Href,
+			enabled: Features.LIVE_TALLY_EXPORT,
 		},
-	];
+	].filter((card) => card.enabled);
 
 	const handlePress = (card: UtilityCard) => {
-		if (card.route) {
-			router.push(card.route);
-		} else {
-			Alert.alert('Coming Soon', `${card.title} is coming soon.`);
-		}
+		router.push(card.route);
 	};
 
 	return (

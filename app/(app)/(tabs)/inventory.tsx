@@ -14,7 +14,6 @@ import {
 import { useRouter as useExpoRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
-import * as XLSX from 'xlsx';
 import {
 	Plus,
 	Package,
@@ -47,6 +46,7 @@ import {
 	announceListLoadMoreComplete,
 	announceListRefreshComplete,
 } from '@/src/accessibility/announcements';
+import { rowsToCsv } from '@/src/utils/csv';
 
 interface SortOption {
 	label: string;
@@ -209,12 +209,8 @@ export default function InventoryTab() {
 		try {
 			setMenuOpen(false);
 			setExporting(true);
-			const data = await inventoryService.exportToExcel();
-
-			const worksheet = XLSX.utils.json_to_sheet(data);
-			const workbook = XLSX.utils.book_new();
-			XLSX.utils.book_append_sheet(workbook, worksheet, 'Inventory');
-			const workbookOutput = XLSX.write(workbook, { type: 'base64', bookType: 'xlsx' });
+			const data = await inventoryService.exportToCsvRows();
+			const csv = rowsToCsv(data);
 
 			const baseDirectory = FileSystem.documentDirectory;
 			if (!baseDirectory) {
@@ -223,11 +219,14 @@ export default function InventoryTab() {
 			}
 
 			const uri =
-				baseDirectory + `Inventory_Export_${new Date().toISOString().split('T')[0]}.xlsx`;
-			await FileSystem.writeAsStringAsync(uri, workbookOutput, {
-				encoding: FileSystem.EncodingType.Base64,
+				baseDirectory + `Inventory_Export_${new Date().toISOString().split('T')[0]}.csv`;
+			await FileSystem.writeAsStringAsync(uri, csv, {
+				encoding: FileSystem.EncodingType.UTF8,
 			});
-			await Sharing.shareAsync(uri);
+			await Sharing.shareAsync(uri, {
+				mimeType: 'text/csv',
+				dialogTitle: t('inventory.exportCsv'),
+			});
 		} catch {
 			Alert.alert(t('common.errorTitle'), t('inventory.exportFailed'));
 		} finally {
@@ -397,7 +396,11 @@ export default function InventoryTab() {
 			) : null}
 
 			<View style={{ paddingHorizontal: s.lg, paddingTop: s.lg }}>
-				<Card accessibilityLabel={t('inventory.summaryLabel')} padding="none" variant="outlined">
+				<Card
+					accessibilityLabel={t('inventory.summaryLabel')}
+					padding="none"
+					variant="outlined"
+				>
 					<View style={styles.summaryRow}>
 						<View style={[styles.summaryCell, { padding: s.md }]}>
 							<ThemedText variant="caption" color={c.onSurfaceVariant}>
@@ -625,7 +628,9 @@ export default function InventoryTab() {
 									setSortSheetOpen(false);
 								}}
 								accessibilityRole="button"
-								accessibilityLabel={t('inventory.sortByLabel', { label: option.label })}
+								accessibilityLabel={t('inventory.sortByLabel', {
+									label: option.label,
+								})}
 								accessibilityState={{ selected: isActive }}
 								style={({ pressed }) => [
 									styles.sortOption,

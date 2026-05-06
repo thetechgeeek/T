@@ -1,0 +1,37 @@
+name: Security Or Dependency Risk
+description: Track audit, SAST, secret, or dependency supply-chain work.
+title: 'security: '
+labels: ['security', 'dependencies']
+body:
+    - type: dropdown
+      id: risk_type
+      attributes:
+          label: Risk Type
+          options:
+              - npm audit
+              - SAST
+              - Secret scanning
+              - Native dependency
+              - Runtime configuration
+              - Other
+      validations:
+          required: true
+    - type: textarea
+      id: impact
+      attributes:
+          label: Impact
+          description: Include package names, CVEs/advisory IDs, affected routes, or data exposure.
+      validations:
+          required: true
+    - type: textarea
+      id: mitigation
+      attributes:
+          label: Mitigation Plan
+          description: State fix, workaround, owner, SLA, and validation commands.
+      validations:
+          required: true
+    - type: input
+      id: due
+      attributes:
+          label: Due Date
+          placeholder: 'YYYY-MM-DD'

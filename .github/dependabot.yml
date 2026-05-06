@@ -1,0 +1,63 @@
+version: 2
+updates:
+    - package-ecosystem: npm
+      directory: /
+      schedule:
+          interval: weekly
+          day: monday
+          time: '04:30'
+          timezone: Asia/Kolkata
+      open-pull-requests-limit: 8
+      labels:
+          - dependencies
+      commit-message:
+          prefix: chore
+          include: scope
+      groups:
+          low-risk-patches:
+              patterns:
+                  - '*'
+              update-types:
+                  - patch
+              exclude-patterns:
+                  - expo
+                  - expo-*
+                  - '@expo/*'
+                  - react
+                  - react-dom
+                  - react-native
+                  - react-native-*
+                  - '@react-native*'
+          native-runtime-patches:
+              patterns:
+                  - expo
+                  - expo-*
+                  - '@expo/*'
+                  - react
+                  - react-dom
+                  - react-native
+                  - react-native-*
+                  - '@react-native*'
+              update-types:
+                  - patch
+      ignore:
+          - dependency-name: '@easydesign/design-system'
+          - dependency-name: '@easydesign/ui-shell'
+
+    - package-ecosystem: github-actions
+      directory: /
+      schedule:
+          interval: weekly
+          day: monday
+          time: '04:45'
+          timezone: Asia/Kolkata
+      open-pull-requests-limit: 4
+      labels:
+          - dependencies
+          - ci
+      groups:
+          actions-patches:
+              patterns:
+                  - '*'
+              update-types:
+                  - patch

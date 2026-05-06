@@ -7,7 +7,6 @@ const TEMPLATE_PREVIEW_COST_PRICE = 350;
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
-import * as XLSX from 'xlsx';
 import { Upload, Download, CheckCircle2, RefreshCw } from 'lucide-react-native';
 import { Screen as AtomicScreen } from '@easydesign/design-system';
 import { ScreenHeader } from '@easydesign/ui-shell';
@@ -19,6 +18,7 @@ import { useLocale } from '@/src/hooks/useLocale';
 import { inventoryService } from '@/src/services/inventoryService';
 import { itemCategoryService, itemUnitService } from '@/src/services/itemCategoryService';
 import type { ItemCategory, ItemUnit, InventoryItemInsert } from '@/src/types/inventory';
+import { parseCsv, rowsToCsv } from '@/src/utils/csv';
 const STEPS = [
 	{ id: 1, title: 'Template' },
 	{ id: 2, title: 'Upload' },
@@ -76,7 +76,7 @@ export default function InventoryImportScreen() {
 
 	const downloadTemplate = async () => {
 		try {
-			const ws = XLSX.utils.json_to_sheet([
+			const template = rowsToCsv([
 				{
 					design_name: 'Glossy White 60x60',
 					item_code: 'GW-6060',
@@ -92,19 +92,19 @@ export default function InventoryImportScreen() {
 					notes: 'Imported from template',
 				},
 			]);
-			const wb = XLSX.utils.book_new();
-			XLSX.utils.book_append_sheet(wb, ws, 'Inventory');
-			const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
 			const base = FileSystem.documentDirectory;
 			if (!base) {
 				Alert.alert(t('common.error'), 'Storage unavailable');
 				return;
 			}
-			const uri = base + 'Inventory_Template.xlsx';
-			await FileSystem.writeAsStringAsync(uri, wbout, {
-				encoding: FileSystem.EncodingType.Base64,
+			const uri = base + 'Inventory_Template.csv';
+			await FileSystem.writeAsStringAsync(uri, template, {
+				encoding: FileSystem.EncodingType.UTF8,
 			});
-			await Sharing.shareAsync(uri);
+			await Sharing.shareAsync(uri, {
+				mimeType: 'text/csv',
+				dialogTitle: 'Download inventory CSV template',
+			});
 		} catch {
 			Alert.alert(t('common.error'), 'Failed to generate template');
 		}
@@ -114,21 +114,15 @@ export default function InventoryImportScreen() {
 		try {
 			setLoading(true);
 			const res = await DocumentPicker.getDocumentAsync({
-				type: [
-					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-					'text/csv',
-				],
+				type: ['text/csv', 'text/comma-separated-values', 'application/csv'],
 			});
 
 			if (!res.canceled && res.assets && res.assets[0]) {
 				const file = res.assets[0];
 				const content = await FileSystem.readAsStringAsync(file.uri, {
-					encoding: FileSystem.EncodingType.Base64,
+					encoding: FileSystem.EncodingType.UTF8,
 				});
-				const wb = XLSX.read(content, { type: 'base64' });
-				const wsname = wb.SheetNames[0];
-				const ws = wb.Sheets[wsname];
-				const data = XLSX.utils.sheet_to_json(ws);
+				const data = parseCsv(content);
 
 				if (data.length === 0) {
 					Alert.alert(t('common.error'), 'The selected file is empty');
@@ -227,10 +221,10 @@ export default function InventoryImportScreen() {
 							color={c.onSurfaceVariant}
 							style={{ textAlign: 'center', marginBottom: s.lg }}
 						>
-							Download correctly formatted Excel template to avoid import errors.
+							Download a correctly formatted CSV template to avoid import errors.
 						</ThemedText>
 						<Button
-							title="Download Excel Template"
+							title="Download CSV Template"
 							onPress={downloadTemplate}
 							variant="outline"
 						/>
@@ -260,7 +254,7 @@ export default function InventoryImportScreen() {
 							color={c.onSurfaceVariant}
 							style={{ textAlign: 'center', marginBottom: s.lg }}
 						>
-							Select your Excel (.xlsx) or CSV file containing item data.
+							Select a CSV file containing item data.
 						</ThemedText>
 						<Button title="Select File" onPress={pickFile} loading={loading} />
 					</Card>
@@ -284,7 +278,7 @@ export default function InventoryImportScreen() {
 							color={c.onSurfaceVariant}
 							style={{ textAlign: 'center', marginBottom: s.lg }}
 						>
-							Ensure your Excel columns match our system fields.
+							Ensure your CSV columns match our system fields.
 						</ThemedText>
 						{/* Mapping logic here - simplified version */}
 						<ThemedText variant="captionBold" style={{ marginBottom: s.xs }}>

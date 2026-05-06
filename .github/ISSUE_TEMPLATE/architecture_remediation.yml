@@ -1,0 +1,33 @@
+name: Architecture Remediation
+description: Track a checklist-backed architectural cleanup.
+title: 'refactor: '
+labels: ['architecture', 'remediation']
+body:
+    - type: input
+      id: checklist_ref
+      attributes:
+          label: Checklist Reference
+          placeholder: 'ARCH-001 / CI-005 / PRODUCT-002'
+      validations:
+          required: true
+    - type: textarea
+      id: problem
+      attributes:
+          label: Problem
+          description: Describe the current coupling, risk, or incomplete surface.
+      validations:
+          required: true
+    - type: textarea
+      id: acceptance
+      attributes:
+          label: Acceptance Criteria
+          description: List the checks, tests, or docs required before closing.
+      validations:
+          required: true
+    - type: input
+      id: owner
+      attributes:
+          label: Owner
+          placeholder: '@app-architecture-owner'
+      validations:
+          required: true

@@ -15,6 +15,9 @@ describe('platform tooling entrypoint', () => {
 		expect(commands['check:routes']).toMatchObject({
 			script: 'check-expo-route-collisions.mjs',
 		});
+		expect(commands['check:product-surfaces']).toMatchObject({
+			script: 'check-product-surfaces.mjs',
+		});
 		expect(commands['e2e:maestro']).toMatchObject({
 			script: 'run-maestro-suite.mjs',
 		});
