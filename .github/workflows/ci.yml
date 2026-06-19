@@ -108,6 +108,8 @@ jobs:
         runs-on: ubuntu-latest
         needs: validate
         timeout-minutes: 30
+        outputs:
+            ready: ${{ steps.backend-secrets.outputs.ready }}
         env:
             SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
             SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
@@ -119,27 +121,57 @@ jobs:
             INTEGRATION_TEST_PASSWORD: ${{ secrets.INTEGRATION_TEST_PASSWORD }}
 
         steps:
+            - name: Check backend integration secrets
+              id: backend-secrets
+              shell: bash
+              run: |
+                  missing=()
+                  for name in \
+                    SUPABASE_TEST_URL \
+                    SUPABASE_TEST_ANON_KEY \
+                    SUPABASE_TEST_SERVICE_ROLE_KEY \
+                    SUPABASE_TEST_PROJECT_REF_ALLOWLIST \
+                    INTEGRATION_TEST_EMAIL \
+                    INTEGRATION_TEST_PASSWORD
+                  do
+                    if [[ -z "${!name:-}" ]]; then
+                      missing+=("$name")
+                    fi
+                  done
+
+                  if (( ${#missing[@]} > 0 )); then
+                    echo "ready=false" >> "$GITHUB_OUTPUT"
+                    echo "::notice title=Backend integration skipped::Missing required GitHub secrets: ${missing[*]}"
+                  else
+                    echo "ready=true" >> "$GITHUB_OUTPUT"
+                  fi
+
             - name: Checkout
+              if: steps.backend-secrets.outputs.ready == 'true'
               uses: actions/checkout@v4
 
             - name: Setup Node.js
+              if: steps.backend-secrets.outputs.ready == 'true'
               uses: actions/setup-node@v4
               with:
                   node-version: '20.19.4'
                   cache: 'npm'
 
             - name: Install dependencies
+              if: steps.backend-secrets.outputs.ready == 'true'
               # Temporary legacy-peer-deps exception documented in docs/PEER_DEPENDENCY_EXCEPTIONS.md; review by 2026-06-30.
               run: npm ci --legacy-peer-deps
 
             - name: Reset deterministic test seed
+              if: steps.backend-secrets.outputs.ready == 'true'
               run: npm run test:seed:reset
 
             - name: Run seeded integration suite
+              if: steps.backend-secrets.outputs.ready == 'true'
               run: npm run test:integration
 
     maestro-critical-ios:
-        if: github.event_name != 'schedule'
+        if: github.event_name != 'schedule' && needs['backend-integration'].outputs.ready == 'true'
         runs-on: macos-latest
         needs: backend-integration
         timeout-minutes: 75
@@ -168,7 +200,10 @@ jobs:
               run: npm ci --legacy-peer-deps
 
             - name: Install Maestro
-              run: brew install maestro
+              run: |
+                  brew tap mobile-dev-inc/tap
+                  brew install mobile-dev-inc/tap/maestro
+                  maestro --version
 
             - name: Reset deterministic test seed
               run: npm run test:seed:reset
@@ -214,11 +249,17 @@ jobs:
               run: npm ci --legacy-peer-deps
 
             - name: Install Maestro and Android tooling
-              run: brew install maestro android-commandlinetools android-platform-tools
+              run: |
+                  brew tap mobile-dev-inc/tap
+                  brew install mobile-dev-inc/tap/maestro android-commandlinetools android-platform-tools
+                  maestro --version
 
             - name: Accept Android licenses
               shell: bash
-              run: yes | sdkmanager --licenses
+              run: |
+                  set +o pipefail
+                  yes | sdkmanager --licenses
+                  set -o pipefail
 
             - name: Install Android SDK packages
               shell: bash
@@ -270,7 +311,10 @@ jobs:
               run: npm ci --legacy-peer-deps
 
             - name: Install Maestro
-              run: brew install maestro
+              run: |
+                  brew tap mobile-dev-inc/tap
+                  brew install mobile-dev-inc/tap/maestro
+                  maestro --version
 
             - name: Generate design-system artifacts
               run: npm run generate:design-system
@@ -314,11 +358,17 @@ jobs:
               run: npm ci --legacy-peer-deps
 
             - name: Install Maestro and Android tooling
-              run: brew install maestro android-commandlinetools android-platform-tools
+              run: |
+                  brew tap mobile-dev-inc/tap
+                  brew install mobile-dev-inc/tap/maestro android-commandlinetools android-platform-tools
+                  maestro --version
 
             - name: Accept Android licenses
               shell: bash
-              run: yes | sdkmanager --licenses
+              run: |
+                  set +o pipefail
+                  yes | sdkmanager --licenses
+                  set -o pipefail
 
             - name: Install Android SDK packages
               shell: bash
@@ -365,39 +415,77 @@ jobs:
             SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
             SUPABASE_TEST_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
             SUPABASE_TEST_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_TEST_SERVICE_ROLE_KEY }}
+            SUPABASE_TEST_PROJECT_REF_ALLOWLIST: ${{ secrets.SUPABASE_TEST_PROJECT_REF_ALLOWLIST }}
             EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
             EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_ANON_KEY }}
             INTEGRATION_TEST_EMAIL: ${{ secrets.INTEGRATION_TEST_EMAIL }}
             INTEGRATION_TEST_PASSWORD: ${{ secrets.INTEGRATION_TEST_PASSWORD }}
 
         steps:
+            - name: Check backend integration secrets
+              id: backend-secrets
+              shell: bash
+              run: |
+                  missing=()
+                  for name in \
+                    SUPABASE_TEST_URL \
+                    SUPABASE_TEST_ANON_KEY \
+                    SUPABASE_TEST_SERVICE_ROLE_KEY \
+                    SUPABASE_TEST_PROJECT_REF_ALLOWLIST \
+                    INTEGRATION_TEST_EMAIL \
+                    INTEGRATION_TEST_PASSWORD
+                  do
+                    if [[ -z "${!name:-}" ]]; then
+                      missing+=("$name")
+                    fi
+                  done
+
+                  if (( ${#missing[@]} > 0 )); then
+                    echo "ready=false" >> "$GITHUB_OUTPUT"
+                    echo "::notice title=Nightly full suite skipped::Missing required GitHub secrets: ${missing[*]}"
+                  else
+                    echo "ready=true" >> "$GITHUB_OUTPUT"
+                  fi
+
             - name: Checkout
+              if: steps.backend-secrets.outputs.ready == 'true'
               uses: actions/checkout@v4
 
             - name: Setup Node.js
+              if: steps.backend-secrets.outputs.ready == 'true'
               uses: actions/setup-node@v4
               with:
                   node-version: '20.19.4'
                   cache: 'npm'
 
             - name: Install dependencies
+              if: steps.backend-secrets.outputs.ready == 'true'
               # Temporary legacy-peer-deps exception documented in docs/PEER_DEPENDENCY_EXCEPTIONS.md; review by 2026-06-30.
               run: npm ci --legacy-peer-deps
 
             - name: Install Maestro
-              run: brew install maestro
+              if: steps.backend-secrets.outputs.ready == 'true'
+              run: |
+                  brew tap mobile-dev-inc/tap
+                  brew install mobile-dev-inc/tap/maestro
+                  maestro --version
 
             - name: Reset deterministic test seed
+              if: steps.backend-secrets.outputs.ready == 'true'
               run: npm run test:seed:reset
 
             - name: Run seeded integration suite
+              if: steps.backend-secrets.outputs.ready == 'true'
               run: npm run test:integration
 
             - name: Start iOS simulator
+              if: steps.backend-secrets.outputs.ready == 'true'
               run: maestro start-device --platform ios --os-version 18 --force-create
 
             - name: Build iOS app
+              if: steps.backend-secrets.outputs.ready == 'true'
               run: npx expo run:ios -d "iPhone 11"
 
             - name: Run full Maestro suite
+              if: steps.backend-secrets.outputs.ready == 'true'
               run: npm run test:e2e:full
