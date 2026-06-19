@@ -286,7 +286,7 @@ jobs:
 
             - name: Upload iOS design-system artifacts
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: design-system-ios-proof
                   path: artifacts/design-system-proof/ios
@@ -352,7 +352,7 @@ jobs:
 
             - name: Upload Android design-system artifacts
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: design-system-android-proof
                   path: artifacts/design-system-proof/android
