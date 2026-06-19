@@ -107,6 +107,7 @@ export function formatLocalePercent(
 
 export function formatLocaleDateTime(locale: DesignSystemLocale | string, value: Date) {
 	return new Intl.DateTimeFormat(resolveIntlLocale(locale), {
+		calendar: 'gregory',
 		dateStyle: 'medium',
 		timeStyle: 'short',
 		timeZone: 'UTC',

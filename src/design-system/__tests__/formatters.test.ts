@@ -45,6 +45,7 @@ describe('design-system locale formatters', () => {
 		);
 		expect(formatLocaleDateTime('ja-JP', new Date('2026-04-15T09:30:00.000Z'))).toBe(
 			new Intl.DateTimeFormat('ja-JP', {
+				calendar: 'gregory',
 				dateStyle: 'medium',
 				timeStyle: 'short',
 				timeZone: 'UTC',
@@ -86,6 +87,7 @@ describe('design-system locale formatters', () => {
 			),
 		).toEqual({
 			absolute: new Intl.DateTimeFormat('en-US', {
+				calendar: 'gregory',
 				dateStyle: 'medium',
 				timeStyle: 'short',
 				timeZone: 'UTC',

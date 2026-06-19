@@ -22,7 +22,7 @@ describe('design-system native proof contract', () => {
 		const ciWorkflow = fs.readFileSync(ciWorkflowPath, 'utf8');
 
 		expect(maestroFlow).toContain('DESIGN_SYSTEM_DEEPLINK');
-		expect(maestroFlow).toContain("label: 'Internal design system workbench'");
+		expect(maestroFlow).toContain("text: 'Internal design system workbench'");
 		expect(maestroFlow).toContain('takeScreenshot: design-system-foundation');
 		expect(fs.existsSync(baselinePath)).toBe(true);
 		expect(fs.existsSync(auditDocPath)).toBe(true);
