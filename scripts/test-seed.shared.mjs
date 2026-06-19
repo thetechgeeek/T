@@ -120,6 +120,30 @@ export async function signInIntegrationUser(client) {
 	}
 }
 
+async function resolveIntegrationUserId(adminClient) {
+	const email = requiredEnv('INTEGRATION_TEST_EMAIL').trim().toLowerCase();
+	const perPage = 1000;
+
+	for (let page = 1; page <= 10; page += 1) {
+		const { data, error } = await adminClient.auth.admin.listUsers({ page, perPage });
+
+		if (error) {
+			throw new Error(`Failed reading Supabase auth users: ${error.message}`);
+		}
+
+		const user = data?.users?.find((candidate) => candidate.email?.toLowerCase() === email);
+		if (user?.id) {
+			return user.id;
+		}
+
+		if ((data?.users?.length ?? 0) < perPage) {
+			break;
+		}
+	}
+
+	throw new Error(`Integration test user ${email} was not found in Supabase auth users.`);
+}
+
 async function runDelete(client, tableName) {
 	const { error } = await client
 		.from(tableName)
@@ -172,6 +196,24 @@ async function upsertSeedBusinessProfile(client) {
 	return insertedProfile.id;
 }
 
+async function ensureSeedBusinessMembership(adminClient, businessId) {
+	const userId = await resolveIntegrationUserId(adminClient);
+	const { error } = await adminClient.from('business_memberships').upsert(
+		{
+			business_id: businessId,
+			user_id: userId,
+			role: 'owner',
+		},
+		{ onConflict: 'business_id,user_id' },
+	);
+
+	if (error) {
+		throw new Error(`Failed seeding business membership: ${error.message}`);
+	}
+
+	return { businessId, userId };
+}
+
 function todayIsoDate() {
 	return new Date().toISOString().slice(0, 10);
 }
@@ -183,11 +225,24 @@ export async function resetSeedData(adminClient) {
 	await runDelete(adminClient, 'stock_operations');
 	await runDelete(adminClient, 'customers');
 	await runDelete(adminClient, 'inventory_items');
-	await upsertSeedBusinessProfile(adminClient);
+	const businessId = await upsertSeedBusinessProfile(adminClient);
+
+	if (hasServiceRoleKey()) {
+		await ensureSeedBusinessMembership(adminClient, businessId);
+	}
+
+	const customers = seedFixtures.customers.map((customer) => ({
+		...customer,
+		business_id: businessId,
+	}));
+	const inventoryItems = seedFixtures.inventoryItems.map((item) => ({
+		...item,
+		business_id: businessId,
+	}));
 
 	const { data: seededCustomers, error: customerError } = await adminClient
 		.from('customers')
-		.upsert(seedFixtures.customers, {
+		.upsert(customers, {
 			onConflict: 'phone',
 		})
 		.select();
@@ -200,7 +255,7 @@ export async function resetSeedData(adminClient) {
 
 	const { data: seededInventory, error: inventoryError } = await adminClient
 		.from('inventory_items')
-		.upsert(seedFixtures.inventoryItems, {
+		.upsert(inventoryItems, {
 			onConflict: 'design_name',
 		})
 		.select();

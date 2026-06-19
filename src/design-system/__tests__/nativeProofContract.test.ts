@@ -21,6 +21,8 @@ describe('design-system native proof contract', () => {
 		const packageJson = fs.readFileSync(packageJsonPath, 'utf8');
 		const ciWorkflow = fs.readFileSync(ciWorkflowPath, 'utf8');
 
+		expect(maestroFlow).toContain('launchApp:');
+		expect(maestroFlow).not.toContain('shared/login_seeded.yaml');
 		expect(maestroFlow).toContain('DESIGN_SYSTEM_DEEPLINK');
 		expect(maestroFlow).toContain("text: 'Internal design system workbench'");
 		expect(maestroFlow).toContain('takeScreenshot: design-system-foundation');
