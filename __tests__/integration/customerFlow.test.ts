@@ -152,7 +152,16 @@ describe('INT-003: Customer Flow', () => {
 				payment_status: 'unpaid',
 				amount_paid: 0,
 			} as any,
-			[],
+			[
+				{
+					design_name: `${prefix}Linked Invoice Line`,
+					quantity: 1,
+					rate_per_unit: 100,
+					gst_rate: 0,
+					discount: 0,
+					sort_order: 1,
+				},
+			] as any,
 		);
 
 		// Deleting customer should succeed (SET NULL)

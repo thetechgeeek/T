@@ -131,6 +131,47 @@ async function runDelete(client, tableName) {
 	}
 }
 
+async function upsertSeedBusinessProfile(client) {
+	const { data: existingProfiles, error: fetchError } = await client
+		.from('business_profile')
+		.select('id')
+		.order('created_at', { ascending: true })
+		.limit(1);
+
+	if (fetchError) {
+		throw new Error(`Failed reading business profile: ${fetchError.message}`);
+	}
+
+	const existingProfile = existingProfiles?.[0];
+
+	if (existingProfile?.id) {
+		const { error: updateError } = await client
+			.from('business_profile')
+			.update(seedFixtures.businessProfile)
+			.eq('id', existingProfile.id);
+
+		if (updateError) {
+			throw new Error(`Failed updating business profile: ${updateError.message}`);
+		}
+
+		return existingProfile.id;
+	}
+
+	const { data: insertedProfile, error: profileError } = await client
+		.from('business_profile')
+		.insert(seedFixtures.businessProfile)
+		.select('id')
+		.single();
+
+	if (profileError || !insertedProfile) {
+		throw new Error(
+			`Failed seeding business profile: ${profileError?.message ?? 'No profile row returned'}`,
+		);
+	}
+
+	return insertedProfile.id;
+}
+
 function todayIsoDate() {
 	return new Date().toISOString().slice(0, 10);
 }
@@ -142,15 +183,7 @@ export async function resetSeedData(adminClient) {
 	await runDelete(adminClient, 'stock_operations');
 	await runDelete(adminClient, 'customers');
 	await runDelete(adminClient, 'inventory_items');
-	await runDelete(adminClient, 'business_profile');
-
-	const { error: profileError } = await adminClient
-		.from('business_profile')
-		.insert(seedFixtures.businessProfile);
-
-	if (profileError) {
-		throw new Error(`Failed seeding business profile: ${profileError.message}`);
-	}
+	await upsertSeedBusinessProfile(adminClient);
 
 	const { data: seededCustomers, error: customerError } = await adminClient
 		.from('customers')

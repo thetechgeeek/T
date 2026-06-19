@@ -33,16 +33,32 @@ describe('Concurrency Real DB', () => {
 	let customerPhone: string;
 
 	beforeAll(async () => {
-		// Clean start for business profile
-		await supabase
-			.from('business_profile')
-			.delete()
-			.neq('id', '00000000-0000-0000-0000-000000000000');
-		await supabase.from('business_profile').insert({
+		// Reset the accessible business profile to avoid sequence collisions.
+		const testProfile = {
 			business_name: `${prefix} Concurrency Ltd`,
 			invoice_prefix: `C${Date.now().toString().slice(-4)}`,
 			invoice_sequence: 0,
-		});
+		};
+		const { data: profiles, error: profileFetchError } = await supabase
+			.from('business_profile')
+			.select('id')
+			.order('created_at', { ascending: true })
+			.limit(1);
+		if (profileFetchError) throw profileFetchError;
+
+		const existingProfile = profiles?.[0];
+		let profileWriteError;
+		if (existingProfile?.id) {
+			const { error } = await supabase
+				.from('business_profile')
+				.update(testProfile)
+				.eq('id', existingProfile.id);
+			profileWriteError = error;
+		} else {
+			const { error } = await supabase.from('business_profile').insert(testProfile);
+			profileWriteError = error;
+		}
+		if (profileWriteError) throw profileWriteError;
 
 		const item = await inventoryRepository.create({
 			design_name: `${prefix}Concurrent Tile`,
@@ -92,11 +108,21 @@ describe('Concurrency Real DB', () => {
 			payment_status: 'unpaid' as const,
 			amount_paid: 0,
 		} as any;
+		const lineItems = [
+			{
+				design_name: `${prefix}Concurrent Service Line`,
+				quantity: 1,
+				rate_per_unit: 100,
+				gst_rate: 0,
+				discount: 0,
+				sort_order: 1,
+			},
+		] as any;
 
 		// Create 3 invoices in parallel
 		const creations = Array(3)
 			.fill(0)
-			.map(() => invoiceRepository.createAtomic(inputBase, []));
+			.map(() => invoiceRepository.createAtomic(inputBase, lineItems));
 
 		const results = await Promise.all(creations);
 		const invoiceNumbers = results.map((r) => r.invoice_number).sort();
@@ -128,7 +154,16 @@ describe('Concurrency Real DB', () => {
 				payment_status: 'unpaid',
 				amount_paid: 0,
 			} as any,
-			[],
+			[
+				{
+					design_name: `${prefix}Concurrent Payment Line`,
+					quantity: 1,
+					rate_per_unit: 1000,
+					gst_rate: 0,
+					discount: 0,
+					sort_order: 1,
+				},
+			] as any,
 		);
 
 		// Use 4 parallel payments. This requires the SQL fix in migration 012

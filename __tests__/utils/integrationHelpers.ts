@@ -108,22 +108,37 @@ export async function signInTestUser(
 
 	await withRetry(
 		async () => {
-			// Sign in both the passed client and the app's singleton client.
-			// The singleton is used by repositories/services under test, while the local
-			// client handles direct cleanup and verification queries.
-			const [res1, res2] = await Promise.all([
-				supabase.auth.signInWithPassword({ email, password }),
-				singletonSupabase.auth.signInWithPassword({ email, password }),
-			]);
+			// Sign in the direct test client, then install the same session into the
+			// app singleton used by repositories/services under test.
+			const res1 = await supabase.auth.signInWithPassword({ email, password });
 
-			if (res1.error) {
+			if (res1.error || !res1.data.session) {
 				throw new Error(
-					`Integration test sign-in failed (test client): ${res1.error.message}`,
+					`Integration test sign-in failed (test client): ${
+						res1.error?.message ?? 'No session returned'
+					}`,
 				);
 			}
-			if (res2.error) {
+
+			const res2 = await singletonSupabase.auth.setSession({
+				access_token: res1.data.session.access_token,
+				refresh_token: res1.data.session.refresh_token,
+			});
+
+			if (res2.error || !res2.data.session) {
 				throw new Error(
-					`Integration test sign-in failed (singleton client): ${res2.error.message}`,
+					`Integration test sign-in failed (singleton client): ${
+						res2.error?.message ?? 'No session returned'
+					}`,
+				);
+			}
+
+			const singletonUser = await singletonSupabase.auth.getUser();
+			if (singletonUser.error || singletonUser.data.user?.id !== res1.data.session.user.id) {
+				throw new Error(
+					`Integration test sign-in failed (singleton verification): ${
+						singletonUser.error?.message ?? 'Session user mismatch'
+					}`,
 				);
 			}
 		},

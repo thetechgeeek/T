@@ -32,16 +32,32 @@ describe('Invoice Creation Real DB', () => {
 	let itemId: string;
 
 	beforeAll(async () => {
-		// Clean start for business profile to avoid sequence collisions
-		await supabase
-			.from('business_profile')
-			.delete()
-			.neq('id', '00000000-0000-0000-0000-000000000000');
-		await supabase.from('business_profile').insert({
+		// Reset the accessible business profile to avoid sequence collisions.
+		const testProfile = {
 			business_name: `${prefix} Test Business`,
 			invoice_prefix: `T${Date.now().toString().slice(-6)}`,
 			invoice_sequence: 0,
-		});
+		};
+		const { data: profiles, error: profileFetchError } = await supabase
+			.from('business_profile')
+			.select('id')
+			.order('created_at', { ascending: true })
+			.limit(1);
+		if (profileFetchError) throw profileFetchError;
+
+		const existingProfile = profiles?.[0];
+		let profileWriteError;
+		if (existingProfile?.id) {
+			const { error } = await supabase
+				.from('business_profile')
+				.update(testProfile)
+				.eq('id', existingProfile.id);
+			profileWriteError = error;
+		} else {
+			const { error } = await supabase.from('business_profile').insert(testProfile);
+			profileWriteError = error;
+		}
+		if (profileWriteError) throw profileWriteError;
 
 		// Seed a customer
 		const customer = await customerRepository.create({
@@ -186,9 +202,19 @@ describe('Invoice Creation Real DB', () => {
 			amount_paid: 0,
 			notes: prefix,
 		};
+		const lineItems = [
+			{
+				design_name: `${prefix}Seq Service Line`,
+				quantity: 1,
+				rate_per_unit: 1000,
+				gst_rate: 0,
+				discount: 0,
+				sort_order: 1,
+			},
+		];
 
-		const res1 = await invoiceRepository.createAtomic(invoiceInput as any, []);
-		const res2 = await invoiceRepository.createAtomic(invoiceInput as any, []);
+		const res1 = await invoiceRepository.createAtomic(invoiceInput as any, lineItems as any);
+		const res2 = await invoiceRepository.createAtomic(invoiceInput as any, lineItems as any);
 
 		const num1 = parseInt(res1.invoice_number.split('/').pop()!);
 		const num2 = parseInt(res2.invoice_number.split('/').pop()!);

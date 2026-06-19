@@ -31,7 +31,6 @@ const destructiveTables = [
 	'stock_operations',
 	'customers',
 	'inventory_items',
-	'business_profile',
 ];
 
 const target = await verifyDestructiveOperationTarget({
