@@ -16,6 +16,16 @@ import type {
 } from '../types/customer';
 import type { UUID } from '../types/common';
 
+const FILTER_REFRESH_DEBOUNCE_MS = 300;
+let pendingFilterRefresh: ReturnType<typeof setTimeout> | null = null;
+
+function clearPendingFilterRefresh() {
+	if (pendingFilterRefresh) {
+		clearTimeout(pendingFilterRefresh);
+		pendingFilterRefresh = null;
+	}
+}
+
 export interface CustomerState {
 	customers: Customer[];
 	totalCount: number;
@@ -59,7 +69,11 @@ export const useCustomerStore = create<CustomerState>()(
 				set((state) => {
 					state.filters = { ...state.filters, ...newFilters };
 				});
-				void get().fetchCustomers(true);
+				clearPendingFilterRefresh();
+				pendingFilterRefresh = setTimeout(() => {
+					pendingFilterRefresh = null;
+					void get().fetchCustomers(true);
+				}, FILTER_REFRESH_DEBOUNCE_MS);
 			},
 
 			fetchCustomers: async (reset = false) => {
@@ -91,6 +105,7 @@ export const useCustomerStore = create<CustomerState>()(
 			},
 
 			reset: () => {
+				clearPendingFilterRefresh();
 				set((s) => {
 					s.customers = [];
 					s.totalCount = 0;

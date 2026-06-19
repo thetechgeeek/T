@@ -127,6 +127,7 @@ export default function ReceivePaymentScreen() {
 			safeAreaEdges={['bottom']}
 			withKeyboard
 			scrollable
+			testID="receive-payment-screen"
 			header={
 				<ScreenHeader
 					title="Receive Payment"
@@ -167,6 +168,7 @@ export default function ReceivePaymentScreen() {
 						value={customerSearch}
 						onChangeText={setCustomerSearch}
 						accessibilityLabel="customer-search"
+						testID="customer-search"
 					/>
 					{customerMatches.length > 0 && (
 						<Card padding="none" style={styles.dropdown}>
@@ -189,6 +191,7 @@ export default function ReceivePaymentScreen() {
 										}}
 										accessibilityRole="button"
 										accessibilityLabel={`payment-customer-${customer.name}`}
+										testID={`payment-customer-${customer.name}`}
 									>
 										<ThemedText variant="body">{customer.name}</ThemedText>
 										<ThemedText variant="caption" color={c.onSurfaceVariant}>
@@ -251,6 +254,7 @@ export default function ReceivePaymentScreen() {
 					inputStyle={{ fontSize: FONT_SIZE.h2 }}
 					placeholder="0"
 					accessibilityLabel="amount-received"
+					testID="amount-received"
 				/>
 				{outstandingBalance > 0 && (
 					<Pressable
@@ -294,6 +298,7 @@ export default function ReceivePaymentScreen() {
 									onPress={() => setPaymentMode(m)}
 									accessibilityRole="button"
 									accessibilityLabel={`payment-mode-${modeToKey[m]}`}
+									testID={`payment-mode-${modeToKey[m]}`}
 								>
 									<ThemedText
 										variant="caption"
@@ -357,6 +362,7 @@ export default function ReceivePaymentScreen() {
 				disabled={submitting}
 				style={[styles.saveBtn, { marginTop: s.lg }]}
 				accessibilityLabel="save-payment"
+				testID="save-payment"
 			/>
 		</Screen>
 	);

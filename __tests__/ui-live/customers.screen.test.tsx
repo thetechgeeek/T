@@ -16,8 +16,10 @@ jest.mock('@/src/services/customerService', () => ({
 	},
 }));
 
+const CUSTOMER_ID = '22222222-2222-4222-8222-222222222222';
+
 const seededCustomer = {
-	id: 'customer-1',
+	id: CUSTOMER_ID,
 	name: 'Rajesh Tiles',
 	phone: '9876543210',
 	city: 'Morbi',
@@ -60,7 +62,7 @@ describe('Customer screens live wiring', () => {
 		});
 
 		fireEvent.press(screen.getByText('Rajesh Tiles'));
-		expect(screen.router.push).toHaveBeenCalledWith('/(app)/customers/customer-1');
+		expect(screen.router.push).toHaveBeenCalledWith(`/(app)/customers/${CUSTOMER_ID}`);
 	});
 
 	it('loads customer detail with the real store and route params', async () => {
@@ -82,11 +84,11 @@ describe('Customer screens live wiring', () => {
 		});
 
 		const screen = await renderScreen(<CustomerDetailScreen />, {
-			searchParams: { id: 'customer-1' },
+			searchParams: { id: CUSTOMER_ID },
 		});
 
 		await waitFor(() => {
-			expect(customerService.fetchCustomerById).toHaveBeenCalledWith('customer-1');
+			expect(customerService.fetchCustomerById).toHaveBeenCalledWith(CUSTOMER_ID);
 		});
 
 		expect(screen.getByText('Rajesh Tiles')).toBeTruthy();

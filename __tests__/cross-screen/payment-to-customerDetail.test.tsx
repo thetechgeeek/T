@@ -2,6 +2,10 @@ import { waitFor } from '@testing-library/react-native';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { eventBus } from '@/src/events/appEvents';
 import { customerService } from '@/src/services/customerService';
+import {
+	startStoreOrchestrator,
+	stopStoreOrchestrator,
+} from '@/src/orchestrators/storeOrchestrator';
 
 jest.mock('@/src/services/customerService');
 
@@ -16,11 +20,17 @@ describe('Cross-Screen Sync: Payment to Customer Detail', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 		useCustomerStore.getState().reset();
+		(customerService.fetchCustomers as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+		startStoreOrchestrator();
 
 		// Set a "selected" customer to simulate being on the Customer Detail screen
 		useCustomerStore.setState({
 			selectedCustomer: { id: customerId, name: 'Test Customer' } as any,
 		});
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
 	});
 
 	it('refreshes customer ledger and summary when a payment is recorded for that customer', async () => {

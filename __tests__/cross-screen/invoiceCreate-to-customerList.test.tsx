@@ -3,6 +3,10 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { invoiceService } from '@/src/services/invoiceService';
 import { customerService } from '@/src/services/customerService';
+import {
+	startStoreOrchestrator,
+	stopStoreOrchestrator,
+} from '@/src/orchestrators/storeOrchestrator';
 
 jest.mock('@/src/services/invoiceService');
 jest.mock('@/src/services/customerService');
@@ -12,6 +16,17 @@ jest.mock('@/src/services/customerService');
  * Verifies that the customer list appropriately refreshes when a new invoice is created.
  */
 describe('Cross-Screen Sync: Customer List Refresh', () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+		useInvoiceStore.getState().reset();
+		useCustomerStore.getState().reset();
+		startStoreOrchestrator();
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
+	});
+
 	it('refreshes customer list when a new invoice is created', async () => {
 		const newCustomerName = 'Brand New Customer Ltd';
 
@@ -20,6 +35,7 @@ describe('Cross-Screen Sync: Customer List Refresh', () => {
 			invoice_number: 'TM/999',
 			customer_name: newCustomerName,
 		});
+		(customerService.fetchCustomers as jest.Mock).mockResolvedValue({ data: [], count: 0 });
 
 		// 1. Create invoice with a "new" customer name
 		await useInvoiceStore.getState().createInvoice({

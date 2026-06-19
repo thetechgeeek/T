@@ -4,6 +4,7 @@ import {
 	BUSINESS_PERSISTED_STORE_KEYS,
 	clearPersistedBusinessStores,
 } from './persistedStoreRegistry';
+import { WRITE_QUEUE_HMAC_KEY } from '@/src/security/writeQueueIntegrity';
 
 describe('persistedStoreRegistry', () => {
 	beforeEach(() => {
@@ -24,8 +25,9 @@ describe('persistedStoreRegistry', () => {
 		expect(AsyncStorage.removeItem).toHaveBeenCalledWith('@writeQueue/mutations');
 		expect(AsyncStorage.removeItem).toHaveBeenCalledWith('@writeQueue/deadLetter');
 		expect(AsyncStorage.removeItem).toHaveBeenCalledWith('@writeQueue/diagnostics');
+		expect(WRITE_QUEUE_HMAC_KEY).toMatch(/^[A-Za-z0-9._-]+$/);
 		expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith(
-			'write-queue:hmac-key:v1',
+			WRITE_QUEUE_HMAC_KEY,
 			expect.objectContaining({
 				keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
 			}),

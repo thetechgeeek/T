@@ -76,6 +76,7 @@ export default function FinanceOverviewScreen() {
 		<AtomicScreen
 			scrollable
 			safeAreaEdges={['bottom']}
+			testID="finance-screen"
 			header={<ScreenHeader title={t('finance.title')} />}
 			scrollViewProps={{
 				refreshControl: (
@@ -107,6 +108,7 @@ export default function FinanceOverviewScreen() {
 					style={[styles.quickBtn, { backgroundColor: c.primary, borderRadius: r.md }]}
 					onPress={() => router.push('/(app)/finance/payments/receive' as Href)}
 					accessibilityLabel="receive-payment"
+					testID="receive-payment"
 				>
 					<ArrowDownLeft size={20} color={c.onPrimary} />
 					<ThemedText

@@ -117,7 +117,7 @@ export function useInvoiceCreateFlow() {
 				rate_per_unit: ratePerUnit,
 				discount: parseFloat(inputDiscount) || 0,
 				gst_rate: 18,
-				tile_image_url: selectedItem.tile_image_url,
+				tile_image_url: selectedItem.tile_image_url ?? undefined,
 			},
 		]);
 		setSelectedItem(null);

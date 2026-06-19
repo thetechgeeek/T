@@ -89,7 +89,7 @@ export default function MoreTab() {
 	];
 
 	return (
-		<AtomicScreen safeAreaEdges={['top', 'bottom']} scrollable>
+		<AtomicScreen safeAreaEdges={['top', 'bottom']} scrollable testID="more-screen">
 			<View
 				style={[
 					styles.header,
@@ -101,7 +101,11 @@ export default function MoreTab() {
 					},
 				]}
 			>
-				<ThemedText variant="h1" accessibilityLabel={MORE_SCREEN_ACCESSIBILITY_LABEL}>
+				<ThemedText
+					variant="h1"
+					accessibilityLabel={MORE_SCREEN_ACCESSIBILITY_LABEL}
+					testID={MORE_SCREEN_ACCESSIBILITY_LABEL}
+				>
 					{t('common.more')}
 				</ThemedText>
 			</View>
@@ -123,6 +127,7 @@ export default function MoreTab() {
 							},
 						]}
 						onPress={() => router.push(item.route as Href)}
+						testID={item.accessibilityLabel}
 						activeOpacity={0.8}
 						accessibilityRole="button"
 						accessibilityLabel={item.accessibilityLabel}
@@ -167,6 +172,7 @@ export default function MoreTab() {
 							},
 						]}
 						onPress={() => router.push(item.route as Href)}
+						testID={item.accessibilityLabel}
 						activeOpacity={0.8}
 						accessibilityRole="button"
 						accessibilityLabel={item.accessibilityLabel}
@@ -210,6 +216,7 @@ export default function MoreTab() {
 						},
 					]}
 					onPress={toggleLanguage}
+					testID="language-toggle"
 					activeOpacity={0.8}
 					accessibilityRole="button"
 					accessibilityLabel="language-toggle"
@@ -248,6 +255,7 @@ export default function MoreTab() {
 						},
 					]}
 					onPress={toggleTheme}
+					testID="dark-mode-toggle"
 					activeOpacity={0.8}
 					accessibilityRole="switch"
 					accessibilityLabel="dark-mode-toggle"
@@ -297,6 +305,7 @@ export default function MoreTab() {
 						},
 					]}
 					onPress={handleLogout}
+					testID="sign-out-button"
 					accessibilityRole="button"
 					accessibilityLabel="sign-out-button"
 					accessibilityHint={t('settings.signOutHint')}

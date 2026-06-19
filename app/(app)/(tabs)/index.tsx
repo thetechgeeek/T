@@ -201,6 +201,7 @@ export default function DashboardScreen() {
 		<AtomicScreen
 			scrollable
 			accessibilityLabel="dashboard-screen"
+			testID="dashboard-screen"
 			safeAreaEdges={[]}
 			scrollViewProps={{
 				keyboardDismissMode: 'on-drag',
@@ -229,6 +230,7 @@ export default function DashboardScreen() {
 								key={stat.accessibilityLabel}
 								label={stat.label}
 								accessibilityLabel={stat.accessibilityLabel}
+								testID={stat.accessibilityLabel}
 								value={stat.value}
 								icon={stat.icon}
 								color={stat.color}

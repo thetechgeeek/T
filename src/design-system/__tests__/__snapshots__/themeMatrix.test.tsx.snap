@@ -2072,7 +2072,10 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
             >
               ‫[~ Ťëẋť Ƒïëľď ~]‬
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -2127,7 +2130,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
                 }
                 value="‫[~ Šëářçħ šťáñďářďš, ťõķëñš, õř ƒïẋťüřëš ~]‬"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -2802,7 +2805,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
           }
           textBreakStrategy="highQuality"
         >
-          ‫[~ Ďáťá áñõɱáľïëš ~]‬: — • قبل ٤ أيام • ٢٣ شوال ١٤٤٧ هـ، ٩:٣٠ ص
+          ‫[~ Ďáťá áñõɱáľïëš ~]‬: — • قبل ٤ أيام • ١١‏/٠٤‏/٢٠٢٦، ٩:٣٠ ص
         </Text>
         <View
           style={
@@ -2967,7 +2970,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
                   }
                   textBreakStrategy="highQuality"
                 >
-                  18 loaded, 2 waiting for retry. أمس • ٢٦ شوال ١٤٤٧ هـ، ٩:٣٠ ص
+                  18 loaded, 2 waiting for retry. أمس • ١٤‏/٠٤‏/٢٠٢٦، ٩:٣٠ ص
                 </Text>
                 <View
                   style={
@@ -3136,7 +3139,7 @@ exports[`design-system theme matrix matches the accessibility stress snapshot fo
                   }
                   textBreakStrategy="highQuality"
                 >
-                  ‫[~ Çáçħëď ďáťá šħõüľď řëɱáïñ řëáďáƀľë ŵħïľë ťħë šüřƒáçë çľëářľÿ šïğñáľš ťħë ľášť šüççëššƒüľ řëƒřëšħ. ~]‬ قبل ٤ أيام • ٢٣ شوال ١٤٤٧ هـ، ٩:٣٠ ص
+                  ‫[~ Çáçħëď ďáťá šħõüľď řëɱáïñ řëáďáƀľë ŵħïľë ťħë šüřƒáçë çľëářľÿ šïğñáľš ťħë ľášť šüççëššƒüľ řëƒřëšħ. ~]‬ قبل ٤ أيام • ١١‏/٠٤‏/٢٠٢٦، ٩:٣٠ ص
                 </Text>
                 <View
                   style={
@@ -5911,7 +5914,10 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -5966,7 +5972,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -9750,7 +9756,10 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -9805,7 +9814,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for baseli
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -13589,7 +13598,10 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -13644,7 +13656,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -17428,7 +17440,10 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -17483,7 +17498,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for execut
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -21267,7 +21282,10 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -21322,7 +21340,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -25106,7 +25124,10 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -25161,7 +25182,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for mono i
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -28945,7 +28966,10 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -29000,7 +29024,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -32784,7 +32808,10 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -32839,7 +32866,7 @@ exports[`design-system theme matrix matches the preset proof snapshot for studio
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={
@@ -36623,7 +36650,10 @@ exports[`design-system theme matrix matches the tablet-landscape snapshot withou
             >
               Text Field
             </Text>
-            <View
+            <Pressable
+              accessible={false}
+              disabled={true}
+              onPress={[Function]}
               style={
                 [
                   {
@@ -36678,7 +36708,7 @@ exports[`design-system theme matrix matches the tablet-landscape snapshot withou
                 }
                 value="Search standards, tokens, or fixtures"
               />
-            </View>
+            </Pressable>
             <View
               importantForAccessibility="no"
               style={

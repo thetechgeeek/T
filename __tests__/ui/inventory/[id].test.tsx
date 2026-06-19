@@ -17,7 +17,7 @@ jest.mock('expo-router', () => {
 	const React = require('react');
 	return {
 		useRouter: jest.fn(() => ({ push: jest.fn(), back: jest.fn() })),
-		useLocalSearchParams: jest.fn(() => ({ id: 'item-123' })),
+		useLocalSearchParams: jest.fn(() => ({ id: '11111111-1111-4111-8111-111111111111' })),
 		useNavigation: jest.fn(() => ({
 			navigate: jest.fn(),
 			setOptions: jest.fn(),
@@ -33,8 +33,10 @@ jest.mock('expo-router', () => {
 	};
 });
 
+const ITEM_ID = '11111111-1111-4111-8111-111111111111';
+
 const mockItem = {
-	id: 'item-123',
+	id: ITEM_ID,
 	design_name: 'Marble Premium Gold',
 	base_item_number: 'MPG-001',
 	category: 'GLOSSY',
@@ -63,7 +65,7 @@ describe('ItemDetailScreen', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 		(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: jest.fn() });
-		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123' });
+		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: ITEM_ID });
 		(inventoryService.fetchItemById as jest.Mock).mockResolvedValue(mockItem);
 		(inventoryService.fetchStockHistory as jest.Mock).mockResolvedValue(mockHistory);
 	});

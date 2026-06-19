@@ -12,9 +12,10 @@ jest.mock('@/src/stores/invoiceStore', () => ({
 
 const mockPush = jest.fn();
 const mockBack = jest.fn();
+const INVOICE_ID = '33333333-3333-4333-8333-333333333333';
 
 const mockInvoice = {
-	id: 'inv-123',
+	id: INVOICE_ID,
 	invoice_number: 'INV-123',
 	customer_name: 'Test Customer',
 	grand_total: 1000,
@@ -28,7 +29,7 @@ beforeEach(() => {
 
 	// Rely on global expo-router mock but set specific return values
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: mockBack });
-	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'inv-123' });
+	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: INVOICE_ID });
 
 	(useInvoiceStore as unknown as jest.Mock).mockReturnValue({
 		currentInvoice: mockInvoice,

@@ -34,9 +34,10 @@ jest.mock('@/app/components/organisms/PaymentModal', () => {
 });
 
 const mockFetchCustomerDetail = jest.fn();
+const CUSTOMER_ID = '22222222-2222-4222-8222-222222222222';
 
 const mockCustomer = {
-	id: 'c-1',
+	id: CUSTOMER_ID,
 	name: 'Rajesh Shah',
 	phone: '9876543210',
 	city: 'Morbi',
@@ -65,7 +66,7 @@ const mockLedger = [
 beforeEach(() => {
 	jest.clearAllMocks();
 	mockFetchCustomerDetail.mockResolvedValue(undefined);
-	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'c-1' });
+	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: CUSTOMER_ID });
 	(useRouter as jest.Mock).mockReturnValue({ push: jest.fn(), back: jest.fn() });
 });
 
@@ -112,7 +113,7 @@ describe('CustomerDetailScreen', () => {
 		renderWithTheme(<CustomerDetailScreen />);
 
 		await waitFor(() => {
-			expect(mockFetchCustomerDetail).toHaveBeenCalledWith('c-1');
+			expect(mockFetchCustomerDetail).toHaveBeenCalledWith(CUSTOMER_ID);
 		});
 	});
 

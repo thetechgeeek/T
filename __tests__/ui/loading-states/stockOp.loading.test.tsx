@@ -40,9 +40,11 @@ jest.mock('@/src/hooks/useLocale', () => ({
 	}),
 }));
 
+const ITEM_ID = '11111111-1111-4111-8111-111111111111';
+
 beforeEach(() => {
 	jest.clearAllMocks();
-	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_in' });
+	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: ITEM_ID, type: 'stock_in' });
 });
 
 describe('StockOp Loading & Error UI States', () => {
@@ -74,7 +76,7 @@ describe('StockOp Loading & Error UI States', () => {
 
 	it('renders form with no spinner after successful fetch', async () => {
 		(inventoryService.fetchItemById as jest.Mock).mockResolvedValue({
-			id: 'item-123',
+			id: ITEM_ID,
 			design_name: 'Marble',
 			box_count: 50,
 			has_batch_tracking: false,

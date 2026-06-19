@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, StyleSheet, Alert, Pressable } from 'react-native';
+import { View, StyleSheet, Alert, Pressable, TextInput as NativeTextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ScreenHeader } from '@easydesign/ui-shell';
 import { useForm, Controller, type Resolver } from 'react-hook-form';
@@ -73,6 +73,7 @@ export default function AddCustomerScreen() {
 
 	const [creditLimit, setCreditLimit] = useState(0);
 	const [openingBalance, setOpeningBalance] = useState(0);
+	const phoneInputRef = React.useRef<NativeTextInput>(null);
 
 	const {
 		control,
@@ -99,9 +100,15 @@ export default function AddCustomerScreen() {
 	const onSubmit = async (data: CustomerFormData) => {
 		try {
 			await createCustomer({
-				...data,
+				name: data.name,
+				phone: data.phone,
+				gstin: data.gstin,
+				address: data.address,
+				city: data.city,
+				state: data.state,
+				type: data.type,
+				notes: data.notes,
 				credit_limit: creditLimit,
-				opening_balance: openingBalance,
 			} as Parameters<typeof createCustomer>[0]);
 			router.back();
 		} catch (e: unknown) {
@@ -120,8 +127,35 @@ export default function AddCustomerScreen() {
 			withKeyboard
 			scrollable
 			header={<ScreenHeader title={t('customer.addCustomer')} />}
+			footer={
+				<View
+					style={[
+						styles.saveFooter,
+						{
+							backgroundColor: c.surface,
+							borderTopColor: c.border,
+							paddingHorizontal: s.lg,
+							paddingTop: s.md,
+							paddingBottom: s.md,
+						},
+					]}
+				>
+					<Button
+						title={loading ? t('common.loading') : t('customer.saveCustomer')}
+						accessibilityLabel="save-customer-button"
+						testID="save-customer-button"
+						accessibilityState={{ busy: loading }}
+						onPress={handleSubmit(onSubmit)}
+						loading={loading}
+					/>
+				</View>
+			}
 			scrollViewProps={{ keyboardDismissMode: 'on-drag' }}
-			contentContainerStyle={{ paddingTop: s.lg, paddingBottom: s.xl, gap: s.lg }}
+			contentContainerStyle={{
+				paddingTop: s.lg,
+				paddingBottom: s.xl + SPACING_PX['4xl'],
+				gap: s.lg,
+			}}
 		>
 			<FormSection title="Basic Info">
 				<Card padding="md">
@@ -132,10 +166,14 @@ export default function AddCustomerScreen() {
 							<FormField
 								label={t('customer.name')}
 								accessibilityLabel="customer-name-input"
+								testID="customer-name-input"
 								required
 								placeholder={t('customer.form.placeholders.fullName')}
 								value={value}
 								onChangeText={onChange}
+								returnKeyType="next"
+								blurOnSubmit={false}
+								onSubmitEditing={() => phoneInputRef.current?.focus()}
 								error={errors.name?.message}
 							/>
 						)}
@@ -215,11 +253,14 @@ export default function AddCustomerScreen() {
 						name="phone"
 						render={({ field: { onChange, value } }) => (
 							<FormField
+								ref={phoneInputRef}
 								label={t('customer.phone')}
 								accessibilityLabel="customer-phone-input"
+								testID="customer-phone-input"
 								required
 								placeholder={t('customer.form.placeholders.phone')}
 								keyboardType="phone-pad"
+								returnKeyType="done"
 								value={value}
 								onChangeText={onChange}
 								error={errors.phone?.message}
@@ -400,16 +441,6 @@ export default function AddCustomerScreen() {
 					</View>
 				</Card>
 			</FormSection>
-
-			<View style={{ paddingHorizontal: s.lg }}>
-				<Button
-					title={loading ? t('common.loading') : t('customer.saveCustomer')}
-					accessibilityLabel="save-customer-button"
-					accessibilityState={{ busy: loading }}
-					onPress={handleSubmit(onSubmit)}
-					loading={loading}
-				/>
-			</View>
 		</AtomicScreen>
 	);
 }
@@ -426,5 +457,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		minHeight: SPACING_PX['2xl'] + SPACING_PX.sm,
+	},
+	saveFooter: {
+		borderTopWidth: StyleSheet.hairlineWidth,
 	},
 });

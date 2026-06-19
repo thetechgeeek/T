@@ -11,7 +11,7 @@ jest.mock('@/src/stores/invoiceStore', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-	useLocalSearchParams: jest.fn(() => ({ id: 'inv-123' })),
+	useLocalSearchParams: jest.fn(() => ({ id: '33333333-3333-4333-8333-333333333333' })),
 	useRouter: jest.fn(() => ({ back: jest.fn(), push: jest.fn() })),
 	useNavigation: jest.fn(() => ({
 		navigate: jest.fn(),
@@ -21,8 +21,10 @@ jest.mock('expo-router', () => ({
 	useFocusEffect: jest.fn((cb) => cb()),
 }));
 
+const INVOICE_ID = '33333333-3333-4333-8333-333333333333';
+
 const mockInvoice = {
-	id: 'inv-123',
+	id: INVOICE_ID,
 	invoice_number: 'TM/2026-27/0001',
 	invoice_date: '2026-03-22',
 	customer_name: 'Test Customer',
@@ -50,7 +52,7 @@ const mockClearCurrentInvoice = jest.fn();
 describe('InvoiceDetailScreen', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
-		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'inv-123' });
+		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: INVOICE_ID });
 		(useInvoiceStore as unknown as jest.Mock).mockReturnValue({
 			currentInvoice: mockInvoice,
 			fetchInvoiceById: mockFetchInvoiceById,

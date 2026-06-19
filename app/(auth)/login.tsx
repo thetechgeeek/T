@@ -144,6 +144,7 @@ export default function LoginScreen() {
 					variant="h2"
 					style={{ marginBottom: s.xs, textAlign: 'center' }}
 					accessibilityLabel="sign-in-heading"
+					testID="sign-in-heading"
 				>
 					{t('auth.welcome')}
 				</ThemedText>

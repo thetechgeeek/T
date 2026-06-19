@@ -243,6 +243,9 @@ export default function InventoryTab() {
 	) => (
 		<Pressable
 			key={key}
+			testID={
+				key.startsWith('category-') ? `category-chip-${key.slice('category-'.length)}` : key
+			}
 			onPress={onPress}
 			accessibilityRole="button"
 			accessibilityLabel={accessibilityLabel}
@@ -313,7 +316,7 @@ export default function InventoryTab() {
 	};
 
 	return (
-		<AtomicScreen safeAreaEdges={[]} withKeyboard={false}>
+		<AtomicScreen safeAreaEdges={[]} withKeyboard={false} testID="inventory-screen">
 			<View
 				accessible
 				accessibilityLabel={INVENTORY_SCREEN_ACCESSIBILITY_LABEL}
@@ -443,6 +446,7 @@ export default function InventoryTab() {
 
 				<View style={[layout.row, { gap: s.sm, marginTop: s.md }]}>
 					<SearchBar
+						testID="inventory-search-input"
 						accessibilityLabel={t('inventory.searchLabel')}
 						accessibilityHint={t('inventory.searchHint')}
 						placeholder={t('inventory.searchPlaceholder')}

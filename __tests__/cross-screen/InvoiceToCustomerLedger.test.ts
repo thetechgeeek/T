@@ -3,6 +3,10 @@ import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { useCustomerStore } from '@/src/stores/customerStore';
 import { invoiceService } from '@/src/services/invoiceService';
 import { customerService } from '@/src/services/customerService';
+import {
+	startStoreOrchestrator,
+	stopStoreOrchestrator,
+} from '@/src/orchestrators/storeOrchestrator';
 
 jest.mock('@/src/services/invoiceService');
 jest.mock('@/src/services/customerService');
@@ -14,11 +18,17 @@ describe('Cross-Screen Sync: Invoice to Customer Ledger', () => {
 		jest.clearAllMocks();
 		useInvoiceStore.getState().reset();
 		useCustomerStore.getState().reset();
+		(customerService.fetchCustomers as jest.Mock).mockResolvedValue({ data: [], count: 0 });
+		startStoreOrchestrator();
 
 		// Set a "selected" customer
 		useCustomerStore.setState({
 			selectedCustomer: { id: customerId, name: 'Test' } as any,
 		});
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
 	});
 
 	it('refreshes customer detailed ledger when a new invoice is created for them', async () => {

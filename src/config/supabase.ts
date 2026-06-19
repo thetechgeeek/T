@@ -24,12 +24,14 @@ export function validateSupabaseConfig(
 }
 
 const appConfig = resolveAppRuntimeConfig();
+const usesPersistentAuthStorage =
+	appConfig.mode !== 'integration' && appConfig.mode !== 'test' && appConfig.mode !== 'e2e';
 
 export const supabase = createClient(appConfig.supabase.url, appConfig.supabase.anonKey, {
 	auth: {
-		storage: secureSupabaseStorage,
-		autoRefreshToken: true,
-		persistSession: true,
+		...(usesPersistentAuthStorage ? { storage: secureSupabaseStorage } : {}),
+		autoRefreshToken: usesPersistentAuthStorage,
+		persistSession: usesPersistentAuthStorage,
 		detectSessionInUrl: false,
 	},
 });

@@ -12,9 +12,10 @@ jest.mock('@/src/stores/customerStore', () => ({
 
 const mockPush = jest.fn();
 const mockBack = jest.fn();
+const CUSTOMER_ID = '22222222-2222-4222-8222-222222222222';
 
 const mockCustomer = {
-	id: 'c-123',
+	id: CUSTOMER_ID,
 	name: 'John Doe',
 	current_balance: 1000,
 	type: 'wholesale' as const,
@@ -25,7 +26,7 @@ beforeEach(() => {
 
 	// Rely on global expo-router mock but set specific return values
 	(useRouter as jest.Mock).mockReturnValue({ push: mockPush, back: mockBack });
-	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'c-123' });
+	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: CUSTOMER_ID });
 
 	(useCustomerStore as unknown as jest.Mock).mockReturnValue({
 		selectedCustomer: mockCustomer,
@@ -45,14 +46,14 @@ describe('CustomerDetail Navigation Wiring', () => {
 		expect(mockBack).toHaveBeenCalled();
 	});
 
-	it('Press "New Invoice" -> navigates to /(app)/invoices/create?customer_id=c-123', async () => {
+	it('Press "New Invoice" -> navigates to invoice create with the current customer id', async () => {
 		const { getByText } = renderWithTheme(<CustomerDetailScreen />);
 		await waitFor(() => expect(getByText('New Invoice')).toBeTruthy());
 		fireEvent.press(getByText('New Invoice'));
 		// Passes customerId as search param in object format
 		expect(mockPush).toHaveBeenCalledWith({
 			pathname: expect.stringContaining('/invoices/create'),
-			params: { customerId: 'c-123' },
+			params: { customerId: CUSTOMER_ID },
 		});
 	});
 

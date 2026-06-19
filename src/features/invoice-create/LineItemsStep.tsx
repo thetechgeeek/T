@@ -85,12 +85,13 @@ export function LineItemsStep({
 	);
 
 	return (
-		<View>
+		<View testID="invoice-step-2-content">
 			<View style={[layout.rowBetween, { marginBottom: s.md, gap: s.md }]}>
 				<ThemedText variant="h3">{t('invoice.lineItems')}</ThemedText>
 				<Button
 					title={t('invoice.add')}
 					accessibilityLabel="add-item-button"
+					testID="add-item-button"
 					onPress={() => setIsAddingItem(true)}
 					size="sm"
 				/>
@@ -117,6 +118,8 @@ export function LineItemsStep({
 						return (
 							<View
 								key={item.item_id ?? `${item.design_name}-${index}`}
+								testID={`invoice-line-item-${index}`}
+								accessibilityLabel={`invoice-line-item-${index}`}
 								style={{
 									paddingHorizontal: s.lg,
 									paddingVertical: s.md,
@@ -288,6 +291,7 @@ export function LineItemsStep({
 						<>
 							<SearchBar
 								accessibilityLabel="inventory-search-input"
+								testID="inventory-search-input"
 								accessibilityHint={t('scanner.searchHint')}
 								placeholder={t('invoice.searchDesign')}
 								value={searchQuery}
@@ -328,6 +332,7 @@ export function LineItemsStep({
 												onPress={() => selectInventoryItem(item)}
 												accessibilityRole="button"
 												accessibilityLabel={item.design_name}
+												testID={`inventory-option-${item.id}`}
 											>
 												<View
 													style={[
@@ -409,6 +414,7 @@ export function LineItemsStep({
 									<FormField
 										label={t('inventory.quantity')}
 										accessibilityLabel="item-quantity-input"
+										testID="item-quantity-input"
 										value={inputQuantity}
 										placeholder={t('invoice.placeholders.enterQuantity')}
 										keyboardType="numeric"
@@ -437,6 +443,7 @@ export function LineItemsStep({
 								<Button
 									title={t('common.cancel')}
 									accessibilityLabel="cancel-add-item"
+									testID="cancel-add-item"
 									onPress={cancelItemSelection}
 									tone="neutral"
 									emphasis="medium"
@@ -445,6 +452,7 @@ export function LineItemsStep({
 								<Button
 									title={t('common.confirm')}
 									accessibilityLabel="confirm-add-item"
+									testID="confirm-add-item"
 									onPress={addLineItem}
 									style={{ flex: 1 }}
 								/>

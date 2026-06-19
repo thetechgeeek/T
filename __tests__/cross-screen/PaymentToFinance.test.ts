@@ -2,6 +2,10 @@ import { waitFor } from '@testing-library/react-native';
 import { useFinanceStore } from '@/src/stores/financeStore';
 import { financeService } from '@/src/services/financeService';
 import { eventBus } from '@/src/events/appEvents';
+import {
+	startStoreOrchestrator,
+	stopStoreOrchestrator,
+} from '@/src/orchestrators/storeOrchestrator';
 
 jest.mock('@/src/services/financeService');
 
@@ -10,6 +14,11 @@ describe('Cross-Screen Sync: Payment to Finance', () => {
 		jest.clearAllMocks();
 		// Initialize with default dateRange
 		useFinanceStore.setState({ summary: null, loading: false });
+		startStoreOrchestrator();
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
 	});
 
 	it('refreshes profit/loss summary when a payment is recorded', async () => {

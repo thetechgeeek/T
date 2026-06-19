@@ -1,6 +1,7 @@
 import { useInvoiceStore, InvoiceState } from './invoiceStore';
 import { invoiceService } from '../services/invoiceService';
 import { eventBus } from '../events/appEvents';
+import { startStoreOrchestrator, stopStoreOrchestrator } from '../orchestrators/storeOrchestrator';
 
 jest.mock('../utils/retry', () => ({
 	withRetry: jest.fn((fn) => fn()),
@@ -26,6 +27,10 @@ describe('invoiceStore', () => {
 			currentInvoice: null,
 			currentPage: 1,
 		});
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
 	});
 
 	// ─── fetchInvoices ────────────────────────────────────────────────────────
@@ -185,6 +190,7 @@ describe('invoiceStore', () => {
 
 	// ─── event-driven refresh ─────────────────────────────────────────────────
 	it('re-fetches invoices when PAYMENT_RECORDED event has invoiceId', async () => {
+		startStoreOrchestrator();
 		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
 
 		eventBus.emit({ type: 'PAYMENT_RECORDED', paymentId: 'pay-1', invoiceId: 'inv-1' });
@@ -194,6 +200,8 @@ describe('invoiceStore', () => {
 	});
 
 	it('does NOT re-fetch when PAYMENT_RECORDED has no invoiceId', async () => {
+		stopStoreOrchestrator();
+		startStoreOrchestrator();
 		(invoiceService.fetchInvoices as jest.Mock).mockResolvedValue({ data: [], count: 0 });
 
 		eventBus.emit({ type: 'PAYMENT_RECORDED' });

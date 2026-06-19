@@ -4,6 +4,10 @@ import { useDashboardStore } from '@/src/stores/dashboardStore';
 import { invoiceService } from '@/src/services/invoiceService';
 import { dashboardService } from '@/src/services/dashboardService';
 import type { InvoiceInput } from '@/src/types/invoice';
+import {
+	startStoreOrchestrator,
+	stopStoreOrchestrator,
+} from '@/src/orchestrators/storeOrchestrator';
 
 jest.mock('@/src/services/invoiceService');
 jest.mock('@/src/services/dashboardService');
@@ -15,7 +19,11 @@ describe('Cross-Screen Sync: Invoice Creation Sync', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 		useInvoiceStore.getState().reset();
-		// Dashboard store refresh logic is in its own subscription
+		startStoreOrchestrator();
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
 	});
 
 	it('adds newly created invoice to the top of the invoice list store', async () => {

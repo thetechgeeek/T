@@ -2,6 +2,10 @@ import { waitFor } from '@testing-library/react-native';
 import { useInvoiceStore } from '@/src/stores/invoiceStore';
 import { invoiceService } from '@/src/services/invoiceService';
 import { eventBus } from '@/src/events/appEvents';
+import {
+	startStoreOrchestrator,
+	stopStoreOrchestrator,
+} from '@/src/orchestrators/storeOrchestrator';
 
 jest.mock('@/src/services/invoiceService');
 
@@ -17,6 +21,11 @@ describe('Cross-Screen Sync: Payment to Invoice Status', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 		useInvoiceStore.getState().reset();
+		startStoreOrchestrator();
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
 	});
 
 	it('refreshes the current invoice detail when a payment is recorded against it', async () => {

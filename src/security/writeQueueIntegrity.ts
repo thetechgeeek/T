@@ -7,7 +7,7 @@ import { AppError } from '@/src/errors/AppError';
 export const WRITE_QUEUE_SIGNATURE_VERSION = 1;
 
 const HMAC_KEY_BYTES = 32;
-const WRITE_QUEUE_HMAC_KEY = 'write-queue:hmac-key:v1';
+export const WRITE_QUEUE_HMAC_KEY = 'write-queue.hmac-key.v1';
 
 const secureStoreOptions: SecureStore.SecureStoreOptions = {
 	keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,

@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import {
 	View,
 	Pressable,
@@ -80,6 +80,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 		);
 
 		const [isFocused, setIsFocused] = useState(false);
+		const inputRef = useRef<RNTextInput>(null);
 		const isDisabled = !editable;
 		const isInteractive = editable && !readOnly;
 		const [currentValue, setCurrentValue] = useControllableState({
@@ -118,6 +119,13 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 				? `Warning: ${warningText}`
 				: (helperText ?? undefined);
 		const canClear = clearable && isInteractive && currentValue.length > 0;
+		const focusInput = () => {
+			if (isInteractive) {
+				inputRef.current?.focus();
+			}
+		};
+
+		useImperativeHandle(ref, () => inputRef.current as RNTextInput, []);
 
 		return (
 			<View style={[styles.container, containerStyle]}>
@@ -138,7 +146,10 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 						{label}
 					</ThemedText>
 				)}
-				<View
+				<Pressable
+					accessible={false}
+					disabled={!isInteractive}
+					onPress={focusInput}
 					style={[
 						styles.inputContainer,
 						{
@@ -171,7 +182,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 						</View>
 					)}
 					<RNTextInput
-						ref={ref}
+						ref={inputRef}
 						accessible={true}
 						accessibilityLabel={computedLabel}
 						accessibilityHint={computedHint}
@@ -240,7 +251,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
 							) : null}
 						</View>
 					)}
-				</View>
+				</Pressable>
 				{/* Footer copy is announced via the input hint and remains visual-only here. */}
 				{hasFooter && (
 					<View

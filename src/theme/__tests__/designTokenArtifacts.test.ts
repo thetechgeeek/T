@@ -4,6 +4,14 @@ import path from 'path';
 import { execFileSync } from 'child_process';
 
 const root = path.join(__dirname, '..', '..', '..');
+const canonicalGeneratedRoot = path.join(
+	root,
+	'src',
+	'design-system',
+	'foundation',
+	'theme',
+	'generated',
+);
 const generatedRoot = path.join(root, 'src', 'theme', 'generated');
 const changelogPath = path.join(root, 'docs', 'DESIGN_TOKEN_CHANGELOG.md');
 
@@ -16,6 +24,9 @@ describe('generated design token artifacts', () => {
 
 	beforeAll(() => {
 		backupRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'design-token-artifacts-'));
+		fs.cpSync(canonicalGeneratedRoot, path.join(backupRoot, 'canonical-generated'), {
+			recursive: true,
+		});
 		fs.cpSync(generatedRoot, path.join(backupRoot, 'generated'), { recursive: true });
 		fs.copyFileSync(changelogPath, path.join(backupRoot, 'DESIGN_TOKEN_CHANGELOG.md'));
 
@@ -31,6 +42,10 @@ describe('generated design token artifacts', () => {
 		}
 
 		fs.rmSync(generatedRoot, { recursive: true, force: true });
+		fs.rmSync(canonicalGeneratedRoot, { recursive: true, force: true });
+		fs.cpSync(path.join(backupRoot, 'canonical-generated'), canonicalGeneratedRoot, {
+			recursive: true,
+		});
 		fs.cpSync(path.join(backupRoot, 'generated'), generatedRoot, { recursive: true });
 		fs.copyFileSync(path.join(backupRoot, 'DESIGN_TOKEN_CHANGELOG.md'), changelogPath);
 		fs.rmSync(backupRoot, { recursive: true, force: true });

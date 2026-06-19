@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Pressable } from 'react-native';
+import { View, TouchableOpacity, Pressable, TextInput as NativeTextInput } from 'react-native';
 import { useThemeTokens } from '@easydesign/design-system/foundation';
 import { useLocale } from '@/src/hooks/useLocale';
 import { ThemedText } from '@easydesign/design-system';
@@ -45,6 +45,7 @@ export function CustomerStep({
 }: Props) {
 	const { c, s, r } = useThemeTokens();
 	const { t } = useLocale();
+	const phoneInputRef = React.useRef<NativeTextInput>(null);
 	const customerTitle = isCashSale
 		? t('invoice.cashWalkInCustomer')
 		: customer?.name?.trim() || t('invoice.regularCustomer');
@@ -59,7 +60,7 @@ export function CustomerStep({
 	};
 
 	return (
-		<View>
+		<View testID="invoice-step-1-content">
 			<ThemedText variant="h3" style={{ marginBottom: s.md }}>
 				{t('invoice.customerDetails')}
 			</ThemedText>
@@ -187,18 +188,25 @@ export function CustomerStep({
 					<FormField
 						label={t('customer.name')}
 						accessibilityLabel="customer-name-input"
+						testID="customer-name-input"
 						required
 						placeholder={t('customer.form.placeholders.fullName')}
 						value={customer?.name || ''}
 						onChangeText={update('name')}
+						returnKeyType="next"
+						blurOnSubmit={false}
+						onSubmitEditing={() => phoneInputRef.current?.focus()}
 					/>
 
 					<FormField
+						ref={phoneInputRef}
 						label={t('common.phone')}
 						accessibilityLabel="customer-phone-input"
+						testID="customer-phone-input"
 						required
 						placeholder={t('customer.form.placeholders.phone')}
 						keyboardType="phone-pad"
+						returnKeyType="done"
 						value={customer?.phone || ''}
 						onChangeText={update('phone')}
 					/>

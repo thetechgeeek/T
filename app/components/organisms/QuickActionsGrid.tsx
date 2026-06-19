@@ -73,6 +73,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions }) =
 						onPress={() =>
 							router.push(action.route as Parameters<typeof router.push>[0])
 						}
+						testID={action.accessibilityLabel}
 						accessibilityRole="button"
 						accessibilityLabel={action.accessibilityLabel}
 					>

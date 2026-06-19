@@ -66,8 +66,18 @@ describe('customerService', () => {
 				phone: '9876543210',
 				type: 'retail',
 				credit_limit: 0,
+				balance_type: 'dr',
+				opening_balance: 0,
 			} as Parameters<typeof customerService.createCustomer>[0]);
 			expect(result).toEqual(customer);
+			expect(builder.insert).toHaveBeenCalledWith([
+				{
+					name: 'Test Customer',
+					phone: '9876543210',
+					type: 'retail',
+					credit_limit: 0,
+				},
+			]);
 		});
 
 		it('throws ValidationError when phone is missing or invalid', async () => {

@@ -16,6 +16,20 @@ import type { UUID } from '../types/common';
 
 const CUSTOMER_SORT_FIELDS = ['name', 'outstanding_balance', 'created_at'] as const;
 
+function toCustomerDbPayload(input: Partial<CustomerInsert>): Partial<CustomerInsert> {
+	const payload: Record<string, unknown> = {};
+	if (input.name !== undefined) payload.name = input.name;
+	if (input.phone !== undefined) payload.phone = input.phone;
+	if (input.gstin !== undefined) payload.gstin = input.gstin;
+	if (input.address !== undefined) payload.address = input.address;
+	if (input.city !== undefined) payload.city = input.city;
+	if (input.state !== undefined) payload.state = input.state;
+	if (input.type !== undefined) payload.type = input.type;
+	if (input.credit_limit !== undefined) payload.credit_limit = input.credit_limit;
+	if (input.notes !== undefined) payload.notes = input.notes;
+	return payload as Partial<CustomerInsert>;
+}
+
 export const customerService = {
 	async fetchCustomers(filters: CustomerFilters, page = 1, limit = 20) {
 		let query = supabase.from('customers').select('*', { count: 'exact' });
@@ -52,10 +66,11 @@ export const customerService = {
 	},
 
 	async createCustomer(customer: CustomerInsert): Promise<Customer> {
-		validateWith(CustomerSchema, customer);
+		const parsed = validateWith(CustomerSchema, customer);
+		const payload = toCustomerDbPayload(parsed);
 		const { data, error } = await supabase
 			.from('customers')
-			.insert([customer])
+			.insert([payload])
 			.select()
 			.single();
 
@@ -71,7 +86,7 @@ export const customerService = {
 		}
 		const { data, error } = await supabase
 			.from('customers')
-			.update(updates)
+			.update(toCustomerDbPayload(updates))
 			.eq('id', id)
 			.select()
 			.single();

@@ -539,19 +539,21 @@ export default function InvoicesListScreen() {
 	);
 
 	return (
-		<AtomicScreen safeAreaEdges={['top']}>
+		<AtomicScreen safeAreaEdges={['top']} testID="invoices-screen">
 			{/* ── Top Header ── */}
 			<View style={[styles.header, { borderBottomColor: c.border }]}>
 				<ThemedText
 					variant="h1"
 					accessibilityRole="header"
 					accessibilityLabel={INVOICES_SCREEN_ACCESSIBILITY_LABEL}
+					testID={INVOICES_SCREEN_ACCESSIBILITY_LABEL}
 				>
 					{t('invoice.title')}
 				</ThemedText>
 				<Button
 					title={t('invoice.newInvoice')}
 					accessibilityLabel="new-invoice-button"
+					testID="new-invoice-button"
 					leftIcon={<Plus color={c.onPrimary} size={20} />}
 					onPress={handleNewInvoice}
 				/>

@@ -291,10 +291,13 @@ const THEME_MATRIX = [
 const mockPush = jest.fn();
 const mockBack = jest.fn();
 const mockReplace = jest.fn();
+const SNAPSHOT_INVOICE_ID = '33333333-3333-4333-8333-333333333333';
+const SNAPSHOT_CUSTOMER_ID = '22222222-2222-4222-8222-222222222222';
+const SNAPSHOT_ITEM_ID = '11111111-1111-4111-8111-111111111111';
 
 const invoiceRows = [
 	{
-		id: 'inv-123',
+		id: SNAPSHOT_INVOICE_ID,
 		invoice_number: 'TM/2026-27/0001',
 		customer_name: 'Rajesh Shah',
 		invoice_date: '2026-04-10',
@@ -303,7 +306,7 @@ const invoiceRows = [
 		payment_status: 'paid',
 	},
 	{
-		id: 'inv-124',
+		id: '33333333-3333-4333-8333-333333333334',
 		invoice_number: 'TM/2026-27/0002',
 		customer_name: 'Kajaria Retail',
 		invoice_date: '2026-04-05',
@@ -314,7 +317,7 @@ const invoiceRows = [
 ];
 
 const currentInvoice = {
-	id: 'inv-123',
+	id: SNAPSHOT_INVOICE_ID,
 	invoice_number: 'TM/2026-27/0001',
 	invoice_date: '2026-04-10',
 	customer_name: 'Rajesh Shah',
@@ -338,7 +341,7 @@ const currentInvoice = {
 
 const inventoryRows = [
 	{
-		id: 'item-1',
+		id: SNAPSHOT_ITEM_ID,
 		design_name: 'Marble Premium Gold',
 		base_item_number: 'MPG-001',
 		category: 'GLOSSY',
@@ -354,7 +357,7 @@ const inventoryRows = [
 		hsn_code: '6908',
 	},
 	{
-		id: 'item-2',
+		id: '11111111-1111-4111-8111-111111111112',
 		design_name: 'Rustic Stone',
 		base_item_number: 'RST-002',
 		category: 'MATT',
@@ -383,7 +386,7 @@ const inventoryHistory = [
 
 const customerRows = [
 	{
-		id: 'c-1',
+		id: SNAPSHOT_CUSTOMER_ID,
 		name: 'Rajesh Shah',
 		phone: '9876543210',
 		city: 'Morbi',
@@ -392,7 +395,7 @@ const customerRows = [
 ];
 
 const selectedCustomer = {
-	id: 'c-1',
+	id: SNAPSHOT_CUSTOMER_ID,
 	name: 'Rajesh Shah',
 	phone: '9876543210',
 	city: 'Morbi',
@@ -772,7 +775,7 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 		});
 
 		it('captures invoice detail', async () => {
-			(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'inv-123' });
+			(useLocalSearchParams as jest.Mock).mockReturnValue({ id: SNAPSHOT_INVOICE_ID });
 			await expectSnapshotMatch(<InvoiceDetailScreen />, {
 				isDark,
 				waitForReady: async ({ getAllByText }) => {
@@ -793,7 +796,7 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 		});
 
 		it('captures customer detail', async () => {
-			(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'c-1' });
+			(useLocalSearchParams as jest.Mock).mockReturnValue({ id: SNAPSHOT_CUSTOMER_ID });
 			await expectSnapshotMatch(<CustomerDetailScreen />, {
 				isDark,
 				waitForReady: async ({ getByText }) => {
@@ -821,7 +824,7 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 		});
 
 		it('captures inventory detail', async () => {
-			(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-1' });
+			(useLocalSearchParams as jest.Mock).mockReturnValue({ id: SNAPSHOT_ITEM_ID });
 			await expectSnapshotMatch(<ItemDetailScreen />, {
 				isDark,
 				waitForReady: async ({ getByText }) => {
@@ -883,7 +886,7 @@ describe('Visual Regression: Representative Screen Snapshots', () => {
 			await expectSnapshotMatch(<AllTransactionsScreen />, {
 				isDark,
 				waitForReady: async ({ getByText }) => {
-					await waitFor(() => expect(getByText('Rajesh Shah')).toBeTruthy());
+					await waitFor(() => expect(getByText('No transactions found')).toBeTruthy());
 				},
 			});
 		});

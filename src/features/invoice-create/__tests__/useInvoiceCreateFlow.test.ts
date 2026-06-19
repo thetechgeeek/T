@@ -162,6 +162,20 @@ describe('useInvoiceCreateFlow', () => {
 		expect(result.current.lineItems[0].quantity).toBe(2.5);
 	});
 
+	it('normalizes nullable inventory image urls before invoice validation', () => {
+		const { result } = renderHook(() => useInvoiceCreateFlow());
+
+		act(() => {
+			result.current.selectInventoryItem({
+				...sampleInventoryItem,
+				tile_image_url: null,
+			} as unknown as Parameters<typeof result.current.selectInventoryItem>[0]);
+		});
+		act(() => result.current.addLineItem());
+
+		expect(result.current.lineItems[0].tile_image_url).toBeUndefined();
+	});
+
 	it('selectInventoryItem + addLineItem twice results in 2 lineItems', () => {
 		const { result } = renderHook(() => useInvoiceCreateFlow());
 

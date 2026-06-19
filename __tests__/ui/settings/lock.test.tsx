@@ -16,9 +16,9 @@ describe('SecurityLockScreen', () => {
 		expect(getByText('Security & Lock')).toBeTruthy();
 	});
 
-	it('renders coming soon placeholder', () => {
+	it('renders unavailable security controls placeholder', () => {
 		const { getByText } = renderWithTheme(<SecurityLockScreen />);
-		expect(getByText('Security & Lock — coming soon')).toBeTruthy();
+		expect(getByText('Security controls are unavailable')).toBeTruthy();
 	});
 
 	it('renders without crashing', () => {

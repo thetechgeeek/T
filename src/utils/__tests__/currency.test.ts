@@ -55,6 +55,12 @@ describe('formatINRShort', () => {
 	it('formats crores', () => {
 		expect(formatINRShort(10000000)).toBe('₹1.0Cr');
 	});
+
+	it('formats Hindi suffixes for thousands, lakhs, and crores', () => {
+		expect(formatINRShort(2500, 'hi')).toBe('₹2.5 हजार');
+		expect(formatINRShort(250000, 'hi')).toBe('₹2.5 लाख');
+		expect(formatINRShort(20000000, 'hi')).toBe('₹2.0 करोड़');
+	});
 });
 
 describe('numberToIndianWords', () => {
@@ -79,6 +85,19 @@ describe('numberToIndianWords', () => {
 		const result = numberToIndianWords(500);
 		expect(result).not.toBe('500');
 		expect(result).toContain('Five');
+	});
+
+	it('converts Hindi zero and paise branches', () => {
+		expect(numberToIndianWords(0, 'hi')).toBe('शून्य रुपये मात्र');
+		expect(numberToIndianWords(123.45, 'hi')).toContain('पैसे');
+	});
+
+	it('converts large Hindi amounts through lakh and crore groups', () => {
+		const result = numberToIndianWords(12345678, 'hi');
+
+		expect(result).toContain('करोड़');
+		expect(result).toContain('लाख');
+		expect(result).toContain('हजार');
 	});
 });
 

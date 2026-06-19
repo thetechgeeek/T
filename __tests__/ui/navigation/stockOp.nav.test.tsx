@@ -16,14 +16,15 @@ jest.mock('@/src/stores/inventoryStore', () => ({
 }));
 
 const mockBack = jest.fn();
-const mockItem = { id: 'item-123', design_name: 'Marble Premium Gold', box_count: 50 };
+const ITEM_ID = '11111111-1111-4111-8111-111111111111';
+const mockItem = { id: ITEM_ID, design_name: 'Marble Premium Gold', box_count: 50 };
 
 beforeEach(() => {
 	jest.clearAllMocks();
 
 	// Rely on global expo-router mock but set specific return values
 	(useRouter as jest.Mock).mockReturnValue({ back: mockBack });
-	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_in' });
+	(useLocalSearchParams as jest.Mock).mockReturnValue({ id: ITEM_ID, type: 'stock_in' });
 
 	(inventoryService.fetchItemById as jest.Mock).mockResolvedValue(mockItem);
 	(useInventoryStore as unknown as jest.Mock).mockReturnValue({

@@ -66,6 +66,7 @@ export default function TabLayout() {
 				options={{
 					title: t('dashboard.greeting'),
 					tabBarAccessibilityLabel: 'tab-dashboard',
+					tabBarButtonTestID: 'tab-dashboard',
 					tabBarIcon: ({ color }) => <Home size={22} color={color} strokeWidth={2} />,
 				}}
 			/>
@@ -74,6 +75,7 @@ export default function TabLayout() {
 				options={{
 					title: t('inventory.title'),
 					tabBarAccessibilityLabel: 'tab-inventory',
+					tabBarButtonTestID: 'tab-inventory',
 					tabBarIcon: ({ color }) => <Package size={22} color={color} strokeWidth={2} />,
 				}}
 			/>
@@ -82,6 +84,7 @@ export default function TabLayout() {
 				options={{
 					title: t('scanner.title'),
 					tabBarAccessibilityLabel: 'tab-scan',
+					tabBarButtonTestID: 'tab-scan',
 					tabBarIcon: ({ color }) => <QrCode size={22} color={color} strokeWidth={2} />,
 				}}
 			/>
@@ -90,6 +93,7 @@ export default function TabLayout() {
 				options={{
 					title: t('invoice.title'),
 					tabBarAccessibilityLabel: 'tab-invoices',
+					tabBarButtonTestID: 'tab-invoices',
 					tabBarIcon: ({ color }) => <FileText size={22} color={color} strokeWidth={2} />,
 				}}
 			/>
@@ -104,6 +108,7 @@ export default function TabLayout() {
 				options={{
 					title: t('tabs.more'),
 					tabBarAccessibilityLabel: 'tab-more',
+					tabBarButtonTestID: 'tab-more',
 					tabBarIcon: ({ color }) => (
 						<MoreHorizontal size={22} color={color} strokeWidth={2} />
 					),

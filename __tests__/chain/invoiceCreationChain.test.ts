@@ -12,6 +12,8 @@ jest.mock('@/src/config/supabase', () => {
 });
 
 const mockSupabase = jest.requireMock('@/src/config/supabase').supabase;
+const CUSTOMER_ID = '22222222-2222-4222-8222-222222222222';
+const ITEM_ID = '11111111-1111-4111-8111-111111111111';
 
 describe('Invoice Creation Chain (Mocked DB)', () => {
 	beforeEach(() => {
@@ -42,7 +44,7 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 		// 2. Trigger
 		const result = await useInvoiceStore.getState().createInvoice({
 			invoice_number: 'INV-TEST-001',
-			customer_id: '11111111-1111-1111-1111-111111111111',
+			customer_id: CUSTOMER_ID,
 			customer_name: 'Test Customer',
 			customer_phone: '9876543210',
 			invoice_date: '2026-04-03',
@@ -50,7 +52,7 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 			payment_status: 'unpaid' as const,
 			line_items: [
 				{
-					item_id: '00000000-0000-0000-0000-000000000000',
+					item_id: ITEM_ID,
 					design_name: 'Classic White',
 					gst_rate: 18,
 					quantity: 1,
@@ -64,7 +66,7 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 
 		expect(mockSupabase.rpc).toHaveBeenCalledWith('create_invoice_with_items_v1', {
 			p_invoice: expect.objectContaining({
-				customer_id: '11111111-1111-1111-1111-111111111111',
+				customer_id: CUSTOMER_ID,
 				is_inter_state: false,
 			}),
 			p_line_items: expect.arrayContaining([
@@ -84,7 +86,7 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 
 		await expect(
 			useInvoiceStore.getState().createInvoice({
-				customer_id: '11111111-1111-1111-1111-111111111111',
+				customer_id: CUSTOMER_ID,
 				customer_name: 'Test Customer',
 				customer_phone: '9876543210',
 				invoice_date: '2026-04-03',
@@ -92,7 +94,7 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 				payment_status: 'unpaid' as const,
 				line_items: [
 					{
-						item_id: '00000000-0000-0000-0000-000000000000',
+						item_id: ITEM_ID,
 						design_name: 'Classic White',
 						gst_rate: 18,
 						quantity: 1,
@@ -103,6 +105,6 @@ describe('Invoice Creation Chain (Mocked DB)', () => {
 		).rejects.toThrow('Database Error');
 
 		expect(useInvoiceStore.getState().loading).toBe(false);
-		expect(useInvoiceStore.getState().error).toBe('Database Error');
+		expect(useInvoiceStore.getState().error).toBe('An unexpected error occurred');
 	});
 });

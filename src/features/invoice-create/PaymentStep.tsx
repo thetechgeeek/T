@@ -54,7 +54,7 @@ export function PaymentStep({
 	const customerPhone = customer?.phone || t('invoice.noPhone');
 
 	return (
-		<View>
+		<View testID="invoice-step-3-content">
 			<ThemedText variant="h3" style={{ marginBottom: s.md }}>
 				{t('invoice.reviewAndPayment')}
 			</ThemedText>
@@ -145,6 +145,7 @@ export function PaymentStep({
 				<View style={[layout.row, { gap: s.sm, marginBottom: s.md, flexWrap: 'wrap' }]}>
 					<TouchableOpacity
 						onPress={() => setAmountPaid(String(grandTotal))}
+						testID="paid-in-full-chip"
 						accessibilityRole="button"
 						accessibilityLabel="paid-in-full-chip"
 						style={{

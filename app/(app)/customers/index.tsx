@@ -121,6 +121,8 @@ export default function CustomersScreen() {
 		<ListItem
 			title={item.name}
 			subtitle={item.phone || item.city || t('customer.noContactInfo')}
+			testID={item.phone ? `customer-row-${item.phone}` : `customer-row-${item.id}`}
+			accessibilityLabel={`${item.name}, ${item.phone || item.city || t('customer.noContactInfo')}`}
 			onPress={() => router.push(`/(app)/customers/${item.id}`)}
 			leftIcon={
 				<View
@@ -154,7 +156,7 @@ export default function CustomersScreen() {
 	);
 
 	return (
-		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false}>
+		<AtomicScreen safeAreaEdges={['bottom']} withKeyboard={false} testID="customers-screen">
 			<ScreenHeader
 				title={t('customer.title')}
 				titleAccessibilityLabel={CUSTOMERS_SCREEN_ACCESSIBILITY_LABEL}
@@ -228,6 +230,7 @@ export default function CustomersScreen() {
 					{ backgroundColor: theme.colors.primary, ...(theme.shadows?.lg || {}) },
 				]}
 				onPress={() => router.push('/(app)/customers/add' as Href)}
+				testID="add-customer-button"
 				activeOpacity={0.85}
 				accessibilityRole="button"
 				accessibilityLabel={t('customer.addCustomer')}

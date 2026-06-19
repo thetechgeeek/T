@@ -19,8 +19,10 @@ jest.mock('@/src/stores/inventoryStore', () => ({
 	useInventoryStore: jest.fn(),
 }));
 
+const ITEM_ID = '11111111-1111-4111-8111-111111111111';
+
 const mockItem = {
-	id: 'item-123',
+	id: ITEM_ID,
 	design_name: 'Marble Premium Gold',
 	box_count: 50,
 	has_batch_tracking: false,
@@ -34,7 +36,7 @@ describe('StockOpScreen', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 		(useRouter as jest.Mock).mockReturnValue({ back: mockBack });
-		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_in' });
+		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: ITEM_ID, type: 'stock_in' });
 		(inventoryService.fetchItemById as jest.Mock).mockResolvedValue(mockItem);
 		(useInventoryStore as unknown as jest.Mock).mockReturnValue({
 			performStockOperation: mockPerformStockOperation,
@@ -63,7 +65,7 @@ describe('StockOpScreen', () => {
 
 		await waitFor(() => {
 			expect(mockPerformStockOperation).toHaveBeenCalledWith(
-				'item-123',
+				ITEM_ID,
 				'stock_in',
 				10,
 				'Restock',
@@ -84,7 +86,7 @@ describe('StockOpScreen', () => {
 
 		await waitFor(() => {
 			expect(mockPerformStockOperation).toHaveBeenCalledWith(
-				'item-123',
+				ITEM_ID,
 				'stock_in',
 				2.5,
 				'Fractional adjustment',
@@ -93,7 +95,7 @@ describe('StockOpScreen', () => {
 	});
 
 	it('successfully submits stock out operation', async () => {
-		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: 'item-123', type: 'stock_out' });
+		(useLocalSearchParams as jest.Mock).mockReturnValue({ id: ITEM_ID, type: 'stock_out' });
 		const { getByText, getByPlaceholderText } = renderWithTheme(<StockOpScreen />);
 
 		await waitFor(() => getByText('Stock Out (Remove)', { exact: false }));
@@ -103,7 +105,7 @@ describe('StockOpScreen', () => {
 
 		await waitFor(() => {
 			expect(mockPerformStockOperation).toHaveBeenCalledWith(
-				'item-123',
+				ITEM_ID,
 				'stock_out',
 				-5,
 				undefined,

@@ -10,6 +10,7 @@ import {
 	highContrastDarkColors,
 	highContrastLightColors,
 	lightColors as baseLightColors,
+	palette,
 	themePresetColorOverrides,
 	themePresetVisualOverrides,
 } from './palette';
@@ -152,8 +153,8 @@ const MIN_DURATION_SLOW = 220;
 const DEFAULT_VIEWPORT_WIDTH = 430;
 const DEFAULT_VIEWPORT_HEIGHT = 932;
 const TABLET_TOUCH_TARGET_MIN = 52;
-const LIGHT_FOREGROUND = '#FFFFFF';
-const DARK_FOREGROUND = '#09090B';
+const LIGHT_FOREGROUND = palette.white;
+const DARK_FOREGROUND = baseLightColors.onSurface;
 const SRGB_LINEAR_THRESHOLD = 0.03928;
 const SRGB_DIVISOR = 12.92;
 const SRGB_OFFSET = 0.055;

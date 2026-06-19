@@ -10,11 +10,15 @@ describe('LoanDetailScreen', () => {
 		(useRouter as jest.Mock).mockReturnValue({ push: jest.fn(), back: jest.fn() });
 	});
 
-	it('renders the loan summary and amortisation section', () => {
-		const { getByText } = renderWithTheme(<LoanDetailScreen />);
+	it('renders the unavailable finance workflow surface', () => {
+		const { getByTestId, getAllByText, getByText } = renderWithTheme(<LoanDetailScreen />);
 
-		expect(getByText('State Bank of India')).toBeTruthy();
-		expect(getByText('Repayment Progress')).toBeTruthy();
-		expect(getByText('Amortisation Schedule')).toBeTruthy();
+		expect(getByTestId('unavailable-product-surface')).toBeTruthy();
+		expect(getAllByText('Loan Detail').length).toBeGreaterThan(0);
+		expect(
+			getByText(
+				'This finance workflow is disabled until it is connected to live banking, ledger, and audit data.',
+			),
+		).toBeTruthy();
 	});
 });

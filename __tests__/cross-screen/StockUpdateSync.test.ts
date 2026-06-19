@@ -3,6 +3,10 @@ import { useInventoryStore } from '@/src/stores/inventoryStore';
 import { useDashboardStore } from '@/src/stores/dashboardStore';
 import { inventoryService } from '@/src/services/inventoryService';
 import { dashboardService } from '@/src/services/dashboardService';
+import {
+	startStoreOrchestrator,
+	stopStoreOrchestrator,
+} from '@/src/orchestrators/storeOrchestrator';
 
 jest.mock('@/src/services/inventoryService');
 jest.mock('@/src/services/dashboardService');
@@ -12,6 +16,11 @@ describe('Cross-Screen Sync: Inventory to Dashboard', () => {
 		jest.clearAllMocks();
 		useInventoryStore.getState().reset();
 		useDashboardStore.setState({ stats: null, loading: false });
+		startStoreOrchestrator();
+	});
+
+	afterEach(() => {
+		stopStoreOrchestrator();
 	});
 
 	it('triggers dashboard refresh when a stock operation is performed', async () => {

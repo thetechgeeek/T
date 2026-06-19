@@ -6,7 +6,10 @@ import { WriteQueueService, type QueuedMutation } from './writeQueueService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import { allowExpectedConsoleError } from '@/__tests__/utils/runtimeNoise';
-import { clearWriteQueueIntegrityKeyCacheForTests } from '../security/writeQueueIntegrity';
+import {
+	WRITE_QUEUE_HMAC_KEY,
+	clearWriteQueueIntegrityKeyCacheForTests,
+} from '../security/writeQueueIntegrity';
 import { clearTelemetrySink, setTelemetrySink } from '../utils/logger';
 
 // Mock AsyncStorage
@@ -67,7 +70,7 @@ describe('WriteQueueService', () => {
 
 		const storedQueue = JSON.parse(mockStorage['@writeQueue/mutations']) as QueuedMutation[];
 		expect(SecureStore.setItemAsync).toHaveBeenCalledWith(
-			'write-queue:hmac-key:v1',
+			WRITE_QUEUE_HMAC_KEY,
 			expect.stringMatching(/^[a-f0-9]{64}$/),
 			expect.objectContaining({
 				keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
@@ -500,8 +503,9 @@ describe('WriteQueueService', () => {
 		await service.clearQueue();
 
 		expect(AsyncStorage.removeItem).toHaveBeenCalledWith('@writeQueue/mutations');
+		expect(WRITE_QUEUE_HMAC_KEY).toMatch(/^[A-Za-z0-9._-]+$/);
 		expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith(
-			'write-queue:hmac-key:v1',
+			WRITE_QUEUE_HMAC_KEY,
 			expect.objectContaining({
 				keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
 			}),

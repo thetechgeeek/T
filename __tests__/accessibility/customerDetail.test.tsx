@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Mock useLocalSearchParams
 jest.mock('expo-router', () => ({
-	useLocalSearchParams: jest.fn(() => ({ id: 'cust-1' })),
+	useLocalSearchParams: jest.fn(() => ({ id: '22222222-2222-4222-8222-222222222222' })),
 	useRouter: jest.fn(() => ({ back: jest.fn(), push: jest.fn() })),
 	useNavigation: jest.fn(() => ({
 		navigate: jest.fn(),
@@ -21,7 +21,7 @@ jest.mock('expo-router', () => ({
 jest.mock('@/src/stores/customerStore', () => ({
 	useCustomerStore: () => ({
 		selectedCustomer: {
-			id: 'cust-1',
+			id: '22222222-2222-4222-8222-222222222222',
 			name: 'John Doe',
 			phone: '9876543210',
 			type: 'retail',
