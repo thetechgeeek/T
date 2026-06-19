@@ -1,8 +1,11 @@
 node_modules
 dist
 .expo
+.claude
 android
 ios
 supabase/functions
 .claire/worktrees
+src/design-system/foundation/theme/generated
+src/theme/generated
 lint_results.json

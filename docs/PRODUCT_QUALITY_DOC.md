@@ -182,7 +182,9 @@ Current validation runs:
 - `check:ui-tokens`
 - `lint`
 - `test`
-- `test:integration`
+
+The real Supabase-backed suite is intentionally separate: `npm run test:integration` verifies seeded
+state before it runs, and CI executes it in the `backend-integration` job with test-project secrets.
 
 These are necessary, but not sufficient.
 

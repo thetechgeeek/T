@@ -21,7 +21,7 @@ An Expo (React Native 0.81 / React 19) + Supabase business-management app target
 
 **Architecture:** `app/` routes → `src/stores/` (Zustand) → `src/services/` (business rules) → `src/repositories/` (Supabase access) → `supabase/` (SQL schema, migrations, RPCs). A parallel governed `src/design-system/` supplies all reusable UI and lives behind lint + contract tests.
 
-**Quality gate:** `npm run validate` runs Prettier → `tsc --noEmit` → hex-color check → route-collision check → token usage check → design-system guardrails → ESLint → Jest unit → Jest integration. Husky wires this into `pre-commit` and `pre-push`; GitHub Actions re-runs it in CI.
+**Quality gate:** `npm run validate` runs Prettier → `tsc --noEmit` → hex-color check → route-collision check → runtime/target architecture checks → i18n checks → token usage check → design-system/UI-shell/workspace guardrails → ESLint → Jest unit. Husky wires this into `pre-push`; GitHub Actions runs the same source gates in its `validate` job, then runs real Supabase coverage separately in `backend-integration`.
 
 ---
 
@@ -104,7 +104,7 @@ The cross-cutting suite. Module-scoped tests live in `__tests__/` folders next t
 
 ## `.github/` <a id="github"></a>
 
-- `workflows/ci.yml` — single GitHub Actions workflow that installs deps and runs `npm run validate` on PRs and pushes to main.
+- `workflows/ci.yml` — GitHub Actions workflow that installs deps, runs the source validation gates on PRs and pushes to main, then runs separate backend, device, and design-system proof jobs.
 
 ---
 
@@ -572,7 +572,7 @@ Idempotent bootstrap for a fresh Postgres database — applies all migrations in
 - `jest.config.js` — primary config (`jest-expo` preset, transforms, moduleNameMapper for `@/*` alias).
 - `jest.integration.config.js` — separate config for integration tests; forces `--runInBand`.
 - `jest.setup.ts` — global test bootstrap: registers all `src/__mocks__/`, sets up i18n, silences RN warnings, wires up `supabaseMock`.
-- `package.json` — dependencies + the `validate` pipeline definition (format → typecheck → hex → routes → tokens → design-system → lint → test → test:integration). Also defines all `generate:*`, `check:*`, and `test:design-system:*` scripts.
+- `package.json` — dependencies + the `validate` pipeline definition (format → typecheck → hex → routes → runtime/target/i18n/token/design-system/UI-shell/workspace checks → lint → test). Backend validation remains explicit through `test:integration`, `test:pr`, and `validate:backend`. Also defines all `generate:*`, `check:*`, and `test:design-system:*` scripts.
 - `package-lock.json` — npm lockfile.
 - `stylelint.config.mjs` — style rules for the generated web CSS/SCSS outputs.
 - `tsconfig.json` — strict TypeScript, `@/*` path alias to repo root.

@@ -23,6 +23,7 @@
 		"test:e2e:negative-auth": "npm run test:seed:reset && npm run test:seed:verify && node scripts/tooling.mjs e2e:maestro test .maestro/auth_invalid_login.yaml",
 		"test:e2e:report": "npm run test:seed:reset && npm run test:seed:verify && node scripts/tooling.mjs e2e:maestro test .maestro/*.yaml --exclude .maestro/auth_invalid_login.yaml --exclude .maestro/_scratch_auth_probe.yaml --format junit --output report.xml",
 		"test:pr": "npm run typecheck && npm run lint && npm run test:coverage && npm run test:seed:reset && npm run test:integration && npm run test:e2e:critical",
+		"validate:backend": "npm run validate && npm run test:seed:reset && npm run test:integration",
 		"audit:security": "npm audit --audit-level=high",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
@@ -52,7 +53,7 @@
 		"generate:tokens": "node scripts/tooling.mjs generate:tokens",
 		"generate:ui-library": "node scripts/tooling.mjs generate:ui-library",
 		"generate:design-system": "npm run generate:tokens && npm run generate:ui-library && node scripts/tooling.mjs generate:component-catalog",
-		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run check:runtime-boundaries && npm run check:target-architecture && npm run check:i18n && npm run check:ui-tokens && npm run check:design-system && npm run check:ui-shell && npm run check:workspace-packages && npm run check:inventory-consumer && npm run check:release-discipline && npm run check:extraction-readiness && npm run lint && npm run test && npm run test:integration",
+		"validate": "npm run format && npm run typecheck && npm run check:hex && npm run check:routes && npm run check:runtime-boundaries && npm run check:target-architecture && npm run check:i18n && npm run check:ui-tokens && npm run check:design-system && npm run check:ui-shell && npm run check:workspace-packages && npm run check:inventory-consumer && npm run check:release-discipline && npm run check:extraction-readiness && npm run lint && npm run test",
 		"prepare": "husky"
 	},
 	"dependencies": {
@@ -144,6 +145,14 @@
 		"stylelint-config-standard": "^40.0.0",
 		"ts-jest": "^29.4.6",
 		"typescript": "~5.9.2"
+	},
+	"overrides": {
+		"@expo/metro-config": {
+			"postcss": "8.5.15"
+		},
+		"xcode": {
+			"uuid": "11.1.1"
+		}
 	},
 	"private": true,
 	"workspaces": [

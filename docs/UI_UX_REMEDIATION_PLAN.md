@@ -661,7 +661,7 @@ Phase 10 (Sweep)
 
 **Done when:**
 
-- `npm run validate` (typecheck + lint + test + integration) passes clean.
+- `npm run validate` (typecheck + lint + source guardrails + Jest) passes clean.
 - `grep -rn "c\.\w\+ + '" src/ app/` returns zero results.
 - `grep -rn 'key={i}' src/ app/` returns zero results.
 - `grep -rn 'ActivityIndicator' src/ app/` returns only action-state uses (Button, PaymentModal submit) — zero content-loading uses.

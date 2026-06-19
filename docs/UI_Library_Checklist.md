@@ -1600,7 +1600,7 @@ The detailed checklist below remains the full capability matrix, but this sectio
 
 #### Common
 
-- [x] `npm run validate` enforces TypeScript strict mode, ESLint, design-system guardrails, unit tests, and integration tests for the supported library surface
+- [x] `npm run validate` enforces TypeScript strict mode, ESLint, design-system guardrails, and unit tests for the supported library surface; backend integration remains covered by the explicit seeded Supabase gate
 - [x] Verification ownership for component logic, utility functions, and token contracts is documented in `docs/DESIGN_SYSTEM_VERIFICATION_STRATEGY.md`
 
 #### Web
