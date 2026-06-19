@@ -3,38 +3,38 @@ appId: com.easystock.app
 # E2E-012: Tab navigation — all bottom tabs accessible
 - runFlow: shared/login_seeded.yaml
 - assertVisible:
-      label: 'dashboard-screen'
+      id: 'dashboard-screen'
 - takeScreenshot: nav_dashboard
 
 # Navigate to Invoices tab
 - tapOn:
-      label: 'tab-invoices'
+      id: 'tab-invoices'
 - assertVisible:
-      label: 'invoices-screen'
+      id: 'invoices-screen'
 - takeScreenshot: nav_invoices
 
 # Navigate to Inventory tab
 - tapOn:
-      label: 'tab-inventory'
+      id: 'tab-inventory'
 - assertVisible:
-      label: 'inventory-screen'
+      id: 'inventory-screen'
 - takeScreenshot: nav_inventory
 
 # Navigate to Scan tab
 - tapOn:
-      label: 'tab-scan'
+      id: 'tab-scan'
 - takeScreenshot: nav_scan
 
 # Navigate to More tab
 - tapOn:
-      label: 'tab-more'
+      id: 'tab-more'
 - assertVisible:
-      label: 'more-screen'
+      id: 'more-screen'
 - takeScreenshot: nav_more
 
 # Return to Dashboard
 - tapOn:
-      label: 'tab-dashboard'
+      id: 'tab-dashboard'
 - assertVisible:
-      label: 'dashboard-screen'
+      id: 'dashboard-screen'
 - takeScreenshot: nav_return_dashboard

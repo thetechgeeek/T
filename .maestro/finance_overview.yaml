@@ -3,47 +3,46 @@ appId: com.easystock.app
 # E2E-008: Finance overview — stats, navigation to sub-sections
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-more'
+      id: 'tab-more'
 - tapOn:
-      label: 'menu-finance'
+      id: 'menu-finance'
 - assertVisible:
-      label: 'stat-gross-profit'
+      id: 'stat-gross-profit'
 - takeScreenshot: finance_overview
 
 # Verify metric cards visible
 - assertVisible:
-      label: 'stat-gross-profit'
+      id: 'stat-gross-profit'
 - assertVisible:
-      label: 'stat-net-profit'
+      id: 'stat-net-profit'
 - assertVisible:
-      label: 'stat-total-expenses'
+      id: 'stat-total-expenses'
 - takeScreenshot: finance_metrics
 
 # Navigate to Expenses
 - assertVisible:
-      label: 'menu-expenses'
+      id: 'menu-expenses'
 - tapOn:
-      label: 'menu-expenses'
+      id: 'menu-expenses'
 - assertVisible:
-      label: 'expenses-screen'
+      id: 'expenses-screen'
 - takeScreenshot: finance_expenses
 
 # Go back
 - tapOn:
-      label: 'Go back'
+      text: 'Go back'
 - assertVisible:
-      label: 'menu-aging-report'
-
+      id: 'menu-aging-report'
 # Navigate to Aging Report
 - tapOn:
-      label: 'menu-aging-report'
+      id: 'menu-aging-report'
 - assertVisible:
-      label: 'aging-report-screen'
+      id: 'aging-report-screen'
 - assertVisible:
-      label: 'aging-total-outstanding-card'
+      id: 'aging-total-outstanding-card'
 - takeScreenshot: aging_report
 
 - tapOn:
-      label: 'Go back'
+      text: 'Go back'
 - assertVisible:
-      label: 'stat-gross-profit'
+      id: 'stat-gross-profit'

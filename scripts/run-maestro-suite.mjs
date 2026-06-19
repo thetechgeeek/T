@@ -8,7 +8,7 @@ import scriptConfig from './lib/script-config.cjs';
 
 const APP_ID = 'com.easystock.app';
 const DEFAULT_DESIGN_SYSTEM_DEEPLINK = 'easystock://design-system';
-const DEFAULT_DEV_CLIENT_SCHEME = 'easystock';
+const DEFAULT_DEV_CLIENT_SCHEME = 'exp+easystock';
 const DEFAULT_E2E_EXPO_PORT = '8088';
 const DEFAULT_TEST_OUTPUT_DIR = path.join(os.homedir(), '.maestro', 'artifacts');
 const IOS_PERMISSION_SERVICES = ['camera', 'photos', 'faceid'];
@@ -197,6 +197,7 @@ async function ensureExpoE2eServer(envFromFile) {
 	if (existingManifest) {
 		return {
 			port,
+			manifestUrl: existingManifest.manifestUrl,
 			launchAssetUrl: existingManifest.launchAssetUrl,
 			managed: false,
 		};
@@ -219,6 +220,7 @@ async function ensureExpoE2eServer(envFromFile) {
 		if (readyManifest) {
 			return {
 				port,
+				manifestUrl: readyManifest.manifestUrl,
 				launchAssetUrl: readyManifest.launchAssetUrl,
 				managed: true,
 			};
@@ -240,8 +242,8 @@ async function ensureExpoE2eServer(envFromFile) {
 	);
 }
 
-function buildDevClientOpenUrl(launchAssetUrl) {
-	return `${DEFAULT_DEV_CLIENT_SCHEME}://expo-development-client/?url=${encodeURIComponent(launchAssetUrl)}&disableOnboarding=1`;
+function buildDevClientOpenUrl(manifestUrl) {
+	return `${DEFAULT_DEV_CLIENT_SCHEME}://expo-development-client/?url=${encodeURIComponent(manifestUrl)}&disableOnboarding=1`;
 }
 
 function collectExcludeArgs(args) {
@@ -645,6 +647,180 @@ function expandFlowTargets(targets) {
 	return expandedTargets;
 }
 
+function stripYamlComment(line) {
+	let quote = null;
+	let escaped = false;
+
+	for (let index = 0; index < line.length; index += 1) {
+		const char = line[index];
+
+		if (escaped) {
+			escaped = false;
+			continue;
+		}
+
+		if (char === '\\') {
+			escaped = true;
+			continue;
+		}
+
+		if ((char === '"' || char === "'") && !quote) {
+			quote = char;
+			continue;
+		}
+
+		if (char === quote) {
+			quote = null;
+			continue;
+		}
+
+		if (char === '#' && !quote) {
+			return line.slice(0, index);
+		}
+	}
+
+	return line;
+}
+
+function unquoteYamlScalar(value) {
+	const trimmed = value.trim();
+	if (
+		(trimmed.startsWith("'") && trimmed.endsWith("'")) ||
+		(trimmed.startsWith('"') && trimmed.endsWith('"'))
+	) {
+		return trimmed.slice(1, -1);
+	}
+
+	return trimmed;
+}
+
+function getYamlIndent(line) {
+	const match = line.match(/^\s*/);
+	return match ? match[0].length : 0;
+}
+
+function resolveFlowReference(fromFile, reference) {
+	const normalizedReference = unquoteYamlScalar(reference);
+	if (
+		!normalizedReference ||
+		normalizedReference.startsWith('{') ||
+		normalizedReference.startsWith('${') ||
+		/^[a-z]+:\/\//i.test(normalizedReference)
+	) {
+		return null;
+	}
+
+	return path.resolve(path.dirname(fromFile), normalizedReference);
+}
+
+function collectRunFlowReferences(filePath, source) {
+	const lines = source.split(/\r?\n/);
+	const references = [];
+
+	for (let index = 0; index < lines.length; index += 1) {
+		const line = stripYamlComment(lines[index]);
+		const inlineRunFlowMatch = line.match(/^\s*-\s*runFlow:\s*(.+?)\s*$/);
+		const runFlowBlockMatch = line.match(/^\s*-\s*runFlow:\s*$/);
+
+		if (inlineRunFlowMatch) {
+			const resolved = resolveFlowReference(filePath, inlineRunFlowMatch[1]);
+			if (resolved) references.push(resolved);
+			continue;
+		}
+
+		if (!runFlowBlockMatch) {
+			continue;
+		}
+
+		const blockIndent = getYamlIndent(line);
+		for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
+			const nestedLine = stripYamlComment(lines[cursor]);
+			if (!nestedLine.trim()) {
+				continue;
+			}
+
+			if (getYamlIndent(nestedLine) <= blockIndent) {
+				break;
+			}
+
+			const fileMatch = nestedLine.match(/^\s*file:\s*(.+?)\s*$/);
+			if (fileMatch) {
+				const resolved = resolveFlowReference(filePath, fileMatch[1]);
+				if (resolved) references.push(resolved);
+				break;
+			}
+		}
+	}
+
+	return references;
+}
+
+function collectFlowFilesForValidation(targets) {
+	const pending = expandFlowTargets(targets).map((target) => path.resolve(process.cwd(), target));
+	const visited = new Set();
+	const flowFiles = [];
+
+	while (pending.length > 0) {
+		const flowFile = pending.pop();
+		if (!flowFile || visited.has(flowFile) || !fs.existsSync(flowFile)) {
+			continue;
+		}
+
+		visited.add(flowFile);
+		if (!flowFile.endsWith('.yaml') && !flowFile.endsWith('.yml')) {
+			continue;
+		}
+
+		flowFiles.push(flowFile);
+		const source = fs.readFileSync(flowFile, 'utf8');
+		pending.push(...collectRunFlowReferences(flowFile, source));
+	}
+
+	return flowFiles;
+}
+
+function validateMaestroFlowSelectors(args) {
+	if (args[0] !== 'test') {
+		return;
+	}
+
+	const { targets } = splitTestArgs(args);
+	const violations = [];
+
+	for (const flowFile of collectFlowFilesForValidation(targets)) {
+		const source = fs.readFileSync(flowFile, 'utf8');
+		const lines = source.split(/\r?\n/);
+
+		lines.forEach((line, index) => {
+			const executableLine = stripYamlComment(line);
+			if (/^\s*label\s*:/.test(executableLine)) {
+				violations.push({
+					file: path.relative(process.cwd(), flowFile),
+					line: index + 1,
+					text: executableLine.trim(),
+				});
+			}
+		});
+	}
+
+	if (violations.length === 0) {
+		return;
+	}
+
+	const details = violations
+		.map(({ file, line, text }) => `  ${file}:${line} ${text}`)
+		.join('\n');
+
+	throw new Error(
+		[
+			'Maestro selector preflight failed.',
+			'Do not use `label:` in Maestro flows. Maestro treats it as a command label, not an element selector, so actions/assertions can pass without targeting UI.',
+			'Use `id:`, `text:`, or `point:` instead.',
+			details,
+		].join('\n'),
+	);
+}
+
 function emitCapturedOutput(result) {
 	if (result.stdout) {
 		process.stdout.write(result.stdout);
@@ -748,6 +924,12 @@ async function main() {
 			},
 			{ dryRun: true },
 		);
+		try {
+			validateMaestroFlowSelectors(args);
+		} catch (error) {
+			console.error(error instanceof Error ? error.message : String(error));
+			process.exit(1);
+		}
 		console.log(
 			JSON.stringify(
 				{
@@ -767,6 +949,21 @@ async function main() {
 		return;
 	}
 
+	const preflightArgs = buildMaestroArgs(
+		runtimeArgs.args,
+		{
+			...baseEnv,
+			E2E_DEV_CLIENT_URL: e2eEnv.E2E_DEV_CLIENT_URL ?? '<resolved after Expo manifest>',
+		},
+		{ dryRun: true },
+	);
+	try {
+		validateMaestroFlowSelectors(preflightArgs);
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : String(error));
+		process.exit(1);
+	}
+
 	const maestroPath = resolveExecutable('maestro');
 	if (!maestroPath) {
 		console.error(
@@ -784,7 +981,7 @@ async function main() {
 		...baseEnv,
 		E2E_EXPO_PORT: baseEnv.E2E_EXPO_PORT ?? expoServer.port,
 		E2E_DEV_CLIENT_URL:
-			e2eEnv.E2E_DEV_CLIENT_URL ?? buildDevClientOpenUrl(expoServer.launchAssetUrl),
+			e2eEnv.E2E_DEV_CLIENT_URL ?? buildDevClientOpenUrl(expoServer.manifestUrl),
 	};
 
 	const args = buildMaestroArgs(runtimeArgs.args, env);

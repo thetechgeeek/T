@@ -3,11 +3,11 @@ appId: com.easystock.app
 # E2E-010: Settings navigation — access settings screens
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-more'
+      id: 'tab-more'
 - tapOn:
-      label: 'menu-settings'
+      id: 'menu-settings'
 - assertVisible:
-      label: 'settings-screen'
+      id: 'settings-screen'
 - assertVisible:
       text: 'Business Profile'
 - takeScreenshot: settings_screen

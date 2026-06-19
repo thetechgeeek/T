@@ -2,12 +2,12 @@ appId: com.easystock.app
 ---
 - runFlow: ../shared/login_seeded.yaml
 - assertVisible:
-      label: 'dashboard-screen'
+      id: 'dashboard-screen'
 - assertVisible:
-      label: 'stat-today-sales'
+      id: 'stat-today-sales'
 - assertVisible:
-      label: 'stat-outstanding'
+      id: 'stat-outstanding'
 - assertVisible:
-      label: 'stat-low-stock'
+      id: 'stat-low-stock'
 - assertVisible:
-      label: 'quick-action-new-invoice'
+      id: 'quick-action-new-invoice'

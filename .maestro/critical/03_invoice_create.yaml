@@ -2,40 +2,48 @@ appId: com.easystock.app
 ---
 - runFlow: ../shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-invoices'
+      id: 'tab-invoices'
 - assertVisible:
-      label: 'invoices-screen'
+      id: 'invoices-screen'
 - tapOn:
-      label: 'new-invoice-button'
+      id: 'new-invoice-button'
 - assertVisible:
-      label: 'invoice-step-1'
+      id: 'invoice-step-1-content'
+- takeScreenshot: invoice-step-1-open
 - tapOn:
-      label: 'customer-name-input'
+      id: 'customer-name-input'
 - inputText: 'Seeded Counter Sale'
+- takeScreenshot: invoice-step-1-after-name
+- assertVisible:
+      text: 'Seeded Counter Sale'
 - tapOn:
-      label: 'customer-phone-input'
+      point: '87%,89%'
 - inputText: '9876500099'
-- tapOn:
-      label: 'invoice-next-button'
+- takeScreenshot: invoice-step-1-after-input
 - assertVisible:
-      label: 'invoice-step-2'
+      text: '9876500099'
 - tapOn:
-      label: 'add-item-button'
-- tapOn:
-      label: 'GLOSSY WHITE 60x60'
-- tapOn:
-      label: 'item-quantity-input'
-- eraseText
-- inputText: '2'
-- tapOn:
-      label: 'confirm-add-item'
-- tapOn:
-      label: 'invoice-next-button'
+      id: 'invoice-next-button'
 - assertVisible:
-      label: 'invoice-step-3'
+      id: 'invoice-step-2-content'
+- takeScreenshot: invoice-step-2-open
 - tapOn:
-      label: 'paid-in-full-chip'
+      id: 'add-item-button'
 - tapOn:
-      label: 'generate-invoice-button'
+      text: 'GLOSSY WHITE 60x60'
+- takeScreenshot: invoice-step-2-item-selected
+- tapOn:
+      id: 'confirm-add-item'
 - assertVisible:
-      label: 'invoice-detail-screen'
+      id: 'invoice-line-item-0'
+- takeScreenshot: invoice-step-2-item-added
+- tapOn:
+      id: 'invoice-next-button'
+- assertVisible:
+      id: 'invoice-step-3-content'
+- tapOn:
+      id: 'paid-in-full-chip'
+- tapOn:
+      id: 'generate-invoice-button'
+- assertVisible:
+      id: 'invoice-detail-screen'

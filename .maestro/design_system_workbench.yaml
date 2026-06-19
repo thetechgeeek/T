@@ -8,5 +8,5 @@ appId: com.easystock.app
     text: 'Open'
     optional: true
 - assertVisible:
-    label: 'Internal design system workbench'
+    text: 'Internal design system workbench'
 - takeScreenshot: design-system-foundation

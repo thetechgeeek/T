@@ -2,13 +2,16 @@ appId: com.easystock.app
 ---
 - runFlow: ../shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-more'
+      id: 'tab-more'
 - assertVisible:
-      label: 'more-screen'
+      id: 'more-screen'
+- scrollUntilVisible:
+      element:
+            id: 'sign-out-button'
+      direction: DOWN
 - tapOn:
-      label: 'sign-out-button'
+      id: 'sign-out-button'
 - tapOn:
-      text: 'Sign Out'
-      optional: true
+      point: '68%,56%'
 - assertVisible:
-      label: 'email-input'
+      id: 'email-input'

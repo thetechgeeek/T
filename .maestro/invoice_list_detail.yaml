@@ -3,27 +3,24 @@ appId: com.easystock.app
 # E2E-004: Invoice list and detail view
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-invoices'
+      id: 'tab-invoices'
 - assertVisible:
-      label: 'invoices-screen'
+      id: 'invoices-screen'
 - takeScreenshot: invoice_list
 
 # Check list items are rendered (at least one invoice)
 - assertVisible:
-      label: 'invoice-SEED/2026-27/0001'
-
+      id: 'invoice-SEED/2026-27/0001'
 # Tap first invoice in list
 - tapOn:
-      label: 'invoice-SEED/2026-27/0001'
-
+      id: 'invoice-SEED/2026-27/0001'
 # If invoice detail loads, assert key fields
 - assertVisible:
-      label: 'invoice-detail-screen'
-
+      id: 'invoice-detail-screen'
 - takeScreenshot: invoice_detail
 
 # Navigate back
 - tapOn:
-      label: 'Go back'
+      text: 'Go back'
 - assertVisible:
-      label: 'invoices-screen'
+      id: 'invoices-screen'

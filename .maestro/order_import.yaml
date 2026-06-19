@@ -3,16 +3,16 @@ appId: com.easystock.app
 # E2E-009: Order import — navigate to orders, view import screen
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-more'
+      id: 'tab-more'
 - tapOn:
-      label: 'menu-orders'
+      id: 'menu-orders'
 - assertVisible:
-      label: 'orders-screen'
+      id: 'orders-screen'
 - takeScreenshot: orders_list
 
 # Tap import button and verify the import surface opens
 - tapOn:
-      label: 'import-pdf-button'
+      id: 'import-pdf-button'
 - assertVisible:
-      label: 'order-import-screen'
+      id: 'order-import-screen'
 - takeScreenshot: order_import_screen

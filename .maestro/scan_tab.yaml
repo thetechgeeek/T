@@ -3,24 +3,23 @@ appId: com.easystock.app
 # E2E-Scan: Scan tab — manual entry search
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-scan'
-
+      id: 'tab-scan'
 # Grant camera permission if prompted
 - tapOn:
-      label: 'grant-camera-permission'
+      id: 'grant-camera-permission'
       optional: true
 
 # Manual entry controls should be visible after permission is granted
 - assertVisible:
-      label: 'manual-entry-input'
+      id: 'manual-entry-input'
 - takeScreenshot: scan_tab
 
 # Test manual search
 - tapOn:
-      label: 'manual-entry-input'
+      id: 'manual-entry-input'
 - inputText: 'GLOSSY'
 - tapOn:
-      label: 'scan-search-button'
+      id: 'scan-search-button'
 - assertVisible:
-      label: 'inventory-detail-screen'
+      id: 'inventory-detail-screen'
 - takeScreenshot: scan_search_result

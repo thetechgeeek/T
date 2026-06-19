@@ -3,21 +3,20 @@ appId: com.easystock.app
 # E2E-002: Dashboard full flow — stats, quick actions, recent invoices
 - runFlow: shared/login_seeded.yaml
 - assertVisible:
-      label: 'dashboard-screen'
+      id: 'dashboard-screen'
 - assertVisible:
-      label: 'stat-today-sales'
+      id: 'stat-today-sales'
 - assertVisible:
-      label: 'stat-outstanding'
+      id: 'stat-outstanding'
 - assertVisible:
-      label: 'stat-low-stock'
+      id: 'stat-low-stock'
 - takeScreenshot: dashboard_stats_visible
 
 # Quick Actions are visible
 - assertVisible:
-      label: 'quick-action-new-invoice'
+      id: 'quick-action-new-invoice'
 - assertVisible:
-      label: 'quick-action-add-stock'
-
+      id: 'quick-action-add-stock'
 # Pull to refresh dashboard
 - swipe:
       direction: DOWN
@@ -26,5 +25,5 @@ appId: com.easystock.app
       direction: UP
       duration: 300
 - assertVisible:
-      label: 'dashboard-screen'
+      id: 'dashboard-screen'
 - takeScreenshot: dashboard_after_refresh

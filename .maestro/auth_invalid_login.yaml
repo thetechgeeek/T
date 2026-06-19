@@ -11,19 +11,19 @@ appId: com.easystock.app
       text: 'Continue'
       optional: true
 - assertVisible:
-      label: 'email-input'
+      id: 'email-input'
 - assertVisible:
-      label: 'password-input'
+      id: 'password-input'
 - assertVisible:
-      label: 'sign-in-button'
+      id: 'sign-in-button'
 - tapOn:
-      label: 'email-input'
+      id: 'email-input'
 - inputText: 'wrong@tilemaster.dev'
 - tapOn:
-      label: 'password-input'
+      id: 'password-input'
 - inputText: 'WrongPassword!'
 - tapOn:
-      label: 'sign-in-button'
+      id: 'sign-in-button'
 - assertVisible:
       text: 'Invalid credentials.'
 - takeScreenshot: auth_login_failure

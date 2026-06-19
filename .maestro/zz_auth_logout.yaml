@@ -3,14 +3,14 @@ appId: com.easystock.app
 # E2E-001c: Logout flow
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-more'
+      id: 'tab-more'
 - assertVisible:
-      label: 'sign-out-button'
+      id: 'sign-out-button'
 - tapOn:
-      label: 'sign-out-button'
+      id: 'sign-out-button'
 - tapOn:
       text: 'Sign Out'
       optional: true
 - assertVisible:
-      label: 'email-input'
+      id: 'email-input'
 - takeScreenshot: auth_logout_success

@@ -3,58 +3,55 @@ appId: com.easystock.app
 # E2E-003: Full invoice creation wizard
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-invoices'
+      id: 'tab-invoices'
 - assertVisible:
-      label: 'invoices-screen'
+      id: 'invoices-screen'
 - tapOn:
-      label: 'new-invoice-button'
+      id: 'new-invoice-button'
 - assertVisible:
-      label: 'invoice-step-1'
+      id: 'invoice-step-1'
 - takeScreenshot: invoice_step1_customer
 
 # Step 1: Enter customer name
 - tapOn:
-      label: 'customer-name-input'
+      id: 'customer-name-input'
 - inputText: 'E2E Test Customer'
 - tapOn:
-      label: 'customer-phone-input'
+      id: 'customer-phone-input'
 - inputText: '9876500097'
 - tapOn:
-      label: 'invoice-next-button'
-
+      id: 'invoice-next-button'
 # Step 2: Add items
 - assertVisible:
-      label: 'invoice-step-2'
+      id: 'invoice-step-2'
 - takeScreenshot: invoice_step2_items
 - tapOn:
-      label: 'add-item-button'
+      id: 'add-item-button'
 - tapOn:
-      label: 'GLOSSY WHITE 60x60'
+      text: 'GLOSSY WHITE 60x60'
 - tapOn:
-      label: 'item-quantity-input'
+      id: 'item-quantity-input'
 - eraseText
 - inputText: '5'
 - tapOn:
-      label: 'confirm-add-item'
-
+      id: 'confirm-add-item'
 # Verify item added
 - assertVisible:
-      label: 'remove-line-item-0'
+      id: 'remove-line-item-0'
 - tapOn:
-      label: 'invoice-next-button'
-
+      id: 'invoice-next-button'
 # Step 3: Review
 - assertVisible:
-      label: 'invoice-step-3'
+      id: 'invoice-step-3'
 - assertVisible:
-      label: 'balance-due-indicator'
+      id: 'balance-due-indicator'
 - takeScreenshot: invoice_step3_review
 
 # Generate
 - tapOn:
-      label: 'paid-in-full-chip'
+      id: 'paid-in-full-chip'
 - tapOn:
-      label: 'generate-invoice-button'
+      id: 'generate-invoice-button'
 - assertVisible:
-      label: 'invoice-detail-screen'
+      id: 'invoice-detail-screen'
 - takeScreenshot: invoice_created_success

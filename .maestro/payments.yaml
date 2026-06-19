@@ -3,30 +3,30 @@ appId: com.easystock.app
 # E2E-007: Payments flow — record payment from finance receive-payment screen
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-more'
+      id: 'tab-more'
 - tapOn:
-      label: 'menu-finance'
+      id: 'menu-finance'
 - assertVisible:
-      label: 'receive-payment'
+      id: 'receive-payment'
 - tapOn:
-      label: 'receive-payment'
+      id: 'receive-payment'
 - assertVisible:
-      label: 'receive-payment-screen'
+      id: 'receive-payment-screen'
 - tapOn:
-      label: 'customer-search'
+      id: 'customer-search'
 - inputText: 'Seeded Customer Alpha'
 - tapOn:
-      label: 'payment-customer-Seeded Customer Alpha'
+      id: 'payment-customer-Seeded Customer Alpha'
 - tapOn:
-      label: 'amount-received'
+      id: 'amount-received'
 - inputText: '1000'
 - tapOn:
-      label: 'payment-mode-upi'
+      id: 'payment-mode-upi'
 - tapOn:
-      label: 'save-payment'
+      id: 'save-payment'
 - tapOn:
       text: 'OK'
       optional: true
 - assertVisible:
-      label: 'receive-payment'
+      id: 'receive-payment'
 - takeScreenshot: payments_recorded

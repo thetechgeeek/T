@@ -3,19 +3,19 @@ appId: com.easystock.app
 # E2E-013: Form validation — customer save rejects invalid mobile number
 - runFlow: shared/login_seeded.yaml
 - tapOn:
-      label: 'tab-more'
+      id: 'tab-more'
 - tapOn:
-      label: 'menu-customers'
+      id: 'menu-customers'
 - tapOn:
-      label: 'add-customer-button'
+      id: 'add-customer-button'
 - tapOn:
-      label: 'customer-name-input'
+      id: 'customer-name-input'
 - inputText: 'Validation Customer'
 - tapOn:
-      label: 'customer-phone-input'
+      id: 'customer-phone-input'
 - inputText: '123'
 - tapOn:
-      label: 'save-customer-button'
+      id: 'save-customer-button'
 - assertVisible:
-      label: 'Enter a valid 10-digit Indian mobile number'
+      text: 'Enter a valid 10-digit Indian mobile number'
 - takeScreenshot: customer_validation_error
