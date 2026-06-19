@@ -209,10 +209,20 @@ jobs:
               run: npm run test:seed:reset
 
             - name: Start iOS simulator
-              run: maestro start-device --platform ios --os-version 18 --force-create
+              shell: bash
+              run: |
+                  maestro start-device --platform ios --os-version 18 --force-create
+                  ios_simulator_udid="$(
+                    xcrun simctl list devices booted -j | node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(0, "utf8")); const devices = Object.values(data.devices || {}).flat(); const booted = devices.find((device) => device.state === "Booted" && device.isAvailable !== false); if (booted?.udid) process.stdout.write(booted.udid);'
+                  )"
+                  if [[ -z "$ios_simulator_udid" ]]; then
+                    xcrun simctl list devices available
+                    exit 1
+                  fi
+                  echo "IOS_SIMULATOR_UDID=$ios_simulator_udid" >> "$GITHUB_ENV"
 
             - name: Build iOS app
-              run: npx expo run:ios -d "iPhone 11"
+              run: npx expo run:ios --device "$IOS_SIMULATOR_UDID"
 
             - name: Run iOS critical app workflows
               run: npm run test:e2e:critical
@@ -266,9 +276,10 @@ jobs:
               run: |
                   sdkmanager --install \
                     "emulator" \
+                    "platforms;android-33" \
                     "platforms;android-35" \
                     "build-tools;35.0.0" \
-                    "system-images;android-35;google_apis;arm64-v8a"
+                    "system-images;android-33;google_apis;arm64-v8a"
 
             - name: Reset deterministic test seed
               run: npm run test:seed:reset
@@ -320,10 +331,20 @@ jobs:
               run: npm run generate:design-system
 
             - name: Start iOS simulator
-              run: maestro start-device --platform ios --os-version 18 --force-create
+              shell: bash
+              run: |
+                  maestro start-device --platform ios --os-version 18 --force-create
+                  ios_simulator_udid="$(
+                    xcrun simctl list devices booted -j | node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(0, "utf8")); const devices = Object.values(data.devices || {}).flat(); const booted = devices.find((device) => device.state === "Booted" && device.isAvailable !== false); if (booted?.udid) process.stdout.write(booted.udid);'
+                  )"
+                  if [[ -z "$ios_simulator_udid" ]]; then
+                    xcrun simctl list devices available
+                    exit 1
+                  fi
+                  echo "IOS_SIMULATOR_UDID=$ios_simulator_udid" >> "$GITHUB_ENV"
 
             - name: Build iOS app
-              run: npx expo run:ios -d "iPhone 11"
+              run: npx expo run:ios --device "$IOS_SIMULATOR_UDID"
 
             - name: Run iOS design-system native proof
               run: npm run test:design-system:ios
@@ -375,9 +396,10 @@ jobs:
               run: |
                   sdkmanager --install \
                     "emulator" \
+                    "platforms;android-33" \
                     "platforms;android-35" \
                     "build-tools;35.0.0" \
-                    "system-images;android-35;google_apis;arm64-v8a"
+                    "system-images;android-33;google_apis;arm64-v8a"
 
             - name: Generate design-system artifacts
               run: npm run generate:design-system
@@ -480,11 +502,21 @@ jobs:
 
             - name: Start iOS simulator
               if: steps.backend-secrets.outputs.ready == 'true'
-              run: maestro start-device --platform ios --os-version 18 --force-create
+              shell: bash
+              run: |
+                  maestro start-device --platform ios --os-version 18 --force-create
+                  ios_simulator_udid="$(
+                    xcrun simctl list devices booted -j | node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(0, "utf8")); const devices = Object.values(data.devices || {}).flat(); const booted = devices.find((device) => device.state === "Booted" && device.isAvailable !== false); if (booted?.udid) process.stdout.write(booted.udid);'
+                  )"
+                  if [[ -z "$ios_simulator_udid" ]]; then
+                    xcrun simctl list devices available
+                    exit 1
+                  fi
+                  echo "IOS_SIMULATOR_UDID=$ios_simulator_udid" >> "$GITHUB_ENV"
 
             - name: Build iOS app
               if: steps.backend-secrets.outputs.ready == 'true'
-              run: npx expo run:ios -d "iPhone 11"
+              run: npx expo run:ios --device "$IOS_SIMULATOR_UDID"
 
             - name: Run full Maestro suite
               if: steps.backend-secrets.outputs.ready == 'true'
